@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ec01445c-2cd4-49a9-b63e-ff9b7dea5c70" name="Changes" comment="adding code">
+      <change afterPath="$PROJECT_DIR$/project/src/main/resources/hibernate.cfg.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,14 +48,15 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/tamrin-ha/ap/advanced-programming-phase-1-group-07",
+    "last_opened_file_path": "D:/tamrin-ha/ap/tamrin1/test-db",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "D:/tamrin-ha/ap/advanced-programming-phase-1-group-07/project/src/main/java/com/example/Main.java",
     "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
+    "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "vue.rearranger.settings.migration": "true"
   }
@@ -80,7 +82,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1744454571514</updated>
-      <workItem from="1744454575154" duration="303000" />
+      <workItem from="1744454575154" duration="630000" />
     </task>
     <task id="LOCAL-00001" summary="adding code">
       <option name="closed" value="true" />
@@ -90,7 +92,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744454683772</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="adding code">
+      <option name="closed" value="true" />
+      <created>1744454905233</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1744454905233</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
