@@ -7,18 +7,6 @@ import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;
 
 public class GameMenu implements Menu {
-    ArtisanController artisanController = new ArtisanController();
-    Cooking cooking = new Cooking();
-    DealingController dealingController = new DealingController();
-    Farming farming = new Farming();
-    FriendshipController friendshipController = new FriendshipController();
-    InventoryFunctionalities inventoryFunctionalities = new InventoryFunctionalities();
-    LivestockController livestockController = new LivestockController();
-    LoadingSavingTurnHandling loadingSavingTurnHandling = new LoadingSavingTurnHandling();
-    MovementAndMap movementAndMap = new MovementAndMap();
-    NPCController npcController = new NPCController();
-    TradingController tradingController = new TradingController();
-    World world = new World();
 
     public void handleMenu(String input) {
         Response response = null;

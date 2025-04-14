@@ -6,11 +6,12 @@ import com.example.models.IO.Response;
 import com.example.models.enums.commands.SignInMenuCommands;
 
 public class SignInMenu implements Menu {
-    SignInMenuController signInMenuController = new SignInMenuController();
 
     public void handleMenu(String input) {
         Response response = null;
-        if (SignInMenuCommands.EXIT_MENU.matches(input)) {
+        if (SignInMenuController.getUserOfForgetPassword() != null) {
+            response = getChangePasswordResponse(input);
+        } else if (SignInMenuCommands.EXIT_MENU.matches(input)) {
             response = getExitMenuResponse(input);
         } else if (SignInMenuCommands.ENTER_MENU.matches(input)) {
             response = getEnterMenuResponse(input);
@@ -26,10 +27,24 @@ public class SignInMenu implements Menu {
             response = getForgetPasswordResponse(input);
         } else if (SignInMenuCommands.PICK_QUESTION.matches(input)) {
             response = getPickQuestionResponse(input);
+        } else if (SignInMenuCommands.LIST_QUESTIONS.matches(input)) {
+            response = getListQuestionsResponse(input);
         } else {
             response = getInvalidCommand();
         }
         printResponse(response);
+    }
+
+    private static Response getChangePasswordResponse(String input) {
+        Request request = new Request(input);
+        Response response = SignInMenuController.handleAccountRecovery(request);
+        return response;
+    }
+
+    private static Response getListQuestionsResponse(String input) {
+        Request request = new Request(input);
+        Response response = SignInMenuController.handleListQuestions(request);
+        return response;
     }
 
     private static Response getExitMenuResponse(String input) {

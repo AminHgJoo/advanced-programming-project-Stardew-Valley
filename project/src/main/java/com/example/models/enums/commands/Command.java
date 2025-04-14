@@ -1,7 +1,7 @@
 package com.example.models.enums.commands;
 
 public interface Command {
-    String ENTER_MENU = "menu\\s+enter\\s+(?<menu_name>.*)";
+    String ENTER_MENU = "menu\\s+enter\\s+(?<menuName>.*)";
     String EXIT_MENU = "menu\\s+exit";
     String SHOW_MENU = "show\\s+current\\s+menu";
 

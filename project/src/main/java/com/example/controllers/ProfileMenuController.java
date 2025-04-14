@@ -45,7 +45,7 @@ public class ProfileMenuController extends Controller {
         if (!Validation.validatePassword(newPassword)) {
             return new Response(false, "New password is invalid!");
         }
-        if (!user.getPassword().equals(oldPassword)) {
+        if (!user.getHashedPassword().equals(oldPassword)) {
             return new Response(false, "old password is invalid!");
         }
         if (user.getPassword().equals(newPassword)) {

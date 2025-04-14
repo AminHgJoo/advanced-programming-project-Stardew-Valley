@@ -21,4 +21,8 @@ public class UserRepository {
     }
     public static void removeUser(User user) {
     }
+    public static User getStayLoggedInUser() {
+
+    }
+    public static void saveStayLoggedInUser(User user) {}
 }

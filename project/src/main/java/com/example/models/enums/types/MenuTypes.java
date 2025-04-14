@@ -10,13 +10,32 @@ public enum MenuTypes {
     ProfileMenu(new ProfileMenu()),
     SignInMenu(new SignInMenu());
 
-    private final views.Menu menu;
+    private final Menu menu;
 
-    MenuTypes(views.Menu menu) {
+    MenuTypes(Menu menu) {
         this.menu = menu;
     }
 
     public Menu getMenu() {
         return menu;
+    }
+
+    @Override
+    public String toString() {
+        if (this == MenuTypes.ExitMenu) {
+            return "Exit Menu";
+        } else if (this == MenuTypes.AvatarMenu) {
+            return "Avatar Menu";
+        } else if (this == MenuTypes.GameMenu) {
+            return "Game Menu";
+        } else if (this == MenuTypes.MainMenu) {
+            return "Main Menu";
+        } else if (this == MenuTypes.ProfileMenu) {
+            return "Profile Menu";
+        } else if (this == MenuTypes.SignInMenu) {
+            return "Sign In Menu";
+        } else {
+            return "";
+        }
     }
 }

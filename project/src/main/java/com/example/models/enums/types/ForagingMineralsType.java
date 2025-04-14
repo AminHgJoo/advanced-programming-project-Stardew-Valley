@@ -20,6 +20,7 @@ public enum ForagingMineralsType {
     COAL(15);
 
     private final int sellPrice;
+
     ForagingMineralsType(int cellPrice) {
         this.sellPrice = cellPrice;
     }

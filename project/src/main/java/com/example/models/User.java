@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class User {
     private String username;
-    private String password;
+    private String hashedPassword;
     private String nickname;
     private String email;
     private String gender;
@@ -16,6 +16,7 @@ public class User {
     private int numberOfGames;
     private Game currentGame;
     private final ArrayList<Game> games = new ArrayList<>();
+
     public User(SecurityQuestion question, String answer, String gender
             , String email, String nickname, String password, String username) {
         this.question = question;
@@ -23,18 +24,19 @@ public class User {
         this.gender = gender;
         this.email = email;
         this.nickname = nickname;
-        this.password = password;
+        this.hashedPassword = password;
         this.username = username;
         this.moneyHighScore = 0;
         this.numberOfGames = 0;
         this.currentGame = null;
     }
+
     public User(String gender
             , String email, String nickname, String password, String username) {
         this.gender = gender;
         this.email = email;
         this.nickname = nickname;
-        this.password = password;
+        this.hashedPassword = password;
         this.username = username;
         this.moneyHighScore = 0;
         this.numberOfGames = 0;
@@ -49,12 +51,12 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
 
     public String getNickname() {

@@ -46,14 +46,15 @@ public enum ForagingSeedsType {
     RARE_SEEDS(Season.AUTUMN),
     POWDERMELON_SEEDS(Season.WINTER),
     ANCIENT_SEEDS(null),
-    MIXED_SEEDS(null)
-    ;
+    MIXED_SEEDS(null);
 
 
     private final Season season;
+
     ForagingSeedsType(Season season) {
         this.season = season;
     }
+
     public Season getSeason() {
         return season;
     }

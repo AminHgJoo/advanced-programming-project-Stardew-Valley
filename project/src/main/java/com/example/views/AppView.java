@@ -8,6 +8,12 @@ import java.util.Scanner;
 public class AppView {
     public final static Scanner scanner = new Scanner(System.in);
 
+    static {
+        if (App.getLoggedInUser() != null) {
+            App.setCurrMenuType(MenuTypes.MainMenu);
+        }
+    }
+
     public void run() {
         while (App.getCurrMenuType() != MenuTypes.ExitMenu) {
             String input = scanner.nextLine().trim();

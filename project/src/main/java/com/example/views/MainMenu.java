@@ -6,8 +6,6 @@ import com.example.models.IO.Response;
 import com.example.models.enums.commands.MainMenuCommands;
 
 public class MainMenu implements Menu {
-    MainMenuController mainMenuController = new MainMenuController();
-
     public void handleMenu(String input) {
         Response response = null;
         if (MainMenuCommands.ENTER_MENU.matches(input)) {

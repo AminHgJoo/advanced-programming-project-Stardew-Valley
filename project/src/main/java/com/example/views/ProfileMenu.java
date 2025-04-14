@@ -6,7 +6,6 @@ import com.example.models.IO.Response;
 import com.example.models.enums.commands.ProfileMenuCommands;
 
 public class ProfileMenu implements Menu {
-    ProfileMenuController profileMenuController = new ProfileMenuController();
 
     public void handleMenu(String input) {
         Response response = null;

@@ -12,6 +12,7 @@ public enum ForagingTreesType {
     MUSHROOM_TREE_SEEDS(null);
 
     private final Season season;
+
     ForagingTreesType(Season season) {
         this.season = season;
     }
