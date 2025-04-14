@@ -1,4 +1,4 @@
-package com.example.models.enums;
+package com.example.models.enums.types;
 
 import com.example.models.items.Item;
 

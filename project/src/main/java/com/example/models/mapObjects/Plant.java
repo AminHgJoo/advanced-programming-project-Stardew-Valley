@@ -1,6 +1,6 @@
 package com.example.models.mapObjects;
 
-import com.example.models.enums.PlantType;
+import com.example.models.enums.types.PlantType;
 import com.example.models.enums.Season;
 
 public class Plant {

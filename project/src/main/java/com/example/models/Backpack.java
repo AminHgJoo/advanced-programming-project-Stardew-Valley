@@ -1,6 +1,6 @@
 package com.example.models;
 
-import com.example.models.enums.BackpackType;
+import com.example.models.enums.types.BackpackType;
 
 import java.util.ArrayList;
 

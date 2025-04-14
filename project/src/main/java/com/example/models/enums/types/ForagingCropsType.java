@@ -1,6 +1,8 @@
 // TODO null means all seasons
 
-package com.example.models.enums;
+package com.example.models.enums.types;
+
+import com.example.models.enums.Season;
 
 public enum ForagingCropsType {
     COMMON_MUSHROOM(null,40,38),

@@ -1,7 +1,7 @@
 package com.example.views;
 
 import com.example.models.App;
-import com.example.models.enums.MenuTypes;
+import com.example.models.enums.types.MenuTypes;
 
 import java.util.Scanner;
 
