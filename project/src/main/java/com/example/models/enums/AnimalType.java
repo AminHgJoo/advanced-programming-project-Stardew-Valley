@@ -1,6 +1,6 @@
 package com.example.models.enums;
 
-import models.items.Item;
+import com.example.models.items.Item;
 
 import java.util.ArrayList;
 

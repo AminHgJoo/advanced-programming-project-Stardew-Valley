@@ -26,7 +26,7 @@ public class MainMenu implements Menu {
 
     private static Response getEnterMenuResponse(String input) {
         Request request = new Request(input);
-        request.body.put("menu_name", MainMenuCommands.ENTER_MENU.getGroup(input, "menu_name"));
+        request.body.put("menuName", MainMenuCommands.ENTER_MENU.getGroup(input, "menuName"));
         Response response = MainMenuController.handleEnterMenu(request);
         return response;
     }

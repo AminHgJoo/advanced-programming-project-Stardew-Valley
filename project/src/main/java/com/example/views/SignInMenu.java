@@ -40,7 +40,7 @@ public class SignInMenu implements Menu {
 
     private static Response getEnterMenuResponse(String input) {
         Request request = new Request(input);
-        request.body.put("menu_name", SignInMenuCommands.ENTER_MENU.getGroup(input, "menu_name"));
+        request.body.put("menuName", SignInMenuCommands.ENTER_MENU.getGroup(input, "menuName"));
         Response response = SignInMenuController.handleEnterMenu(request);
         return response;
     }
@@ -55,7 +55,7 @@ public class SignInMenu implements Menu {
         Request request = new Request(input);
         request.body.put("username", SignInMenuCommands.REGISTER.getGroup(input, "username"));
         request.body.put("password", SignInMenuCommands.REGISTER.getGroup(input, "password"));
-        request.body.put("password_confirm", SignInMenuCommands.REGISTER.getGroup(input, "password_confirm"));
+        request.body.put("passwordConfirm", SignInMenuCommands.REGISTER.getGroup(input, "passwordConfirm"));
         request.body.put("nickname", SignInMenuCommands.REGISTER.getGroup(input, "nickname"));
         request.body.put("email", SignInMenuCommands.REGISTER.getGroup(input, "email"));
         request.body.put("gender", SignInMenuCommands.REGISTER.getGroup(input, "gender"));
@@ -65,9 +65,9 @@ public class SignInMenu implements Menu {
 
     private static Response getPickQuestionResponse(String input) {
         Request request = new Request(input);
-        request.body.put("question_number", SignInMenuCommands.PICK_QUESTION.getGroup(input, "question_number"));
+        request.body.put("questionNumber", SignInMenuCommands.PICK_QUESTION.getGroup(input, "questionNumber"));
         request.body.put("answer", SignInMenuCommands.PICK_QUESTION.getGroup(input, "answer"));
-        request.body.put("answer_confirm", SignInMenuCommands.PICK_QUESTION.getGroup(input, "answer_confirm"));
+        request.body.put("answerConfirm", SignInMenuCommands.PICK_QUESTION.getGroup(input, "answerConfirm"));
         Response response = SignInMenuController.handlePickQuestion(request);
         return response;
     }
@@ -76,7 +76,7 @@ public class SignInMenu implements Menu {
         Request request = new Request(input);
         request.body.put("username", SignInMenuCommands.LOGIN.getGroup(input, "username"));
         request.body.put("password", SignInMenuCommands.LOGIN.getGroup(input, "password"));
-        request.body.put("login_flag", SignInMenuCommands.LOGIN.getGroup(input, "login_flag"));
+        request.body.put("loginFlag", SignInMenuCommands.LOGIN.getGroup(input, "loginFlag"));
         Response response = SignInMenuController.handleLogin(request);
         return response;
     }

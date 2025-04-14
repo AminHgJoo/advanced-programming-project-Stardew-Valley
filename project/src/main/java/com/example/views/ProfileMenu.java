@@ -59,8 +59,8 @@ public class ProfileMenu implements Menu {
     private static Response getChangePasswordResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("new_password", ProfileMenuCommands.CHANGE_PASSWORD.getGroup(input, "new_password"));
-        request.body.put("old_password", ProfileMenuCommands.CHANGE_PASSWORD.getGroup(input, "old_password"));
+        request.body.put("newPassword", ProfileMenuCommands.CHANGE_PASSWORD.getGroup(input, "newPassword"));
+        request.body.put("oldPassword", ProfileMenuCommands.CHANGE_PASSWORD.getGroup(input, "oldPassword"));
         response = ProfileMenuController.handleChangePassword(request);
         return response;
     }
@@ -90,7 +90,7 @@ public class ProfileMenu implements Menu {
     private static Response getEnterMenuResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("menu_name", ProfileMenuCommands.ENTER_MENU.getGroup(input, "menu_name"));
+        request.body.put("menuName", ProfileMenuCommands.ENTER_MENU.getGroup(input, "menuName"));
         response = ProfileMenuController.handleEnterMenu(request);
         return response;
     }

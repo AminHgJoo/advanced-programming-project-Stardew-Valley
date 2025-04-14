@@ -7,7 +7,7 @@ public enum ProfileMenuCommands implements Command {
     CHANGE_USERNAME("^change\\s+username\\s+-u\\s+(?<username>.+)$"),
     CHANGE_NICKNAME("^change\\s+nickname\\s+-u\\s+(?<nickname>.+)$"),
     CHANGE_EMAIL("^change\\s+email\\s+-e\\s+(?<email>.+)$"),
-    CHANGE_PASSWORD("^change\\s+password\\s+-p\\s+(?<new_password>.+?)\\s+-o\\s+(?<old_password>.+)$"),
+    CHANGE_PASSWORD("^change\\s+password\\s+-p\\s+(?<newPassword>.+?)\\s+-o\\s+(?<oldPassword>.+)$"),
     USER_INFO("user\\s+info"),
     SHOW_MENU(Command.SHOW_MENU),
     EXIT_MENU(Command.EXIT_MENU),

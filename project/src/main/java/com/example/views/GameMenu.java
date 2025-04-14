@@ -210,7 +210,7 @@ public class GameMenu implements Menu {
     private static Response getBuildResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("building_name", GameMenuCommands.BUILD.getGroup(input, "building_name"));
+        request.body.put("buildingName", GameMenuCommands.BUILD.getGroup(input, "buildingName"));
         request.body.put("x", GameMenuCommands.BUILD.getGroup(input, "x"));
         request.body.put("y", GameMenuCommands.BUILD.getGroup(input, "y"));
         response = World.handleBuildBuilding(request);
@@ -220,7 +220,7 @@ public class GameMenu implements Menu {
     private static Response getEatResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("food_name", GameMenuCommands.EAT.getGroup(input, "food_name"));
+        request.body.put("foodName", GameMenuCommands.EAT.getGroup(input, "foodName"));
         response = InventoryFunctionalities.handleEating(request);
         return response;
     }
@@ -251,7 +251,7 @@ public class GameMenu implements Menu {
     private static Response getAddItemCheatResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("item_name", GameMenuCommands.CHEAT_ADD_ITEM.getGroup(input, "item_name"));
+        request.body.put("itemName", GameMenuCommands.CHEAT_ADD_ITEM.getGroup(input, "itemName"));
         request.body.put("count", GameMenuCommands.CHEAT_ADD_ITEM.getGroup(input, "count"));
         response = InventoryFunctionalities.handleAddItemCheat(request);
         return response;
@@ -260,7 +260,7 @@ public class GameMenu implements Menu {
     private static Response getPlaceItemResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("item_name", GameMenuCommands.PLACE_ITEM.getGroup(input, "item_name"));
+        request.body.put("itemName", GameMenuCommands.PLACE_ITEM.getGroup(input, "itemName"));
         request.body.put("direction", GameMenuCommands.PLACE_ITEM.getGroup(input, "direction"));
         response = InventoryFunctionalities.handlePlaceItem(request);
         return response;
@@ -269,7 +269,7 @@ public class GameMenu implements Menu {
     private static Response getCraftingResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("item_name", GameMenuCommands.CRAFTING_CRAFT.getGroup(input, "item_name"));
+        request.body.put("itemName", GameMenuCommands.CRAFTING_CRAFT.getGroup(input, "itemName"));
         response = InventoryFunctionalities.handleItemCrafting(request);
         return response;
     }
@@ -318,7 +318,7 @@ public class GameMenu implements Menu {
     private static Response getCraftInfoResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("craft_name", GameMenuCommands.CRAFT_INFO.getGroup(input, "craft_name"));
+        request.body.put("craftName", GameMenuCommands.CRAFT_INFO.getGroup(input, "craftName"));
         response = InventoryFunctionalities.handleCraftInfoQuery(request);
         return response;
     }
@@ -334,7 +334,7 @@ public class GameMenu implements Menu {
     private static Response getUpgradeToolsResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("tool_name", GameMenuCommands.TOOLS_UPGRADE.getGroup(input, "tool_name"));
+        request.body.put("toolName", GameMenuCommands.TOOLS_UPGRADE.getGroup(input, "toolName"));
         response = InventoryFunctionalities.handleToolUpgrade(request);
         return response;
     }
@@ -356,7 +356,7 @@ public class GameMenu implements Menu {
     private static Response getToolsEquipResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("tool_name", GameMenuCommands.TOOLS_EQUIP.getGroup(input, "tool_name"));
+        request.body.put("toolName", GameMenuCommands.TOOLS_EQUIP.getGroup(input, "toolName"));
         response = InventoryFunctionalities.handleToolEquip(request);
         return response;
     }
@@ -538,7 +538,7 @@ public class GameMenu implements Menu {
     private static Response getGameMapResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("map_number", GameMenuCommands.GAME_MAP.getGroup(input, "map_number"));
+        request.body.put("mapNumber", GameMenuCommands.GAME_MAP.getGroup(input, "mapNumber"));
         response = LoadingSavingTurnHandling.handleMapSelection(request);
         return response;
     }
@@ -625,15 +625,15 @@ public class GameMenu implements Menu {
 
     private static Response getArtisanUseResponse(String input) {
         Request request = new Request(input);
-        request.body.put("artisan_name", GameMenuCommands.ARTISAN_USE.getGroup(input, "artisan_name"));
-        request.body.put("item1_name", GameMenuCommands.ARTISAN_USE.getGroup(input, "item1_name"));
+        request.body.put("artisanName", GameMenuCommands.ARTISAN_USE.getGroup(input, "artisanName"));
+        request.body.put("item1Name", GameMenuCommands.ARTISAN_USE.getGroup(input, "item1Name"));
         Response response = ArtisanController.handleArtisanUse(request);
         return response;
     }
 
     private static Response getArtisanGetResponse(String input) {
         Request request = new Request(input);
-        request.body.put("artisan_name", GameMenuCommands.ARTISAN_USE.getGroup(input, "artisan_name"));
+        request.body.put("artisanName", GameMenuCommands.ARTISAN_USE.getGroup(input, "artisanName"));
         Response response = ArtisanController.handleArtisanUse(request);
         return response;
     }
@@ -652,7 +652,7 @@ public class GameMenu implements Menu {
 
     private static Response getPurchaseResponse(String input) {
         Request request = new Request(input);
-        request.body.put("product_name", GameMenuCommands.PURCHASE.getGroup(input, "product_name"));
+        request.body.put("productName", GameMenuCommands.PURCHASE.getGroup(input, "productName"));
         request.body.put("count", GameMenuCommands.PURCHASE.getGroup(input, "count"));
         Response response = DealingController.handlePurchase(request);
         return response;
@@ -667,7 +667,7 @@ public class GameMenu implements Menu {
 
     private static Response getSellProductResponse(String input) {
         Request request = new Request(input);
-        request.body.put("product_name", GameMenuCommands.SELL_PRODUCT.getGroup(input, "product_name"));
+        request.body.put("productName", GameMenuCommands.SELL_PRODUCT.getGroup(input, "productName"));
         request.body.put("count", GameMenuCommands.SELL_PRODUCT.getGroup(input, "count"));
         Response response = DealingController.handleSellProduct(request);
         return response;
@@ -718,7 +718,7 @@ public class GameMenu implements Menu {
 
     private static Response getGiftRateResponse(String input) {
         Request request = new Request(input);
-        request.body.put("gift_number", GameMenuCommands.GIFT_RATE.getGroup(input, "gift_number"));
+        request.body.put("giftNumber", GameMenuCommands.GIFT_RATE.getGroup(input, "giftNumber"));
         request.body.put("rate", GameMenuCommands.GIFT_RATE.getGroup(input, "rate"));
         Response response = FriendshipController.handleGiftRate(request);
         return response;
@@ -807,14 +807,14 @@ public class GameMenu implements Menu {
 
     private static Response getMeetNPCResponse(String input) {
         Request request = new Request(input);
-        request.body.put("npc_name", GameMenuCommands.MEET_NPC.getGroup(input, "npc_name"));
+        request.body.put("npcName", GameMenuCommands.MEET_NPC.getGroup(input, "npcName"));
         Response response = NPCController.handleMeetNPC(request);
         return response;
     }
 
     private static Response getGiftNPCResponse(String input) {
         Request request = new Request(input);
-        request.body.put("npc_name", GameMenuCommands.GIFT_NPC.getGroup(input, "npc_name"));
+        request.body.put("npcName", GameMenuCommands.GIFT_NPC.getGroup(input, "npcName"));
         request.body.put("item", GameMenuCommands.GIFT_NPC.getGroup(input, "item"));
         Response response = NPCController.handleGiftNPC(request);
         return response;
@@ -840,7 +840,7 @@ public class GameMenu implements Menu {
 
     private static Response getEnterMenuResponse(String input) {
         Request request = new Request(input);
-        request.body.put("menu_name", GameMenuCommands.ENTER_MENU.getGroup(input, "menu_name"));
+        request.body.put("menuName", GameMenuCommands.ENTER_MENU.getGroup(input, "menuName"));
         Response response = Controller.handleEnterMenu(request);
         return response;
     }
