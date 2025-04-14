@@ -1,8 +1,8 @@
 package com.example.models;
 
 import com.example.models.NPCModels.NPCFriendship;
-import com.example.models.enums.BackpackType;
-import com.example.models.enums.TrashcanType;
+import com.example.models.enums.types.BackpackType;
+import com.example.models.enums.types.TrashcanType;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
 import com.example.models.skills.Skill;

@@ -1,6 +1,6 @@
 package com.example.models;
 
-import com.example.models.enums.MenuTypes;
+import com.example.models.enums.types.MenuTypes;
 
 import java.util.ArrayList;
 

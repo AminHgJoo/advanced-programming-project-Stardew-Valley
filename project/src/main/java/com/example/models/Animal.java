@@ -1,6 +1,6 @@
 package com.example.models;
 
-import com.example.models.enums.AnimalType;
+import com.example.models.enums.types.AnimalType;
 
 public class Animal {
     private String name;
