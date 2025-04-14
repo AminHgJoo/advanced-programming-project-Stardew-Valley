@@ -8,7 +8,6 @@ import com.example.models.User;
 import com.example.models.enums.SecurityQuestion;
 import com.example.models.enums.types.MenuTypes;
 import com.example.utilities.Validation;
-import com.example.views.AppView;
 
 public class SignInMenuController extends Controller {
 
@@ -53,7 +52,7 @@ public class SignInMenuController extends Controller {
             return new Response(false, "Username is invalid!");
         }
         while (UserRepository.findUserByUsername(username) != null) {
-            username = username + (int)(Math.random() * 69420);
+            username = username + (int) (Math.random() * 69420);
         }
         if (!Validation.validateEmail(email)) {
             return new Response(false, "Email is invalid!");

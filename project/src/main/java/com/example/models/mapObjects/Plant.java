@@ -1,7 +1,7 @@
 package com.example.models.mapObjects;
 
-import com.example.models.enums.types.PlantType;
 import com.example.models.enums.Season;
+import com.example.models.enums.types.PlantType;
 
 public class Plant {
     public final Season seasonOfGrowth;

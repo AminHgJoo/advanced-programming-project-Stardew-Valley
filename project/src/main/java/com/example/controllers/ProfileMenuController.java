@@ -18,7 +18,7 @@ public class ProfileMenuController extends Controller {
             return new Response(false, "Pick a new username!");
         }
         while (UserRepository.findUserByUsername(username) != null) {
-            username = username + (int)(Math.random() * 69420);
+            username = username + (int) (Math.random() * 69420);
         }
         user.setUsername(username);
         UserRepository.saveUser(user);
@@ -33,9 +33,9 @@ public class ProfileMenuController extends Controller {
         String numberOfGames = String.valueOf(user.getNumberOfGames());
         return new Response(true,
                 "Username: " + username + "\n" +
-                "nickname: " + nickname + "\n" +
-                "moneyHighScore: " + moneyHighScore + "\n" +
-                "numberOfGames: " + numberOfGames);
+                        "nickname: " + nickname + "\n" +
+                        "moneyHighScore: " + moneyHighScore + "\n" +
+                        "numberOfGames: " + numberOfGames);
 
     }
 
@@ -48,7 +48,7 @@ public class ProfileMenuController extends Controller {
         }
         if (!Validation.validatePasswordSecurity(newPassword).equals("Success")) {
             return new Response(false, "New password isn't secure! "
-             + Validation.validatePasswordSecurity(newPassword));
+                    + Validation.validatePasswordSecurity(newPassword));
         }
         if (!user.getHashedPassword().equals(Validation.hashPassword(oldPassword))) {
             return new Response(false, "Old password is wrong!");
@@ -85,5 +85,4 @@ public class ProfileMenuController extends Controller {
         UserRepository.saveUser(user);
         return new Response(true, "Nickname has been changed!");
     }
-
 }
