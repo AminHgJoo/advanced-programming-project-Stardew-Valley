@@ -1,6 +1,6 @@
 package com.example.models.enums;
 
-import views.*;
+import com.example.views.*;
 
 public enum MenuTypes {
     ExitMenu(new ExitMenu()),

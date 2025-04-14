@@ -1,6 +1,6 @@
 package com.example.models.mapObjects;
 
-import models.enums.StoneType;
+import com.example.models.enums.StoneType;
 
 public class Stone {
     private final StoneType stoneType;

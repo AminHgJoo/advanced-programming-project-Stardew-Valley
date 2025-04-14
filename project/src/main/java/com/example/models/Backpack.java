@@ -2,7 +2,7 @@ package com.example.models;
 
 import com.example.models.enums.BackpackType;
 
-import com.example.java.util.ArrayList;
+import java.util.ArrayList;
 
 public class Backpack {
     private final ArrayList<Slot> slots = new ArrayList<>();

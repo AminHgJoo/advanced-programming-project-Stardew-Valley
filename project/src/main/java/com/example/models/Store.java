@@ -2,8 +2,8 @@ package com.example.models;
 
 import com.example.models.NPCModels.NPC;
 
-import com.example.java.time.LocalDateTime;
-import com.example.java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Store {
     private final NPC owner;

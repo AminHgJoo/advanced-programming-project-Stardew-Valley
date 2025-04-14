@@ -1,7 +1,7 @@
 package com.example.models.mapObjects;
 
-import models.enums.TreeStage;
-import models.enums.TreeType;
+import com.example.models.enums.TreeStage;
+import com.example.models.enums.TreeType;
 
 public class Tree {
     private final TreeStage treeGrowthStage;

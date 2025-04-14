@@ -1,6 +1,6 @@
 package com.example.models.skills;
 
-import models.enums.SkillLevel;
+import com.example.models.enums.SkillLevel;
 
 abstract public class Skill {
     protected double energyCost;

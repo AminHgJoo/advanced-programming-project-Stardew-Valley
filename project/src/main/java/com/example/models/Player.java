@@ -7,7 +7,7 @@ import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
 import com.example.models.skills.Skill;
 
-import com.example.java.util.ArrayList;
+import java.util.ArrayList;
 
 public class Player {
     private Coordinate coordinate;

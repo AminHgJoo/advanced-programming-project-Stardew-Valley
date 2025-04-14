@@ -1,8 +1,8 @@
 package com.example.models.NPCModels;
 
-import models.Quest;
-import models.items.Item;
-import models.mapModels.Coordinate;
+import com.example.models.Quest;
+import com.example.models.items.Item;
+import com.example.models.mapModels.Coordinate;
 
 import java.util.ArrayList;
 

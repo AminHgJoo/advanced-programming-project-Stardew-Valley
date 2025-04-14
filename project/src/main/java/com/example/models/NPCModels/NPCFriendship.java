@@ -1,6 +1,6 @@
 package com.example.models.NPCModels;
 
-import models.Player;
+import com.example.models.Player;
 
 public class NPCFriendship {
     private final Player player;

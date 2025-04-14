@@ -1,7 +1,7 @@
 package com.example.models.mapModels;
 
-import models.NPCModels.NPC;
-import models.Store;
+import com.example.models.NPCModels.NPC;
+import com.example.models.Store;
 
 import java.util.ArrayList;
 

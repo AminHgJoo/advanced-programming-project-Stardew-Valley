@@ -1,6 +1,6 @@
 package com.example.models.items;
 
-import models.enums.Quality;
+import com.example.models.enums.Quality;
 
 abstract public class Item {
     protected Quality quality;

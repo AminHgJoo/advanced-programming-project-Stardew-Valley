@@ -1,6 +1,6 @@
 package com.example.models.mapModels;
 
-import models.buildings.Building;
+import com.example.models.buildings.Building;
 
 import java.util.ArrayList;
 

@@ -3,7 +3,7 @@ package com.example.views;
 import com.example.models.App;
 import com.example.models.enums.MenuTypes;
 
-import com.example.java.util.Scanner;
+import java.util.Scanner;
 
 public class AppView {
     public final static Scanner scanner = new Scanner(System.in);
