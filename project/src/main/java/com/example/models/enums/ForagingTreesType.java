@@ -1,3 +1,5 @@
+// TODO null means all seasons
+
 package com.example.models.enums;
 
 public enum ForagingTreesType {
