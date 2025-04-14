@@ -15,10 +15,10 @@ public class UserRepository {
     public static void saveUser(User user) {
 
     }
+    public static User getCurrentUser() {return null;}
     public static ArrayList<User> findAllUsers() {
         return null;
     }
     public static void removeUser(User user) {
-
     }
 }
