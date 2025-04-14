@@ -4,102 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ec01445c-2cd4-49a9-b63e-ff9b7dea5c70" name="Changes" comment="adding configs">
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/Controller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/MainMenuController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/ProfileMenuController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/SignInMenuController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/ArtisanController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/Cooking.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/DealingController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/Farming.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/FriendshipController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/InventoryFunctionalities.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/LivestockController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/LoadingSavingTurnHandling.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/MovementAndMap.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/NPCController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/TradingController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/World.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/Animal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/App.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/Backpack.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/Friendship.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/Game.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/IO/Request.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/IO/Response.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/NPCModels/NPC.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/NPCModels/NPCDialogue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/NPCModels/NPCFriendship.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/NPCModels/NPCRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/NPCModels/NPCReward.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/PlayerAnimal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/Quest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/Slot.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/Store.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/StoreProduct.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/activities/Activity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/activities/Cooking.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/activities/Crafting.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Barn.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Building.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Coop.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Greenhouse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/PlayerHome.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/AnimalType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/BackpackType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/CropStage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/CropType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/ForagingType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/MenuTypes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/PlantType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/Quality.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/Season.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/SecurityQuestion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/SkillLevel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/StoneType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/TrashcanType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/TreeStage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/TreeType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/Weather.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/commands/Command.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/commands/GameMenuCommands.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/commands/MainMenuCommands.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/commands/ProfileMenuCommands.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/commands/SignInMenuCommands.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/items/Crop.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/items/Food.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/items/Item.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/items/Tool.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapModels/Cell.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapModels/Coordinate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapModels/Farm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapModels/Map.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapModels/Village.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapObjects/ArtisanBlock.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapObjects/Plant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapObjects/Stone.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapObjects/Tree.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapObjects/Water.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/skills/Farming.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/skills/Fishing.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/skills/Foraging.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/skills/Mining.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/skills/Skill.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/views/AppView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/views/AvatarMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/views/ExitMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/views/GameMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/views/GameThread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/views/MainMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/views/Menu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/views/ProfileMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/views/SignInMenu.java" afterDir="false" />
+    <list default="true" id="ec01445c-2cd4-49a9-b63e-ff9b7dea5c70" name="Changes" comment="fixing imports">
+      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/CraftingRecipes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/ForagingTreesType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/resources/hibernate.cfg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/ForagingType.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/ForagingMineralsType.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,6 +19,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -191,6 +101,7 @@
       <updated>1744454571514</updated>
       <workItem from="1744454575154" duration="1969000" />
       <workItem from="1744529890402" duration="538000" />
+      <workItem from="1744619401285" duration="1936000" />
     </task>
     <task id="LOCAL-00001" summary="adding code">
       <option name="closed" value="true" />
@@ -224,7 +135,23 @@
       <option name="project" value="LOCAL" />
       <updated>1744455232678</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="adding Foragings type">
+      <option name="closed" value="true" />
+      <created>1744619514669</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1744619514669</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fixing imports">
+      <option name="closed" value="true" />
+      <created>1744620168546</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1744620168546</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -233,6 +160,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="adding code" />
     <MESSAGE value="adding configs" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding configs" />
+    <MESSAGE value="adding Foragings type" />
+    <MESSAGE value="fixing imports" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing imports" />
   </component>
 </project>
