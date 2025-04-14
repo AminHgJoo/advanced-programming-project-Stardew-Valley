@@ -16,6 +16,6 @@
         <!-- Hibernate Configuration -->
         <property name="hibernate.hbm2ddl.auto">update</property>
         <!-- Database settings... -->
-
+        <mapping class="com.example.models.User"/>
     </session-factory>
 </hibernate-configuration>
