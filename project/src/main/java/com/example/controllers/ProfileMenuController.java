@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import com.example.Repositories.UserRepository;
+import com.example.models.App;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.User;
@@ -8,16 +9,16 @@ import com.example.utilities.Validation;
 
 public class ProfileMenuController extends Controller {
     public static Response handleChangeUsername(Request request) {
-        String username = request.body.put("username", request.body.get("username"));
-        User user = UserRepository.getCurrentUser();
+        String username = request.body.get("username");
+        User user = App.getLoggedInUser();
         if (!Validation.validateUsername(username)) {
             return new Response(false, "Username is invalid!");
         }
         if (user.getUsername().equals(username)) {
-            return new Response(false, "Username is already taken!");
+            return new Response(false, "Pick a new username!");
         }
         while (UserRepository.findUserByUsername(username) != null) {
-            username = username + Math.random() % 42069;
+            username = username + (int)(Math.random() * 69420);
         }
         user.setUsername(username);
         UserRepository.saveUser(user);
@@ -25,7 +26,7 @@ public class ProfileMenuController extends Controller {
     }
 
     public static Response handleUserInfoQuery(Request request) {
-        User user = UserRepository.getCurrentUser();
+        User user = App.getLoggedInUser();
         String username = user.getUsername();
         String nickname = user.getNickname();
         String moneyHighScore = String.valueOf(user.getMoneyHighScore());
@@ -41,29 +42,33 @@ public class ProfileMenuController extends Controller {
     public static Response handleChangePassword(Request request) {
         String newPassword = request.body.get("newPassword");
         String oldPassword = request.body.get("oldPassword");
-        User user = UserRepository.getCurrentUser();
-        if (!Validation.validatePassword(newPassword)) {
-            return new Response(false, "New password is invalid!");
+        User user = App.getLoggedInUser();
+        if (!Validation.validatePasswordFormat(newPassword)) {
+            return new Response(false, "New password format is invalid!");
         }
-        if (!user.getHashedPassword().equals(oldPassword)) {
-            return new Response(false, "old password is invalid!");
+        if (!Validation.validatePasswordSecurity(newPassword).equals("Success")) {
+            return new Response(false, "New password isn't secure! "
+             + Validation.validatePasswordSecurity(newPassword));
         }
-        if (user.getPassword().equals(newPassword)) {
-            return new Response(false, "New password is the same!");
+        if (!user.getHashedPassword().equals(Validation.hashPassword(oldPassword))) {
+            return new Response(false, "Old password is wrong!");
         }
-        user.setPassword(newPassword);
+        if (oldPassword.equals(newPassword)) {
+            return new Response(false, "New password is the same as the old password!");
+        }
+        user.setHashedPassword(Validation.hashPassword(newPassword));
         UserRepository.saveUser(user);
         return new Response(true, "Password changed!");
     }
 
     public static Response handleChangeEmail(Request request) {
         String email = request.body.get("email");
-        User user = UserRepository.getCurrentUser();
+        User user = App.getLoggedInUser();
         if (!Validation.validateEmail(email)) {
             return new Response(false, "Email is invalid!");
         }
         if (user.getEmail().equals(email)) {
-            return new Response(false, "Email is already taken!");
+            return new Response(false, "Enter a new email address!");
         }
         user.setEmail(email);
         UserRepository.saveUser(user);
@@ -72,9 +77,9 @@ public class ProfileMenuController extends Controller {
 
     public static Response handleChangeNickname(Request request) {
         String nickname = request.body.get("nickname");
-        User user = UserRepository.getCurrentUser();
+        User user = App.getLoggedInUser();
         if (user.getNickname().equals(nickname)) {
-            return new Response(false, "Nickname is already taken!");
+            return new Response(false, "Choose a new nickname!");
         }
         user.setNickname(nickname);
         UserRepository.saveUser(user);

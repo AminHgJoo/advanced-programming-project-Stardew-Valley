@@ -189,9 +189,6 @@ public class GameMenu implements Menu {
             response = getInvalidCommand();
         }
 
-        /*
-        TODO: implement other commands, add invalid command error
-            */
         printResponse(response);
     }
 
