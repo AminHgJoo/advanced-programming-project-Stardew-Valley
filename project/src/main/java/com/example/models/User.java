@@ -15,8 +15,7 @@ public class User {
     private int moneyHighScore;
     private int numberOfGames;
     private Game currentGame;
-    private final ArrayList<Game> games;
-
+    private final ArrayList<Game> games = new ArrayList<>();
     public User(SecurityQuestion question, String answer, String gender
             , String email, String nickname, String password, String username) {
         this.question = question;
@@ -29,7 +28,17 @@ public class User {
         this.moneyHighScore = 0;
         this.numberOfGames = 0;
         this.currentGame = null;
-        this.games = new ArrayList<>();
+    }
+    public User(String gender
+            , String email, String nickname, String password, String username) {
+        this.gender = gender;
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.username = username;
+        this.moneyHighScore = 0;
+        this.numberOfGames = 0;
+        this.currentGame = null;
     }
 
     public String getUsername() {
