@@ -9,6 +9,7 @@ public enum SignInMenuCommands implements Command {
     LOGIN("^login\\s+-u\\s+(?<username>.+?)\\s+-p\\s+(?<password>.+?)(\\s+(?<loginFlag>–stay-logged-in))$"),
     FORGET("^forget\\s+password\\s+-u\\s+(?<username>.+)$"),
     ANSWER("^answer\\s+-a\\s+(?<answer>.+)$"),
+    LIST_QUESTIONS("^list\\s+questions$"),
     SHOW_MENU(Command.SHOW_MENU),
     EXIT_MENU(Command.EXIT_MENU),
     ENTER_MENU(Command.ENTER_MENU);
