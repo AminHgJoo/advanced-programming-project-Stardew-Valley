@@ -9,6 +9,7 @@ public class SignInMenu implements Menu {
 
     public void handleMenu(String input) {
         Response response = null;
+
         if (SignInMenuController.getUserOfForgetPassword() != null) {
             response = getChangePasswordResponse(input);
         } else if (SignInMenuCommands.EXIT_MENU.matches(input)) {

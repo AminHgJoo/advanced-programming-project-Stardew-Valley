@@ -13,4 +13,5 @@ public interface Menu {
     default Response getInvalidCommand() {
         return new Response(false, "Invalid command");
     }
+
 }
