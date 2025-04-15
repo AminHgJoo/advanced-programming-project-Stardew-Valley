@@ -9,8 +9,15 @@ public class SignInMenu implements Menu {
 
     public void handleMenu(String input) {
         Response response = null;
-
-        if (SignInMenuController.getUserOfForgetPassword() != null) {
+        if (SignInMenuCommands.LIST_QUESTIONS.matches(input)) {
+            response = getListQuestionsResponse(input);
+        } else if (SignInMenuController.isProgramWaitingForQuestion) {
+            if (SignInMenuCommands.PICK_QUESTION.matches(input)) {
+                response = getPickQuestionResponse(input);
+            } else {
+                response = getInvalidCommand();
+            }
+        } else if (SignInMenuController.getUserOfForgetPassword() != null) {
             response = getChangePasswordResponse(input);
         } else if (SignInMenuCommands.EXIT_MENU.matches(input)) {
             response = getExitMenuResponse(input);
@@ -26,10 +33,6 @@ public class SignInMenu implements Menu {
             response = getLoginResponse(input);
         } else if (SignInMenuCommands.FORGET.matches(input)) {
             response = getForgetPasswordResponse(input);
-        } else if (SignInMenuCommands.PICK_QUESTION.matches(input)) {
-            response = getPickQuestionResponse(input);
-        } else if (SignInMenuCommands.LIST_QUESTIONS.matches(input)) {
-            response = getListQuestionsResponse(input);
         } else {
             response = getInvalidCommand();
         }

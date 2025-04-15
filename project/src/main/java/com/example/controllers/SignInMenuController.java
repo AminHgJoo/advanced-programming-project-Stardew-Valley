@@ -12,6 +12,7 @@ import com.example.utilities.Validation;
 public class SignInMenuController extends Controller {
 
     private static User userOfForgetPassword = null;
+    public static boolean isProgramWaitingForQuestion = false;
 
     public static User getUserOfForgetPassword() {
         return userOfForgetPassword;
@@ -19,7 +20,6 @@ public class SignInMenuController extends Controller {
 
     public static Response handleAccountRecovery(Request request) {
         User user = userOfForgetPassword;
-        userOfForgetPassword = null;
         String newPass = request.command;
         if (Validation.hashPassword(newPass).equals(user.getHashedPassword())) {
             return new Response(false, "Select a new password!");
@@ -38,6 +38,9 @@ public class SignInMenuController extends Controller {
         }
         user.setHashedPassword(Validation.hashPassword(newPass));
         UserRepository.saveUser(user);
+        userOfForgetPassword = null;
+        App.setLoggedInUser(user);
+        App.setCurrMenuType(MenuTypes.MainMenu);
         return new Response(true, "Successfully logged in! Password updated to: " + newPass);
     }
 
@@ -58,7 +61,7 @@ public class SignInMenuController extends Controller {
             return new Response(false, "Email is invalid!");
         }
 
-        if (password.equals(passwordConfirm) && password.equals("random")) {
+        if (password.equals(passwordConfirm) && password.compareToIgnoreCase("random") == 0) {
             password = Validation.createRandomPassword();
             passwordConfirm = password;
         } else {
@@ -75,6 +78,7 @@ public class SignInMenuController extends Controller {
         }
         User user = new User(gender, email, nickname, Validation.hashPassword(password), username);
         UserRepository.saveUser(user);
+        isProgramWaitingForQuestion = true;
         return new Response(true, "User created! Password is: " + password);
     }
 
@@ -92,7 +96,10 @@ public class SignInMenuController extends Controller {
         user.setAnswer(answer);
         user.setQuestion(SecurityQuestion.values()[questionNumber - 1]);
         UserRepository.saveUser(user);
-        return new Response(true, "Question Picked!");
+        isProgramWaitingForQuestion = false;
+        App.setCurrMenuType(MenuTypes.MainMenu);
+        App.setLoggedInUser(user);
+        return new Response(true, "Question Picked! Logging in...");
     }
 
     public static Response handleLogin(Request request) {

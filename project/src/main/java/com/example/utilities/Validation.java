@@ -82,13 +82,10 @@ public class Validation {
         }
         if (invalidFrontAndEndChars(username)) return false;
 
-        if (thisCharCount('.', domain) == 0) {
-            return false;
-        }
         if (!tail.matches("[a-zA-Z]{2,}")) {
             return false;
         }
-        if (!domain.matches("a-zA-Z\\d-")) {
+        if (!domain.matches("[a-zA-Z\\d-]+")) {
             return false;
         }
         if (invalidFrontAndEndChars(domain)) return false;
