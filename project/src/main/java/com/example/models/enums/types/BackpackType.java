@@ -1,15 +1,24 @@
 package com.example.models.enums.types;
 
 public enum BackpackType {
-    DEFAULT(12);
+    DEFAULT(12, "Default"),
+    GIANT(24, "Giant"),
+    DELUXE(Double.POSITIVE_INFINITY, "Deluxe"),;
 
-    public int getMaxCapacity() {
-        return maxCapacity;
+    final private double maxCapacity;
+    final private String name;
+
+    BackpackType(double maxCapacity, String name) {
+        this.maxCapacity = maxCapacity;
+        this.name = name;
     }
 
-    final public int maxCapacity;
+    @Override
+    public String toString() {
+        return name;
+    }
 
-    BackpackType(int maxCapacity) {
-        this.maxCapacity = maxCapacity;
+    public double getMaxCapacity() {
+        return maxCapacity;
     }
 }

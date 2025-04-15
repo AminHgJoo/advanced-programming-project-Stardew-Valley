@@ -3,6 +3,7 @@ package com.example.models;
 import com.example.models.NPCModels.NPCFriendship;
 import com.example.models.enums.types.BackpackType;
 import com.example.models.enums.types.TrashcanType;
+import com.example.models.items.Item;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
 import com.example.models.skills.Skill;
@@ -22,8 +23,9 @@ public class Player {
     private final ArrayList<PlayerAnimal> animals = new ArrayList<>();
     private double energy = 0;
     private TrashcanType trashcanType;
+    private Item equippedItem;
 
-    /// called in game thread.
+    ///TODO: called in game thread.
     public void checkForFainting() {
 
     }
@@ -100,5 +102,14 @@ public class Player {
 
     public ArrayList<PlayerAnimal> getAnimals() {
         return animals;
+    }
+
+
+    public Item getEquippedItem() {
+        return equippedItem;
+    }
+
+    public void setEquippedItem(Item equippedItem) {
+        this.equippedItem = equippedItem;
     }
 }
