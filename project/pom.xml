@@ -12,33 +12,31 @@
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
+        <mongodb-driver-sync.version>5.0.0</mongodb-driver-sync.version>
+        <mongodb-crypt.version>1.8.0</mongodb-crypt.version>
+        <!-- Keeping 1.2.13 until mongodb-crypt makes slf4j-api an optional dependency -->
+        <!-- https://jira.mongodb.org/browse/MONGOCRYPT-602 -->
+        <logback-classic.version>1.2.13</logback-classic.version>
+        <exec-maven-plugin.version>3.1.1</exec-maven-plugin.version>
     </properties>
     <dependencies>
+
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.6.15.Final</version> <!-- Use the latest version -->
+            <groupId>dev.morphia.morphia</groupId>
+            <artifactId>morphia-core</artifactId>
+            <version>2.3.0</version> <!-- Latest stable version -->
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.0</version> <!-- Use latest version -->
         </dependency>
 
-        <!-- PostgreSQL JDBC Driver -->
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.5.0</version> <!-- Use the latest version -->
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>4.9.0</version> <!-- Latest stable version -->
         </dependency>
-
-        <!-- Hibernate Annotations -->
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>javax.persistence-api</artifactId>
-            <version>2.2</version>
-        </dependency>
-
-        <!-- Logging (Optional, for Hibernate) -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.slf4j</groupId>-->
-        <!--            <artifactId>slf4j-api</artifactId>-->
-        <!--            <version>1.7.36</version>-->
-        <!--        </dependency>-->
     </dependencies>
 </project>

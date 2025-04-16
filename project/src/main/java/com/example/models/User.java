@@ -1,10 +1,17 @@
 package com.example.models;
 
 import com.example.models.enums.SecurityQuestion;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Reference;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 
-public class User {
+@Entity("users")
+public class User{
+    @Id
+    private ObjectId id;
     private String username;
     private String hashedPassword;
     private String nickname;
@@ -14,9 +21,14 @@ public class User {
     private String answer;
     private int moneyHighScore;
     private int numberOfGames;
+    @Reference
     private Game currentGame;
+    @Reference
     private final ArrayList<Game> games = new ArrayList<>();
 
+    public User(){
+
+    }
     public User(SecurityQuestion question, String answer, String gender
             , String email, String nickname, String password, String username) {
         this.question = question;
@@ -125,5 +137,9 @@ public class User {
 
     public ArrayList<Game> getGames() {
         return games;
+    }
+
+    public ObjectId getId() {
+        return id;
     }
 }

@@ -4,12 +4,18 @@ import com.example.models.enums.Season;
 import com.example.models.enums.Weather;
 import com.example.models.mapModels.Map;
 import com.example.views.GameThread;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+@Entity("games")
 public class Game {
+    @Id
+    private ObjectId id;
     final private ArrayList<Player> players;
     final private Map map;
     private boolean isGameOngoing;
@@ -86,5 +92,9 @@ public class Game {
 
     public GameThread getTimeHandler() {
         return timeHandler;
+    }
+
+    public ObjectId getId() {
+        return id;
     }
 }
