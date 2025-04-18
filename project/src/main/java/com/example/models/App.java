@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class App {
     final private static ArrayList<User> users = new ArrayList<>();
     private static User loggedInUser = UserRepository.getStayLoggedInUser();
-    private static MenuTypes currMenuType;
+    private static MenuTypes currMenuType = MenuTypes.SignInMenu;
 
     public static MenuTypes getCurrMenuType() {
         return currMenuType;

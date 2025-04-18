@@ -57,15 +57,12 @@ public class SignInMenuController extends Controller {
         while (UserRepository.findUserByUsername(username) != null) {
             username = username + (int) (Math.random() * 69420);
         }
-        if (!Validation.validateEmail(email)) {
-            return new Response(false, "Email is invalid!");
-        }
-
         if (password.equals(passwordConfirm) && password.compareToIgnoreCase("random") == 0) {
             password = Validation.createRandomPassword();
             passwordConfirm = password;
         } else {
             if (!Validation.validatePasswordFormat(password)) {
+                System.out.println(password);
                 return new Response(false, "Password Format is invalid!");
             }
             if (!Validation.validatePasswordSecurity(password).equals("Success")) {
@@ -76,6 +73,10 @@ public class SignInMenuController extends Controller {
                 return new Response(false, "Passwords do not match!");
             }
         }
+        if (!Validation.validateEmail(email)) {
+            return new Response(false, "Email is invalid!");
+        }
+
         User user = new User(gender, email, nickname, Validation.hashPassword(password), username);
         UserRepository.saveUser(user);
         isProgramWaitingForQuestion = true;
