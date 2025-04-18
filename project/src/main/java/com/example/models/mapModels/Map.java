@@ -11,7 +11,7 @@ public class Map {
         this.village = village;
     }
 
-    public static Map makeMap(){
+    public static Map makeMap() {
         ArrayList<Farm> farms = new ArrayList<>();
         farms.add(Farm.makeFarm());
         farms.add(Farm.makeFarm());
