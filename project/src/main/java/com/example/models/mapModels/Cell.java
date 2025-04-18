@@ -1,10 +1,13 @@
 package com.example.models.mapModels;
 
+import com.example.models.mapObjects.MapObject;
+
 public class Cell {
-    private Object objectOnCell;
+    //TODO : modify
+    private MapObject objectOnCell;
     private Coordinate coordinate;
 
-    public Cell(Object objectOnCell, Coordinate coordinate) {
+    public Cell(MapObject objectOnCell, Coordinate coordinate) {
         this.objectOnCell = objectOnCell;
         this.coordinate = coordinate;
     }
@@ -21,7 +24,7 @@ public class Cell {
         return objectOnCell;
     }
 
-    public void setObjectOnCell(Object objectOnCell) {
+    public void setObjectOnCell(MapObject objectOnCell) {
         this.objectOnCell = objectOnCell;
     }
 }

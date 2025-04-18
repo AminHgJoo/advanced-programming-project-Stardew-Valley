@@ -9,7 +9,7 @@ import org.bson.types.ObjectId;
 import java.util.ArrayList;
 
 @Entity("users")
-public class User{
+public class User {
     @Id
     private ObjectId id;
     private String username;
@@ -26,9 +26,10 @@ public class User{
     @Reference
     private final ArrayList<Game> games = new ArrayList<>();
 
-    public User(){
+    public User() {
 
     }
+
     public User(SecurityQuestion question, String answer, String gender
             , String email, String nickname, String password, String username) {
         this.question = question;

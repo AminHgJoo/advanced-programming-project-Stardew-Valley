@@ -1,4 +1,4 @@
 package com.example.models.mapObjects;
 
-public class ArtisanBlock {
+public class ArtisanBlock extends MapObject {
 }

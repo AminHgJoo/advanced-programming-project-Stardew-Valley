@@ -2,10 +2,11 @@ package com.example.models.mapObjects;
 
 import com.example.models.enums.types.StoneType;
 
-public class Stone {
+public class Stone extends MapObject {
     private final StoneType stoneType;
 
     public Stone(StoneType stoneType) {
+        super(false);
         this.stoneType = stoneType;
     }
 

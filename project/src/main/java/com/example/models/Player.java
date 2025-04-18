@@ -25,7 +25,7 @@ public class Player {
     private TrashcanType trashcanType;
     private Item equippedItem;
 
-    ///TODO: called in game thread.
+    /// TODO: called in game thread.
     public void checkForFainting() {
 
     }

@@ -5,18 +5,18 @@ import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 
 public class Connection {
-   private static Datastore database;
+    private static Datastore database;
 
-   public static Datastore getDatabase() {
-       if(database == null) {
-           try{
-               database = Morphia.createDatastore(MongoClients.create("mongodb://localhost:27017"), "AP_PROJECT");
-               database.getMapper().mapPackage("com.example.models");
-               database.ensureIndexes();
-           }catch (Exception e){
-               e.printStackTrace();
-           }
-       }
-       return database;
-   }
+    public static Datastore getDatabase() {
+        if (database == null) {
+            try {
+                database = Morphia.createDatastore(MongoClients.create("mongodb://localhost:27017"), "AP_PROJECT");
+                database.getMapper().mapPackage("com.example.models");
+                database.ensureIndexes();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return database;
+    }
 }

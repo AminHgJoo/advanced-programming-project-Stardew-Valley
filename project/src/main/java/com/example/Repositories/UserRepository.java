@@ -9,13 +9,14 @@ import java.util.ArrayList;
 
 public class UserRepository {
     private static final Datastore db = Connection.getDatabase();
+
     public static User findUserById(String id) {
-        User user = db.find(User.class).filter("_id",new ObjectId(id)).first();
+        User user = db.find(User.class).filter("_id", new ObjectId(id)).first();
         return user;
     }
 
     public static User findUserByUsername(String username) {
-        User user = db.find(User.class).filter("username",username).first();
+        User user = db.find(User.class).filter("username", username).first();
         return user;
     }
 
@@ -24,14 +25,15 @@ public class UserRepository {
     }
 
     public static ArrayList<User> findAllUsers() {
-       ArrayList<User> users = new ArrayList<>(db.find(User.class).iterator().toList());
-       return users;
+        ArrayList<User> users = new ArrayList<>(db.find(User.class).iterator().toList());
+        return users;
     }
 
     public static void removeUser(User user) {
         db.delete(user);
     }
 
+    //TODO: implement stay logged in config.
     public static User getStayLoggedInUser() {
         return null;
     }
