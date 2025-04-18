@@ -6,6 +6,7 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.Weather;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 public class World extends Controller {
@@ -33,7 +34,10 @@ public class World extends Controller {
     public static Response handleDayOfWeekQuery(Request request) {
         Response response = new Response();
         response.setSuccess(true);
-        response.setMessage(App.getLoggedInUser().getCurrentGame().getDate().getDayOfWeek().toString());
+        LocalDateTime currentDateTime = App.getLoggedInUser().getCurrentGame().getDate();
+        int currentDay = currentDateTime.getDayOfMonth();
+        int dayOfWeek = currentDay % 7;
+        response.setMessage(DayOfWeek.values()[dayOfWeek].toString());
         return response;
     }
 
