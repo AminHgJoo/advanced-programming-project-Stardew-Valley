@@ -29,9 +29,9 @@ public class Game {
 
     }
 
-    public Game(ArrayList<Player> players, Map map, Player currentPlayer) {
+    public Game(ArrayList<Player> players, Player currentPlayer) {
         this.players = players;
-        this.map = map;
+        this.map = Map.makeMap();
         this.isGameOngoing = true;
         this.currentPlayer = currentPlayer;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -97,4 +97,5 @@ public class Game {
     public ObjectId getId() {
         return id;
     }
+
 }

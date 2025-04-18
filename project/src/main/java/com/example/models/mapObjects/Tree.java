@@ -8,7 +8,7 @@ public class Tree extends MapObject {
     private final TreeType treeType;
 
     public Tree(TreeStage treeGrowthStage, TreeType treeType) {
-        super(false);
+        super(false, "tree");
         this.treeGrowthStage = treeGrowthStage;
         this.treeType = treeType;
     }

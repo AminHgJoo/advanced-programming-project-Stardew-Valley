@@ -11,6 +11,16 @@ public class Map {
         this.village = village;
     }
 
+    public static Map makeMap(){
+        ArrayList<Farm> farms = new ArrayList<>();
+        farms.add(Farm.makeFarm());
+        farms.add(Farm.makeFarm());
+        farms.add(Farm.makeFarm());
+        farms.add(Farm.makeFarm());
+        Village village = new Village();
+        return new Map(farms, village);
+    }
+
     public ArrayList<Farm> getFarms() {
         return farms;
     }

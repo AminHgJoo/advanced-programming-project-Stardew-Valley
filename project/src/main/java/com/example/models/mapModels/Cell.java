@@ -20,7 +20,7 @@ public class Cell {
         this.coordinate = coordinate;
     }
 
-    public Object getObjectOnCell() {
+    public MapObject getObjectOnCell() {
         return objectOnCell;
     }
 

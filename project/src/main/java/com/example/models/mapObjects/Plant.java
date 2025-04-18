@@ -9,7 +9,7 @@ public class Plant extends MapObject {
     public final PlantType plantType;
 
     public Plant(Season seasonOfGrowth, boolean canBeGiant, PlantType plantType) {
-        super(true);
+        super(true, "plant");
         this.seasonOfGrowth = seasonOfGrowth;
         this.canBeGiant = canBeGiant;
         this.plantType = plantType;
