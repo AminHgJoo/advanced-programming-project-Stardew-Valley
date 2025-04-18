@@ -37,13 +37,14 @@ public class Farm {
 
     private static void addRandomItems(ArrayList<Cell> farmCells) {
         for (Cell cell : farmCells) {
+            // TODO parameters
             int randomNumber = (int) (Math.random() * 8);
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
-                cell.getObjectOnCell(new Tree());
+                cell.setObjectOnCell(new Tree(null,null));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
-                cell.setObjectOnCell(new Stone());
+                cell.setObjectOnCell(new Stone(null));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
-                cell.setObjectOnCell(new ForagingCrop());
+                cell.setObjectOnCell(new ForagingCrop(false));
             }
         }
     }
