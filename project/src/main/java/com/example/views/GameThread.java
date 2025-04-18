@@ -9,8 +9,16 @@ public class GameThread extends Thread {
         this.game = game;
     }
 
+    //TODO: initialize thread
     @Override
     public void run() {
-
+        while (game.isGameOngoing()) {
+            try {
+                this.wait(500);
+            } catch (InterruptedException _) {
+            }
+            game.advanceTime();
+            game.checkSeasonChange();
+        }
     }
 }

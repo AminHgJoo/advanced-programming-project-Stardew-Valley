@@ -19,4 +19,22 @@ public enum Weather {
     public String toString() {
         return name;
     }
+
+    public boolean isWeatherPossibleInThisSeason(Season season) {
+        for (Season possibleSeason : possibleSeasons) {
+            if (possibleSeason == season) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Weather getWeatherByName(String input) {
+        for (Weather weather : Weather.values()) {
+            if (weather.name.compareToIgnoreCase(input) == 0) {
+                return weather;
+            }
+        }
+        return null;
+    }
 }
