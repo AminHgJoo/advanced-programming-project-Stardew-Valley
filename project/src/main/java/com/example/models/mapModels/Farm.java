@@ -37,13 +37,14 @@ public class Farm {
 
     private static void addRandomItems(ArrayList<Cell> farmCells) {
         for (Cell cell : farmCells) {
+            // TODO parameters
             int randomNumber = (int) (Math.random() * 8);
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
-                cell.setObjectOnCell(new Tree());
+                cell.setObjectOnCell(new Tree(null,null));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
-                cell.setObjectOnCell(new Stone());
+                cell.setObjectOnCell(new Stone(null));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
-                cell.setObjectOnCell(new ForagingCrop());
+                cell.setObjectOnCell(new ForagingCrop(false));
             }
         }
     }
@@ -52,7 +53,7 @@ public class Farm {
         for (int j = 37; j < 46; j++) {
             for (int i = 33; i < 41; i++) {
                 Cell cell = getCellByCoordinate(i, j, farmCells);
-                cell.setObjectOnCell(new Water());
+                cell.setObjectOnCell(new Water(false));
             }
         }
         int randNumber = (int) (Math.random() * 3);
@@ -60,7 +61,7 @@ public class Farm {
             for (int j = 34; j < 40; j++) {
                 for (int i = 42; i < 48; i++) {
                     Cell cell = getCellByCoordinate(i, j, farmCells);
-                    cell.setObjectOnCell(new Water());
+                    cell.setObjectOnCell(new Water(false));
                 }
             }
         }
@@ -70,7 +71,7 @@ public class Farm {
         for (int i = 0; i < 75; i++) {
             for (int j = 0; j < 50; j++) {
                 Coordinate coordinate = new Coordinate(i, j);
-                farmCells.add(new Cell(new EmptyCell(), coordinate));
+                farmCells.add(new Cell(new EmptyCell(true), coordinate));
             }
         }
     }

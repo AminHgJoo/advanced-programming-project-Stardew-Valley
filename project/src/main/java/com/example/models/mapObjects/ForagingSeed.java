@@ -1,7 +1,7 @@
 package com.example.models.mapObjects;
 
 public class ForagingSeed extends MapObject {
-    public ForagingSeed() {
-        super(true, "foragingSeed");
+    protected ForagingSeed(boolean isWalkable) {
+        super(isWalkable, "foragingSeed");
     }
 }

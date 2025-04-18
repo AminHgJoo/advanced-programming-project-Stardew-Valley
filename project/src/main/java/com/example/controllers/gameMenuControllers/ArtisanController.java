@@ -6,8 +6,10 @@ import com.example.models.IO.Response;
 
 public class ArtisanController extends Controller {
     public static Response handleArtisanUse(Request request) {
+        return null;
     }
 
     public static Response handleArtisanGet(Request request) {
+        return null;
     }
 }
