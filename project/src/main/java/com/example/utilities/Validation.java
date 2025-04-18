@@ -17,7 +17,7 @@ public class Validation {
     }
 
     public static boolean validatePasswordFormat(String password) {
-        String regex = "[a-zA-Z\\d?><,\"';:\\\\/|\\]\\[}{+=)(*&^%$#!]+";
+        String regex = "[a-zA-Z\\d?><,\"';:\\\\/|\\]\\[}{+=)(*@&^%$#!]+";
         return password.matches(regex);
     }
 
@@ -37,7 +37,7 @@ public class Validation {
         if (!matcher3.find()) {
             return "Password must contain a uppercase letter";
         }
-        Matcher matcher1 = Pattern.compile("[?><,\"';:\\\\/|\\]\\[}{+=)(*&^%$#!]").matcher(password);
+        Matcher matcher1 = Pattern.compile("[?><,\"';:\\\\/|\\]\\[}{+=)(@*&^%$#!]").matcher(password);
         if (!matcher1.find()) {
             return "Password must contain a special character";
         }

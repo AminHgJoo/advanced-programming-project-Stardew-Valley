@@ -12,8 +12,9 @@ import com.example.utilities.Validation;
 public class SignInMenuController extends Controller {
 
     private static User userOfForgetPassword = null;
+    private static String userPassword ;
     public static boolean isProgramWaitingForQuestion = false;
-
+    private static User userWaitingForQuestion = null;
     public static User getUserOfForgetPassword() {
         return userOfForgetPassword;
     }
@@ -57,12 +58,11 @@ public class SignInMenuController extends Controller {
         while (UserRepository.findUserByUsername(username) != null) {
             username = username + (int) (Math.random() * 69420);
         }
-        if (password.equals(passwordConfirm) && password.compareToIgnoreCase("random") == 0) {
+        if (password.equalsIgnoreCase(passwordConfirm) && password.compareToIgnoreCase("random") == 0) {
             password = Validation.createRandomPassword();
             passwordConfirm = password;
         } else {
             if (!Validation.validatePasswordFormat(password)) {
-                System.out.println(password);
                 return new Response(false, "Password Format is invalid!");
             }
             if (!Validation.validatePasswordSecurity(password).equals("Success")) {
@@ -78,8 +78,11 @@ public class SignInMenuController extends Controller {
         }
 
         User user = new User(gender, email, nickname, Validation.hashPassword(password), username);
-        UserRepository.saveUser(user);
+        userWaitingForQuestion = user;
         isProgramWaitingForQuestion = true;
+        if(System.getenv("APP_MODE") != null && System.getenv("APP_MODE").equals("TEST")) {
+            userPassword = password;
+        }
         return new Response(true, "User created! Password is: " + password);
     }
 
@@ -93,7 +96,7 @@ public class SignInMenuController extends Controller {
         if (!answer.equals(answerConfirm)) {
             return new Response(false, "Answer doesn't match!");
         }
-        User user = UserRepository.findAllUsers().getLast();
+        User user = getUserWaitingForQuestion();
         user.setAnswer(answer);
         user.setQuestion(SecurityQuestion.values()[questionNumber - 1]);
         UserRepository.saveUser(user);
@@ -159,5 +162,13 @@ public class SignInMenuController extends Controller {
         }
         response.setMessage(stringBuilder.toString());
         return response;
+    }
+
+    public static User getUserWaitingForQuestion() {
+        return userWaitingForQuestion;
+    }
+
+    public static String getUserPassword() {
+        return userPassword;
     }
 }
