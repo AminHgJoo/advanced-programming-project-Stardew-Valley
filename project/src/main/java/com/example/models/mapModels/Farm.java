@@ -25,7 +25,7 @@ public class Farm {
         return buildings;
     }
 
-    public static Farm makeFarm(){
+    public static Farm makeFarm() {
         ArrayList<Cell> farmCells = new ArrayList<>();
         ArrayList<Building> farmBuildings = new ArrayList<>();
         addBuildings(farmBuildings);
@@ -36,43 +36,41 @@ public class Farm {
     }
 
     private static void addRandomItems(ArrayList<Cell> farmCells) {
-        for(Cell cell : farmCells){
+        for (Cell cell : farmCells) {
             int randomNumber = (int) (Math.random() * 8);
-            if(cell.getObjectOnCell().type.equals("empty") && randomNumber == 3){
-                cell.getObjectOnCell(new Tree());
-            }
-            else if(cell.getObjectOnCell().type.equals("empty") && randomNumber == 2){
+            if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
+                cell.setObjectOnCell(new Tree());
+            } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
                 cell.setObjectOnCell(new Stone());
-            }
-            else if(cell.getObjectOnCell().type.equals("empty") && randomNumber == 1){
+            } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
                 cell.setObjectOnCell(new ForagingCrop());
             }
         }
     }
 
     private static void addLake(ArrayList<Cell> farmCells) {
-        for(int j = 37 ; j<46; j++){
-            for(int i=33; i<41; i++){
-            Cell cell = getCellByCoordinate(i, j, farmCells);
-            cell.setObjectOnCell(new Water(false));
+        for (int j = 37; j < 46; j++) {
+            for (int i = 33; i < 41; i++) {
+                Cell cell = getCellByCoordinate(i, j, farmCells);
+                cell.setObjectOnCell(new Water());
             }
         }
-        int randNumber = (int)(Math.random()*3);
-        if(randNumber == 1){
-            for(int j = 34 ; j<40; j++){
-                for(int i=42; i<48; i++){
+        int randNumber = (int) (Math.random() * 3);
+        if (randNumber == 1) {
+            for (int j = 34; j < 40; j++) {
+                for (int i = 42; i < 48; i++) {
                     Cell cell = getCellByCoordinate(i, j, farmCells);
-                    cell.setObjectOnCell(new Water(false));
+                    cell.setObjectOnCell(new Water());
                 }
             }
         }
     }
 
     private static void makeEmptyCells(ArrayList<Cell> farmCells) {
-        for(int i=0; i<75; i++){
-            for(int j=0; j<50; j++) {
+        for (int i = 0; i < 75; i++) {
+            for (int j = 0; j < 50; j++) {
                 Coordinate coordinate = new Coordinate(i, j);
-                farmCells.add(new Cell(new EmptyCell(true), coordinate));
+                farmCells.add(new Cell(new EmptyCell(), coordinate));
             }
         }
     }
@@ -85,7 +83,7 @@ public class Farm {
 
     private static Cell getCellByCoordinate(int x, int y, ArrayList<Cell> cells) {
         for (Cell cell : cells) {
-            if(cell.getCoordinate().getX() == x && cell.getCoordinate().getY() == y) {
+            if (cell.getCoordinate().getX() == x && cell.getCoordinate().getY() == y) {
                 return cell;
             }
         }

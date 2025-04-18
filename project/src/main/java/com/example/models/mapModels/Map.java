@@ -6,12 +6,12 @@ public class Map {
     private final ArrayList<Farm> farms;
     private final Village village;
 
-    public Map(ArrayList<Farm> farms, Village village) {
+    private Map(ArrayList<Farm> farms, Village village) {
         this.farms = farms;
         this.village = village;
     }
 
-    public static Map makeMap(){
+    public static Map makeMap() {
         ArrayList<Farm> farms = new ArrayList<>();
         farms.add(Farm.makeFarm());
         farms.add(Farm.makeFarm());
