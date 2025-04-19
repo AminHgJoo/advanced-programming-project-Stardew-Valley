@@ -1,4 +1,11 @@
 package com.example.models.buildings;
 
-public class PlayerHome implements Building {
+import com.example.models.mapModels.Cell;
+
+import java.util.ArrayList;
+
+public class PlayerHome extends Building {
+    public PlayerHome(ArrayList<Cell> buildingCells) {
+        super(buildingCells);
+    }
 }

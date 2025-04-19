@@ -28,8 +28,8 @@ public class Farm {
     public static Farm makeFarm() {
         ArrayList<Cell> farmCells = new ArrayList<>();
         ArrayList<Building> farmBuildings = new ArrayList<>();
-        addBuildings(farmBuildings);
         makeEmptyCells(farmCells);
+        addBuildings(farmBuildings, farmCells);
         addLake(farmCells);
         addRandomItems(farmCells);
         return new Farm(farmCells, farmBuildings);
@@ -76,10 +76,37 @@ public class Farm {
         }
     }
 
-    private static void addBuildings(ArrayList<Building> farmBuildings) {
-        farmBuildings.add(new PlayerHome());
-        farmBuildings.add(new Greenhouse());
-        farmBuildings.add(new Mine());
+    private static void addBuildings(ArrayList<Building> farmBuildings, ArrayList<Cell> farmCells) {
+        ArrayList<Cell> playerHomeCells = new ArrayList<>();
+        ArrayList<Cell> greenHouseCells = new ArrayList<>();
+        ArrayList<Cell> mineCells = new ArrayList<>();
+        for (int i = 61; i < 65; i++) {
+            for (int j = 4; j < 8; j++) {
+                Cell cell = getCellByCoordinate(i, j, farmCells);
+                cell.setObjectOnCell(new BuildingBlock(false));
+                playerHomeCells.add(cell);
+            }
+        }
+        for (int i = 22; i < 29; i++) {
+            for (int j = 3; j < 11; j++) {
+                Cell cell = getCellByCoordinate(i, j, farmCells);
+                if (i != 22 && i != 28 && j != 3 && j != 10) {
+                    cell.setObjectOnCell(new BuildingBlock(false));
+                } else
+                    cell.setObjectOnCell(new BuildingBlock(true));
+                greenHouseCells.add(cell);
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 12; j++) {
+                Cell cell = getCellByCoordinate(i, j, farmCells);
+                cell.setObjectOnCell(new BuildingBlock(true));
+                mineCells.add(cell);
+            }
+        }
+        farmBuildings.add(new PlayerHome(playerHomeCells));
+        farmBuildings.add(new Greenhouse(greenHouseCells));
+        farmBuildings.add(new Mine(mineCells));
     }
 
     private static Cell getCellByCoordinate(int x, int y, ArrayList<Cell> cells) {
