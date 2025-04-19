@@ -24,6 +24,8 @@ public class Player {
     private double energy = 0;
     private TrashcanType trashcanType;
     private Item equippedItem;
+    /// TODO: handle energy usage in one turn.
+    private double usedEnergyInTurn;
 
     /// TODO: called in game thread.
     public void checkForFainting() {
@@ -33,6 +35,7 @@ public class Player {
         this.user = user;
         this.inventory = new Backpack(BackpackType.DEFAULT);
         this.trashcanType = TrashcanType.DEFAULT;
+        this.usedEnergyInTurn = 0;
     }
 
     public Player(Coordinate coordinate, int money, Farm farm, User user, double energy) {
@@ -120,5 +123,13 @@ public class Player {
 
     public void setEquippedItem(Item equippedItem) {
         this.equippedItem = equippedItem;
+    }
+
+    public double getUsedEnergyInTurn() {
+        return usedEnergyInTurn;
+    }
+
+    public void setUsedEnergyInTurn(double usedEnergyInTurn) {
+        this.usedEnergyInTurn = usedEnergyInTurn;
     }
 }

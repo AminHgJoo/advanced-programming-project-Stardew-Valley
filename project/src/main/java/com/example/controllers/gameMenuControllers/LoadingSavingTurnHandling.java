@@ -60,7 +60,17 @@ public class LoadingSavingTurnHandling extends Controller {
     }
 
     public static Response handleNextTurn(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        int numberOfPlayers = game.getPlayers().size();
+        int playerIndex = game.getPlayers().indexOf(game.getCurrentPlayer());
+        game.getCurrentPlayer().setUsedEnergyInTurn(0);
+        if (playerIndex == numberOfPlayers - 1) {
+            game.setCurrentPlayer(game.getPlayers().getFirst());
+            game.hasTurnCycleFinished = true;
+        } else
+            game.setCurrentPlayer(game.getPlayers().get(playerIndex + 1));
+        return new Response(true, "It is " + game.getCurrentPlayer().getUser().getUsername() + " turn.");
 
     }
 }

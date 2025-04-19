@@ -25,7 +25,7 @@ public class Game {
     private Weather weatherTomorrow;
     private Season season;
     private final GameThread timeHandler;
-    private boolean hasTurnCycleFinished;
+    public boolean hasTurnCycleFinished;
     //TODO : handle turn cycle boolean!
 
     public void advanceTime() {
@@ -67,6 +67,7 @@ public class Game {
     }
 
     public Game(ArrayList<Player> players, Player currentPlayer) {
+        this.hasTurnCycleFinished = false;
         this.players = players;
         this.map = Map.makeMap();
         this.isGameOngoing = true;

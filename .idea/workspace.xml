@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ec01445c-2cd4-49a9-b63e-ff9b7dea5c70" name="Changes" comment="adding buildings">
+    <list default="true" id="ec01445c-2cd4-49a9-b63e-ff9b7dea5c70" name="Changes" comment="adding Lakes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/LoadingSavingTurnHandling.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/controllers/gameMenuControllers/LoadingSavingTurnHandling.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapModels/Farm.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapModels/Farm.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -126,7 +129,7 @@
       <workItem from="1744986089434" duration="16000" />
       <workItem from="1745004342868" duration="133000" />
       <workItem from="1745004553339" duration="904000" />
-      <workItem from="1745050104139" duration="7920000" />
+      <workItem from="1745050104139" duration="9398000" />
     </task>
     <task id="LOCAL-00001" summary="adding code">
       <option name="closed" value="true" />
@@ -232,7 +235,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745052595319</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="adding Lakes">
+      <option name="closed" value="true" />
+      <created>1745059955041</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1745059955041</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -259,7 +270,8 @@
     <MESSAGE value="ProfileMenuController completed" />
     <MESSAGE value="adding" />
     <MESSAGE value="adding buildings" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding buildings" />
+    <MESSAGE value="adding Lakes" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding Lakes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

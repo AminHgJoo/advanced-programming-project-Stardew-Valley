@@ -34,7 +34,8 @@ public class Farm {
             addOneLake(farmCells);
         else
             addTwoLakes(farmCells);
-            addRandomItems(farmCells);
+
+        addRandomItems(farmCells);
         return new Farm(farmCells, farmBuildings);
     }
 
