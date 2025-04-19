@@ -42,6 +42,9 @@ public class LoadingSavingTurnHandling extends Controller {
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
         int mapNumber = Integer.parseInt(request.body.get("mapNumber"));
+        if (mapNumber != 1 && mapNumber != 2) {
+            return new Response(false, "Invalid map number");
+        }
         Farm farm = Farm.makeFarm(mapNumber);
         game.getMap().addFarm(farm);
         player.setFarm(farm);

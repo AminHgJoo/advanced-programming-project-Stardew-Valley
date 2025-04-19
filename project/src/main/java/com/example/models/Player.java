@@ -14,7 +14,7 @@ public class Player {
     private Coordinate coordinate;
     private int money;
     private Backpack inventory;
-    private  Farm farm;
+    private Farm farm;
     private final ArrayList<Skill> skills = new ArrayList<>();
     private final ArrayList<Quest> quests = new ArrayList<>();
     private final User user;
