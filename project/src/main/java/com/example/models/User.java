@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @Entity("users")
 public class User {
     @Id
-    private ObjectId id;
+    private ObjectId _id;
     private String username;
     private String hashedPassword;
     private String nickname;
@@ -140,7 +140,7 @@ public class User {
         return games;
     }
 
-    public ObjectId getId() {
-        return id;
+    public ObjectId get_id() {
+        return _id;
     }
 }

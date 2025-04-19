@@ -15,7 +15,7 @@ import java.util.ArrayList;
 @Entity("games")
 public class Game {
     @Id
-    private ObjectId id;
+    private ObjectId _id;
     final private ArrayList<Player> players;
     final private Map map;
     private boolean isGameOngoing;
@@ -132,15 +132,15 @@ public class Game {
         return timeHandler;
     }
 
-    public ObjectId getId() {
-        return id;
-    }
-
     public Weather getWeatherTomorrow() {
         return weatherTomorrow;
     }
 
     public void setWeatherTomorrow(Weather weatherTomorrow) {
         this.weatherTomorrow = weatherTomorrow;
+    }
+
+    public ObjectId get_id() {
+        return _id;
     }
 }

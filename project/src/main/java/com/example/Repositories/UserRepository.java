@@ -20,8 +20,8 @@ public class UserRepository {
         return user;
     }
 
-    public static void saveUser(User user) {
-        db.save(user);
+    public static User saveUser(User user) {
+        return db.save(user);
     }
 
     public static ArrayList<User> findAllUsers() {

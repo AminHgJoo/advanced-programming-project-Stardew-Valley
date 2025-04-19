@@ -99,7 +99,7 @@ public class SignInMenuController extends Controller {
         User user = getUserWaitingForQuestion();
         user.setAnswer(answer);
         user.setQuestion(SecurityQuestion.values()[questionNumber - 1]);
-        UserRepository.saveUser(user);
+        user = UserRepository.saveUser(user);
         isProgramWaitingForQuestion = false;
         App.setCurrMenuType(MenuTypes.MainMenu);
         App.setLoggedInUser(user);
