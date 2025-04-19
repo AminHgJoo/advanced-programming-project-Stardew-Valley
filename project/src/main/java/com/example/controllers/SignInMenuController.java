@@ -14,9 +14,13 @@ public class SignInMenuController extends Controller {
     private static User userOfForgetPassword = null;
     private static String userPassword ;
     public static boolean isProgramWaitingForQuestion = false;
+    public static boolean isProgramWaitingForAnswer = false;
     private static User userWaitingForQuestion = null;
     public static User getUserOfForgetPassword() {
         return userOfForgetPassword;
+    }
+    public static void setUserOfForgetPassword(User userOfForgetPassword) {
+        SignInMenuController.userOfForgetPassword = userOfForgetPassword;
     }
 
     public static Response handleAccountRecovery(Request request) {
@@ -133,6 +137,7 @@ public class SignInMenuController extends Controller {
             return new Response(false, "User not found!");
         }
         userOfForgetPassword = user;
+        isProgramWaitingForAnswer = true;
         return new Response(true, "User " + user.getUsername()
                 + ": Answer your security question next.");
     }
@@ -147,6 +152,7 @@ public class SignInMenuController extends Controller {
             userOfForgetPassword = null;
             return new Response(false, "Answer doesn't match!");
         }
+        isProgramWaitingForAnswer = false;
         return new Response(true, "Your answer is correct; select your new password.");
     }
 

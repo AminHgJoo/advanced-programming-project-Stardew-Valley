@@ -17,7 +17,7 @@ public class SignInMenu implements Menu {
             } else {
                 response = getInvalidCommand();
             }
-        } else if (SignInMenuController.getUserOfForgetPassword() != null) {
+        } else if (SignInMenuController.getUserOfForgetPassword() != null && !SignInMenuController.isProgramWaitingForAnswer) {
             response = getChangePasswordResponse(input);
         } else if (SignInMenuCommands.EXIT_MENU.matches(input)) {
             response = getExitMenuResponse(input);
