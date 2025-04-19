@@ -30,7 +30,7 @@ public class SignInMenuController extends Controller {
             return new Response(false, "Select a new password!");
         }
 
-        if (newPass.equals("random")) {
+        if (newPass.compareToIgnoreCase("random") == 0) {
             newPass = Validation.createRandomPassword();
         } else {
             if (!Validation.validatePasswordFormat(newPass)) {
