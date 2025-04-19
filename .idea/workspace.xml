@@ -4,11 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ec01445c-2cd4-49a9-b63e-ff9b7dea5c70" name="Changes" comment="fixing imports">
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/CraftingRecipes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/ForagingTreesType.java" afterDir="false" />
+    <list default="true" id="ec01445c-2cd4-49a9-b63e-ff9b7dea5c70" name="Changes" comment="adding">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapObjects/BuildingBlock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/ForagingType.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/enums/ForagingMineralsType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Building.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Building.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Coop.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Coop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Greenhouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Greenhouse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Mine.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Mine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/PlayerHome.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/PlayerHome.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapModels/Farm.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapModels/Farm.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,8 +24,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -40,7 +46,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/advanced-programming-sut-2025/advanced-programming-phase-1-group-07.git&quot;,
-    &quot;accountId&quot;: &quot;c8e2394c-9c98-44da-adb5-322ba7ea4a96&quot;
+    &quot;accountId&quot;: &quot;e95f5dfc-9d84-4d24-a606-1ef03975495c&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -51,14 +57,18 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2vcqAnnTEVaaCu0bNQl4ROCdszi" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RegisterTest.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;phase-1&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/tamrin-ha/ap/advanced-programming-phase-1-group-07/project/src/main/java/com/example&quot;,
@@ -86,8 +96,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.24978.46" />
-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-IU-243.24978.46" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
       </set>
     </attachedChunks>
   </component>
@@ -102,6 +112,14 @@
       <workItem from="1744454575154" duration="1969000" />
       <workItem from="1744529890402" duration="538000" />
       <workItem from="1744619401285" duration="1936000" />
+      <workItem from="1744616924348" duration="17000" />
+      <workItem from="1744640179797" duration="2459000" />
+      <workItem from="1744645729243" duration="10000" />
+      <workItem from="1744969778247" duration="6852000" />
+      <workItem from="1744986089434" duration="16000" />
+      <workItem from="1745004342868" duration="133000" />
+      <workItem from="1745004553339" duration="904000" />
+      <workItem from="1745050104139" duration="2466000" />
     </task>
     <task id="LOCAL-00001" summary="adding code">
       <option name="closed" value="true" />
@@ -151,17 +169,91 @@
       <option name="project" value="LOCAL" />
       <updated>1744620168546</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="changing regexes">
+      <option name="closed" value="true" />
+      <created>1744609086925</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1744609086925</updated>
+    </task>
+    <task id="LOCAL-00008" summary="changing regexes">
+      <option name="closed" value="true" />
+      <created>1744609303454</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1744609303454</updated>
+    </task>
+    <task id="LOCAL-00009" summary="changing regexes">
+      <option name="closed" value="true" />
+      <created>1744611897847</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1744611897847</updated>
+    </task>
+    <task id="LOCAL-00010" summary="adding game repository and register controller">
+      <option name="closed" value="true" />
+      <created>1744615425408</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1744615425408</updated>
+    </task>
+    <task id="LOCAL-00011" summary="ProfileMenuController completed">
+      <option name="closed" value="true" />
+      <created>1744642825400</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1744642825400</updated>
+    </task>
+    <task id="LOCAL-00012" summary="adding">
+      <option name="closed" value="true" />
+      <created>1744986068169</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1744986068169</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="adding code" />
     <MESSAGE value="adding configs" />
     <MESSAGE value="adding Foragings type" />
     <MESSAGE value="fixing imports" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing imports" />
+    <MESSAGE value="changing regexes" />
+    <MESSAGE value="adding game repository and register controller" />
+    <MESSAGE value="ProfileMenuController completed" />
+    <MESSAGE value="adding" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/project/src/main/java/com/example/Main.java</url>
+          <line>8</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

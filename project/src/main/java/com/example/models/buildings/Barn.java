@@ -1,4 +1,11 @@
 package com.example.models.buildings;
 
-public class Barn implements Building {
+import com.example.models.mapModels.Cell;
+
+import java.util.ArrayList;
+
+public class Barn extends Building {
+    protected Barn(ArrayList<Cell> buildingCells) {
+        super(buildingCells);
+    }
 }
