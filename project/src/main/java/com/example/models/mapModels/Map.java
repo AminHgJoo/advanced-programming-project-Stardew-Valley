@@ -13,12 +13,12 @@ public class Map {
 
     public static Map makeMap() {
         ArrayList<Farm> farms = new ArrayList<>();
-        farms.add(Farm.makeFarm());
-        farms.add(Farm.makeFarm());
-        farms.add(Farm.makeFarm());
-        farms.add(Farm.makeFarm());
         Village village = new Village();
         return new Map(farms, village);
+    }
+
+    public void addFarm(Farm farm) {
+        farms.add(farm);
     }
 
     public ArrayList<Farm> getFarms() {
