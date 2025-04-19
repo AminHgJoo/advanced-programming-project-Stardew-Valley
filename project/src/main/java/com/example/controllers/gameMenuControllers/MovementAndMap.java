@@ -5,12 +5,32 @@ import com.example.models.App;
 import com.example.models.Game;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
+import com.example.models.Player;
 import com.example.models.User;
+import com.example.models.mapModels.Cell;
+import com.example.utilities.FindPath;
+
+import java.util.ArrayList;
 
 public class MovementAndMap extends Controller {
     public static Response handleWalking(Request request) {
+        int x = Integer.parseInt(request.body.get("x"));
+        int y = Integer.parseInt(request.body.get("y"));
+        Game game = App.getLoggedInUser().getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Cell src = player.getFarm().findCellByCoordinate(player.getCoordinate().getX() , player.getCoordinate().getY());
+        Cell dest = player.getFarm().findCellByCoordinate(x, y).clone();
+        if(dest == null || !dest.getObjectOnCell().isWalkable) {
+            return  new Response(false , "destination is not valid");
+        }
+        FindPath.pathBFS(src , dest , player.getFarm().getCells());
+        ArrayList<Cell> path = new ArrayList<Cell>();
+        while(dest != null) {
+            path.add(dest);
+            dest = dest.prev;
+        }
+        player.getFarm().initialCells();
         return null;
-
     }
 
     public static Response handlePrintMap(Request request) {

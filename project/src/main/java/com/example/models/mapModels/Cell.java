@@ -8,10 +8,27 @@ public class Cell {
     private Coordinate coordinate;
     private boolean isTilled;
 
+    // for walking
+    public int distance = 0;
+    public int energy = 0;
+    public int turns = 0;
+    public Cell prev = null;
+
     public Cell(MapObject objectOnCell, Coordinate coordinate) {
         this.objectOnCell = objectOnCell;
         this.coordinate = coordinate;
         this.isTilled = false;
+    }
+
+    public int diffXPrev(){
+        return this.coordinate.getX() - this.prev.coordinate.getX();
+    }
+    public int diffYPrev(){
+        return this.coordinate.getY() - this.prev.coordinate.getY();
+    }
+
+    public void setEnergy() {
+        energy = distance + 10*turns;
     }
 
     public Coordinate getCoordinate() {
@@ -36,5 +53,10 @@ public class Cell {
 
     public void setTilled(boolean tilled) {
         isTilled = tilled;
+    }
+
+    @Override
+    public Cell clone() {
+        return new Cell(objectOnCell, coordinate);
     }
 }

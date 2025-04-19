@@ -131,4 +131,22 @@ public class Farm {
         }
         return null;
     }
+
+    public Cell findCellByCoordinate(int x, int y) {
+        for (Cell cell : cells) {
+            if (cell.getCoordinate().getX() == x && cell.getCoordinate().getY() == y) {
+                return cell;
+            }
+        }
+        return null;
+    }
+
+    public void initialCells(){
+        for (Cell cell : cells) {
+            cell.energy = 0;
+            cell.distance = 0;
+            cell.turns = 0;
+            cell.prev = null;
+        }
+    }
 }
