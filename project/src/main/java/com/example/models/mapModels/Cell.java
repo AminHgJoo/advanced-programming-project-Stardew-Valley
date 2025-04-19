@@ -6,10 +6,12 @@ public class Cell {
     //TODO : modify
     private MapObject objectOnCell;
     private Coordinate coordinate;
+    private boolean isTilled;
 
     public Cell(MapObject objectOnCell, Coordinate coordinate) {
         this.objectOnCell = objectOnCell;
         this.coordinate = coordinate;
+        this.isTilled = false;
     }
 
     public Coordinate getCoordinate() {
@@ -26,5 +28,13 @@ public class Cell {
 
     public void setObjectOnCell(MapObject objectOnCell) {
         this.objectOnCell = objectOnCell;
+    }
+
+    public boolean isTilled() {
+        return isTilled;
+    }
+
+    public void setTilled(boolean tilled) {
+        isTilled = tilled;
     }
 }

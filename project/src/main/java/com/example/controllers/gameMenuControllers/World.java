@@ -114,8 +114,8 @@ public class World extends Controller {
     }
 
     public static Response handleGreenhouseBuilding(Request request) {
+        //TODO: once items are added, implement.
         return null;
-
     }
 
     public static Response handleToolUse(Request request) {
