@@ -8,6 +8,7 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.Player;
 import com.example.models.User;
+import com.example.models.mapModels.Farm;
 
 import java.util.ArrayList;
 
@@ -41,7 +42,9 @@ public class LoadingSavingTurnHandling extends Controller {
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
         int mapNumber = Integer.parseInt(request.body.get("mapNumber"));
-        player.setFarm(game.getMap().getFarms().get(mapNumber - 1));
+        Farm farm = Farm.makeFarm(mapNumber);
+        game.getMap().addFarm(farm);
+        player.setFarm(farm);
         boolean check = game.nextPlayerTurn();
         if (check) {
             isWaitingForChoosingMap = false;
