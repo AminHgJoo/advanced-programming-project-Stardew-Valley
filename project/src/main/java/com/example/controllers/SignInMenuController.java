@@ -12,7 +12,7 @@ import com.example.utilities.Validation;
 public class SignInMenuController extends Controller {
 
     private static User userOfForgetPassword = null;
-    private static String userPassword ;
+    private static String userPassword;
     public static boolean isProgramWaitingForQuestion = false;
     public static boolean isProgramWaitingForAnswer = false;
     private static User userWaitingForQuestion = null;

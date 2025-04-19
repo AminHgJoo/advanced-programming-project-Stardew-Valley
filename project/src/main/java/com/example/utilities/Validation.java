@@ -50,8 +50,9 @@ public class Validation {
         password += (char) ((int) (Math.random() * 26) + 'A');
         password += (char) ((int) (Math.random() * 26) + 'a');
         password += (char) ((int) (Math.random() * 10) + '0');
+        password += (char) ((int) (Math.random() * 14) + '!');
 
-        for (int i = 3; i < length; i++) {
+        for (int i = 4; i < length; i++) {
             password += (char) ((int) (Math.random() * 93) + '!');
         }
         return password;
