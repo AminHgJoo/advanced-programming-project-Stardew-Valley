@@ -50,6 +50,9 @@ public class Farm {
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
                 cell.setObjectOnCell(new ForagingCrop());
             }
+            else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 4) {
+                cell.setObjectOnCell(new ForagingSeed());
+            }
         }
     }
 
