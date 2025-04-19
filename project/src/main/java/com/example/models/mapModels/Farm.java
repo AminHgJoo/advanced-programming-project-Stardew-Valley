@@ -25,13 +25,16 @@ public class Farm {
         return buildings;
     }
 
-    public static Farm makeFarm() {
+    public static Farm makeFarm(int lakeModifier) {
         ArrayList<Cell> farmCells = new ArrayList<>();
         ArrayList<Building> farmBuildings = new ArrayList<>();
         makeEmptyCells(farmCells);
         addBuildings(farmBuildings, farmCells);
-        addLake(farmCells);
-        addRandomItems(farmCells);
+        if (lakeModifier == 1)
+            addOneLake(farmCells);
+        else
+            addTwoLakes(farmCells);
+            addRandomItems(farmCells);
         return new Farm(farmCells, farmBuildings);
     }
 
@@ -49,23 +52,30 @@ public class Farm {
         }
     }
 
-    private static void addLake(ArrayList<Cell> farmCells) {
+    private static void addOneLake(ArrayList<Cell> farmCells) {
         for (int j = 37; j < 46; j++) {
             for (int i = 33; i < 41; i++) {
                 Cell cell = getCellByCoordinate(i, j, farmCells);
                 cell.setObjectOnCell(new Water());
             }
         }
-        int randNumber = (int) (Math.random() * 3);
-        if (randNumber == 1) {
-            for (int j = 34; j < 40; j++) {
-                for (int i = 42; i < 48; i++) {
-                    Cell cell = getCellByCoordinate(i, j, farmCells);
-                    cell.setObjectOnCell(new Water());
-                }
+    }
+
+    private static void addTwoLakes(ArrayList<Cell> farmCells) {
+        for (int j = 37; j < 46; j++) {
+            for (int i = 33; i < 41; i++) {
+                Cell cell = getCellByCoordinate(i, j, farmCells);
+                cell.setObjectOnCell(new Water());
+            }
+        }
+        for (int j = 34; j < 40; j++) {
+            for (int i = 42; i < 48; i++) {
+                Cell cell = getCellByCoordinate(i, j, farmCells);
+                cell.setObjectOnCell(new Water());
             }
         }
     }
+
 
     private static void makeEmptyCells(ArrayList<Cell> farmCells) {
         for (int i = 0; i < 75; i++) {

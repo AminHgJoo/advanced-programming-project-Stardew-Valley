@@ -4,16 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ec01445c-2cd4-49a9-b63e-ff9b7dea5c70" name="Changes" comment="adding">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapObjects/BuildingBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="ec01445c-2cd4-49a9-b63e-ff9b7dea5c70" name="Changes" comment="adding buildings">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Building.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Building.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Coop.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Coop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Greenhouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Greenhouse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Mine.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/Mine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/PlayerHome.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/buildings/PlayerHome.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapModels/Farm.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/example/models/mapModels/Farm.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,28 +54,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.RegisterTest.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;phase-1&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/tamrin-ha/ap/advanced-programming-phase-1-group-07/project/src/main/java/com/example&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;D:/tamrin-ha/ap/advanced-programming-phase-1-group-07/project/src/main/java/com/example/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "JUnit.LoginTest.executor": "Run",
+    "JUnit.RegisterTest.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "phase-1",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/tamrin-ha/ap/advanced-programming-phase-1-group-07/project/src/main/java/com/example",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "D:/tamrin-ha/ap/advanced-programming-phase-1-group-07/project/src/main/java/com/example/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\tamrin-ha\ap\advanced-programming-phase-1-group-07\project\src\main\java\com\example" />
@@ -92,6 +85,20 @@
       <recent name="D:\tamrin-ha\ap\advanced-programming-phase-1-group-07\project\src\main\java\com\example\views" />
       <recent name="D:\tamrin-ha\ap\advanced-programming-phase-1-group-07" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="openjdk-23" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <envs>
+        <env name="APP_MODE" value="PROD" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="com.example.Main" />
+      <module name="test-db" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -119,7 +126,7 @@
       <workItem from="1744986089434" duration="16000" />
       <workItem from="1745004342868" duration="133000" />
       <workItem from="1745004553339" duration="904000" />
-      <workItem from="1745050104139" duration="2466000" />
+      <workItem from="1745050104139" duration="7920000" />
     </task>
     <task id="LOCAL-00001" summary="adding code">
       <option name="closed" value="true" />
@@ -217,7 +224,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744986068169</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="adding buildings">
+      <option name="closed" value="true" />
+      <created>1745052595319</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1745052595319</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -243,7 +258,8 @@
     <MESSAGE value="adding game repository and register controller" />
     <MESSAGE value="ProfileMenuController completed" />
     <MESSAGE value="adding" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding" />
+    <MESSAGE value="adding buildings" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding buildings" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
