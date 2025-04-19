@@ -44,6 +44,7 @@ public class RegisterTest {
             "register -u ali -p hdhsshjss@Al12 hdhsshjssj -n shsh -e ee -g a, Passwords do not match!"
     })
     void testInvalidPassword(String input, String output) throws IOException {
+        logout();
         SignInMenuController.isProgramWaitingForQuestion = false;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
@@ -62,6 +63,7 @@ public class RegisterTest {
             "register -u ali -p hdhsshjss@Al12 hdhsshjss@Al12 -n shsh -e aa@gmail. -g a, Email is invalid!",
     })
     void testInvalidEmail(String input, String output) throws IOException {
+        logout();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
@@ -83,7 +85,7 @@ public class RegisterTest {
 
     @Test
     void listOfQuestions() throws IOException {
-            register();
+        register();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
@@ -95,12 +97,13 @@ public class RegisterTest {
                 "4- COLOR_QUESTION";
         assertEquals(output, outputStream.toString().trim());
     }
+
     @ParameterizedTest
     @CsvSource({
             "pick question -q 16252526 -a dhdjdjdjdjdhs -c jfjdjddjdndn, Invalid question number!",
             "pick question -q 2 -a hasan -c hasans, Answer doesn't match!"
     })
-    void invalidPickQuestion(String input , String output) throws IOException {
+    void invalidPickQuestion(String input, String output) throws IOException {
         register();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
@@ -121,8 +124,8 @@ public class RegisterTest {
     }
 
 
-  @Test
-  void invalidRandomPassRegister() throws IOException {
+    @Test
+    void invalidRandomPassRegister() throws IOException {
         logout();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
@@ -131,20 +134,22 @@ public class RegisterTest {
         App.getCurrMenuType().getMenu().handleMenu(input);
         String output = "Password isn't secure! Password must be at least 8 characters";
         assertEquals(output, outputStream.toString().trim());
-  }
-  @Test
-  void validRandomPassRegister() throws IOException {
-      logout();
+    }
+
+    @Test
+    void validRandomPassRegister() throws IOException {
+        logout();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
         String input = "register -u mamad -p random Random -n shsh -e a@gmail.com -g a";
         App.getCurrMenuType().getMenu().handleMenu(input.trim());
-        String output = "User created! Password is: "+ SignInMenuController.getUserPassword();
+        String output = "User created! Password is: " + SignInMenuController.getUserPassword();
         assertEquals(output, outputStream.toString().trim());
-  }
-  @Test
-  void userLogout() throws IOException {
+    }
+
+    @Test
+    void userLogout() throws IOException {
         App.getCurrMenuType().getMenu().handleMenu("register -u ali -p hdhsshjss@Al12 hdhsshjss@Al12 -n shsh -e a@gmail.com -g a");
         App.getCurrMenuType().getMenu().handleMenu("pick question -q 2 -a hasan -c hasan");
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -153,15 +158,16 @@ public class RegisterTest {
         App.getCurrMenuType().getMenu().handleMenu("user logout");
         String output = "You are now logged out!";
         assertEquals(output, outputStream.toString().trim());
-  }
-
-  public static void logout(){
-      if(App.getCurrMenuType() == MenuTypes.MainMenu) {
-          App.getCurrMenuType().getMenu().handleMenu("user logout");
-      }
-      SignInMenuController.isProgramWaitingForQuestion = false;
     }
-    public static void register(){
+
+    public static void logout() {
+        if (App.getCurrMenuType() == MenuTypes.MainMenu) {
+            App.getCurrMenuType().getMenu().handleMenu("user logout");
+        }
+        SignInMenuController.isProgramWaitingForQuestion = false;
+    }
+
+    public static void register() {
         logout();
         App.getCurrMenuType().getMenu().handleMenu("register -u ali -p hdhsshjss@Al12 hdhsshjss@Al12 -n shsh -e a@gmail.com -g a");
     }
