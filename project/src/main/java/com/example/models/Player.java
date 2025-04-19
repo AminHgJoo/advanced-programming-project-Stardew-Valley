@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Player {
     private Coordinate coordinate;
     private int money;
-    private Backpack inventory;
+    private final Backpack inventory;
     private Farm farm;
     private final ArrayList<Skill> skills = new ArrayList<>();
     private final ArrayList<Quest> quests = new ArrayList<>();
@@ -21,24 +21,31 @@ public class Player {
     private final ArrayList<Friendship> friendships = new ArrayList<>();
     private final ArrayList<NPCFriendship> npcFriendships = new ArrayList<>();
     private final ArrayList<PlayerAnimal> animals = new ArrayList<>();
-    private double energy = 0;
+    private double energy;
+    private double maxEnergy;
+    private boolean isPlayerFainted;
+
     private TrashcanType trashcanType;
     private Item equippedItem;
-    /// TODO: handle energy usage in one turn.
+
+    // TODO: handle energy usage in one turn.
     private double usedEnergyInTurn;
 
-    /// TODO: called in game thread.
-    public void checkForFainting() {
-
-    }
     public Player(User user) {
         this.user = user;
         this.inventory = new Backpack(BackpackType.DEFAULT);
         this.trashcanType = TrashcanType.DEFAULT;
         this.usedEnergyInTurn = 0;
+        this.energy = 200;
+        this.maxEnergy = 200;
+        this.money = 0;
+        this.coordinate = new Coordinate(0, 0);
+        this.equippedItem = null;
+        this.isPlayerFainted = false;
     }
 
-    public Player(Coordinate coordinate, int money, Farm farm, User user, double energy) {
+    //TODO: Debug Only Constructor. Not Usable.
+    private Player(Coordinate coordinate, int money, Farm farm, User user, double energy) {
         this.coordinate = coordinate;
         this.trashcanType = TrashcanType.DEFAULT;
         this.inventory = new Backpack(BackpackType.DEFAULT);
@@ -131,5 +138,21 @@ public class Player {
 
     public void setUsedEnergyInTurn(double usedEnergyInTurn) {
         this.usedEnergyInTurn = usedEnergyInTurn;
+    }
+
+    public double getMaxEnergy() {
+        return maxEnergy;
+    }
+
+    public void setMaxEnergy(double maxEnergy) {
+        this.maxEnergy = maxEnergy;
+    }
+
+    public boolean isPlayerFainted() {
+        return isPlayerFainted;
+    }
+
+    public void setPlayerFainted(boolean playerFainted) {
+        isPlayerFainted = playerFainted;
     }
 }

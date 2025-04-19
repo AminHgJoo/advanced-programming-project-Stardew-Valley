@@ -13,19 +13,27 @@ import com.example.utilities.FindPath;
 import java.util.ArrayList;
 
 public class MovementAndMap extends Controller {
+
     public static Response handleWalking(Request request) {
+        //TODO: Print error if going to destination causes energyUsedInTurn to exceed 50.
+        //TODO: Subtract energy from player after walking, add the used energy to energyUsedInTurn.
+        //TODO: How should fainting be handled, if player traces the path instantly?
+        //TODO: Player should faint in the last tile before they run out of energy. Fainting handler is
+        // removed from thread! If player faints, put the field 'isPlayerFainted' to true.
+        //TODO: move player to dest if everything is OK!
+
         int x = Integer.parseInt(request.body.get("x"));
         int y = Integer.parseInt(request.body.get("y"));
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Cell src = player.getFarm().findCellByCoordinate(player.getCoordinate().getX() , player.getCoordinate().getY());
+        Cell src = player.getFarm().findCellByCoordinate(player.getCoordinate().getX(), player.getCoordinate().getY());
         Cell dest = player.getFarm().findCellByCoordinate(x, y).clone();
-        if(dest == null || !dest.getObjectOnCell().isWalkable) {
-            return  new Response(false , "destination is not valid");
+        if (dest == null || !dest.getObjectOnCell().isWalkable) {
+            return new Response(false, "destination is not valid");
         }
-        FindPath.pathBFS(src , dest , player.getFarm().getCells());
+        FindPath.pathBFS(src, dest, player.getFarm().getCells());
         ArrayList<Cell> path = new ArrayList<Cell>();
-        while(dest != null) {
+        while (dest != null) {
             path.add(dest);
             dest = dest.prev;
         }
@@ -47,10 +55,10 @@ public class MovementAndMap extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         double energy = game.getCurrentPlayer().getEnergy();
-        if(energy == Double.POSITIVE_INFINITY) {
+        if (energy == Double.POSITIVE_INFINITY) {
             return new Response(true, "infinity");
         }
-        String energyString = String.valueOf((int)energy);
+        String energyString = String.valueOf((int) energy);
         return new Response(true, energyString);
     }
 
@@ -67,6 +75,5 @@ public class MovementAndMap extends Controller {
         Game game = user.getCurrentGame();
         game.getCurrentPlayer().setEnergy(Double.POSITIVE_INFINITY);
         return new Response(true, "energy successfully set to infinity");
-
     }
 }

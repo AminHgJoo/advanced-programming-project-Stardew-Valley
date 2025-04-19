@@ -30,7 +30,8 @@ public class User {
 
     }
 
-    public User(SecurityQuestion question, String answer, String gender
+    /// Does not have any usages. set to private to prevent errors and mistakes.
+    private User(SecurityQuestion question, String answer, String gender
             , String email, String nickname, String password, String username) {
         this.question = question;
         this.answer = answer;

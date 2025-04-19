@@ -26,7 +26,7 @@ public class Backpack {
 
     public Slot getSlotByItemName(String itemName) {
         for (Slot slot : slots) {
-            if(slot.getHeader().getName().equals(itemName)) {
+            if (slot.getHeader().getName().equals(itemName)) {
                 return slot;
             }
         }

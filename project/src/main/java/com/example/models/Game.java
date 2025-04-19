@@ -29,19 +29,32 @@ public class Game {
     //TODO : handle turn cycle boolean!
 
     public void advanceTime() {
-        if (hasTurnCycleFinished) {
-            date = date.plusHours(1);
-            hasTurnCycleFinished = false;
-            if (date.getHour() == 23) {
-                //TODO : next day has arrived
-                date = date.plusHours(10);
-                weatherToday = weatherTomorrow;
-                determineWeatherTomorrow();
+
+        if (!hasTurnCycleFinished) {
+            return;
+        }
+        date = date.plusHours(1);
+        hasTurnCycleFinished = false;
+        if (date.getHour() == 23) {
+            //TODO : next day has arrived
+            date = date.plusHours(10);
+
+            weatherToday = weatherTomorrow;
+            determineWeatherTomorrow();
+
+            for (Player player : players) {
+                if (player.isPlayerFainted()) {
+                    player.setPlayerFainted(false);
+                    player.setEnergy(player.getMaxEnergy() * 0.75);
+                } else {
+                    player.setEnergy(player.getMaxEnergy());
+                }
+                player.setUsedEnergyInTurn(0);
             }
-            if (date.getDayOfMonth() == 29) {
-                date = date.minusDays(28);
-                date = date.plusMonths(1);
-            }
+        }
+        if (date.getDayOfMonth() == 29) {
+            date = date.minusDays(28);
+            date = date.plusMonths(1);
         }
     }
 
@@ -78,7 +91,7 @@ public class Game {
         this.weatherTomorrow = Weather.SUNNY;
         this.season = Season.SPRING;
         this.timeHandler = new GameThread(this);
-        this.isGameOngoing = true;
+        this.isGameOngoing = false;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -145,22 +158,23 @@ public class Game {
         return _id;
     }
 
-    public Player findPlayerByUser(User user){
-        for(Player player : players){
-            if(player.getUser().getUsername().equals(user.getUsername())){
+    public Player findPlayerByUser(User user) {
+        for (Player player : players) {
+            if (player.getUser().getUsername().equals(user.getUsername())) {
                 return player;
             }
         }
         return null;
     }
 
-    public boolean nextPlayerTurn(){
+    /// Cycles to next player in turn, returns true if end was reached.
+    public boolean cycleToNextPlayer() {
         int index = players.indexOf(currentPlayer);
-        if(index == players.size() - 1){
-            currentPlayer = players.get(0);
+        if (index == players.size() - 1) {
+            currentPlayer = players.getFirst();
             return true;
-        }else {
-            currentPlayer = players.get(index+1);
+        } else {
+            currentPlayer = players.get(index + 1);
             return false;
         }
     }

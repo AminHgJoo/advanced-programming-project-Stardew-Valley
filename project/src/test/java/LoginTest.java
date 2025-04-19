@@ -53,7 +53,7 @@ public class LoginTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
-        String input = "login -u "+user.getUsername()+" -p " + password;
+        String input = "login -u " + user.getUsername() + " -p " + password;
         App.getCurrMenuType().getMenu().handleMenu(input);
         String output = "Login Successful. Going to Main Menu!";
         assertEquals(output, outputStream.toString().trim());
@@ -90,7 +90,7 @@ public class LoginTest {
             "ksjd6562, Password isn't secure! Password must contain a uppercase letter",
             "Kkjaff273, Password isn't secure! Password must contain a special character"
     })
-    void forgetPasswordWrongPassword(String input , String output) throws IOException {
+    void forgetPasswordWrongPassword(String input, String output) throws IOException {
         logout();
         forgetPass();
         App.getCurrMenuType().getMenu().handleMenu("answer -a hasan");
@@ -122,10 +122,12 @@ public class LoginTest {
         SignInMenuController.isProgramWaitingForAnswer = false;
         SignInMenuController.setUserOfForgetPassword(null);
     }
-    public static void forgetPass(){
-        String input = "forget password -u "+user.getUsername();
+
+    public static void forgetPass() {
+        String input = "forget password -u " + user.getUsername();
         App.getCurrMenuType().getMenu().handleMenu(input);
     }
+
     public static void register() {
         logout();
         App.getCurrMenuType().getMenu().handleMenu("register -u ali -p hdhsshjss@Al12 hdhsshjss@Al12 -n shsh -e a@gmail.com -g a");

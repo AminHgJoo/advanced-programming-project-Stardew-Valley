@@ -53,9 +53,9 @@ public class ProfileMenuTest {
         System.setOut(printStream);
         String input = "user info";
         App.getCurrMenuType().getMenu().handleMenu(input);
-        String output = String.format("Username: %s\n",user.getUsername()) +
-                String.format("nickname: %s\n" , user.getNickname()) +
-                String.format("moneyHighScore: %d\n" , user.getMoneyHighScore()) +
+        String output = String.format("Username: %s\n", user.getUsername()) +
+                String.format("nickname: %s\n", user.getNickname()) +
+                String.format("moneyHighScore: %d\n", user.getMoneyHighScore()) +
                 String.format("numberOfGames: %d", user.getNumberOfGames());
         assertEquals(output, outputStream.toString().trim());
     }
@@ -103,7 +103,7 @@ public class ProfileMenuTest {
             "change email -e a@gmail.com, Enter a new email address!"
     })
     @Order(7)
-    void invalidChangeEmail(String input , String output) throws IOException {
+    void invalidChangeEmail(String input, String output) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
@@ -130,7 +130,7 @@ public class ProfileMenuTest {
             "change password -p hdhsshjss@Al12 -o hdhsshjss@Al12, New password is the same as the old password!"
     })
     @Order(9)
-    void invalidChangePassword(String input , String output) throws IOException {
+    void invalidChangePassword(String input, String output) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
@@ -195,6 +195,7 @@ public class ProfileMenuTest {
         SignInMenuController.isProgramWaitingForAnswer = false;
         SignInMenuController.setUserOfForgetPassword(null);
     }
+
     public static void register() {
         logout();
         App.getCurrMenuType().getMenu().handleMenu("register -u ali -p hdhsshjss@Al12 hdhsshjss@Al12 -n shsh -e a@gmail.com -g a");

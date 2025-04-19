@@ -9,6 +9,7 @@ public enum GameMenuCommands implements Command {
     LOAD_GAME("^load\\s+game$"),
     EXIT_GAME("^exit\\s+game$"),
     NEXT_TURN("^next\\s+turn$"),
+    FORCE_DELETE_GAME("^force\\s+delete\\s+game$"),
     TIME("^time$"),
     DATE("^date$"),
     DATETIME("^datetime$"),

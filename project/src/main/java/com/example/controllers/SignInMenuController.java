@@ -16,9 +16,11 @@ public class SignInMenuController extends Controller {
     public static boolean isProgramWaitingForQuestion = false;
     public static boolean isProgramWaitingForAnswer = false;
     private static User userWaitingForQuestion = null;
+
     public static User getUserOfForgetPassword() {
         return userOfForgetPassword;
     }
+
     public static void setUserOfForgetPassword(User userOfForgetPassword) {
         SignInMenuController.userOfForgetPassword = userOfForgetPassword;
     }

@@ -20,15 +20,16 @@ public class Cell {
         this.isTilled = false;
     }
 
-    public int diffXPrev(){
+    public int diffXPrev() {
         return this.coordinate.getX() - this.prev.coordinate.getX();
     }
-    public int diffYPrev(){
+
+    public int diffYPrev() {
         return this.coordinate.getY() - this.prev.coordinate.getY();
     }
 
     public void setEnergy() {
-        energy = distance + 10*turns;
+        energy = distance + 10 * turns;
     }
 
     public Coordinate getCoordinate() {

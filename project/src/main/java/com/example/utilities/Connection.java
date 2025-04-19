@@ -11,7 +11,7 @@ public class Connection {
         if (database == null) {
             try {
                 String DB = "AP_PROJECT";
-                if(System.getenv("APP_MODE") != null && System.getenv("APP_MODE").equals("TEST")) {
+                if (System.getenv("APP_MODE") != null && System.getenv("APP_MODE").equals("TEST")) {
                     DB += "_TEST";
                 }
                 database = Morphia.createDatastore(MongoClients.create("mongodb://localhost:27017"), DB);

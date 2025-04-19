@@ -14,12 +14,23 @@ public class GameMenu implements Menu {
 
         if (App.getLoggedInUser().getCurrentGame() == null
                 || !App.getLoggedInUser().getCurrentGame().isGameOngoing()) {
-            if (GameMenuCommands.GAME_NEW.matches(input)) {
+
+            if (LoadingSavingTurnHandling.isWaitingForChoosingMap) {
+                if (GameMenuCommands.GAME_MAP.matches(input)) {
+                    response = getGameMapResponse(input);
+                } else {
+                    response = getInvalidCommand();
+                }
+            } else if (GameMenuCommands.GAME_NEW.matches(input)) {
                 response = getNewGameResponse(input);
-            } else if (GameMenuCommands.GAME_MAP.matches(input) && LoadingSavingTurnHandling.isWaitingForChoosingMap) {
-                response = getGameMapResponse(input);
             } else if (GameMenuCommands.LOAD_GAME.matches(input)) {
                 response = getLoadGameResponse(input);
+            } else if (GameMenuCommands.SHOW_MENU.matches(input)) {
+                response = getShowMenuResponse(input);
+            } else if (GameMenuCommands.EXIT_MENU.matches(input)) {
+                response = getExitMenuResponse(input);
+            } else if (GameMenuCommands.ENTER_MENU.matches(input)) {
+                response = getEnterMenuResponse(input);
             } else {
                 response = getInvalidCommand();
             }
@@ -28,6 +39,8 @@ public class GameMenu implements Menu {
                 response = getExitGameResponse(input);
             } else if (GameMenuCommands.NEXT_TURN.matches(input)) {
                 response = getNextTurnResponse(input);
+            } else if (GameMenuCommands.FORCE_DELETE_GAME.matches(input)) {
+                response = getForceDeleteGameResponse(input);
             } else if (GameMenuCommands.TIME.matches(input)) {
                 response = getTimeResponse(input);
             } else if (GameMenuCommands.DATE.matches(input)) {
@@ -188,16 +201,19 @@ public class GameMenu implements Menu {
                 response = getQuestFinishResponse(input);
             } else if (GameMenuCommands.SHOW_MENU.matches(input)) {
                 response = getShowMenuResponse(input);
-            } else if (GameMenuCommands.EXIT_MENU.matches(input)) {
-                response = getExitMenuResponse(input);
-            } else if (GameMenuCommands.ENTER_MENU.matches(input)) {
-                response = getEnterMenuResponse(input);
             } else {
                 response = getInvalidCommand();
             }
         }
 
         printResponse(response);
+    }
+
+    private static Response getForceDeleteGameResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = LoadingSavingTurnHandling.handleForceDeleteGame(request);
+        return response;
     }
 
     private static Response getBuildResponse(String input) {

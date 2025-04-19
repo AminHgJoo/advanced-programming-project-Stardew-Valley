@@ -49,8 +49,7 @@ public class Farm {
                 cell.setObjectOnCell(new Stone(null));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
                 cell.setObjectOnCell(new ForagingCrop());
-            }
-            else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 4) {
+            } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 4) {
                 cell.setObjectOnCell(new ForagingSeed());
             }
         }
@@ -141,7 +140,7 @@ public class Farm {
         return null;
     }
 
-    public void initialCells(){
+    public void initialCells() {
         for (Cell cell : cells) {
             cell.energy = 0;
             cell.distance = 0;

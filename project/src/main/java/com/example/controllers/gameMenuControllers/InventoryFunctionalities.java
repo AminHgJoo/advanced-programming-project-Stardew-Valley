@@ -27,19 +27,19 @@ public class InventoryFunctionalities extends Controller {
         Game game = user.getCurrentGame();
         Backpack backpack = game.getCurrentPlayer().getInventory();
         Slot slot = backpack.getSlotByItemName(itemName);
-        if(slot == null)
+        if (slot == null)
             return new Response(false, "item(s) does not exist!");
-        if(number == null){
+        if (number == null) {
             backpack.removeSlot(slot);
             return new Response(true, "Item successfully trashed!");
         }
-            int numberInt = Integer.parseInt(number);
-            slot.setCount(slot.getCount() - numberInt);
-            if(slot.getCount() <= 0) {
-                backpack.removeSlot(slot);
-                return new Response(true, "Item successfully trashed!");
-            }
-            return new Response(true, numberInt + " of item(s) successfully trashed!");
+        int numberInt = Integer.parseInt(number);
+        slot.setCount(slot.getCount() - numberInt);
+        if (slot.getCount() <= 0) {
+            backpack.removeSlot(slot);
+            return new Response(true, "Item successfully trashed!");
+        }
+        return new Response(true, numberInt + " of item(s) successfully trashed!");
 
     }
 

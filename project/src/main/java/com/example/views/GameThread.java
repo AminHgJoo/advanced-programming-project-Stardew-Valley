@@ -1,5 +1,6 @@
 package com.example.views;
 
+import com.example.models.App;
 import com.example.models.Game;
 
 public class GameThread extends Thread {
@@ -14,7 +15,7 @@ public class GameThread extends Thread {
     public void run() {
         while (game.isGameOngoing()) {
             try {
-                this.wait(500);
+                this.wait(100);
             } catch (InterruptedException _) {
             }
             game.advanceTime();

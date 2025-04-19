@@ -34,9 +34,9 @@ public enum SignInMenuCommands implements Command {
         Matcher matcher = getMatcher(input);
         matcher.find();
         String value = matcher.group(group);
-        if(value != null && group.equals("loginFlag")) {
-            if(!value.equals("-stay-logged-in")) value = null;
+        if (value != null && group.equals("loginFlag")) {
+            if (!value.equals("-stay-logged-in")) value = null;
         }
-        return  value != null ? value.trim() : null;
+        return value != null ? value.trim() : null;
     }
 }
