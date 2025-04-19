@@ -80,11 +80,10 @@ public class SignInMenuController extends Controller {
         if (!Validation.validateEmail(email)) {
             return new Response(false, "Email is invalid!");
         }
-
         User user = new User(gender, email, nickname, Validation.hashPassword(password), username);
         userWaitingForQuestion = user;
         isProgramWaitingForQuestion = true;
-        if(System.getenv("APP_MODE") != null && System.getenv("APP_MODE").equals("TEST")) {
+        if (System.getenv("APP_MODE") != null && System.getenv("APP_MODE").equals("TEST")) {
             userPassword = password;
         }
         return new Response(true, "User created! Password is: " + password);
