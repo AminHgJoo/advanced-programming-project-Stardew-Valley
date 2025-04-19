@@ -14,4 +14,8 @@ abstract public class Item {
     abstract public void deleteItem();
 
     abstract public void dropItem();
+
+    public String getName() {
+        return name;
+    }
 }

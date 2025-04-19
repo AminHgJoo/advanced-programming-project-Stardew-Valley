@@ -11,6 +11,11 @@ public class Slot {
         this.count = count;
     }
 
+    @Override
+    public String toString() {
+        return "Slot [header=" + header.getName() + ", count=" + count + "]";
+    }
+
     public Item getHeader() {
         return header;
     }

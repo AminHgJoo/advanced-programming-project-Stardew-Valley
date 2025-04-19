@@ -1,12 +1,22 @@
 package com.example.controllers.gameMenuControllers;
 
 import com.example.controllers.Controller;
+import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 
 public class InventoryFunctionalities extends Controller {
     public static Response handleShowInventory(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Backpack backpack = game.getCurrentPlayer().getInventory();
+        StringBuilder output = new StringBuilder();
+        for(Slot slot : backpack.getSlots()) {
+            output.append(slot.toString()).append("\n");
+        }
+        if(output.isEmpty())
+            return new Response(true, "Your Backpack is empty!");
+        return new Response(true, output.toString());
 
     }
 
