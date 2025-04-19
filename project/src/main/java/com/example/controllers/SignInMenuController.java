@@ -105,6 +105,7 @@ public class SignInMenuController extends Controller {
         user.setQuestion(SecurityQuestion.values()[questionNumber - 1]);
         user = UserRepository.saveUser(user);
         isProgramWaitingForQuestion = false;
+        userWaitingForQuestion = null;
         App.setCurrMenuType(MenuTypes.MainMenu);
         App.setLoggedInUser(user);
         return new Response(true, "Question Picked! Logging in...");
@@ -150,6 +151,7 @@ public class SignInMenuController extends Controller {
         User user = userOfForgetPassword;
         if (!answer.equals(user.getAnswer())) {
             userOfForgetPassword = null;
+            isProgramWaitingForAnswer = false;
             return new Response(false, "Answer doesn't match!");
         }
         isProgramWaitingForAnswer = false;
