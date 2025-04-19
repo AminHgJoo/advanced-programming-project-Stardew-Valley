@@ -143,4 +143,24 @@ public class Game {
     public ObjectId get_id() {
         return _id;
     }
+
+    public Player findPlayerByUser(User user){
+        for(Player player : players){
+            if(player.getUser().getUsername().equals(user.getUsername())){
+                return player;
+            }
+        }
+        return null;
+    }
+
+    public boolean nextPlayerTurn(){
+        int index = players.indexOf(currentPlayer);
+        if(index == players.size() - 1){
+            currentPlayer = players.get(0);
+            return true;
+        }else {
+            currentPlayer = players.get(index+1);
+            return false;
+        }
+    }
 }

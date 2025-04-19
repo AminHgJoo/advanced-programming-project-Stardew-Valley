@@ -13,8 +13,8 @@ import java.util.ArrayList;
 public class Player {
     private Coordinate coordinate;
     private int money;
-    private final Backpack inventory;
-    private final Farm farm;
+    private Backpack inventory;
+    private  Farm farm;
     private final ArrayList<Skill> skills = new ArrayList<>();
     private final ArrayList<Quest> quests = new ArrayList<>();
     private final User user;
@@ -28,6 +28,11 @@ public class Player {
     /// TODO: called in game thread.
     public void checkForFainting() {
 
+    }
+    public Player(User user) {
+        this.user = user;
+        this.inventory = new Backpack(BackpackType.DEFAULT);
+        this.trashcanType = TrashcanType.DEFAULT;
     }
 
     public Player(Coordinate coordinate, int money, Farm farm, User user, double energy) {
@@ -66,6 +71,10 @@ public class Player {
 
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    public void setFarm(Farm farm) {
+        this.farm = farm;
     }
 
     public Backpack getInventory() {

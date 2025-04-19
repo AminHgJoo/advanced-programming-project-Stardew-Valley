@@ -13,7 +13,7 @@ public class GameMenu implements Menu {
 
         if (GameMenuCommands.GAME_NEW.matches(input)) {
             response = getNewGameResponse(input);
-        } else if (GameMenuCommands.GAME_MAP.matches(input)) {
+        } else if (GameMenuCommands.GAME_MAP.matches(input) && LoadingSavingTurnHandling.isWaitingForChoosingMap) {
             response = getGameMapResponse(input);
         } else if (GameMenuCommands.LOAD_GAME.matches(input)) {
             response = getLoadGameResponse(input);
