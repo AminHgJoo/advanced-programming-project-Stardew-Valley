@@ -6,7 +6,7 @@ public class Stone extends MapObject {
     private final StoneType stoneType;
 
     public Stone(StoneType stoneType) {
-        super(false, "stone");
+        super(false, "stone", "gray");
         this.stoneType = stoneType;
     }
 

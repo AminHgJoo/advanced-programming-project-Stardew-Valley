@@ -17,6 +17,38 @@ public class Farm {
         this.buildings = buildings;
     }
 
+    public void showFarm() {
+        for (int i = 0; i < 75; i++) {
+            System.out.print("-");
+        }
+        int cellIndex = 0;
+        for (Cell cell : cells) {
+            if (cellIndex % 75 == 0)
+                System.out.print("| ");
+            if (cell.getObjectOnCell().color.equals("blue"))
+                System.out.print("\u001B[34m" + "# ");
+            else if (cell.getObjectOnCell().color.equals("red"))
+                System.out.print("\u001B[31m" + "# ");
+            else if (cell.getObjectOnCell().color.equals("green"))
+                System.out.print("\u001B[32m" + "# ");
+            else if (cell.getObjectOnCell().color.equals("yellow"))
+                System.out.print("\u001B[33m" + "# ");
+            else if (cell.getObjectOnCell().color.equals("black"))
+                System.out.print("\u001B[90m" + "# ");
+            else if (cell.getObjectOnCell().color.equals("gray"))
+                System.out.print("\u001B[37m" + "# ");
+            cellIndex++;
+            if (cellIndex % 75 == 0)
+                System.out.println("|");
+
+            for (int i = 0; i < 75; i++) {
+                System.out.print("-");
+            }
+        }
+
+
+    }
+
     public ArrayList<Cell> getCells() {
         return cells;
     }
@@ -81,8 +113,8 @@ public class Farm {
 
 
     private static void makeEmptyCells(ArrayList<Cell> farmCells) {
-        for (int i = 0; i < 75; i++) {
-            for (int j = 0; j < 50; j++) {
+        for (int j = 0; j < 50; j++) {
+            for (int i = 0; i < 75; i++) {
                 Coordinate coordinate = new Coordinate(i, j);
                 farmCells.add(new Cell(new EmptyCell(), coordinate));
             }

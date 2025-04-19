@@ -6,6 +6,7 @@ import com.example.models.App;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;
+import org.jetbrains.annotations.NotNull;
 
 public class GameMenu implements Menu {
 
@@ -201,12 +202,21 @@ public class GameMenu implements Menu {
                 response = getQuestFinishResponse(input);
             } else if (GameMenuCommands.SHOW_MENU.matches(input)) {
                 response = getShowMenuResponse(input);
+            } else if (GameMenuCommands.SHOW_FARM.matches(input)) {
+                response = showFarmResponse(input);
             } else {
                 response = getInvalidCommand();
             }
         }
 
         printResponse(response);
+    }
+
+    private static @NotNull Response showFarmResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = World.showFarm();
+        return response;
     }
 
     private static Response getForceDeleteGameResponse(String input) {

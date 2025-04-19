@@ -2,14 +2,25 @@ package com.example.controllers.gameMenuControllers;
 
 import com.example.controllers.Controller;
 import com.example.models.App;
+import com.example.models.Game;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
+import com.example.models.User;
 import com.example.models.enums.Weather;
+import com.example.models.mapModels.Farm;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 public class World extends Controller {
+    public static Response showFarm() {
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Farm farm = game.getCurrentPlayer().getFarm();
+        farm.showFarm();
+        return new Response(true, " ");
+    }
+
     public static Response handleTimeQuery(Request request) {
         Response response = new Response();
         response.setSuccess(true);
