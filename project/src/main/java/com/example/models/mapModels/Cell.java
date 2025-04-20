@@ -1,7 +1,9 @@
 package com.example.models.mapModels;
 
 import com.example.models.mapObjects.MapObject;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class Cell {
     //TODO : modify
     private MapObject objectOnCell;

@@ -7,10 +7,12 @@ import com.example.models.items.Item;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
 import com.example.models.skills.Skill;
-import dev.morphia.annotations.Reference;
+import dev.morphia.annotations.Embedded;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 
+@Embedded
 public class Player {
     private Coordinate coordinate;
     private int money;
@@ -18,8 +20,8 @@ public class Player {
     private Farm farm;
     private final ArrayList<Skill> skills = new ArrayList<>();
     private final ArrayList<Quest> quests = new ArrayList<>();
-    @Reference
-    private final User user;
+    private final ObjectId user_id;
+    private User user;
     private final ArrayList<Friendship> friendships = new ArrayList<>();
     private final ArrayList<NPCFriendship> npcFriendships = new ArrayList<>();
     private final ArrayList<PlayerAnimal> animals = new ArrayList<>();
@@ -35,6 +37,7 @@ public class Player {
 
     public Player(User user) {
         this.user = user;
+        this.user_id = user.get_id();
         this.inventory = new Backpack(BackpackType.DEFAULT);
         this.trashcanType = TrashcanType.DEFAULT;
         this.usedEnergyInTurn = 0;
@@ -54,10 +57,15 @@ public class Player {
         this.money = money;
         this.farm = farm;
         this.user = user;
+        this.user_id = user.get_id();
         this.energy = energy;
     }
 
-    public int getTrashcanRefundPercentage(){
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public int getTrashcanRefundPercentage() {
         return trashcanType.refundPercentage;
     }
 
@@ -160,5 +168,9 @@ public class Player {
 
     public void setPlayerFainted(boolean playerFainted) {
         isPlayerFainted = playerFainted;
+    }
+
+    public ObjectId getUser_id() {
+        return user_id;
     }
 }

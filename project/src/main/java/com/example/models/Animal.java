@@ -1,7 +1,9 @@
 package com.example.models;
 
 import com.example.models.enums.types.AnimalType;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class Animal {
     private String name;
     private AnimalType type;

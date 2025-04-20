@@ -1,5 +1,8 @@
 package com.example.models.mapModels;
 
+import dev.morphia.annotations.Embedded;
+
+@Embedded
 public class Coordinate {
     private final int x;
     private final int y;

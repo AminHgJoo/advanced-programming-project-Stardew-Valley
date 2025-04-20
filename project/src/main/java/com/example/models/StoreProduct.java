@@ -1,7 +1,9 @@
 package com.example.models;
 
 import com.example.models.items.Item;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class StoreProduct {
     private final int price;
     private final Item item;

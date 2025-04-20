@@ -17,4 +17,9 @@ public enum SecurityQuestion {
     public String getQuestion() {
         return question;
     }
+
+    @Override
+    public String toString() {
+        return question;
+    }
 }

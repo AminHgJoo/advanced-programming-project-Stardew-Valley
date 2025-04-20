@@ -1,5 +1,8 @@
 package com.example.models;
 
+import dev.morphia.annotations.Embedded;
+
+@Embedded
 public class PlayerAnimal {
     private final Animal animal;
     private final int xp;

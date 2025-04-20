@@ -1,5 +1,8 @@
 package com.example.models;
 
+import dev.morphia.annotations.Embedded;
+
+@Embedded
 public class Friendship {
     private Player player;
     private int level;

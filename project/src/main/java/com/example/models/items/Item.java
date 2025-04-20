@@ -1,7 +1,9 @@
 package com.example.models.items;
 
 import com.example.models.enums.Quality;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 abstract public class Item {
     protected Quality quality;
     protected int maxStackSize;
@@ -15,7 +17,7 @@ abstract public class Item {
 
     abstract public void dropItem();
 
-    public int getValue(){
+    public int getValue() {
         return value;
     }
 

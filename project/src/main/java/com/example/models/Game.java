@@ -6,6 +6,7 @@ import com.example.models.mapModels.Map;
 import com.example.views.GameThread;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class Game {
     private Weather weatherToday;
     private Weather weatherTomorrow;
     private Season season;
+    @Transient
     private final GameThread timeHandler;
     public boolean hasTurnCycleFinished;
     //TODO : handle turn cycle boolean!

@@ -6,9 +6,11 @@ import com.example.models.buildings.Greenhouse;
 import com.example.models.buildings.Mine;
 import com.example.models.buildings.PlayerHome;
 import com.example.models.mapObjects.*;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 
+@Embedded
 public class Farm {
     final private ArrayList<Cell> cells;
     final private ArrayList<Building> buildings;
@@ -21,25 +23,31 @@ public class Farm {
     public void showFarm(int x, int y, int size) {
         int playerX = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate().getX();
         int playerY = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate().getY();
+
         for (Cell cell : cells) {
             Coordinate coordinate = cell.getCoordinate();
+
             int xOfCell = coordinate.getX();
             int yOfCell = coordinate.getY();
+
             if (Math.abs(x - xOfCell) <= size / 2 && Math.abs(y - yOfCell) <= size / 2) {
                 if (xOfCell == playerX && yOfCell == playerY)
-                    System.out.println("\u001B[34m" + "P");
+                    System.out.print("\u001B[34m" + "P" + "\033[0m");
                 else if (cell.getObjectOnCell().color.equals("blue"))
-                    System.out.print("\u001B[34m" + cell.getObjectOnCell().toString());
+                    System.out.print("\u001B[34m" + cell.getObjectOnCell().toString() + "\033[0m");
                 else if (cell.getObjectOnCell().color.equals("red"))
-                    System.out.print("\u001B[31m" + cell.getObjectOnCell().toString());
+                    System.out.print("\u001B[31m" + cell.getObjectOnCell().toString() + "\033[0m");
                 else if (cell.getObjectOnCell().color.equals("green"))
-                    System.out.print("\u001B[32m" + cell.getObjectOnCell().toString());
+                    System.out.print("\u001B[32m" + cell.getObjectOnCell().toString() + "\033[0m");
                 else if (cell.getObjectOnCell().color.equals("yellow"))
-                    System.out.print("\u001B[33m" + cell.getObjectOnCell().toString());
+                    System.out.print("\u001B[33m" + cell.getObjectOnCell().toString() + "\033[0m");
                 else if (cell.getObjectOnCell().color.equals("black"))
-                    System.out.print("\u001B[90m" + cell.getObjectOnCell().toString());
+                    System.out.print("\u001B[90m" + cell.getObjectOnCell().toString() + "\033[0m");
                 else if (cell.getObjectOnCell().color.equals("gray"))
-                    System.out.print("\u001B[37m" + cell.getObjectOnCell().toString());
+                    System.out.print("\u001B[37m" + cell.getObjectOnCell().toString() + "\033[0m");
+                if (xOfCell - x == size / 2) {
+                    System.out.print("\n");
+                }
             }
         }
     }
