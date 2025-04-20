@@ -9,8 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserRepository {
     private static final Datastore db = Connection.getDatabase();
@@ -38,19 +41,36 @@ public class UserRepository {
         db.delete(user);
     }
 
-    //TODO: implement stay logged in config.
-    public static User getStayLoggedInUser()
-    {
+    public static User getStayLoggedInUser() {
         String user_id = System.getProperty("USER_ID");
-        if(user_id == null)return  null;
+        if (user_id == null) return null;
         User user = findUserById(user_id);
         return user;
     }
 
+    public static void removeStayLoggedInUser() {
+        String envFilePath = System.getProperty("user.dir") + "/project/src/main/java/com/example/configs/env."
+                + System.getenv("APP_MODE").toLowerCase();
+        String variableToRemove = "USER_ID";
+
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(envFilePath));
+
+            List<String> updatedLines = lines.stream()
+                    .filter(line -> !line.startsWith(variableToRemove + "="))
+                    .collect(Collectors.toList());
+
+            Files.write(Paths.get(envFilePath), updatedLines, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+
+        } catch (IOException e) {
+            System.out.println("Error updating .env file: " + e.getMessage());
+        }
+    }
+
     public static void saveStayLoggedInUser(User user) {
         String envFilePath = System.getProperty("user.dir") + "/project/src/main/java/com/example/configs/env."
-                +System.getenv("APP_MODE").toLowerCase();
-        String envVar = "\nUSER_ID="+user.get_id().toString();
+                + System.getenv("APP_MODE").toLowerCase();
+        String envVar = "\nUSER_ID=" + user.get_id().toString();
 
         try {
             Files.write(Path.of(envFilePath), envVar.getBytes(), StandardOpenOption.APPEND);

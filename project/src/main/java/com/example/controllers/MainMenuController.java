@@ -1,5 +1,6 @@
 package com.example.controllers;
 
+import com.example.Repositories.UserRepository;
 import com.example.models.App;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
@@ -9,6 +10,7 @@ public class MainMenuController extends Controller {
     public static Response handleLogout(Request request) {
         App.setLoggedInUser(null);
         App.setCurrMenuType(MenuTypes.SignInMenu);
+        UserRepository.removeStayLoggedInUser();
         return new Response(true, "You are now logged out!");
     }
 }

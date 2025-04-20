@@ -4,6 +4,7 @@ import com.example.Repositories.UserRepository;
 import com.example.models.App;
 import com.example.models.User;
 import com.example.models.enums.types.MenuTypes;
+import com.example.utilities.Connection;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.Scanner;
@@ -17,6 +18,7 @@ public class AppView {
                 .filename("env."+System.getenv("APP_MODE").toLowerCase())
                 .systemProperties()
                 .load();
+        Connection.getDatabase();
         User user = UserRepository.getStayLoggedInUser();
         App.setLoggedInUser(user);
         if (App.getLoggedInUser() != null) {

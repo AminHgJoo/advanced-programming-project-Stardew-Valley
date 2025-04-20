@@ -45,7 +45,8 @@ public class Controller {
             App.setCurrMenuType(MenuTypes.MainMenu);
             return new Response(true, "Exiting to Main Menu...");
         } else if (App.getCurrMenuType() == MenuTypes.MainMenu) {
-            return new Response(false, "Cannot exit from Main Menu, you should logout instead.");
+            App.setCurrMenuType(MenuTypes.ExitMenu);
+            return new Response(true, "Exiting app...");
         } else if (App.getCurrMenuType() == MenuTypes.GameMenu) {
             App.setCurrMenuType(MenuTypes.MainMenu);
             return new Response(true, "Exiting to Main Menu...");
