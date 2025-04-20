@@ -11,4 +11,9 @@ abstract public class MapObject {
         this.type = type;
         this.color = color;
     }
+
+    @Override
+    public String toString() {
+        return type.substring(0, 1).toUpperCase();
+    }
 }

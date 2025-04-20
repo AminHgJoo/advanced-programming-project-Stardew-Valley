@@ -53,8 +53,8 @@ public class MovementAndMap extends Controller {
     }
 
     public static Response handleMapHelp(Request request) {
-        return null;
-
+        return new Response(true, "The player is shown by blue 'P', " +
+                "all other icons show the first letter of their type and corresponding color.");
     }
 
     public static Response handleShowEnergy(Request request) {
