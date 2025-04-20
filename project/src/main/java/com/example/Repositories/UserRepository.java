@@ -1,5 +1,7 @@
 package com.example.Repositories;
 
+import com.example.models.Game;
+import com.example.models.Player;
 import com.example.models.User;
 import com.example.utilities.Connection;
 import dev.morphia.Datastore;
@@ -18,7 +20,8 @@ public class UserRepository {
     private static final Datastore db = Connection.getDatabase();
 
     public static User findUserById(String id) {
-        User user = db.find(User.class).filter("_id", new ObjectId(id)).first();
+        User user = db.find(User.class)
+                .filter("_id", new ObjectId(id)).first();
         return user;
     }
 
@@ -75,6 +78,12 @@ public class UserRepository {
             Files.write(Path.of(envFilePath), envVar.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             System.out.println("Error updating .env file: " + e.getMessage());
+        }
+    }
+    public static void populateUsersOfPlayers(Game game) {
+        for (Player player : game.getPlayers()) {
+            User user = db.find(User.class).filter("_id" , player.getUser_id().toString()).first();
+            player.setUser(user);
         }
     }
 }

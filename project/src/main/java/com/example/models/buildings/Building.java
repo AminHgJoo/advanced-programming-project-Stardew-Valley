@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 @Embedded
 public abstract class Building {
-    public final ArrayList<Cell> buildingCells;
-
-    protected Building(ArrayList<Cell> buildingCells) {
+    public  ArrayList<Cell> buildingCells;
+    public Building(){}
+    public Building(ArrayList<Cell> buildingCells) {
         this.buildingCells = buildingCells;
     }
 }

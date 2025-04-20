@@ -6,9 +6,10 @@ import java.util.ArrayList;
 
 @Embedded
 public class Map {
-    private final ArrayList<Farm> farms;
-    private final Village village;
+    private ArrayList<Farm> farms;
+    private Village village;
 
+    public Map() {}
     private Map(ArrayList<Farm> farms, Village village) {
         this.farms = farms;
         this.village = village;

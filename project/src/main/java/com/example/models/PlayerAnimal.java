@@ -4,8 +4,12 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class PlayerAnimal {
-    private final Animal animal;
-    private final int xp;
+    private Animal animal;
+    private int xp;
+
+    public PlayerAnimal() {
+
+    }
 
     public PlayerAnimal(Animal animal, int xp) {
         this.animal = animal;

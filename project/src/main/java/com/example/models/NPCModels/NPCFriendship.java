@@ -5,9 +5,9 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class NPCFriendship {
-    private final Player player;
-    private final NPC npc;
-    private final int level;
+    private Player player;
+    private NPC npc;
+    private int level;
 
     public NPCFriendship(Player player, NPC npc, int level) {
         this.player = player;

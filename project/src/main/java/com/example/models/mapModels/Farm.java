@@ -12,8 +12,12 @@ import java.util.ArrayList;
 
 @Embedded
 public class Farm {
-    final private ArrayList<Cell> cells;
-    final private ArrayList<Building> buildings;
+    private ArrayList<Cell> cells;
+    private ArrayList<Building> buildings;
+
+    public Farm() {
+
+    }
 
     public Farm(ArrayList<Cell> cells, ArrayList<Building> buildings) {
         this.cells = cells;

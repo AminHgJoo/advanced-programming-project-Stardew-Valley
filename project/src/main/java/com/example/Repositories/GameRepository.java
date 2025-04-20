@@ -2,6 +2,7 @@ package com.example.Repositories;
 
 import com.example.models.Game;
 import com.example.models.Player;
+import com.example.models.User;
 import com.example.utilities.Connection;
 import dev.morphia.Datastore;
 import org.bson.types.ObjectId;
@@ -24,6 +25,7 @@ public class GameRepository {
         for (Player player : game.getPlayers()) {
             player.setUser(UserRepository.findUserById(player.getUser_id().toString()));
         }
+        game.getCurrentPlayer().setUser(UserRepository.findUserById(game.getCurrentPlayer().getUser_id().toString()));
     }
 
     public static void saveGame(Game game) {

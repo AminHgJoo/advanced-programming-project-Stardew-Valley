@@ -8,6 +8,8 @@ import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
 import com.example.models.skills.Skill;
 import dev.morphia.annotations.Embedded;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -16,15 +18,16 @@ import java.util.ArrayList;
 public class Player {
     private Coordinate coordinate;
     private int money;
-    private final Backpack inventory;
+    private Backpack inventory;
     private Farm farm;
-    private final ArrayList<Skill> skills = new ArrayList<>();
-    private final ArrayList<Quest> quests = new ArrayList<>();
-    private final ObjectId user_id;
+    private ArrayList<Skill> skills = new ArrayList<>();
+    private ArrayList<Quest> quests = new ArrayList<>();
+    private ObjectId user_id;
+    @Transient
     private User user;
-    private final ArrayList<Friendship> friendships = new ArrayList<>();
-    private final ArrayList<NPCFriendship> npcFriendships = new ArrayList<>();
-    private final ArrayList<PlayerAnimal> animals = new ArrayList<>();
+    private ArrayList<Friendship> friendships = new ArrayList<>();
+    private ArrayList<NPCFriendship> npcFriendships = new ArrayList<>();
+    private ArrayList<PlayerAnimal> animals = new ArrayList<>();
     private double energy;
     private double maxEnergy;
     private boolean isPlayerFainted;
@@ -34,6 +37,8 @@ public class Player {
 
     // TODO: handle energy usage in one turn.
     private double usedEnergyInTurn;
+
+    public Player() {}
 
     public Player(User user) {
         this.user = user;

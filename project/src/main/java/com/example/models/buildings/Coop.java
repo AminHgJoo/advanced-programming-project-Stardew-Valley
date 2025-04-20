@@ -1,11 +1,14 @@
 package com.example.models.buildings;
 
 import com.example.models.mapModels.Cell;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 
+@Embedded
 public class Coop extends Building {
-    protected Coop(ArrayList<Cell> buildingCells) {
+    public Coop(){}
+    public Coop(ArrayList<Cell> buildingCells) {
         super(buildingCells);
     }
 }

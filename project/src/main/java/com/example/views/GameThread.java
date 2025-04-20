@@ -1,8 +1,10 @@
 package com.example.views;
 
 import com.example.models.Game;
+import dev.morphia.annotations.Transient;
 
 public class GameThread extends Thread {
+    @Transient
     private final Game game;
 
     public GameThread(Game game) {

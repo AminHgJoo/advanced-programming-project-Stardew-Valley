@@ -17,8 +17,8 @@ import java.util.ArrayList;
 public class Game {
     @Id
     private ObjectId _id;
-    final private ArrayList<Player> players;
-    final private Map map;
+    private ArrayList<Player> players;
+    private Map map;
     private boolean isGameOngoing;
     private Player currentPlayer;
     private LocalDateTime date;
@@ -26,7 +26,7 @@ public class Game {
     private Weather weatherTomorrow;
     private Season season;
     @Transient
-    private final GameThread timeHandler;
+    private GameThread timeHandler;
     public boolean hasTurnCycleFinished;
     //TODO : handle turn cycle boolean!
 
@@ -79,6 +79,10 @@ public class Game {
         } else if (date.getMonthValue() >= 10 && date.getMonthValue() <= 12) {
             season = Season.WINTER;
         }
+    }
+
+    public Game() {
+
     }
 
     public Game(ArrayList<Player> players, Player currentPlayer) {

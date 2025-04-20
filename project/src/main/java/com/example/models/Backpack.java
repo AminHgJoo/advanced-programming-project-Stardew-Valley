@@ -8,9 +8,12 @@ import java.util.ArrayList;
 
 @Embedded
 public class Backpack {
-    private final ArrayList<Slot> slots = new ArrayList<>();
+    private  ArrayList<Slot> slots = new ArrayList<>();
     private BackpackType type;
 
+    public Backpack(){
+
+    }
     public Backpack(BackpackType type) {
         this.type = type;
     }

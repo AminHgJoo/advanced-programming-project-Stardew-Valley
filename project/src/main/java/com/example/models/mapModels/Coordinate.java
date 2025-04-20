@@ -4,8 +4,12 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Coordinate {
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
+
+    public Coordinate(){
+
+    }
 
     public Coordinate(int x, int y) {
         this.x = x;

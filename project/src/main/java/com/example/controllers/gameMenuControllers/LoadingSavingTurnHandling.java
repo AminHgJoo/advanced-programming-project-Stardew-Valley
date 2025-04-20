@@ -12,6 +12,7 @@ import com.example.models.User;
 import com.example.models.enums.types.MenuTypes;
 import com.example.models.mapModels.Farm;
 import com.example.views.AppView;
+import dev.morphia.mapping.Mapper;
 
 import java.util.ArrayList;
 
@@ -77,18 +78,22 @@ public class LoadingSavingTurnHandling extends Controller {
             return new Response(false, "No saved game found.");
         }
         User user = App.getLoggedInUser();
-        Game game = App.getLoggedInUser().getCurrentGame();
+        user.populateGame();
+        Game game = user.getCurrentGame();
         ArrayList<Player> players = game.getPlayers();
         Player firstPlayer = players.getFirst();
         Player loader = null;
         for (Player player : players) {
-            if (player.getUser() == user) {
+            User u = UserRepository.findUserById(player.getUser_id().toString());
+            player.setUser(u);
+            if (player.getUser().equals(user)) {
                 game.setCurrentPlayer(player);
                 loader = player;
                 break;
             }
         }
         game.setGameOngoing(true);
+        GameRepository.saveGame(game);
         int loaderIndex = players.indexOf(loader);
         players.set(0, loader);
         players.set(loaderIndex, firstPlayer);
@@ -97,11 +102,12 @@ public class LoadingSavingTurnHandling extends Controller {
     }
 
     public static Response handleExitGame(Request request) {
-        if (App.getLoggedInUser().getCurrentGame()
-                .getCurrentPlayer().getUser() == App.getLoggedInUser()) {
-            App.getLoggedInUser().getCurrentGame().setGameOngoing(false);
-            App.getLoggedInUser().getCurrentGame().hasTurnCycleFinished = false;
-            GameRepository.saveGame(App.getLoggedInUser().getCurrentGame());
+        App.getLoggedInUser().populateGame();
+        Game game = App.getLoggedInUser().getCurrentGame();
+        if (game.getCurrentPlayer().getUser().equals(App.getLoggedInUser())) {
+            game.setGameOngoing(false);
+            game.hasTurnCycleFinished = false;
+            GameRepository.saveGame(game);
             App.setCurrMenuType(MenuTypes.GameMenu);
 
             return new Response(true, "Exiting and saving game. Redirecting to game menu...");

@@ -9,14 +9,16 @@ import java.util.ArrayList;
 
 @Embedded
 public class NPC {
-    final private String name;
-    final private ArrayList<Item> favoriteItems = new ArrayList<>();
-    final private ArrayList<NPCRequest> npcRequests = new ArrayList<>();
-    final private ArrayList<NPCReward> rewards = new ArrayList<>();
+    private String name;
+    private ArrayList<Item> favoriteItems = new ArrayList<>();
+    private ArrayList<NPCRequest> npcRequests = new ArrayList<>();
+    private ArrayList<NPCReward> rewards = new ArrayList<>();
     private Coordinate coordinate;
-    private final ArrayList<NPCFriendship> friendships = new ArrayList<>();
-    private final ArrayList<NPCDialogue> dialogues = new ArrayList<>();
-    private final ArrayList<Quest> quests = new ArrayList<>();
+    private ArrayList<NPCFriendship> friendships = new ArrayList<>();
+    private ArrayList<NPCDialogue> dialogues = new ArrayList<>();
+    private ArrayList<Quest> quests = new ArrayList<>();
+
+    public NPC(){}
 
     public NPC(String name, Coordinate coordinate) {
         this.name = name;

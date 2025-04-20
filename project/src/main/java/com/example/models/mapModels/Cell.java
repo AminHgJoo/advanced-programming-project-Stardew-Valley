@@ -16,6 +16,8 @@ public class Cell {
     public int turns = 0;
     public Cell prev = null;
 
+    public Cell(){}
+
     public Cell(MapObject objectOnCell, Coordinate coordinate) {
         this.objectOnCell = objectOnCell;
         this.coordinate = coordinate;

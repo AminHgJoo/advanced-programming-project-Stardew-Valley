@@ -5,9 +5,10 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Slot {
-    private final Item item;
+    private Item item;
     private int count;
 
+    public Slot(){}
     public Slot(Item item, int count) {
         this.item = item;
         this.count = count;

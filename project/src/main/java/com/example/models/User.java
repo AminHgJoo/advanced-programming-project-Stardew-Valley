@@ -1,5 +1,6 @@
 package com.example.models;
 
+import com.example.Repositories.GameRepository;
 import com.example.models.enums.SecurityQuestion;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
@@ -21,9 +22,9 @@ public class User {
     private String answer;
     private int moneyHighScore;
     private int numberOfGames;
-    @Reference
+    @Reference(lazy = true)
     private Game currentGame;
-    @Reference
+    @Reference(lazy = true)
     private final ArrayList<Game> games = new ArrayList<>();
 
     public User() {
@@ -143,5 +144,17 @@ public class User {
 
     public ObjectId get_id() {
         return _id;
+    }
+
+    public void populateGame(){
+        currentGame = GameRepository.findGameById(currentGame.get_id().toString(),true);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return username.equals(user.username);
     }
 }
