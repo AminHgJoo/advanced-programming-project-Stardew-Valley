@@ -131,6 +131,7 @@ public class User {
     }
 
     public Game getCurrentGame() {
+        populateGame();
         return currentGame;
     }
 
