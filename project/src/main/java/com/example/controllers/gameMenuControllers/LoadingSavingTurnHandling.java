@@ -11,6 +11,7 @@ import com.example.models.Player;
 import com.example.models.User;
 import com.example.models.enums.types.MenuTypes;
 import com.example.models.mapModels.Farm;
+import com.example.views.AppView;
 
 import java.util.ArrayList;
 
@@ -110,8 +111,34 @@ public class LoadingSavingTurnHandling extends Controller {
     }
 
     public static Response handleForceDeleteGame(Request request) {
+
         //TODO: force deleting game entirely.
-        return null;
+        Game game = App.getLoggedInUser().getCurrentGame();
+        User loggedInUser = App.getLoggedInUser();
+        if (game.getCurrentPlayer().getUser() != App.getLoggedInUser()) {
+            return new Response(false, "Only the logged in user can force delete the game.");
+        }
+
+        System.out.println("Attempting to delete the game. Initializing voting sequence...");
+        game.cycleToNextPlayer();
+
+        boolean success = false;
+        while (!success) {
+            System.out.println("Awaiting confirmation (Y/n) from player "
+                    + game.getCurrentPlayer().getUser().getUsername());
+            String answer = AppView.scanner.nextLine();
+            if (answer.compareToIgnoreCase("y") == 0) {
+                System.out.println("Confirmation received.");
+                success = game.cycleToNextPlayer();
+            } else {
+                game.setCurrentPlayer(game.findPlayerByUser(loggedInUser));
+                return new Response(true, "Confirmation not received. Aborting...");
+            }
+        }
+        loggedInUser.setCurrentGame(null);
+        loggedInUser.getGames().remove(game);
+        GameRepository.removeGame(game);
+        return new Response(true, "The game has been deleted successfully. Going to game menu...");
     }
 
     public static Response handleNextTurn(Request request) {

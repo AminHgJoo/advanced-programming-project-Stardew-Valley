@@ -425,16 +425,6 @@ public class GameMenu implements Menu {
         return response;
     }
 
-//    private static Response getPrintMapResponse(String input) {
-//        Response response;
-//        Request request = new Request(input);
-//        request.body.put("x", GameMenuCommands.PRINT_MAP.getGroup(input, "x"));
-//        request.body.put("y", GameMenuCommands.PRINT_MAP.getGroup(input, "y"));
-//        request.body.put("size", GameMenuCommands.PRINT_MAP.getGroup(input, "size"));
-//        response = MovementAndMap.handlePrintMap(request);
-//        return response;
-//    }
-
     private static Response getWalkResponse(String input) {
         Response response;
         Request request = new Request(input);
