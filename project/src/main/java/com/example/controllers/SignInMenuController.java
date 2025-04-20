@@ -88,7 +88,10 @@ public class SignInMenuController extends Controller {
         if (System.getenv("APP_MODE") != null && System.getenv("APP_MODE").equals("TEST")) {
             userPassword = password;
         }
-        return new Response(true, "User created! Password is: " + password);
+        String message = "User created! Password is: " + password + "\n" +
+                "Enter 'pick question -q <question number> -a <answer> -c <confirm answer>>' to choose security question\n" +
+                "You can enter 'list questions' command to see possible security questions\n";
+        return new Response(true, message);
     }
 
     public static Response handlePickQuestion(Request request) {
