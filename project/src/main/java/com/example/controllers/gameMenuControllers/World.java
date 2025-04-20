@@ -8,6 +8,7 @@ import com.example.models.enums.Weather;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class World extends Controller {
     public static Response handleTimeQuery(Request request) {
@@ -27,7 +28,8 @@ public class World extends Controller {
     public static Response handleDatetimeQuery(Request request) {
         Response response = new Response();
         response.setSuccess(true);
-        response.setMessage(App.getLoggedInUser().getCurrentGame().getDate().toString());
+        response.setMessage(App.getLoggedInUser().getCurrentGame()
+                .getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm:ss")).toString());
         return response;
     }
 
@@ -36,8 +38,8 @@ public class World extends Controller {
         response.setSuccess(true);
         LocalDateTime currentDateTime = App.getLoggedInUser().getCurrentGame().getDate();
         int currentDay = currentDateTime.getDayOfMonth();
-        int dayOfWeek = currentDay % 7;
-        response.setMessage(DayOfWeek.values()[dayOfWeek].toString());
+        int dayOfWeek = (currentDay - 1) % 7;
+        response.setMessage(DayOfWeek.values()[dayOfWeek].toString().toLowerCase());
         return response;
     }
 

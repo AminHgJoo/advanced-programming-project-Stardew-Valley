@@ -26,7 +26,7 @@ public class Game {
     private Weather weatherTomorrow;
     private Season season;
     @Transient
-    private GameThread timeHandler;
+    private GameThread gameThread;
     public boolean hasTurnCycleFinished;
     //TODO : handle turn cycle boolean!
 
@@ -96,7 +96,7 @@ public class Game {
         this.weatherToday = Weather.SUNNY;
         this.weatherTomorrow = Weather.SUNNY;
         this.season = Season.SPRING;
-        this.timeHandler = new GameThread(this);
+        this.gameThread = new GameThread(this);
         this.isGameOngoing = false;
     }
 
@@ -148,8 +148,8 @@ public class Game {
         this.season = season;
     }
 
-    public GameThread getTimeHandler() {
-        return timeHandler;
+    public GameThread getGameThread() {
+        return gameThread;
     }
 
     public Weather getWeatherTomorrow() {

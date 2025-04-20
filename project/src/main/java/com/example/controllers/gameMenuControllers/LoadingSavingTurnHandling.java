@@ -97,6 +97,9 @@ public class LoadingSavingTurnHandling extends Controller {
         int loaderIndex = players.indexOf(loader);
         players.set(0, loader);
         players.set(loaderIndex, firstPlayer);
+
+        game.getGameThread().run();
+
         return new Response(true, "The game has been loaded successfully. Welcome "
                 + user.getUsername());
     }

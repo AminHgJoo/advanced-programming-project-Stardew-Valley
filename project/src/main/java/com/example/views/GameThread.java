@@ -17,7 +17,7 @@ public class GameThread extends Thread {
     public void run() {
         while (game.isGameOngoing()) {
             try {
-                this.wait(100);
+                this.wait(500);
             } catch (InterruptedException _) {
             }
             game.advanceTime();
