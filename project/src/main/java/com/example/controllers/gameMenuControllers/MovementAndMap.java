@@ -8,6 +8,7 @@ import com.example.models.IO.Response;
 import com.example.models.Player;
 import com.example.models.User;
 import com.example.models.mapModels.Cell;
+import com.example.models.mapModels.Farm;
 import com.example.utilities.FindPath;
 
 import java.util.ArrayList;
@@ -41,9 +42,14 @@ public class MovementAndMap extends Controller {
         return null;
     }
 
-    public static Response handlePrintMap(Request request) {
-        return null;
-
+    public static Response showFarm(Request request) {
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Farm farm = game.getCurrentPlayer().getFarm();
+        farm.showFarm(Integer.parseInt(request.body.get("x"))
+                , Integer.parseInt(request.body.get("y")),
+                Integer.parseInt(request.body.get("size")));
+        return new Response(true, "");
     }
 
     public static Response handleMapHelp(Request request) {

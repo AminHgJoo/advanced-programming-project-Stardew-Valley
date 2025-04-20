@@ -1,5 +1,6 @@
 package com.example.models.mapModels;
 
+import com.example.models.App;
 import com.example.models.buildings.Building;
 import com.example.models.buildings.Greenhouse;
 import com.example.models.buildings.Mine;
@@ -17,15 +18,50 @@ public class Farm {
         this.buildings = buildings;
     }
 
-    public void showFarm() {
-        for (int i = 0; i < 75; i++) {
-            System.out.print("-");
-        }
-        int cellIndex = 0;
+    public void showFarm(int x, int y, int size) {
+        int playerX = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate().getX();
+        int playerY = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate().getY();
         for (Cell cell : cells) {
-            if (cellIndex % 75 == 0)
-                System.out.print("| ");
-            if (cell.getObjectOnCell().color.equals("blue"))
+            Coordinate coordinate = cell.getCoordinate();
+            int xOfCell = coordinate.getX();
+            int yOfCell = coordinate.getY();
+            if (Math.abs(x - xOfCell) <= size / 2 && Math.abs(y - yOfCell) <= size / 2) {
+                if (xOfCell == playerX && yOfCell == playerY)
+                    System.out.println("\u001B[34m" + "P");
+                else if (cell.getObjectOnCell().color.equals("blue"))
+                    System.out.print("\u001B[34m" + "# ");
+                else if (cell.getObjectOnCell().color.equals("red"))
+                    System.out.print("\u001B[31m" + "# ");
+                else if (cell.getObjectOnCell().color.equals("green"))
+                    System.out.print("\u001B[32m" + "# ");
+                else if (cell.getObjectOnCell().color.equals("yellow"))
+                    System.out.print("\u001B[33m" + "# ");
+                else if (cell.getObjectOnCell().color.equals("black"))
+                    System.out.print("\u001B[90m" + "# ");
+                else if (cell.getObjectOnCell().color.equals("gray"))
+                    System.out.print("\u001B[37m" + "# ");
+            }
+        }
+    }
+
+    /// Debug method.
+    public void showEntireFarm() {
+        int playerX = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate().getX();
+        int playerY = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate().getY();
+
+        for (int i = 0; i < 75; i++) {
+            System.out.print("_");
+        }
+
+        int cellIndex = 0;
+
+        for (Cell cell : cells) {
+            if (cellIndex % 75 == 0 && cellIndex != 0)
+                System.out.print("|");
+
+            if (cell.getCoordinate().getX() == playerX && cell.getCoordinate().getY() == playerY)
+                System.out.println("\u001B[34m" + "P");
+            else if (cell.getObjectOnCell().color.equals("blue"))
                 System.out.print("\u001B[34m" + "# ");
             else if (cell.getObjectOnCell().color.equals("red"))
                 System.out.print("\u001B[31m" + "# ");
@@ -37,16 +73,14 @@ public class Farm {
                 System.out.print("\u001B[90m" + "# ");
             else if (cell.getObjectOnCell().color.equals("gray"))
                 System.out.print("\u001B[37m" + "# ");
+
             cellIndex++;
-            if (cellIndex % 75 == 0)
+            if (cellIndex % 75 == 0 && cellIndex != 0)
                 System.out.println("|");
-
-            for (int i = 0; i < 75; i++) {
-                System.out.print("-");
-            }
         }
-
-
+        for (int i = 0; i < 75; i++) {
+            System.out.print("_");
+        }
     }
 
     public ArrayList<Cell> getCells() {

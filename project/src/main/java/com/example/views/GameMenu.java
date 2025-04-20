@@ -6,7 +6,6 @@ import com.example.models.App;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;
-import org.jetbrains.annotations.NotNull;
 
 public class GameMenu implements Menu {
 
@@ -69,7 +68,7 @@ public class GameMenu implements Menu {
             } else if (GameMenuCommands.WALK.matches(input)) {
                 response = getWalkResponse(input);
             } else if (GameMenuCommands.PRINT_MAP.matches(input)) {
-                response = getPrintMapResponse(input);
+                response = getShowFarmResponse(input);
             } else if (GameMenuCommands.HELP_READING_MAP.matches(input)) {
                 response = getMapHelpResponse(input);
             } else if (GameMenuCommands.ENERGY_SHOW.matches(input)) {
@@ -202,8 +201,6 @@ public class GameMenu implements Menu {
                 response = getQuestFinishResponse(input);
             } else if (GameMenuCommands.SHOW_MENU.matches(input)) {
                 response = getShowMenuResponse(input);
-            } else if (GameMenuCommands.SHOW_FARM.matches(input)) {
-                response = showFarmResponse(input);
             } else {
                 response = getInvalidCommand();
             }
@@ -212,10 +209,13 @@ public class GameMenu implements Menu {
         printResponse(response);
     }
 
-    private static @NotNull Response showFarmResponse(String input) {
+    private static Response getShowFarmResponse(String input) {
         Response response;
         Request request = new Request(input);
-        response = World.showFarm();
+        request.body.put("x", GameMenuCommands.PRINT_MAP.getGroup(input, "x"));
+        request.body.put("y", GameMenuCommands.PRINT_MAP.getGroup(input, "y"));
+        request.body.put("size", GameMenuCommands.PRINT_MAP.getGroup(input, "size"));
+        response = MovementAndMap.showFarm(request);
         return response;
     }
 
@@ -425,15 +425,15 @@ public class GameMenu implements Menu {
         return response;
     }
 
-    private static Response getPrintMapResponse(String input) {
-        Response response;
-        Request request = new Request(input);
-        request.body.put("x", GameMenuCommands.PRINT_MAP.getGroup(input, "x"));
-        request.body.put("y", GameMenuCommands.PRINT_MAP.getGroup(input, "y"));
-        request.body.put("size", GameMenuCommands.PRINT_MAP.getGroup(input, "size"));
-        response = MovementAndMap.handlePrintMap(request);
-        return response;
-    }
+//    private static Response getPrintMapResponse(String input) {
+//        Response response;
+//        Request request = new Request(input);
+//        request.body.put("x", GameMenuCommands.PRINT_MAP.getGroup(input, "x"));
+//        request.body.put("y", GameMenuCommands.PRINT_MAP.getGroup(input, "y"));
+//        request.body.put("size", GameMenuCommands.PRINT_MAP.getGroup(input, "size"));
+//        response = MovementAndMap.handlePrintMap(request);
+//        return response;
+//    }
 
     private static Response getWalkResponse(String input) {
         Response response;
