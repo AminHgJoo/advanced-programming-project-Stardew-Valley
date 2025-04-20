@@ -15,6 +15,10 @@ abstract public class Item {
 
     abstract public void dropItem();
 
+    public int getValue(){
+        return value;
+    }
+
     public String getName() {
         return name;
     }

@@ -55,6 +55,10 @@ public class Player {
         this.energy = energy;
     }
 
+    public int getTrashcanRefundPercentage(){
+        return trashcanType.refundPercentage;
+    }
+
     public double getEnergy() {
         return energy;
     }
