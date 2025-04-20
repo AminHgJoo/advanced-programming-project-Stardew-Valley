@@ -3,9 +3,11 @@ package com.example.models.NPCModels;
 import com.example.models.Quest;
 import com.example.models.items.Item;
 import com.example.models.mapModels.Coordinate;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 
+@Embedded
 public class NPC {
     final private String name;
     final private ArrayList<Item> favoriteItems = new ArrayList<>();

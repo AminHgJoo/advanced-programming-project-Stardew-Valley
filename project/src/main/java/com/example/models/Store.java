@@ -1,10 +1,12 @@
 package com.example.models;
 
 import com.example.models.NPCModels.NPC;
+import dev.morphia.annotations.Embedded;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+@Embedded
 public class Store {
     private final NPC owner;
     private final LocalDateTime openHour;

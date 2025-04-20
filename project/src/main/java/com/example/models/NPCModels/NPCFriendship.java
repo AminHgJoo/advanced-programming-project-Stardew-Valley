@@ -1,7 +1,9 @@
 package com.example.models.NPCModels;
 
 import com.example.models.Player;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class NPCFriendship {
     private final Player player;
     private final NPC npc;

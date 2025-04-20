@@ -2,9 +2,11 @@ package com.example.models;
 
 import com.example.models.enums.types.BackpackType;
 import com.example.models.items.Tool;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 
+@Embedded
 public class Backpack {
     private final ArrayList<Slot> slots = new ArrayList<>();
     private BackpackType type;

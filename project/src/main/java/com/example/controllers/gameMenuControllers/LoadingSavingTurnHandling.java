@@ -39,7 +39,6 @@ public class LoadingSavingTurnHandling extends Controller {
             player.getUser().setCurrentGame(game);
             player.getUser().getGames().add(game);
             player.getUser().setNumberOfGames(player.getUser().getNumberOfGames() + 1);
-            UserRepository.saveUser(player.getUser());
         }
         isWaitingForChoosingMap = true;
         return new Response(true, "The game has been made successfully. Awaiting each user's map choice...");
@@ -63,6 +62,10 @@ public class LoadingSavingTurnHandling extends Controller {
         String responseString = player.getUser().getUsername() + " has chosen their farm.";
         if (check) {
             responseString += "\nAll farm selection successful! Game successfully created!";
+            GameRepository.saveGame(game);
+            for (Player player1 : game.getPlayers()) {
+                UserRepository.saveUser(player1.getUser());
+            }
         }
         return new Response(true, responseString);
     }

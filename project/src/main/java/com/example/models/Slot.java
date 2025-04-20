@@ -1,7 +1,9 @@
 package com.example.models;
 
 import com.example.models.items.Item;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class Slot {
     private final Item item;
     private int count;

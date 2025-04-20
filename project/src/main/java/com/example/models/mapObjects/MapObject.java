@@ -1,5 +1,8 @@
 package com.example.models.mapObjects;
 
+import dev.morphia.annotations.Embedded;
+
+@Embedded
 abstract public class MapObject {
     final public String type;
     final public boolean isWalkable;

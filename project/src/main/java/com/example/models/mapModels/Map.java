@@ -1,7 +1,10 @@
 package com.example.models.mapModels;
 
+import dev.morphia.annotations.Embedded;
+
 import java.util.ArrayList;
 
+@Embedded
 public class Map {
     private final ArrayList<Farm> farms;
     private final Village village;
