@@ -24,7 +24,7 @@ public enum GameMenuCommands implements Command {
     CHEAT_WEATHER_SET("^cheat\\s+weather\\s+set\\s+(?<Type>sunny|rain|storm|snow)$"),
     GREEN_HOUSE_BUILD("^greenhouse\\s+build$"),
     WALK("^walk\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
-    PRINT_MAP("^print\\s+map\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s+-s\\s+(?<size>.+)$"),
+    PRINT_MAP("^print\\s+map\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s+-s\\s+(?<size>.+)$"),
     HELP_READING_MAP("^help\\s+reading\\s+map$"),
     ENERGY_SHOW("^energy\\s+show$"),
     ENERGY_SET_VALUE("^energy\\s+set\\s+(?<value>\\d+)$"),
