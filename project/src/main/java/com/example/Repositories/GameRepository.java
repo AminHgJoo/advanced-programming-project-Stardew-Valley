@@ -12,6 +12,8 @@ import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 
+// TODO optimizing the queiries
+
 public class GameRepository {
     private static final Datastore db = Connection.getDatabase();
 
