@@ -10,19 +10,14 @@ import com.example.models.User;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
 import com.example.utilities.FindPath;
+import com.example.views.AppView;
 
 import java.util.ArrayList;
 
 public class MovementAndMap extends Controller {
 
     public static Response handleWalking(Request request) {
-        //TODO: Print error if going to destination causes energyUsedInTurn to exceed 50.
-        //TODO: Subtract energy from player after walking, add the used energy to energyUsedInTurn.
-        //TODO: How should fainting be handled, if player traces the path instantly?
-        //TODO: Player should faint in the last tile before they run out of energy. Fainting handler is
-        // removed from thread! If player faints, put the field 'isPlayerFainted' to true.
-        //TODO: move player to dest if everything is OK!
-
+        // TODO test the walk functionality
         int x = Integer.parseInt(request.body.get("x"));
         int y = Integer.parseInt(request.body.get("y"));
         Game game = App.getLoggedInUser().getCurrentGame();
@@ -33,13 +28,40 @@ public class MovementAndMap extends Controller {
             return new Response(false, "destination is not valid");
         }
         FindPath.pathBFS(src, dest, player.getFarm().getCells());
-        ArrayList<Cell> path = new ArrayList<Cell>();
-        while (dest != null) {
-            path.add(dest);
-            dest = dest.prev;
+        double energy = dest.energy / 20;
+        String message = "Your current energy is: " + player.getEnergy() + "\n" +
+                "The path energy cost is : " + energy + "\n" +
+                "Do you want to move the path? (Y/N): ";
+        System.out.println(message);
+        String answer = AppView.scanner.nextLine();
+        if (answer.compareToIgnoreCase("Y") == 0) {
+            ArrayList<Cell> path = new ArrayList<Cell>();
+            while (dest != null) {
+                path.add(dest);
+                dest = dest.prev;
+            }
+            path.reversed();
+            for (Cell c : path) {
+                if (c.energy > player.getEnergy()) {
+                    player.setPlayerFainted(true);
+                    player.setEnergy(player.getEnergy() - c.energy/20);
+                    player.getFarm().initialCells();
+                    return new Response(false, "You have been fainted");
+                }
+                if (c.energy + player.getUsedEnergyInTurn() > 50) {
+                    player.getFarm().initialCells();
+                    return new Response(false, "You can not use this much energy");
+                }
+                player.setCoordinate(c.getCoordinate());
+            }
+            player.setEnergy(player.getEnergy() - energy);
+            player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
+            player.getFarm().initialCells();
+            return new Response(true, "You successfully moved to the destination");
+        } else {
+            player.getFarm().initialCells();
+            return new Response(false , "Movement process aborted");
         }
-        player.getFarm().initialCells();
-        return null;
     }
 
     public static Response showFarm(Request request) {

@@ -10,7 +10,7 @@ public class Cell {
 
     // for walking
     public int distance = 0;
-    public int energy = 0;
+    public double energy = 0;
     public int turns = 0;
     public Cell prev = null;
 

@@ -61,7 +61,7 @@ public class FindPath {
     public static class CellComparator implements Comparator<Cell> {
         @Override
         public int compare(Cell c1, Cell c2) {
-            return Integer.compare(c1.energy, c2.energy); // Lower cost = higher priority
+            return Double.compare(c1.energy, c2.energy); // Lower cost = higher priority
         }
     }
 
