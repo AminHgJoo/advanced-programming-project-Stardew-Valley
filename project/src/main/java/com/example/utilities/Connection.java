@@ -10,11 +10,10 @@ public class Connection {
     public static Datastore getDatabase() {
         if (database == null) {
             try {
-                String DB = "AP_PROJECT";
-                if (System.getenv("APP_MODE") != null && System.getenv("APP_MODE").equals("TEST")) {
-                    DB += "_TEST";
-                }
-                database = Morphia.createDatastore(MongoClients.create("mongodb://localhost:27017"), DB);
+                String DB = System.getProperty("DB_NAME");
+                String DB_URI = System.getProperty("DB_URI");
+
+                database = Morphia.createDatastore(MongoClients.create(DB_URI), DB);
                 database.getMapper().mapPackage("com.example.models");
                 database.ensureIndexes();
             } catch (Exception e) {

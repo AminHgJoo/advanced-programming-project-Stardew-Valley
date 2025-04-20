@@ -2,6 +2,7 @@ package com.example.views;
 
 import com.example.models.App;
 import com.example.models.enums.types.MenuTypes;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.Scanner;
 
@@ -9,6 +10,11 @@ public class AppView {
     public final static Scanner scanner = new Scanner(System.in);
 
     static {
+        Dotenv.configure()
+                .directory(System.getProperty("user.dir")+"/project/src/main/java/com/example/configs")
+                .filename("env."+System.getenv("APP_MODE").toLowerCase())
+                .systemProperties()
+                .load();
         if (App.getLoggedInUser() != null) {
             App.setCurrMenuType(MenuTypes.MainMenu);
         }
