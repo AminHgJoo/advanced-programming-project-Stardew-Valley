@@ -29,17 +29,17 @@ public class Farm {
                 if (xOfCell == playerX && yOfCell == playerY)
                     System.out.println("\u001B[34m" + "P");
                 else if (cell.getObjectOnCell().color.equals("blue"))
-                    System.out.print("\u001B[34m" + "# ");
+                    System.out.print("\u001B[34m" + cell.getObjectOnCell().toString());
                 else if (cell.getObjectOnCell().color.equals("red"))
-                    System.out.print("\u001B[31m" + "# ");
+                    System.out.print("\u001B[31m" + cell.getObjectOnCell().toString());
                 else if (cell.getObjectOnCell().color.equals("green"))
-                    System.out.print("\u001B[32m" + "# ");
+                    System.out.print("\u001B[32m" + cell.getObjectOnCell().toString());
                 else if (cell.getObjectOnCell().color.equals("yellow"))
-                    System.out.print("\u001B[33m" + "# ");
+                    System.out.print("\u001B[33m" + cell.getObjectOnCell().toString());
                 else if (cell.getObjectOnCell().color.equals("black"))
-                    System.out.print("\u001B[90m" + "# ");
+                    System.out.print("\u001B[90m" + cell.getObjectOnCell().toString());
                 else if (cell.getObjectOnCell().color.equals("gray"))
-                    System.out.print("\u001B[37m" + "# ");
+                    System.out.print("\u001B[37m" + cell.getObjectOnCell().toString());
             }
         }
     }
@@ -62,17 +62,17 @@ public class Farm {
             if (cell.getCoordinate().getX() == playerX && cell.getCoordinate().getY() == playerY)
                 System.out.println("\u001B[34m" + "P");
             else if (cell.getObjectOnCell().color.equals("blue"))
-                System.out.print("\u001B[34m" + "# ");
+                System.out.print("\u001B[34m" + cell.getObjectOnCell().toString());
             else if (cell.getObjectOnCell().color.equals("red"))
-                System.out.print("\u001B[31m" + "# ");
+                System.out.print("\u001B[31m" + cell.getObjectOnCell().toString());
             else if (cell.getObjectOnCell().color.equals("green"))
-                System.out.print("\u001B[32m" + "# ");
+                System.out.print("\u001B[32m" + cell.getObjectOnCell().toString());
             else if (cell.getObjectOnCell().color.equals("yellow"))
-                System.out.print("\u001B[33m" + "# ");
+                System.out.print("\u001B[33m" + cell.getObjectOnCell().toString());
             else if (cell.getObjectOnCell().color.equals("black"))
-                System.out.print("\u001B[90m" + "# ");
+                System.out.print("\u001B[90m" + cell.getObjectOnCell().toString());
             else if (cell.getObjectOnCell().color.equals("gray"))
-                System.out.print("\u001B[37m" + "# ");
+                System.out.print("\u001B[37m" + cell.getObjectOnCell().toString());
 
             cellIndex++;
             if (cellIndex % 75 == 0 && cellIndex != 0)
