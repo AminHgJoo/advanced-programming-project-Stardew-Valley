@@ -5,6 +5,9 @@ import com.example.models.Player;
 import com.example.models.User;
 import com.example.utilities.Connection;
 import dev.morphia.Datastore;
+import dev.morphia.query.Update;
+import dev.morphia.query.updates.UpdateOperator;
+import dev.morphia.query.updates.UpdateOperators;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -29,6 +32,10 @@ public class GameRepository {
     }
 
     public static void saveGame(Game game) {
+        for (Player player : game.getPlayers()) {
+            player.setUser(null);
+        }
+        game.getCurrentPlayer().setUser(null);
         db.save(game);
     }
 
@@ -43,6 +50,10 @@ public class GameRepository {
     }
 
     public static void removeGame(Game game) {
+        for (Player player : game.getPlayers()) {
+            player.getUser().setCurrentGame(null);
+            UserRepository.saveUser(player.getUser());
+        }
         db.delete(game);
     }
 }

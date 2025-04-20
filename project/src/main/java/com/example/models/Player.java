@@ -178,4 +178,12 @@ public class Player {
     public ObjectId getUser_id() {
         return user_id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return player.getUser_id().toString().equals(this.getUser_id().toString());
+    }
 }

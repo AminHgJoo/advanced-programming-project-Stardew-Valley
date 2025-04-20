@@ -23,9 +23,9 @@ public class User {
     private String answer;
     private int moneyHighScore;
     private int numberOfGames;
-    @Reference(lazy = true)
+    @Reference(lazy = true , idOnly = true , ignoreMissing = true)
     private Game currentGame;
-    @Reference(lazy = true)
+    @Reference(lazy = true , idOnly = true , ignoreMissing = true)
     private final ArrayList<Game> games = new ArrayList<>();
 
     public User() {
@@ -132,6 +132,8 @@ public class User {
     }
 
     public Game getCurrentGame() {
+        if(currentGame == null) return null;
+        if(currentGame.get_id() == null) return currentGame;
         GameThread t = currentGame.getGameThread();
         populateGame();
         currentGame.setGameThread(t);
@@ -150,8 +152,8 @@ public class User {
         return _id;
     }
 
-    public void populateGame(){
-        currentGame = GameRepository.findGameById(currentGame.get_id().toString(),true);
+    public void populateGame() {
+        currentGame = GameRepository.findGameById(currentGame.get_id().toString(), true);
     }
 
     @Override
