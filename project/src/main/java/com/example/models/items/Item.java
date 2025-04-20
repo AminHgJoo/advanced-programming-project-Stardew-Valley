@@ -17,7 +17,7 @@ abstract public class Item {
 
     abstract public void dropItem();
 
-    public int getValue(){
+    public int getValue() {
         return value;
     }
 

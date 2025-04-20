@@ -14,8 +14,8 @@ public class AppView {
 
     static {
         Dotenv.configure()
-                .directory(System.getProperty("user.dir")+"/project/src/main/java/com/example/configs")
-                .filename("env."+System.getenv("APP_MODE").toLowerCase())
+                .directory(System.getProperty("user.dir") + "/project/src/main/java/com/example/configs")
+                .filename("env." + System.getenv("APP_MODE").toLowerCase())
                 .systemProperties()
                 .load();
         Connection.getDatabase();

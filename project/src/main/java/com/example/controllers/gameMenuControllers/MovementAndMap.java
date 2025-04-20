@@ -44,7 +44,7 @@ public class MovementAndMap extends Controller {
             for (Cell c : path) {
                 if (c.energy > player.getEnergy()) {
                     player.setPlayerFainted(true);
-                    player.setEnergy(player.getEnergy() - c.energy/20);
+                    player.setEnergy(player.getEnergy() - c.energy / 20);
                     player.getFarm().initialCells();
                     return new Response(false, "You have been fainted");
                 }
@@ -60,7 +60,7 @@ public class MovementAndMap extends Controller {
             return new Response(true, "You successfully moved to the destination");
         } else {
             player.getFarm().initialCells();
-            return new Response(false , "Movement process aborted");
+            return new Response(false, "Movement process aborted");
         }
     }
 

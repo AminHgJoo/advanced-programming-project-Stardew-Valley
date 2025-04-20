@@ -7,7 +7,6 @@ import com.example.models.buildings.Mine;
 import com.example.models.buildings.PlayerHome;
 import com.example.models.mapObjects.*;
 import dev.morphia.annotations.Embedded;
-import net.bytebuddy.implementation.bind.annotation.Empty;
 
 import java.util.ArrayList;
 

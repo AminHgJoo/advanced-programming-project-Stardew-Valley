@@ -1,6 +1,5 @@
 package com.example.views;
 
-import com.example.models.App;
 import com.example.models.Game;
 
 public class GameThread extends Thread {
@@ -11,6 +10,7 @@ public class GameThread extends Thread {
     }
 
     //TODO: initialize thread
+    //TODO: crop stuff.
     @Override
     public void run() {
         while (game.isGameOngoing()) {

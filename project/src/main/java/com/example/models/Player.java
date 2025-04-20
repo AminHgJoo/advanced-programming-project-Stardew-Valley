@@ -8,9 +8,6 @@ import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
 import com.example.models.skills.Skill;
 import dev.morphia.annotations.Embedded;
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Reference;
-import net.bytebuddy.implementation.bind.annotation.Empty;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -38,7 +35,7 @@ public class Player {
     // TODO: handle energy usage in one turn.
     private double usedEnergyInTurn;
 
-    public Player(User user ) {
+    public Player(User user) {
         this.user = user;
         this.user_id = user.get_id();
         this.inventory = new Backpack(BackpackType.DEFAULT);
@@ -68,7 +65,7 @@ public class Player {
         this.user = user;
     }
 
-    public int getTrashcanRefundPercentage(){
+    public int getTrashcanRefundPercentage() {
         return trashcanType.refundPercentage;
     }
 
