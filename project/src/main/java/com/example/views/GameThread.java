@@ -6,6 +6,7 @@ import dev.morphia.annotations.Transient;
 public class GameThread extends Thread {
     @Transient
     private final Game game;
+    public boolean keepRunning = false;
 
     public GameThread(Game game) {
         this.game = game;
@@ -13,15 +14,18 @@ public class GameThread extends Thread {
 
     //TODO: initialize thread
     //TODO: crop stuff.
-    @Override
     public void run() {
-        while (game.isGameOngoing()) {
+
+        while (keepRunning) {
             try {
-                this.wait(500);
-            } catch (InterruptedException _) {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             game.advanceTime();
             game.checkSeasonChange();
         }
+        //debug code
+        System.out.println("Thread Exiting...");
     }
 }

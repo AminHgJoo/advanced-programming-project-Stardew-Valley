@@ -100,7 +100,8 @@ public class LoadingSavingTurnHandling extends Controller {
         players.set(loaderIndex, firstPlayer);
 
         game.setGameThread(new GameThread(game));
-        game.getGameThread().run();
+        game.getGameThread().keepRunning = true;
+        game.getGameThread().start();
 
         return new Response(true, "The game has been loaded successfully. Welcome "
                 + user.getUsername());
@@ -109,8 +110,11 @@ public class LoadingSavingTurnHandling extends Controller {
     public static Response handleExitGame(Request request) {
         App.getLoggedInUser().populateGame();
         Game game = App.getLoggedInUser().getCurrentGame();
+
         if (game.getCurrentPlayer().getUser().equals(App.getLoggedInUser())) {
+
             game.setGameOngoing(false);
+            game.getGameThread().keepRunning = false;
             game.hasTurnCycleFinished = false;
             GameRepository.saveGame(game);
             App.setCurrMenuType(MenuTypes.GameMenu);
@@ -147,6 +151,8 @@ public class LoadingSavingTurnHandling extends Controller {
                 return new Response(true, "Confirmation not received. Aborting...");
             }
         }
+        game.getGameThread().keepRunning = false;
+        game.setGameOngoing(false);
         loggedInUser.setCurrentGame(null);
         loggedInUser.getGames().remove(game);
         GameRepository.removeGame(game);
