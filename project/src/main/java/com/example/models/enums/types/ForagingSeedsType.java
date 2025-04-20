@@ -1,5 +1,3 @@
-// TODO null means all seasons
-
 package com.example.models.enums.types;
 
 import com.example.models.enums.Season;
@@ -45,17 +43,20 @@ public enum ForagingSeedsType {
     YAM_SEEDS(Season.AUTUMN),
     RARE_SEEDS(Season.AUTUMN),
     POWDERMELON_SEEDS(Season.WINTER),
-    ANCIENT_SEEDS(null),
-    MIXED_SEEDS(null);
+    ANCIENT_SEEDS(Season.values()),
+    MIXED_SEEDS(Season.values()),;
 
+    private final Season[] seasons;
 
-    private final Season season;
-
-    ForagingSeedsType(Season season) {
-        this.season = season;
+    ForagingSeedsType(Season[] season) {
+        this.seasons = season;
     }
 
-    public Season getSeason() {
-        return season;
+    ForagingSeedsType(Season season) {
+        this.seasons = new Season[]{season};
+    }
+
+    public Season[] getSeasons() {
+        return seasons;
     }
 }

@@ -6,8 +6,6 @@ public interface Menu {
     void handleMenu(String input);
 
     default void printResponse(Response response) {
-        if (response != null && response.getMessage() != null) {
-        }
         System.out.println(response.getMessage());
     }
 

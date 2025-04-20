@@ -35,7 +35,9 @@ public class GameMenu implements Menu {
                 response = getInvalidCommand();
             }
         } else {
-            if (GameMenuCommands.EXIT_GAME.matches(input)) {
+            if (GameMenuCommands.SHOW_FARM.matches(input)) {
+                response = getShowFullFarmResponse(input);
+            } else if (GameMenuCommands.EXIT_GAME.matches(input)) {
                 response = getExitGameResponse(input);
             } else if (GameMenuCommands.NEXT_TURN.matches(input)) {
                 response = getNextTurnResponse(input);
@@ -207,6 +209,13 @@ public class GameMenu implements Menu {
         }
 
         printResponse(response);
+    }
+
+    private static Response getShowFullFarmResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = MovementAndMap.showFullFarm(request);
+        return response;
     }
 
     private static Response getShowFarmResponse(String input) {

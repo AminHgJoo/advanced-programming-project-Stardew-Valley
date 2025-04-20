@@ -121,7 +121,8 @@ public class LoadingSavingTurnHandling extends Controller {
         //TODO: force deleting game entirely.
         Game game = App.getLoggedInUser().getCurrentGame();
         User loggedInUser = App.getLoggedInUser();
-        if (game.getCurrentPlayer().getUser() != App.getLoggedInUser()) {
+
+        if (!game.getCurrentPlayer().getUser().equals(App.getLoggedInUser())) {
             return new Response(false, "Only the logged in user can force delete the game.");
         }
 

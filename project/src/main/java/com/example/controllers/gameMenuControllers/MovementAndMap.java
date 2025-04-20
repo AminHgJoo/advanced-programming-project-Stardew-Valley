@@ -74,6 +74,15 @@ public class MovementAndMap extends Controller {
         return new Response(true, "");
     }
 
+    /// debug method
+    public static Response showFullFarm(Request request) {
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Farm farm = game.getCurrentPlayer().getFarm();
+        farm.showEntireFarm();
+        return new Response(true, "");
+    }
+
     public static Response handleMapHelp(Request request) {
         return new Response(true, "The player is shown by blue 'P', " +
                 "all other icons show the first letter of their type and corresponding color.");

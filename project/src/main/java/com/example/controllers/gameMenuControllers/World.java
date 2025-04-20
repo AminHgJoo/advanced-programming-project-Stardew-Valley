@@ -27,7 +27,7 @@ public class World extends Controller {
     public static Response handleDatetimeQuery(Request request) {
         Response response = new Response();
         response.setSuccess(true);
-        response.setMessage(App.getLoggedInUser().getCurrentGame().toString());
+        response.setMessage(App.getLoggedInUser().getCurrentGame().getDate().toString());
         return response;
     }
 
