@@ -12,6 +12,7 @@ import com.example.models.User;
 import com.example.models.enums.types.MenuTypes;
 import com.example.models.mapModels.Farm;
 import com.example.views.AppView;
+import com.example.views.GameThread;
 import dev.morphia.mapping.Mapper;
 
 import java.util.ArrayList;
@@ -98,6 +99,7 @@ public class LoadingSavingTurnHandling extends Controller {
         players.set(0, loader);
         players.set(loaderIndex, firstPlayer);
 
+        game.setGameThread(new GameThread(game));
         game.getGameThread().run();
 
         return new Response(true, "The game has been loaded successfully. Welcome "

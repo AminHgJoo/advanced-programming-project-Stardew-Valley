@@ -96,7 +96,6 @@ public class Game {
         this.weatherToday = Weather.SUNNY;
         this.weatherTomorrow = Weather.SUNNY;
         this.season = Season.SPRING;
-        this.gameThread = new GameThread(this);
         this.isGameOngoing = false;
     }
 
@@ -150,6 +149,10 @@ public class Game {
 
     public GameThread getGameThread() {
         return gameThread;
+    }
+
+    public void setGameThread(GameThread gameThread) {
+        this.gameThread = gameThread;
     }
 
     public Weather getWeatherTomorrow() {
