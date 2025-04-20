@@ -39,6 +39,7 @@ public class LoadingSavingTurnHandling extends Controller {
             player.getUser().setCurrentGame(game);
             player.getUser().getGames().add(game);
             player.getUser().setNumberOfGames(player.getUser().getNumberOfGames() + 1);
+            UserRepository.saveUser(player.getUser());
         }
         isWaitingForChoosingMap = true;
         return new Response(true, "The game has been made successfully. Awaiting each user's map choice...");
