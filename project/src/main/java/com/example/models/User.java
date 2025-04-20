@@ -2,6 +2,7 @@ package com.example.models;
 
 import com.example.Repositories.GameRepository;
 import com.example.models.enums.SecurityQuestion;
+import com.example.views.GameThread;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
@@ -131,7 +132,9 @@ public class User {
     }
 
     public Game getCurrentGame() {
+        GameThread t = currentGame.getGameThread();
         populateGame();
+        currentGame.setGameThread(t);
         return currentGame;
     }
 

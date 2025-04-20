@@ -79,7 +79,6 @@ public class LoadingSavingTurnHandling extends Controller {
             return new Response(false, "No saved game found.");
         }
         User user = App.getLoggedInUser();
-        user.populateGame();
         Game game = user.getCurrentGame();
         ArrayList<Player> players = game.getPlayers();
         Player firstPlayer = players.getFirst();
@@ -108,7 +107,6 @@ public class LoadingSavingTurnHandling extends Controller {
     }
 
     public static Response handleExitGame(Request request) {
-        App.getLoggedInUser().populateGame();
         Game game = App.getLoggedInUser().getCurrentGame();
 
         if (game.getCurrentPlayer().getUser().equals(App.getLoggedInUser())) {
