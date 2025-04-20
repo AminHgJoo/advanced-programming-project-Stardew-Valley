@@ -7,6 +7,7 @@ import com.example.models.items.Item;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
 import com.example.models.skills.Skill;
+import dev.morphia.annotations.Reference;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class Player {
     private Farm farm;
     private final ArrayList<Skill> skills = new ArrayList<>();
     private final ArrayList<Quest> quests = new ArrayList<>();
+    @Reference
     private final User user;
     private final ArrayList<Friendship> friendships = new ArrayList<>();
     private final ArrayList<NPCFriendship> npcFriendships = new ArrayList<>();

@@ -1,6 +1,8 @@
 package com.example.views;
 
+import com.example.Repositories.UserRepository;
 import com.example.models.App;
+import com.example.models.User;
 import com.example.models.enums.types.MenuTypes;
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -15,6 +17,8 @@ public class AppView {
                 .filename("env."+System.getenv("APP_MODE").toLowerCase())
                 .systemProperties()
                 .load();
+        User user = UserRepository.getStayLoggedInUser();
+        App.setLoggedInUser(user);
         if (App.getLoggedInUser() != null) {
             App.setCurrMenuType(MenuTypes.MainMenu);
         }
