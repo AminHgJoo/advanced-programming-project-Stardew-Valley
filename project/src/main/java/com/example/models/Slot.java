@@ -3,21 +3,21 @@ package com.example.models;
 import com.example.models.items.Item;
 
 public class Slot {
-    private final Item header;
+    private final Item item;
     private int count;
 
-    public Slot(Item header, int count) {
-        this.header = header;
+    public Slot(Item item, int count) {
+        this.item = item;
         this.count = count;
     }
 
     @Override
     public String toString() {
-        return "Slot [header=" + header.getName() + ", count=" + count + "]";
+        return "Slot [header=" + item.getName() + ", count=" + count + "]";
     }
 
-    public Item getHeader() {
-        return header;
+    public Item getItem() {
+        return item;
     }
 
     public int getCount() {

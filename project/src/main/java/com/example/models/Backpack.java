@@ -1,6 +1,7 @@
 package com.example.models;
 
 import com.example.models.enums.types.BackpackType;
+import com.example.models.items.Tool;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ public class Backpack {
 
     public Slot getSlotByItemName(String itemName) {
         for (Slot slot : slots) {
-            if (slot.getHeader().getName().equals(itemName)) {
+            if (slot.getItem().getName().equals(itemName)) {
                 return slot;
             }
         }
@@ -35,6 +36,23 @@ public class Backpack {
 
     public void removeSlot(Slot slot) {
         slots.remove(slot);
+    }
+
+    public String showInventory() {
+        StringBuilder output = new StringBuilder();
+        for (Slot slot : slots) {
+            output.append(slot.toString()).append("\n");
+        }
+        return output.toString();
+    }
+
+    public String showTools() {
+        StringBuilder tools = new StringBuilder();
+        for (Slot slot : slots) {
+            if (slot.getItem() instanceof Tool)
+                tools.append(slot.toString()).append("\n");
+        }
+        return tools.toString();
     }
 
 }

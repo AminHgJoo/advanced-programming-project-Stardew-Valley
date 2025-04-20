@@ -4,20 +4,18 @@ import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
+import com.example.models.items.Item;
+import com.example.models.items.Tool;
 
 public class InventoryFunctionalities extends Controller {
     public static Response handleShowInventory(Request request) {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Backpack backpack = game.getCurrentPlayer().getInventory();
-        StringBuilder output = new StringBuilder();
-        for (Slot slot : backpack.getSlots()) {
-            output.append(slot.toString()).append("\n");
-        }
+        String output = backpack.showInventory();
         if (output.isEmpty())
             return new Response(true, "Your Backpack is empty!");
-        return new Response(true, output.toString());
-
+        return new Response(true, output);
     }
 
     public static Response handleInventoryTrashing(Request request) {
@@ -44,21 +42,42 @@ public class InventoryFunctionalities extends Controller {
     }
 
     public static Response handleToolEquip(Request request) {
-        return null;
-
+        String toolName = request.body.get("toolName");
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Backpack backpack = game.getCurrentPlayer().getInventory();
+        Slot slot = backpack.getSlotByItemName(toolName);
+        if (slot == null)
+            return new Response(false, "item(s) does not exist!");
+        if (!(slot.getItem() instanceof Tool))
+            return new Response(false, "item(s) is not a tool!");
+        game.getCurrentPlayer().setEquippedItem(slot.getItem());
+        return new Response(true, "Equipped " + toolName + " successfully!");
     }
 
     public static Response handleEquippedToolQuery(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Item item = game.getCurrentPlayer().getEquippedItem();
+        if (item == null)
+            return new Response(false, "No equipped tool found!");
+        return new Response(true, item.getName());
 
     }
 
     public static Response handleShowTools(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Backpack backpack = game.getCurrentPlayer().getInventory();
+        String output = backpack.showTools();
+        if (output.isEmpty())
+            return new Response(true, "No tools found!");
+        return new Response(true, output);
 
     }
 
     public static Response handleToolUpgrade(Request request) {
+        // TODO BLACKSMITH
         return null;
 
     }
