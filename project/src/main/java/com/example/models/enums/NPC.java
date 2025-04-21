@@ -2,6 +2,7 @@ package com.example.models.enums;
 
 import com.example.models.NPCModels.NPCRequest;
 import com.example.models.NPCModels.NPCReward;
+import com.example.models.enums.types.ForagingMineralsType;
 import com.example.models.items.Item;
 
 import java.util.ArrayList;
