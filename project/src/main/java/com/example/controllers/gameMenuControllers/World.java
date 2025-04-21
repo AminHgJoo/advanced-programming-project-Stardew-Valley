@@ -6,7 +6,16 @@ import com.example.models.App;
 import com.example.models.Game;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
+import com.example.models.Player;
+import com.example.models.User;
+import com.example.models.enums.Quality;
 import com.example.models.enums.Weather;
+import com.example.models.enums.types.ForagingCropsType;
+import com.example.models.enums.types.ToolTypes;
+import com.example.models.items.Tool;
+import com.example.models.mapModels.Cell;
+import com.example.models.mapModels.Farm;
+import com.example.models.mapObjects.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -123,18 +132,451 @@ public class World extends Controller {
         return new Response(true, "Tomorrow's weather set successfully.");
     }
 
+    //TODO: Implement.
     public static Response handleGreenhouseBuilding(Request request) {
         //TODO: once items are added, implement.
         return null;
     }
 
     public static Response handleToolUse(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
 
+        if (player.getEquippedItem() == null) {
+            return new Response(false, "You have no equipped item.");
+        }
+        if (!(player.getEquippedItem() instanceof Tool)) {
+            return new Response(false, "You have no equipped tools.");
+        }
+        if (getXAndYIncrement(request.body.get("direction")) == null) {
+            return new Response(false, "Invalid direction.");
+        }
+
+        Tool equippedTool = (Tool) player.getEquippedItem();
+        ToolTypes toolType = equippedTool.getType();
+
+        if (toolType == ToolTypes.HOE) {
+            return handleHoeUse(request, equippedTool.getQuality()
+                    , player.getFarmingSkill().getLevel().energyCostDiscount);
+        } else if (toolType == ToolTypes.PICKAXE) {
+            return handlePickaxeUse(request, equippedTool.getQuality()
+                    , player.getMiningSkill().getLevel().energyCostDiscount);
+        } else if (toolType == ToolTypes.AXE) {
+            return handleAxeUse(request, equippedTool.getQuality()
+                    , player.getForagingSkill().getLevel().energyCostDiscount);
+        } else if (toolType == ToolTypes.WATERING_CAN_DEFAULT) {
+            return handleWateringCanUse(request, toolType
+                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                    , equippedTool);
+        } else if (toolType == ToolTypes.WATERING_CAN_COPPER) {
+            return handleWateringCanUse(request, toolType
+                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                    , equippedTool);
+        } else if (toolType == ToolTypes.WATERING_CAN_IRON) {
+            return handleWateringCanUse(request, toolType
+                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                    , equippedTool);
+        } else if (toolType == ToolTypes.WATERING_CAN_GOLD) {
+            return handleWateringCanUse(request, toolType
+                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                    , equippedTool);
+        } else if (toolType == ToolTypes.WATERING_CAN_IRIDIUM) {
+            return handleWateringCanUse(request, toolType
+                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                    , equippedTool);
+        } else if (toolType == ToolTypes.FISHING_ROD) {
+            return handleFishingRodUse(request, equippedTool.getQuality()
+                    , player.getFishingSkill().getLevel().energyCostDiscount);
+        } else if (toolType == ToolTypes.SCYTHE) {
+            return handleScytheUse(request);
+        } else if (toolType == ToolTypes.MILK_PAIL) {
+            return handleMilkPailUse(request);
+        } else if (toolType == ToolTypes.SHEAR) {
+            return handleShearUse(request);
+        } else {
+            return new Response(false, "Tool type is invalid.");
+        }
     }
 
+    private static int[] getXAndYIncrement(String direction) {
+        if (direction.compareToIgnoreCase("u") == 0) {
+            return new int[]{0, -1};
+        } else if (direction.compareToIgnoreCase("d") == 0) {
+            return new int[]{0, 1};
+        } else if (direction.compareToIgnoreCase("r") == 0) {
+            return new int[]{1, 0};
+        } else if (direction.compareToIgnoreCase("l") == 0) {
+            return new int[]{-1, 0};
+        } else if (direction.compareToIgnoreCase("ur") == 0) {
+            return new int[]{1, -1};
+        } else if (direction.compareToIgnoreCase("ul") == 0) {
+            return new int[]{-1, -1};
+        } else if (direction.compareToIgnoreCase("dr") == 0) {
+            return new int[]{1, 1};
+        } else if (direction.compareToIgnoreCase("dl") == 0) {
+            return new int[]{-1, 1};
+        } else {
+            return null;
+        }
+    }
+
+    private static int calculateEnergyCostForHoeAxePickaxeWaterCan(int discount, Quality quality) {
+        int answer = 5 - quality.getQualityLevel() - discount;
+
+        if (answer < 0) {
+            answer = 0;
+        }
+        return answer;
+    }
+
+    //TODO: IMPORTANT: SAVE GAME!!!!!!!
+
+    private static Response handleHoeUse(Request request, Quality quality, int skillEnergyDiscount) {
+        String direction = request.body.get("direction");
+        int[] dxAndDy = getXAndYIncrement(direction);
+        int dx = dxAndDy[0];
+        int dy = dxAndDy[1];
+
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Farm farm = player.getFarm();
+
+        int playerX = player.getCoordinate().getX();
+        int playerY = player.getCoordinate().getY();
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+
+        int energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
+        double currentEnergyUsed = player.getUsedEnergyInTurn();
+        double playerEnergy = player.getEnergy();
+
+        if (energyCost + currentEnergyUsed > 50) {
+            return new Response(false, "You can't perform this activity. You will exceed your energy usage limit.");
+        }
+
+        if (playerEnergy - energyCost < 0) {
+            return new Response(false, "You don't have enough energy.");
+        }
+
+        if (targetCell == null) {
+            return new Response(false, "Target cell not found.");
+        }
+
+        player.setEnergy(player.getEnergy() - energyCost);
+        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
+
+        if (!(targetCell.getObjectOnCell() instanceof EmptyCell)) {
+            GameRepository.saveGame(game);
+            return new Response(false, "Target cell is invalid.");
+        }
+
+        targetCell.setTilled(true);
+        GameRepository.saveGame(game);
+        return new Response(true, "Target cell has been tilled.");
+    }
+
+    //TODO: HANDLE MINING MINERALS AND STONES.
+    private static Response handlePickaxeUse(Request request, Quality quality, int skillEnergyDiscount) {
+        String direction = request.body.get("direction");
+        int[] dxAndDy = getXAndYIncrement(direction);
+        int dx = dxAndDy[0];
+        int dy = dxAndDy[1];
+
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Farm farm = player.getFarm();
+
+        int playerX = player.getCoordinate().getX();
+        int playerY = player.getCoordinate().getY();
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+
+        int energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
+        double currentEnergyUsed = player.getUsedEnergyInTurn();
+        double playerEnergy = player.getEnergy();
+
+        if (energyCost + currentEnergyUsed > 50) {
+            return new Response(false, "You can't perform this activity. You will exceed your energy usage limit.");
+        }
+
+        if (playerEnergy - energyCost < 0) {
+            return new Response(false, "You don't have enough energy.");
+        }
+
+        if (targetCell == null) {
+            return new Response(false, "Target cell not found.");
+        }
+
+        player.setEnergy(player.getEnergy() - energyCost);
+        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
+
+        if ((targetCell.getObjectOnCell() instanceof Stone
+                || targetCell.getObjectOnCell() instanceof ForagingMineral)) {
+            //TODO: MINE TILE AND ADD STUFF TO INVENTORY BASED ON SKILL.
+
+
+            GameRepository.saveGame(game);
+            return new Response(true, "Mined stone/mineral at target cell.");
+        }
+
+        if (targetCell.getObjectOnCell() instanceof DroppedItem) {
+            targetCell.setObjectOnCell(new EmptyCell());
+            GameRepository.saveGame(game);
+            return new Response(true, "Destroyed item on target cell.");
+        }
+
+        if (targetCell.getObjectOnCell() instanceof EmptyCell) {
+            targetCell.setTilled(false);
+            GameRepository.saveGame(game);
+            return new Response(true, "Target cell has been untilled.");
+        }
+
+        GameRepository.saveGame(game);
+        return new Response(false, "No operation was performed.");
+    }
+
+    //TODO: HANDLE CUTTING TREES AND ADDING WOOD.
+    private static Response handleAxeUse(Request request, Quality quality, int skillEnergyDiscount) {
+        String direction = request.body.get("direction");
+        int[] dxAndDy = getXAndYIncrement(direction);
+        int dx = dxAndDy[0];
+        int dy = dxAndDy[1];
+
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Farm farm = player.getFarm();
+
+        int playerX = player.getCoordinate().getX();
+        int playerY = player.getCoordinate().getY();
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+
+        int energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
+        double currentEnergyUsed = player.getUsedEnergyInTurn();
+        double playerEnergy = player.getEnergy();
+
+        if (energyCost + currentEnergyUsed > 50) {
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+
+        if (playerEnergy - energyCost < 0) {
+            return new Response(false, "You don't have enough energy.");
+        }
+
+        if (targetCell == null) {
+            return new Response(false, "Target cell not found.");
+        }
+
+        player.setEnergy(player.getEnergy() - energyCost);
+        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
+
+        if (!(targetCell.getObjectOnCell() instanceof Tree)) {
+            GameRepository.saveGame(game);
+            return new Response(false, "Target cell is invalid.");
+        }
+
+        //TODO: Handle wood chopping and syrup extraction.
+
+        GameRepository.saveGame(game);
+        return new Response(true, "Axe used successfully.");
+    }
+
+    private static Response handleWateringCanUse(Request request, ToolTypes wateringCanType
+            , int skillEnergyDiscount, Quality quality, Tool equippedTool) {
+        String direction = request.body.get("direction");
+        int[] dxAndDy = getXAndYIncrement(direction);
+        int dx = dxAndDy[0];
+        int dy = dxAndDy[1];
+
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Farm farm = player.getFarm();
+
+        int playerX = player.getCoordinate().getX();
+        int playerY = player.getCoordinate().getY();
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+
+        int energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
+        double currentEnergyUsed = player.getUsedEnergyInTurn();
+        double playerEnergy = player.getEnergy();
+
+        if (energyCost + currentEnergyUsed > 50) {
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+
+        if (playerEnergy - energyCost < 0) {
+            return new Response(false, "You don't have enough energy.");
+        }
+
+        if (targetCell == null) {
+            return new Response(false, "Target cell not found.");
+        }
+
+        player.setEnergy(player.getEnergy() - energyCost);
+        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
+
+        if (targetCell.getObjectOnCell() instanceof Water) {
+            equippedTool.setWaterReserve(wateringCanType.waterCapacity);
+            GameRepository.saveGame(game);
+            return new Response(true, "Water filled successfully.");
+        }
+
+        if (targetCell.getObjectOnCell() instanceof Tree) {
+            Tree tree = (Tree) targetCell.getObjectOnCell();
+            if (equippedTool.getWaterReserve() == 0) {
+                GameRepository.saveGame(game);
+                return new Response(false, "Watering can is empty.");
+            }
+            tree.setHasBeenWateredToday(true);
+            GameRepository.saveGame(game);
+            return new Response(true, "Tree watered successfully.");
+        }
+
+        if (targetCell.getObjectOnCell() instanceof Crop) {
+            Crop crop = (Crop) targetCell.getObjectOnCell();
+            if (equippedTool.getWaterReserve() == 0) {
+                GameRepository.saveGame(game);
+                return new Response(false, "Watering can is empty.");
+            }
+            crop.setHasBeenWateredToday(true);
+            GameRepository.saveGame(game);
+            return new Response(true, "Crop watered successfully.");
+        }
+
+        GameRepository.saveGame(game);
+        return new Response(false, "No operation was performed.");
+    }
+
+
+    private static int calculateFishingEnergyCost(int discount, Quality quality) {
+        int answer = 0;
+        if (quality == Quality.COPPER) {
+            answer = 8;
+        } else if (quality == Quality.SILVER) {
+            answer = 8;
+        } else if (quality == Quality.GOLD) {
+            answer = 6;
+        } else if (quality == Quality.IRIDIUM) {
+            answer = 4;
+        } else {
+            answer = 1;
+        }
+        return answer - discount;
+    }
+
+    //TODO: Implement fishing once reached that part in the document.
+    private static Response handleFishingRodUse(Request request, Quality quality, int skillEnergyDiscount) {
+        String direction = request.body.get("direction");
+        int[] dxAndDy = getXAndYIncrement(direction);
+        int dx = dxAndDy[0];
+        int dy = dxAndDy[1];
+
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Farm farm = player.getFarm();
+
+        int playerX = player.getCoordinate().getX();
+        int playerY = player.getCoordinate().getY();
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+
+        int energyCost = calculateFishingEnergyCost(skillEnergyDiscount, quality);
+        double currentEnergyUsed = player.getUsedEnergyInTurn();
+        double playerEnergy = player.getEnergy();
+
+        if (energyCost + currentEnergyUsed > 50) {
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+
+        if (playerEnergy - energyCost < 0) {
+            return new Response(false, "You don't have enough energy.");
+        }
+
+        if (targetCell == null) {
+            return new Response(false, "Target cell not found.");
+        }
+
+        player.setEnergy(player.getEnergy() - energyCost);
+        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
+
+        if (targetCell.getObjectOnCell() instanceof Water) {
+            //TODO: Perform fishing.
+
+            GameRepository.saveGame(game);
+            return new Response(true, "Fishing done! You caught <quantity> of <fish>");
+        }
+
+        GameRepository.saveGame(game);
+        return new Response(false, "Target cell isn't water.");
+    }
+
+    //TODO: Add fiber or other stuff to inventory of player.
+    private static Response handleScytheUse(Request request) {
+        String direction = request.body.get("direction");
+        int[] dxAndDy = getXAndYIncrement(direction);
+        int dx = dxAndDy[0];
+        int dy = dxAndDy[1];
+
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Farm farm = player.getFarm();
+
+        int playerX = player.getCoordinate().getX();
+        int playerY = player.getCoordinate().getY();
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+
+        int energyCost = 2;
+        double currentEnergyUsed = player.getUsedEnergyInTurn();
+        double playerEnergy = player.getEnergy();
+
+        if (energyCost + currentEnergyUsed > 50) {
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+
+        if (playerEnergy - energyCost < 0) {
+            return new Response(false, "You don't have enough energy.");
+        }
+
+        if (targetCell == null) {
+            return new Response(false, "Target cell not found.");
+        }
+
+        player.setEnergy(player.getEnergy() - energyCost);
+        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
+
+        if (targetCell.getObjectOnCell() instanceof ForagingCrop) {
+            ForagingCrop crop = (ForagingCrop) targetCell.getObjectOnCell();
+            if (crop.type.equals(ForagingCropsType.GRASS)) {
+                targetCell.setObjectOnCell(new EmptyCell());
+                //TODO: maybe add stuff to player inventory?
+                GameRepository.saveGame(game);
+                return new Response(true, "Grass removed from tile.");
+            }
+        }
+
+        GameRepository.saveGame(game);
+        return new Response(false, "Target cell isn't grass.");
+    }
+
+    //TODO: Implement later.
+    private static Response handleMilkPailUse(Request request) {
+        return null;
+    }
+
+    //TODO: Implement later.
+    private static Response handleShearUse(Request request) {
+        return null;
+    }
+
+    //TODO: Implement later.
     public static Response handleBuildBuilding(Request request) {
         return null;
-
     }
 }

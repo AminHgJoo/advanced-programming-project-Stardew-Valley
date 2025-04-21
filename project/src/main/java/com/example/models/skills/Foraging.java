@@ -5,4 +5,8 @@ public class Foraging extends Skill {
     public void learn() {
 
     }
+
+    public Foraging() {
+        super();
+    }
 }

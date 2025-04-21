@@ -1,6 +1,5 @@
 package com.example.models.mapObjects;
 
-import com.example.models.enums.types.StoneType;
 import dev.morphia.annotations.Embedded;
 
 @Embedded

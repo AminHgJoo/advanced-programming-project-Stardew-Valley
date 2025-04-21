@@ -5,4 +5,8 @@ public class Mining extends Skill {
     public void learn() {
 
     }
+
+    public Mining() {
+        super();
+    }
 }

@@ -1,16 +1,18 @@
 package com.example.models.enums;
 
 public enum SkillLevel {
-    FOUR(null),
-    THREE(FOUR),
-    TWO(THREE),
-    ONE(TWO),
-    ZERO(ONE);
+    FOUR(null, 1),
+    THREE(FOUR, 0),
+    TWO(THREE, 0),
+    ONE(TWO, 0),
+    ZERO(ONE, 0);
 
     final public double xpToNextLevel;
     final public SkillLevel nextLevel;
+    final public int energyCostDiscount;
 
-    SkillLevel(SkillLevel nextLevel) {
+    SkillLevel(SkillLevel nextLevel, int energyCostDiscount) {
+        this.energyCostDiscount = energyCostDiscount;
         if (nextLevel == null) {
             this.xpToNextLevel = Double.POSITIVE_INFINITY;
         } else {

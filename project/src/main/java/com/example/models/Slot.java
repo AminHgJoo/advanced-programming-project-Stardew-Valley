@@ -9,6 +9,7 @@ public class Slot {
     private int count;
 
     public Slot(){}
+
     public Slot(Item item, int count) {
         this.item = item;
         this.count = count;

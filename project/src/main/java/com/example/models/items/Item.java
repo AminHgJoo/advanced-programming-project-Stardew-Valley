@@ -34,4 +34,16 @@ abstract public class Item {
     public String getName() {
         return name;
     }
+
+    public Quality getQuality() {
+        return quality;
+    }
+
+    public double getEnergyCost() {
+        return energyCost;
+    }
+
+    public int getMaxStackSize() {
+        return maxStackSize;
+    }
 }

@@ -89,7 +89,7 @@ public class SignInMenuController extends Controller {
             userPassword = password;
         }
         String message = "User created! Password is: " + password + "\n" +
-                "Enter 'pick question -q <question number> -a <answer> -c <confirm answer>>' to choose security question\n" +
+                "Enter 'pick question -q <question number> -a <answer> -c <confirm answer>' to choose security question\n" +
                 "You can enter 'list questions' command to see possible security questions\n";
         return new Response(true, message);
     }

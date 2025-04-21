@@ -139,6 +139,17 @@ public class Farm {
     }
 
     public void foragingRefresh() {
+        /// makes sure the map doesn't get crowded.
+        int count = 0;
+        for (Cell cell : cells) {
+            if (!(cell.getObjectOnCell() instanceof EmptyCell)) {
+                count++;
+            }
+        }
+        if (count >= 2500) {
+            return;
+        }
+
         for (Cell cell : cells) {
             int randomNumber = (int) (Math.random() * 100);
             if (cell.getObjectOnCell().type.equals("empty") && cell.isTilled() && randomNumber == 3) {
@@ -162,51 +173,51 @@ public class Farm {
     private static ForagingCrop randomForagingCrop() {
         int randomNumber = (int) (Math.random() * 22);
         if (randomNumber == 0)
-            return new ForagingCrop(ForagingCropsType.WINTER_ROOT);
+            return new ForagingCrop(ForagingCropsType.WINTER_ROOT, true);
         else if (randomNumber == 1)
-            return new ForagingCrop(ForagingCropsType.BLACKBERRY);
+            return new ForagingCrop(ForagingCropsType.BLACKBERRY, true);
         else if (randomNumber == 2)
-            return new ForagingCrop(ForagingCropsType.COMMON_MUSHROOM);
+            return new ForagingCrop(ForagingCropsType.COMMON_MUSHROOM, true);
         if (randomNumber == 3)
-            return new ForagingCrop(ForagingCropsType.CHANTERELLE);
+            return new ForagingCrop(ForagingCropsType.CHANTERELLE, true);
         else if (randomNumber == 4)
-            return new ForagingCrop(ForagingCropsType.CROCUS);
+            return new ForagingCrop(ForagingCropsType.CROCUS, true);
         else if (randomNumber == 5)
-            return new ForagingCrop(ForagingCropsType.CRYSTAL_FRUIT);
+            return new ForagingCrop(ForagingCropsType.CRYSTAL_FRUIT, true);
         if (randomNumber == 6)
-            return new ForagingCrop(ForagingCropsType.DAFFODIL);
+            return new ForagingCrop(ForagingCropsType.DAFFODIL, true);
         else if (randomNumber == 7)
-            return new ForagingCrop(ForagingCropsType.DANDELION);
+            return new ForagingCrop(ForagingCropsType.DANDELION, true);
         else if (randomNumber == 8)
-            return new ForagingCrop(ForagingCropsType.FIDDLE_HEAD_FERN);
+            return new ForagingCrop(ForagingCropsType.FIDDLE_HEAD_FERN, true);
         if (randomNumber == 9)
-            return new ForagingCrop(ForagingCropsType.GRAPE);
+            return new ForagingCrop(ForagingCropsType.GRAPE, true);
         else if (randomNumber == 10)
-            return new ForagingCrop(ForagingCropsType.HAZELNUT);
+            return new ForagingCrop(ForagingCropsType.HAZELNUT, true);
         else if (randomNumber == 11)
-            return new ForagingCrop(ForagingCropsType.HOLLY);
+            return new ForagingCrop(ForagingCropsType.HOLLY, true);
         if (randomNumber == 12)
-            return new ForagingCrop(ForagingCropsType.LEEK);
+            return new ForagingCrop(ForagingCropsType.LEEK, true);
         else if (randomNumber == 13)
-            return new ForagingCrop(ForagingCropsType.MOREL);
+            return new ForagingCrop(ForagingCropsType.MOREL, true);
         else if (randomNumber == 14)
-            return new ForagingCrop(ForagingCropsType.PURPLE_MUSHROOM);
+            return new ForagingCrop(ForagingCropsType.PURPLE_MUSHROOM, true);
         if (randomNumber == 15)
-            return new ForagingCrop(ForagingCropsType.RED_MUSHROOM);
+            return new ForagingCrop(ForagingCropsType.RED_MUSHROOM, true);
         else if (randomNumber == 16)
-            return new ForagingCrop(ForagingCropsType.SALMON_BERRY);
+            return new ForagingCrop(ForagingCropsType.SALMON_BERRY, true);
         else if (randomNumber == 17)
-            return new ForagingCrop(ForagingCropsType.SNOW_YAM);
+            return new ForagingCrop(ForagingCropsType.SNOW_YAM, true);
         if (randomNumber == 18)
-            return new ForagingCrop(ForagingCropsType.SPICE_BERRY);
+            return new ForagingCrop(ForagingCropsType.SPICE_BERRY, true);
         else if (randomNumber == 19)
-            return new ForagingCrop(ForagingCropsType.SPRING_ONION);
+            return new ForagingCrop(ForagingCropsType.SPRING_ONION, true);
         else if (randomNumber == 20)
-            return new ForagingCrop(ForagingCropsType.SWEET_PEA);
+            return new ForagingCrop(ForagingCropsType.SWEET_PEA, true);
         if (randomNumber == 21)
-            return new ForagingCrop(ForagingCropsType.WILD_HORSERADISH);
+            return new ForagingCrop(ForagingCropsType.WILD_HORSERADISH, true);
 
-        return new ForagingCrop(ForagingCropsType.WILD_PLUM);
+        return new ForagingCrop(ForagingCropsType.WILD_PLUM, true);
     }
 
     private static ForagingMineral randomForagingMineral() {

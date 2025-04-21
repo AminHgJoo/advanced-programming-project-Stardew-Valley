@@ -1,12 +1,15 @@
 package com.example.models;
 
 import com.example.models.NPCModels.NPCFriendship;
+import com.example.models.enums.Quality;
 import com.example.models.enums.types.BackpackType;
+import com.example.models.enums.types.ToolTypes;
 import com.example.models.enums.types.TrashcanType;
 import com.example.models.items.Item;
+import com.example.models.items.Tool;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
-import com.example.models.skills.Skill;
+import com.example.models.skills.*;
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Transient;
@@ -52,6 +55,64 @@ public class Player {
         this.coordinate = new Coordinate(0, 0);
         this.equippedItem = null;
         this.isPlayerFainted = false;
+        initializeInventory();
+        initializeSkills();
+    }
+
+    private void initializeSkills() {
+        this.skills.add(new Farming());
+        this.skills.add(new Fishing());
+        this.skills.add(new Foraging());
+        this.skills.add(new Mining());
+    }
+
+    private void initializeInventory() {
+        this.inventory.getSlots().add(
+                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Hoe", ToolTypes.HOE, 0), 1));
+        this.inventory.getSlots().add(
+                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Pickaxe", ToolTypes.PICKAXE, 0), 1));
+        this.inventory.getSlots().add(
+                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Axe", ToolTypes.AXE, 0), 1));
+        this.inventory.getSlots().add(
+                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Water Can", ToolTypes.WATERING_CAN_DEFAULT, 40), 1));
+        this.inventory.getSlots().add(
+                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Scythe", ToolTypes.SCYTHE, 0), 1));
+    }
+
+    public Farming getFarmingSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Farming) {
+                return (Farming) skill;
+            }
+        }
+        return null;
+    }
+
+    public Fishing getFishingSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Fishing) {
+                return (Fishing) skill;
+            }
+        }
+        return null;
+    }
+
+    public Foraging getForagingSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Foraging) {
+                return (Foraging) skill;
+            }
+        }
+        return null;
+    }
+
+    public Mining getMiningSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Mining) {
+                return (Mining) skill;
+            }
+        }
+        return null;
     }
 
     //TODO: Debug Only Constructor. Not Usable.
@@ -110,9 +171,9 @@ public class Player {
         return inventory;
     }
 
-    public ArrayList<Skill> getSkills() {
-        return skills;
-    }
+//    public ArrayList<Skill> getSkills() {
+//        return skills;
+//    }
 
     public ArrayList<Quest> getQuests() {
         return quests;

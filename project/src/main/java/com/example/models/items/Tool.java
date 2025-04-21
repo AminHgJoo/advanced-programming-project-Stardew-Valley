@@ -5,10 +5,12 @@ import com.example.models.enums.types.ToolTypes;
 
 public class Tool extends Item {
     private ToolTypes type;
+    private int waterReserve;
 
-    public Tool(Quality quality, int value, double energyCost, String name, ToolTypes type) {
+    public Tool(Quality quality, int value, double energyCost, String name, ToolTypes type, int waterReserve) {
         super(quality, 1, value, energyCost, name);
         this.type = type;
+        this.waterReserve = waterReserve;
     }
 
     /// Only in blacksmith shop.
@@ -33,5 +35,13 @@ public class Tool extends Item {
 
     public ToolTypes getType() {
         return type;
+    }
+
+    public int getWaterReserve() {
+        return waterReserve;
+    }
+
+    public void setWaterReserve(int waterReserve) {
+        this.waterReserve = waterReserve;
     }
 }

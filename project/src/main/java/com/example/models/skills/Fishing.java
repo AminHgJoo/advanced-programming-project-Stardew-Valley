@@ -5,4 +5,8 @@ public class Fishing extends Skill {
     public void learn() {
 
     }
+
+    public Fishing() {
+        super();
+    }
 }

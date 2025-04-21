@@ -5,6 +5,7 @@ package com.example.models.enums.types;
 import com.example.models.enums.Season;
 
 public enum ForagingCropsType {
+    GRASS(null, 0, 0),
     COMMON_MUSHROOM(null, 40, 38),
     DAFFODIL(Season.SPRING, 30, 0),
     DANDELION(Season.SPRING, 40, 25),
