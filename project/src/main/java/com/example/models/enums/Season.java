@@ -3,7 +3,7 @@ package com.example.models.enums;
 public enum Season {
     SPRING("Spring"),
     SUMMER("Summer"),
-    AUTUMN("Autumn"),
+    FALL("Fall"),
     WINTER("Winter");
 
     private final String name;

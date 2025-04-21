@@ -69,21 +69,16 @@ public class Game {
         weatherTomorrow = Weather.values()[randomNumber];
     }
 
-    public boolean checkSeasonChange() {
+    public void checkSeasonChange() {
         if (date.getMonthValue() >= 1 && date.getMonthValue() <= 3) {
             season = Season.SPRING;
-            return true;
         } else if (date.getMonthValue() >= 4 && date.getMonthValue() <= 6) {
             season = Season.SUMMER;
-            return true;
         } else if (date.getMonthValue() >= 7 && date.getMonthValue() <= 9) {
-            season = Season.AUTUMN;
-            return true;
+            season = Season.FALL;
         } else if (date.getMonthValue() >= 10 && date.getMonthValue() <= 12) {
             season = Season.WINTER;
-            return true;
         }
-        return false;
     }
 
     public Game() {
