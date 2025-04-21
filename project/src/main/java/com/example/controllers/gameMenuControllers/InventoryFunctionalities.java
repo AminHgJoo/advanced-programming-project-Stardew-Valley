@@ -1,5 +1,6 @@
 package com.example.controllers.gameMenuControllers;
 
+import com.example.Repositories.GameRepository;
 import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
@@ -30,26 +31,28 @@ public class InventoryFunctionalities extends Controller {
         if (slot == null)
             return new Response(false, "item(s) does not exist!");
         if (number == null)
-            return removeSlotHandle(slot, player, backpack);
+            return removeSlotHandle(slot, player, backpack , game);
         int numberInt = Integer.parseInt(number);
         slot.setCount(slot.getCount() - numberInt);
         if (slot.getCount() <= 0)
-            return removeSlotHandle(slot, player, backpack);
-        return removeItemHandle(numberInt, slot, player);
+            return removeSlotHandle(slot, player, backpack , game);
+        return removeItemHandle(numberInt, slot, player , game);
     }
 
-    private static @NotNull Response removeItemHandle(int numberInt, Slot slot, Player player) {
+    private static @NotNull Response removeItemHandle(int numberInt, Slot slot, Player player , Game game) {
         int cashBack = (numberInt * slot.getItem().getValue() *
                 player.getTrashcanRefundPercentage()) / 100;
         player.setMoney(player.getMoney() + cashBack);
+        GameRepository.saveGame(game);
         return new Response(true, numberInt + " of item(s) successfully trashed!");
     }
 
-    private static @NotNull Response removeSlotHandle(Slot slot, Player player, Backpack backpack) {
+    private static @NotNull Response removeSlotHandle(Slot slot, Player player, Backpack backpack , Game game) {
         int cashBack = (slot.getCount() * slot.getItem().getValue() *
                 player.getTrashcanRefundPercentage()) / 100;
         player.setMoney(player.getMoney() + cashBack);
         backpack.removeSlot(slot);
+        GameRepository.saveGame(game);
         return new Response(true, "Item successfully trashed!" + "profit: " + cashBack);
     }
 
@@ -64,6 +67,7 @@ public class InventoryFunctionalities extends Controller {
         if (!(slot.getItem() instanceof Tool))
             return new Response(false, "item(s) is not a tool!");
         game.getCurrentPlayer().setEquippedItem(slot.getItem());
+        GameRepository.saveGame(game);
         return new Response(true, "Equipped " + toolName + " successfully!");
     }
 

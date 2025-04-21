@@ -1,5 +1,6 @@
 package com.example.controllers.gameMenuControllers;
 
+import com.example.Repositories.GameRepository;
 import com.example.controllers.Controller;
 import com.example.models.App;
 import com.example.models.Game;
@@ -46,10 +47,12 @@ public class MovementAndMap extends Controller {
                     player.setPlayerFainted(true);
                     player.setEnergy(player.getEnergy() - c.energy / 20);
                     player.getFarm().initialCells();
+                    GameRepository.saveGame(game);
                     return new Response(false, "You have been fainted");
                 }
                 if (c.energy + player.getUsedEnergyInTurn() > 50) {
                     player.getFarm().initialCells();
+                    GameRepository.saveGame(game);
                     return new Response(false, "You can not use this much energy");
                 }
                 player.setCoordinate(c.getCoordinate());
@@ -57,6 +60,7 @@ public class MovementAndMap extends Controller {
             player.setEnergy(player.getEnergy() - energy);
             player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
             player.getFarm().initialCells();
+            GameRepository.saveGame(game);
             return new Response(true, "You successfully moved to the destination");
         } else {
             player.getFarm().initialCells();
@@ -104,6 +108,7 @@ public class MovementAndMap extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         game.getCurrentPlayer().setEnergy(Double.parseDouble(energy));
+        GameRepository.saveGame(game);
         return new Response(true, "energy successfully set to " + energy);
     }
 
@@ -111,6 +116,7 @@ public class MovementAndMap extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         game.getCurrentPlayer().setEnergy(Double.POSITIVE_INFINITY);
+        GameRepository.saveGame(game);
         return new Response(true, "energy successfully set to infinity");
     }
 }

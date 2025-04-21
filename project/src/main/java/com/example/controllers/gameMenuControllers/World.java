@@ -113,10 +113,12 @@ public class World extends Controller {
     public static Response handleSetWeatherCheat(Request request) {
         String type = request.body.get("Type");
         Weather weather = Weather.getWeatherByName(type);
+        Game game = App.getLoggedInUser().getCurrentGame();
         if (weather == null) {
             return new Response(false, "Weather type is invalid.");
         } else {
-            App.getLoggedInUser().getCurrentGame().setWeatherTomorrow(weather);
+            game.setWeatherTomorrow(weather);
+            GameRepository.saveGame(game);
         }
         return new Response(true, "Tomorrow's weather set successfully.");
     }

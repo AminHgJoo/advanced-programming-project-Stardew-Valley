@@ -36,13 +36,13 @@ public class GameRepository {
     }
 
     public static void saveGame(Game game) {
-        if(game.getGameThread() != null) {
+        if (game.getGameThread() != null) {
             game.getGameThread().setGame(game);
         }
-        new Thread(()->{
-            try{
+        new Thread(() -> {
+            try {
                 db.save(game);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
@@ -59,14 +59,16 @@ public class GameRepository {
     }
 
     public static Query<Game> updateGame(Game game) {
-        return db.find(Game.class).filter("_id" , game.get_id().toString());
+        return db.find(Game.class).filter("_id", game.get_id().toString());
     }
 
     public static void removeGame(Game game) {
-        for (Player player : game.getPlayers()) {
-            player.getUser().setCurrentGame(null);
-            UserRepository.saveUser(player.getUser());
-        }
-        db.delete(game);
+        new Thread(() -> {
+            for (Player player : game.getPlayers()) {
+                player.getUser().setCurrentGame(null);
+                UserRepository.saveUser(player.getUser());
+            }
+            db.delete(game);
+        }).start();
     }
 }
