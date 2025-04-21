@@ -39,13 +39,15 @@ public class GameRepository {
         if (game.getGameThread() != null) {
             game.getGameThread().setGame(game);
         }
-        new Thread(() -> {
-            try {
-                db.save(game);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+        db.save(game);
+
+//        new Thread(() -> {
+//            try {
+//                db.save(game);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
     }
 
     public static ArrayList<Game> findAllGames(boolean populateFlag) {

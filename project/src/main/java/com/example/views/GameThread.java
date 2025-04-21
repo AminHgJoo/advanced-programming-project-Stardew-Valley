@@ -27,8 +27,14 @@ public class GameThread extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            game.advanceTime();
-            game.checkSeasonChange();
+            if (game.hasTurnCycleFinished) {
+                game.advanceTime();
+                GameRepository.saveGame(game);
+            }
+            boolean check = game.checkSeasonChange();
+            if(check){
+                GameRepository.saveGame(game);
+            }
         }
         //debug code
         System.out.println("Thread Exiting...");
