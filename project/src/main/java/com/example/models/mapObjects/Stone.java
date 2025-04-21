@@ -5,12 +5,8 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Stone extends MapObject {
-    private StoneType stoneType;
-
-    public Stone() {}
-    public Stone(StoneType stoneType) {
+    public Stone() {
         super(false, "stone", "gray");
-        this.stoneType = stoneType;
     }
 
     public StoneType getStoneType() {

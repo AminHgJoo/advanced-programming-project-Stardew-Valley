@@ -5,6 +5,7 @@ import com.example.models.buildings.Building;
 import com.example.models.buildings.Greenhouse;
 import com.example.models.buildings.Mine;
 import com.example.models.buildings.PlayerHome;
+import com.example.models.enums.types.TreeType;
 import com.example.models.mapObjects.*;
 import dev.morphia.annotations.Embedded;
 
@@ -123,14 +124,28 @@ public class Farm {
             // TODO parameters
             int randomNumber = (int) (Math.random() * 8);
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
-                cell.setObjectOnCell(new Tree(null));
+                cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
-                cell.setObjectOnCell(new Stone(null));
+                cell.setObjectOnCell(new Stone());
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
                 cell.setObjectOnCell(new ForagingCrop());
-            } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 4) {
+            } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 4 && ) {
                 cell.setObjectOnCell(new ForagingSeed());
             }
+        }
+    }
+
+    public void foragingRefresh(){
+        for(Cell cell : cells){
+            int randomNumber = (int) (Math.random() * 100);
+            if(cell.getObjectOnCell().type.equals("empty") && cell.isTilled() && randomNumber == 3){
+                cell.setObjectOnCell(new ForagingSeed());
+            }
+            else if(cell.getObjectOnCell().type.equals("empty") && randomNumber == 3){
+                cell.setObjectOnCell(new ForagingCrop());
+            }
+            int randomNumber2 = (int) (Math.random() * 20);
+            if(cell.getObjectOnCell().type.equals("empty") && randomNumber2 == 2 ){}
         }
     }
 
@@ -166,6 +181,10 @@ public class Farm {
                 farmCells.add(new Cell(new EmptyCell(), coordinate));
             }
         }
+    }
+
+    private static boolean isMineCell(Cell cell) {
+        return cell.getCoordinate().getX() <=9 && cell.getCoordinate().getX() >=0 && cell.getCoordinate().getY() <=11 && cell.getCoordinate().getY() >=0;
     }
 
     private static void addBuildings(ArrayList<Building> farmBuildings, ArrayList<Cell> farmCells) {

@@ -3,6 +3,7 @@ package com.example.models.enums.types;
 import com.example.models.enums.Season;
 
 public enum TreeType {
+    NORMAL_TREE("Normal Tree",7, null, -1, -1, false, -1, Season.values()),
     APRICOT_TREE("Apricot Tree", 7, FoodTypes.APRICOT, 1, 59, true, 38, Season.SPRING),
     CHERRY_TREE("Cherry Tree", 7, FoodTypes.CHERRY, 1, 80, true, 38, Season.SPRING),
     BANANA_TREE("Banana Tree", 7, FoodTypes.BANANA, 1, 150, true, 75, Season.SUMMER),

@@ -4,4 +4,5 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Quest {
+    
 }
