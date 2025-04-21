@@ -48,7 +48,7 @@ public class MovementAndMap extends Controller {
                     player.setEnergy(player.getEnergy() - c.energy / 20);
                     player.getFarm().initialCells();
                     GameRepository.saveGame(game);
-                    return new Response(false, "You have been fainted");
+                    return new Response(false, "You have fainted");
                 }
                 if (c.energy + player.getUsedEnergyInTurn() > 50) {
                     player.getFarm().initialCells();

@@ -4,7 +4,8 @@ import com.example.Repositories.GameRepository;
 import com.example.models.Game;
 import com.example.models.mapModels.Farm;
 import dev.morphia.annotations.Transient;
-import dev.morphia.query.updates.UpdateOperators;
+
+import java.util.ArrayList;
 
 public class GameThread extends Thread {
     @Transient
@@ -30,11 +31,10 @@ public class GameThread extends Thread {
             }
             if (game.hasTurnCycleFinished) {
                 game.advanceTime();
-                handleRefreshForaging();
                 GameRepository.saveGame(game);
             }
             boolean check = game.checkSeasonChange();
-            if(check){
+            if (check) {
                 GameRepository.saveGame(game);
             }
         }
@@ -42,8 +42,9 @@ public class GameThread extends Thread {
         System.out.println("Thread Exiting...");
     }
 
-    private void handleRefreshForaging() {
-        for (Farm farm : game.getMap().getFarms()) {
+    public void handleRefreshForaging() {
+        ArrayList<Farm> allFarms = game.getMap().getFarms();
+        for (Farm farm : allFarms) {
             farm.foragingRefresh();
         }
     }

@@ -11,6 +11,7 @@ public class Tool extends Item {
         this.type = type;
     }
 
+    /// Only in blacksmith shop.
     public void upgradeTool() {
 
     }

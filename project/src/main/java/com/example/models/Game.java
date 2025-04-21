@@ -36,7 +36,7 @@ public class Game {
         if (date.getHour() == 23) {
             //TODO : next day has arrived
             date = date.plusHours(10);
-
+            gameThread.handleRefreshForaging();
             weatherToday = weatherTomorrow;
             determineWeatherTomorrow();
 

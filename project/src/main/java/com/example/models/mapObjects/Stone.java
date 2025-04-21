@@ -9,7 +9,4 @@ public class Stone extends MapObject {
         super(false, "stone", "gray");
     }
 
-    public StoneType getStoneType() {
-        return stoneType;
-    }
 }
