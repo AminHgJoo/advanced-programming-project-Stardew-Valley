@@ -3,6 +3,7 @@ package com.example.views;
 import com.example.controllers.Controller;
 import com.example.controllers.gameMenuControllers.*;
 import com.example.models.App;
+import com.example.models.Game;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;
@@ -35,6 +36,12 @@ public class GameMenu implements Menu {
                 response = getInvalidCommand();
             }
         } else {
+            Game game  = App.getLoggedInUser().getCurrentGame();
+            if(game.getGameThread()==null){
+                game.setGameThread(new GameThread(game));
+                game.getGameThread().keepRunning = true;
+                game.getGameThread().start();
+            }
             if (GameMenuCommands.SHOW_FARM.matches(input)) {
                 response = getShowFullFarmResponse(input);
             } else if (GameMenuCommands.EXIT_GAME.matches(input)) {
