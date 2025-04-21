@@ -11,6 +11,7 @@ import dev.morphia.query.updates.UpdateOperators;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 
 // TODO optimizing the queiries
 
@@ -34,11 +35,17 @@ public class GameRepository {
     }
 
     public static void saveGame(Game game) {
-        for (Player player : game.getPlayers()) {
-            player.setUser(null);
-        }
-        game.getCurrentPlayer().setUser(null);
-        db.save(game);
+        CompletableFuture.runAsync(() -> {
+            try {
+                for (Player player : game.getPlayers()) {
+                    player.setUser(null);
+                }
+                game.getCurrentPlayer().setUser(null);
+                db.save(game);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static ArrayList<Game> findAllGames(boolean populateFlag) {
@@ -52,10 +59,16 @@ public class GameRepository {
     }
 
     public static void removeGame(Game game) {
-        for (Player player : game.getPlayers()) {
-            player.getUser().setCurrentGame(null);
-            UserRepository.saveUser(player.getUser());
-        }
-        db.delete(game);
+        CompletableFuture.runAsync(() -> {
+            try {
+                for (Player player : game.getPlayers()) {
+                    player.getUser().setCurrentGame(null);
+                    UserRepository.saveUser(player.getUser());
+                }
+                db.delete(game);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

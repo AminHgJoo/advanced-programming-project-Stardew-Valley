@@ -1,5 +1,6 @@
 package com.example.views;
 
+import com.example.Repositories.GameRepository;
 import com.example.models.Game;
 import dev.morphia.annotations.Transient;
 
@@ -24,6 +25,7 @@ public class GameThread extends Thread {
             }
             game.advanceTime();
             game.checkSeasonChange();
+            GameRepository.saveGame(game);
         }
         //debug code
         System.out.println("Thread Exiting...");
