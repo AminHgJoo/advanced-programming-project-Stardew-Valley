@@ -5,6 +5,7 @@ import com.example.models.Player;
 import com.example.models.User;
 import com.example.utilities.Connection;
 import dev.morphia.Datastore;
+import dev.morphia.query.Query;
 import dev.morphia.query.Update;
 import dev.morphia.query.updates.UpdateOperator;
 import dev.morphia.query.updates.UpdateOperators;
@@ -35,17 +36,16 @@ public class GameRepository {
     }
 
     public static void saveGame(Game game) {
-        CompletableFuture.runAsync(() -> {
+        if (game.getGameThread() != null) {
+            game.getGameThread().setGame(game);
+        }
+        new Thread(() -> {
             try {
-                for (Player player : game.getPlayers()) {
-                    player.setUser(null);
-                }
-                game.getCurrentPlayer().setUser(null);
                 db.save(game);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        });
+        }).start();
     }
 
     public static ArrayList<Game> findAllGames(boolean populateFlag) {
@@ -58,17 +58,17 @@ public class GameRepository {
         return games;
     }
 
+    public static Query<Game> updateGame(Game game) {
+        return db.find(Game.class).filter("_id", game.get_id().toString());
+    }
+
     public static void removeGame(Game game) {
-        CompletableFuture.runAsync(() -> {
-            try {
-                for (Player player : game.getPlayers()) {
-                    player.getUser().setCurrentGame(null);
-                    UserRepository.saveUser(player.getUser());
-                }
-                db.delete(game);
-            } catch (Exception e) {
-                e.printStackTrace();
+        new Thread(() -> {
+            for (Player player : game.getPlayers()) {
+                player.getUser().setCurrentGame(null);
+                UserRepository.saveUser(player.getUser());
             }
-        });
+            db.delete(game);
+        }).start();
     }
 }

@@ -135,7 +135,7 @@ public class User {
         if(currentGame == null) return null;
         if(currentGame.get_id() == null) return currentGame;
         GameThread t = currentGame.getGameThread();
-        populateGame();
+        currentGame = populateGame();
         currentGame.setGameThread(t);
         return currentGame;
     }
@@ -152,8 +152,8 @@ public class User {
         return _id;
     }
 
-    public void populateGame() {
-        currentGame = GameRepository.findGameById(currentGame.get_id().toString(), true);
+    public Game populateGame() {
+        return GameRepository.findGameById(currentGame.get_id().toString(), true);
     }
 
     @Override

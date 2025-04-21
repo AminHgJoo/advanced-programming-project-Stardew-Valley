@@ -1,7 +1,9 @@
 package com.example.controllers.gameMenuControllers;
 
+import com.example.Repositories.GameRepository;
 import com.example.controllers.Controller;
 import com.example.models.App;
+import com.example.models.Game;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.Weather;
@@ -47,6 +49,7 @@ public class World extends Controller {
         int amountOfHours = Integer.parseInt(request.body.get("X"));
         LocalDateTime currentDateTime = App.getLoggedInUser().getCurrentGame().getDate();
         LocalDateTime nextDateTime;
+        Game currentGame = App.getLoggedInUser().getCurrentGame();
         int howManyDays = amountOfHours / 24;
         int howManyHours = amountOfHours % 24;
         int howManyMonths = howManyDays / 28;
@@ -63,8 +66,9 @@ public class World extends Controller {
         nextDateTime = currentDateTime.plusDays(howManyDays);
         nextDateTime = nextDateTime.plusHours(howManyHours);
         nextDateTime = nextDateTime.plusMonths(howManyMonths);
-        App.getLoggedInUser().getCurrentGame().setDate(nextDateTime);
-        App.getLoggedInUser().getCurrentGame().checkSeasonChange();
+        currentGame.setDate(nextDateTime);
+        currentGame.checkSeasonChange();
+        GameRepository.saveGame(currentGame);
         return new Response(true, "Date and time set successfully.");
     }
 
@@ -72,6 +76,7 @@ public class World extends Controller {
         int amountOfDays = Integer.parseInt(request.body.get("X"));
         LocalDateTime currentDateTime = App.getLoggedInUser().getCurrentGame().getDate();
         LocalDateTime nextDateTime;
+        Game currentGame = App.getLoggedInUser().getCurrentGame();
         int howManyDays = amountOfDays % 28;
         int howManyMonths = amountOfDays / 28;
         int currentDay = currentDateTime.getDayOfMonth();
@@ -81,8 +86,9 @@ public class World extends Controller {
         }
         nextDateTime = currentDateTime.plusDays(howManyDays);
         nextDateTime = nextDateTime.plusMonths(howManyMonths);
-        App.getLoggedInUser().getCurrentGame().setDate(nextDateTime);
-        App.getLoggedInUser().getCurrentGame().checkSeasonChange();
+        currentGame.setDate(nextDateTime);
+        currentGame.checkSeasonChange();
+        GameRepository.saveGame(currentGame);
         return new Response(true, "Date set successfully.");
     }
 
@@ -107,10 +113,12 @@ public class World extends Controller {
     public static Response handleSetWeatherCheat(Request request) {
         String type = request.body.get("Type");
         Weather weather = Weather.getWeatherByName(type);
+        Game game = App.getLoggedInUser().getCurrentGame();
         if (weather == null) {
             return new Response(false, "Weather type is invalid.");
         } else {
-            App.getLoggedInUser().getCurrentGame().setWeatherTomorrow(weather);
+            game.setWeatherTomorrow(weather);
+            GameRepository.saveGame(game);
         }
         return new Response(true, "Tomorrow's weather set successfully.");
     }
