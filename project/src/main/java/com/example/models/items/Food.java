@@ -1,10 +1,15 @@
 package com.example.models.items;
 
 import com.example.models.enums.types.FoodTypes;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class Food extends Item {
-    public final boolean isEdible;
-    public final FoodTypes foodType;
+    public boolean isEdible;
+    public FoodTypes foodType;
+
+    public Food() {
+    }
 
     public Food(boolean isEdible, FoodTypes foodType) {
         this.isEdible = isEdible;

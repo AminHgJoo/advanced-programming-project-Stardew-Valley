@@ -31,6 +31,9 @@ public class LoadingSavingTurnHandling extends Controller {
             if (user == null) {
                 return new Response(false, "User not found");
             }
+            if (user.equals(App.getLoggedInUser())) {
+                return new Response(false, "You can't add yourself.");
+            }
             if (user.getCurrentGame() != null) {
                 return new Response(false, "Player " + username + " is already in a game");
             }
