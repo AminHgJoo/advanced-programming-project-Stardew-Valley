@@ -123,7 +123,7 @@ public class Farm {
             // TODO parameters
             int randomNumber = (int) (Math.random() * 8);
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
-                cell.setObjectOnCell(new Tree(null, null));
+                cell.setObjectOnCell(new Tree(null));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
                 cell.setObjectOnCell(new Stone(null));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
