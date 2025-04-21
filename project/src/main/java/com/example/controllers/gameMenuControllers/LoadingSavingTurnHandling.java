@@ -44,7 +44,8 @@ public class LoadingSavingTurnHandling extends Controller {
             player.getUser().setNumberOfGames(player.getUser().getNumberOfGames() + 1);
         }
         isWaitingForChoosingMap = true;
-        return new Response(true, "The game has been made successfully. Awaiting each user's map choice...");
+        return new Response(true, "The game has been made successfully. Awaiting each user's map choice...\n" +
+                "Use 'game map <map_number>' to pick map 1 or 2.");
     }
 
     public static Response handleMapSelection(Request request) {

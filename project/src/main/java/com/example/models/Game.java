@@ -75,7 +75,7 @@ public class Game {
         } else if (date.getMonthValue() >= 4 && date.getMonthValue() <= 6) {
             season = Season.SUMMER;
         } else if (date.getMonthValue() >= 7 && date.getMonthValue() <= 9) {
-            season = Season.AUTUMN;
+            season = Season.FALL;
         } else if (date.getMonthValue() >= 10 && date.getMonthValue() <= 12) {
             season = Season.WINTER;
         }

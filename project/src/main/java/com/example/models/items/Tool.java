@@ -1,9 +1,15 @@
 package com.example.models.items;
 
-import java.util.HashMap;
+import com.example.models.enums.Quality;
+import com.example.models.enums.types.ToolTypes;
 
 public class Tool extends Item {
-    private final HashMap<String, String> properties = new HashMap<>();
+    private ToolTypes type;
+
+    public Tool(Quality quality, int value, double energyCost, String name, ToolTypes type) {
+        super(quality, 1, value, energyCost, name);
+        this.type = type;
+    }
 
     public void upgradeTool() {
 
@@ -24,7 +30,7 @@ public class Tool extends Item {
 
     }
 
-    public HashMap<String, String> getProperties() {
-        return properties;
+    public ToolTypes getType() {
+        return type;
     }
 }

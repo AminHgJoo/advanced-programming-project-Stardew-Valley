@@ -16,7 +16,6 @@ public class GameThread extends Thread {
     //TODO: initialize thread
     //TODO: crop stuff.
     public void run() {
-
         while (keepRunning) {
             try {
                 Thread.sleep(500);

@@ -1,9 +1,9 @@
 package com.example.models.enums;
 
 public enum Weather {
-    SUNNY(new Season[]{Season.SPRING, Season.SUMMER, Season.AUTUMN, Season.WINTER}, "Sunny"),
-    RAIN(new Season[]{Season.SPRING, Season.SUMMER, Season.AUTUMN}, "Rain"),
-    STORM(new Season[]{Season.SPRING, Season.SUMMER, Season.AUTUMN}, "Storm"),
+    SUNNY(new Season[]{Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER}, "Sunny"),
+    RAIN(new Season[]{Season.SPRING, Season.SUMMER, Season.FALL}, "Rain"),
+    STORM(new Season[]{Season.SPRING, Season.SUMMER, Season.FALL}, "Storm"),
     SNOW(new Season[]{Season.WINTER}, "Snow"),
     ;
 

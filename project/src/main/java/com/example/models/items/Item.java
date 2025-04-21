@@ -11,6 +11,14 @@ abstract public class Item {
     protected double energyCost;
     protected String name;
 
+    public Item(Quality quality, int maxStackSize, int value, double energyCost, String name) {
+        this.quality = quality;
+        this.maxStackSize = maxStackSize;
+        this.value = value;
+        this.energyCost = energyCost;
+        this.name = name;
+    }
+
     abstract public void useItem();
 
     abstract public void deleteItem();
