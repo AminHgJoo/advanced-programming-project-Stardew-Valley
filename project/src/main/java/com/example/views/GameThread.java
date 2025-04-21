@@ -2,6 +2,7 @@ package com.example.views;
 
 import com.example.Repositories.GameRepository;
 import com.example.models.Game;
+import com.example.models.mapModels.Farm;
 import dev.morphia.annotations.Transient;
 import dev.morphia.query.updates.UpdateOperators;
 
@@ -29,6 +30,7 @@ public class GameThread extends Thread {
             }
             if (game.hasTurnCycleFinished) {
                 game.advanceTime();
+                handleRefreshForaging();
                 GameRepository.saveGame(game);
             }
             boolean check = game.checkSeasonChange();
@@ -38,5 +40,11 @@ public class GameThread extends Thread {
         }
         //debug code
         System.out.println("Thread Exiting...");
+    }
+
+    private void handleRefreshForaging() {
+        for (Farm farm : game.getMap().getFarms()) {
+            farm.foragingRefresh();
+        }
     }
 }

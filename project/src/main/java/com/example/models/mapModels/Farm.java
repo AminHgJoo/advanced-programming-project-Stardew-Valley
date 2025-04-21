@@ -5,6 +5,9 @@ import com.example.models.buildings.Building;
 import com.example.models.buildings.Greenhouse;
 import com.example.models.buildings.Mine;
 import com.example.models.buildings.PlayerHome;
+import com.example.models.enums.types.ForagingCropsType;
+import com.example.models.enums.types.ForagingMineralsType;
+import com.example.models.enums.types.ForagingSeedsType;
 import com.example.models.enums.types.TreeType;
 import com.example.models.mapObjects.*;
 import dev.morphia.annotations.Embedded;
@@ -128,9 +131,9 @@ public class Farm {
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
                 cell.setObjectOnCell(new Stone());
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
-                cell.setObjectOnCell(new ForagingCrop());
-            } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 4 && ) {
-                cell.setObjectOnCell(new ForagingSeed());
+                cell.setObjectOnCell(randomForagingCrop());
+            } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 4 && isMineCell(cell)) {
+                cell.setObjectOnCell(randomForagingMineral());
             }
         }
     }
@@ -139,15 +142,80 @@ public class Farm {
         for(Cell cell : cells){
             int randomNumber = (int) (Math.random() * 100);
             if(cell.getObjectOnCell().type.equals("empty") && cell.isTilled() && randomNumber == 3){
-                cell.setObjectOnCell(new ForagingSeed());
+                cell.setObjectOnCell(randomForagingSeed());
             }
             else if(cell.getObjectOnCell().type.equals("empty") && randomNumber == 3){
-                cell.setObjectOnCell(new ForagingCrop());
+                cell.setObjectOnCell(randomForagingCrop());
             }
-            int randomNumber2 = (int) (Math.random() * 20);
-            if(cell.getObjectOnCell().type.equals("empty") && randomNumber2 == 2 ){}
+            int randomNumber2 = (int) (Math.random() * 15);
+            if(cell.getObjectOnCell().type.equals("empty") && randomNumber2 == 2 && isMineCell(cell)){
+                cell.setObjectOnCell(randomForagingMineral());
+            }
         }
     }
+
+    private static ForagingSeed randomForagingSeed() {
+        ForagingSeedsType[] values = ForagingSeedsType.values();
+        int randomNumber = (int) (Math.random() * values.length);
+        return new ForagingSeed(values[randomNumber]);
+    }
+
+    private static ForagingCrop randomForagingCrop() {
+        int randomNumber = (int) (Math.random() * 22);
+        if(randomNumber == 0)
+            return new ForagingCrop(ForagingCropsType.WINTER_ROOT);
+        else if(randomNumber == 1)
+            return new ForagingCrop(ForagingCropsType.BLACKBERRY);
+        else if(randomNumber == 2)
+            return new ForagingCrop(ForagingCropsType.COMMON_MUSHROOM);
+        if(randomNumber == 3)
+            return new ForagingCrop(ForagingCropsType.CHANTERELLE);
+        else if(randomNumber == 4)
+            return new ForagingCrop(ForagingCropsType.CROCUS);
+        else if(randomNumber == 5)
+            return new ForagingCrop(ForagingCropsType.CRYSTAL_FRUIT);
+        if(randomNumber == 6)
+            return new ForagingCrop(ForagingCropsType.DAFFODIL);
+        else if(randomNumber == 7)
+            return new ForagingCrop(ForagingCropsType.DANDELION);
+        else if(randomNumber == 8)
+            return new ForagingCrop(ForagingCropsType.FIDDLE_HEAD_FERN);
+        if(randomNumber == 9)
+            return new ForagingCrop(ForagingCropsType.GRAPE);
+        else if(randomNumber == 10)
+            return new ForagingCrop(ForagingCropsType.HAZELNUT);
+        else if(randomNumber == 11)
+            return new ForagingCrop(ForagingCropsType.HOLLY);
+        if(randomNumber == 12)
+            return new ForagingCrop(ForagingCropsType.LEEK);
+        else if(randomNumber == 13)
+            return new ForagingCrop(ForagingCropsType.MOREL);
+        else if(randomNumber == 14)
+            return new ForagingCrop(ForagingCropsType.PURPLE_MUSHROOM);
+        if(randomNumber == 15)
+            return new ForagingCrop(ForagingCropsType.RED_MUSHROOM);
+        else if(randomNumber == 16)
+            return new ForagingCrop(ForagingCropsType.SALMON_BERRY);
+        else if(randomNumber == 17)
+            return new ForagingCrop(ForagingCropsType.SNOW_YAM);
+        if(randomNumber == 18)
+            return new ForagingCrop(ForagingCropsType.SPICE_BERRY);
+        else if(randomNumber == 19)
+            return new ForagingCrop(ForagingCropsType.SPRING_ONION);
+        else if(randomNumber == 20)
+            return new ForagingCrop(ForagingCropsType.SWEET_PEA);
+        if(randomNumber == 21)
+            return new ForagingCrop(ForagingCropsType.WILD_HORSERADISH);
+
+            return new ForagingCrop(ForagingCropsType.WILD_PLUM);
+    }
+
+    private static ForagingMineral randomForagingMineral() {
+        ForagingMineralsType[] values = ForagingMineralsType.values();
+        int randomNumber = (int) (Math.random() * values.length);
+        return new ForagingMineral(values[randomNumber]);
+    }
+
 
     private static void addOneLake(ArrayList<Cell> farmCells) {
         for (int j = 37; j < 46; j++) {
