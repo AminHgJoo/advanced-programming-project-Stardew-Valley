@@ -97,7 +97,6 @@ public class LoadingSavingTurnHandling extends Controller {
             }
         }
         game.setGameOngoing(true);
-        GameRepository.saveGame(game);
         int loaderIndex = players.indexOf(loader);
         players.set(0, loader);
         players.set(loaderIndex, firstPlayer);
@@ -105,6 +104,7 @@ public class LoadingSavingTurnHandling extends Controller {
         game.setGameThread(new GameThread(game));
         game.getGameThread().keepRunning = true;
         game.getGameThread().start();
+        GameRepository.saveGame(game);
 
         return new Response(true, "The game has been loaded successfully. Welcome "
                 + user.getUsername());
@@ -162,7 +162,6 @@ public class LoadingSavingTurnHandling extends Controller {
     }
 
     public static Response handleNextTurn(Request request) {
-
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
 

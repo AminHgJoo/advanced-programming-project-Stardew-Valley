@@ -5,8 +5,8 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Tree extends MapObject {
-    private final TreeType treeType;
-
+    private TreeType treeType;
+    public Tree() {}
     public Tree( TreeType treeType) {
         super(false, "tree", "green");
         this.treeType = treeType;
