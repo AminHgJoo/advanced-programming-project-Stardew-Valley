@@ -7,11 +7,9 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.Quality;
 import com.example.models.enums.Season;
+import com.example.models.enums.SkillLevel;
 import com.example.models.enums.Weather;
-import com.example.models.enums.types.FishType;
-import com.example.models.enums.types.ForagingCropsType;
-import com.example.models.enums.types.MiscType;
-import com.example.models.enums.types.ToolTypes;
+import com.example.models.enums.types.*;
 import com.example.models.items.Food;
 import com.example.models.items.Misc;
 import com.example.models.items.Tool;
@@ -164,7 +162,9 @@ public class World extends Controller {
             return handleHoeUse(request, equippedTool.getQuality()
                     , player.getFarmingSkill().getLevel().energyCostDiscount);
         } else if (toolType == ToolTypes.PICKAXE) {
-            return handlePickaxeUse(request, equippedTool.getQuality()
+            return handlePickaxeUse(request
+                    , player.getMiningSkill().getLevel()
+                    , equippedTool.getQuality()
                     , player.getMiningSkill().getLevel().energyCostDiscount);
         } else if (toolType == ToolTypes.AXE) {
             return handleAxeUse(request, equippedTool.getQuality()
@@ -281,7 +281,8 @@ public class World extends Controller {
     }
 
     //TODO: HANDLE MINING MINERALS AND STONES.
-    private static Response handlePickaxeUse(Request request, Quality quality, int skillEnergyDiscount) {
+    private static Response handlePickaxeUse(Request request, SkillLevel skillLevel
+            , Quality quality, int skillEnergyDiscount) {
         String direction = request.body.get("direction");
         int[] dxAndDy = getXAndYIncrement(direction);
         int dx = dxAndDy[0];
@@ -316,8 +317,35 @@ public class World extends Controller {
         player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
         if (targetCell.getObjectOnCell() instanceof ForagingMineral) {
-            //TODO: MINE TILE AND ADD STUFF TO INVENTORY BASED ON SKILL.
 
+            ForagingMineralsType type = ((ForagingMineral) targetCell.getObjectOnCell()).getType();
+
+            Backpack backpack = player.getInventory();
+            Slot slot = backpack.getSlotByItemName(type.name);
+
+            player.getMiningSkill().setXp(player.getMiningSkill().getXp() + 10);
+
+            int count = 1;
+            if (skillLevel.ordinal() <= 2) {
+                count++;
+            }
+
+            if (backpack.getSlots().size() == backpack.getType().getMaxCapacity()) {
+                if (slot == null) {
+                    System.out.println("No space in backpack.");
+                } else {
+                    slot.setCount(Math.min(slot.getCount() + count, slot.getItem().getMaxStackSize()));
+                    System.out.println("Added " + count + " to backpack.");
+                }
+            } else {
+                if (slot == null) {
+                    backpack.getSlots().add(new
+                            Slot(new com.example.models.items.ForagingMineral(Quality.DEFAULT, type.getSellPrice(), type), count));
+                } else {
+                    slot.setCount(Math.min(slot.getItem().getMaxStackSize(), slot.getCount() + count));
+                }
+                System.out.println("Added " + count + " to backpack.");
+            }
 
             GameRepository.saveGame(game);
             return new Response(true, "Mined stone/mineral at target cell.");
@@ -471,7 +499,6 @@ public class World extends Controller {
         return answer - discount;
     }
 
-    //TODO: Implement fishing once reached that part in the document.
     private static Response handleFishingRodUse(Request request, Quality quality, int skillEnergyDiscount) {
         String direction = request.body.get("direction");
         int[] dxAndDy = getXAndYIncrement(direction);
@@ -641,16 +668,21 @@ public class World extends Controller {
 
                 targetCell.setObjectOnCell(new EmptyCell());
 
+                Backpack backpack = player.getInventory();
+                Slot slot = backpack.getSlotByItemName("Fiber");
+
                 if (player.getInventory().getType().getMaxCapacity() == player.getInventory().getSlots().size()) {
-                    System.out.println("You had no inventory space to collect the materials.");
+                    if (slot == null) {
+                        System.out.println("You had no inventory space to collect the materials.");
+                    } else {
+                        slot.setCount(Math.min(slot.getCount() + 1, slot.getItem().getMaxStackSize()));
+                    }
                 } else {
-                    Backpack backpack = player.getInventory();
-                    Slot slot = backpack.getSlotByItemName("Fiber");
                     if (slot == null) {
                         backpack.getSlots()
-                                .add(new Slot(new Misc(Quality.DEFAULT, 1000, 0, 0, "Fiber", MiscType.FIBER), 1));
+                                .add(new Slot(new Misc(0, "Fiber", MiscType.FIBER), 1));
                     } else {
-                        slot.setCount(slot.getCount() + 1);
+                        slot.setCount(Math.min(slot.getCount() + 1, slot.getItem().getMaxStackSize()));
                     }
                     System.out.println("Added one Fiber to your backpack.");
                 }
