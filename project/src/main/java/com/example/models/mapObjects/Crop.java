@@ -1,23 +1,22 @@
 package com.example.models.mapObjects;
 
-import com.example.models.enums.Season;
 import com.example.models.enums.types.CropType;
 import dev.morphia.annotations.Embedded;
 
 // TODO CROP STAGE
 @Embedded
 public class Crop extends MapObject {
-    public final Season seasonOfGrowth;
-    public final boolean canBeGiant;
-    public final CropType cropType;
+    public  CropType cropType;
     private int daysToNextStage;
     private int stageNumber;
-    private boolean hasBeenWateredToday;
+    private boolean hasBeenWateredToday = false;
+    private boolean hasBeenFertilized = false;
+    public Crop(){
 
-    public Crop(Season seasonOfGrowth, boolean canBeGiant, CropType plantType) {
+    }
+
+    public Crop(CropType plantType) {
         super(true, "plant", "green");
-        this.seasonOfGrowth = seasonOfGrowth;
-        this.canBeGiant = canBeGiant;
         this.cropType = plantType;
         stageNumber = 0;
         daysToNextStage = cropType.StageZeroDaysToNextStage;
@@ -46,5 +45,24 @@ public class Crop extends MapObject {
 
     public void setStageNumber(int stageNumber) {
         this.stageNumber = stageNumber;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("name : ").append(cropType.name).append("\n");
+        builder.append("tim to next stage : ").append(daysToNextStage).append("\n");
+        builder.append("stage number : ").append(stageNumber).append("\n");
+        builder.append("has been watered today : ").append(hasBeenWateredToday).append("\n");
+        builder.append("has been fertilized : ").append(hasBeenFertilized).append("\n");
+        return builder.toString();
+    }
+
+    public boolean isHasBeenFertilized() {
+        return hasBeenFertilized;
+    }
+
+    public void setHasBeenFertilized(boolean hasBeenFertilized) {
+        this.hasBeenFertilized = hasBeenFertilized;
     }
 }
