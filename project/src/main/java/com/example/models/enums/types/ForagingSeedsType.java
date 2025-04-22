@@ -1,6 +1,8 @@
 package com.example.models.enums.types;
 
 import com.example.models.enums.Season;
+import dev.morphia.annotations.Embedded;
+
 
 public enum ForagingSeedsType {
     JAZZ_SEEDS(Season.SPRING),
