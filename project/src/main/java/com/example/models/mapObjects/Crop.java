@@ -12,7 +12,7 @@ public class Crop extends MapObject {
     private boolean hasBeenWateredToday = false;
     private boolean hasBeenFertilized = false;
     public Crop(){
-
+        super();
     }
 
     public Crop(CropType plantType) {

@@ -11,6 +11,9 @@ public class Food extends Item {
     public ConsumableType consumableType;
 
     public Food() {
+        super();
+        isEdible = false;
+        consumableType = null;
     }
 
     public Food(Quality quality, int maxStackSize, int value, double energyCost, String name, ConsumableType consumableType, boolean isEdible) {

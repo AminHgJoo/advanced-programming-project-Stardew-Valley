@@ -4,7 +4,9 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class BuildingBlock extends MapObject {
-    public BuildingBlock(){}
+    public BuildingBlock(){
+        super();
+    }
     public BuildingBlock(boolean isWalkable) {
         super(isWalkable, "buildingBlock", "red");
     }

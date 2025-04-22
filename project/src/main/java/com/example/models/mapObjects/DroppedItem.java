@@ -8,6 +8,9 @@ public class DroppedItem extends MapObject {
     private int quantity;
     private Item item;
 
+    public DroppedItem() {
+        super();
+    }
     public DroppedItem(String color, int quantity, Item item) {
         super(true, "droppedItem", color);
         this.quantity = quantity;

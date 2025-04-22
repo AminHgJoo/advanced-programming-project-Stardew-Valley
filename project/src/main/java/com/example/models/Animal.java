@@ -9,6 +9,8 @@ public class Animal {
     private AnimalType type;
     private int cost;
 
+    public Animal(){}
+
     public Animal(String name, AnimalType type, int cost) {
         this.name = name;
         this.type = type;
