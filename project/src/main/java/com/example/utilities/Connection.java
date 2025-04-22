@@ -18,6 +18,7 @@ public class Connection {
                 database.getMapper().mapPackage("com.example.models");
                 database.getMapper().mapPackage("com.example.models.mapObjects");
                 database.getMapper().mapPackage("com.example.models.buildings");
+                database.getMapper().mapPackage("com.example.models.items");
                 database.ensureIndexes();
             } catch (Exception e) {
                 e.printStackTrace();

@@ -2,9 +2,13 @@ package com.example.models.items;
 
 import com.example.models.enums.Quality;
 import com.example.models.enums.types.ToolTypes;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class Tool extends Item {
     private ToolTypes type;
+
+    public Tool(){}
 
     public Tool(Quality quality, int value, double energyCost, String name, ToolTypes type) {
         super(quality, 1, value, energyCost, name);
