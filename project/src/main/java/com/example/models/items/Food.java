@@ -13,14 +13,15 @@ public class Food extends Item {
     public Food() {
     }
 
-    public Food(Quality quality, int maxStackSize, int value, double energyCost, String name, ConsumableType consumableType) {
-        this.isEdible = true;
+    public Food(Quality quality, int maxStackSize, int value, double energyCost, String name, ConsumableType consumableType, boolean isEdible) {
+        this.isEdible = isEdible;
         this.quality = quality;
         this.maxStackSize = maxStackSize;
         this.value = value;
         this.energyCost = energyCost;
         this.name = name;
         this.consumableType = consumableType;
+
     }
 
     @Override

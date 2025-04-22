@@ -524,7 +524,7 @@ public class World extends Controller {
             Quality fishQuality = setFishQuality(qualityNumber);
             int price = fishType.price;
 
-            Food fish = new Food(fishQuality, 1000, price, 0.0, fishType.name, fishType);
+            Food fish = new Food(fishQuality, Integer.MAX_VALUE, price, 0.0, fishType.name, fishType, false);
             Backpack backpack = player.getInventory();
             addFishes(fish, backpack, numberOfFishes);
             GameRepository.saveGame(game);
@@ -538,18 +538,12 @@ public class World extends Controller {
     private static void addFishes(Food fish, Backpack backpack, int numberOfFishes) {
         for (Slot slot : backpack.getSlots()) {
             if (slot.getItem().getName().equals(fish.getName())) {
-                if (slot.getCount() + numberOfFishes >= 1000) {
-                    int numberOfFishesToAdd = slot.getCount() + numberOfFishes - 1000;
-                    slot.setCount(1000);
-                    Slot newSlot = new Slot(fish, numberOfFishesToAdd);
-                    return;
-                } else {
-                    slot.setCount(slot.getCount() + numberOfFishes);
-                    return;
-                }
+                slot.setCount(slot.getCount() + numberOfFishes);
+                return;
             }
         }
         Slot newSlot = new Slot(fish, numberOfFishes);
+        backpack.addSlot(newSlot);
     }
 
     private static ArrayList<FishType> getValidFishTypes(Season season, int playerLevel) {
