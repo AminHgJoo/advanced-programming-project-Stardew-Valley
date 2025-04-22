@@ -32,7 +32,7 @@ public class Backpack {
 
     public Slot getSlotByItemName(String itemName) {
         for (Slot slot : slots) {
-            if (slot.getItem().getName().equals(itemName)) {
+            if (slot.getItem().getName().compareToIgnoreCase(itemName) == 0) {
                 return slot;
             }
         }

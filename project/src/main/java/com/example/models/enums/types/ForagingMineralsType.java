@@ -1,6 +1,7 @@
 package com.example.models.enums.types;
 
 public enum ForagingMineralsType {
+    STONE(0),
     QUARTZ(25),
     EARTH_CRYSTAL(50),
     FROZEN_TEAR(75),
@@ -21,8 +22,8 @@ public enum ForagingMineralsType {
 
     private final int sellPrice;
 
-    ForagingMineralsType(int cellPrice) {
-        this.sellPrice = cellPrice;
+    ForagingMineralsType(int sellPrice) {
+        this.sellPrice = sellPrice;
     }
 
     public int getSellPrice() {

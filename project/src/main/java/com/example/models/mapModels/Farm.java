@@ -129,7 +129,7 @@ public class Farm {
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
                 cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
-                cell.setObjectOnCell(new Stone());
+                cell.setObjectOnCell(new ForagingMineral(ForagingMineralsType.STONE, "gray"));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
                 cell.setObjectOnCell(randomForagingCrop());
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 4 && isMineCell(cell)) {

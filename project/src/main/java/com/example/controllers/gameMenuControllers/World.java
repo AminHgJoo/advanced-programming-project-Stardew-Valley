@@ -2,16 +2,15 @@ package com.example.controllers.gameMenuControllers;
 
 import com.example.Repositories.GameRepository;
 import com.example.controllers.Controller;
-import com.example.models.App;
-import com.example.models.Game;
+import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
-import com.example.models.Player;
-import com.example.models.User;
 import com.example.models.enums.Quality;
 import com.example.models.enums.Weather;
 import com.example.models.enums.types.ForagingCropsType;
+import com.example.models.enums.types.MiscType;
 import com.example.models.enums.types.ToolTypes;
+import com.example.models.items.Misc;
 import com.example.models.items.Tool;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
@@ -21,6 +20,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+//TODO: Handle all skills.
 public class World extends Controller {
     public static Response handleTimeQuery(Request request) {
         Response response = new Response();
@@ -311,8 +311,7 @@ public class World extends Controller {
         player.setEnergy(player.getEnergy() - energyCost);
         player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
-        if ((targetCell.getObjectOnCell() instanceof Stone
-                || targetCell.getObjectOnCell() instanceof ForagingMineral)) {
+        if (targetCell.getObjectOnCell() instanceof ForagingMineral) {
             //TODO: MINE TILE AND ADD STUFF TO INVENTORY BASED ON SKILL.
 
 
@@ -515,7 +514,6 @@ public class World extends Controller {
         return new Response(false, "Target cell isn't water.");
     }
 
-    //TODO: Add fiber or other stuff to inventory of player.
     private static Response handleScytheUse(Request request) {
         String direction = request.body.get("direction");
         int[] dxAndDy = getXAndYIncrement(direction);
@@ -553,9 +551,25 @@ public class World extends Controller {
 
         if (targetCell.getObjectOnCell() instanceof ForagingCrop) {
             ForagingCrop crop = (ForagingCrop) targetCell.getObjectOnCell();
+
             if (crop.type.equals(ForagingCropsType.GRASS)) {
+
                 targetCell.setObjectOnCell(new EmptyCell());
-                //TODO: maybe add stuff to player inventory?
+
+                if (player.getInventory().getType().getMaxCapacity() == player.getInventory().getSlots().size()) {
+                    System.out.println("You had no inventory space to collect the materials.");
+                } else {
+                    Backpack backpack = player.getInventory();
+                    Slot slot = backpack.getSlotByItemName("Fiber");
+                    if (slot == null) {
+                        backpack.getSlots()
+                                .add(new Slot(new Misc(Quality.DEFAULT, 1000, 0, 0, "Fiber", MiscType.FIBER), 1));
+                    } else {
+                        slot.setCount(slot.getCount() + 1);
+                    }
+                    System.out.println("Added one Fiber to your backpack.");
+                }
+
                 GameRepository.saveGame(game);
                 return new Response(true, "Grass removed from tile.");
             }
