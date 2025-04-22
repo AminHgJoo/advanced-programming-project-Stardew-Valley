@@ -39,6 +39,10 @@ public class Backpack {
         return null;
     }
 
+    public void addSlot(Slot slot) {
+        this.slots.add(slot);
+    }
+
     public void removeSlot(Slot slot) {
         slots.remove(slot);
     }

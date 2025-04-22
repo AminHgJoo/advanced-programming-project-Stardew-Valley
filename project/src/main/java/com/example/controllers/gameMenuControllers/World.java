@@ -6,10 +6,13 @@ import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.Quality;
+import com.example.models.enums.Season;
 import com.example.models.enums.Weather;
+import com.example.models.enums.types.FishType;
 import com.example.models.enums.types.ForagingCropsType;
 import com.example.models.enums.types.MiscType;
 import com.example.models.enums.types.ToolTypes;
+import com.example.models.items.Food;
 import com.example.models.items.Misc;
 import com.example.models.items.Tool;
 import com.example.models.mapModels.Cell;
@@ -19,6 +22,7 @@ import com.example.models.mapObjects.*;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 //TODO: Handle all skills.
 public class World extends Controller {
@@ -504,14 +508,101 @@ public class World extends Controller {
         player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
         if (targetCell.getObjectOnCell() instanceof Water) {
-            //TODO: Perform fishing.
+            int randomNumber = (int) (Math.random() * 2);
+            double weatherModifier = 0;
+            setWeatherModifierFishing(game);
+            int playerLevel = player.getFishingSkill().getLevel().levelNumber;
+            int numberOfFishes = (int) (((double) randomNumber)
+                    * weatherModifier * (double) (playerLevel + 2));
+            ArrayList<FishType> values = getValidFishTypes(game.getSeason(), playerLevel);
+            int randomFishNumber = (int) (Math.random() * values.size());
+            FishType fishType = values.get(randomFishNumber);
 
+            double qualityNumber = 0;
+            double pole = setPoleModifier(quality);
+            qualityNumber = (randomNumber * (double) (playerLevel + 2) * pole) / (7.0 - weatherModifier);
+            Quality fishQuality = setFishQuality(qualityNumber);
+            int price = fishType.price;
+
+            Food fish = new Food(fishQuality, 1000, price, 0.0, fishType.name, fishType);
+            Backpack backpack = player.getInventory();
+            addFishes(fish, backpack, numberOfFishes);
             GameRepository.saveGame(game);
-            return new Response(true, "Fishing done! You caught <quantity> of <fish>");
+            return new Response(true, "Fishing done! You caught " + numberOfFishes + " of " + fishType.name);
         }
 
         GameRepository.saveGame(game);
         return new Response(false, "Target cell isn't water.");
+    }
+
+    private static void addFishes(Food fish, Backpack backpack, int numberOfFishes) {
+        for (Slot slot : backpack.getSlots()) {
+            if (slot.getItem().getName().equals(fish.getName())) {
+                if (slot.getCount() + numberOfFishes >= 1000) {
+                    int numberOfFishesToAdd = slot.getCount() + numberOfFishes - 1000;
+                    slot.setCount(1000);
+                    Slot newSlot = new Slot(fish, numberOfFishesToAdd);
+                    return;
+                } else {
+                    slot.setCount(slot.getCount() + numberOfFishes);
+                    return;
+                }
+            }
+        }
+        Slot newSlot = new Slot(fish, numberOfFishes);
+    }
+
+    private static ArrayList<FishType> getValidFishTypes(Season season, int playerLevel) {
+        if (playerLevel == 4) {
+            FishType[] values = FishType.values();
+            ArrayList<FishType> finalValues = new ArrayList<>();
+            for (int i = 0; i < values.length; i++) {
+                if (values[i].season == season) {
+                    finalValues.add(values[i]);
+                }
+            }
+            return finalValues;
+        }
+        FishType[] values = FishType.values();
+        ArrayList<FishType> finalValues = new ArrayList<>();
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].season == season && !values[i].isLegendary) {
+                finalValues.add(values[i]);
+            }
+        }
+        return finalValues;
+    }
+
+    private static Quality setFishQuality(double qualityNumber) {
+        if (qualityNumber >= 0.5 && qualityNumber < 0.7)
+            return Quality.SILVER;
+        else if (qualityNumber >= 0.7 && qualityNumber < 0.9)
+            return Quality.GOLD;
+        else if (qualityNumber >= 0.9)
+            return Quality.IRIDIUM;
+        return Quality.COPPER;
+    }
+
+    private static double setPoleModifier(Quality quality) {
+        if (quality == Quality.COPPER)
+            return 0.1;
+        else if (quality == Quality.SILVER)
+            return 0.5;
+        else if (quality == Quality.GOLD)
+            return 0.9;
+        return 1.2;
+    }
+
+    private static void setWeatherModifierFishing(Game game) {
+        double weatherModifier;
+        if (game.getWeatherToday().equals(Weather.SUNNY))
+            weatherModifier = 1.5;
+        else if (game.getWeatherToday().equals(Weather.RAIN))
+            weatherModifier = 1.2;
+        else if (game.getWeatherToday().equals(Weather.STORM))
+            weatherModifier = 0.5;
+        else
+            weatherModifier = 1.0;
     }
 
     private static Response handleScytheUse(Request request) {

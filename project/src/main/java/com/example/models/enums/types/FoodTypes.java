@@ -1,6 +1,6 @@
 package com.example.models.enums.types;
 
-public enum FoodTypes {
+public enum FoodTypes implements ConsumableType {
     APRICOT("Apricot"),
     CHERRY("Cherry"),
     BANANA("Banana"),
