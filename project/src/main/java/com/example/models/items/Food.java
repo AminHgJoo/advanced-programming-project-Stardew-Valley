@@ -21,7 +21,6 @@ public class Food extends Item {
         this.energyCost = energyCost;
         this.name = name;
         this.consumableType = consumableType;
-
     }
 
     @Override

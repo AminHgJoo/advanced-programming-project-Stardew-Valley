@@ -107,9 +107,9 @@ public class World extends Controller {
         return new Response(true, App.getLoggedInUser().getCurrentGame().getSeason().toString());
     }
 
+    //TODO: lightning doesn't do anything right now. implement later on.
     public static Response handleCheatThor(Request request) {
         return null;
-        //TODO: lightning doesn't do anything right now. implement later on.
     }
 
     public static Response handleWeatherQuery(Request request) {
@@ -280,7 +280,6 @@ public class World extends Controller {
         return new Response(true, "Target cell has been tilled.");
     }
 
-    //TODO: HANDLE MINING MINERALS AND STONES.
     private static Response handlePickaxeUse(Request request, SkillLevel skillLevel
             , Quality quality, int skillEnergyDiscount) {
         String direction = request.body.get("direction");
@@ -302,7 +301,8 @@ public class World extends Controller {
         double playerEnergy = player.getEnergy();
 
         if (energyCost + currentEnergyUsed > 50) {
-            return new Response(false, "You can't perform this activity. You will exceed your energy usage limit.");
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
         }
 
         if (playerEnergy - energyCost < 0) {
@@ -554,6 +554,7 @@ public class World extends Controller {
             Food fish = new Food(fishQuality, Integer.MAX_VALUE, price, 0.0, fishType.name, fishType, false);
             Backpack backpack = player.getInventory();
             addFishes(fish, backpack, numberOfFishes);
+            player.getFishingSkill().setXp(player.getFishingSkill().getXp() + 5);
             GameRepository.saveGame(game);
             return new Response(true, "Fishing done! You caught " + numberOfFishes + " of " + fishType.name);
         }
