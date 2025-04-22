@@ -21,8 +21,8 @@ public class Misc extends Item {
 
     }
 
-    public Misc(Quality quality, int maxStackSize, int value, double energyCost, String name, MiscType type) {
-        super(quality, maxStackSize, value, energyCost, name);
+    public Misc(int value, String name, MiscType type) {
+        super(Quality.DEFAULT, Integer.MAX_VALUE, value, 0, name);
         this.type = type;
     }
 }
