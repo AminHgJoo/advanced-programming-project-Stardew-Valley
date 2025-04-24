@@ -5,6 +5,7 @@ import com.example.models.Player;
 import com.example.models.User;
 import com.example.utilities.Connection;
 import dev.morphia.Datastore;
+import dev.morphia.query.filters.Filters;
 import org.bson.types.ObjectId;
 
 import java.io.IOException;
@@ -22,12 +23,12 @@ public class UserRepository {
     private static final Datastore db = Connection.getDatabase();
 
     public static User findUserById(String id) {
-        User user = db.find(User.class).filter("_id", new ObjectId(id)).first();
+        User user = db.find(User.class).filter(Filters.eq("_id", new ObjectId(id))).first();
         return user;
     }
 
     public static User findUserByUsername(String username) {
-        User user = db.find(User.class).filter("username", username).first();
+        User user = db.find(User.class).filter(Filters.eq("username", username)).first();
         return user;
     }
 

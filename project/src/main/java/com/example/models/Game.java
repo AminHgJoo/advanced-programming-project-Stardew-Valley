@@ -4,6 +4,7 @@ import com.example.models.enums.Season;
 import com.example.models.enums.Weather;
 import com.example.models.mapModels.Map;
 import com.example.views.GameThread;
+import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;

@@ -3,7 +3,6 @@ package com.example.models.mapObjects;
 import com.example.models.enums.types.ForagingMineralsType;
 import dev.morphia.annotations.Embedded;
 
-@Embedded
 public class ForagingMineral extends MapObject {
     private ForagingMineralsType type;
 

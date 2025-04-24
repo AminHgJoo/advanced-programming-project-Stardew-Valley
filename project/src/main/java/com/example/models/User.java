@@ -6,6 +6,7 @@ import com.example.views.GameThread;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
+import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -23,10 +24,10 @@ public class User {
     private String answer;
     private int moneyHighScore;
     private int numberOfGames;
-    @Reference(lazy = true,idOnly = true , ignoreMissing = true)
+    private ObjectId currentGameId;
+    @Transient
     private Game currentGame;
-    @Reference(lazy = true,idOnly = true, ignoreMissing = true)
-    private final ArrayList<Game> games = new ArrayList<>();
+    private final ArrayList<ObjectId> games = new ArrayList<>();
 
     public User() {
 
@@ -132,11 +133,9 @@ public class User {
     }
 
     public Game getCurrentGame() {
-        if(currentGame == null) return null;
-        if(currentGame.get_id() == null) return currentGame;
-        GameThread t = currentGame.getGameThread();
-        populateGame();
-        currentGame.setGameThread(t);
+        if (currentGame == null && currentGameId != null) {
+            currentGame = GameRepository.findGameById(currentGameId.toString(), true);
+        }
         return currentGame;
     }
 
@@ -144,7 +143,7 @@ public class User {
         this.currentGame = currentGame;
     }
 
-    public ArrayList<Game> getGames() {
+    public ArrayList<ObjectId> getGames() {
         return games;
     }
 
@@ -162,5 +161,13 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return username.equals(user.username);
+    }
+
+    public ObjectId getCurrentGameId() {
+        return currentGameId;
+    }
+
+    public void setCurrentGameId(ObjectId currentGameId) {
+        this.currentGameId = currentGameId;
     }
 }

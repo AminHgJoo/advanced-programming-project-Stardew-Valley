@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.Repositories.GameRepository;
 import com.example.views.AppView;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or

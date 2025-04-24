@@ -2,6 +2,7 @@ package com.example.models.mapObjects;
 
 import com.example.models.enums.types.CropType;
 import dev.morphia.annotations.Embedded;
+import dev.morphia.annotations.Entity;
 
 // TODO CROP STAGE
 @Embedded

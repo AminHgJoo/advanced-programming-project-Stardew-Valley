@@ -7,8 +7,10 @@ import com.example.utilities.Connection;
 import dev.morphia.Datastore;
 import dev.morphia.query.Query;
 import dev.morphia.query.Update;
+import dev.morphia.query.filters.Filters;
 import dev.morphia.query.updates.UpdateOperator;
 import dev.morphia.query.updates.UpdateOperators;
+import org.bson.codecs.configuration.CodecConfigurationException;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -20,11 +22,16 @@ public class GameRepository {
     private static final Datastore db = Connection.getDatabase();
 
     public static Game findGameById(String id, boolean populateFlag) {
-        Game game = db.find(Game.class).filter("_id", new ObjectId(id)).first();
-        if (populateFlag) {
-            populateUserOfPlayers(game);
-        }
+       try {
+           Game game = db.find(Game.class)
+                   .filter(Filters.eq("_id", new ObjectId(id)))
+                   .first();
         return game;
+       }catch (Exception e) {
+//           System.out.println(e.getCause());
+           System.out.println(e.getMessage());
+        return null;
+       }
     }
 
     public static void populateUserOfPlayers(Game game) {
@@ -52,16 +59,11 @@ public class GameRepository {
 
     public static ArrayList<Game> findAllGames(boolean populateFlag) {
         ArrayList<Game> games = new ArrayList<>(db.find(Game.class).iterator().toList());
-        if (populateFlag) {
-            for (Game game : games) {
-                populateUserOfPlayers(game);
-            }
-        }
         return games;
     }
 
     public static Query<Game> updateGame(Game game) {
-        return db.find(Game.class).filter("_id", game.get_id().toString());
+        return db.find(Game.class).filter(Filters.eq("_id", game.get_id().toString()));
     }
 
     public static void removeGame(Game game) {

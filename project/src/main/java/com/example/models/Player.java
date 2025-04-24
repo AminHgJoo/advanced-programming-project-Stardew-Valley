@@ -1,5 +1,6 @@
 package com.example.models;
 
+import com.example.Repositories.UserRepository;
 import com.example.models.NPCModels.NPCFriendship;
 import com.example.models.enums.Quality;
 import com.example.models.enums.types.BackpackType;
@@ -11,7 +12,6 @@ import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
 import com.example.models.skills.*;
 import dev.morphia.annotations.Embedded;
-import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 
@@ -34,7 +34,6 @@ public class Player {
     private double energy;
     private double maxEnergy;
     private boolean isPlayerFainted;
-
     private TrashcanType trashcanType;
     private Item equippedItem;
 
@@ -180,9 +179,12 @@ public class Player {
     }
 
     public User getUser() {
+        if (user == null) {
+            // Lazy load user when needed
+            user = UserRepository.findUserById(user_id.toString());
+        }
         return user;
     }
-
     public ArrayList<Friendship> getFriendships() {
         return friendships;
     }
