@@ -3,27 +3,29 @@ package com.example.models.mapObjects;
 import com.example.models.enums.types.ForagingMineralsType;
 import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class ForagingMineral extends MapObject {
-    private ForagingMineralsType type;
+    private ForagingMineralsType fMType;
 
     public ForagingMineral(){
+
     }
 
     public ForagingMineral(ForagingMineralsType type, String color, String name) {
         super(false, "foragingMineral", color);
-        this.type = type;
+        this.fMType = type;
     }
 
     public ForagingMineral(ForagingMineralsType type) {
         super(false, "foragingMineral", "black");
-        this.type = type;
+        this.fMType = type;
     }
 
-    public void setType(ForagingMineralsType type) {
-        this.type = type;
+    public void setFMType(ForagingMineralsType type) {
+        this.fMType = type;
     }
 
-    public ForagingMineralsType getType() {
-        return type;
+    public ForagingMineralsType getFMType() {
+        return fMType;
     }
 }

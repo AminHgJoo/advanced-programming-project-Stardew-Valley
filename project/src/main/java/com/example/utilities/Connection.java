@@ -1,16 +1,10 @@
 package com.example.utilities;
 
-import com.example.models.*;
-import com.example.models.mapModels.Coordinate;
-import com.example.models.mapObjects.*;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecConfigurationException;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 public class Connection {
     private static Datastore database;

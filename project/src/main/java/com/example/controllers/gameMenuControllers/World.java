@@ -318,7 +318,7 @@ public class World extends Controller {
 
         if (targetCell.getObjectOnCell() instanceof ForagingMineral) {
 
-            ForagingMineralsType type = ((ForagingMineral) targetCell.getObjectOnCell()).getType();
+            ForagingMineralsType type = ((ForagingMineral) targetCell.getObjectOnCell()).getFMType();
 
             Backpack backpack = player.getInventory();
             Slot slot = backpack.getSlotByItemName(type.name);
