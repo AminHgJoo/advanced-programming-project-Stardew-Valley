@@ -72,14 +72,7 @@ public class LoadingSavingTurnHandling extends Controller {
                 player1.setUser(null);
             }
             responseString += "\nAll farm selection successful! Game successfully created!";
-            GameRepository.saveGame(game);
-            for (User u : users) {
-                u.setCurrentGameId(game.get_id());
-                u.setCurrentGame(null);
-                u.getGames().add(game.get_id());
-                u.setNumberOfGames(player.getUser().getNumberOfGames() + 1);
-                UserRepository.saveUser(u);
-            }
+            GameRepository.saveGame(game , users);
         }
         return new Response(true, responseString);
     }
