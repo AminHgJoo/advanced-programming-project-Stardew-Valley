@@ -34,9 +34,13 @@ public class GameThread extends Thread {
                 GameRepository.saveGame(game);
             }
             boolean check = game.checkSeasonChange();
+
             if (check) {
                 GameRepository.saveGame(game);
             }
+
+            game.checkForSkillUpgrades();
+            GameRepository.saveGame(game);
         }
         //debug code
         System.out.println("Thread Exiting...");

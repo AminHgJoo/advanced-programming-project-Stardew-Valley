@@ -3,6 +3,7 @@ package com.example.models;
 import com.example.models.enums.Season;
 import com.example.models.enums.Weather;
 import com.example.models.mapModels.Map;
+import com.example.models.skills.*;
 import com.example.views.GameThread;
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Entity;
@@ -29,7 +30,6 @@ public class Game {
     @Transient
     private GameThread gameThread;
     public boolean hasTurnCycleFinished;
-    //TODO : handle turn cycle boolean!
 
     public void advanceTime() {
         date = date.plusHours(1);
@@ -99,6 +99,27 @@ public class Game {
         this.weatherTomorrow = Weather.SUNNY;
         this.season = Season.SPRING;
         this.isGameOngoing = false;
+    }
+
+    public void checkForSkillUpgrades() {
+        for (Player player : players) {
+            ArrayList<Skill> skills = new ArrayList<>();
+            skills.add(player.getFarmingSkill());
+            skills.add(player.getFishingSkill());
+            skills.add(player.getForagingSkill());
+            skills.add(player.getMiningSkill());
+            for (Skill skill : skills) {
+                if (skill.getLevel().getXpToNextLevel() == Double.POSITIVE_INFINITY) {
+                    continue;
+                }
+                if (skill.getLevel().xpToNextLevel <= skill.getXp()) {
+                    System.out.println(player.getUser().getUsername() + "'s " + skill + " Skill has leveled up to level "
+                            + skill.getLevel().getNextLevel().toString());
+                    skill.setXp((int) (skill.getXp() - skill.getLevel().getXpToNextLevel()));
+                    skill.setLevel(skill.getLevel().getNextLevel());
+                }
+            }
+        }
     }
 
     public ArrayList<Player> getPlayers() {

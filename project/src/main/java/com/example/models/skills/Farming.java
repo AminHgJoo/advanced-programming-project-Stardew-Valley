@@ -13,4 +13,9 @@ public class Farming extends Skill {
     public Farming() {
         super();
     }
+
+    @Override
+    public String toString() {
+        return "Farming";
+    }
 }

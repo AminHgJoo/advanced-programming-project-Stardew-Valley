@@ -23,6 +23,11 @@ public enum SkillLevel {
         this.nextLevel = nextLevel;
     }
 
+    @Override
+    public String toString() {
+        return levelNumber + "";
+    }
+
     public SkillLevel getNextLevel() {
         return nextLevel;
     }

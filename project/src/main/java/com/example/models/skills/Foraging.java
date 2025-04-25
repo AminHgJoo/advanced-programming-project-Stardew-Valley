@@ -12,4 +12,9 @@ public class Foraging extends Skill {
     public Foraging() {
         super();
     }
+
+    @Override
+    public String toString() {
+        return "Foraging";
+    }
 }

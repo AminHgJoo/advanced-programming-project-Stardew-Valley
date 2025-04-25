@@ -12,4 +12,9 @@ public class Fishing extends Skill {
     public Fishing() {
         super();
     }
+
+    @Override
+    public String toString() {
+        return "Fishing";
+    }
 }

@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-//TODO: Handle all skills.
 public class World extends Controller {
     public static Response handleTimeQuery(Request request) {
         Response response = new Response();
@@ -225,16 +224,22 @@ public class World extends Controller {
         }
     }
 
-    private static int calculateEnergyCostForHoeAxePickaxeWaterCan(int discount, Quality quality) {
-        int answer = 5 - quality.getQualityLevel() - discount;
-
+    private static double calculateEnergyCostForHoeAxePickaxeWaterCan(int discount, Quality quality) {
+        double answer = 5 - quality.getQualityLevel() - discount;
         if (answer < 0) {
             answer = 0;
         }
+
+        Game game = App.getLoggedInUser().getCurrentGame();
+        if (game.getWeatherToday() == Weather.SNOW) {
+            answer *= 2;
+        }
+        if (game.getWeatherToday() == Weather.RAIN) {
+            answer *= 1.5;
+        }
+
         return answer;
     }
-
-    //TODO: IMPORTANT: SAVE GAME!!!!!!!
 
     private static Response handleHoeUse(Request request, Quality quality, int skillEnergyDiscount) {
         String direction = request.body.get("direction");
@@ -251,7 +256,7 @@ public class World extends Controller {
         int playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
-        int energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
+        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
         double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
 
@@ -296,7 +301,7 @@ public class World extends Controller {
         int playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
-        int energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
+        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
         double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
 
@@ -383,7 +388,7 @@ public class World extends Controller {
         int playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
-        int energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
+        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
         double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
 
@@ -430,7 +435,7 @@ public class World extends Controller {
         int playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
-        int energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
+        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
         double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
 
@@ -483,8 +488,8 @@ public class World extends Controller {
     }
 
 
-    private static int calculateFishingEnergyCost(int discount, Quality quality) {
-        int answer = 0;
+    private static double calculateFishingEnergyCost(int discount, Quality quality) {
+        double answer = 0;
         if (quality == Quality.COPPER) {
             answer = 8;
         } else if (quality == Quality.SILVER) {
@@ -496,7 +501,17 @@ public class World extends Controller {
         } else {
             answer = 1;
         }
-        return answer - discount;
+        answer -= discount;
+
+        Game game = App.getLoggedInUser().getCurrentGame();
+        if (game.getWeatherToday() == Weather.SNOW) {
+            answer *= 2;
+        }
+        if (game.getWeatherToday() == Weather.RAIN) {
+            answer *= 1.5;
+        }
+
+        return answer;
     }
 
     private static Response handleFishingRodUse(Request request, Quality quality, int skillEnergyDiscount) {
@@ -514,7 +529,7 @@ public class World extends Controller {
         int playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
-        int energyCost = calculateFishingEnergyCost(skillEnergyDiscount, quality);
+        double energyCost = calculateFishingEnergyCost(skillEnergyDiscount, quality);
         double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
 
@@ -642,7 +657,7 @@ public class World extends Controller {
         int playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
-        int energyCost = 2;
+        double energyCost = getScytheEnergyCost();
         double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
 
@@ -695,6 +710,19 @@ public class World extends Controller {
 
         GameRepository.saveGame(game);
         return new Response(false, "Target cell isn't grass.");
+    }
+
+    private static double getScytheEnergyCost() {
+        Game game = App.getLoggedInUser().getCurrentGame();
+
+        double energyCost = 2;
+        if (game.getWeatherToday() == Weather.SNOW) {
+            energyCost *= 2;
+        }
+        if (game.getWeatherToday() == Weather.RAIN) {
+            energyCost *= 1.5;
+        }
+        return energyCost;
     }
 
     //TODO: Implement later.

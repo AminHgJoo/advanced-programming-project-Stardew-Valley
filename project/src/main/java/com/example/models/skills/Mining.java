@@ -12,4 +12,9 @@ public class Mining extends Skill {
     public Mining() {
         super();
     }
+
+    @Override
+    public String toString() {
+        return "Mining";
+    }
 }

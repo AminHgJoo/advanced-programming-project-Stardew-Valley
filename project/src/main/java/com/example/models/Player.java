@@ -36,8 +36,6 @@ public class Player {
     private boolean isPlayerFainted;
     private TrashcanType trashcanType;
     private Item equippedItem;
-
-    // TODO: handle energy usage in one turn.
     private double usedEnergyInTurn;
 
     public Player() {}
