@@ -1,5 +1,6 @@
 package com.example.models.items.buffs;
 
+import com.example.models.App;
 import dev.morphia.annotations.Embedded;
 
 import java.time.LocalDateTime;
@@ -12,9 +13,10 @@ public class ActiveBuff {
     public ActiveBuff() {
     }
 
-    public ActiveBuff(FoodBuff foodBuff, LocalDateTime timeNow, int durationInHours) {
+    public ActiveBuff(FoodBuff foodBuff) {
+        LocalDateTime timeNow = App.getLoggedInUser().getCurrentGame().getDate();
         this.foodBuff = foodBuff;
-        this.expirationTime = handleFormattingOfTime(timeNow, durationInHours);
+        this.expirationTime = handleFormattingOfTime(timeNow, foodBuff.getDuration());
     }
 
     private LocalDateTime handleFormattingOfTime(LocalDateTime dateTime, int durationInHours) {

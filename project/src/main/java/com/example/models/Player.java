@@ -2,6 +2,7 @@ package com.example.models;
 
 import com.example.Repositories.UserRepository;
 import com.example.models.NPCModels.NPCFriendship;
+import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
 import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.Recipe;
@@ -67,7 +68,9 @@ public class Player {
         this.unlockedRecipes.add(CraftingRecipes.FURNACE);
         this.unlockedRecipes.add(CraftingRecipes.SCARE_CROW);
         this.unlockedRecipes.add(CraftingRecipes.MAYONNAISE_MACHINE);
-        //TODO: MORE!
+        this.unlockedRecipes.add(CookingRecipes.FRIED_EGG);
+        this.unlockedRecipes.add(CookingRecipes.BAKED_FISH);
+        this.unlockedRecipes.add(CookingRecipes.SALAD);
     }
 
     private void initializeSkills() {
