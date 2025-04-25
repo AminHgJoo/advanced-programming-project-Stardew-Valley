@@ -503,6 +503,10 @@ public class World extends Controller {
         }
         answer -= discount;
 
+        if (answer < 0) {
+            answer = 0;
+        }
+
         Game game = App.getLoggedInUser().getCurrentGame();
         if (game.getWeatherToday() == Weather.SNOW) {
             answer *= 2;
@@ -551,8 +555,7 @@ public class World extends Controller {
 
         if (targetCell.getObjectOnCell() instanceof Water) {
             int randomNumber = (int) (Math.random() * 2);
-            double weatherModifier = 0;
-            setWeatherModifierFishing(game);
+            double weatherModifier = setWeatherModifierFishing(game);
             int playerLevel = player.getFishingSkill().getLevel().levelNumber;
             int numberOfFishes = (int) (((double) randomNumber)
                     * weatherModifier * (double) (playerLevel + 2));
@@ -630,7 +633,7 @@ public class World extends Controller {
         return 1.2;
     }
 
-    private static void setWeatherModifierFishing(Game game) {
+    private static double setWeatherModifierFishing(Game game) {
         double weatherModifier;
         if (game.getWeatherToday().equals(Weather.SUNNY))
             weatherModifier = 1.5;
@@ -640,6 +643,7 @@ public class World extends Controller {
             weatherModifier = 0.5;
         else
             weatherModifier = 1.0;
+        return weatherModifier;
     }
 
     private static Response handleScytheUse(Request request) {

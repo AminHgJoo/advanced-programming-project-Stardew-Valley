@@ -5,8 +5,8 @@ package com.example.models.enums.types;
 import com.example.models.enums.Season;
 
 public enum ForagingCropsType {
-    GRASS(null, 0, 0),
-    COMMON_MUSHROOM(null, 40, 38),
+    GRASS(Season.values(), 0, 0),
+    COMMON_MUSHROOM(Season.values(), 40, 38),
     DAFFODIL(Season.SPRING, 30, 0),
     DANDELION(Season.SPRING, 40, 25),
     LEEK(Season.SPRING, 60, 40),
@@ -30,18 +30,24 @@ public enum ForagingCropsType {
     SNOW_YAM(Season.WINTER, 100, 30),
     WINTER_ROOT(Season.WINTER, 70, 25),
     ;
-    private final Season season;
+    private final Season[] seasons;
     private final int cost;
     private final int energy;
 
-    ForagingCropsType(Season season, int cost, int energy) {
-        this.season = season;
+    ForagingCropsType(Season[] seasons, int cost, int energy) {
+        this.seasons = seasons;
         this.cost = cost;
         this.energy = -energy;
     }
 
-    public Season getSeason() {
-        return season;
+    ForagingCropsType(Season season, int cost, int energy) {
+        this.seasons = new Season[]{season};
+        this.cost = cost;
+        this.energy = -energy;
+    }
+
+    public Season[] getSeasons() {
+        return seasons;
     }
 
     public int getCost() {
