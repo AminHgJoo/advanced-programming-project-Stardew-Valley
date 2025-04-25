@@ -5,13 +5,15 @@ import com.example.models.items.Item;
 import java.util.ArrayList;
 
 public enum AnimalType {
-    HEN(1, 4),
+    Chicken(1, 4),
     DUCK(2, 8),
     RABBIT(4, 12),
     DINOSAUR(7, 8),
     COW(1, 4),
     GOAT(2, 8),
-    SHEEP(3, 12);
+    SHEEP(3, 12),
+    //TODO pig
+    PIG(-1, -1),;
 
     public final int productPerDay;
     public final int capacity;

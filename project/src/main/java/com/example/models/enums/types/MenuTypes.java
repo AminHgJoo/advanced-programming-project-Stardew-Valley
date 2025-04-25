@@ -8,7 +8,9 @@ public enum MenuTypes {
     GameMenu(new GameMenu()),
     MainMenu(new MainMenu()),
     ProfileMenu(new ProfileMenu()),
-    SignInMenu(new SignInMenu());
+    SignInMenu(new SignInMenu()),
+    CarpenterShopMenu(new CarpenterShopMenu()),
+    MarineRanchMenu(new MarineRanchMenu());
 
     private final Menu menu;
 
@@ -34,6 +36,10 @@ public enum MenuTypes {
             return "Profile Menu";
         } else if (this == MenuTypes.SignInMenu) {
             return "Sign In Menu";
+        } else if (this == MenuTypes.CarpenterShopMenu) {
+            return "Carpenter Shop Menu";
+        } else if (this == MenuTypes.MarineRanchMenu) {
+            return "Marine Ranch Menu";
         } else {
             return "";
         }

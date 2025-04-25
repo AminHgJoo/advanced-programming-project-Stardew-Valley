@@ -1,5 +1,6 @@
 package com.example.models.buildings;
 
+import com.example.models.Animal;
 import com.example.models.mapModels.Cell;
 import dev.morphia.annotations.Embedded;
 
@@ -7,10 +8,13 @@ import java.util.ArrayList;
 
 @Embedded
 public class Coop extends Building {
+    public String coopType;
+    public ArrayList<Animal> animals = new ArrayList<>();
     public Coop() {
     }
 
-    public Coop(ArrayList<Cell> buildingCells) {
+    public Coop(ArrayList<Cell> buildingCells, String coopType) {
         super(buildingCells);
+        this.coopType = "Coop";
     }
 }

@@ -8,6 +8,7 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.Player;
 import com.example.models.User;
+import com.example.models.enums.types.MenuTypes;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
 import com.example.utilities.FindPath;
@@ -118,5 +119,15 @@ public class MovementAndMap extends Controller {
         game.getCurrentPlayer().setEnergy(Double.POSITIVE_INFINITY);
         GameRepository.saveGame(game);
         return new Response(true, "energy successfully set to infinity");
+    }
+
+    public static Response handleGoToCarpenterShop(Request request) {
+        App.setCurrMenuType(MenuTypes.CarpenterShopMenu);
+        return new Response(true, "Going to Carpenter’s shop");
+    }
+
+    public static Response handleGoToMarineRanch(Request request) {
+        App.setCurrMenuType(MenuTypes.MarineRanchMenu);
+        return new Response(true, "Going to Marin’s Ranch");
     }
 }

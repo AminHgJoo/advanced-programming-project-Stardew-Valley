@@ -1,10 +1,8 @@
 package com.example.models.mapModels;
 
+import com.example.models.Animal;
 import com.example.models.App;
-import com.example.models.buildings.Building;
-import com.example.models.buildings.Greenhouse;
-import com.example.models.buildings.Mine;
-import com.example.models.buildings.PlayerHome;
+import com.example.models.buildings.*;
 import com.example.models.enums.types.ForagingCropsType;
 import com.example.models.enums.types.ForagingMineralsType;
 import com.example.models.enums.types.ForagingSeedsType;
@@ -165,59 +163,31 @@ public class Farm {
     }
 
     private static ForagingSeed randomForagingSeed() {
-        ForagingSeedsType[] values = ForagingSeedsType.values();
-        int randomNumber = (int) (Math.random() * values.length);
-        return new ForagingSeed(values[randomNumber]);
+        ForagingSeedsType[] allValues = ForagingSeedsType.values();
+        ForagingSeedsType[] validValues = new ForagingSeedsType[allValues.length];
+        int index = 0;
+        for (int i = 0; i < validValues.length; i++) {
+            if (allValues[i].getSeasons().length > 1 || allValues[i].getSeasons()[0] == App.getLoggedInUser().getCurrentGame().getSeason()) {
+                validValues[index] = allValues[i];
+                index++;
+            }
+        }
+        int randomNumber = (int) (Math.random() * validValues.length);
+        return new ForagingSeed(validValues[randomNumber]);
     }
 
     private static ForagingCrop randomForagingCrop() {
-        int randomNumber = (int) (Math.random() * 22);
-        if (randomNumber == 0)
-            return new ForagingCrop(ForagingCropsType.WINTER_ROOT, true);
-        else if (randomNumber == 1)
-            return new ForagingCrop(ForagingCropsType.BLACKBERRY, true);
-        else if (randomNumber == 2)
-            return new ForagingCrop(ForagingCropsType.COMMON_MUSHROOM, true);
-        if (randomNumber == 3)
-            return new ForagingCrop(ForagingCropsType.CHANTERELLE, true);
-        else if (randomNumber == 4)
-            return new ForagingCrop(ForagingCropsType.CROCUS, true);
-        else if (randomNumber == 5)
-            return new ForagingCrop(ForagingCropsType.CRYSTAL_FRUIT, true);
-        if (randomNumber == 6)
-            return new ForagingCrop(ForagingCropsType.DAFFODIL, true);
-        else if (randomNumber == 7)
-            return new ForagingCrop(ForagingCropsType.DANDELION, true);
-        else if (randomNumber == 8)
-            return new ForagingCrop(ForagingCropsType.FIDDLE_HEAD_FERN, true);
-        if (randomNumber == 9)
-            return new ForagingCrop(ForagingCropsType.GRAPE, true);
-        else if (randomNumber == 10)
-            return new ForagingCrop(ForagingCropsType.HAZELNUT, true);
-        else if (randomNumber == 11)
-            return new ForagingCrop(ForagingCropsType.HOLLY, true);
-        if (randomNumber == 12)
-            return new ForagingCrop(ForagingCropsType.LEEK, true);
-        else if (randomNumber == 13)
-            return new ForagingCrop(ForagingCropsType.MOREL, true);
-        else if (randomNumber == 14)
-            return new ForagingCrop(ForagingCropsType.PURPLE_MUSHROOM, true);
-        if (randomNumber == 15)
-            return new ForagingCrop(ForagingCropsType.RED_MUSHROOM, true);
-        else if (randomNumber == 16)
-            return new ForagingCrop(ForagingCropsType.SALMON_BERRY, true);
-        else if (randomNumber == 17)
-            return new ForagingCrop(ForagingCropsType.SNOW_YAM, true);
-        if (randomNumber == 18)
-            return new ForagingCrop(ForagingCropsType.SPICE_BERRY, true);
-        else if (randomNumber == 19)
-            return new ForagingCrop(ForagingCropsType.SPRING_ONION, true);
-        else if (randomNumber == 20)
-            return new ForagingCrop(ForagingCropsType.SWEET_PEA, true);
-        if (randomNumber == 21)
-            return new ForagingCrop(ForagingCropsType.WILD_HORSERADISH, true);
-
-        return new ForagingCrop(ForagingCropsType.WILD_PLUM, true);
+        ForagingCropsType[] allValues = ForagingCropsType.values();
+        ForagingCropsType[] validValues = new ForagingCropsType[allValues.length];
+        int index = 0;
+        for (int i = 0; i < validValues.length; i++) {
+            if (allValues[i].getSeasons().length > 1 || allValues[i].getSeasons()[0] == App.getLoggedInUser().getCurrentGame().getSeason()) {
+                validValues[index] = allValues[i];
+                index++;
+            }
+        }
+        int randomNumber = (int) (Math.random() * validValues.length);
+        return new ForagingCrop(validValues[randomNumber], true);
     }
 
     private static ForagingMineral randomForagingMineral() {
@@ -272,7 +242,7 @@ public class Farm {
         for (int i = 61; i < 65; i++) {
             for (int j = 4; j < 8; j++) {
                 Cell cell = getCellByCoordinate(i, j, farmCells);
-                cell.setObjectOnCell(new BuildingBlock(false));
+                cell.setObjectOnCell(new BuildingBlock(false, "Home"));
                 playerHomeCells.add(cell);
             }
         }
@@ -280,16 +250,16 @@ public class Farm {
             for (int j = 3; j < 11; j++) {
                 Cell cell = getCellByCoordinate(i, j, farmCells);
                 if (i != 22 && i != 28 && j != 3 && j != 10) {
-                    cell.setObjectOnCell(new BuildingBlock(false));
+                    cell.setObjectOnCell(new BuildingBlock(false, "Greenhouse"));
                 } else
-                    cell.setObjectOnCell(new BuildingBlock(true));
+                    cell.setObjectOnCell(new BuildingBlock(true, "greenhouse"));
                 greenHouseCells.add(cell);
             }
         }
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 12; j++) {
                 Cell cell = getCellByCoordinate(i, j, farmCells);
-                cell.setObjectOnCell(new BuildingBlock(true));
+                cell.setObjectOnCell(new BuildingBlock(true, "Mine"));
                 mineCells.add(cell);
             }
         }
@@ -324,5 +294,24 @@ public class Farm {
             cell.turns = 0;
             cell.prev = null;
         }
+    }
+
+    public  boolean doesAnimalExist(String animalName) {
+        for (Building b : getBuildings()) {
+            if (b instanceof Coop) {
+                for (Animal animal : ((Coop) b).animals) {
+                    if (animal.getName().equals(animalName)) {
+                        return true;
+                    }
+                }
+            } else if (b instanceof Barn) {
+                for (Animal animal : ((Barn) b).animals) {
+                    if (animal.getName().equals(animalName)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
