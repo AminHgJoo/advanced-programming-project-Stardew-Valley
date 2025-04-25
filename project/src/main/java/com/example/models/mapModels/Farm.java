@@ -314,4 +314,20 @@ public class Farm {
         }
         return false;
     }
+
+    public void strikeLightning(int targetX, int targetY) {
+        Cell targetCell = findCellByCoordinate(targetX, targetY);
+        if (targetCell != null) {
+            if (targetCell.getObjectOnCell() instanceof Tree) {
+                targetCell.setObjectOnCell(new Tree(TreeType.BURNT_TREE));
+            }
+            if (targetCell.getObjectOnCell() instanceof Crop) {
+                targetCell.setObjectOnCell(new EmptyCell());
+            }
+            if (targetCell.getObjectOnCell() instanceof ForagingCrop) {
+                targetCell.setObjectOnCell(new EmptyCell());
+            }
+        }
+        System.out.println("Lightning has struck coordinates: " + targetX + ", " + targetY);
+    }
 }
