@@ -129,7 +129,6 @@ public class LoadingSavingTurnHandling extends Controller {
 
     public static Response handleForceDeleteGame(Request request) {
 
-        //TODO: force deleting game entirely.
         Game game = App.getLoggedInUser().getCurrentGame();
         User loggedInUser = App.getLoggedInUser();
 

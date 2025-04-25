@@ -793,14 +793,14 @@ public class GameMenu implements Menu {
 
     private static Response getTradeResponse(String input) {
         Request request = new Request(input);
-        request.body.put("username", GameMenuCommands.START_TRADE.getGroup(input, "username"));
-        request.body.put("item", GameMenuCommands.START_TRADE.getGroup(input, "item"));
-        request.body.put("type", GameMenuCommands.START_TRADE.getGroup(input, "type"));
-        request.body.put("amount", GameMenuCommands.START_TRADE.getGroup(input, "amount"));
-        request.body.put("price", GameMenuCommands.START_TRADE.getGroup(input, "price"));
-        request.body.put("targetItem", GameMenuCommands.START_TRADE.getGroup(input, "targetItem"));
-        request.body.put("targetAmount", GameMenuCommands.START_TRADE.getGroup(input, "targetAmount"));
-        Response response = TradingController.handleStartTrade(request);
+        request.body.put("username", GameMenuCommands.TRADE.getGroup(input, "username"));
+        request.body.put("item", GameMenuCommands.TRADE.getGroup(input, "item"));
+        request.body.put("type", GameMenuCommands.TRADE.getGroup(input, "type"));
+        request.body.put("amount", GameMenuCommands.TRADE.getGroup(input, "amount"));
+        request.body.put("price", GameMenuCommands.TRADE.getGroup(input, "price"));
+        request.body.put("targetItem", GameMenuCommands.TRADE.getGroup(input, "targetItem"));
+        request.body.put("targetAmount", GameMenuCommands.TRADE.getGroup(input, "targetAmount"));
+        Response response = TradingController.handleTrade(request);
         return response;
     }
 
