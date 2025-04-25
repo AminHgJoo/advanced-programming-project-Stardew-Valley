@@ -1,9 +1,10 @@
-package com.example.views;
+package com.example.views.shops;
 
 import com.example.controllers.gameMenuControllers.MarineRanchController;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;
+import com.example.views.Menu;
 
 public class MarineRanchMenu implements Menu {
 

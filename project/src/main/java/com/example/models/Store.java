@@ -8,31 +8,31 @@ import java.util.ArrayList;
 
 @Embedded
 public class Store {
-    private NPC owner;
-    private LocalDateTime openHour;
-    private LocalDateTime closeHour;
+    private String owner;
+    private int openHour;
+    private int closeHour;
     private ArrayList<StoreProduct> products = new ArrayList<>();
     private String name;
 
     public Store() {
     }
 
-    public Store(NPC owner, LocalDateTime openHour, LocalDateTime closeHour, String name) {
+    public Store(String owner, int openHour, int closeHour, String name) {
         this.owner = owner;
         this.openHour = openHour;
         this.closeHour = closeHour;
         this.name = name;
     }
 
-    public NPC getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public LocalDateTime getOpenHour() {
+    public int getOpenHour() {
         return openHour;
     }
 
-    public LocalDateTime getCloseHour() {
+    public int getCloseHour() {
         return closeHour;
     }
 
@@ -42,5 +42,9 @@ public class Store {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isOpen(int hour) {
+        return openHour <= hour && hour <= closeHour;
     }
 }

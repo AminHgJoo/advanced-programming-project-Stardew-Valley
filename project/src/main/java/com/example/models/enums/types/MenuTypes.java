@@ -1,6 +1,7 @@
 package com.example.models.enums.types;
 
 import com.example.views.*;
+import com.example.views.shops.*;
 
 public enum MenuTypes {
     ExitMenu(new ExitMenu()),
@@ -10,8 +11,12 @@ public enum MenuTypes {
     ProfileMenu(new ProfileMenu()),
     SignInMenu(new SignInMenu()),
     CarpenterShopMenu(new CarpenterShopMenu()),
-    MarineRanchMenu(new MarineRanchMenu());
-
+    MarineRanchMenu(new MarineRanchMenu()),
+    BlacksmithShopMenu(new BlacksmithShopMenu()),
+    JojaMartShopMenu(new JojaMartShopMenu()),
+    PierreGeneralStoreMenu(new PierreGeneralStoreMenu()),
+    FishShopMenu(new FishShopMenu()),
+    TheStardropSaloonMenu(new TheStardropSaloonMenu()),;
     private final Menu menu;
 
     MenuTypes(Menu menu) {
