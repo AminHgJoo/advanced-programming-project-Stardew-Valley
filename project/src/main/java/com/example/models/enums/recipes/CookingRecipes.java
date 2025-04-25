@@ -5,10 +5,11 @@ import com.example.models.enums.types.FoodTypes;
 import com.example.models.items.Food;
 
 public enum CookingRecipes implements Recipe {
-    FRIED_EGG("Fried Egg", 0, 0, 0, 0, 35, FoodTypes.FRIED_EGG, new Slot(new Food("Fried Egg", FoodTypes.FRIED_EGG), 1)),
-    BAKED_FISH("Baked Fish", 0, 0, 0, 0, 100, FoodTypes.BAKED_FISH, new Slot(new Food("Baked Fish", FoodTypes.BAKED_FISH), 1)),
-    SALAD("Salad", 0, 0, 0, 0, 110, FoodTypes.SALAD, new Slot(new Food("Salad", FoodTypes.SALAD), 1)),
-    OMELETTE("Omelette", Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, 125, FoodTypes.OMELETTE, new Slot(new Food("Omelette", FoodTypes.OMELETTE), 1)),
+    //TODO: INGREDIENTS ARE WRONG!
+    FRIED_EGG("Fried Egg", 0, 0, 0, 0, 35, FoodTypes.FRIED_EGG, new Slot(new Food(FoodTypes.FRIED_EGG), 1)),
+    BAKED_FISH("Baked Fish", 0, 0, 0, 0, 100, FoodTypes.BAKED_FISH, new Slot(new Food(FoodTypes.BAKED_FISH), 1)),
+    SALAD("Salad", 0, 0, 0, 0, 110, FoodTypes.SALAD, new Slot(new Food(FoodTypes.SALAD), 1)),
+    OMELETTE("Omelette", Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, 125, FoodTypes.OMELETTE, new Slot(new Food(FoodTypes.OMELETTE), 1)),
     ;
 
 
