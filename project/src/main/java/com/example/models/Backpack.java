@@ -65,4 +65,15 @@ public class Backpack {
         return tools.toString();
     }
 
+    public Tool getWateringCan(){
+        for (Slot slot : slots) {
+            if(slot.getItem() instanceof Tool){
+                if(((Tool) slot.getItem()).getType().waterCapacity > 0){
+                    return (Tool)slot.getItem();
+                }
+            }
+        }
+        return null;
+    }
+
 }
