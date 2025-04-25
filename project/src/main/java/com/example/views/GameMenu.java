@@ -153,12 +153,6 @@ public class GameMenu implements Menu {
                 response = getArtisanUseResponse(input);
             } else if (GameMenuCommands.ARTISAN_GET.matches(input)) {
                 response = getArtisanGetResponse(input);
-            } else if (GameMenuCommands.SHOW_ALL_PRODUCTS.matches(input)) {
-                response = getShowAllProductsResponse(input);
-            } else if (GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.matches(input)) {
-                response = getShowAvailableProductsResponse(input);
-            } else if (GameMenuCommands.PURCHASE.matches(input)) {
-                response = getPurchaseResponse(input);
             } else if (GameMenuCommands.CHEAT_ADD_DOLLARS.matches(input)) {
                 response = getCheatAddDollarsResponse(input);
             } else if (GameMenuCommands.SELL_PRODUCT.matches(input)) {
@@ -215,6 +209,8 @@ public class GameMenu implements Menu {
                 response = goToCarpenterShop(input);
             } else if (GameMenuCommands.GO_TO_MARINE_RANCH.matches(input)) {
                 goToMarineRanch(input);
+            }else if (GameMenuCommands.GO_TO_STORE.matches(input)) {
+                response = goToStore(input);
             } else {
                 response = getInvalidCommand();
             }
@@ -226,6 +222,13 @@ public class GameMenu implements Menu {
     private static void goToMarineRanch(String input) {
         Request request = new Request(input);
         MovementAndMap.handleGoToMarineRanch(request);
+    }
+
+    private static Response goToStore(String input) {
+        Request request = new Request(input);
+        request.body.put("storeName" , GameMenuCommands.GO_TO_STORE.getGroup(input , "storeName"));
+        Response response = DealingController.handleGoToStore(request);
+        return response;
     }
 
     private static @NotNull Response goToCarpenterShop(String input) {
