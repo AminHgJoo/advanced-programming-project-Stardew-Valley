@@ -2,7 +2,9 @@ package com.example.models;
 
 import com.example.Repositories.UserRepository;
 import com.example.models.NPCModels.NPCFriendship;
+import com.example.models.enums.CraftingRecipes;
 import com.example.models.enums.Quality;
+import com.example.models.enums.Recipes;
 import com.example.models.enums.types.BackpackType;
 import com.example.models.enums.types.ToolTypes;
 import com.example.models.enums.types.TrashcanType;
@@ -25,6 +27,7 @@ public class Player {
     private Farm farm;
     private ArrayList<Skill> skills = new ArrayList<>();
     private ArrayList<Quest> quests = new ArrayList<>();
+    private ArrayList<Recipes> unlockedRecipes = new ArrayList<>();
     private ObjectId user_id;
     @Transient
     private User user;
@@ -54,6 +57,14 @@ public class Player {
         this.isPlayerFainted = false;
         initializeInventory();
         initializeSkills();
+        initializeRecipes();
+    }
+
+    private void initializeRecipes() {
+        this.unlockedRecipes.add(CraftingRecipes.FURNACE);
+        this.unlockedRecipes.add(CraftingRecipes.SCARE_CROW);
+        this.unlockedRecipes.add(CraftingRecipes.MAYONNAISE_MACHINE);
+
     }
 
     private void initializeSkills() {
@@ -168,10 +179,6 @@ public class Player {
         return inventory;
     }
 
-//    public ArrayList<Skill> getSkills() {
-//        return skills;
-//    }
-
     public ArrayList<Quest> getQuests() {
         return quests;
     }
@@ -238,6 +245,10 @@ public class Player {
 
     public ObjectId getUser_id() {
         return user_id;
+    }
+
+    public ArrayList<CraftingRecipes> getUnlockedRecipes() {
+        return unlockedRecipes;
     }
 
     @Override

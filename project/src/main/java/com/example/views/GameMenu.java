@@ -659,7 +659,7 @@ public class GameMenu implements Menu {
     private static Response getArtisanGetResponse(String input) {
         Request request = new Request(input);
         request.body.put("artisanName", GameMenuCommands.ARTISAN_GET.getGroup(input, "artisanName"));
-        Response response = ArtisanController.handleArtisanUse(request);
+        Response response = ArtisanController.handleArtisanGet(request);
         return response;
     }
 

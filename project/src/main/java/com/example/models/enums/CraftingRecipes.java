@@ -4,7 +4,7 @@ import com.example.models.Slot;
 
 import java.util.ArrayList;
 
-public enum CraftingRecipes {
+public enum CraftingRecipes implements Recipes {
     CHERRY_BOMB("Cherry Bomb", "Destroys everything in a 3 tile radius.", 0, 1, 0, 50, new ArrayList<>()),
     BOMB("Bomb", "Destroys everything in a 5 tile radius.", 0, 2, 0, 50, new ArrayList<>()),
     MEGA_BOMB("Mega Bomb", "Destroys everything in a 7 tile radius.", 0, 3, 0, 50, new ArrayList<>()),
@@ -42,5 +42,10 @@ public enum CraftingRecipes {
         this.foragingLevel = foragingLevel;
         this.sellingPrice = sellingPrice;
         this.ingredients = ingredients;
+    }
+
+    @Override
+    public String toString() {
+        return name + " Recipe: " + description;
     }
 }
