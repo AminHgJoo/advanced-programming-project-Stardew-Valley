@@ -7,7 +7,7 @@ import dev.morphia.annotations.Entity;
 // TODO CROP STAGE
 @Embedded
 public class Crop extends MapObject {
-    public  CropType cropType;
+    public CropType cropType;
     private int daysToNextStage;
     private int stageNumber;
     private boolean hasBeenWateredToday = false;

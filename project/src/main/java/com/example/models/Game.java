@@ -122,6 +122,12 @@ public class Game {
         }
     }
 
+    public void handleBuffExpiration() {
+        for (Player player : players) {
+            player.getActiveBuffs().removeIf(buff -> buff.getExpirationTime().isBefore(date));
+        }
+    }
+
     public ArrayList<Player> getPlayers() {
         return players;
     }

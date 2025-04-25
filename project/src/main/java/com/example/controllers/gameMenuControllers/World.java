@@ -10,6 +10,7 @@ import com.example.models.enums.Season;
 import com.example.models.enums.SkillLevel;
 import com.example.models.enums.Weather;
 import com.example.models.enums.types.*;
+import com.example.models.items.Fish;
 import com.example.models.items.Food;
 import com.example.models.items.Misc;
 import com.example.models.items.Tool;
@@ -569,7 +570,7 @@ public class World extends Controller {
             Quality fishQuality = setFishQuality(qualityNumber);
             int price = fishType.price;
 
-            Food fish = new Food(fishQuality, Integer.MAX_VALUE, price, 0.0, fishType.name, fishType, false);
+            Fish fish = new Fish(fishQuality, Integer.MAX_VALUE, price, 0.0, fishType.name, fishType);
             Backpack backpack = player.getInventory();
             addFishes(fish, backpack, numberOfFishes);
             player.getFishingSkill().setXp(player.getFishingSkill().getXp() + 5);
@@ -581,7 +582,7 @@ public class World extends Controller {
         return new Response(false, "Target cell isn't water.");
     }
 
-    private static void addFishes(Food fish, Backpack backpack, int numberOfFishes) {
+    private static void addFishes(Fish fish, Backpack backpack, int numberOfFishes) {
         for (Slot slot : backpack.getSlots()) {
             if (slot.getItem().getName().equals(fish.getName())) {
                 slot.setCount(slot.getCount() + numberOfFishes);

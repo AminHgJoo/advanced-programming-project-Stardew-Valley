@@ -8,6 +8,7 @@ import com.example.models.enums.Recipes;
 import com.example.models.enums.types.BackpackType;
 import com.example.models.enums.types.ToolTypes;
 import com.example.models.enums.types.TrashcanType;
+import com.example.models.items.ActiveBuff;
 import com.example.models.items.Item;
 import com.example.models.items.Tool;
 import com.example.models.mapModels.Coordinate;
@@ -28,6 +29,7 @@ public class Player {
     private ArrayList<Skill> skills = new ArrayList<>();
     private ArrayList<Quest> quests = new ArrayList<>();
     private ArrayList<Recipes> unlockedRecipes = new ArrayList<>();
+    private ArrayList<ActiveBuff> activeBuffs = new ArrayList<>();
     private ObjectId user_id;
     @Transient
     private User user;
@@ -64,7 +66,7 @@ public class Player {
         this.unlockedRecipes.add(CraftingRecipes.FURNACE);
         this.unlockedRecipes.add(CraftingRecipes.SCARE_CROW);
         this.unlockedRecipes.add(CraftingRecipes.MAYONNAISE_MACHINE);
-
+        //TODO: MORE!
     }
 
     private void initializeSkills() {
@@ -247,8 +249,12 @@ public class Player {
         return user_id;
     }
 
-    public ArrayList<CraftingRecipes> getUnlockedRecipes() {
+    public ArrayList<Recipes> getUnlockedRecipes() {
         return unlockedRecipes;
+    }
+
+    public ArrayList<ActiveBuff> getActiveBuffs() {
+        return activeBuffs;
     }
 
     @Override

@@ -1,42 +1,25 @@
 package com.example.models.items;
 
 import com.example.models.enums.Quality;
-import com.example.models.enums.types.ConsumableType;
-import com.example.models.enums.types.FishType;
+import com.example.models.enums.types.FoodTypes;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Food extends Item {
     public boolean isEdible;
-//    public ConsumableType consumableType;
+    public FoodTypes foodTypes;
+    public FoodBuff foodBuff;
 
     public Food() {
         super();
         isEdible = false;
-//        consumableType = null;
     }
 
-    public Food(Quality quality, int maxStackSize, int value, double energyCost, String name, ConsumableType consumableType, boolean isEdible) {
+    public Food(Quality quality, int value, double energyCost, String name, boolean isEdible, FoodTypes foodTypes, FoodBuff foodBuff) {
+        super(quality, Integer.MAX_VALUE, value, energyCost, name);
         this.isEdible = isEdible;
-        this.quality = quality;
-        this.maxStackSize = maxStackSize;
-        this.value = value;
-        this.energyCost = energyCost;
-        this.name = name;
-//        this.consumableType = consumableType;
-    }
-
-    @Override
-    public int getValue() {
-//        if (consumableType instanceof FishType) {
-//            if (this.quality == Quality.SILVER)
-//                return (int) ((double) this.value * 1.25);
-//            else if (this.quality == Quality.GOLD)
-//                return (int) ((double) this.value * 1.5);
-//            else if (this.quality == Quality.IRIDIUM)
-//                return (int) ((double) this.value * 2);
-//        }
-        return value;
+        this.foodTypes = foodTypes;
+        this.foodBuff = foodBuff;
     }
 
     @Override
