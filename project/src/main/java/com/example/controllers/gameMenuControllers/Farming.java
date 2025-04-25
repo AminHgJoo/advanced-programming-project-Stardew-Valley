@@ -9,6 +9,7 @@ import com.example.models.IO.Response;
 import com.example.models.Player;
 import com.example.models.enums.Directions;
 import com.example.models.enums.types.CropType;
+import com.example.models.items.Seed;
 import com.example.models.items.Tool;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Coordinate;
@@ -42,6 +43,10 @@ public class Farming extends Controller {
             return new Response(false, "Cell is not empty");
         }
         // TODO check for seed existence
+        Seed playerSeed  = player.getInventory().findSeedByItemName(seed);
+        if(playerSeed == null){
+            return new Response(false, "Seed not found in player inventory");
+        }
         Crop plant = new Crop(cropType);
         cell.setObjectOnCell(plant);
         GameRepository.saveGame(game);

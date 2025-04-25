@@ -47,4 +47,5 @@ abstract public class Item {
     public int getMaxStackSize() {
         return maxStackSize;
     }
+
 }
