@@ -5,10 +5,14 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class ArtisanBlock extends MapObject {
-    public ArtisanBlockType artisanType;
+    private ArtisanBlockType artisanType;
 
     public ArtisanBlock(ArtisanBlockType artisanType) {
         super(false, "artisanBlock", "black");
         this.artisanType = artisanType;
+    }
+
+    public ArtisanBlockType getArtisanType() {
+        return artisanType;
     }
 }
