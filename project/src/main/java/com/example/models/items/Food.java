@@ -3,7 +3,6 @@ package com.example.models.items;
 import com.example.models.enums.Quality;
 import com.example.models.enums.types.FoodTypes;
 import com.example.models.items.buffs.FoodBuff;
-import com.example.utilities.ItemLambda;
 import dev.morphia.annotations.Embedded;
 
 @Embedded

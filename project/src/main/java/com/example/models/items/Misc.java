@@ -2,7 +2,6 @@ package com.example.models.items;
 
 import com.example.models.enums.Quality;
 import com.example.models.enums.types.MiscType;
-import com.example.utilities.ItemLambda;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
