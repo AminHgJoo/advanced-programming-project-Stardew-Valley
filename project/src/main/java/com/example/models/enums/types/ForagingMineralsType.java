@@ -1,6 +1,6 @@
 package com.example.models.enums.types;
 
-public enum ForagingMineralsType {
+public enum ForagingMineralsType implements ItemType {
     STONE(0),
     QUARTZ(25),
     EARTHCRYSTAL(50),

@@ -1,6 +1,6 @@
 package com.example.models.enums.types;
 
-public enum ToolTypes {
+public enum ToolTypes implements ItemType {
     HOE(0),
     PICKAXE(0),
     AXE(0),

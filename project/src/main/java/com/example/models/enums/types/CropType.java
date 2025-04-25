@@ -1,6 +1,6 @@
 package com.example.models.enums.types;
 
-import com.example.models.enums.Season;
+import com.example.models.enums.worldEnums.Season;
 
 public enum CropType {
     BLUE_JAZZ("Blue Jazz", "Jazz Seeds", 1, 2, 2, 2, -1, 7, true, -1, 50, true, 45, new Season[]{Season.SPRING}, false),

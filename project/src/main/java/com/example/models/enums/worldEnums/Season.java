@@ -1,4 +1,4 @@
-package com.example.models.enums;
+package com.example.models.enums.worldEnums;
 
 public enum Season {
     SPRING("Spring"),

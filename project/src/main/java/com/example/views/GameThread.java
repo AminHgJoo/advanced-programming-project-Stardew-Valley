@@ -39,10 +39,10 @@ public class GameThread extends Thread {
                 GameRepository.saveGame(game);
             }
 
-            //TODO:UNLOCK CRAFTING/COOKING RECIPES.
-
+            game.checkForRecipeUnlocking();
             game.handleBuffExpiration();
             game.checkForSkillUpgrades();
+
             GameRepository.saveGame(game);
         }
         //debug code

@@ -2,7 +2,7 @@
 
 package com.example.models.enums.types;
 
-import com.example.models.enums.Season;
+import com.example.models.enums.worldEnums.Season;
 
 public enum ForagingCropsType {
     GRASS(Season.values(), 0, 0),

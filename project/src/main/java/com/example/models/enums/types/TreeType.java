@@ -1,6 +1,6 @@
 package com.example.models.enums.types;
 
-import com.example.models.enums.Season;
+import com.example.models.enums.worldEnums.Season;
 
 public enum TreeType {
     TREE_BARK("Tree Bark", -1, null, -1, -1, false, -1, (Season[]) null),

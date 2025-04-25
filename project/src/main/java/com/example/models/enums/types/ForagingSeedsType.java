@@ -1,6 +1,6 @@
 package com.example.models.enums.types;
 
-import com.example.models.enums.Season;
+import com.example.models.enums.worldEnums.Season;
 
 public enum ForagingSeedsType {
     JAZZ_SEEDS(Season.SPRING),

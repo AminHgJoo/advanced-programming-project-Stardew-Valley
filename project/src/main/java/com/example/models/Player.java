@@ -2,13 +2,13 @@ package com.example.models;
 
 import com.example.Repositories.UserRepository;
 import com.example.models.NPCModels.NPCFriendship;
-import com.example.models.enums.CraftingRecipes;
+import com.example.models.enums.recipes.CraftingRecipes;
 import com.example.models.enums.Quality;
-import com.example.models.enums.Recipes;
+import com.example.models.enums.recipes.Recipe;
 import com.example.models.enums.types.BackpackType;
 import com.example.models.enums.types.ToolTypes;
 import com.example.models.enums.types.TrashcanType;
-import com.example.models.items.ActiveBuff;
+import com.example.models.items.buffs.ActiveBuff;
 import com.example.models.items.Item;
 import com.example.models.items.Tool;
 import com.example.models.mapModels.Coordinate;
@@ -28,7 +28,7 @@ public class Player {
     private Farm farm;
     private ArrayList<Skill> skills = new ArrayList<>();
     private ArrayList<Quest> quests = new ArrayList<>();
-    private ArrayList<Recipes> unlockedRecipes = new ArrayList<>();
+    private ArrayList<Recipe> unlockedRecipes = new ArrayList<>();
     private ArrayList<ActiveBuff> activeBuffs = new ArrayList<>();
     private ObjectId user_id;
     @Transient
@@ -316,7 +316,7 @@ public class Player {
         return user_id;
     }
 
-    public ArrayList<Recipes> getUnlockedRecipes() {
+    public ArrayList<Recipe> getUnlockedRecipes() {
         return unlockedRecipes;
     }
 

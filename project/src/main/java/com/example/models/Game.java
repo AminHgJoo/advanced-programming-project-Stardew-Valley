@@ -1,7 +1,9 @@
 package com.example.models;
 
-import com.example.models.enums.Season;
-import com.example.models.enums.Weather;
+import com.example.models.enums.recipes.CookingRecipes;
+import com.example.models.enums.recipes.CraftingRecipes;
+import com.example.models.enums.worldEnums.Season;
+import com.example.models.enums.worldEnums.Weather;
 import com.example.models.mapModels.Map;
 import com.example.models.skills.Skill;
 import com.example.views.GameThread;
@@ -98,6 +100,35 @@ public class Game {
         this.weatherTomorrow = Weather.SUNNY;
         this.season = Season.SPRING;
         this.isGameOngoing = false;
+    }
+
+    public void checkForRecipeUnlocking() {
+        for (Player player : players) {
+            for (CraftingRecipes craftingRecipes : CraftingRecipes.values()) {
+                if (!player.getUnlockedRecipes().contains(craftingRecipes)
+                        && isPlayerLevelOk(player, craftingRecipes.farmingLevel
+                        , craftingRecipes.foragingLevel, craftingRecipes.fishingLevel
+                        , craftingRecipes.miningLevel)) {
+                    player.getUnlockedRecipes().add(craftingRecipes);
+                }
+            }
+            for (CookingRecipes cookingRecipes : CookingRecipes.values()) {
+                if (!player.getUnlockedRecipes().contains(cookingRecipes)
+                        && isPlayerLevelOk(player, cookingRecipes.farmingLevel
+                        , cookingRecipes.foragingLevel, cookingRecipes.fishingLevel
+                        , cookingRecipes.miningLevel)) {
+                    player.getUnlockedRecipes().add(cookingRecipes);
+                }
+            }
+        }
+    }
+
+    private boolean isPlayerLevelOk(Player player, int farmingLevel
+            , int foragingLevel, int fishingLevel, int miningLevel) {
+        return player.getFarmingSkill().getLevel().levelNumber >= farmingLevel &&
+                player.getForagingSkill().getLevel().levelNumber >= foragingLevel &&
+                player.getFishingSkill().getLevel().levelNumber >= fishingLevel &&
+                player.getMiningSkill().getLevel().levelNumber >= miningLevel;
     }
 
     public void checkForSkillUpgrades() {

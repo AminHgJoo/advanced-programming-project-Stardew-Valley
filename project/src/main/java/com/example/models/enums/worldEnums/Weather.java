@@ -1,4 +1,4 @@
-package com.example.models.enums;
+package com.example.models.enums.worldEnums;
 
 public enum Weather {
     SUNNY(new Season[]{Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER}, "Sunny"),

@@ -1,4 +1,4 @@
-package com.example.models.items;
+package com.example.models.items.buffs;
 
 import dev.morphia.annotations.Embedded;
 

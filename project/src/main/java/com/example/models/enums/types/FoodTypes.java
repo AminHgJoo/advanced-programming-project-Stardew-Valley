@@ -1,22 +1,22 @@
 package com.example.models.enums.types;
 
-import com.example.models.items.FoodBuff;
+import com.example.models.items.buffs.FoodBuff;
 
-public enum FoodTypes {
-    APRICOT("Apricot", 0, new FoodBuff(null, 0)),
-    CHERRY("Cherry", 0, new FoodBuff(null, 0)),
-    BANANA("Banana", 0, new FoodBuff(null, 0)),
-    MANGO("Mango", 0, new FoodBuff(null, 0)),
-    ORANGE("Orange", 0, new FoodBuff(null, 0)),
-    PEACH("Peach", 0, new FoodBuff(null, 0)),
-    APPLE("Apple", 0, new FoodBuff(null, 0)),
-    POMEGRANATE("Pomegranate", 0, new FoodBuff(null, 0)),
-    OAK_RESIN("Oak Resin", 0, new FoodBuff(null, 0)),
-    MAPLE_SYRUP("Maple Syrup", 0, new FoodBuff(null, 0)),
-    PINE_TAR("Pine Tar", 0, new FoodBuff(null, 0)),
-    SAP("Sap", 0, new FoodBuff(null, 0)),
-    COMMON_MUSHROOM("Common Mushroom", 0, new FoodBuff(null, 0)),
-    MYSTIC_SYRUP("Mystic Syrup", 0, new FoodBuff(null, 0)),
+public enum FoodTypes implements ItemType {
+    APRICOT("Apricot", 0, new FoodBuff("", 0)),
+    CHERRY("Cherry", 0, new FoodBuff("", 0)),
+    BANANA("Banana", 0, new FoodBuff("", 0)),
+    MANGO("Mango", 0, new FoodBuff("", 0)),
+    ORANGE("Orange", 0, new FoodBuff("", 0)),
+    PEACH("Peach", 0, new FoodBuff("", 0)),
+    APPLE("Apple", 0, new FoodBuff("", 0)),
+    POMEGRANATE("Pomegranate", 0, new FoodBuff("", 0)),
+    OAK_RESIN("Oak Resin", 0, new FoodBuff("", 0)),
+    MAPLE_SYRUP("Maple Syrup", 0, new FoodBuff("", 0)),
+    PINE_TAR("Pine Tar", 0, new FoodBuff("", 0)),
+    SAP("Sap", 0, new FoodBuff("", 0)),
+    COMMON_MUSHROOM("Common Mushroom", 0, new FoodBuff("", 0)),
+    MYSTIC_SYRUP("Mystic Syrup", 0, new FoodBuff("", 0)),
     ;
 
     final public String name;

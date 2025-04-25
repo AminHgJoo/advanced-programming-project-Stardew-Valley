@@ -2,7 +2,9 @@ package com.example.models.items;
 
 import com.example.models.enums.Quality;
 import com.example.models.enums.types.FishType;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class Fish extends Item {
     private FishType fishType;
 

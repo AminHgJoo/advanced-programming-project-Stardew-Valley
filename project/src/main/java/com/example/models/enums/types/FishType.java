@@ -1,8 +1,8 @@
 package com.example.models.enums.types;
 
-import com.example.models.enums.Season;
+import com.example.models.enums.worldEnums.Season;
 
-public enum FishType {
+public enum FishType implements ItemType {
     SALMON("Salmon", 75, Season.FALL, false),
     SARDINE("Sardine", 40, Season.FALL, false),
     SHAD("Shad", 60, Season.FALL, false),
