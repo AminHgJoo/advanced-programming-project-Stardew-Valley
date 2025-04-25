@@ -1,5 +1,3 @@
-// TODO null means all seasons
-
 package com.example.models.enums.types;
 
 import com.example.models.enums.worldEnums.Season;
@@ -37,7 +35,7 @@ public enum ForagingCropsType {
     ForagingCropsType(Season[] seasons, int cost, int energy) {
         this.seasons = seasons;
         this.cost = cost;
-        this.energy = -energy;
+        this.energy = energy;
     }
 
     ForagingCropsType(Season season, int cost, int energy) {

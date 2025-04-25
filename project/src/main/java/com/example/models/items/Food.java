@@ -16,6 +16,9 @@ public class Food extends Item {
         isEdible = false;
     }
 
+    /// To be used in enums only!
+    public Food(String name, FoodTypes foodTypes) {}
+
     public Food(Quality quality, int value, double energyCost, String name, boolean isEdible, FoodTypes foodTypes, FoodBuff foodBuff) {
         super(quality, Integer.MAX_VALUE, value, energyCost, name);
         this.isEdible = isEdible;

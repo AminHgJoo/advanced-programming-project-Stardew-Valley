@@ -2,11 +2,12 @@ package com.example.models.enums.recipes;
 
 import com.example.models.Slot;
 import com.example.models.enums.types.FoodTypes;
-
-import java.util.ArrayList;
+import com.example.models.items.Food;
 
 public enum CookingRecipes implements Recipe {
-    ;
+    FRIED_EGG("Fried Egg", 0, 0, 0, 0, 35, FoodTypes.FRIED_EGG, new Slot(new Food("Fried Egg", FoodTypes.FRIED_EGG), 1)),
+    BAKED_FISH("Baked Fish", 0, 0, 0, 0, 100, FoodTypes.BAKED_FISH, new Slot(new Food("Baked Fish", FoodTypes.BAKED_FISH), 1)),
+
 
     public final String name;
     public final int farmingLevel;
@@ -15,10 +16,10 @@ public enum CookingRecipes implements Recipe {
     public final int fishingLevel;
     public final int sellingPrice;
     public final FoodTypes craftingResult;
-    public final ArrayList<Slot> ingredients;
+    public final Slot[] ingredients;
 
     CookingRecipes(String name, int farmingLevel, int miningLevel, int foragingLevel, int fishingLevel
-            , int sellingPrice, FoodTypes craftingResult, ArrayList<Slot> ingredients) {
+            , int sellingPrice, FoodTypes craftingResult, Slot[] ingredients) {
         this.name = name;
         this.farmingLevel = farmingLevel;
         this.miningLevel = miningLevel;
@@ -27,5 +28,17 @@ public enum CookingRecipes implements Recipe {
         this.sellingPrice = sellingPrice;
         this.craftingResult = craftingResult;
         this.ingredients = ingredients;
+    }
+
+    CookingRecipes(String name, int farmingLevel, int miningLevel, int foragingLevel, int fishingLevel
+            , int sellingPrice, FoodTypes craftingResult, Slot ingredient) {
+        this.name = name;
+        this.farmingLevel = farmingLevel;
+        this.miningLevel = miningLevel;
+        this.foragingLevel = foragingLevel;
+        this.fishingLevel = fishingLevel;
+        this.sellingPrice = sellingPrice;
+        this.craftingResult = craftingResult;
+        this.ingredients = new Slot[]{ingredient};
     }
 }
