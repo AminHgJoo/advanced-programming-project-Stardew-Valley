@@ -45,6 +45,7 @@ public enum CropType {
     POWDER_MELON("Powder Melon", "Powdermelon Seeds", 1, 2, 1, 2, 1, 7, true, -1, 60, true, 63, new Season[]{Season.WINTER}, true),
     ANCIENT_FRUIT("Ancient Fruit", "Ancient Seeds", 2, 7, 7, 7, 5, 28, false, 7, 550, false, 0, new Season[]{Season.FALL, Season.SUMMER, Season.SPRING}, false),
     ;
+
     public final String name;
     public final String source;
     public final int StageZeroDaysToNextStage;
