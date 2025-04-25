@@ -5,7 +5,7 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class ForagingCrop extends MapObject {
-    private ForagingCropsType fCropType;
+    private ForagingCropsType foragingCropsType;
     private boolean canBeHarvested;
 
     public ForagingCrop() {
@@ -14,7 +14,7 @@ public class ForagingCrop extends MapObject {
 
     public ForagingCrop(ForagingCropsType type, boolean canBeHarvested) {
         super(true, "foragingCrop", "black");
-        this.fCropType = type;
+        this.foragingCropsType = type;
         this.canBeHarvested = canBeHarvested;
     }
 
@@ -26,11 +26,11 @@ public class ForagingCrop extends MapObject {
         this.canBeHarvested = canBeHarvested;
     }
 
-    public ForagingCropsType getfCropType() {
-        return fCropType;
+    public ForagingCropsType getForagingCropsType() {
+        return foragingCropsType;
     }
 
-    public void setfCropType(ForagingCropsType fCropType) {
-        this.fCropType = fCropType;
+    public void setForagingCropsType(ForagingCropsType foragingCropsType) {
+        this.foragingCropsType = foragingCropsType;
     }
 }

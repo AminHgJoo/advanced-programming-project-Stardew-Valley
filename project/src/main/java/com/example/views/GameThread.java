@@ -20,7 +20,6 @@ public class GameThread extends Thread {
         this.game = game;
     }
 
-    //TODO: initialize thread
     //TODO: crop stuff.
     public void run() {
         while (keepRunning) {

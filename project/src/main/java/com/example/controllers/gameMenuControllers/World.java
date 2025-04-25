@@ -583,7 +583,7 @@ public class World extends Controller {
 
     private static void addFishes(Fish fish, Backpack backpack, int numberOfFishes) {
         for (Slot slot : backpack.getSlots()) {
-            if (slot.getItem().getName().equals(fish.getName())) {
+            if (slot.getItem().getName().compareToIgnoreCase(fish.getName()) == 0) {
                 slot.setCount(slot.getCount() + numberOfFishes);
                 return;
             }
@@ -684,7 +684,7 @@ public class World extends Controller {
         if (targetCell.getObjectOnCell() instanceof ForagingCrop) {
             ForagingCrop crop = (ForagingCrop) targetCell.getObjectOnCell();
 
-            if (crop.type.equals(ForagingCropsType.GRASS)) {
+            if (crop.getForagingCropsType().equals(ForagingCropsType.GRASS)) {
 
                 targetCell.setObjectOnCell(new EmptyCell());
 
