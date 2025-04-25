@@ -13,10 +13,6 @@ public class LivestockController extends Controller {
         return null;
     }
 
-    public static Response handle(Request request) {
-        return null;
-    }
-
     public static Response handleCheatSetFriendship(Request request) {
         return null;
     }
