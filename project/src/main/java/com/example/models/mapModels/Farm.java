@@ -296,7 +296,7 @@ public class Farm {
         }
     }
 
-    public  boolean doesAnimalExist(String animalName) {
+    public boolean doesAnimalExist(String animalName) {
         for (Building b : getBuildings()) {
             if (b instanceof Coop) {
                 for (Animal animal : ((Coop) b).animals) {

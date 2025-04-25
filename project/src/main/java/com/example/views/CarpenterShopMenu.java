@@ -9,13 +9,11 @@ public class CarpenterShopMenu implements Menu {
     @Override
     public void handleMenu(String input) {
         Response response = null;
-        if(GameMenuCommands.BUILD.matches(input)) {
+        if (GameMenuCommands.BUILD.matches(input)) {
             build(input);
-        }
-        else if(GameMenuCommands.EXIT_MENU.matches(input)) {
+        } else if (GameMenuCommands.EXIT_MENU.matches(input)) {
             leaveShop(input);
-        }
-        else {
+        } else {
             response = getInvalidCommand();
         }
 

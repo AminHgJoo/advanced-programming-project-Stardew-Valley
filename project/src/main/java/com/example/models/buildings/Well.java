@@ -11,5 +11,6 @@ public class Well extends Building {
     public String wellType;
     public ArrayList<Cell> buildingCells;
 
-    public Well() {}
+    public Well() {
+    }
 }

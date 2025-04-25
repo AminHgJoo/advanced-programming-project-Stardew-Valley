@@ -5,6 +5,7 @@ import dev.morphia.annotations.Embedded;
 @Embedded
 public class BuildingBlock extends MapObject {
     public String buildingType;
+
     public BuildingBlock() {
         super();
     }

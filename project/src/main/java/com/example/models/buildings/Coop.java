@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Coop extends Building {
     public String coopType;
     public ArrayList<Animal> animals = new ArrayList<>();
+
     public Coop() {
     }
 

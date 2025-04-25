@@ -166,7 +166,7 @@ public class CarpenterShopController extends Controller {
         }
         for (int i = x; i < x + width; i++) {
             for (int j = y; j < y + height; j++) {
-                if (farm.findCellByCoordinate(i, j) == null ||!(farm.findCellByCoordinate(i, j).getObjectOnCell() instanceof EmptyCell)) {
+                if (farm.findCellByCoordinate(i, j) == null || !(farm.findCellByCoordinate(i, j).getObjectOnCell() instanceof EmptyCell)) {
                     return false;
                 }
             }

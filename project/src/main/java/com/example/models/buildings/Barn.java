@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Barn extends Building {
     public String barnType;
     public ArrayList<Animal> animals = new ArrayList<>();
+
     public Barn() {
     }
 

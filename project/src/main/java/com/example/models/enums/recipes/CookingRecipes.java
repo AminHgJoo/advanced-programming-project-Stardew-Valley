@@ -38,7 +38,7 @@ public enum CookingRecipes implements Recipe {
     public final Slot[] ingredients;
 
     CookingRecipes(String name, int farmingLevel, int miningLevel, int foragingLevel, int fishingLevel
-            ,  FoodTypes craftingResult, Slot[] ingredients) {
+            , FoodTypes craftingResult, Slot[] ingredients) {
         this.name = name;
         this.farmingLevel = farmingLevel;
         this.miningLevel = miningLevel;

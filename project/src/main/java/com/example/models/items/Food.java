@@ -15,7 +15,8 @@ public class Food extends Item {
     }
 
     /// To be used in enums only!
-    public Food(FoodTypes foodTypes) {}
+    public Food(FoodTypes foodTypes) {
+    }
 
     public Food(Quality quality, FoodTypes foodTypes) {
         super(quality, Integer.MAX_VALUE, foodTypes.value, -foodTypes.energy, foodTypes.name);

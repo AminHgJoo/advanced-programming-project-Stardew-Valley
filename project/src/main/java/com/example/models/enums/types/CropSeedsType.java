@@ -2,7 +2,7 @@ package com.example.models.enums.types;
 
 import com.example.models.enums.worldEnums.Season;
 
-public enum CropType {
+public enum CropSeedsType implements ItemType {
     BLUE_JAZZ("Blue Jazz", "Jazz Seeds", 1, 2, 2, 2, -1, 7, true, -1, 50, true, 45, new Season[]{Season.SPRING}, false),
     CARROT("Carrot", "Carrot Seeds", 1, 1, 1, -1, -1, 3, true, -1, 35, true, 75, new Season[]{Season.SPRING}, false),
     CAULIFLOWER("Cauliflower", "Cauliflower Seeds", 1, 2, 4, 4, 1, 12, true, -1, 175, true, 75, new Season[]{Season.SPRING}, true),
@@ -63,7 +63,7 @@ public enum CropType {
     public final boolean canBeGiant;
 
 
-    CropType(String name, String source, int stageZeroDaysToNextStage, int stageOneDaysToNextStage, int stageTwoDaysToNextStage, int stageThreeDaysToNextStage, int stageFourDaysToNextStage, int totalHarvestTime, boolean oneTime, int regrowthTime, int baseSellPrice, boolean isEdible, double energy, Season[] season, boolean canBeGiant) {
+    CropSeedsType(String name, String source, int stageZeroDaysToNextStage, int stageOneDaysToNextStage, int stageTwoDaysToNextStage, int stageThreeDaysToNextStage, int stageFourDaysToNextStage, int totalHarvestTime, boolean oneTime, int regrowthTime, int baseSellPrice, boolean isEdible, double energy, Season[] season, boolean canBeGiant) {
         this.name = name;
         this.source = source;
         this.stageZeroDaysToNextStage = stageZeroDaysToNextStage;
@@ -81,8 +81,8 @@ public enum CropType {
         this.canBeGiant = canBeGiant;
     }
 
-    public static CropType findCropBySeed(String seed) {
-        for (CropType crop : CropType.values()) {
+    public static CropSeedsType findCropBySeed(String seed) {
+        for (CropSeedsType crop : CropSeedsType.values()) {
             if (crop.source.equals(seed)) {
                 return crop;
             }

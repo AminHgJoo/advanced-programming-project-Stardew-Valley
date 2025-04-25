@@ -8,7 +8,7 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.Player;
 import com.example.models.enums.Directions;
-import com.example.models.enums.types.CropType;
+import com.example.models.enums.types.CropSeedsType;
 import com.example.models.items.Seed;
 import com.example.models.items.Tool;
 import com.example.models.mapModels.Cell;
@@ -20,8 +20,8 @@ public class Farming extends Controller {
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
         String seed = request.body.get("seed");
-        CropType cropType = CropType.findCropBySeed(seed);
-        if (cropType == null) {
+        CropSeedsType cropSeedsType = CropSeedsType.findCropBySeed(seed);
+        if (cropSeedsType == null) {
             return new Response(false, "crop not found");
         }
         String dir = request.body.get("direction");
@@ -43,11 +43,11 @@ public class Farming extends Controller {
             return new Response(false, "Cell is not empty");
         }
         // TODO check for seed existence
-        Seed playerSeed  = player.getInventory().findSeedByItemName(seed);
-        if(playerSeed == null){
+        Seed playerSeed = player.getInventory().findSeedByItemName(seed);
+        if (playerSeed == null) {
             return new Response(false, "Seed not found in player inventory");
         }
-        Crop plant = new Crop(cropType);
+        Crop plant = new Crop(cropSeedsType);
         cell.setObjectOnCell(plant);
         GameRepository.saveGame(game);
         return new Response(true, "Planting was successful");
@@ -98,6 +98,6 @@ public class Farming extends Controller {
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
         Tool wateringCan = player.getInventory().getWateringCan();
-        return new Response(true, "You have " +wateringCan.getWaterReserve() + " water");
+        return new Response(true, "You have " + wateringCan.getWaterReserve() + " water");
     }
 }

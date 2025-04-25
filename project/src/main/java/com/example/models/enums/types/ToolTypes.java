@@ -12,7 +12,8 @@ public enum ToolTypes implements ItemType {
     FISHING_ROD(0, "Fishing Rod"),
     SCYTHE(0, "Scythe"),
     MILK_PAIL(0, "Milk Pail"),
-    SHEAR(0, "Shear"),;
+    SHEAR(0, "Shear"),
+    ;
 
     public final int waterCapacity;
     public final String name;

@@ -1,12 +1,12 @@
 package com.example.models.mapObjects;
 
-import com.example.models.enums.types.CropType;
+import com.example.models.enums.types.CropSeedsType;
 import dev.morphia.annotations.Embedded;
 
 // TODO CROP STAGE
 @Embedded
 public class Crop extends MapObject {
-    public CropType cropType;
+    public CropSeedsType cropSeedsType;
     private int daysToNextStage;
     private int stageNumber;
     private boolean hasBeenWateredToday = false;
@@ -16,11 +16,11 @@ public class Crop extends MapObject {
         super();
     }
 
-    public Crop(CropType plantType) {
+    public Crop(CropSeedsType plantType) {
         super(true, "plant", "green");
-        this.cropType = plantType;
+        this.cropSeedsType = plantType;
         stageNumber = 0;
-        daysToNextStage = cropType.stageZeroDaysToNextStage;
+        daysToNextStage = cropSeedsType.stageZeroDaysToNextStage;
         this.hasBeenWateredToday = false;
     }
 
@@ -51,7 +51,7 @@ public class Crop extends MapObject {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("name : ").append(cropType.name).append("\n");
+        builder.append("name : ").append(cropSeedsType.name).append("\n");
         builder.append("tim to next stage : ").append(daysToNextStage).append("\n");
         builder.append("stage number : ").append(stageNumber).append("\n");
         builder.append("has been watered today : ").append(hasBeenWateredToday).append("\n");

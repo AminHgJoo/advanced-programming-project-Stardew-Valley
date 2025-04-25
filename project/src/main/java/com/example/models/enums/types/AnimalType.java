@@ -13,7 +13,8 @@ public enum AnimalType {
     GOAT(2, 8),
     SHEEP(3, 12),
     //TODO pig
-    PIG(-1, -1),;
+    PIG(-1, -1),
+    ;
 
     public final int productPerDay;
     public final int capacity;

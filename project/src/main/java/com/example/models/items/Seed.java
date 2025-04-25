@@ -1,25 +1,26 @@
 package com.example.models.items;
 
-import com.example.models.enums.types.CropType;
+import com.example.models.enums.types.CropSeedsType;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
-public class Seed extends Item{
-    private CropType cropType;
+public class Seed extends Item {
+    private CropSeedsType cropSeedsType;
     private String name;
 
-    public Seed(){}
-
-    public CropType getCropType() {
-        return cropType;
+    public Seed() {
     }
 
-    public void setCropType(CropType cropType) {
-        this.cropType = cropType;
+    public CropSeedsType getCropType() {
+        return cropSeedsType;
     }
 
-    public Seed(CropType cropType, String name) {
-        this.cropType = cropType;
+    public void setCropType(CropSeedsType cropSeedsType) {
+        this.cropSeedsType = cropSeedsType;
+    }
+
+    public Seed(CropSeedsType cropSeedsType, String name) {
+        this.cropSeedsType = cropSeedsType;
         this.name = name;
     }
 

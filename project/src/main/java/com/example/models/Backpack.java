@@ -90,7 +90,7 @@ public class Backpack {
     public Seed findSeedByItemName(String itemName) {
         for (Slot slot : slots) {
             if (slot.getItem() instanceof Seed) {
-                if(slot.getItem().getName().compareToIgnoreCase(itemName) == 0) {
+                if (slot.getItem().getName().compareToIgnoreCase(itemName) == 0) {
                     return (Seed) slot.getItem();
                 }
             }
