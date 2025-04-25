@@ -8,9 +8,10 @@ public class Tree extends MapObject {
     private TreeType treeType;
     private boolean hasBeenWateredToday;
 
-    public Tree() {}
+    public Tree() {
+    }
 
-    public Tree( TreeType treeType) {
+    public Tree(TreeType treeType) {
         super(false, "tree", "green");
         this.treeType = treeType;
     }

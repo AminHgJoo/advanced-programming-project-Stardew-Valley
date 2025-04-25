@@ -19,22 +19,22 @@ public class Farming extends Controller {
         Player player = game.getCurrentPlayer();
         String seed = request.body.get("seed");
         CropType cropType = CropType.findCropBySeed(seed);
-        if(cropType == null){
+        if (cropType == null) {
             return new Response(false, "crop not found");
         }
         String dir = request.body.get("direction");
-        Directions direction ;
-        try{
+        Directions direction;
+        try {
             direction = Directions.valueOf(dir);
-        }catch(Exception e){
+        } catch (Exception e) {
             return new Response(false, "Invalid direction");
         }
         Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
         Cell cell = player.getFarm().findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
-        if(cell == null){
+        if (cell == null) {
             return new Response(false, "Cell not found");
         }
-        if(!cell.isTilled()){
+        if (!cell.isTilled()) {
             return new Response(false, "Cell is not tilled");
         }
         Crop plant = new Crop(cropType);
@@ -49,14 +49,14 @@ public class Farming extends Controller {
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
         Cell cell = player.getFarm().findCellByCoordinate(x, y);
-        if(cell == null){
+        if (cell == null) {
             return new Response(false, "Cell not found");
         }
-        if(!cell.getObjectOnCell().type.equals("plant")){
+        if (!cell.getObjectOnCell().type.equals("plant")) {
             return new Response(false, "Cell is not a plant");
         }
         Crop plant = (Crop) cell.getObjectOnCell();
-        return new Response(true , plant.toString());
+        return new Response(true, plant.toString());
     }
 
     public static Response handleFertilization(Request request) {

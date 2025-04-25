@@ -8,13 +8,14 @@ import java.util.ArrayList;
 
 @Embedded
 public class Store {
-    private  NPC owner;
-    private  LocalDateTime openHour;
-    private  LocalDateTime closeHour;
-    private  ArrayList<StoreProduct> products = new ArrayList<>();
-    private  String name;
+    private NPC owner;
+    private LocalDateTime openHour;
+    private LocalDateTime closeHour;
+    private ArrayList<StoreProduct> products = new ArrayList<>();
+    private String name;
 
-    public Store(){}
+    public Store() {
+    }
 
     public Store(NPC owner, LocalDateTime openHour, LocalDateTime closeHour, String name) {
         this.owner = owner;

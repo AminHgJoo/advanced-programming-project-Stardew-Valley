@@ -26,11 +26,11 @@ public class ActiveBuff {
         return output;
     }
 
-    public FoodBuff getFoodBuff() {
-        return foodBuff;
-    }
-
     public LocalDateTime getExpirationTime() {
         return expirationTime;
+    }
+
+    public FoodBuff getFoodBuff() {
+        return foodBuff;
     }
 }

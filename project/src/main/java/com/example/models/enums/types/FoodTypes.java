@@ -1,23 +1,22 @@
 package com.example.models.enums.types;
 
-import com.example.models.Player;
 import com.example.models.items.FoodBuff;
 
 public enum FoodTypes {
-    APRICOT("Apricot", 0, (Player _) -> {}),
-    CHERRY("Cherry", 0, (Player _) -> {}),
-    BANANA("Banana", 0, (Player _) -> {}),
-    MANGO("Mango", 0, (Player _) -> {}),
-    ORANGE("Orange", 0, (Player _) -> {}),
-    PEACH("Peach", 0, (Player _) -> {}),
-    APPLE("Apple", 0, (Player _) -> {}),
-    POMEGRANATE("Pomegranate", 0, (Player _) -> {}),
-    OAK_RESIN("Oak Resin", 0, (Player _) -> {}),
-    MAPLE_SYRUP("Maple Syrup", 0, (Player _) -> {}),
-    PINE_TAR("Pine Tar", 0, (Player _) -> {}),
-    SAP("Sap", 0, (Player _) -> {}),
-    COMMON_MUSHROOM("Common Mushroom", 0, (Player _) -> {}),
-    MYSTIC_SYRUP("Mystic Syrup", 0, (Player _) -> {}),
+    APRICOT("Apricot", 0, new FoodBuff(null, 0)),
+    CHERRY("Cherry", 0, new FoodBuff(null, 0)),
+    BANANA("Banana", 0, new FoodBuff(null, 0)),
+    MANGO("Mango", 0, new FoodBuff(null, 0)),
+    ORANGE("Orange", 0, new FoodBuff(null, 0)),
+    PEACH("Peach", 0, new FoodBuff(null, 0)),
+    APPLE("Apple", 0, new FoodBuff(null, 0)),
+    POMEGRANATE("Pomegranate", 0, new FoodBuff(null, 0)),
+    OAK_RESIN("Oak Resin", 0, new FoodBuff(null, 0)),
+    MAPLE_SYRUP("Maple Syrup", 0, new FoodBuff(null, 0)),
+    PINE_TAR("Pine Tar", 0, new FoodBuff(null, 0)),
+    SAP("Sap", 0, new FoodBuff(null, 0)),
+    COMMON_MUSHROOM("Common Mushroom", 0, new FoodBuff(null, 0)),
+    MYSTIC_SYRUP("Mystic Syrup", 0, new FoodBuff(null, 0)),
     ;
 
     final public String name;

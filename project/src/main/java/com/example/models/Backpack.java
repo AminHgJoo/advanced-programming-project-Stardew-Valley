@@ -11,9 +11,10 @@ public class Backpack {
     private ArrayList<Slot> slots = new ArrayList<>();
     private BackpackType type;
 
-    public Backpack(){
+    public Backpack() {
 
     }
+
     public Backpack(BackpackType type) {
         this.type = type;
     }

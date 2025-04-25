@@ -9,7 +9,7 @@ public class Tool extends Item {
     private ToolTypes type;
     private int waterReserve;
 
-    public Tool(){
+    public Tool() {
         super();
         type = null;
     }

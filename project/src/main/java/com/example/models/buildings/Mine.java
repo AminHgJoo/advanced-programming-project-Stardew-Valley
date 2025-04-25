@@ -7,7 +7,9 @@ import java.util.ArrayList;
 
 @Embedded
 public class Mine extends Building {
-    public Mine(){}
+    public Mine() {
+    }
+
     public Mine(ArrayList<Cell> buildingCells) {
         super(buildingCells);
     }

@@ -13,6 +13,11 @@ abstract public class Skill {
         this.xp = 0;
     }
 
+    protected Skill(SkillLevel level, int xp) {
+        this.level = level;
+        this.xp = xp;
+    }
+
     abstract public void learn();
 
     public int getXp() {

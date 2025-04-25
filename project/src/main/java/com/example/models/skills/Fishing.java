@@ -1,5 +1,6 @@
 package com.example.models.skills;
 
+import com.example.models.enums.SkillLevel;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
@@ -11,6 +12,10 @@ public class Fishing extends Skill {
 
     public Fishing() {
         super();
+    }
+
+    public Fishing(SkillLevel level, int xp) {
+        super(level, xp);
     }
 
     @Override

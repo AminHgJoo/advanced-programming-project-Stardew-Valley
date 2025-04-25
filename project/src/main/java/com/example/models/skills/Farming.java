@@ -1,7 +1,7 @@
 package com.example.models.skills;
 
+import com.example.models.enums.SkillLevel;
 import dev.morphia.annotations.Embedded;
-import dev.morphia.annotations.Entity;
 
 @Embedded
 public class Farming extends Skill {
@@ -12,6 +12,10 @@ public class Farming extends Skill {
 
     public Farming() {
         super();
+    }
+
+    public Farming(SkillLevel level, int xp) {
+        super(level, xp);
     }
 
     @Override

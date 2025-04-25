@@ -82,9 +82,10 @@ public class UserRepository {
             System.out.println("Error updating .env file: " + e.getMessage());
         }
     }
+
     public static void populateUsersOfPlayers(Game game) {
         for (Player player : game.getPlayers()) {
-            User user = db.find(User.class).filter("_id" , player.getUser_id().toString()).first();
+            User user = db.find(User.class).filter("_id", player.getUser_id().toString()).first();
             player.setUser(user);
         }
     }

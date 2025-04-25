@@ -6,16 +6,10 @@ import com.example.models.User;
 import com.example.utilities.Connection;
 import dev.morphia.Datastore;
 import dev.morphia.query.Query;
-import dev.morphia.query.Update;
 import dev.morphia.query.filters.Filters;
-import dev.morphia.query.updates.UpdateOperator;
-import dev.morphia.query.updates.UpdateOperators;
-import org.bson.codecs.configuration.CodecConfigurationException;
 import org.bson.types.ObjectId;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
 
 // TODO optimizing the queiries
 

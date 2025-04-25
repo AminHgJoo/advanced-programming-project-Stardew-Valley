@@ -8,9 +8,10 @@ public class Friendship {
     private int level;
     private int xp;
 
-    public Friendship(){
+    public Friendship() {
 
     }
+
     public Friendship(Player player) {
         this.player = player;
         this.level = 0;

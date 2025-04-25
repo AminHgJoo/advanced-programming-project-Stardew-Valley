@@ -23,7 +23,7 @@ public class Misc extends Item {
 
     }
 
-    public Misc(){
+    public Misc() {
         super();
         type = null;
     }

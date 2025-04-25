@@ -36,8 +36,8 @@ public class GameMenu implements Menu {
                 response = getInvalidCommand();
             }
         } else {
-            Game game  = App.getLoggedInUser().getCurrentGame();
-            if(game.getGameThread()==null){
+            Game game = App.getLoggedInUser().getCurrentGame();
+            if (game.getGameThread() == null) {
                 game.setGameThread(new GameThread(game));
                 game.getGameThread().keepRunning = true;
                 game.getGameThread().start();

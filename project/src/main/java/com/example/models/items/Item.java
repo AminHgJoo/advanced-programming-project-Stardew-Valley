@@ -11,7 +11,8 @@ abstract public class Item {
     protected double energyCost;
     protected String name;
 
-    public Item(){}
+    public Item() {
+    }
 
     public Item(Quality quality, int maxStackSize, int value, double energyCost, String name) {
         this.quality = quality;

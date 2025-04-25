@@ -7,7 +7,9 @@ import java.util.ArrayList;
 
 @Embedded
 public class Coop extends Building {
-    public Coop(){}
+    public Coop() {
+    }
+
     public Coop(ArrayList<Cell> buildingCells) {
         super(buildingCells);
     }

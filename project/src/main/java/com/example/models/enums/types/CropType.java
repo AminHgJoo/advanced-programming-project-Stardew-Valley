@@ -80,9 +80,9 @@ public enum CropType {
         this.canBeGiant = canBeGiant;
     }
 
-    public static CropType findCropBySeed(String seed){
-        for (CropType crop : CropType.values()){
-            if(crop.source.equals(seed)){
+    public static CropType findCropBySeed(String seed) {
+        for (CropType crop : CropType.values()) {
+            if (crop.source.equals(seed)) {
                 return crop;
             }
         }

@@ -8,7 +8,7 @@ public class ForagingCrop extends MapObject {
     private ForagingCropsType fCropType;
     private boolean canBeHarvested;
 
-    public ForagingCrop(){
+    public ForagingCrop() {
         super();
     }
 

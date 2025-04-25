@@ -43,7 +43,8 @@ public class Player {
     private Item equippedItem;
     private double usedEnergyInTurn;
 
-    public Player() {}
+    public Player() {
+    }
 
     public Player(User user) {
         this.user = user;
@@ -92,7 +93,22 @@ public class Player {
     public Farming getFarmingSkill() {
         for (Skill skill : skills) {
             if (skill instanceof Farming) {
-                return (Farming) skill;
+                Farming farming = (Farming) skill;
+                Farming clone = new Farming(farming.getLevel(), farming.getXp());
+
+                for (ActiveBuff activeBuff : activeBuffs) {
+                    if (activeBuff.getFoodBuff().getAffectedField().compareToIgnoreCase("farming") == 0) {
+                        for (int i = 0; i < activeBuff.getFoodBuff().getIncrement(); i++) {
+                            if (clone.getLevel().getNextLevel() != null) {
+                                clone.setLevel(clone.getLevel().getNextLevel());
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return clone;
             }
         }
         return null;
@@ -101,7 +117,22 @@ public class Player {
     public Fishing getFishingSkill() {
         for (Skill skill : skills) {
             if (skill instanceof Fishing) {
-                return (Fishing) skill;
+                Fishing fishing = (Fishing) skill;
+                Fishing clone = new Fishing(fishing.getLevel(), fishing.getXp());
+
+                for (ActiveBuff activeBuff : activeBuffs) {
+                    if (activeBuff.getFoodBuff().getAffectedField().compareToIgnoreCase("fishing") == 0) {
+                        for (int i = 0; i < activeBuff.getFoodBuff().getIncrement(); i++) {
+                            if (clone.getLevel().getNextLevel() != null) {
+                                clone.setLevel(clone.getLevel().getNextLevel());
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return clone;
             }
         }
         return null;
@@ -110,7 +141,22 @@ public class Player {
     public Foraging getForagingSkill() {
         for (Skill skill : skills) {
             if (skill instanceof Foraging) {
-                return (Foraging) skill;
+                Foraging foraging = (Foraging) skill;
+                Foraging clone = new Foraging(foraging.getLevel(), foraging.getXp());
+
+                for (ActiveBuff activeBuff : activeBuffs) {
+                    if (activeBuff.getFoodBuff().getAffectedField().compareToIgnoreCase("foraging") == 0) {
+                        for (int i = 0; i < activeBuff.getFoodBuff().getIncrement(); i++) {
+                            if (clone.getLevel().getNextLevel() != null) {
+                                clone.setLevel(clone.getLevel().getNextLevel());
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return clone;
             }
         }
         return null;
@@ -119,7 +165,22 @@ public class Player {
     public Mining getMiningSkill() {
         for (Skill skill : skills) {
             if (skill instanceof Mining) {
-                return (Mining) skill;
+                Mining mining = (Mining) skill;
+                Mining clone = new Mining(mining.getLevel(), mining.getXp());
+
+                for (ActiveBuff activeBuff : activeBuffs) {
+                    if (activeBuff.getFoodBuff().getAffectedField().compareToIgnoreCase("mining") == 0) {
+                        for (int i = 0; i < activeBuff.getFoodBuff().getIncrement(); i++) {
+                            if (clone.getLevel().getNextLevel() != null) {
+                                clone.setLevel(clone.getLevel().getNextLevel());
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return clone;
             }
         }
         return null;
@@ -192,6 +253,7 @@ public class Player {
         }
         return user;
     }
+
     public ArrayList<Friendship> getFriendships() {
         return friendships;
     }
@@ -212,7 +274,6 @@ public class Player {
         return animals;
     }
 
-
     public Item getEquippedItem() {
         return equippedItem;
     }
@@ -230,7 +291,13 @@ public class Player {
     }
 
     public double getMaxEnergy() {
-        return maxEnergy;
+        double clone = maxEnergy;
+        for (ActiveBuff activeBuff : activeBuffs) {
+            if (activeBuff.getFoodBuff().getAffectedField().compareToIgnoreCase("maxEnergy") == 0) {
+                clone += activeBuff.getFoodBuff().getIncrement();
+            }
+        }
+        return clone;
     }
 
     public void setMaxEnergy(double maxEnergy) {

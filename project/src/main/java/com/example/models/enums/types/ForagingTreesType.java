@@ -8,7 +8,8 @@ public enum ForagingTreesType {
     MAPLE_SEEDS(Season.values()),
     PINE_CONES(Season.values()),
     MAHOGANY_SEEDS(Season.values()),
-    MUSHROOM_TREE_SEEDS(Season.values()),;
+    MUSHROOM_TREE_SEEDS(Season.values()),
+    ;
 
     private final Season[] growthSeasons;
 

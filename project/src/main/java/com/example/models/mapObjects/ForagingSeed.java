@@ -6,9 +6,11 @@ import dev.morphia.annotations.Embedded;
 @Embedded
 public class ForagingSeed extends MapObject {
     public ForagingSeedsType type;
-    public ForagingSeed(){
+
+    public ForagingSeed() {
         super();
     }
+
     public ForagingSeed(ForagingSeedsType type) {
         super(true, "foragingSeed", "black");
         this.type = type;

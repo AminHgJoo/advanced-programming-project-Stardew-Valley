@@ -15,7 +15,7 @@ public enum CraftingRecipes implements Recipes {
     IRIDIUM_SPRINKLER("Iridium Sprinkler", "Waters 24 adjacent crops.", 3, 0, 0, 0, new ArrayList<>()),
     CHARCOAL_KLIN("Charcoal Klin", "Converts 10 wood to 1 coal.", 1, 0, 0, 0, new ArrayList<>()),
     FURNACE("Furnace", "Convert ores and coal into ingots.", 0, 0, 0, 0, new ArrayList<>()),
-    SCARE_CROW("Scare Crow","Prevents crow attacks in an 8 tile radius." , 0, 0, 0, 0, new ArrayList<>()),
+    SCARE_CROW("Scare Crow", "Prevents crow attacks in an 8 tile radius.", 0, 0, 0, 0, new ArrayList<>()),
     DELUXE_SCARE_CROW("Deluxe Scarecrow", "Prevents crow attacks in a 12 tile radius.", 2, 0, 0, 0, new ArrayList<>()),
     BEE_HOUSE("Bee House", "Produces honey.", 1, 0, 0, 0, new ArrayList<>()),
     CHEESE_PRESS("Cheese Press", "Produces cheese from milk.", 2, 0, 0, 0, new ArrayList<>()),

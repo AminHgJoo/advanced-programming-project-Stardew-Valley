@@ -9,9 +9,10 @@ abstract public class MapObject {
     public String color;
     //TODO: texture
 
-    public MapObject(){
+    public MapObject() {
 
     }
+
     public MapObject(boolean isWalkable, String type, String color) {
         this.isWalkable = isWalkable;
         this.type = type;

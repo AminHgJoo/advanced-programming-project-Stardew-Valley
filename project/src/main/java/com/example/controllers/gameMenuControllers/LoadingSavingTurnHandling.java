@@ -13,7 +13,6 @@ import com.example.models.enums.types.MenuTypes;
 import com.example.models.mapModels.Farm;
 import com.example.views.AppView;
 import com.example.views.GameThread;
-import dev.morphia.mapping.Mapper;
 
 import java.util.ArrayList;
 
@@ -72,7 +71,7 @@ public class LoadingSavingTurnHandling extends Controller {
                 player1.setUser(null);
             }
             responseString += "\nAll farm selection successful! Game successfully created!";
-            GameRepository.saveGame(game , users);
+            GameRepository.saveGame(game, users);
         }
         return new Response(true, responseString);
     }

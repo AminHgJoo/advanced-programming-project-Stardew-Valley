@@ -16,7 +16,7 @@ public class ForagingMineral extends Item {
         return type;
     }
 
-    public ForagingMineral(){
+    public ForagingMineral() {
         super();
         type = null;
     }

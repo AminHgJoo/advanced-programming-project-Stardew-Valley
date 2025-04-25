@@ -150,7 +150,7 @@ public class User {
     }
 
     public void populateGame() {
-        currentGame =  GameRepository.findGameById(currentGame.get_id().toString(), true);
+        currentGame = GameRepository.findGameById(currentGame.get_id().toString(), true);
     }
 
     @Override

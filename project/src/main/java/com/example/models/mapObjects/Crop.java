@@ -2,7 +2,6 @@ package com.example.models.mapObjects;
 
 import com.example.models.enums.types.CropType;
 import dev.morphia.annotations.Embedded;
-import dev.morphia.annotations.Entity;
 
 // TODO CROP STAGE
 @Embedded
@@ -12,7 +11,8 @@ public class Crop extends MapObject {
     private int stageNumber;
     private boolean hasBeenWateredToday = false;
     private boolean hasBeenFertilized = false;
-    public Crop(){
+
+    public Crop() {
         super();
     }
 

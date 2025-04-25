@@ -7,7 +7,7 @@ import dev.morphia.annotations.Embedded;
 public class ForagingMineral extends MapObject {
     private ForagingMineralsType fMType;
 
-    public ForagingMineral(){
+    public ForagingMineral() {
 
     }
 

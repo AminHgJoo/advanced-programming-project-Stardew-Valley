@@ -7,7 +7,9 @@ import java.util.ArrayList;
 
 @Embedded
 public class Greenhouse extends Building {
-    public Greenhouse(){}
+    public Greenhouse() {
+    }
+
     public Greenhouse(ArrayList<Cell> buildingCells) {
         super(buildingCells);
     }

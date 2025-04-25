@@ -5,10 +5,11 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class NPCReward {
-public int money;
-public Item[] rewardItems;
-public NPCReward(int money, Item[] rewardItems) {
-    this.money = money;
-    this.rewardItems = rewardItems;
-}
+    public int money;
+    public Item[] rewardItems;
+
+    public NPCReward(int money, Item[] rewardItems) {
+        this.money = money;
+        this.rewardItems = rewardItems;
+    }
 }

@@ -8,7 +8,8 @@ public class Slot {
     private Item item;
     private int count;
 
-    public Slot(){}
+    public Slot() {
+    }
 
     public Slot(Item item, int count) {
         this.item = item;

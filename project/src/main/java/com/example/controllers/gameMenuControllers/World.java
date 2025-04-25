@@ -11,7 +11,6 @@ import com.example.models.enums.SkillLevel;
 import com.example.models.enums.Weather;
 import com.example.models.enums.types.*;
 import com.example.models.items.Fish;
-import com.example.models.items.Food;
 import com.example.models.items.Misc;
 import com.example.models.items.Tool;
 import com.example.models.mapModels.Cell;

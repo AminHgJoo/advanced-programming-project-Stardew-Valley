@@ -7,7 +7,9 @@ import java.util.ArrayList;
 
 @Embedded
 public class PlayerHome extends Building {
-    public PlayerHome(){}
+    public PlayerHome() {
+    }
+
     public PlayerHome(ArrayList<Cell> buildingCells) {
         super(buildingCells);
     }

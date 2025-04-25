@@ -18,7 +18,8 @@ public class NPC {
     private ArrayList<NPCDialogue> dialogues = new ArrayList<>();
     private ArrayList<Quest> quests = new ArrayList<>();
 
-    public NPC(){}
+    public NPC() {
+    }
 
     public NPC(String name, Coordinate coordinate) {
         this.name = name;

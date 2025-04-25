@@ -3,8 +3,6 @@ package com.example.models.NPCModels;
 import com.example.models.items.Item;
 import dev.morphia.annotations.Embedded;
 
-import java.util.ArrayList;
-
 @Embedded
 public class NPCRequest {
     private Item[] requestedItems;

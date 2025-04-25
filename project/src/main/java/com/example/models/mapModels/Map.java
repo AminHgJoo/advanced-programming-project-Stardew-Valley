@@ -9,7 +9,9 @@ public class Map {
     private ArrayList<Farm> farms;
     private Village village;
 
-    public Map() {}
+    public Map() {
+    }
+
     private Map(ArrayList<Farm> farms, Village village) {
         this.farms = farms;
         this.village = village;

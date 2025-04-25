@@ -2,12 +2,9 @@ package com.example.models.enums;
 
 import com.example.models.NPCModels.NPCRequest;
 import com.example.models.NPCModels.NPCReward;
-import com.example.models.enums.types.ForagingMineralsType;
 import com.example.models.items.Item;
 
-import java.util.ArrayList;
-
-public enum NPC  {
+public enum NPC {
     SEBASTIAN("Sebastian", new Item[]{}, new NPCRequest(new Item[]{}), new NPCReward(5000, new Item[]{})),
     ABIGAIL("Abigail", new Item[]{}, new NPCRequest(new Item[]{}), new NPCReward(500, new Item[]{})),
     HARVEY("Harvey", new Item[]{}, new NPCRequest(new Item[]{}), new NPCReward(750, new Item[]{})),

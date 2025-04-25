@@ -31,15 +31,15 @@ public class InventoryFunctionalities extends Controller {
         if (slot == null)
             return new Response(false, "item(s) does not exist!");
         if (number == null)
-            return removeSlotHandle(slot, player, backpack , game);
+            return removeSlotHandle(slot, player, backpack, game);
         int numberInt = Integer.parseInt(number);
         slot.setCount(slot.getCount() - numberInt);
         if (slot.getCount() <= 0)
-            return removeSlotHandle(slot, player, backpack , game);
-        return removeItemHandle(numberInt, slot, player , game);
+            return removeSlotHandle(slot, player, backpack, game);
+        return removeItemHandle(numberInt, slot, player, game);
     }
 
-    private static @NotNull Response removeItemHandle(int numberInt, Slot slot, Player player , Game game) {
+    private static @NotNull Response removeItemHandle(int numberInt, Slot slot, Player player, Game game) {
         int cashBack = (numberInt * slot.getItem().getValue() *
                 player.getTrashcanRefundPercentage()) / 100;
         player.setMoney(player.getMoney() + cashBack);
@@ -47,7 +47,7 @@ public class InventoryFunctionalities extends Controller {
         return new Response(true, numberInt + " of item(s) successfully trashed!");
     }
 
-    private static @NotNull Response removeSlotHandle(Slot slot, Player player, Backpack backpack , Game game) {
+    private static @NotNull Response removeSlotHandle(Slot slot, Player player, Backpack backpack, Game game) {
         int cashBack = (slot.getCount() * slot.getItem().getValue() *
                 player.getTrashcanRefundPercentage()) / 100;
         player.setMoney(player.getMoney() + cashBack);

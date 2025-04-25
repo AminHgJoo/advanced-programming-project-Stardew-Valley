@@ -5,10 +5,11 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class StoreProduct {
-    private  int price;
-    private  Item item;
+    private int price;
+    private Item item;
 
-    public StoreProduct(){}
+    public StoreProduct() {
+    }
 
     public StoreProduct(Item item, int price) {
         this.item = item;

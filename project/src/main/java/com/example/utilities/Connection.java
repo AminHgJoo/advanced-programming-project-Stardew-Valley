@@ -36,7 +36,8 @@ public class Connection {
         }
         return database;
     }
-    public static void testCodec(Class<?> clazz , Datastore datastore) {
+
+    public static void testCodec(Class<?> clazz, Datastore datastore) {
         try {
             Codec<?> codec = datastore.getCodecRegistry().get(clazz);
             System.out.println(clazz.getSimpleName() + ": " +
