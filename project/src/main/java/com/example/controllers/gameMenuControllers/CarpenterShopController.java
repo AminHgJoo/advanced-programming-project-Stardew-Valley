@@ -87,7 +87,7 @@ public class CarpenterShopController extends Controller {
             }
         }
         GameRepository.saveGame(game);
-        return new Response(false, "pool nadari");
+        return new Response(false, "You don't have enough money.");
     }
 
     private static @NotNull Response buildShipping(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice) {
@@ -102,7 +102,7 @@ public class CarpenterShopController extends Controller {
             }
         }
         GameRepository.saveGame(game);
-        return new Response(false, "pool nadari");
+        return new Response(false, "You don't have enough money.");
     }
 
     private static @NotNull Response buildWell(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice) {
@@ -125,7 +125,7 @@ public class CarpenterShopController extends Controller {
             }
         }
         GameRepository.saveGame(game);
-        return new Response(false, "pool nadari");
+        return new Response(false, "You don't have enough money.");
     }
 
     private static @NotNull Response buildCoop(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice) {
@@ -148,7 +148,7 @@ public class CarpenterShopController extends Controller {
             }
         }
         GameRepository.saveGame(game);
-        return new Response(false, "pool nadari");
+        return new Response(false, "You don't have enough money.");
     }
 
     private static boolean buildCheck(String buildingName, Farm farm, int x, int y) {

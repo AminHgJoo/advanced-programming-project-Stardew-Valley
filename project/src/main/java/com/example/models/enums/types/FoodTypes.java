@@ -17,7 +17,6 @@ public enum FoodTypes implements ItemType {
     SAP("Sap", -2, new FoodBuff("", 0, 0), 2),
     COMMON_MUSHROOM("Common Mushroom", 38, new FoodBuff("", 0, 0), 40),
     MYSTIC_SYRUP("Mystic Syrup", 500, new FoodBuff("", 0, 0), 1000),
-    //
     FRIED_EGG("Fried Egg", 50, new FoodBuff("", 0, 0), 35),
     BAKED_FISH("Baked Fish", 75, new FoodBuff("", 0, 0), 100),
     SALAD("Salad", 113, new FoodBuff("", 0, 0), 110),
