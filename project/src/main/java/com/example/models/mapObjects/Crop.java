@@ -20,7 +20,7 @@ public class Crop extends MapObject {
         super(true, "plant", "green");
         this.cropType = plantType;
         stageNumber = 0;
-        daysToNextStage = cropType.StageZeroDaysToNextStage;
+        daysToNextStage = cropType.stageZeroDaysToNextStage;
         this.hasBeenWateredToday = false;
     }
 

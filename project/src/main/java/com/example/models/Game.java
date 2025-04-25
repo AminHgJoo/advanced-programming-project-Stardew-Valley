@@ -40,8 +40,10 @@ public class Game {
             date = date.plusHours(10);
             gameThread.handleRefreshForaging();
             weatherToday = weatherTomorrow;
-            determineWeatherTomorrow();
-
+            determineAndSetWeatherTomorrow();
+            if (weatherToday == Weather.STORM) {
+                strikeLightningOnStormyDay();
+            }
             for (Player player : players) {
                 if (player.isPlayerFainted()) {
                     player.setPlayerFainted(false);
@@ -58,7 +60,15 @@ public class Game {
         }
     }
 
-    private void determineWeatherTomorrow() {
+    private void strikeLightningOnStormyDay() {
+        for (int i = 0; i < 3; i++) {
+            int targetX = (int) (Math.random() * 75);
+            int targetY = (int) (Math.random() * 50);
+            currentPlayer.getFarm().strikeLightning(targetX, targetY);
+        }
+    }
+
+    private void determineAndSetWeatherTomorrow() {
         int randomNumber;
         do {
             randomNumber = (int) (Math.random() * 4);

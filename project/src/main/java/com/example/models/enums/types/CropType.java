@@ -48,11 +48,11 @@ public enum CropType {
 
     public final String name;
     public final String source;
-    public final int StageZeroDaysToNextStage;
-    public final int StageOneDaysToNextStage;
-    public final int StageTwoDaysToNextStage;
-    public final int StageThreeDaysToNextStage;
-    public final int StageFourDaysToNextStage;
+    public final int stageZeroDaysToNextStage;
+    public final int stageOneDaysToNextStage;
+    public final int stageTwoDaysToNextStage;
+    public final int stageThreeDaysToNextStage;
+    public final int stageFourDaysToNextStage;
     public final int totalHarvestTime;
     public final boolean oneTime;
     public final int regrowthTime;
@@ -66,11 +66,11 @@ public enum CropType {
     CropType(String name, String source, int stageZeroDaysToNextStage, int stageOneDaysToNextStage, int stageTwoDaysToNextStage, int stageThreeDaysToNextStage, int stageFourDaysToNextStage, int totalHarvestTime, boolean oneTime, int regrowthTime, int baseSellPrice, boolean isEdible, double energy, Season[] season, boolean canBeGiant) {
         this.name = name;
         this.source = source;
-        StageZeroDaysToNextStage = stageZeroDaysToNextStage;
-        StageOneDaysToNextStage = stageOneDaysToNextStage;
-        StageTwoDaysToNextStage = stageTwoDaysToNextStage;
-        StageThreeDaysToNextStage = stageThreeDaysToNextStage;
-        StageFourDaysToNextStage = stageFourDaysToNextStage;
+        this.stageZeroDaysToNextStage = stageZeroDaysToNextStage;
+        this.stageOneDaysToNextStage = stageOneDaysToNextStage;
+        this.stageTwoDaysToNextStage = stageTwoDaysToNextStage;
+        this.stageThreeDaysToNextStage = stageThreeDaysToNextStage;
+        this.stageFourDaysToNextStage = stageFourDaysToNextStage;
         this.totalHarvestTime = totalHarvestTime;
         this.oneTime = oneTime;
         this.regrowthTime = regrowthTime;

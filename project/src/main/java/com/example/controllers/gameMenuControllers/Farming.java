@@ -9,6 +9,7 @@ import com.example.models.IO.Response;
 import com.example.models.Player;
 import com.example.models.enums.Directions;
 import com.example.models.enums.types.CropType;
+import com.example.models.items.Tool;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapObjects.Crop;
@@ -37,6 +38,10 @@ public class Farming extends Controller {
         if (!cell.isTilled()) {
             return new Response(false, "Cell is not tilled");
         }
+        if (!cell.getObjectOnCell().type.equals("empty")) {
+            return new Response(false, "Cell is not empty");
+        }
+        // TODO check for seed existence
         Crop plant = new Crop(cropType);
         cell.setObjectOnCell(plant);
         GameRepository.saveGame(game);
@@ -60,12 +65,34 @@ public class Farming extends Controller {
     }
 
     public static Response handleFertilization(Request request) {
-        return null;
-
+        Game game = App.getLoggedInUser().getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        String fertilizer = request.body.get("fertilizer");
+        String dir = request.body.get("direction");
+        Directions direction;
+        try {
+            direction = Directions.valueOf(dir);
+        } catch (Exception e) {
+            return new Response(false, "Invalid direction");
+        }
+        Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
+        Cell cell = player.getFarm().findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+        if (cell == null) {
+            return new Response(false, "Cell not found");
+        }
+        if (!cell.getObjectOnCell().type.equals("plant")) {
+            return new Response(false, "Cell is not a plant");
+        }
+        Crop p = (Crop) cell.getObjectOnCell();
+        p.setHasBeenFertilized(true);
+        GameRepository.saveGame(game);
+        return new Response(true, "Fertilization was successful");
     }
 
     public static Response handleHowMuchWater(Request request) {
-        return null;
-
+        Game game = App.getLoggedInUser().getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Tool wateringCan = player.getInventory().getWateringCan();
+        return new Response(true, "You have " +wateringCan.getWaterReserve() + " water");
     }
 }

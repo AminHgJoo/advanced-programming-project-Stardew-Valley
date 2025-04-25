@@ -6,7 +6,7 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Misc extends Item {
-    private MiscType type;
+    private MiscType miscType;
 
     @Override
     public void useItem() {
@@ -25,19 +25,19 @@ public class Misc extends Item {
 
     public Misc() {
         super();
-        type = null;
+        miscType = null;
     }
 
-    public Misc(int value, String name, MiscType type) {
-        super(Quality.DEFAULT, Integer.MAX_VALUE, value, 0, name);
-        this.type = type;
+    public Misc(int value, MiscType miscType) {
+        super(Quality.DEFAULT, Integer.MAX_VALUE, value, 0, miscType.name);
+        this.miscType = miscType;
     }
 
-    public MiscType getType() {
-        return type;
+    public MiscType getMiscType() {
+        return miscType;
     }
 
-    public void setType(MiscType type) {
-        this.type = type;
+    public void setMiscType(MiscType miscType) {
+        this.miscType = miscType;
     }
 }

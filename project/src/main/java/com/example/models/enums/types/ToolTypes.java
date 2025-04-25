@@ -1,22 +1,24 @@
 package com.example.models.enums.types;
 
 public enum ToolTypes implements ItemType {
-    HOE(0),
-    PICKAXE(0),
-    AXE(0),
-    WATERING_CAN_DEFAULT(40),
-    WATERING_CAN_COPPER(55),
-    WATERING_CAN_IRON(70),
-    WATERING_CAN_GOLD(85),
-    WATERING_CAN_IRIDIUM(100),
-    FISHING_ROD(0),
-    SCYTHE(0),
-    MILK_PAIL(0),
-    SHEAR(0);
+    HOE(0, "Hoe"),
+    PICKAXE(0, "Pickaxe"),
+    AXE(0, "Axe"),
+    WATERING_CAN_DEFAULT(40, "Watering Can Default"),
+    WATERING_CAN_COPPER(55, "Watering Can Copper"),
+    WATERING_CAN_IRON(70, "Watering Can Iron"),
+    WATERING_CAN_GOLD(85, "Watering Can Gold"),
+    WATERING_CAN_IRIDIUM(100, "Watering Can Iridium"),
+    FISHING_ROD(0, "Fishing Rod"),
+    SCYTHE(0, "Scythe"),
+    MILK_PAIL(0, "Milk Pail"),
+    SHEAR(0, "Shear"),;
 
     public final int waterCapacity;
+    public final String name;
 
-    ToolTypes(int waterCapacity) {
+    ToolTypes(int waterCapacity, String name) {
         this.waterCapacity = waterCapacity;
+        this.name = name;
     }
 }

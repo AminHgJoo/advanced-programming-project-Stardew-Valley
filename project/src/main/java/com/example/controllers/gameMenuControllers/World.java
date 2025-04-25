@@ -6,11 +6,12 @@ import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.Quality;
-import com.example.models.enums.worldEnums.Season;
 import com.example.models.enums.SkillLevel;
-import com.example.models.enums.worldEnums.Weather;
 import com.example.models.enums.types.*;
+import com.example.models.enums.worldEnums.Season;
+import com.example.models.enums.worldEnums.Weather;
 import com.example.models.items.Fish;
+import com.example.models.items.Food;
 import com.example.models.items.Misc;
 import com.example.models.items.Tool;
 import com.example.models.mapModels.Cell;
@@ -106,9 +107,18 @@ public class World extends Controller {
         return new Response(true, App.getLoggedInUser().getCurrentGame().getSeason().toString());
     }
 
-    //TODO: lightning doesn't do anything right now. implement later on.
     public static Response handleCheatThor(Request request) {
-        return null;
+        int targetX = Integer.parseInt(request.body.get("x"));
+        int targetY = Integer.parseInt(request.body.get("y"));
+
+        if (targetX >= 75 || targetY >= 50 || targetX < 0 || targetY < 0) {
+            return new Response(false, "Coordinates out of bounds.");
+        }
+
+        Game currentGame = App.getLoggedInUser().getCurrentGame();
+        currentGame.getCurrentPlayer().getFarm().strikeLightning(targetX, targetY);
+        GameRepository.saveGame(currentGame);
+        return new Response(true, "Lightning summoned at target coordinates.");
     }
 
     public static Response handleWeatherQuery(Request request) {
@@ -372,7 +382,7 @@ public class World extends Controller {
         return new Response(false, "No operation was performed.");
     }
 
-    //TODO: HANDLE CUTTING TREES AND ADDING WOOD.
+    //TODO: Handle the fact that syrup was extracted and you must wait to harvest again!
     private static Response handleAxeUse(Request request, Quality quality, int skillEnergyDiscount) {
         String direction = request.body.get("direction");
         int[] dxAndDy = getXAndYIncrement(direction);
@@ -413,10 +423,181 @@ public class World extends Controller {
             return new Response(false, "Target cell is invalid.");
         }
 
-        //TODO: Handle wood chopping and syrup extraction.
+        Tree tree = (Tree) targetCell.getObjectOnCell();
 
-        GameRepository.saveGame(game);
-        return new Response(true, "Axe used successfully.");
+        if (tree.getTreeType() == TreeType.NORMAL_TREE) {
+            int amountOfWood = (int) (Math.random() * 4 + 2);
+            targetCell.setObjectOnCell(new Tree(TreeType.TREE_BARK));
+
+            Backpack backpack = player.getInventory();
+            Slot slot = backpack.getSlotByItemName("Wood");
+
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                if (slot == null) {
+                    GameRepository.saveGame(game);
+                    return new Response(false,
+                            "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
+                }
+                slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfWood + " wood.");
+            } else {
+                if (slot == null) {
+                    backpack.getSlots().add(new Slot(new Misc(0, MiscType.WOOD), amountOfWood));
+                } else {
+                    slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
+                }
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfWood + " wood.");
+            }
+        } else if (tree.getTreeType() == TreeType.TREE_BARK) {
+            int amountOfWood = (int) (Math.random() * 2 + 1);
+            targetCell.setObjectOnCell(new EmptyCell());
+
+            Backpack backpack = player.getInventory();
+            Slot slot = backpack.getSlotByItemName("Wood");
+
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                if (slot == null) {
+                    GameRepository.saveGame(game);
+                    return new Response(false,
+                            "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
+                }
+                slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfWood + " wood.");
+            } else {
+                if (slot == null) {
+                    backpack.getSlots().add(new Slot(new Misc(0, MiscType.WOOD), amountOfWood));
+                } else {
+                    slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
+                }
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfWood + " wood.");
+            }
+        } else if (tree.getTreeType() == TreeType.OAK_TREE) {
+            int amountOfResin = (int) (Math.random() * 2 + 1);
+
+            Backpack backpack = player.getInventory();
+            Slot slot = backpack.getSlotByItemName("Oak Resin");
+
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                if (slot == null) {
+                    GameRepository.saveGame(game);
+                    return new Response(false,
+                            "Tree was harvested; however, your backpack was full. The product wasn't added to your backpack.");
+                }
+                slot.setCount(Math.min(slot.getCount() + amountOfResin, slot.getItem().getMaxStackSize()));
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfResin + " Oak Resin.");
+            } else {
+                if (slot == null) {
+                    backpack.getSlots().add(new Slot(new Food(Quality.DEFAULT, FoodTypes.OAK_RESIN), amountOfResin));
+                } else {
+                    slot.setCount(Math.min(slot.getCount() + amountOfResin, slot.getItem().getMaxStackSize()));
+                }
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfResin + " Oak Resin.");
+            }
+        } else if (tree.getTreeType() == TreeType.MAPLE_TREE) {
+            int amountOfSyrup = (int) (Math.random() * 2 + 1);
+
+            Backpack backpack = player.getInventory();
+            Slot slot = backpack.getSlotByItemName("Maple Syrup");
+
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                if (slot == null) {
+                    GameRepository.saveGame(game);
+                    return new Response(false,
+                            "Tree was harvested; however, your backpack was full. The product wasn't added to your backpack.");
+                }
+                slot.setCount(Math.min(slot.getCount() + amountOfSyrup, slot.getItem().getMaxStackSize()));
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfSyrup + " Maple Syrup.");
+            } else {
+                if (slot == null) {
+                    backpack.getSlots().add(new Slot(new Food(Quality.DEFAULT, FoodTypes.MAPLE_SYRUP), amountOfSyrup));
+                } else {
+                    slot.setCount(Math.min(slot.getCount() + amountOfSyrup, slot.getItem().getMaxStackSize()));
+                }
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfSyrup + " Maple Syrup.");
+            }
+        } else if (tree.getTreeType() == TreeType.PINE_TREE) {
+            int amountOfTar = (int) (Math.random() * 2 + 1);
+
+            Backpack backpack = player.getInventory();
+            Slot slot = backpack.getSlotByItemName("Pine Tar");
+
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                if (slot == null) {
+                    GameRepository.saveGame(game);
+                    return new Response(false,
+                            "Tree was harvested; however, your backpack was full. The product wasn't added to your backpack.");
+                }
+                slot.setCount(Math.min(slot.getCount() + amountOfTar, slot.getItem().getMaxStackSize()));
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfTar + " Pine Tar.");
+            } else {
+                if (slot == null) {
+                    backpack.getSlots().add(new Slot(new Food(Quality.DEFAULT, FoodTypes.PINE_TAR), amountOfTar));
+                } else {
+                    slot.setCount(Math.min(slot.getCount() + amountOfTar, slot.getItem().getMaxStackSize()));
+                }
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfTar + " Pine Tar.");
+            }
+        } else if (tree.getTreeType() == TreeType.MAHOGANY_TREE) {
+            int amountOfSap = (int) (Math.random() * 2 + 1);
+
+            Backpack backpack = player.getInventory();
+            Slot slot = backpack.getSlotByItemName("Sap");
+
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                if (slot == null) {
+                    GameRepository.saveGame(game);
+                    return new Response(false,
+                            "Tree was harvested; however, your backpack was full. The product wasn't added to your backpack.");
+                }
+                slot.setCount(Math.min(slot.getCount() + amountOfSap, slot.getItem().getMaxStackSize()));
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfSap + " Sap.");
+            } else {
+                if (slot == null) {
+                    backpack.getSlots().add(new Slot(new Food(Quality.DEFAULT, FoodTypes.SAP), amountOfSap));
+                } else {
+                    slot.setCount(Math.min(slot.getCount() + amountOfSap, slot.getItem().getMaxStackSize()));
+                }
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfSap + " Sap.");
+            }
+        } else if (tree.getTreeType() == TreeType.MYSTIC_TREE) {
+            int amountOfSyrup = (int) (Math.random() * 2 + 1);
+
+            Backpack backpack = player.getInventory();
+            Slot slot = backpack.getSlotByItemName("Mystic Syrup");
+
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                if (slot == null) {
+                    GameRepository.saveGame(game);
+                    return new Response(false,
+                            "Tree was harvested; however, your backpack was full. The product wasn't added to your backpack.");
+                }
+                slot.setCount(Math.min(slot.getCount() + amountOfSyrup, slot.getItem().getMaxStackSize()));
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfSyrup + " Mystic Syrup.");
+            } else {
+                if (slot == null) {
+                    backpack.getSlots().add(new Slot(new Food(Quality.DEFAULT, FoodTypes.MYSTIC_SYRUP), amountOfSyrup));
+                } else {
+                    slot.setCount(Math.min(slot.getCount() + amountOfSyrup, slot.getItem().getMaxStackSize()));
+                }
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + amountOfSyrup + " Mystic Syrup.");
+            }
+        } else {
+            return new Response(false, "Target tree is not harvestable.");
+        }
     }
 
     private static Response handleWateringCanUse(Request request, ToolTypes wateringCanType
@@ -486,7 +667,6 @@ public class World extends Controller {
         GameRepository.saveGame(game);
         return new Response(false, "No operation was performed.");
     }
-
 
     private static double calculateFishingEnergyCost(int discount, Quality quality) {
         double answer = 0;
@@ -571,8 +751,15 @@ public class World extends Controller {
 
             Fish fish = new Fish(fishQuality, Integer.MAX_VALUE, price, 0.0, fishType.name, fishType);
             Backpack backpack = player.getInventory();
-            addFishes(fish, backpack, numberOfFishes);
             player.getFishingSkill().setXp(player.getFishingSkill().getXp() + 5);
+
+            if (backpack.getType().getMaxCapacity() >= backpack.getSlots().size()) {
+                GameRepository.saveGame(game);
+                return new Response(false, "You didn't have enough space. But caught a fish anyways.");
+            }
+
+            addFishes(fish, backpack, numberOfFishes);
+
             GameRepository.saveGame(game);
             return new Response(true, "Fishing done! You caught " + numberOfFishes + " of " + fishType.name);
         }
@@ -700,7 +887,7 @@ public class World extends Controller {
                 } else {
                     if (slot == null) {
                         backpack.getSlots()
-                                .add(new Slot(new Misc(0, "Fiber", MiscType.FIBER), 1));
+                                .add(new Slot(new Misc(0, MiscType.FIBER), 1));
                     } else {
                         slot.setCount(Math.min(slot.getCount() + 1, slot.getItem().getMaxStackSize()));
                     }
