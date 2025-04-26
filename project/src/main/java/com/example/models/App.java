@@ -2,6 +2,7 @@ package com.example.models;
 
 import com.example.Repositories.UserRepository;
 import com.example.models.enums.types.*;
+import com.example.models.enums.types.itemTypes.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +15,6 @@ public class App {
     private static HashMap<String, ItemType> allItemTypes = new HashMap<>();
 
     static {
-        for (ArtisanBlockType artisanBlockType : ArtisanBlockType.values()) {
-            allItemTypes.put(artisanBlockType.name, artisanBlockType);
-        }
         for (CropSeedsType cropSeedsType : CropSeedsType.values()) {
             allItemTypes.put(cropSeedsType.name, cropSeedsType);
         }
@@ -29,11 +27,8 @@ public class App {
         for (ForagingMineralsType foragingMineralsType : ForagingMineralsType.values()) {
             allItemTypes.put(foragingMineralsType.name, foragingMineralsType);
         }
-        for (ForagingSeedsType foragingSeedsType : ForagingSeedsType.values()) {
-            allItemTypes.put(foragingSeedsType.name, foragingSeedsType);
-        }
-        for (ForagingTreeSeedsType foragingTreeSeedsType : ForagingTreeSeedsType.values()) {
-            allItemTypes.put(foragingTreeSeedsType.name, foragingTreeSeedsType);
+        for (TreeSeedsType treeSeedsType : TreeSeedsType.values()) {
+            allItemTypes.put(treeSeedsType.name, treeSeedsType);
         }
         for (MiscType miscType : MiscType.values()) {
             allItemTypes.put(miscType.name, miscType);

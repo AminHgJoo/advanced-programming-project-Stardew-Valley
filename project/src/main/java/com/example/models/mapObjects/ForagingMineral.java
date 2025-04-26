@@ -1,6 +1,6 @@
 package com.example.models.mapObjects;
 
-import com.example.models.enums.types.ForagingMineralsType;
+import com.example.models.enums.types.itemTypes.ForagingMineralsType;
 import dev.morphia.annotations.Embedded;
 
 @Embedded

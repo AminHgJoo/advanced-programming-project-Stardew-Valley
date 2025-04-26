@@ -1,7 +1,7 @@
 package com.example.models.items;
 
 import com.example.models.enums.Quality;
-import com.example.models.enums.types.FishType;
+import com.example.models.enums.types.itemTypes.FishType;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
@@ -30,8 +30,8 @@ public class Fish extends Item {
     public Fish() {
     }
 
-    public Fish(Quality quality, int maxStackSize, int value, double energyCost, String name, FishType fishType) {
-        super(quality, maxStackSize, value, energyCost, name);
+    public Fish(Quality quality, FishType fishType) {
+        super(quality, Integer.MAX_VALUE, fishType.price, 0, fishType.name);
         this.fishType = fishType;
     }
 

@@ -1,6 +1,8 @@
-package com.example.models.enums.types;
+package com.example.models.enums.types.itemTypes;
 
+import com.example.models.Slot;
 import com.example.models.enums.worldEnums.Season;
+import com.example.models.items.Seed;
 
 public enum CropSeedsType implements ItemType {
     BLUE_JAZZ("Blue Jazz", "Jazz Seeds", 1, 2, 2, 2, -1, 7, true, -1, 50, true, 45, new Season[]{Season.SPRING}, false),
@@ -90,4 +92,8 @@ public enum CropSeedsType implements ItemType {
         return null;
     }
 
+    @Override
+    public Slot createAmountOfItem(int amount) {
+        return new Slot(new Seed(this), amount);
+    }
 }

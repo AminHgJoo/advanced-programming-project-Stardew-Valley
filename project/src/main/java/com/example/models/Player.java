@@ -5,10 +5,9 @@ import com.example.models.NPCModels.NPC;
 import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
-import com.example.models.enums.recipes.Recipe;
-import com.example.models.enums.types.BackpackType;
-import com.example.models.enums.types.ToolTypes;
-import com.example.models.enums.types.TrashcanType;
+import com.example.models.enums.types.inventoryEnums.BackpackType;
+import com.example.models.enums.types.itemTypes.ToolTypes;
+import com.example.models.enums.types.inventoryEnums.TrashcanType;
 import com.example.models.items.Item;
 import com.example.models.items.Tool;
 import com.example.models.items.buffs.ActiveBuff;
@@ -29,7 +28,8 @@ public class Player {
     private Farm farm;
     private ArrayList<Skill> skills = new ArrayList<>();
     private ArrayList<Quest> quests = new ArrayList<>();
-    private ArrayList<Recipe> unlockedRecipes = new ArrayList<>();
+    private ArrayList<CookingRecipes> unlockedCookingRecipes = new ArrayList<>();
+    private ArrayList<CraftingRecipes> unlockedCraftingRecipes = new ArrayList<>();
     private ArrayList<ActiveBuff> activeBuffs = new ArrayList<>();
     private ObjectId user_id;
     @Transient
@@ -65,8 +65,8 @@ public class Player {
     }
 
     public Animal getAnimalByName(String name) {
-        for(Animal animal :animals){
-            if(animal.getName().equals(name)){
+        for (Animal animal : animals) {
+            if (animal.getName().equals(name)) {
                 return animal;
             }
         }
@@ -74,12 +74,12 @@ public class Player {
     }
 
     private void initializeRecipes() {
-        this.unlockedRecipes.add(CraftingRecipes.FURNACE);
-        this.unlockedRecipes.add(CraftingRecipes.SCARE_CROW);
-        this.unlockedRecipes.add(CraftingRecipes.MAYONNAISE_MACHINE);
-        this.unlockedRecipes.add(CookingRecipes.FRIED_EGG);
-        this.unlockedRecipes.add(CookingRecipes.BAKED_FISH);
-        this.unlockedRecipes.add(CookingRecipes.SALAD);
+        this.unlockedCraftingRecipes.add(CraftingRecipes.FURNACE);
+        this.unlockedCraftingRecipes.add(CraftingRecipes.SCARE_CROW);
+        this.unlockedCraftingRecipes.add(CraftingRecipes.MAYONNAISE_MACHINE);
+        this.unlockedCookingRecipes.add(CookingRecipes.FRIED_EGG);
+        this.unlockedCookingRecipes.add(CookingRecipes.BAKED_FISH);
+        this.unlockedCookingRecipes.add(CookingRecipes.SALAD);
     }
 
     private void initializeSkills() {
@@ -325,8 +325,16 @@ public class Player {
         return user_id;
     }
 
-    public ArrayList<Recipe> getUnlockedRecipes() {
-        return unlockedRecipes;
+    public ArrayList<CookingRecipes> getUnlockedCookingRecipes() {
+        return unlockedCookingRecipes;
+    }
+
+    public ArrayList<CraftingRecipes> getUnlockedCraftingRecipes() {
+        return unlockedCraftingRecipes;
+    }
+
+    public ArrayList<Friendship> getFriendships() {
+        return friendships;
     }
 
     public ArrayList<ActiveBuff> getActiveBuffs() {

@@ -1,4 +1,4 @@
-package com.example.views;
+package com.example.views.gameViews;
 
 import com.example.controllers.Controller;
 import com.example.controllers.gameMenuControllers.*;
@@ -7,6 +7,7 @@ import com.example.models.Game;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;
+import com.example.views.Menu;
 
 public class GameMenu implements Menu {
 
@@ -118,10 +119,8 @@ public class GameMenu implements Menu {
                 response = getPlaceItemResponse(input);
             } else if (GameMenuCommands.CHEAT_ADD_ITEM.matches(input)) {
                 response = getAddItemCheatResponse(input);
-            } else if (GameMenuCommands.COOKING_REFRIGERATOR_PICK.matches(input)) {
-                response = getCookingPickRefrigeratorResponse(input);
-            } else if (GameMenuCommands.COOKING_REFRIGERATOR_PUT.matches(input)) {
-                response = getCookingRefrigeratorPutResponse(input);
+            } else if (GameMenuCommands.ENTER_HOME.matches(input)) {
+                response = getEnterPlayerHomeResponse(input);
             } else if (GameMenuCommands.COOKING_SHOW_RECIPES.matches(input)) {
                 response = getShowCookingRecipesResponse(input);
             } else if (GameMenuCommands.EAT.matches(input)) {
@@ -156,8 +155,8 @@ public class GameMenu implements Menu {
                 response = getSellProductResponse(input);
             } else if (GameMenuCommands.FRIENDSHIPS.matches(input)) {
                 response = getFriendshipResponse(input);
-            } else if (GameMenuCommands.TALK_HISTORY.matches(input)) {
-                response = getTalkHistoryResponse(input);
+            } else if (GameMenuCommands.TALK.matches(input)) {
+                response = getTalkResponse(input);
             } else if (GameMenuCommands.TALK_HISTORY.matches(input)) {
                 response = getTalkHistoryResponse(input);
             } else if (GameMenuCommands.GIFT.matches(input)) {
@@ -212,6 +211,11 @@ public class GameMenu implements Menu {
         printResponse(response);
     }
 
+    private static Response getEnterPlayerHomeResponse(String input) {
+        Request request = new Request(input);
+        Response response = Cooking.handleEnterPlayerHome(request);
+        return response;
+    }
 
     private static Response goToStore(String input) {
         Request request = new Request(input);
@@ -256,22 +260,6 @@ public class GameMenu implements Menu {
         Response response;
         Request request = new Request(input);
         response = Cooking.handleShowCookingRecipes(request);
-        return response;
-    }
-
-    private static Response getCookingRefrigeratorPutResponse(String input) {
-        Response response;
-        Request request = new Request(input);
-        request.body.put("item", GameMenuCommands.COOKING_REFRIGERATOR_PUT.getGroup(input, "item"));
-        response = Cooking.handlePutIntoRefrigerator(request);
-        return response;
-    }
-
-    private static Response getCookingPickRefrigeratorResponse(String input) {
-        Response response;
-        Request request = new Request(input);
-        request.body.put("item", GameMenuCommands.COOKING_REFRIGERATOR_PICK.getGroup(input, "item"));
-        response = Cooking.handlePickFromRefrigerator(request);
         return response;
     }
 
@@ -652,26 +640,6 @@ public class GameMenu implements Menu {
         Request request = new Request(input);
         request.body.put("artisanName", GameMenuCommands.ARTISAN_GET.getGroup(input, "artisanName"));
         Response response = ArtisanController.handleArtisanGet(request);
-        return response;
-    }
-
-    private static Response getShowAllProductsResponse(String input) {
-        Request request = new Request(input);
-        Response response = DealingController.handleShowAllProducts(request);
-        return response;
-    }
-
-    private static Response getShowAvailableProductsResponse(String input) {
-        Request request = new Request(input);
-        Response response = DealingController.handleShowAvailableProducts(request);
-        return response;
-    }
-
-    private static Response getPurchaseResponse(String input) {
-        Request request = new Request(input);
-        request.body.put("productName", GameMenuCommands.PURCHASE.getGroup(input, "productName"));
-        request.body.put("count", GameMenuCommands.PURCHASE.getGroup(input, "count"));
-        Response response = DealingController.handlePurchase(request);
         return response;
     }
 

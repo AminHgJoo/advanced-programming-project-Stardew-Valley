@@ -10,7 +10,7 @@ import com.example.models.mapModels.Farm;
 import com.example.models.mapModels.Map;
 import com.example.models.mapObjects.AnimalBlock;
 import com.example.models.skills.Skill;
-import com.example.views.GameThread;
+import com.example.views.gameViews.GameThread;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
@@ -154,19 +154,19 @@ public class Game {
     public void checkForRecipeUnlocking() {
         for (Player player : players) {
             for (CraftingRecipes craftingRecipes : CraftingRecipes.values()) {
-                if (!player.getUnlockedRecipes().contains(craftingRecipes)
+                if (!player.getUnlockedCraftingRecipes().contains(craftingRecipes)
                         && isPlayerLevelOk(player, craftingRecipes.farmingLevel
                         , craftingRecipes.foragingLevel, craftingRecipes.fishingLevel
                         , craftingRecipes.miningLevel)) {
-                    player.getUnlockedRecipes().add(craftingRecipes);
+                    player.getUnlockedCraftingRecipes().add(craftingRecipes);
                 }
             }
             for (CookingRecipes cookingRecipes : CookingRecipes.values()) {
-                if (!player.getUnlockedRecipes().contains(cookingRecipes)
+                if (!player.getUnlockedCookingRecipes().contains(cookingRecipes)
                         && isPlayerLevelOk(player, cookingRecipes.farmingLevel
                         , cookingRecipes.foragingLevel, cookingRecipes.fishingLevel
                         , cookingRecipes.miningLevel)) {
-                    player.getUnlockedRecipes().add(cookingRecipes);
+                    player.getUnlockedCookingRecipes().add(cookingRecipes);
                 }
             }
         }

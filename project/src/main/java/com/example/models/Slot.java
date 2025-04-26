@@ -18,7 +18,7 @@ public class Slot {
 
     @Override
     public String toString() {
-        return "Slot [header=" + item.getName() + ", count=" + count + "]";
+        return "Slot [item=" + item.getName() + ", count=" + count + "]";
     }
 
     public Item getItem() {

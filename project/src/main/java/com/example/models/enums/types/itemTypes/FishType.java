@@ -1,6 +1,9 @@
-package com.example.models.enums.types;
+package com.example.models.enums.types.itemTypes;
 
+import com.example.models.Slot;
+import com.example.models.enums.Quality;
 import com.example.models.enums.worldEnums.Season;
+import com.example.models.items.Fish;
 
 public enum FishType implements ItemType {
     SALMON("Salmon", 75, Season.FALL, false),
@@ -34,5 +37,10 @@ public enum FishType implements ItemType {
         this.price = price;
         this.season = season;
         this.isLegendary = isLegendary;
+    }
+
+    @Override
+    public Slot createAmountOfItem(int amount) {
+        return new Slot(new Fish(Quality.DEFAULT, this), amount);
     }
 }

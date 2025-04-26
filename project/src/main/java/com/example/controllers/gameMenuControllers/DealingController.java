@@ -49,11 +49,11 @@ public class DealingController extends Controller {
                 check = true;
                 App.setCurrMenuType(MenuTypes.TheStardropSaloonMenu);
             }
-        }else {
-            return  new Response(false, "Invalid shop name");
+        } else {
+            return new Response(false, "Invalid shop name");
         }
-        if(!check){
-            return  new Response(false , "Shop is closed now :(");
+        if (!check) {
+            return new Response(false, "Shop is closed now :(");
         }
         return new Response(true, "Going to " + name + " ...");
     }

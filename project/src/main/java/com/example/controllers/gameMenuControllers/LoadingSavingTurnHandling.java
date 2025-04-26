@@ -12,7 +12,7 @@ import com.example.models.User;
 import com.example.models.enums.types.MenuTypes;
 import com.example.models.mapModels.Farm;
 import com.example.views.AppView;
-import com.example.views.GameThread;
+import com.example.views.gameViews.GameThread;
 
 import java.util.ArrayList;
 

@@ -3,10 +3,10 @@ package com.example.models.mapModels;
 import com.example.models.Animal;
 import com.example.models.App;
 import com.example.models.buildings.*;
-import com.example.models.enums.types.ForagingCropsType;
-import com.example.models.enums.types.ForagingMineralsType;
-import com.example.models.enums.types.ForagingSeedsType;
-import com.example.models.enums.types.TreeType;
+import com.example.models.enums.types.mapObjectTypes.ForagingCropsType;
+import com.example.models.enums.types.itemTypes.ForagingMineralsType;
+import com.example.models.enums.types.mapObjectTypes.ForagingSeedsType;
+import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.mapObjects.*;
 import dev.morphia.annotations.Embedded;
 
@@ -336,10 +336,10 @@ public class Farm {
     }
 
     public AnimalBlock getAnimalBlock(Animal animal) {
-        for(Cell cell : getCells()){
-            if(cell.getObjectOnCell() instanceof AnimalBlock){
-                if(((AnimalBlock)cell.getObjectOnCell()).animal == animal){
-                    return (AnimalBlock)cell.getObjectOnCell();
+        for (Cell cell : getCells()) {
+            if (cell.getObjectOnCell() instanceof AnimalBlock) {
+                if (((AnimalBlock) cell.getObjectOnCell()).animal == animal) {
+                    return (AnimalBlock) cell.getObjectOnCell();
                 }
             }
         }

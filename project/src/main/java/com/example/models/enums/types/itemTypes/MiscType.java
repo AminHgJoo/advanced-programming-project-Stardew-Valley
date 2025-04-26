@@ -1,4 +1,7 @@
-package com.example.models.enums.types;
+package com.example.models.enums.types.itemTypes;
+
+import com.example.models.Slot;
+import com.example.models.items.Misc;
 
 public enum MiscType implements ItemType {
     WOOD("Wood", 2),
@@ -49,7 +52,7 @@ public enum MiscType implements ItemType {
     PRESERVES_JAR("Preserves Jar", 0),
     DEHYDRATOR("Dehydrator", 0),
     FISH_SMOKER("Fish Smoker", 0),
-    MYSTIC_TREE_SEED("Mystic tree seed", 100);;
+    ;
 
     final public String name;
     final public int value;
@@ -57,5 +60,10 @@ public enum MiscType implements ItemType {
     MiscType(String name, int value) {
         this.name = name;
         this.value = value;
+    }
+
+    @Override
+    public Slot createAmountOfItem(int amount) {
+        return new Slot(new Misc(this), amount);
     }
 }

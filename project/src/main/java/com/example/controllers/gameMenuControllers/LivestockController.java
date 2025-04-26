@@ -5,7 +5,7 @@ import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
-import com.example.models.enums.types.MiscType;
+import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.worldEnums.Weather;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
@@ -109,15 +109,15 @@ public class LivestockController extends Controller {
         }
         Backpack backpack = player.getInventory();
         Slot haySlot = null;
-        for(Slot slot : backpack.getSlots()) {
-            if(slot.getItem().getName().equals(MiscType.HAY.name))
+        for (Slot slot : backpack.getSlots()) {
+            if (slot.getItem().getName().equals(MiscType.HAY.name))
                 haySlot = slot;
         }
-        if(haySlot == null) {
+        if (haySlot == null) {
             return new Response(false, "no hay found");
         }
         haySlot.setCount(haySlot.getCount() - 1);
-        if(haySlot.getCount() == 0) {
+        if (haySlot.getCount() == 0) {
             backpack.removeSlot(haySlot);
         }
         animal.hasBeenFedByHay = true;

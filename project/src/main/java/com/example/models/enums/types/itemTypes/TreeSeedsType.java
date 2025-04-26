@@ -1,0 +1,31 @@
+package com.example.models.enums.types.itemTypes;
+
+import com.example.models.Slot;
+import com.example.models.enums.worldEnums.Season;
+import com.example.models.items.TreeSeed;
+
+public enum TreeSeedsType implements ItemType {
+
+    ACORNS(Season.values(), "Acorns", 0),
+    MAPLE_SEEDS(Season.values(), "Maple Seeds", 0),
+    PINE_CONES(Season.values(), "Pine Cones", 0),
+    MAHOGANY_SEEDS(Season.values(), "Mahogany Seeds", 0),
+    MUSHROOM_TREE_SEEDS(Season.values(), "Mushroom Tree Seeds", 0),
+    //Non Foraging seeds
+    MYSTIC_TREE_SEED(Season.values(), "Mystic tree seed", 100);
+
+    public final Season[] growthSeasons;
+    public final String name;
+    public final int value;
+
+    TreeSeedsType(Season[] season, String name, int value) {
+        this.growthSeasons = season;
+        this.name = name;
+        this.value = value;
+    }
+
+    @Override
+    public Slot createAmountOfItem(int amount) {
+        return new Slot(new TreeSeed(this), amount);
+    }
+}

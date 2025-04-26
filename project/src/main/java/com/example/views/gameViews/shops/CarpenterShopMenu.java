@@ -1,4 +1,4 @@
-package com.example.views.shops;
+package com.example.views.gameViews.shops;
 
 import com.example.controllers.gameMenuControllers.CarpenterShopController;
 import com.example.models.IO.Request;

@@ -1,7 +1,7 @@
 package com.example.models.items;
 
 import com.example.models.enums.Quality;
-import com.example.models.enums.types.MiscType;
+import com.example.models.enums.types.itemTypes.MiscType;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
@@ -29,8 +29,8 @@ public class Misc extends Item {
         miscType = null;
     }
 
-    public Misc(int value, MiscType miscType) {
-        super(Quality.DEFAULT, Integer.MAX_VALUE, value, 0, miscType.name);
+    public Misc(MiscType miscType) {
+        super(Quality.DEFAULT, Integer.MAX_VALUE, miscType.value, 0, miscType.name);
         this.miscType = miscType;
     }
 

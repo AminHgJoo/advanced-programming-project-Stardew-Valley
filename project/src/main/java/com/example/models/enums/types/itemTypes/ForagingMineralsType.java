@@ -1,4 +1,8 @@
-package com.example.models.enums.types;
+package com.example.models.enums.types.itemTypes;
+
+import com.example.models.Slot;
+import com.example.models.enums.Quality;
+import com.example.models.items.ForagingMineral;
 
 public enum ForagingMineralsType implements ItemType {
     STONE(2, "Stone"),
@@ -30,5 +34,10 @@ public enum ForagingMineralsType implements ItemType {
 
     public int getSellPrice() {
         return sellPrice;
+    }
+
+    @Override
+    public Slot createAmountOfItem(int amount) {
+        return new Slot(new ForagingMineral(Quality.DEFAULT, this), amount);
     }
 }

@@ -1,8 +1,8 @@
-package com.example.models.enums.types;
+package com.example.models.enums.types.mapObjectTypes;
 
 import com.example.models.enums.worldEnums.Season;
 
-public enum ForagingSeedsType implements ItemType {
+public enum ForagingSeedsType {
 
     JAZZ_SEEDS(Season.SPRING, "Jazz Seeds"),
     CARROT_SEEDS(Season.SPRING, "Carrot Seeds"),
@@ -45,7 +45,8 @@ public enum ForagingSeedsType implements ItemType {
     RARE_SEEDS(Season.FALL, "Rare Seeds"),
     POWDERMELON_SEEDS(Season.WINTER, "Powdermelon Seeds"),
     ANCIENT_SEEDS(Season.values(), "Ancient Seeds"),
-    MIXED_SEEDS(Season.values(), "Mixed Seeds"),;
+    MIXED_SEEDS(Season.values(), "Mixed Seeds"),
+    ;
 
     public final Season[] seasons;
     public final String name;
@@ -63,4 +64,5 @@ public enum ForagingSeedsType implements ItemType {
     public Season[] getSeasons() {
         return seasons;
     }
+
 }
