@@ -6,6 +6,8 @@ import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 
+import java.util.ArrayList;
+
 public class LivestockController extends Controller {
     public static Response handleBuyAnimal(Request request) {
         return null;
@@ -43,7 +45,25 @@ public class LivestockController extends Controller {
     }
 
     public static Response handleAnimals(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        ArrayList<PlayerAnimal> friendship = player.getAnimalFriendship();
+        if (friendship.isEmpty()) {
+            GameRepository.saveGame(game);
+            return new Response(false, "No animals found");
+        }
+        StringBuilder animals = new StringBuilder();
+        for (PlayerAnimal animal : friendship) {
+            animals.append("name: ").
+                    append(animal.getAnimal().getName()).append("\n").
+                    append("friendship level: ").append(animal.getXp()).append("\n").
+                    append("hasBeenPetToDay: ").append(animal.hasBeenPetToDay).append("\n").
+                    append("hasBeenFedToDay: ").append(animal.hasBeenFed).append("\n").
+                    append("xp: ").append(animal.getXp()).append("\n\n");
+        }
+        GameRepository.saveGame(game);
+        return new Response(true, animals.toString());
     }
 
     public static Response handleShepherd(Request request) {

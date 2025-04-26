@@ -282,7 +282,7 @@ public class Player {
         this.trashcanType = trashcanType;
     }
 
-    public ArrayList<PlayerAnimal> getAnimalFriendshipByName() {
+    public ArrayList<PlayerAnimal> getAnimalFriendship() {
         return animalFriendship;
     }
 

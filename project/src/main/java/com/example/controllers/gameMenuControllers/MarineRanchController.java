@@ -86,7 +86,7 @@ public class MarineRanchController extends Controller {
                 if (((Coop) building).animals.size() < AnimalType.Chicken.capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Coop) building).animals.add(animal);
-                    player.getAnimalFriendshipByName().add(new PlayerAnimal(animal, 0));
+                    player.getAnimalFriendship().add(new PlayerAnimal(animal, 0));
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -102,7 +102,7 @@ public class MarineRanchController extends Controller {
                 if (((Barn) building).animals.size() < AnimalType.PIG.capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Barn) building).animals.add(animal);
-                    player.getAnimalFriendshipByName().add(new PlayerAnimal(animal, 0));
+                    player.getAnimalFriendship().add(new PlayerAnimal(animal, 0));
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -118,7 +118,7 @@ public class MarineRanchController extends Controller {
                 if (((Coop) building).animals.size() < AnimalType.DINOSAUR.capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Coop) building).animals.add(animal);
-                    player.getAnimalFriendshipByName().add(new PlayerAnimal(animal, 0));
+                    player.getAnimalFriendship().add(new PlayerAnimal(animal, 0));
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -134,7 +134,7 @@ public class MarineRanchController extends Controller {
                 if (((Coop) building).animals.size() < AnimalType.RABBIT.capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Coop) building).animals.add(animal);
-                    player.getAnimalFriendshipByName().add(new PlayerAnimal(animal, 0));
+                    player.getAnimalFriendship().add(new PlayerAnimal(animal, 0));
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -150,7 +150,7 @@ public class MarineRanchController extends Controller {
                 if (((Barn) building).animals.size() < AnimalType.SHEEP.capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Barn) building).animals.add(animal);
-                    player.getAnimalFriendshipByName().add(new PlayerAnimal(animal, 0));
+                    player.getAnimalFriendship().add(new PlayerAnimal(animal, 0));
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -166,7 +166,7 @@ public class MarineRanchController extends Controller {
                 if (((Coop) building).animals.size() < AnimalType.DUCK.capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Coop) building).animals.add(animal);
-                    player.getAnimalFriendshipByName().add(new PlayerAnimal(animal, 0));
+                    player.getAnimalFriendship().add(new PlayerAnimal(animal, 0));
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -182,7 +182,7 @@ public class MarineRanchController extends Controller {
                 if (((Barn) building).animals.size() < AnimalType.GOAT.capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Barn) building).animals.add(animal);
-                    player.getAnimalFriendshipByName().add(new PlayerAnimal(animal, 0));
+                    player.getAnimalFriendship().add(new PlayerAnimal(animal, 0));
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -198,7 +198,7 @@ public class MarineRanchController extends Controller {
                 if (((Barn) building).animals.size() < AnimalType.COW.capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Barn) building).animals.add(animal);
-                    player.getAnimalFriendshipByName().add(new PlayerAnimal(animal, 0));
+                    player.getAnimalFriendship().add(new PlayerAnimal(animal, 0));
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }

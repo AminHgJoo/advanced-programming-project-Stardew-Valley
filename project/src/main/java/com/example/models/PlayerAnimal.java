@@ -7,6 +7,7 @@ public class PlayerAnimal {
     private Animal animal;
     private int xp;
     public boolean hasBeenPetToDay;
+    public boolean hasBeenFed;
 
     public PlayerAnimal() {
 
@@ -16,6 +17,7 @@ public class PlayerAnimal {
         this.animal = animal;
         this.xp = xp;
         hasBeenPetToDay = false;
+        hasBeenFed = false;
     }
 
     public Animal getAnimal() {
