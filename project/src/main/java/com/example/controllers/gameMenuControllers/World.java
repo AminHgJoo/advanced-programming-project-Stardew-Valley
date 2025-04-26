@@ -471,7 +471,7 @@ public class World extends Controller {
                 return new Response(true, "You received " + amountOfWood + " wood.");
             } else {
                 if (slot == null) {
-                    backpack.getSlots().add(new Slot(new Misc(MiscType.WOOD), amountOfWood));
+                    backpack.getSlots().add(new Slot(new Misc(MiscType.WOOD, Quality.DEFAULT), amountOfWood));
                 } else {
                     slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
                 }
@@ -496,7 +496,7 @@ public class World extends Controller {
                 return new Response(true, "You received " + amountOfWood + " wood.");
             } else {
                 if (slot == null) {
-                    backpack.getSlots().add(new Slot(new Misc(MiscType.WOOD), amountOfWood));
+                    backpack.getSlots().add(new Slot(new Misc(MiscType.WOOD, Quality.DEFAULT), amountOfWood));
                 } else {
                     slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
                 }
@@ -915,7 +915,7 @@ public class World extends Controller {
                 } else {
                     if (slot == null) {
                         backpack.getSlots()
-                                .add(new Slot(new Misc(MiscType.FIBER), 1));
+                                .add(new Slot(new Misc(MiscType.FIBER, Quality.DEFAULT), 1));
                     } else {
                         slot.setCount(Math.min(slot.getCount() + 1, slot.getItem().getMaxStackSize()));
                     }
