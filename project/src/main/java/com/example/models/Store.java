@@ -45,4 +45,26 @@ public class Store {
     public boolean isOpen(int hour) {
         return openHour <= hour && hour <= closeHour;
     }
+
+
+    // TODO do the to string stuff
+    public String productsToString() {
+        StringBuilder message = new StringBuilder();
+        return message.toString();
+    }
+    public ArrayList<StoreProduct> getAvailableProducts(){
+        ArrayList<StoreProduct> availableProducts = new ArrayList<>();
+        for (StoreProduct product : products) {
+            if(product.getAvailableCount()>0){
+                availableProducts.add(product);
+            }
+        }
+        return availableProducts;
+    }
+    public String availableProductsToString() {
+        ArrayList<StoreProduct> availableProducts = getAvailableProducts();
+        StringBuilder message = new StringBuilder();
+        return message.toString();
+    }
 }
+

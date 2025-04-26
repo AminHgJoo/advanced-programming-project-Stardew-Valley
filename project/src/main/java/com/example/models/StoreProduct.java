@@ -7,7 +7,8 @@ import dev.morphia.annotations.Embedded;
 public class StoreProduct {
     private int price;
     private Item item;
-
+    // TODO initialize this field
+    private int availableCount;
     public StoreProduct() {
     }
 
@@ -22,5 +23,13 @@ public class StoreProduct {
 
     public Item getItem() {
         return item;
+    }
+
+    public int getAvailableCount() {
+        return availableCount;
+    }
+
+    public void setAvailableCount(int availableCount) {
+        this.availableCount = availableCount;
     }
 }

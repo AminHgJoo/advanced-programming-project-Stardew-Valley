@@ -5,6 +5,7 @@ import com.example.models.App;
 import com.example.models.Game;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
+import com.example.models.Player;
 import com.example.models.Store;
 import com.example.models.enums.types.MenuTypes;
 
@@ -59,19 +60,28 @@ public class DealingController extends Controller {
     }
 
     public static Response handleShowAllProducts(Request request) {
-        return null;
+        Game game = App.getLoggedInUser().getCurrentGame();
+        String name = request.body.get("storeName");
+        Store store = game.getMap().getVillage().getStore(name);
+        return new Response(true , store.productsToString());
     }
 
     public static Response handleShowAvailableProducts(Request request) {
-        return null;
-    }
+        Game game = App.getLoggedInUser().getCurrentGame();
+        String name = request.body.get("storeName");
+        Store store = game.getMap().getVillage().getStore(name);
+        return new Response(true , store.availableProductsToString());    }
 
     public static Response handlePurchase(Request request) {
         return null;
     }
 
     public static Response handleCheatAddDollars(Request request) {
-        return null;
+        int count  = Integer.parseInt(request.body.get("count"));
+        Game game = App.getLoggedInUser().getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        player.setMoney(player.getMoney() + count);
+        return new Response(true , "Money added successfully");
     }
 
     public static Response handleSellProduct(Request request) {
