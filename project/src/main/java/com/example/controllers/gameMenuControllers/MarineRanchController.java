@@ -11,7 +11,6 @@ import com.example.models.buildings.Coop;
 import com.example.models.enums.types.AnimalType;
 import com.example.models.enums.types.MenuTypes;
 import com.example.models.mapModels.Farm;
-import org.jetbrains.annotations.NotNull;
 
 public class MarineRanchController extends Controller {
     public static Response leaveRanch(Request request) {
@@ -80,7 +79,7 @@ public class MarineRanchController extends Controller {
         return new Response(false, "invalid animal");
     }
 
-    private static @NotNull Response buyChicken(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyChicken(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop && ((Coop) building).coopType.equals("Coop")) {
                 if (((Coop) building).animals.size() < AnimalType.Chicken.capacity) {
@@ -95,7 +94,7 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Coop");
     }
 
-    private static @NotNull Response buyPig(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyPig(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && ((Barn) building).barnType.equals("Deluxe Barn")) {
                 if (((Barn) building).animals.size() < AnimalType.PIG.capacity) {
@@ -110,7 +109,7 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Deluxe Barn");
     }
 
-    private static @NotNull Response buyDinosaur(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyDinosaur(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop && ((Coop) building).coopType.equals("Big Coop")) {
                 if (((Coop) building).animals.size() < AnimalType.DINOSAUR.capacity) {
@@ -125,7 +124,7 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Big Coop");
     }
 
-    private static @NotNull Response buyRabbit(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyRabbit(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop && ((Coop) building).coopType.equals("Deluxe Coop")) {
                 if (((Coop) building).animals.size() < AnimalType.RABBIT.capacity) {
@@ -140,7 +139,7 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Deluxe Coop");
     }
 
-    private static @NotNull Response buySheep(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buySheep(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && ((Barn) building).barnType.equals("Deluxe Barn")) {
                 if (((Barn) building).animals.size() < AnimalType.SHEEP.capacity) {
@@ -155,7 +154,7 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Deluxe Barn");
     }
 
-    private static @NotNull Response buyDuck(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyDuck(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop && ((Coop) building).coopType.equals("Big Coop")) {
                 if (((Coop) building).animals.size() < AnimalType.DUCK.capacity) {
@@ -170,7 +169,7 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Big Coop");
     }
 
-    private static @NotNull Response buyGoat(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyGoat(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && ((Barn) building).barnType.equals("Big Barn")) {
                 if (((Barn) building).animals.size() < AnimalType.GOAT.capacity) {
@@ -185,7 +184,7 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Big Barn");
     }
 
-    private static @NotNull Response buyCow(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyCow(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && ((Barn) building).barnType.equals("Barn")) {
                 if (((Barn) building).animals.size() < AnimalType.COW.capacity) {

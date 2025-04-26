@@ -31,6 +31,7 @@ public class Player {
     private ArrayList<CookingRecipes> unlockedCookingRecipes = new ArrayList<>();
     private ArrayList<CraftingRecipes> unlockedCraftingRecipes = new ArrayList<>();
     private ArrayList<ActiveBuff> activeBuffs = new ArrayList<>();
+    private ArrayList<Slot> refrigeratorSlots = new ArrayList<>();
     private ObjectId user_id;
     @Transient
     private User user;
@@ -266,7 +267,6 @@ public class Player {
         return user;
     }
 
-
     public ArrayList<NPC> getNpcs() {
         return npcs;
     }
@@ -339,6 +339,10 @@ public class Player {
 
     public ArrayList<ActiveBuff> getActiveBuffs() {
         return activeBuffs;
+    }
+
+    public ArrayList<Slot> getRefrigeratorSlots() {
+        return refrigeratorSlots;
     }
 
     @Override

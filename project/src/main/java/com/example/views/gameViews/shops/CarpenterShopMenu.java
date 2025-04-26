@@ -11,9 +11,9 @@ public class CarpenterShopMenu implements Menu {
     public void handleMenu(String input) {
         Response response = null;
         if (GameMenuCommands.BUILD.matches(input)) {
-            build(input);
+            response = build(input);
         } else if (GameMenuCommands.EXIT_MENU.matches(input)) {
-            leaveShop(input);
+            response = leaveShop(input);
         } else {
             response = getInvalidCommand();
         }
@@ -21,13 +21,13 @@ public class CarpenterShopMenu implements Menu {
         printResponse(response);
     }
 
-    private static void build(String input) {
+    private static Response build(String input) {
         Request request = new Request(input);
-        CarpenterShopController.build(request);
+        return CarpenterShopController.build(request);
     }
 
-    private static void leaveShop(String input) {
+    private static Response leaveShop(String input) {
         Request request = new Request(input);
-        CarpenterShopController.leaveCarpenterShop(request);
+        return CarpenterShopController.leaveCarpenterShop(request);
     }
 }

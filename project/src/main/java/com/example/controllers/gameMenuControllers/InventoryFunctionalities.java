@@ -16,7 +16,6 @@ import com.example.models.items.TreeSeed;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapObjects.DroppedItem;
 import com.example.models.mapObjects.EmptyCell;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -50,7 +49,7 @@ public class InventoryFunctionalities extends Controller {
         return removeItemHandle(numberInt, slot, player, game);
     }
 
-    private static @NotNull Response removeItemHandle(int numberInt, Slot slot, Player player, Game game) {
+    private static Response removeItemHandle(int numberInt, Slot slot, Player player, Game game) {
         int cashBack = (numberInt * slot.getItem().getValue() *
                 player.getTrashcanRefundPercentage()) / 100;
         player.setMoney(player.getMoney() + cashBack);
@@ -58,7 +57,7 @@ public class InventoryFunctionalities extends Controller {
         return new Response(true, numberInt + " of item(s) successfully trashed!");
     }
 
-    private static @NotNull Response removeSlotHandle(Slot slot, Player player, Backpack backpack, Game game) {
+    private static Response removeSlotHandle(Slot slot, Player player, Backpack backpack, Game game) {
         int cashBack = (slot.getCount() * slot.getItem().getValue() *
                 player.getTrashcanRefundPercentage()) / 100;
         player.setMoney(player.getMoney() + cashBack);
@@ -103,12 +102,12 @@ public class InventoryFunctionalities extends Controller {
 
     }
 
+    // TODO BLACKSMITH
     public static Response handleToolUpgrade(Request request) {
-        // TODO BLACKSMITH
         return null;
-
     }
 
+    //TODO: For crops, trees and all seeds/saplings.
     public static Response handleCraftInfoQuery(Request request) {
         return null;
 
@@ -305,8 +304,8 @@ public class InventoryFunctionalities extends Controller {
         return new Response(true, "Item added successfully.");
     }
 
+    //TODO: Implement after cooking.
     public static Response handleEating(Request request) {
         return null;
-
     }
 }

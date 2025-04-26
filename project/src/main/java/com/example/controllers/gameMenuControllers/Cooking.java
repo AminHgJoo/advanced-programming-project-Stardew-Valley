@@ -12,6 +12,8 @@ import com.example.models.enums.types.MenuTypes;
 public class Cooking extends Controller {
 
     public static Response handlePickFromRefrigerator(Request request) {
+        String item = request.body.get("item");
+
 
     }
 
