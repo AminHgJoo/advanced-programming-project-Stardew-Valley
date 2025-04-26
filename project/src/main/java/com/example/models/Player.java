@@ -36,7 +36,7 @@ public class Player {
     private User user;
     private ArrayList<Friendship> friendships = new ArrayList<>();
     private ArrayList<NPCFriendship> npcFriendships = new ArrayList<>();
-    private ArrayList<PlayerAnimal> animals = new ArrayList<>();
+    private ArrayList<PlayerAnimal> animalFriendship = new ArrayList<>();
     private double energy;
     private double maxEnergy;
     private boolean isPlayerFainted;
@@ -62,6 +62,15 @@ public class Player {
         initializeInventory();
         initializeSkills();
         initializeRecipes();
+    }
+
+    public PlayerAnimal getAnimalFriendship(String name) {
+        for(PlayerAnimal friendship : animalFriendship){
+            if(friendship.getAnimal().getName().equals(name)){
+                return friendship;
+            }
+        }
+        return null;
     }
 
     private void initializeRecipes() {
@@ -273,8 +282,8 @@ public class Player {
         this.trashcanType = trashcanType;
     }
 
-    public ArrayList<PlayerAnimal> getAnimals() {
-        return animals;
+    public ArrayList<PlayerAnimal> getAnimalFriendship() {
+        return animalFriendship;
     }
 
     public Item getEquippedItem() {

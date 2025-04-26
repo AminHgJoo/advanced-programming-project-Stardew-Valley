@@ -24,7 +24,7 @@ public class LivestockController extends Controller {
             return new Response(false, "Animal not found");
         }
         PlayerAnimal playerAnimal = new PlayerAnimal(animal, 0);
-        player.getAnimals().add(playerAnimal);
+        player.getAnimalFriendship().add(playerAnimal);
         GameRepository.saveGame(game);
         return new Response(true, "you are now friend with " + petName);
     }
@@ -32,8 +32,17 @@ public class LivestockController extends Controller {
     public static Response handleCheatSetFriendship(Request request) {
         String animalName = request.body.get("animalName");
         int amount = Integer.parseInt(request.body.get("amount"));
-
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        PlayerAnimal friendship = player.getAnimalFriendship(animalName);
+        if (friendship == null) {
+            GameRepository.saveGame(game);
+            return new Response(false, "Animal not found");
+        }
+        friendship.setXp(amount);
+        GameRepository.saveGame(game);
+        return new Response(true, "your xp is: " + friendship.getXp());
     }
 
     public static Response handleAnimals(Request request) {

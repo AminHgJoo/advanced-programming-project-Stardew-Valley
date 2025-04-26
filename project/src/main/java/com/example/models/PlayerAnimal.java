@@ -15,4 +15,20 @@ public class PlayerAnimal {
         this.animal = animal;
         this.xp = xp;
     }
+
+    public Animal getAnimal() {
+        return animal;
+    }
+
+    public void setAnimal(Animal animal) {
+        this.animal = animal;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
 }
