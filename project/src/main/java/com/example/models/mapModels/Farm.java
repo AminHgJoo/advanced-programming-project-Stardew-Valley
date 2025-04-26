@@ -335,6 +335,17 @@ public class Farm {
         return null;
     }
 
+    public AnimalBlock getAnimalBlock(Animal animal) {
+        for(Cell cell : getCells()){
+            if(cell.getObjectOnCell() instanceof AnimalBlock){
+                if(((AnimalBlock)cell.getObjectOnCell()).animal == animal){
+                    return (AnimalBlock)cell.getObjectOnCell();
+                }
+            }
+        }
+        return null;
+    }
+
     public void strikeLightning(int targetX, int targetY) {
         Cell targetCell = findCellByCoordinate(targetX, targetY);
         if (targetCell != null) {
