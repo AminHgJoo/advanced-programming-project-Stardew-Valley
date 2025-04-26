@@ -5,6 +5,8 @@ import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
+import com.example.models.enums.types.MiscType;
+import com.example.models.enums.worldEnums.Weather;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapObjects.AnimalBlock;
@@ -63,7 +65,7 @@ public class LivestockController extends Controller {
                     append(animal.getName()).append("\n").
                     append("friendship level: ").append(animal.getXp()).append("\n").
                     append("hasBeenPetToDay: ").append(animal.hasBeenPetToDay).append("\n").
-                    append("hasBeenFedToDay: ").append(animal.hasBeenFed).append("\n").
+                    append("hasBeenFedToDay: ").append(animal.hasBeenFedByHay).append("\n").
                     append("xp: ").append(animal.getXp()).append("\n\n");
         }
         GameRepository.saveGame(game);
@@ -80,18 +82,47 @@ public class LivestockController extends Controller {
         Farm farm = game.getCurrentPlayer().getFarm();
         Animal animal = player.getAnimalByName(animalName);
         Cell cell = farm.findCellByCoordinate(x, y);
-        if(cell == null|| !(cell.getObjectOnCell() instanceof EmptyCell)) {
+        if (cell == null || !(cell.getObjectOnCell() instanceof EmptyCell) || animal == null) {
             GameRepository.saveGame(game);
-            return new Response(false, "cell not found or not empty");
+            return new Response(false, "cell not found or not empty or no animal found");
+        }
+        if (game.getWeatherToday() == Weather.SNOW || game.getWeatherToday() == Weather.STORM || game.getWeatherToday() == Weather.RAIN) {
+            GameRepository.saveGame(game);
+            return new Response(true, "bad weather quality");
         }
         cell.setObjectOnCell(new AnimalBlock(animal));
-        animal.hasBeenFed = true;
+        animal.hasBeenFedByGrass = true;
         GameRepository.saveGame(game);
         return new Response(true, "you have shepherd");
     }
 
     public static Response handleFeedHay(Request request) {
-        return null;
+        String animalName = request.body.get("animalName");
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Farm farm = game.getCurrentPlayer().getFarm();
+        Animal animal = player.getAnimalByName(animalName);
+        if (animal == null) {
+            GameRepository.saveGame(game);
+            return new Response(false, "no animal found");
+        }
+        Backpack backpack = player.getInventory();
+        Slot haySlot = null;
+        for(Slot slot : backpack.getSlots()) {
+            if(slot.getItem().getName().equals(MiscType.HAY.name))
+                haySlot = slot;
+        }
+        if(haySlot == null) {
+            return new Response(false, "no hay found");
+        }
+        haySlot.setCount(haySlot.getCount() - 1);
+        if(haySlot.getCount() == 0) {
+            backpack.removeSlot(haySlot);
+        }
+        animal.hasBeenFedByHay = true;
+        GameRepository.saveGame(game);
+        return new Response(true, "you have shepherd");
     }
 
     public static Response handleProduces(Request request) {

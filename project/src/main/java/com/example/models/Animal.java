@@ -10,7 +10,8 @@ public class Animal {
     private int cost;
     private int xp;
     public boolean hasBeenPetToDay;
-    public boolean hasBeenFed;
+    public boolean hasBeenFedByHay;
+    public boolean hasBeenFedByGrass;
 
 
     public Animal() {
@@ -21,7 +22,7 @@ public class Animal {
         this.type = type;
         this.cost = cost;
         this.hasBeenPetToDay = false;
-        this.hasBeenFed = false;
+        this.hasBeenFedByHay = false;
         this.xp = 0;
     }
 
