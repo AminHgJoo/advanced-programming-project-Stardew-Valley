@@ -1,7 +1,7 @@
 package com.example.models.enums.types;
 
 public enum ForagingMineralsType implements ItemType {
-    STONE(0, "Stone"),
+    STONE(2, "Stone"),
     QUARTZ(25, "Quartz"),
     EARTH_CRYSTAL(50, "Earth Crystal"),
     FROZEN_TEAR(75, "Frozen Tear"),
@@ -14,10 +14,10 @@ public enum ForagingMineralsType implements ItemType {
     JADE(200, "Jade"),
     DIAMOND(750, "Diamond"),
     PRISMATIC_SHARD(2000, "Prismatic Shard"),
-    COPPER(5, "Copper"),
-    IRON(10, "Iron"),
-    GOLD(25, "Gold"),
-    IRIDIUM(100, "Iridium"),
+    COPPER_ORE(5, "Copper Ore"),
+    IRON_ORE(10, "Iron Ore"),
+    GOLD_ORE(25, "Gold Ore"),
+    IRIDIUM_ORE(100, "Iridium Ore"),
     COAL(15, "Coal");
 
     private final int sellPrice;

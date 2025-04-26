@@ -40,7 +40,10 @@ public class Game {
             date = date.plusHours(10);
             gameThread.handleRefreshForaging();
             weatherToday = weatherTomorrow;
+
             determineAndSetWeatherTomorrow();
+            resetAllAnimalDailyVariables();
+
             if (weatherToday == Weather.STORM) {
                 strikeLightningOnStormyDay();
             }
@@ -96,6 +99,10 @@ public class Game {
 
     public Game() {
 
+    }
+
+    public void resetAllAnimalDailyVariables() {
+        //TODO: Handle later
     }
 
     public Game(ArrayList<Player> players, Player currentPlayer) {

@@ -150,7 +150,7 @@ public class Farm {
 
         for (Cell cell : cells) {
             //TODO: Fix foraging seed into crops.
-            int randomNumber = (int) (Math.random() * 100);
+            int randomNumber = (int) (Math.random() * 150);
             if (cell.getObjectOnCell().type.equals("empty") && cell.isTilled() && randomNumber == 3) {
                 cell.setObjectOnCell(randomForagingSeed());
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {

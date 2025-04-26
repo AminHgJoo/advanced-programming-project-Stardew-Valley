@@ -102,15 +102,37 @@ public enum FoodTypes implements ItemType {
     HOLLY("Holly", -37, new FoodBuff("", 0, 0), 80),
     SNOW_YAM("Snow Yam", 30, new FoodBuff("", 0, 0), 100),
     WINTER_ROOT("Winter Root", 25, new FoodBuff("", 0, 0), 70),
+    BEER("Beer", 50, new FoodBuff("", 0, 0), 200),
+    COFFEE("Coffee", 3, new FoodBuff("", 0, 0), 150),
+    JOJA_COLA("Joja Cola", 13, new FoodBuff("", 0, 0), 25),
+    SUGAR("Sugar", 25, new FoodBuff("", 0, 0), 50),
+    WHEAT_FLOUR("Wheat Flour", 13, new FoodBuff("", 0, 0), 50),
+    RICE("Rice", 13, new FoodBuff("", 0, 0), 100),
+    OIL("Oil", 13, new FoodBuff("", 0, 0), 100),
+    VINEGAR("Vinegar", 13, new FoodBuff("", 0, 0), 100),
+    TROUT_SOUP("Trout Soup", 100, new FoodBuff("", 0, 0), 100),
+    HONEY("Honey", 0, new FoodBuff("", 0, 0), 100),
+    MAYONNAISE("Mayonnaise", 50, new FoodBuff("", 0, 0), 190),
+    DUCK_MAYONNAISE("Duck Mayonnaise", 75, new FoodBuff("", 0, 0), 375),
+    DINOSAUR_MAYONNAISE("Dinosaur Mayonnaise", 125, new FoodBuff("", 0, 0), 800),
+    TRUFFLE_OIL("Truffle Oil", 38, new FoodBuff("", 0, 0), 1065),
+    CHEESE("Cheese", 125, new FoodBuff("", 0, 0), 230),
+    GOAT_CHEESE("Goat Cheese", 125, new FoodBuff("", 0, 0), 400),
+    //TODO: Determine based on base ingredient.
+    JUICE("Juice", null, new FoodBuff("", 0, 0), null),
+    MEAD("Mead", 75, new FoodBuff("", 0, 0), 300),
+    PALE_ALE("Pale Ale", 50, new FoodBuff("", 0, 0), 300),
+    //TODO: Determine based on base ingredient.
+    WINE("Wine", null, new FoodBuff("", 0, 0), null),
     ;
 
     //TODO: Add buff to player's list of buffs.
     final public String name;
-    final public int energy;
+    final public Integer energy;
     final public FoodBuff foodBuff;
-    final public int value;
+    final public Integer value;
 
-    FoodTypes(String name, int energy, FoodBuff foodBuff, int value) {
+    FoodTypes(String name, Integer energy, FoodBuff foodBuff, Integer value) {
         this.name = name;
         this.energy = energy;
         this.foodBuff = foodBuff;
