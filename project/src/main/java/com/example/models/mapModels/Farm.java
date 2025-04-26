@@ -315,6 +315,25 @@ public class Farm {
         return false;
     }
 
+    public Animal findAnimal(String animalName) {
+        for (Building b : getBuildings()) {
+            if (b instanceof Coop) {
+                for (Animal animal : ((Coop) b).animals) {
+                    if (animal.getName().equals(animalName)) {
+                        return animal;
+                    }
+                }
+            } else if (b instanceof Barn) {
+                for (Animal animal : ((Barn) b).animals) {
+                    if (animal.getName().equals(animalName)) {
+                        return animal;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public void strikeLightning(int targetX, int targetY) {
         Cell targetCell = findCellByCoordinate(targetX, targetY);
         if (targetCell != null) {
