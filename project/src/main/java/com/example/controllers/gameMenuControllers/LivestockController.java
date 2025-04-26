@@ -65,7 +65,7 @@ public class LivestockController extends Controller {
                     append(animal.getName()).append("\n").
                     append("friendship level: ").append(animal.getXp()).append("\n").
                     append("hasBeenPetToDay: ").append(animal.hasBeenPetToDay).append("\n").
-                    append("hasBeenFedToDay: ").append(animal.hasBeenFedByHay).append("\n").
+                    append("hasBeenFedToDay: ").append(animal.hasBeenFedByHay || animal.hasBeenFedByGrass).append("\n").
                     append("xp: ").append(animal.getXp()).append("\n\n");
         }
         GameRepository.saveGame(game);
