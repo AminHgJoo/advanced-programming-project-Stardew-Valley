@@ -9,10 +9,8 @@ import com.example.models.enums.recipes.CraftingRecipes;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.types.itemTypes.TreeSeedsType;
-import com.example.models.items.Item;
-import com.example.models.items.Misc;
-import com.example.models.items.Tool;
-import com.example.models.items.TreeSeed;
+import com.example.models.items.*;
+import com.example.models.items.buffs.ActiveBuff;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapObjects.DroppedItem;
 import com.example.models.mapObjects.EmptyCell;
@@ -143,7 +141,7 @@ public class InventoryFunctionalities extends Controller {
         }
 
         if (targetRecipe == null) {
-            return new Response(false, "No recipe found for " + itemName);
+            return new Response(false, "No recipe found for: " + itemName);
         }
 
         Backpack backpack = player.getInventory();
@@ -304,8 +302,34 @@ public class InventoryFunctionalities extends Controller {
         return new Response(true, "Item added successfully.");
     }
 
-    //TODO: Implement after cooking.
     public static Response handleEating(Request request) {
-        return null;
+        String foodName = request.body.get("foodName");
+
+        Game game = App.getLoggedInUser().getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Backpack backpack = player.getInventory();
+
+        Slot slot = backpack.getSlotByItemName(foodName);
+
+        if (slot == null) {
+            return new Response(false, "Item not found.");
+        }
+
+        if (!(slot.getItem() instanceof Food) || slot.getItem().getEnergyCost() >= 0) {
+            return new Response(false, "Item isn't edible food.");
+        }
+
+        Food food = (Food) slot.getItem();
+        slot.setCount(slot.getCount() - 1);
+
+        if (slot.getCount() == 0) {
+            backpack.getSlots().remove(slot);
+        }
+
+        player.setEnergy(Math.min(player.getEnergy() - food.getEnergyCost(), player.getMaxEnergy()));
+        player.getActiveBuffs().add(new ActiveBuff(food.foodBuff));
+
+        GameRepository.saveGame(game);
+        return new Response(true, "You successfully consumed: " + food.getName());
     }
 }
