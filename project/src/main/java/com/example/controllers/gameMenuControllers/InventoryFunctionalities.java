@@ -326,8 +326,8 @@ public class InventoryFunctionalities extends Controller {
             backpack.getSlots().remove(slot);
         }
 
-        player.setEnergy(Math.min(player.getEnergy() - food.getEnergyCost(), player.getMaxEnergy()));
         player.getActiveBuffs().add(new ActiveBuff(food.foodBuff));
+        player.setEnergy(Math.min(player.getEnergy() - food.getEnergyCost(), player.getMaxEnergy()));
 
         GameRepository.saveGame(game);
         return new Response(true, "You successfully consumed: " + food.getName());

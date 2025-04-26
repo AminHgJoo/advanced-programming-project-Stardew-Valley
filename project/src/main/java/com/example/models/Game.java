@@ -220,19 +220,19 @@ public class Game {
 
     private boolean isPlayerLevelOk(Player player, int farmingLevel
             , int foragingLevel, int fishingLevel, int miningLevel) {
-        return player.getFarmingSkill().getLevel().levelNumber >= farmingLevel &&
-                player.getForagingSkill().getLevel().levelNumber >= foragingLevel &&
-                player.getFishingSkill().getLevel().levelNumber >= fishingLevel &&
-                player.getMiningSkill().getLevel().levelNumber >= miningLevel;
+        return player.getUnbuffedFarmingSkill().getLevel().levelNumber >= farmingLevel &&
+                player.getUnbuffedForagingSkill().getLevel().levelNumber >= foragingLevel &&
+                player.getUnbuffedFishingSkill().getLevel().levelNumber >= fishingLevel &&
+                player.getUnbuffedMiningSkill().getLevel().levelNumber >= miningLevel;
     }
 
     public void checkForSkillUpgrades() {
         for (Player player : players) {
             ArrayList<Skill> skills = new ArrayList<>();
-            skills.add(player.getFarmingSkill());
-            skills.add(player.getFishingSkill());
-            skills.add(player.getForagingSkill());
-            skills.add(player.getMiningSkill());
+            skills.add(player.getUnbuffedFarmingSkill());
+            skills.add(player.getUnbuffedFishingSkill());
+            skills.add(player.getUnbuffedForagingSkill());
+            skills.add(player.getUnbuffedMiningSkill());
             for (Skill skill : skills) {
                 if (skill.getLevel().getXpToNextLevel() == Double.POSITIVE_INFINITY) {
                     continue;

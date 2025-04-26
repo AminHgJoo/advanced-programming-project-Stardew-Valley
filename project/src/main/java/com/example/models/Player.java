@@ -18,6 +18,7 @@ import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 @Embedded
@@ -203,6 +204,46 @@ public class Player {
                 }
 
                 return clone;
+            }
+        }
+        return null;
+    }
+
+    public Farming getUnbuffedFarmingSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Farming) {
+                Farming farming = (Farming) skill;
+                return farming;
+            }
+        }
+        return null;
+    }
+
+    public Fishing getUnbuffedFishingSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Fishing) {
+                Fishing fishing = (Fishing) skill;
+                return fishing;
+            }
+        }
+        return null;
+    }
+
+    public Foraging getUnbuffedForagingSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Foraging) {
+                Foraging foraging = (Foraging) skill;
+                return foraging;
+            }
+        }
+        return null;
+    }
+
+    public Mining getUnbuffedMiningSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Mining) {
+                Mining mining = (Mining) skill;
+                return mining;
             }
         }
         return null;
