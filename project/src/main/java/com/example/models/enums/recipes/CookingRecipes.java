@@ -3,7 +3,7 @@ package com.example.models.enums.recipes;
 import com.example.models.Slot;
 import com.example.models.enums.types.FoodTypes;
 
-public enum CookingRecipes implements Recipe {
+public enum CookingRecipes {
     //TODO: INGREDIENTS ARE WRONG!
     FRIED_EGG("Fried Egg", 0, 0, 0, 0, FoodTypes.FRIED_EGG, (Slot[]) null),
     BAKED_FISH("Baked Fish", 0, 0, 0, 0, FoodTypes.BAKED_FISH, (Slot[]) null),
