@@ -15,7 +15,6 @@ import com.example.models.mapModels.Farm;
 import com.example.models.mapObjects.ArtisanBlock;
 import com.example.models.mapObjects.BuildingBlock;
 import com.example.models.mapObjects.EmptyCell;
-import org.jetbrains.annotations.NotNull;
 
 public class CarpenterShopController extends Controller {
     public static Response leaveCarpenterShop(Request request) {
@@ -67,7 +66,7 @@ public class CarpenterShopController extends Controller {
 
     }
 
-    private static @NotNull Response buildBarn(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
+    private static Response buildBarn(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
         if (wood != null && stone != null) {
             if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney() >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
@@ -96,7 +95,7 @@ public class CarpenterShopController extends Controller {
         return new Response(false, "You don't have enough money.");
     }
 
-    private static @NotNull Response buildShipping(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
+    private static Response buildShipping(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
         if (wood != null && stone != null) {
             if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney() >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
@@ -117,7 +116,7 @@ public class CarpenterShopController extends Controller {
         return new Response(false, "You don't have enough money.");
     }
 
-    private static @NotNull Response buildWell(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
+    private static Response buildWell(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
         if (wood != null && stone != null) {
             if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney() >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
@@ -146,7 +145,7 @@ public class CarpenterShopController extends Controller {
         return new Response(false, "You don't have enough money.");
     }
 
-    private static @NotNull Response buildCoop(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
+    private static Response buildCoop(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
         if (wood != null && stone != null) {
             if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney() >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);

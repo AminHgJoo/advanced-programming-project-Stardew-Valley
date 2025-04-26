@@ -12,7 +12,7 @@ public class MarnieRanchMenu implements Menu {
     public void handleMenu(String input) {
         Response response = null;
         if (GameMenuCommands.BUY_ANIMAL.matches(input)) {
-            buyAnimal(input);
+            response = buyAnimal(input);
         } else if (GameMenuCommands.EXIT_MENU.matches(input)) {
             response = leaveRanch(input);
         } else {
@@ -22,9 +22,9 @@ public class MarnieRanchMenu implements Menu {
         printResponse(response);
     }
 
-    private static void buyAnimal(String input) {
+    private static Response buyAnimal(String input) {
         Request request = new Request(input);
-        MarineRanchController.buyAnimal(request);
+        return MarineRanchController.buyAnimal(request);
     }
 
     private static Response leaveRanch(String input) {
