@@ -118,12 +118,18 @@ public enum FoodTypes implements ItemType {
     TRUFFLE_OIL("Truffle Oil", 38, new FoodBuff("", 0, 0), 1065),
     CHEESE("Cheese", 125, new FoodBuff("", 0, 0), 230),
     GOAT_CHEESE("Goat Cheese", 125, new FoodBuff("", 0, 0), 400),
-    //TODO: Determine based on base ingredient.
-    JUICE("Juice", null, new FoodBuff("", 0, 0), null),
     MEAD("Mead", 75, new FoodBuff("", 0, 0), 300),
     PALE_ALE("Pale Ale", 50, new FoodBuff("", 0, 0), 300),
-    //TODO: Determine based on base ingredient.
+    RAISINS("Raisins", 125, new FoodBuff("", 0, 0), 600),
+    //TODO: Determine based on base ingredient.,
     WINE("Wine", null, new FoodBuff("", 0, 0), null),
+    JUICE("Juice", null, new FoodBuff("", 0, 0), null),
+    DRIED_MUSHROOMS("Dried Mushrooms", 50, new FoodBuff("", 0, 0), null),
+    DRIED_FRUIT("Dried Fruit", 75, new FoodBuff("", 0, 0), null),
+    PICKLES("Pickles", null, new FoodBuff("", 0, 0), null),
+    JELLY("Jelly", null, new FoodBuff("", 0, 0), null),
+    SMOKED_FISH("Smoked Fish", null, new FoodBuff("", 0, 0), null)
+    //END OF LIST
     ;
 
     //TODO: Add buff to player's list of buffs.
