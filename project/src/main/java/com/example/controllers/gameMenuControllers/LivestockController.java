@@ -85,6 +85,7 @@ public class LivestockController extends Controller {
             return new Response(false, "cell not found or not empty");
         }
         cell.setObjectOnCell(new AnimalBlock(animal));
+        animal.hasBeenFed = true;
         GameRepository.saveGame(game);
         return new Response(true, "you have shepherd");
     }
