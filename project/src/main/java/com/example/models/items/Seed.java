@@ -1,7 +1,7 @@
 package com.example.models.items;
 
 import com.example.models.enums.Quality;
-import com.example.models.enums.types.CropSeedsType;
+import com.example.models.enums.types.itemTypes.CropSeedsType;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
@@ -19,9 +19,9 @@ public class Seed extends Item {
         this.cropSeedsType = cropSeedsType;
     }
 
-    public Seed(CropSeedsType cropSeedsType, String name) {
+    public Seed(CropSeedsType cropSeedsType) {
         this.cropSeedsType = cropSeedsType;
-        this.name = name;
+        this.name = cropSeedsType.name;
         this.quality = Quality.DEFAULT;
         this.maxStackSize = Integer.MAX_VALUE;
         this.value = cropSeedsType.baseSellPrice;
@@ -41,11 +41,6 @@ public class Seed extends Item {
     @Override
     public void dropItem() {
 
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {

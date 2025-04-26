@@ -1,6 +1,6 @@
 package com.example.models;
 
-import com.example.models.enums.types.BackpackType;
+import com.example.models.enums.types.inventoryEnums.BackpackType;
 import com.example.models.items.Seed;
 import com.example.models.items.Tool;
 import dev.morphia.annotations.Embedded;

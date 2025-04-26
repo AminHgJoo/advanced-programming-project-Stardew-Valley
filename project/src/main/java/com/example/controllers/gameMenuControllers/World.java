@@ -7,7 +7,9 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.Quality;
 import com.example.models.enums.SkillLevel;
-import com.example.models.enums.types.*;
+import com.example.models.enums.types.itemTypes.*;
+import com.example.models.enums.types.mapObjectTypes.ForagingCropsType;
+import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.enums.worldEnums.Season;
 import com.example.models.enums.worldEnums.Weather;
 import com.example.models.items.Fish;
@@ -355,7 +357,7 @@ public class World extends Controller {
             } else {
                 if (slot == null) {
                     backpack.getSlots().add(new
-                            Slot(new com.example.models.items.ForagingMineral(Quality.DEFAULT, type.getSellPrice(), type), count));
+                            Slot(new com.example.models.items.ForagingMineral(Quality.DEFAULT, type), count));
                 } else {
                     slot.setCount(Math.min(slot.getItem().getMaxStackSize(), slot.getCount() + count));
                 }
@@ -367,9 +369,35 @@ public class World extends Controller {
         }
 
         if (targetCell.getObjectOnCell() instanceof DroppedItem) {
-            targetCell.setObjectOnCell(new EmptyCell());
-            GameRepository.saveGame(game);
-            return new Response(true, "Destroyed item on target cell.");
+
+            DroppedItem droppedItem = (DroppedItem) targetCell.getObjectOnCell();
+            Slot droppedSlot = new Slot(droppedItem.getItem(), droppedItem.getQuantity());
+            Backpack backpack = player.getInventory();
+            Slot backpackSlot = backpack.getSlotByItemName(droppedSlot.getItem().getName());
+
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                if (backpackSlot == null) {
+                    GameRepository.saveGame(game);
+                    return new Response(false, "Backpack was full! Couldn't retrieve item from the ground.");
+                } else {
+                    backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxStackSize()));
+                    targetCell.setObjectOnCell(new EmptyCell());
+                    GameRepository.saveGame(game);
+                    return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
+                }
+            } else {
+                if (backpackSlot == null) {
+                    backpack.getSlots().add(droppedSlot);
+                    targetCell.setObjectOnCell(new EmptyCell());
+                    GameRepository.saveGame(game);
+                    return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
+                } else {
+                    backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxStackSize()));
+                    targetCell.setObjectOnCell(new EmptyCell());
+                    GameRepository.saveGame(game);
+                    return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
+                }
+            }
         }
 
         if (targetCell.getObjectOnCell() instanceof EmptyCell) {
@@ -443,7 +471,7 @@ public class World extends Controller {
                 return new Response(true, "You received " + amountOfWood + " wood.");
             } else {
                 if (slot == null) {
-                    backpack.getSlots().add(new Slot(new Misc(0, MiscType.WOOD), amountOfWood));
+                    backpack.getSlots().add(new Slot(new Misc(MiscType.WOOD), amountOfWood));
                 } else {
                     slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
                 }
@@ -468,7 +496,7 @@ public class World extends Controller {
                 return new Response(true, "You received " + amountOfWood + " wood.");
             } else {
                 if (slot == null) {
-                    backpack.getSlots().add(new Slot(new Misc(0, MiscType.WOOD), amountOfWood));
+                    backpack.getSlots().add(new Slot(new Misc(MiscType.WOOD), amountOfWood));
                 } else {
                     slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
                 }
@@ -749,7 +777,7 @@ public class World extends Controller {
             Quality fishQuality = setFishQuality(qualityNumber);
             int price = fishType.price;
 
-            Fish fish = new Fish(fishQuality, Integer.MAX_VALUE, price, 0.0, fishType.name, fishType);
+            Fish fish = new Fish(fishQuality, fishType);
             Backpack backpack = player.getInventory();
             player.getFishingSkill().setXp(player.getFishingSkill().getXp() + 5);
 
@@ -887,7 +915,7 @@ public class World extends Controller {
                 } else {
                     if (slot == null) {
                         backpack.getSlots()
-                                .add(new Slot(new Misc(0, MiscType.FIBER), 1));
+                                .add(new Slot(new Misc(MiscType.FIBER), 1));
                     } else {
                         slot.setCount(Math.min(slot.getCount() + 1, slot.getItem().getMaxStackSize()));
                     }

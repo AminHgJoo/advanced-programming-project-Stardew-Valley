@@ -1,4 +1,4 @@
-package com.example.models.enums.types;
+package com.example.models.enums.types.mapObjectTypes;
 
 import com.example.models.enums.worldEnums.Season;
 

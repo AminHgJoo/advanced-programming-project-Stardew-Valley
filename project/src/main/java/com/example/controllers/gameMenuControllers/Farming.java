@@ -8,7 +8,7 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.Player;
 import com.example.models.enums.Directions;
-import com.example.models.enums.types.CropSeedsType;
+import com.example.models.enums.types.itemTypes.CropSeedsType;
 import com.example.models.items.Seed;
 import com.example.models.items.Tool;
 import com.example.models.mapModels.Cell;

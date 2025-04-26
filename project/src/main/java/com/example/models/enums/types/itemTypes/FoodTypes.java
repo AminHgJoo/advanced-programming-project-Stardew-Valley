@@ -1,5 +1,8 @@
-package com.example.models.enums.types;
+package com.example.models.enums.types.itemTypes;
 
+import com.example.models.Slot;
+import com.example.models.enums.Quality;
+import com.example.models.items.Food;
 import com.example.models.items.buffs.FoodBuff;
 
 public enum FoodTypes implements ItemType {
@@ -88,7 +91,7 @@ public enum FoodTypes implements ItemType {
     SALMON_BERRY("Salmon Berry", 13, new FoodBuff("", 0, 0), 8),
     SPRING_ONION("Spring Onion", 13, new FoodBuff("", 0, 0), 8),
     WILD_HORSERADISH("Wild Horseradish", 13, new FoodBuff("", 0, 0), 50),
-    FIDDLE_HEAD_FERN("Fiddle Head Fern" , 25, new FoodBuff("", 0, 0), 90),
+    FIDDLE_HEAD_FERN("Fiddle Head Fern", 25, new FoodBuff("", 0, 0), 90),
     RED_MUSHROOM("Red Mushroom", -50, new FoodBuff("", 0, 0), 75),
     SPICE_BERRY("Spice Berry", 25, new FoodBuff("", 0, 0), 80),
     SWEET_PEA("Sweet Pea", 0, new FoodBuff("", 0, 0), 50),
@@ -143,5 +146,10 @@ public enum FoodTypes implements ItemType {
         this.energy = energy;
         this.foodBuff = foodBuff;
         this.value = value;
+    }
+
+    @Override
+    public Slot createAmountOfItem(int amount) {
+        return new Slot(new Food(Quality.DEFAULT, this), amount);
     }
 }

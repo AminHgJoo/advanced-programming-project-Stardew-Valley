@@ -1,7 +1,7 @@
 package com.example.models.items;
 
 import com.example.models.enums.Quality;
-import com.example.models.enums.types.ForagingMineralsType;
+import com.example.models.enums.types.itemTypes.ForagingMineralsType;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
@@ -21,8 +21,8 @@ public class ForagingMineral extends Item {
         type = null;
     }
 
-    public ForagingMineral(Quality quality, int value, ForagingMineralsType type) {
-        super(quality, Integer.MAX_VALUE, value, 0, type.name);
+    public ForagingMineral(Quality quality, ForagingMineralsType type) {
+        super(quality, Integer.MAX_VALUE, type.getSellPrice(), 0, type.name);
         this.type = type;
     }
 

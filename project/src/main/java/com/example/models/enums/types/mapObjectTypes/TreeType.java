@@ -1,5 +1,6 @@
-package com.example.models.enums.types;
+package com.example.models.enums.types.mapObjectTypes;
 
+import com.example.models.enums.types.itemTypes.FoodTypes;
 import com.example.models.enums.worldEnums.Season;
 
 public enum TreeType {

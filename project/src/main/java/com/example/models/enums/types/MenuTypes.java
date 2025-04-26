@@ -16,7 +16,9 @@ public enum MenuTypes {
     JojaMartShopMenu(new JojaMartShopMenu()),
     PierreGeneralStoreMenu(new PierreGeneralStoreMenu()),
     FishShopMenu(new FishShopMenu()),
-    TheStardropSaloonMenu(new TheStardropSaloonMenu()),;
+    TheStardropSaloonMenu(new TheStardropSaloonMenu()),
+    ;
+
     private final Menu menu;
 
     MenuTypes(Menu menu) {

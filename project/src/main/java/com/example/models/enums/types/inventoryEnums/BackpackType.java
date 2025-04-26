@@ -1,4 +1,4 @@
-package com.example.models.enums.types;
+package com.example.models.enums.types.inventoryEnums;
 
 public enum BackpackType {
     DEFAULT(12, "Default"),

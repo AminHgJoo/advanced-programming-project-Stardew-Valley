@@ -1,9 +1,7 @@
 package com.example.models;
 
-import com.example.models.NPCModels.NPC;
 import dev.morphia.annotations.Embedded;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Embedded

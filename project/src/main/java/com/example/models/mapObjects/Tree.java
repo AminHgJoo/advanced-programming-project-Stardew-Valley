@@ -1,6 +1,6 @@
 package com.example.models.mapObjects;
 
-import com.example.models.enums.types.TreeType;
+import com.example.models.enums.types.mapObjectTypes.TreeType;
 import dev.morphia.annotations.Embedded;
 
 @Embedded

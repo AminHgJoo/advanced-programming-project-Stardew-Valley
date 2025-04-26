@@ -1,6 +1,6 @@
-package com.example.models.enums.types;
+package com.example.models.enums.types.mapObjectTypes;
 
-public enum ArtisanBlockType implements ItemType {
+public enum ArtisanBlockType {
     SHIPPING_BIN("Shipping Bin"),
     ;
 
@@ -9,4 +9,5 @@ public enum ArtisanBlockType implements ItemType {
     ArtisanBlockType(String name) {
         this.name = name;
     }
+
 }

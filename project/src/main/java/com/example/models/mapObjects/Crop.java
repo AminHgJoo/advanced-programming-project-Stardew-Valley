@@ -1,6 +1,6 @@
 package com.example.models.mapObjects;
 
-import com.example.models.enums.types.CropSeedsType;
+import com.example.models.enums.types.itemTypes.CropSeedsType;
 import dev.morphia.annotations.Embedded;
 
 // TODO CROP STAGE

@@ -6,6 +6,7 @@ import dev.morphia.annotations.Embedded;
 @Embedded
 public class AnimalBlock extends MapObject {
     public Animal animal;
+
     public AnimalBlock(Animal animal) {
         super(false, "animal", "purple");
         this.animal = animal;

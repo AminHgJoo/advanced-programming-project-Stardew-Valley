@@ -1,4 +1,8 @@
-package com.example.models.enums.types;
+package com.example.models.enums.types.itemTypes;
+
+import com.example.models.Slot;
+import com.example.models.enums.Quality;
+import com.example.models.items.Tool;
 
 public enum ToolTypes implements ItemType {
     HOE(0, "Hoe"),
@@ -21,5 +25,11 @@ public enum ToolTypes implements ItemType {
     ToolTypes(int waterCapacity, String name) {
         this.waterCapacity = waterCapacity;
         this.name = name;
+    }
+
+
+    @Override
+    public Slot createAmountOfItem(int amount) {
+        return new Slot(new Tool(Quality.DEFAULT, 0, 0, this.name, this, this.waterCapacity), 1);
     }
 }
