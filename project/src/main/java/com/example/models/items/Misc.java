@@ -34,6 +34,10 @@ public class Misc extends Item {
         this.miscType = miscType;
     }
 
+    public Misc(MiscType miscType) {
+        this(miscType, Quality.DEFAULT);
+    }
+
     public MiscType getMiscType() {
         return miscType;
     }
