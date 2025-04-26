@@ -161,7 +161,6 @@ public class LivestockController extends Controller {
         Player player = game.getCurrentPlayer();
         Animal animal = player.getAnimalByName(animalName);
         Item equippedItem = player.getEquippedItem();
-        Item product = animal.product;
         Backpack backpack = player.getInventory();
         Slot productSlot = null;
 
@@ -169,7 +168,7 @@ public class LivestockController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "no animal found");
         }
-
+        Item product = animal.product;
         if (product == null) {
             return noProductFoundHandle(animal, equippedItem, player, game);
         }
@@ -178,20 +177,33 @@ public class LivestockController extends Controller {
                 GameRepository.saveGame(game);
                 return new Response(false, "you have to equip milk pail first");
             }
-            }
-        if(animal.getType().equals(AnimalType.SHEEP)) {
-            if(equippedItem == null || !equippedItem.getName().equals(ToolTypes.SHEAR.name)) {
+            handleCollectProducts(product, backpack, productSlot, animal, player, game);
+           //  World.handleToolUse(request);
+            //TODO milk pail tool
+            player.setEnergy(player.getEnergy() -4);
+            return handleCollectProducts(product, backpack, productSlot, animal, player, game);
+        }
+        if (animal.getType().equals(AnimalType.SHEEP)) {
+            if (equippedItem == null || !equippedItem.getName().equals(ToolTypes.SHEAR.name)) {
                 GameRepository.saveGame(game);
                 return new Response(false, "you have to equip sheer first");
             }
+           //  World.handleToolUse(request);
+            //TODO milk shear
+            player.setEnergy(player.getEnergy() -4);
+           return handleCollectProducts(product, backpack, productSlot, animal, player, game);
         }
+        return handleCollectProducts(product, backpack, productSlot, animal, player, game);
+    }
+
+    private static @NotNull Response handleCollectProducts(Item product, Backpack backpack, Slot productSlot, Animal animal, Player player, Game game) {
         Item item = new Misc(((Misc) product).getMiscType(), ((Misc) product).getQuality());
-        for(Slot slot : backpack.getSlots()) {
+        for (Slot slot : backpack.getSlots()) {
             if (slot.getItem().getName().equals(product.getName())) {
                 productSlot = slot;
             }
         }
-        if(productSlot == null) {
+        if (productSlot == null) {
             return addNewSlotForProductHandle(backpack, animal, player, game, item, product);
         }
         return addToExistingSlotHandle(productSlot, animal, player, game, product);
@@ -199,44 +211,28 @@ public class LivestockController extends Controller {
 
     private static @NotNull Response addToExistingSlotHandle(Slot productSlot, Animal animal, Player player, Game game, Item product) {
         productSlot.setCount(productSlot.getCount() + animal.getType().productPerDay);
-        if(animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT) || animal.getType().equals(AnimalType.SHEEP)) {
-            player.setEnergy(player.getEnergy() - 4);
+        if(animal.getType().equals(AnimalType.SHEEP) ||animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT))
             animal.hasBeenHarvested = true;
-        }
         animal.product = null;
         GameRepository.saveGame(game);
         return new Response(true, "you have collected " + animal.getType().productPerDay + " of " + product.getName());
     }
 
     private static @NotNull Response addNewSlotForProductHandle(Backpack backpack, Animal animal, Player player, Game game, Item item, Item product) {
-        if(backpack.getSlots().size() == backpack.getType().getMaxCapacity()){
-            if(animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT) || animal.getType().equals(AnimalType.SHEEP)) {
-                player.setEnergy(player.getEnergy() - 4);
-            }
+        if (backpack.getSlots().size() == backpack.getType().getMaxCapacity()) {
             GameRepository.saveGame(game);
             return new Response(false, "your backpack is full");
         }
         Slot newSlot = new Slot(item, animal.getType().productPerDay);
         backpack.addSlot(newSlot);
-        player.setEnergy(player.getEnergy() - 4);
-        animal.product = null;
-        if(animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT) || animal.getType().equals(AnimalType.SHEEP))
+        if(animal.getType().equals(AnimalType.SHEEP) ||animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT))
             animal.hasBeenHarvested = true;
+        animal.product = null;
         GameRepository.saveGame(game);
         return new Response(true, "you have collected " + animal.getType().productPerDay + " of " + product.getName());
     }
 
     private static @NotNull Response noProductFoundHandle(Animal animal, Item equippedItem, Player player, Game game) {
-        if (animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT)) {
-            if (equippedItem != null && equippedItem.getName().equals(ToolTypes.MILK_PAIL.name)) {
-                player.setEnergy(player.getEnergy() - 4);
-            }
-        }
-        if (animal.getType().equals(AnimalType.SHEEP)) {
-            if (equippedItem != null && equippedItem.getName().equals(ToolTypes.SHEAR.name)) {
-                player.setEnergy(player.getEnergy() - 4);
-            }
-        }
         GameRepository.saveGame(game);
         return new Response(false, "no product found");
     }
@@ -247,18 +243,18 @@ public class LivestockController extends Controller {
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
         Animal animal = player.getAnimalByName(animalName);
-        if(animal == null) {
+        if (animal == null) {
             GameRepository.saveGame(game);
             return new Response(false, "no animal found");
         }
-        int price = (int)((double)animal.getXp()/1000+ 0.3)*animal.getType().price;
+        int price = (int) ((double) animal.getXp() / 1000 + 0.3) * animal.getType().price;
         player.setMoney(player.getMoney() + price);
         player.getAnimals().remove(animal);
         GameRepository.saveGame(game);
-        return new Response(true, "you have sold " +animalName + " for " + price);
+        return new Response(true, "you have sold " + animalName + " for " + price);
     }
 
     public static Response handleFishing(Request request) {
-       return World.handleToolUse(request);
+        return World.handleToolUse(request);
     }
 }
