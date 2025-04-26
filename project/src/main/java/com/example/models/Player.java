@@ -45,6 +45,15 @@ public class Player {
     private Item equippedItem;
     private double usedEnergyInTurn;
 
+    public Slot getRefrigeratorSlotByName(String slotName) {
+        for (Slot slot : refrigeratorSlots) {
+            if (slot.getItem().getName().compareToIgnoreCase(slotName) == 0) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
     public Player() {
     }
 
