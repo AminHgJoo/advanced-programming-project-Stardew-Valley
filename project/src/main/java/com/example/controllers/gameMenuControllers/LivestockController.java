@@ -1,5 +1,6 @@
 package com.example.controllers.gameMenuControllers;
 
+import com.example.Repositories.GameRepository;
 import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
@@ -18,14 +19,20 @@ public class LivestockController extends Controller {
         Player player = game.getCurrentPlayer();
         Farm farm = game.getCurrentPlayer().getFarm();
         Animal animal = farm.findAnimal(petName);
-        if (animal == null)
+        if (animal == null) {
+            GameRepository.saveGame(game);
             return new Response(false, "Animal not found");
+        }
         PlayerAnimal playerAnimal = new PlayerAnimal(animal, 0);
         player.getAnimals().add(playerAnimal);
+        GameRepository.saveGame(game);
         return new Response(true, "you are now friend with " + petName);
     }
 
     public static Response handleCheatSetFriendship(Request request) {
+        String animalName = request.body.get("animalName");
+        int amount = Integer.parseInt(request.body.get("amount"));
+
         return null;
     }
 
