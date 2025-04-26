@@ -8,6 +8,10 @@ public class Animal {
     private String name;
     private AnimalType type;
     private int cost;
+    private int xp;
+    public boolean hasBeenPetToDay;
+    public boolean hasBeenFed;
+
 
     public Animal() {
     }
@@ -16,6 +20,9 @@ public class Animal {
         this.name = name;
         this.type = type;
         this.cost = cost;
+        this.hasBeenPetToDay = false;
+        this.hasBeenFed = false;
+        this.xp = 0;
     }
 
     public String getName() {
@@ -40,5 +47,13 @@ public class Animal {
 
     public void setCost(int cost) {
         this.cost = cost;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
     }
 }

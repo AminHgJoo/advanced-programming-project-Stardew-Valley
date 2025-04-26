@@ -1,7 +1,7 @@
 package com.example.models;
 
 import com.example.Repositories.UserRepository;
-import com.example.models.NPCModels.NPCFriendship;
+import com.example.models.NPCModels.NPC;
 import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
@@ -35,8 +35,8 @@ public class Player {
     @Transient
     private User user;
     private ArrayList<Friendship> friendships = new ArrayList<>();
-    private ArrayList<NPCFriendship> npcFriendships = new ArrayList<>();
-    private ArrayList<PlayerAnimal> animals = new ArrayList<>();
+    private ArrayList<NPC> npcs = new ArrayList<>();
+    private ArrayList<Animal> animals = new ArrayList<>();
     private double energy;
     private double maxEnergy;
     private boolean isPlayerFainted;
@@ -62,6 +62,15 @@ public class Player {
         initializeInventory();
         initializeSkills();
         initializeRecipes();
+    }
+
+    public Animal getAnimalByName(String name) {
+        for(Animal animal :animals){
+            if(animal.getName().equals(name)){
+                return animal;
+            }
+        }
+        return null;
     }
 
     private void initializeRecipes() {
@@ -257,12 +266,9 @@ public class Player {
         return user;
     }
 
-    public ArrayList<Friendship> getFriendships() {
-        return friendships;
-    }
 
-    public ArrayList<NPCFriendship> getNpcFriendships() {
-        return npcFriendships;
+    public ArrayList<NPC> getNpcs() {
+        return npcs;
     }
 
     public TrashcanType getTrashcanType() {
@@ -273,7 +279,7 @@ public class Player {
         this.trashcanType = trashcanType;
     }
 
-    public ArrayList<PlayerAnimal> getAnimals() {
+    public ArrayList<Animal> getAnimals() {
         return animals;
     }
 
