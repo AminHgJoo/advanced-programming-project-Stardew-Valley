@@ -7,14 +7,19 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.Player;
 import com.example.models.enums.recipes.CookingRecipes;
+import com.example.models.enums.types.MenuTypes;
 
 public class Cooking extends Controller {
+
     public static Response handlePickFromRefrigerator(Request request) {
-        return null;
+
     }
 
     public static Response handlePutIntoRefrigerator(Request request) {
-        return null;
+
+    }
+
+    public static Response handleCookingFood(Request request) {
 
     }
 
@@ -30,5 +35,15 @@ public class Cooking extends Controller {
         }
 
         return new Response(true, stringBuilder.toString());
+    }
+
+    public static Response handleEnterPlayerHome(Request request) {
+        App.setCurrMenuType(MenuTypes.PlayerHomeMenu);
+        return new Response(true, "Entering home menu.");
+    }
+
+    public static Response handleExitPlayerHome(Request request) {
+        App.setCurrMenuType(MenuTypes.GameMenu);
+        return new Response(true, "Exiting home menu.");
     }
 }

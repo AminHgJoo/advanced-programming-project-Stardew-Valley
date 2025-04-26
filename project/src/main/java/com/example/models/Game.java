@@ -10,7 +10,7 @@ import com.example.models.mapModels.Farm;
 import com.example.models.mapModels.Map;
 import com.example.models.mapObjects.AnimalBlock;
 import com.example.models.skills.Skill;
-import com.example.views.GameThread;
+import com.example.views.gameViews.GameThread;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;

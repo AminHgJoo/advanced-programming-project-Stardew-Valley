@@ -1,4 +1,4 @@
-package com.example.views;
+package com.example.views.gameViews;
 
 import com.example.Repositories.GameRepository;
 import com.example.models.Game;

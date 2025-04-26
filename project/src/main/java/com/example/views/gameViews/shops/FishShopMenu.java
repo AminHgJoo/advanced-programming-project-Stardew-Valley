@@ -1,4 +1,4 @@
-package com.example.views.shops;
+package com.example.views.gameViews.shops;
 
 import com.example.controllers.gameMenuControllers.DealingController;
 import com.example.models.IO.Request;
@@ -6,7 +6,7 @@ import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;
 import com.example.views.Menu;
 
-public class PierreGeneralStoreMenu implements Menu {
+public class FishShopMenu implements Menu {
     @Override
     public void handleMenu(String input) {
         Response response = null;
