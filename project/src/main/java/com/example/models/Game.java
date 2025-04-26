@@ -4,8 +4,11 @@ import com.example.Repositories.GameRepository;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
 import com.example.models.enums.types.AnimalType;
+import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.worldEnums.Season;
 import com.example.models.enums.worldEnums.Weather;
+import com.example.models.items.Item;
+import com.example.models.items.Misc;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapModels.Map;
 import com.example.models.mapObjects.AnimalBlock;
@@ -118,6 +121,8 @@ public class Game {
             if (animal.hasBeenPetToDay) {
                 animal.setXp(animal.getXp() + 15);
             }
+            else
+                animal.setXp(animal.getXp() - 10);
             animal.hasBeenPetToDay = false;
             if (animal.hasBeenFedByHay || animal.hasBeenFedByGrass)
                 animal.hasBeenFedYesterday = true;
@@ -127,14 +132,54 @@ public class Game {
             if (animalBlock != null) {
                 animal.setXp(animal.getXp() - 20);
             }
-            if (animal.hasBeenPetToDay)
-                animal.setXp(animal.getXp() + 15);
-            else
-                animal.setXp(animal.getXp() - 10);
-            animal.hasBeenPetToDay = true;
             if (animal.getType().equals(AnimalType.SHEEP)) {
                 if (animal.hasBeenHarvested)
                     animal.setXp(animal.getXp() + 5);
+            }
+            if (animal.hasBeenFedYesterday) {
+                double randNum = 0.5 + Math.random();
+                randNum = (animal.getXp() + (150 * randNum)) / 1500;
+                double quality = ((double) animal.getXp() / 1000) * (0.5 + 0.5 * Math.random());
+                Item item = null;
+                if (randNum >= 1 && animal.getXp() >= 100) {
+                    if(animal.getType().equals(AnimalType.Chicken))
+                        item = new Misc(MiscType.BIG_EGG);
+                    else if(animal.getType().equals(AnimalType.DUCK))
+                        item = new Misc(MiscType.DUCK_FEATHER);
+                    else if(animal.getType().equals(AnimalType.RABBIT))
+                        item = new Misc(MiscType.RABBITS_FOOT);
+                    else if(animal.getType().equals(AnimalType.DINOSAUR))
+                        item = new Misc(MiscType.DINOSAUR);
+                    else if(animal.getType().equals(AnimalType.COW))
+                        item = new Misc(MiscType.BIG_MILK);
+                    else if(animal.getType().equals(AnimalType.GOAT))
+                        item = new Misc(MiscType.BIG_GOAT_MILK);
+                    else if(animal.getType().equals(AnimalType.SHEEP))
+                        item = new Misc(MiscType.WOOL);
+                    else if(animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
+                        item = new Misc(MiscType.TRUFFLE);
+                }
+                else{
+                    if(animal.getType().equals(AnimalType.Chicken))
+                        item = new Misc(MiscType.EGG);
+                    else if(animal.getType().equals(AnimalType.DUCK))
+                        item = new Misc(MiscType.DUCK_EGG);
+                    else if(animal.getType().equals(AnimalType.RABBIT))
+                        item = new Misc(MiscType.WOOL);
+                    else if(animal.getType().equals(AnimalType.DINOSAUR))
+                        item = new Misc(MiscType.DINOSAUR);
+                    else if(animal.getType().equals(AnimalType.COW))
+                        item = new Misc(MiscType.MILK);
+                    else if(animal.getType().equals(AnimalType.GOAT))
+                        item = new Misc(MiscType.GOAT_MILK);
+                    else if(animal.getType().equals(AnimalType.SHEEP))
+                        item = new Misc(MiscType.WOOL);
+                    else if(animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
+                        item = new Misc(MiscType.TRUFFLE);
+                }
+                animal.hasBeenFedByGrass = false;
+                animal.hasBeenFedByHay = false;
+                animal.product = item;
             }
         }
         GameRepository.saveGame(game);
