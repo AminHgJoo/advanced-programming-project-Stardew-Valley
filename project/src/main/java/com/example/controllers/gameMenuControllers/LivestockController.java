@@ -179,6 +179,12 @@ public class LivestockController extends Controller {
                 return new Response(false, "you have to equip milk pail first");
             }
             }
+        if(animal.getType().equals(AnimalType.SHEEP)) {
+            if(equippedItem == null || !equippedItem.getName().equals(ToolTypes.SHEAR.name)) {
+                GameRepository.saveGame(game);
+                return new Response(false, "you have to equip sheer first");
+            }
+        }
         Item item = new Misc(((Misc) product).getMiscType(), ((Misc) product).getQuality());
         for(Slot slot : backpack.getSlots()) {
             if (slot.getItem().getName().equals(product.getName())) {
@@ -236,10 +242,20 @@ public class LivestockController extends Controller {
     }
 
     public static Response handleSellAnimal(Request request) {
-        return null;
+        String animalName = request.body.get("name");
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Animal animal = player.getAnimalByName(animalName);
+        if(animal == null) {
+            GameRepository.saveGame(game);
+            return new Response(false, "no animal found");
+        }
+        int price = (int)((double)animal.getXp()/1000+ 0.3)*animal.getType().price;
+        player.setMoney(player.getMoney() + price);
+        player.getAnimals().remove(animal);
+        GameRepository.saveGame(game);
+        return new Response(true, "you have sold " +animalName + " for " + price);
     }
 
-    public static Response handleFishing(Request request) {
-        return null;
-    }
 }
