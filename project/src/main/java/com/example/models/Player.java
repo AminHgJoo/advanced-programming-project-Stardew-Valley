@@ -64,7 +64,7 @@ public class Player {
         initializeRecipes();
     }
 
-    public PlayerAnimal getAnimalFriendship(String name) {
+    public PlayerAnimal getAnimalFriendshipByName(String name) {
         for(PlayerAnimal friendship : animalFriendship){
             if(friendship.getAnimal().getName().equals(name)){
                 return friendship;
@@ -282,7 +282,7 @@ public class Player {
         this.trashcanType = trashcanType;
     }
 
-    public ArrayList<PlayerAnimal> getAnimalFriendship() {
+    public ArrayList<PlayerAnimal> getAnimalFriendshipByName() {
         return animalFriendship;
     }
 

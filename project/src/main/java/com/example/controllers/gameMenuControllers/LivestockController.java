@@ -5,7 +5,6 @@ import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
-import com.example.models.mapModels.Farm;
 
 public class LivestockController extends Controller {
     public static Response handleBuyAnimal(Request request) {
@@ -17,16 +16,14 @@ public class LivestockController extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = game.getCurrentPlayer().getFarm();
-        Animal animal = farm.findAnimal(petName);
-        if (animal == null) {
+        PlayerAnimal animalFriendship = player.getAnimalFriendshipByName(petName);
+        if (animalFriendship == null) {
             GameRepository.saveGame(game);
             return new Response(false, "Animal not found");
         }
-        PlayerAnimal playerAnimal = new PlayerAnimal(animal, 0);
-        player.getAnimalFriendship().add(playerAnimal);
+        animalFriendship.hasBeenPetToDay = true;
         GameRepository.saveGame(game);
-        return new Response(true, "you are now friend with " + petName);
+        return new Response(true, "you have pet " + petName);
     }
 
     public static Response handleCheatSetFriendship(Request request) {
@@ -35,7 +32,7 @@ public class LivestockController extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        PlayerAnimal friendship = player.getAnimalFriendship(animalName);
+        PlayerAnimal friendship = player.getAnimalFriendshipByName(animalName);
         if (friendship == null) {
             GameRepository.saveGame(game);
             return new Response(false, "Animal not found");

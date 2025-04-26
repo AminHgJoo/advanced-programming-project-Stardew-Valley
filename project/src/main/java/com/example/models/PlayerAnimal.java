@@ -6,6 +6,7 @@ import dev.morphia.annotations.Embedded;
 public class PlayerAnimal {
     private Animal animal;
     private int xp;
+    public boolean hasBeenPetToDay;
 
     public PlayerAnimal() {
 
@@ -14,6 +15,7 @@ public class PlayerAnimal {
     public PlayerAnimal(Animal animal, int xp) {
         this.animal = animal;
         this.xp = xp;
+        hasBeenPetToDay = false;
     }
 
     public Animal getAnimal() {
