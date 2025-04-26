@@ -7,9 +7,9 @@ import java.util.ArrayList;
 public enum CraftingRecipes implements Recipe {
 
     //TODO: Ingredients.
-    CHERRY_BOMB("Cherry Bomb", "Destroys everything in a 3 tile radius.", 0, 1, 0, 50, 0, new ArrayList<>()),
-    BOMB("Bomb", "Destroys everything in a 5 tile radius.", 0, 2, 0, 50, 0, new ArrayList<>()),
-    MEGA_BOMB("Mega Bomb", "Destroys everything in a 7 tile radius.", 0, 3, 0, 50, 0, new ArrayList<>()),
+    CHERRY_BOMB("Cherry Bomb", "Destroys everything in a 3 tile radius.", 0, 1, 0, 0, 50, new ArrayList<>()),
+    BOMB("Bomb", "Destroys everything in a 5 tile radius.", 0, 2, 0, 0, 50, new ArrayList<>()),
+    MEGA_BOMB("Mega Bomb", "Destroys everything in a 7 tile radius.", 0, 3, 0, 0, 50, new ArrayList<>()),
     SPRINKLER("Sprinkler", "Waters 4 adjacent crops.", 1, 0, 0, 0, 0, new ArrayList<>()),
     QUALITY_SPRINKLER("Quality Sprinkler", "Waters 8 adjacent crops.", 2, 0, 0, 0, 0, new ArrayList<>()),
     IRIDIUM_SPRINKLER("Iridium Sprinkler", "Waters 24 adjacent crops.", 3, 0, 0, 0, 0, new ArrayList<>()),
@@ -26,7 +26,7 @@ public enum CraftingRecipes implements Recipe {
     PRESERVES_JAR("Preserves Jar", "Produces jam from fruits and vegetables.", 2, 0, 0, 0, 0, new ArrayList<>()),
     DEHYDRATOR("Dehydrator", "Dries fruits and mushrooms.", 0, 0, 0, 0, 0, new ArrayList<>()),
     FISH_SMOKER("Fish Smoker", "Smokes fish while preserving their quality.", 0, 0, 0, 0, 0, new ArrayList<>()),
-    MYSTIC_TREE_SEED("Mystic tree seed", "Can be planted to grow into a mystic tree.", 0, 0, 4, 100, 0, new ArrayList<>());
+    MYSTIC_TREE_SEED("Mystic tree seed", "Can be planted to grow into a mystic tree.", 0, 0, 4, 0, 100, new ArrayList<>());
 
     public final String name;
     public final String description;
@@ -38,7 +38,7 @@ public enum CraftingRecipes implements Recipe {
     public final ArrayList<Slot> ingredients;
 
     CraftingRecipes(String name, String description, int farmingLevel, int miningLevel, int foragingLevel
-            , int sellingPrice, int fishingLevel, ArrayList<Slot> ingredients) {
+            , int fishingLevel, int sellingPrice, ArrayList<Slot> ingredients) {
         this.name = name;
         this.description = description;
         this.farmingLevel = farmingLevel;
