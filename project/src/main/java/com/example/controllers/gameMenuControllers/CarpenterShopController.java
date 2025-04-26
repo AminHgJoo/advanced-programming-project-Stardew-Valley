@@ -8,9 +8,9 @@ import com.example.models.IO.Response;
 import com.example.models.buildings.Barn;
 import com.example.models.buildings.Coop;
 import com.example.models.buildings.Well;
-import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.example.models.enums.types.MenuTypes;
 import com.example.models.enums.types.itemTypes.MiscType;
+import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapObjects.ArtisanBlock;
 import com.example.models.mapObjects.BuildingBlock;
@@ -88,9 +88,9 @@ public class CarpenterShopController extends Controller {
                     }
                 }
                 int capacity = 4;
-                if(buildingName.equals("Big Barn"))
+                if (buildingName.equals("Big Barn"))
                     capacity = 8;
-                else if(buildingName.equals("Deluxe Barn"))
+                else if (buildingName.equals("Deluxe Barn"))
                     capacity = 12;
                 barn.capacity = capacity;
                 farm.getBuildings().add(barn);
@@ -173,9 +173,9 @@ public class CarpenterShopController extends Controller {
                     }
                 }
                 int capacity = 4;
-                if(buildingName.equals("Big Coop"))
+                if (buildingName.equals("Big Coop"))
                     capacity = 8;
-                else if(buildingName.equals("Deluxe Coop"))
+                else if (buildingName.equals("Deluxe Coop"))
                     capacity = 12;
                 coop.capacity = capacity;
                 farm.getBuildings().add(coop);

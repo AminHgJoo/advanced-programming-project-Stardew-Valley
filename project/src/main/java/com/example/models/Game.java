@@ -120,8 +120,7 @@ public class Game {
         for (Animal animal : animals) {
             if (animal.hasBeenPetToDay) {
                 animal.setXp(animal.getXp() + 15);
-            }
-            else
+            } else
                 animal.setXp(animal.getXp() - 10);
             animal.hasBeenPetToDay = false;
             if (animal.hasBeenFedByHay || animal.hasBeenFedByGrass)
@@ -142,39 +141,38 @@ public class Game {
                 double quality = ((double) animal.getXp() / 1000) * (0.5 + 0.5 * Math.random());
                 Item item = null;
                 if (randNum >= 1 && animal.getXp() >= 100) {
-                    if(animal.getType().equals(AnimalType.Chicken))
+                    if (animal.getType().equals(AnimalType.Chicken))
                         item = new Misc(MiscType.BIG_EGG);
-                    else if(animal.getType().equals(AnimalType.DUCK))
+                    else if (animal.getType().equals(AnimalType.DUCK))
                         item = new Misc(MiscType.DUCK_FEATHER);
-                    else if(animal.getType().equals(AnimalType.RABBIT))
+                    else if (animal.getType().equals(AnimalType.RABBIT))
                         item = new Misc(MiscType.RABBITS_FOOT);
-                    else if(animal.getType().equals(AnimalType.DINOSAUR))
+                    else if (animal.getType().equals(AnimalType.DINOSAUR))
                         item = new Misc(MiscType.DINOSAUR);
-                    else if(animal.getType().equals(AnimalType.COW))
+                    else if (animal.getType().equals(AnimalType.COW))
                         item = new Misc(MiscType.BIG_MILK);
-                    else if(animal.getType().equals(AnimalType.GOAT))
+                    else if (animal.getType().equals(AnimalType.GOAT))
                         item = new Misc(MiscType.BIG_GOAT_MILK);
-                    else if(animal.getType().equals(AnimalType.SHEEP))
+                    else if (animal.getType().equals(AnimalType.SHEEP))
                         item = new Misc(MiscType.WOOL);
-                    else if(animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
+                    else if (animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
                         item = new Misc(MiscType.TRUFFLE);
-                }
-                else{
-                    if(animal.getType().equals(AnimalType.Chicken))
+                } else {
+                    if (animal.getType().equals(AnimalType.Chicken))
                         item = new Misc(MiscType.EGG);
-                    else if(animal.getType().equals(AnimalType.DUCK))
+                    else if (animal.getType().equals(AnimalType.DUCK))
                         item = new Misc(MiscType.DUCK_EGG);
-                    else if(animal.getType().equals(AnimalType.RABBIT))
+                    else if (animal.getType().equals(AnimalType.RABBIT))
                         item = new Misc(MiscType.WOOL);
-                    else if(animal.getType().equals(AnimalType.DINOSAUR))
+                    else if (animal.getType().equals(AnimalType.DINOSAUR))
                         item = new Misc(MiscType.DINOSAUR);
-                    else if(animal.getType().equals(AnimalType.COW))
+                    else if (animal.getType().equals(AnimalType.COW))
                         item = new Misc(MiscType.MILK);
-                    else if(animal.getType().equals(AnimalType.GOAT))
+                    else if (animal.getType().equals(AnimalType.GOAT))
                         item = new Misc(MiscType.GOAT_MILK);
-                    else if(animal.getType().equals(AnimalType.SHEEP))
+                    else if (animal.getType().equals(AnimalType.SHEEP))
                         item = new Misc(MiscType.WOOL);
-                    else if(animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
+                    else if (animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
                         item = new Misc(MiscType.TRUFFLE);
                 }
                 animal.hasBeenFedByGrass = false;
