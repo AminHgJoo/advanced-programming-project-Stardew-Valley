@@ -1,7 +1,7 @@
 package com.example.models;
 
 import com.example.Repositories.UserRepository;
-import com.example.models.NPCModels.NPCFriendship;
+import com.example.models.NPCModels.NPC;
 import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
@@ -35,8 +35,8 @@ public class Player {
     @Transient
     private User user;
     private ArrayList<Friendship> friendships = new ArrayList<>();
-    private ArrayList<NPCFriendship> npcFriendships = new ArrayList<>();
-    private ArrayList<PlayerAnimal> animalFriendship = new ArrayList<>();
+    private ArrayList<NPC> npcs = new ArrayList<>();
+    private ArrayList<Animal> animals = new ArrayList<>();
     private double energy;
     private double maxEnergy;
     private boolean isPlayerFainted;
@@ -64,10 +64,10 @@ public class Player {
         initializeRecipes();
     }
 
-    public PlayerAnimal getAnimalFriendshipByName(String name) {
-        for(PlayerAnimal friendship : animalFriendship){
-            if(friendship.getAnimal().getName().equals(name)){
-                return friendship;
+    public Animal getAnimalByName(String name) {
+        for(Animal animal :animals){
+            if(animal.getName().equals(name)){
+                return animal;
             }
         }
         return null;
@@ -266,12 +266,9 @@ public class Player {
         return user;
     }
 
-    public ArrayList<Friendship> getFriendships() {
-        return friendships;
-    }
 
-    public ArrayList<NPCFriendship> getNpcFriendships() {
-        return npcFriendships;
+    public ArrayList<NPC> getNpcs() {
+        return npcs;
     }
 
     public TrashcanType getTrashcanType() {
@@ -282,8 +279,8 @@ public class Player {
         this.trashcanType = trashcanType;
     }
 
-    public ArrayList<PlayerAnimal> getAnimalFriendship() {
-        return animalFriendship;
+    public ArrayList<Animal> getAnimals() {
+        return animals;
     }
 
     public Item getEquippedItem() {
