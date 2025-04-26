@@ -10,12 +10,14 @@ import java.util.ArrayList;
 public class Coop extends Building {
     public String coopType;
     public ArrayList<Animal> animals = new ArrayList<>();
+    public int capacity;
 
     public Coop() {
     }
 
-    public Coop(ArrayList<Cell> buildingCells, String coopType) {
+    public Coop(ArrayList<Cell> buildingCells, String coopType, int capacity) {
         super(buildingCells);
         this.coopType = "Coop";
+        this.capacity = capacity;
     }
 }

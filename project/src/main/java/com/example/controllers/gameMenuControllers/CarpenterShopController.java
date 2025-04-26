@@ -78,6 +78,7 @@ public class CarpenterShopController extends Controller {
                     backpack.removeSlot(stone);
                 }
                 game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney() - goldPrice);
+
                 Barn barn = new Barn();
                 barn.barnType = buildingName;
                 for (int i = x; i < x + width; i++) {
@@ -86,6 +87,12 @@ public class CarpenterShopController extends Controller {
                         barn.buildingCells.add(farm.findCellByCoordinate(i, j));
                     }
                 }
+                int capacity = 4;
+                if(buildingName.equals("Big Barn"))
+                    capacity = 8;
+                else if(buildingName.equals("Deluxe Barn"))
+                    capacity = 12;
+                barn.capacity = capacity;
                 farm.getBuildings().add(barn);
                 GameRepository.saveGame(game);
                 return new Response(true, "You built a " + buildingName);
@@ -165,6 +172,12 @@ public class CarpenterShopController extends Controller {
                         coop.buildingCells.add(farm.findCellByCoordinate(i, j));
                     }
                 }
+                int capacity = 4;
+                if(buildingName.equals("Big Coop"))
+                    capacity = 8;
+                else if(buildingName.equals("Deluxe Coop"))
+                    capacity = 12;
+                coop.capacity = capacity;
                 farm.getBuildings().add(coop);
                 GameRepository.saveGame(game);
                 return new Response(true, "You built a " + buildingName);
