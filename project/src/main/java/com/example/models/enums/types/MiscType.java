@@ -29,7 +29,27 @@ public enum MiscType implements ItemType {
     WEDDING_RING("Wedding Ring", 1000),
     BASIC_RETAINING_SOIL("Basic Retaining Soil", 4),
     QUALITY_RETAINING_SOIL("Quality Retaining Soil", 5),
-    CLOTH("Cloth", 100),;
+    CLOTH("Cloth", 100),
+    CHERRY_BOMB("Cherry Bomb", 50),
+    BOMB("Bomb", 50),
+    MEGA_BOMB("Mega Bomb", 50),
+    SPRINKLER("Sprinkler", 0),
+    QUALITY_SPRINKLER("Quality Sprinkler", 0),
+    IRIDIUM_SPRINKLER("Iridium Sprinkler", 0),
+    CHARCOAL_KLIN("Charcoal Klin", 0),
+    FURNACE("Furnace", 0),
+    SCARE_CROW("Scare Crow", 0),
+    DELUXE_SCARE_CROW("Deluxe Scarecrow", 0),
+    BEE_HOUSE("Bee House", 0),
+    CHEESE_PRESS("Cheese Press", 0),
+    KEG("Keg", 0),
+    LOOM("Loom", 0),
+    MAYONNAISE_MACHINE("Mayonnaise Machine", 0),
+    OIL_MAKER("Oil Maker", 0),
+    PRESERVES_JAR("Preserves Jar", 0),
+    DEHYDRATOR("Dehydrator", 0),
+    FISH_SMOKER("Fish Smoker", 0),
+    MYSTIC_TREE_SEED("Mystic tree seed", 100);;
 
     final public String name;
     final public int value;
