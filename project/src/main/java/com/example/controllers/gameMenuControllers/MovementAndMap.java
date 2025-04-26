@@ -120,14 +120,4 @@ public class MovementAndMap extends Controller {
         GameRepository.saveGame(game);
         return new Response(true, "energy successfully set to infinity");
     }
-
-    public static Response handleGoToCarpenterShop(Request request) {
-        App.setCurrMenuType(MenuTypes.CarpenterShopMenu);
-        return new Response(true, "Going to Carpenter’s shop");
-    }
-
-    public static Response handleGoToMarineRanch(Request request) {
-        App.setCurrMenuType(MenuTypes.MarineRanchMenu);
-        return new Response(true, "Going to Marin’s Ranch");
-    }
 }
