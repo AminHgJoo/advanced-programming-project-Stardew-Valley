@@ -1,10 +1,14 @@
 package com.example.models;
 
+import com.example.Repositories.GameRepository;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
+import com.example.models.enums.types.AnimalType;
 import com.example.models.enums.worldEnums.Season;
 import com.example.models.enums.worldEnums.Weather;
+import com.example.models.mapModels.Farm;
 import com.example.models.mapModels.Map;
+import com.example.models.mapObjects.AnimalBlock;
 import com.example.models.skills.Skill;
 import com.example.views.GameThread;
 import dev.morphia.annotations.Entity;
@@ -103,6 +107,34 @@ public class Game {
 
     public void resetAllAnimalDailyVariables() {
         //TODO: Handle later
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Farm farm = game.getCurrentPlayer().getFarm();
+        ArrayList<Animal> animals = game.getCurrentPlayer().getAnimals();
+        for (Animal animal : animals) {
+            if (animal.hasBeenPetToDay) {
+                animal.setXp(animal.getXp() + 15);
+            }
+            animal.hasBeenPetToDay = false;
+            if (animal.hasBeenFedByHay || animal.hasBeenFedByGrass)
+                animal.hasBeenFedYesterday = true;
+            if (!animal.hasBeenFedByGrass && !animal.hasBeenFedByHay)
+                animal.setXp(animal.getXp() - 20);
+            AnimalBlock animalBlock = farm.getAnimalBlock(animal);
+            if (animalBlock != null) {
+                animal.setXp(animal.getXp() - 20);
+            }
+            if (animal.hasBeenPetToDay)
+                animal.setXp(animal.getXp() + 15);
+            else
+                animal.setXp(animal.getXp() - 10);
+            animal.hasBeenPetToDay = true;
+            if (animal.getType().equals(AnimalType.SHEEP)) {
+                if (animal.hasBeenHarvested)
+                    animal.setXp(animal.getXp() + 5);
+            }
+        }
+        GameRepository.saveGame(game);
     }
 
     public Game(ArrayList<Player> players, Player currentPlayer) {

@@ -12,6 +12,8 @@ public class Animal {
     public boolean hasBeenPetToDay;
     public boolean hasBeenFedByHay;
     public boolean hasBeenFedByGrass;
+    public boolean hasBeenFedYesterday;
+    public boolean hasBeenHarvested;
 
 
     public Animal() {
