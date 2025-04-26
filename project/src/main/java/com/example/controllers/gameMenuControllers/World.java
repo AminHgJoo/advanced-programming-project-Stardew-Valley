@@ -925,9 +925,4 @@ public class World extends Controller {
     private static Response handleShearUse(Request request) {
         return null;
     }
-
-    //TODO: Implement later.
-    public static Response handleBuildBuilding(Request request) {
-        return null;
-    }
 }

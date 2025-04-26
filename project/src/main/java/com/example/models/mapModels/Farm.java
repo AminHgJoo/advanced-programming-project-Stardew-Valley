@@ -137,7 +137,7 @@ public class Farm {
     }
 
     public void foragingRefresh() {
-        /// makes sure the map doesn't get crowded.
+        // makes sure the map doesn't get crowded.
         int count = 0;
         for (Cell cell : cells) {
             if (!(cell.getObjectOnCell() instanceof EmptyCell)) {
@@ -149,6 +149,7 @@ public class Farm {
         }
 
         for (Cell cell : cells) {
+            //TODO: Fix foraging seed into crops.
             int randomNumber = (int) (Math.random() * 100);
             if (cell.getObjectOnCell().type.equals("empty") && cell.isTilled() && randomNumber == 3) {
                 cell.setObjectOnCell(randomForagingSeed());
@@ -164,30 +165,30 @@ public class Farm {
 
     private static ForagingSeed randomForagingSeed() {
         ForagingSeedsType[] allValues = ForagingSeedsType.values();
-        ForagingSeedsType[] validValues = new ForagingSeedsType[allValues.length];
-        int index = 0;
-        for (int i = 0; i < validValues.length; i++) {
+        ArrayList<ForagingSeedsType> validValues = new ArrayList<>();
+
+        for (int i = 0; i < allValues.length; i++) {
             if (allValues[i].getSeasons().length > 1 || allValues[i].getSeasons()[0] == App.getLoggedInUser().getCurrentGame().getSeason()) {
-                validValues[index] = allValues[i];
-                index++;
+                validValues.add(allValues[i]);
             }
         }
-        int randomNumber = (int) (Math.random() * validValues.length);
-        return new ForagingSeed(validValues[randomNumber]);
+
+        int randomNumber = (int) (Math.random() * validValues.size());
+        return new ForagingSeed(validValues.get(randomNumber));
     }
 
     private static ForagingCrop randomForagingCrop() {
         ForagingCropsType[] allValues = ForagingCropsType.values();
-        ForagingCropsType[] validValues = new ForagingCropsType[allValues.length];
-        int index = 0;
-        for (int i = 0; i < validValues.length; i++) {
+        ArrayList<ForagingCropsType> validValues = new ArrayList<>();
+
+        for (int i = 0; i < allValues.length; i++) {
             if (allValues[i].getSeasons().length > 1 || allValues[i].getSeasons()[0] == App.getLoggedInUser().getCurrentGame().getSeason()) {
-                validValues[index] = allValues[i];
-                index++;
+                validValues.add(allValues[i]);
             }
         }
-        int randomNumber = (int) (Math.random() * validValues.length);
-        return new ForagingCrop(validValues[randomNumber], true);
+
+        int randomNumber = (int) (Math.random() * validValues.size());
+        return new ForagingCrop(validValues.get(randomNumber), true);
     }
 
     private static ForagingMineral randomForagingMineral() {

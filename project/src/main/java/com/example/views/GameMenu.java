@@ -126,8 +126,6 @@ public class GameMenu implements Menu {
                 response = getShowCookingRecipesResponse(input);
             } else if (GameMenuCommands.EAT.matches(input)) {
                 response = getEatResponse(input);
-            } else if (GameMenuCommands.BUILD.matches(input)) {
-                response = getBuildResponse(input);
             } else if (GameMenuCommands.BUY_ANIMAL.matches(input)) {
                 response = getBuyAnimalResponse(input);
             } else if (GameMenuCommands.PET.matches(input)) {
@@ -243,16 +241,6 @@ public class GameMenu implements Menu {
         Response response;
         Request request = new Request(input);
         response = LoadingSavingTurnHandling.handleForceDeleteGame(request);
-        return response;
-    }
-
-    private static Response getBuildResponse(String input) {
-        Response response;
-        Request request = new Request(input);
-        request.body.put("buildingName", GameMenuCommands.BUILD.getGroup(input, "buildingName"));
-        request.body.put("x", GameMenuCommands.BUILD.getGroup(input, "x"));
-        request.body.put("y", GameMenuCommands.BUILD.getGroup(input, "y"));
-        response = World.handleBuildBuilding(request);
         return response;
     }
 
