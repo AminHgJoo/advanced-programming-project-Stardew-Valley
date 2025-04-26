@@ -45,10 +45,13 @@ public class Game {
         if (date.getHour() == 23) {
             //TODO : next day has arrived
             date = date.plusHours(10);
+
             gameThread.handleRefreshForaging();
+
             weatherToday = weatherTomorrow;
 
             determineAndSetWeatherTomorrow();
+
             resetAllAnimalDailyVariables();
 
             if (weatherToday == Weather.STORM) {
@@ -117,8 +120,7 @@ public class Game {
         for (Animal animal : animals) {
             if (animal.hasBeenPetToDay) {
                 animal.setXp(animal.getXp() + 15);
-            }
-            else
+            } else
                 animal.setXp(animal.getXp() - 10);
             animal.hasBeenPetToDay = false;
             if (animal.hasBeenFedByHay || animal.hasBeenFedByGrass)
@@ -139,39 +141,38 @@ public class Game {
                 double quality = ((double) animal.getXp() / 1000) * (0.5 + 0.5 * Math.random());
                 Item item = null;
                 if (randNum >= 1 && animal.getXp() >= 100) {
-                    if(animal.getType().equals(AnimalType.Chicken))
+                    if (animal.getType().equals(AnimalType.Chicken))
                         item = new Misc(MiscType.BIG_EGG);
-                    else if(animal.getType().equals(AnimalType.DUCK))
+                    else if (animal.getType().equals(AnimalType.DUCK))
                         item = new Misc(MiscType.DUCK_FEATHER);
-                    else if(animal.getType().equals(AnimalType.RABBIT))
+                    else if (animal.getType().equals(AnimalType.RABBIT))
                         item = new Misc(MiscType.RABBITS_FOOT);
-                    else if(animal.getType().equals(AnimalType.DINOSAUR))
+                    else if (animal.getType().equals(AnimalType.DINOSAUR))
                         item = new Misc(MiscType.DINOSAUR);
-                    else if(animal.getType().equals(AnimalType.COW))
+                    else if (animal.getType().equals(AnimalType.COW))
                         item = new Misc(MiscType.BIG_MILK);
-                    else if(animal.getType().equals(AnimalType.GOAT))
+                    else if (animal.getType().equals(AnimalType.GOAT))
                         item = new Misc(MiscType.BIG_GOAT_MILK);
-                    else if(animal.getType().equals(AnimalType.SHEEP))
+                    else if (animal.getType().equals(AnimalType.SHEEP))
                         item = new Misc(MiscType.WOOL);
-                    else if(animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
+                    else if (animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
                         item = new Misc(MiscType.TRUFFLE);
-                }
-                else{
-                    if(animal.getType().equals(AnimalType.Chicken))
+                } else {
+                    if (animal.getType().equals(AnimalType.Chicken))
                         item = new Misc(MiscType.EGG);
-                    else if(animal.getType().equals(AnimalType.DUCK))
+                    else if (animal.getType().equals(AnimalType.DUCK))
                         item = new Misc(MiscType.DUCK_EGG);
-                    else if(animal.getType().equals(AnimalType.RABBIT))
+                    else if (animal.getType().equals(AnimalType.RABBIT))
                         item = new Misc(MiscType.WOOL);
-                    else if(animal.getType().equals(AnimalType.DINOSAUR))
+                    else if (animal.getType().equals(AnimalType.DINOSAUR))
                         item = new Misc(MiscType.DINOSAUR);
-                    else if(animal.getType().equals(AnimalType.COW))
+                    else if (animal.getType().equals(AnimalType.COW))
                         item = new Misc(MiscType.MILK);
-                    else if(animal.getType().equals(AnimalType.GOAT))
+                    else if (animal.getType().equals(AnimalType.GOAT))
                         item = new Misc(MiscType.GOAT_MILK);
-                    else if(animal.getType().equals(AnimalType.SHEEP))
+                    else if (animal.getType().equals(AnimalType.SHEEP))
                         item = new Misc(MiscType.WOOL);
-                    else if(animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
+                    else if (animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
                         item = new Misc(MiscType.TRUFFLE);
                 }
                 animal.hasBeenFedByGrass = false;
@@ -219,19 +220,19 @@ public class Game {
 
     private boolean isPlayerLevelOk(Player player, int farmingLevel
             , int foragingLevel, int fishingLevel, int miningLevel) {
-        return player.getFarmingSkill().getLevel().levelNumber >= farmingLevel &&
-                player.getForagingSkill().getLevel().levelNumber >= foragingLevel &&
-                player.getFishingSkill().getLevel().levelNumber >= fishingLevel &&
-                player.getMiningSkill().getLevel().levelNumber >= miningLevel;
+        return player.getUnbuffedFarmingSkill().getLevel().levelNumber >= farmingLevel &&
+                player.getUnbuffedForagingSkill().getLevel().levelNumber >= foragingLevel &&
+                player.getUnbuffedFishingSkill().getLevel().levelNumber >= fishingLevel &&
+                player.getUnbuffedMiningSkill().getLevel().levelNumber >= miningLevel;
     }
 
     public void checkForSkillUpgrades() {
         for (Player player : players) {
             ArrayList<Skill> skills = new ArrayList<>();
-            skills.add(player.getFarmingSkill());
-            skills.add(player.getFishingSkill());
-            skills.add(player.getForagingSkill());
-            skills.add(player.getMiningSkill());
+            skills.add(player.getUnbuffedFarmingSkill());
+            skills.add(player.getUnbuffedFishingSkill());
+            skills.add(player.getUnbuffedForagingSkill());
+            skills.add(player.getUnbuffedMiningSkill());
             for (Skill skill : skills) {
                 if (skill.getLevel().getXpToNextLevel() == Double.POSITIVE_INFINITY) {
                     continue;

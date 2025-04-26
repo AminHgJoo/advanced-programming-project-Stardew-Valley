@@ -82,7 +82,7 @@ public class MarineRanchController extends Controller {
     private static Response buyChicken(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop) {
-                if (((Coop) building).animals.size() < ((Coop)building).capacity) {
+                if (((Coop) building).animals.size() < ((Coop) building).capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Coop) building).animals.add(animal);
                     GameRepository.saveGame(game);
@@ -97,7 +97,7 @@ public class MarineRanchController extends Controller {
     private static Response buyPig(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && ((Barn) building).barnType.equals("Deluxe Barn")) {
-                if (((Barn) building).animals.size() < ((Barn)building).capacity) {
+                if (((Barn) building).animals.size() < ((Barn) building).capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Barn) building).animals.add(animal);
                     GameRepository.saveGame(game);
@@ -111,8 +111,8 @@ public class MarineRanchController extends Controller {
 
     private static Response buyDinosaur(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
-            if (building instanceof Coop && (((Coop) building).coopType.equals("Big Coop") ||((Coop) building).coopType.equals("Deluxe Coop"))) {
-                if (((Coop) building).animals.size() < ((Coop)building).capacity) {
+            if (building instanceof Coop && (((Coop) building).coopType.equals("Big Coop") || ((Coop) building).coopType.equals("Deluxe Coop"))) {
+                if (((Coop) building).animals.size() < ((Coop) building).capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Coop) building).animals.add(animal);
                     GameRepository.saveGame(game);
@@ -127,7 +127,7 @@ public class MarineRanchController extends Controller {
     private static Response buyRabbit(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop && ((Coop) building).coopType.equals("Deluxe Coop")) {
-                if (((Coop) building).animals.size() < ((Coop)building).capacity) {
+                if (((Coop) building).animals.size() < ((Coop) building).capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Coop) building).animals.add(animal);
                     GameRepository.saveGame(game);
@@ -142,7 +142,7 @@ public class MarineRanchController extends Controller {
     private static Response buySheep(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && ((Barn) building).barnType.equals("Deluxe Barn")) {
-                if (((Barn) building).animals.size() < ((Barn)building).capacity) {
+                if (((Barn) building).animals.size() < ((Barn) building).capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Barn) building).animals.add(animal);
                     GameRepository.saveGame(game);
@@ -156,8 +156,8 @@ public class MarineRanchController extends Controller {
 
     private static Response buyDuck(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
-            if (building instanceof Coop && (((Coop) building).coopType.equals("Big Coop") ||((Coop) building).coopType.equals("Deluxe Coop"))) {
-                if (((Coop) building).animals.size() <((Coop)building).capacity) {
+            if (building instanceof Coop && (((Coop) building).coopType.equals("Big Coop") || ((Coop) building).coopType.equals("Deluxe Coop"))) {
+                if (((Coop) building).animals.size() < ((Coop) building).capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Coop) building).animals.add(animal);
                     GameRepository.saveGame(game);
@@ -171,8 +171,8 @@ public class MarineRanchController extends Controller {
 
     private static Response buyGoat(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
-            if (building instanceof Barn && (((Barn) building).barnType.equals("Big Barn")||((Barn) building).barnType.equals("Deluxe Barn"))) {
-                if (((Barn) building).animals.size() < ((Barn)building).capacity) {
+            if (building instanceof Barn && (((Barn) building).barnType.equals("Big Barn") || ((Barn) building).barnType.equals("Deluxe Barn"))) {
+                if (((Barn) building).animals.size() < ((Barn) building).capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Barn) building).animals.add(animal);
                     GameRepository.saveGame(game);
@@ -187,7 +187,7 @@ public class MarineRanchController extends Controller {
     private static Response buyCow(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn) {
-                if (((Barn) building).animals.size() < ((Barn)building).capacity) {
+                if (((Barn) building).animals.size() < ((Barn) building).capacity) {
                     player.setMoney(player.getMoney() - cost);
                     ((Barn) building).animals.add(animal);
                     GameRepository.saveGame(game);

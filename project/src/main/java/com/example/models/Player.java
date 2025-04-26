@@ -6,8 +6,8 @@ import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
 import com.example.models.enums.types.inventoryEnums.BackpackType;
-import com.example.models.enums.types.itemTypes.ToolTypes;
 import com.example.models.enums.types.inventoryEnums.TrashcanType;
+import com.example.models.enums.types.itemTypes.ToolTypes;
 import com.example.models.items.Item;
 import com.example.models.items.Tool;
 import com.example.models.items.buffs.ActiveBuff;
@@ -18,6 +18,7 @@ import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 @Embedded
@@ -44,6 +45,15 @@ public class Player {
     private TrashcanType trashcanType;
     private Item equippedItem;
     private double usedEnergyInTurn;
+
+    public Slot getRefrigeratorSlotByName(String slotName) {
+        for (Slot slot : refrigeratorSlots) {
+            if (slot.getItem().getName().compareToIgnoreCase(slotName) == 0) {
+                return slot;
+            }
+        }
+        return null;
+    }
 
     public Player() {
     }
@@ -194,6 +204,46 @@ public class Player {
                 }
 
                 return clone;
+            }
+        }
+        return null;
+    }
+
+    public Farming getUnbuffedFarmingSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Farming) {
+                Farming farming = (Farming) skill;
+                return farming;
+            }
+        }
+        return null;
+    }
+
+    public Fishing getUnbuffedFishingSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Fishing) {
+                Fishing fishing = (Fishing) skill;
+                return fishing;
+            }
+        }
+        return null;
+    }
+
+    public Foraging getUnbuffedForagingSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Foraging) {
+                Foraging foraging = (Foraging) skill;
+                return foraging;
+            }
+        }
+        return null;
+    }
+
+    public Mining getUnbuffedMiningSkill() {
+        for (Skill skill : skills) {
+            if (skill instanceof Mining) {
+                Mining mining = (Mining) skill;
+                return mining;
             }
         }
         return null;

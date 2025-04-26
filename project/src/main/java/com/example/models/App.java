@@ -1,7 +1,7 @@
 package com.example.models;
 
 import com.example.Repositories.UserRepository;
-import com.example.models.enums.types.*;
+import com.example.models.enums.types.MenuTypes;
 import com.example.models.enums.types.itemTypes.*;
 
 import java.util.ArrayList;
