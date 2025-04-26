@@ -126,7 +126,27 @@ public class LivestockController extends Controller {
     }
 
     public static Response handleProduces(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        ArrayList<Animal> allAnimals = game.getCurrentPlayer().getAnimals();
+        ArrayList<Animal> desiredAnimals = new ArrayList<>();
+        for (Animal animal : allAnimals) {
+            if (animal.product != null) {
+                desiredAnimals.add(animal);
+            }
+        }
+        if (desiredAnimals.isEmpty()) {
+            GameRepository.saveGame(game);
+            return new Response(false, "No products found");
+        }
+        StringBuilder animalString = new StringBuilder();
+        for (Animal animal : desiredAnimals) {
+            animalString.append("name: ").append(animal.getName())
+                    .append(" product: ").append(animal.product.getName()).append(" ").
+                    append(animal.product.getQuality()).append("\n");
+        }
+        GameRepository.saveGame(game);
+        return new Response(true, animalString.toString());
     }
 
     public static Response handleCollectProduce(Request request) {

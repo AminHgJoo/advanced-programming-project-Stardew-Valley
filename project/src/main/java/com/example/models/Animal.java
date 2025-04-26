@@ -1,6 +1,7 @@
 package com.example.models;
 
 import com.example.models.enums.types.AnimalType;
+import com.example.models.items.Item;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
@@ -14,7 +15,7 @@ public class Animal {
     public boolean hasBeenFedByGrass;
     public boolean hasBeenFedYesterday;
     public boolean hasBeenHarvested;
-
+    public Item product;
 
     public Animal() {
     }
