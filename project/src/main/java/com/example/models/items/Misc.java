@@ -45,4 +45,16 @@ public class Misc extends Item {
     public void setMiscType(MiscType miscType) {
         this.miscType = miscType;
     }
+
+    @Override
+    public int getValue() {
+        if (this.quality == Quality.SILVER)
+            return (int) ((double) this.value * 1.25);
+        else if (this.quality == Quality.GOLD)
+            return (int) ((double) this.value * 1.5);
+        else if (this.quality == Quality.IRIDIUM)
+            return (int) ((double) this.value * 2);
+
+        return value;
+    }
 }

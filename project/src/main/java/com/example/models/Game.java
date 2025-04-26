@@ -132,7 +132,7 @@ public class Game {
             if (animalBlock != null) {
                 animal.setXp(animal.getXp() - 20);
             }
-            if (animal.getType().equals(AnimalType.SHEEP)) {
+            if (animal.getType().equals(AnimalType.SHEEP) || animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT)) {
                 if (animal.hasBeenHarvested)
                     animal.setXp(animal.getXp() + 5);
             }
