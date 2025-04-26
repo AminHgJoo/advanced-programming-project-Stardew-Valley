@@ -7,7 +7,6 @@ import com.example.models.Game;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;
-import org.jetbrains.annotations.NotNull;
 
 public class GameMenu implements Menu {
 
@@ -205,11 +204,7 @@ public class GameMenu implements Menu {
                 response = getQuestFinishResponse(input);
             } else if (GameMenuCommands.SHOW_MENU.matches(input)) {
                 response = getShowMenuResponse(input);
-            } else if (GameMenuCommands.GO_TO_CARPENTER_SHOP.matches(input)) {
-                response = goToCarpenterShop(input);
-            } else if (GameMenuCommands.GO_TO_MARINE_RANCH.matches(input)) {
-                goToMarineRanch(input);
-            }else if (GameMenuCommands.GO_TO_STORE.matches(input)) {
+            } else if (GameMenuCommands.GO_TO_STORE.matches(input)) {
                 response = goToStore(input);
             } else {
                 response = getInvalidCommand();
@@ -219,22 +214,11 @@ public class GameMenu implements Menu {
         printResponse(response);
     }
 
-    private static void goToMarineRanch(String input) {
-        Request request = new Request(input);
-        MovementAndMap.handleGoToMarineRanch(request);
-    }
 
     private static Response goToStore(String input) {
         Request request = new Request(input);
-        request.body.put("storeName" , GameMenuCommands.GO_TO_STORE.getGroup(input , "storeName"));
+        request.body.put("storeName", GameMenuCommands.GO_TO_STORE.getGroup(input, "storeName"));
         Response response = DealingController.handleGoToStore(request);
-        return response;
-    }
-
-    private static @NotNull Response goToCarpenterShop(String input) {
-        Response response;
-        Request request = new Request(input);
-        response = MovementAndMap.handleGoToCarpenterShop(request);
         return response;
     }
 
