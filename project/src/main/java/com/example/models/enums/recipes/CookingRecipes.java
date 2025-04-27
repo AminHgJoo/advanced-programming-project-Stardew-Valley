@@ -10,7 +10,7 @@ import com.example.models.items.Food;
 import com.example.models.items.Misc;
 
 public enum CookingRecipes {
-    //TODO: INGREDIENTS ARE WRONG!
+
     FRIED_EGG("Fried Egg", 0, 0, 0, 0, FoodTypes.FRIED_EGG,
             new Slot(new Misc(MiscType.EGG), 1)),
     BAKED_FISH("Baked Fish", 0, 0, 0, 0, FoodTypes.BAKED_FISH,
