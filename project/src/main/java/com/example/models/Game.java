@@ -1,6 +1,7 @@
 package com.example.models;
 
 import com.example.Repositories.GameRepository;
+import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
 import com.example.models.enums.types.AnimalType;
@@ -131,49 +132,56 @@ public class Game {
             if (animalBlock != null) {
                 animal.setXp(animal.getXp() - 20);
             }
-            if (animal.getType().equals(AnimalType.SHEEP)) {
+            if (animal.getType().equals(AnimalType.SHEEP) || animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT)) {
                 if (animal.hasBeenHarvested)
                     animal.setXp(animal.getXp() + 5);
             }
             if (animal.hasBeenFedYesterday) {
                 double randNum = 0.5 + Math.random();
                 randNum = (animal.getXp() + (150 * randNum)) / 1500;
-                double quality = ((double) animal.getXp() / 1000) * (0.5 + 0.5 * Math.random());
+                double qualityNumber = ((double) animal.getXp() / 1000) * (0.5 + 0.5 * Math.random());
+                Quality quality = Quality.IRIDIUM;
+                if(qualityNumber <0.5)
+                    quality = Quality.COPPER;
+                else if(qualityNumber <0.7)
+                    quality = Quality.SILVER;
+                else if(qualityNumber <0.9)
+                    quality = Quality.GOLD;
                 Item item = null;
                 if (randNum >= 1 && animal.getXp() >= 100) {
                     if (animal.getType().equals(AnimalType.Chicken))
-                        item = new Misc(MiscType.BIG_EGG);
+                        item = new Misc(MiscType.BIG_EGG, quality);
                     else if (animal.getType().equals(AnimalType.DUCK))
-                        item = new Misc(MiscType.DUCK_FEATHER);
+                        item = new Misc(MiscType.DUCK_FEATHER, quality);
                     else if (animal.getType().equals(AnimalType.RABBIT))
-                        item = new Misc(MiscType.RABBITS_FOOT);
+                        item = new Misc(MiscType.RABBITS_FOOT, quality);
                     else if (animal.getType().equals(AnimalType.DINOSAUR))
-                        item = new Misc(MiscType.DINOSAUR);
+                        item = new Misc(MiscType.DINOSAUR, quality);
                     else if (animal.getType().equals(AnimalType.COW))
-                        item = new Misc(MiscType.BIG_MILK);
+                        item = new Misc(MiscType.BIG_MILK, quality);
                     else if (animal.getType().equals(AnimalType.GOAT))
-                        item = new Misc(MiscType.BIG_GOAT_MILK);
+                        item = new Misc(MiscType.BIG_GOAT_MILK, quality);
                     else if (animal.getType().equals(AnimalType.SHEEP))
-                        item = new Misc(MiscType.WOOL);
+                        item = new Misc(MiscType.WOOL, quality);
                     else if (animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
-                        item = new Misc(MiscType.TRUFFLE);
+                        item = new Misc(MiscType.TRUFFLE, quality);
                 } else {
                     if (animal.getType().equals(AnimalType.Chicken))
-                        item = new Misc(MiscType.EGG);
+                        item = new Misc(MiscType.EGG, quality);
                     else if (animal.getType().equals(AnimalType.DUCK))
-                        item = new Misc(MiscType.DUCK_EGG);
+                        item = new Misc(MiscType.DUCK_EGG, quality);
                     else if (animal.getType().equals(AnimalType.RABBIT))
-                        item = new Misc(MiscType.WOOL);
+                        item = new Misc(MiscType.WOOL, quality);
                     else if (animal.getType().equals(AnimalType.DINOSAUR))
-                        item = new Misc(MiscType.DINOSAUR);
+                        item = new Misc(MiscType.DINOSAUR, quality);
                     else if (animal.getType().equals(AnimalType.COW))
-                        item = new Misc(MiscType.MILK);
+                        item = new Misc(MiscType.MILK, quality);
                     else if (animal.getType().equals(AnimalType.GOAT))
-                        item = new Misc(MiscType.GOAT_MILK);
+                        item = new Misc(MiscType.GOAT_MILK, quality);
                     else if (animal.getType().equals(AnimalType.SHEEP))
-                        item = new Misc(MiscType.WOOL);
+                        item = new Misc(MiscType.WOOL, quality);
                     else if (animal.getType().equals(AnimalType.PIG) && animal.hasBeenFedByGrass)
-                        item = new Misc(MiscType.TRUFFLE);
+                        item = new Misc(MiscType.TRUFFLE, quality);
                 }
                 animal.hasBeenFedByGrass = false;
                 animal.hasBeenFedByHay = false;

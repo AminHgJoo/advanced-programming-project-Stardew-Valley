@@ -5,12 +5,17 @@ import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
+import com.example.models.enums.types.AnimalType;
 import com.example.models.enums.types.itemTypes.MiscType;
+import com.example.models.enums.types.itemTypes.ToolTypes;
 import com.example.models.enums.worldEnums.Weather;
+import com.example.models.items.Item;
+import com.example.models.items.Misc;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapObjects.AnimalBlock;
 import com.example.models.mapObjects.EmptyCell;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -150,14 +155,106 @@ public class LivestockController extends Controller {
     }
 
     public static Response handleCollectProduce(Request request) {
-        return null;
+        String animalName = request.body.get("name");
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Animal animal = player.getAnimalByName(animalName);
+        Item equippedItem = player.getEquippedItem();
+        Backpack backpack = player.getInventory();
+        Slot productSlot = null;
+
+        if (animal == null) {
+            GameRepository.saveGame(game);
+            return new Response(false, "no animal found");
+        }
+        Item product = animal.product;
+        if (product == null) {
+            return noProductFoundHandle(animal, equippedItem, player, game);
+        }
+        if (animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT)) {
+            if (equippedItem == null || !equippedItem.getName().equals(ToolTypes.MILK_PAIL.name)) {
+                GameRepository.saveGame(game);
+                return new Response(false, "you have to equip milk pail first");
+            }
+            handleCollectProducts(product, backpack, productSlot, animal, player, game);
+           //  World.handleToolUse(request);
+            //TODO milk pail tool
+            player.setEnergy(player.getEnergy() -4);
+            return handleCollectProducts(product, backpack, productSlot, animal, player, game);
+        }
+        if (animal.getType().equals(AnimalType.SHEEP)) {
+            if (equippedItem == null || !equippedItem.getName().equals(ToolTypes.SHEAR.name)) {
+                GameRepository.saveGame(game);
+                return new Response(false, "you have to equip sheer first");
+            }
+           //  World.handleToolUse(request);
+            //TODO milk shear
+            player.setEnergy(player.getEnergy() -4);
+           return handleCollectProducts(product, backpack, productSlot, animal, player, game);
+        }
+        return handleCollectProducts(product, backpack, productSlot, animal, player, game);
+    }
+
+    private static @NotNull Response handleCollectProducts(Item product, Backpack backpack, Slot productSlot, Animal animal, Player player, Game game) {
+        Item item = new Misc(((Misc) product).getMiscType(), ((Misc) product).getQuality());
+        for (Slot slot : backpack.getSlots()) {
+            if (slot.getItem().getName().equals(product.getName())) {
+                productSlot = slot;
+            }
+        }
+        if (productSlot == null) {
+            return addNewSlotForProductHandle(backpack, animal, player, game, item, product);
+        }
+        return addToExistingSlotHandle(productSlot, animal, player, game, product);
+    }
+
+    private static @NotNull Response addToExistingSlotHandle(Slot productSlot, Animal animal, Player player, Game game, Item product) {
+        productSlot.setCount(productSlot.getCount() + animal.getType().productPerDay);
+        if(animal.getType().equals(AnimalType.SHEEP) ||animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT))
+            animal.hasBeenHarvested = true;
+        animal.product = null;
+        GameRepository.saveGame(game);
+        return new Response(true, "you have collected " + animal.getType().productPerDay + " of " + product.getName());
+    }
+
+    private static @NotNull Response addNewSlotForProductHandle(Backpack backpack, Animal animal, Player player, Game game, Item item, Item product) {
+        if (backpack.getSlots().size() == backpack.getType().getMaxCapacity()) {
+            GameRepository.saveGame(game);
+            return new Response(false, "your backpack is full");
+        }
+        Slot newSlot = new Slot(item, animal.getType().productPerDay);
+        backpack.addSlot(newSlot);
+        if(animal.getType().equals(AnimalType.SHEEP) ||animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT))
+            animal.hasBeenHarvested = true;
+        animal.product = null;
+        GameRepository.saveGame(game);
+        return new Response(true, "you have collected " + animal.getType().productPerDay + " of " + product.getName());
+    }
+
+    private static @NotNull Response noProductFoundHandle(Animal animal, Item equippedItem, Player player, Game game) {
+        GameRepository.saveGame(game);
+        return new Response(false, "no product found");
     }
 
     public static Response handleSellAnimal(Request request) {
-        return null;
+        String animalName = request.body.get("name");
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Animal animal = player.getAnimalByName(animalName);
+        if (animal == null) {
+            GameRepository.saveGame(game);
+            return new Response(false, "no animal found");
+        }
+        int price = (int) ((double) animal.getXp() / 1000 + 0.3) * animal.getType().price;
+        player.setMoney(player.getMoney() + price);
+        player.getAnimals().remove(animal);
+        GameRepository.saveGame(game);
+        return new Response(true, "you have sold " + animalName + " for " + price);
     }
 
     public static Response handleFishing(Request request) {
-        return null;
+        return World.handleToolUse(request);
     }
 }
