@@ -8,6 +8,7 @@ import com.example.models.IO.Response;
 import com.example.models.enums.Quality;
 import com.example.models.enums.SkillLevel;
 import com.example.models.enums.types.itemTypes.*;
+import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.example.models.enums.types.mapObjectTypes.ForagingCropsType;
 import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.enums.worldEnums.Season;
@@ -396,6 +397,38 @@ public class World extends Controller {
                     targetCell.setObjectOnCell(new EmptyCell());
                     GameRepository.saveGame(game);
                     return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
+                }
+            }
+        }
+
+        if (targetCell.getObjectOnCell() instanceof ArtisanBlock) {
+            ArtisanBlock block = (ArtisanBlock) targetCell.getObjectOnCell();
+            Slot droppedSlot = new Slot(new Misc(MiscType.getMiscTypeByName(block.getArtisanType().name), Quality.DEFAULT), 1);
+
+            Backpack backpack = player.getInventory();
+            Slot backpackSlot = backpack.getSlotByItemName(droppedSlot.getItem().getName());
+
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                if (backpackSlot == null) {
+                    GameRepository.saveGame(game);
+                    return new Response(false, "Backpack was full! Couldn't retrieve item from the ground.");
+                } else {
+                    backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxStackSize()));
+                    targetCell.setObjectOnCell(new EmptyCell());
+                    GameRepository.saveGame(game);
+                    return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
+                }
+            } else {
+                if (backpackSlot == null) {
+                    backpack.getSlots().add(droppedSlot);
+                    targetCell.setObjectOnCell(new EmptyCell());
+                    GameRepository.saveGame(game);
+                    return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
+                } else {
+                    backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxStackSize()));
+                    targetCell.setObjectOnCell(new EmptyCell());
+                    GameRepository.saveGame(game);
+                    return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
                 }
             }
         }

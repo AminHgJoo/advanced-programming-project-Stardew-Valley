@@ -20,7 +20,7 @@ public class ArtisanBlock extends MapObject {
         super(false, "artisanBlock", "black");
         this.artisanType = artisanType;
         this.beingUsed = false;
-        canBeCollected = false;
+        this.canBeCollected = false;
     }
 
     public ArtisanBlockType getArtisanType() {

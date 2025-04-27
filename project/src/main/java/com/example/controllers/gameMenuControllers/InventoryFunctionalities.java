@@ -9,15 +9,18 @@ import com.example.models.enums.recipes.CraftingRecipes;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.types.itemTypes.TreeSeedsType;
+import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.example.models.items.*;
 import com.example.models.items.buffs.ActiveBuff;
 import com.example.models.mapModels.Cell;
+import com.example.models.mapObjects.ArtisanBlock;
 import com.example.models.mapObjects.DroppedItem;
 import com.example.models.mapObjects.EmptyCell;
 
 import java.util.HashMap;
 
 public class InventoryFunctionalities extends Controller {
+
     public static Response handleShowInventory(Request request) {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
@@ -264,8 +267,30 @@ public class InventoryFunctionalities extends Controller {
             return new Response(false, "Target cell is not empty.");
         }
 
-        targetCell.setObjectOnCell(new DroppedItem("gray", slotToPlace.getCount(), slotToPlace.getItem()));
-        backpack.getSlots().remove(slotToPlace);
+        if (slotToPlace.getItem() instanceof Misc) {
+
+            Misc misc = (Misc) slotToPlace.getItem();
+
+            if (misc.getMiscType().isArtisanBlock && misc.getMiscType().isPlacable) {
+                targetCell.setObjectOnCell(new ArtisanBlock(ArtisanBlockType.getArtisanBlockTypeByName(misc.getName())));
+                slotToPlace.setCount(slotToPlace.getCount() - 1);
+                if (slotToPlace.getCount() == 0) {
+                    backpack.getSlots().remove(slotToPlace);
+                }
+            } else if (misc.getMiscType().isPlacable) {
+                targetCell.setObjectOnCell(new DroppedItem("gray", slotToPlace.getCount(), slotToPlace.getItem()));
+                slotToPlace.setCount(slotToPlace.getCount() - 1);
+                if (slotToPlace.getCount() == 0) {
+                    backpack.getSlots().remove(slotToPlace);
+                }
+            } else {
+                targetCell.setObjectOnCell(new DroppedItem("gray", slotToPlace.getCount(), slotToPlace.getItem()));
+                backpack.getSlots().remove(slotToPlace);
+            }
+        } else {
+            targetCell.setObjectOnCell(new DroppedItem("gray", slotToPlace.getCount(), slotToPlace.getItem()));
+            backpack.getSlots().remove(slotToPlace);
+        }
 
         GameRepository.saveGame(game);
         return new Response(true, "Item placed successfully on Coordinates : x = " + (playerX + dx) + ", y = " + (playerY + dy));
