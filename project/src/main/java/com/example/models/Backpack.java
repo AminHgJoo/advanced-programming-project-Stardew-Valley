@@ -1,6 +1,7 @@
 package com.example.models;
 
 import com.example.models.enums.types.inventoryEnums.BackpackType;
+import com.example.models.items.Fish;
 import com.example.models.items.Seed;
 import com.example.models.items.Tool;
 import dev.morphia.annotations.Embedded;
@@ -98,4 +99,12 @@ public class Backpack {
         return null;
     }
 
+    public Slot getFirstFish() {
+        for (Slot slot : slots) {
+            if (slot.getItem() instanceof Fish) {
+                return slot;
+            }
+        }
+        return null;
+    }
 }

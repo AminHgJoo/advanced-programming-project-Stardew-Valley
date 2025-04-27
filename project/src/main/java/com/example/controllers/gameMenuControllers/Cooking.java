@@ -129,6 +129,21 @@ public class Cooking extends Controller {
             }
         }
 
+        //one fish
+        if (targetRecipe == CookingRecipes.MAKI_ROLL) {
+            Slot fishSlot = backpack.getFirstFish();
+
+            if (fishSlot == null) {
+                GameRepository.saveGame(game);
+                return new Response(false, "You don't have the fish to cook this recipe.");
+            }
+
+            fishSlot.setCount(fishSlot.getCount() - 1);
+            if (fishSlot.getCount() == 0) {
+                backpack.getSlots().remove(fishSlot);
+            }
+        }
+
         //deduct ingredients.
         for (Slot ingredient : targetRecipe.ingredients) {
             Slot backpackSlot = backpack.getSlotByItemName(ingredient.getItem().getName());
