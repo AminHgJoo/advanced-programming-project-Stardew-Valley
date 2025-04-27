@@ -253,8 +253,4 @@ public class LivestockController extends Controller {
         GameRepository.saveGame(game);
         return new Response(true, "you have sold " + animalName + " for " + price);
     }
-
-    public static Response handleFishing(Request request) {
-        return World.handleToolUse(request);
-    }
 }

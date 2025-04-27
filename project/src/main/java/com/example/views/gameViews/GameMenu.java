@@ -143,8 +143,6 @@ public class GameMenu implements Menu {
                 response = getCollectProduceResponse(input);
             } else if (GameMenuCommands.SELL_ANIMAL.matches(input)) {
                 response = getSellAnimalResponse(input);
-            } else if (GameMenuCommands.FISHING.matches(input)) {
-                response = getFishingResponse(input);
             } else if (GameMenuCommands.ARTISAN_USE.matches(input)) {
                 response = getArtisanUseResponse(input);
             } else if (GameMenuCommands.ARTISAN_GET.matches(input)) {
@@ -618,13 +616,6 @@ public class GameMenu implements Menu {
         Request request = new Request(input);
         request.body.put("name", GameMenuCommands.SELL_ANIMAL.getGroup(input, "name"));
         Response response = LivestockController.handleSellAnimal(request);
-        return response;
-    }
-
-    private static Response getFishingResponse(String input) {
-        Request request = new Request(input);
-        request.body.put("fishingPole", GameMenuCommands.FISHING.getGroup(input, "fishingPole"));
-        Response response = LivestockController.handleFishing(request);
         return response;
     }
 
