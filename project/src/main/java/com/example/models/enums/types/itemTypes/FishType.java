@@ -39,6 +39,22 @@ public enum FishType implements ItemType {
         this.isLegendary = isLegendary;
     }
 
+    public static boolean isFish(String itemName) {
+        for(FishType f : FishType.values()) {
+            if(f.name.equals(itemName))
+                return true;
+        }
+        return false;
+    }
+
+    public static FishType getFishType(String itemName) {
+        for(FishType f : FishType.values()) {
+            if(f.name.equals(itemName))
+                return f;
+        }
+        return null;
+    }
+
     @Override
     public Slot createAmountOfItem(int amount) {
         return new Slot(new Fish(Quality.DEFAULT, this), amount);

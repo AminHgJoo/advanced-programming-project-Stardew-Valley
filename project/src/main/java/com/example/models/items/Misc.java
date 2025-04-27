@@ -34,6 +34,11 @@ public class Misc extends Item {
         this.miscType = miscType;
     }
 
+    public Misc(Quality quality, MiscType miscType, int price) {
+        super(quality, Integer.MAX_VALUE, price, 0, miscType.name);
+        this.miscType = miscType;
+    }
+
     public Misc(MiscType miscType) {
         this(miscType, Quality.DEFAULT);
     }
