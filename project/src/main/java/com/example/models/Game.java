@@ -10,9 +10,12 @@ import com.example.models.enums.worldEnums.Season;
 import com.example.models.enums.worldEnums.Weather;
 import com.example.models.items.Item;
 import com.example.models.items.Misc;
+import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapModels.Map;
 import com.example.models.mapObjects.AnimalBlock;
+import com.example.models.mapObjects.ArtisanBlock;
+import com.example.models.mapObjects.MapObject;
 import com.example.models.skills.Skill;
 import com.example.views.gameViews.GameThread;
 import dev.morphia.annotations.Entity;
@@ -72,6 +75,22 @@ public class Game {
             date = date.minusDays(28);
             date = date.plusMonths(1);
         }
+        handleArtisanUse();
+    }
+
+    private void handleArtisanUse() {
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Farm farm = game.getCurrentPlayer().getFarm();
+        for (Cell cell : farm.getCells()) {
+            MapObject objectONCell = cell.getObjectOnCell();
+            if (objectONCell instanceof ArtisanBlock && ((ArtisanBlock) objectONCell).beingUsed) {
+                if (((ArtisanBlock) objectONCell).PrepTime.isAfter(date)) {
+                    ((ArtisanBlock) objectONCell).canBeCollected = true;
+                }
+            }
+        }
+        GameRepository.saveGame(game);
     }
 
     private void strikeLightningOnStormyDay() {
@@ -141,11 +160,11 @@ public class Game {
                 randNum = (animal.getXp() + (150 * randNum)) / 1500;
                 double qualityNumber = ((double) animal.getXp() / 1000) * (0.5 + 0.5 * Math.random());
                 Quality quality = Quality.IRIDIUM;
-                if(qualityNumber <0.5)
+                if (qualityNumber < 0.5)
                     quality = Quality.COPPER;
-                else if(qualityNumber <0.7)
+                else if (qualityNumber < 0.7)
                     quality = Quality.SILVER;
-                else if(qualityNumber <0.9)
+                else if (qualityNumber < 0.9)
                     quality = Quality.GOLD;
                 Item item = null;
                 if (randNum >= 1 && animal.getXp() >= 100) {

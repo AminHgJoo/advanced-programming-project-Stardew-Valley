@@ -58,6 +58,14 @@ public class Farm {
         }
     }
 
+    public ArtisanBlock getArtisanBlock(String artisanName) {
+        for (Cell cell : cells) {
+            if (cell.getObjectOnCell() instanceof ArtisanBlock && ((ArtisanBlock) cell.getObjectOnCell()).getArtisanType().name.equals(artisanName))
+                return (ArtisanBlock) cell.getObjectOnCell();
+        }
+        return null;
+    }
+
     /// Debug method.
     public void showEntireFarm() {
         int playerX = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate().getX();

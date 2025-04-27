@@ -148,6 +148,22 @@ public enum FoodTypes implements ItemType {
         this.value = value;
     }
 
+    public static int getEnergy(String itemName) {
+        for (FoodTypes type : FoodTypes.values()) {
+            if(type.name.equals(itemName))
+                return type.energy;
+        }
+        return 0;
+    }
+
+    public static int getPrice(String itemName) {
+        for(FoodTypes t : FoodTypes.values()) {
+            if(t.name.equals(itemName))
+                return t.value;
+        }
+        return 0;
+    }
+
     @Override
     public Slot createAmountOfItem(int amount) {
         return new Slot(new Food(Quality.DEFAULT, this), amount);
