@@ -1,7 +1,10 @@
 package com.example.models.mapObjects;
 
 import com.example.models.enums.types.itemTypes.CropSeedsType;
+import com.example.utilities.DateUtility;
 import dev.morphia.annotations.Embedded;
+
+import java.time.LocalDateTime;
 
 // TODO CROP STAGE
 @Embedded
@@ -11,19 +14,27 @@ public class Crop extends MapObject {
     private int stageNumber;
     private boolean hasBeenWateredToday = false;
     private boolean hasBeenFertilized = false;
-
+    private LocalDateTime[] growthDeadLines = new LocalDateTime[5];
     public Crop() {
         super();
     }
 
-    public Crop(CropSeedsType plantType) {
+    public Crop(CropSeedsType plantType , LocalDateTime source) {
         super(true, "plant", "green");
         this.cropSeedsType = plantType;
         stageNumber = 0;
         daysToNextStage = cropSeedsType.stageZeroDaysToNextStage;
+        growthDeadLines[0] = DateUtility.getLocalDate(source, cropSeedsType.stageZeroDaysToNextStage);
+        growthDeadLines[1] = DateUtility.getLocalDate(growthDeadLines[0], cropSeedsType.stageOneDaysToNextStage);
+        growthDeadLines[2] = DateUtility.getLocalDate(growthDeadLines[1], cropSeedsType.stageTwoDaysToNextStage);
+        growthDeadLines[3] = DateUtility.getLocalDate(growthDeadLines[2], cropSeedsType.stageThreeDaysToNextStage);
+        growthDeadLines[4] = DateUtility.getLocalDate(growthDeadLines[3], cropSeedsType.stageFourDaysToNextStage);
         this.hasBeenWateredToday = false;
     }
 
+    public LocalDateTime[] getGrowthDeadLines() {
+        return growthDeadLines;
+    }
     public boolean isHasBeenWateredToday() {
         return hasBeenWateredToday;
     }

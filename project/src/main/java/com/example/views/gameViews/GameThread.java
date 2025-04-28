@@ -41,7 +41,7 @@ public class GameThread extends Thread {
             game.checkForRecipeUnlocking();
             game.handleBuffExpiration();
             game.checkForSkillUpgrades();
-
+            game.checkForCropNextStage();
             GameRepository.saveGame(game);
         }
         //debug code

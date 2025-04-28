@@ -5,6 +5,7 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class StoreProduct {
+    // TODO add StoreProduct type , reinitialize the availableCount end of the day
     private int price;
     private Item item;
     // TODO initialize this field

@@ -13,9 +13,7 @@ import com.example.models.items.Misc;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapModels.Map;
-import com.example.models.mapObjects.AnimalBlock;
-import com.example.models.mapObjects.ArtisanBlock;
-import com.example.models.mapObjects.MapObject;
+import com.example.models.mapObjects.*;
 import com.example.models.skills.Skill;
 import com.example.views.gameViews.GameThread;
 import dev.morphia.annotations.Entity;
@@ -94,6 +92,12 @@ public class Game {
     }
 
     private void strikeLightningOnStormyDay() {
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        for (int i = 0; i < 3; i++) {
+            int targetX = (int) (Math.random() * 75);
+            int targetY = (int) (Math.random() * 50);
+            currentPlayer.getFarm().strikeLightning(targetX, targetY , game.getDate());
         for (Player player : players) {
             for (int i = 0; i < 3; i++) {
                 int targetX = (int) (Math.random() * 75);
@@ -271,6 +275,33 @@ public class Game {
                             + skill.getLevel().getNextLevel().toString());
                     skill.setXp((int) (skill.getXp() - skill.getLevel().getXpToNextLevel()));
                     skill.setLevel(skill.getLevel().getNextLevel());
+                }
+            }
+        }
+    }
+
+    public void checkForCropNextStage(){
+        for (Farm farm : map.getFarms()) {
+            for(Cell cell : farm.getCells()) {
+                if(cell.getObjectOnCell() instanceof Crop){
+                    Crop crop = (Crop) cell.getObjectOnCell();
+                    LocalDateTime[] arr = crop.getGrowthDeadLines();
+                    for (int i = 0; i <5 ; i++) {
+                        LocalDateTime d = arr[i];
+                        if(d!= null && d.isAfter(date)) {
+                            crop.setStageNumber(i+1);
+                        }
+                    }
+                }
+                if(cell.getObjectOnCell() instanceof Tree){
+                    Tree tree = (Tree) cell.getObjectOnCell();
+                    LocalDateTime[] arr = tree.getGrowthDeadLines();
+                    for (int i = 0; i <5 ; i++) {
+                        LocalDateTime d = arr[i];
+                        if(d!= null && d.isAfter(date)) {
+                            tree.setStageNumber(i+1);
+                        }
+                    }
                 }
             }
         }

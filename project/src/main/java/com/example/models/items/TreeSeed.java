@@ -30,4 +30,12 @@ public class TreeSeed extends Item {
         super(Quality.DEFAULT, Integer.MAX_VALUE, treeSeedsType.value, 0, treeSeedsType.name);
         this.treeSeedsType = treeSeedsType;
     }
+
+    public TreeSeedsType getTreeSeedsType() {
+        return treeSeedsType;
+    }
+
+    public void setTreeSeedsType(TreeSeedsType treeSeedsType) {
+        this.treeSeedsType = treeSeedsType;
+    }
 }

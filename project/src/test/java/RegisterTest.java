@@ -1,6 +1,9 @@
 import com.example.controllers.SignInMenuController;
 import com.example.models.App;
 import com.example.models.enums.types.MenuTypes;
+import com.example.utilities.Connection;
+import io.github.cdimascio.dotenv.Dotenv;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -15,6 +18,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegisterTest {
     private static final Logger log = LoggerFactory.getLogger(RegisterTest.class);
+
+    @BeforeAll
+    public static void init() {
+        Dotenv.configure()
+                .directory(System.getProperty("user.dir") + "/src/main/java/com/example/configs")
+                .filename("env." + System.getenv("APP_MODE").toLowerCase())
+                .systemProperties()
+                .load();
+        Connection.getDatabase();
+    }
 
     @Test
     void testInvalidUsername() throws IOException {
@@ -76,7 +89,9 @@ public class RegisterTest {
         System.setOut(printStream);
         String input = "register -u ali -p hdhsshjss@Al12 hdhsshjss@Al12 -n shsh -e a@gmail.com -g a\n";
         App.getCurrMenuType().getMenu().handleMenu(input.trim());
-        String output = "User created! Password is: hdhsshjss@Al12";
+        String output = "User created! Password is: hdhsshjss@Al12\n" +
+                "Enter 'pick question -q <question number> -a <answer> -c <confirm answer>' to choose security question\n" +
+                "You can enter 'list questions' command to see possible security questions";
         assertEquals(output, outputStream.toString().trim());
     }
 
@@ -88,10 +103,10 @@ public class RegisterTest {
         System.setOut(printStream);
         App.getCurrMenuType().getMenu().handleMenu("list questions");
         String output = "List of questions:\n" +
-                "1- PET_QUESTION\n" +
-                "2- GAME_QUESTION\n" +
-                "3- CAR_QUESTION\n" +
-                "4- COLOR_QUESTION";
+                "1- What is your favorite pet?\n" +
+                "2- What is your favorite game?\n" +
+                "3- What is your favorite car?\n" +
+                "4- What is your favorite color?";
         assertEquals(output, outputStream.toString().trim());
     }
 
@@ -141,7 +156,8 @@ public class RegisterTest {
         System.setOut(printStream);
         String input = "register -u mamad -p random Random -n shsh -e a@gmail.com -g a";
         App.getCurrMenuType().getMenu().handleMenu(input.trim());
-        String output = "User created! Password is: " + SignInMenuController.getUserPassword();
+        String output = "User created! Password is: " + SignInMenuController.getUserPassword() + "\nEnter 'pick question -q <question number> -a <answer> -c <confirm answer>' to choose security question\n" +
+                "You can enter 'list questions' command to see possible security questions";
         assertEquals(output, outputStream.toString().trim());
     }
 

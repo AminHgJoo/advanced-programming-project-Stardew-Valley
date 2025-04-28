@@ -53,8 +53,14 @@ public class UserRepository {
     }
 
     public static void removeStayLoggedInUser() {
-        String envFilePath = System.getProperty("user.dir") + "/project/src/main/java/com/example/configs/env."
-                + System.getenv("APP_MODE").toLowerCase();
+        String envFilePath = System.getProperty("user.dir");
+        if (System.getenv("APP_MODE").equals("TEST")) {
+            envFilePath += "/src/main/java/com/example/configs/env."
+                    + System.getenv("APP_MODE").toLowerCase();
+        } else {
+            envFilePath += "/src/main/java/com/example/configs/env."
+                    + System.getenv("APP_MODE").toLowerCase();
+        }
         String variableToRemove = "USER_ID";
 
         try {

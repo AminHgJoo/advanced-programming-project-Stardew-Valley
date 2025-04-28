@@ -40,6 +40,7 @@ public enum GameMenuCommands implements Command {
     TOOLS_USE_DIRECTION("^tools\\s+use\\s+-d\\s+(?<direction>.+)$"),
     CRAFT_INFO("^craftinfo\\s+-n\\s+(?<craftName>.+)$"),
     PLANT("^plant\\s+-s\\s+(?<seed>.+?)\\s+-d\\s+(?<direction>.+)$"),
+    PLANT_TREE("^plant\\s+tree\\s+-s\\s+(?<seed>.+?)\\s+-d\\s+(?<direction>.+)$"),
     SHOW_PLANT("^showplant\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
     FERTILIZE("^fertilize\\s+-f\\s+(?<fertilizer>.+?)\\s+-d\\s+(?<direction>.+)$"),
     HOW_MUCH_WATER("^howmuch\\s+water$"),
