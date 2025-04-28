@@ -10,6 +10,8 @@ import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.mapObjects.*;
 import dev.morphia.annotations.Embedded;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Embedded
@@ -133,7 +135,8 @@ public class Farm {
             // TODO parameters
             int randomNumber = (int) (Math.random() * 8);
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
-                cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE));
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE, LocalDateTime.parse("2025-01-01 09:00:00", dateTimeFormatter)));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
                 cell.setObjectOnCell(new ForagingMineral(ForagingMineralsType.STONE, "gray", "Stone"));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
@@ -354,11 +357,11 @@ public class Farm {
         return null;
     }
 
-    public void strikeLightning(int targetX, int targetY) {
+    public void strikeLightning(int targetX, int targetY , LocalDateTime source) {
         Cell targetCell = findCellByCoordinate(targetX, targetY);
         if (targetCell != null) {
             if (targetCell.getObjectOnCell() instanceof Tree) {
-                targetCell.setObjectOnCell(new Tree(TreeType.BURNT_TREE));
+                targetCell.setObjectOnCell(new Tree(TreeType.BURNT_TREE , source));
             }
             if (targetCell.getObjectOnCell() instanceof Crop) {
                 targetCell.setObjectOnCell(new EmptyCell());

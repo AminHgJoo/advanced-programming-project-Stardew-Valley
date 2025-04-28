@@ -123,7 +123,7 @@ public class Farming extends Controller {
             return new Response(false, "This tree can not be planted in this season");
         }
         TreeType treeType = TreeType.findTreeTypeByName(seed);
-        Tree tree = new Tree(treeType);
+        Tree tree = new Tree(treeType ,game.getDate());
         cell.setObjectOnCell(tree);
         GameRepository.saveGame(game);
         return new Response(true, "Planting was successful");
