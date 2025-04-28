@@ -4,6 +4,7 @@ import com.example.models.enums.types.inventoryEnums.BackpackType;
 import com.example.models.items.Fish;
 import com.example.models.items.Seed;
 import com.example.models.items.Tool;
+import com.example.models.items.TreeSeed;
 import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
@@ -98,6 +99,18 @@ public class Backpack {
         }
         return null;
     }
+
+    public Slot findTreeSeedByItemName(String itemName) {
+        for (Slot slot : slots) {
+            if (slot.getItem() instanceof TreeSeed) {
+                if (slot.getItem().getName().compareToIgnoreCase(itemName) == 0) {
+                    return slot;
+                }
+            }
+        }
+        return null;
+    }
+
 
     public Slot getFirstFish() {
         for (Slot slot : slots) {

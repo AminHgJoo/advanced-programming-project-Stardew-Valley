@@ -10,12 +10,17 @@ import com.example.models.Player;
 import com.example.models.Slot;
 import com.example.models.enums.Directions;
 import com.example.models.enums.types.itemTypes.CropSeedsType;
+import com.example.models.enums.types.itemTypes.TreeSeedsType;
+import com.example.models.enums.types.mapObjectTypes.TreeType;
+import com.example.models.enums.worldEnums.Season;
 import com.example.models.items.Misc;
 import com.example.models.items.Seed;
 import com.example.models.items.Tool;
+import com.example.models.items.TreeSeed;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapObjects.Crop;
+import com.example.models.mapObjects.Tree;
 
 public class Farming extends Controller {
     public static Response handleSeedPlanting(Request request) {
@@ -55,8 +60,71 @@ public class Farming extends Controller {
         if(cropSeedsType == CropSeedsType.RANDOM_CROP){
             cropSeedsType = cropSeedsType.getRandomCropSeedsType(game.getSeason());
         }
-        Crop plant = new Crop(cropSeedsType);
+        boolean check = false;
+        for (Season season : cropSeedsType.season) {
+            if(season == game.getSeason()){
+                check = true;
+                break;
+            }
+        }
+        if(!check){
+            return new Response(false, "This crop can not be planted in this season");
+        }
+        Crop plant = new Crop(cropSeedsType , game.getDate());
+        // TODO can be giant  , page 35 in doc , a boolean field in crop to check if has been giant
+        if(cropSeedsType.canBeGiant){
+
+        }
         cell.setObjectOnCell(plant);
+        GameRepository.saveGame(game);
+        return new Response(true, "Planting was successful");
+    }
+
+    public static Response handleTreePlanting(Request request) {
+        Game game = App.getLoggedInUser().getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        String seed = request.body.get("seed");
+        TreeSeedsType treeSeedsType =  TreeSeedsType.findTreeTypeByName(seed);
+        if(treeSeedsType == null) {
+            return new Response(false, "Tree seed not found");
+        }
+        String dir = request.body.get("direction");
+        Directions direction;
+        try {
+            direction = Directions.valueOf(dir);
+        } catch (Exception e) {
+            return new Response(false, "Invalid direction");
+        }
+        Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
+        Cell cell = player.getFarm().findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+        if (cell == null) {
+            return new Response(false, "Cell not found");
+        }
+        if (!cell.isTilled()) {
+            return new Response(false, "Cell is not tilled");
+        }
+        if (!cell.getObjectOnCell().type.equals("empty")) {
+            return new Response(false, "Cell is not empty");
+        }
+        Slot playerSeedSlot = player.getInventory().findTreeSeedByItemName(seed);
+        playerSeedSlot.setCount(playerSeedSlot.getCount()  - 1);
+        if(playerSeedSlot.getCount() <= 0){
+            player.getInventory().getSlots().remove(playerSeedSlot);
+        }
+        TreeSeed treeSeed = (TreeSeed) playerSeedSlot.getItem();
+        boolean check = false;
+        for (Season season : treeSeed.getTreeSeedsType().growthSeasons) {
+            if(season == game.getSeason()){
+                check = true;
+                break;
+            }
+        }
+        if(!check){
+            return new Response(false, "This tree can not be planted in this season");
+        }
+        TreeType treeType = TreeType.findTreeTypeByName(seed);
+        Tree tree = new Tree(treeType);
+        cell.setObjectOnCell(tree);
         GameRepository.saveGame(game);
         return new Response(true, "Planting was successful");
     }

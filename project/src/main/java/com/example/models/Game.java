@@ -15,6 +15,7 @@ import com.example.models.mapModels.Farm;
 import com.example.models.mapModels.Map;
 import com.example.models.mapObjects.AnimalBlock;
 import com.example.models.mapObjects.ArtisanBlock;
+import com.example.models.mapObjects.Crop;
 import com.example.models.mapObjects.MapObject;
 import com.example.models.skills.Skill;
 import com.example.views.gameViews.GameThread;
@@ -269,6 +270,23 @@ public class Game {
                             + skill.getLevel().getNextLevel().toString());
                     skill.setXp((int) (skill.getXp() - skill.getLevel().getXpToNextLevel()));
                     skill.setLevel(skill.getLevel().getNextLevel());
+                }
+            }
+        }
+    }
+
+    public void checkForCropNextStage(){
+        for (Farm farm : map.getFarms()) {
+            for(Cell cell : farm.getCells()) {
+                if(cell.getObjectOnCell() instanceof Crop){
+                    Crop crop = (Crop) cell.getObjectOnCell();
+                    LocalDateTime[] arr = crop.getGrowthDeadLines();
+                    for (int i = 0; i <5 ; i++) {
+                        LocalDateTime d = arr[i];
+                        if(d!= null && d.isAfter(date)) {
+                            crop.setStageNumber(i+1);
+                        }
+                    }
                 }
             }
         }

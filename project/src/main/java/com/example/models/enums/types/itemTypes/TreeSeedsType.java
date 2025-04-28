@@ -5,7 +5,6 @@ import com.example.models.enums.worldEnums.Season;
 import com.example.models.items.TreeSeed;
 
 public enum TreeSeedsType implements ItemType {
-
     ACORNS(Season.values(), "Acorns", 0),
     MAPLE_SEEDS(Season.values(), "Maple Seeds", 0),
     PINE_CONES(Season.values(), "Pine Cones", 0),
@@ -37,6 +36,15 @@ public enum TreeSeedsType implements ItemType {
         this.growthSeasons = new Season[]{season};
         this.name = name;
         this.value = value;
+    }
+
+    public static TreeSeedsType findTreeTypeByName(String name){
+        for (TreeSeedsType tree : TreeSeedsType.values()) {
+            if (tree.name.compareToIgnoreCase(name) == 0) {
+                return tree;
+            }
+        }
+        return null;
     }
 
     @Override

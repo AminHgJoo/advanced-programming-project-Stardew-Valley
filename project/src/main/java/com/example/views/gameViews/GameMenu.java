@@ -105,6 +105,8 @@ public class GameMenu implements Menu {
                 response = getCraftInfoResponse(input);
             } else if (GameMenuCommands.PLANT.matches(input)) {
                 response = getPlantingResponse(input);
+            }else if(GameMenuCommands.PLACE_ITEM.matches(input)){
+                response =getPlantingTree(input);
             } else if (GameMenuCommands.SHOW_PLANT.matches(input)) {
                 response = getShowPlantResponse(input);
             } else if (GameMenuCommands.FERTILIZE.matches(input)) {
@@ -316,6 +318,15 @@ public class GameMenu implements Menu {
         request.body.put("x", GameMenuCommands.SHOW_PLANT.getGroup(input, "x"));
         request.body.put("y", GameMenuCommands.SHOW_PLANT.getGroup(input, "y"));
         response = Farming.handleShowPlant(request);
+        return response;
+    }
+
+    private static Response getPlantingTree(String input){
+        Response response;
+        Request request = new Request(input);
+        request.body.put("seed", GameMenuCommands.PLANT.getGroup(input, "seed"));
+        request.body.put("direction", GameMenuCommands.PLANT.getGroup(input, "direction"));
+        response = Farming.handleTreePlanting(request);
         return response;
     }
 

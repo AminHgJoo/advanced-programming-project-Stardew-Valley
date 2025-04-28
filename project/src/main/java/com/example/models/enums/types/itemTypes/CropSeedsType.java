@@ -114,7 +114,7 @@ public enum CropSeedsType implements ItemType {
                 return arr[0];
             }
         }
-        return null;
+        return this;
     }
 
     @Override
