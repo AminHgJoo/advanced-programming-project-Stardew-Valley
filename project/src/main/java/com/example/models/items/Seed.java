@@ -21,7 +21,7 @@ public class Seed extends Item {
 
     public Seed(CropSeedsType cropSeedsType) {
         this.cropSeedsType = cropSeedsType;
-        this.name = cropSeedsType.name;
+        this.name = cropSeedsType.source;
         this.quality = Quality.DEFAULT;
         this.maxStackSize = Integer.MAX_VALUE;
         this.value = cropSeedsType.baseSellPrice;
