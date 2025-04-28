@@ -17,4 +17,21 @@ public interface StoreProductInterface {
     public String getName();
 
     public ItemType getItemType();
+
+    default boolean isInSeason(Season season){
+        Season[] seasons = getSeasons();
+        boolean inSeason = false;
+        for (Season s : seasons){
+            if(s == season){
+                inSeason = true;
+            }
+        }
+        return inSeason;
+    }
+    default double getProductPrice(Season season){
+        if(isInSeason(season)){
+            return getPrice();
+        }
+        return getOutOfSeasonPrice();
+    }
 }
