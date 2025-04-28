@@ -32,6 +32,15 @@ public enum ForagingMineralsType implements ItemType {
         this.name = name;
     }
 
+    public static int getPriceByName(String name) {
+        for (ForagingMineralsType type : ForagingMineralsType.values()) {
+            if (type.name.equals(name)) {
+                return type.sellPrice;
+            }
+        }
+        return 0;
+    }
+
     public int getSellPrice() {
         return sellPrice;
     }

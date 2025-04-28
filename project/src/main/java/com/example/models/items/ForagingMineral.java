@@ -26,6 +26,11 @@ public class ForagingMineral extends Item {
         this.type = type;
     }
 
+    public ForagingMineral(Quality quality, ForagingMineralsType type, int sellPrice) {
+        super(quality, Integer.MAX_VALUE, sellPrice, 0, type.name);
+        this.type = type;
+    }
+
     @Override
     public void useItem() {
 
