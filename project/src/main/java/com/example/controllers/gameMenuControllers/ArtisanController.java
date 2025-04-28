@@ -57,21 +57,32 @@ public class ArtisanController extends Controller {
         } else if (artisanName.equals("Fish Smoker")) {
             return fishSmoker(item1Name, player, game, backpack, block);
         }
-        //TODO furnace
+        return furnace(item1Name, player, game, backpack, block);
 
-        return null;
+    }
+
+    private static @Nullable Response furnace(String item1Name, Player player, Game game, Backpack backpack, ArtisanBlock block) {
+        if (item1Name.equals(ForagingMineralsType.COPPER_ORE.name)) {
+            return artisanMiscHandleCoal(player, game, backpack, item1Name, block, 0, 4, MiscType.COPPER_BAR, 5, 1, 10 * ForagingMineralsType.getPriceByName(item1Name));
+        } else if (item1Name.equals(ForagingMineralsType.GOLD_ORE.name)) {
+            return artisanMiscHandleCoal(player, game, backpack, item1Name, block, 0, 4, MiscType.GOLD_BAR, 5, 1, 10 * ForagingMineralsType.getPriceByName(item1Name));
+        } else if (item1Name.equals(ForagingMineralsType.IRON_ORE.name)) {
+            return artisanMiscHandleCoal(player, game, backpack, item1Name, block, 0, 4, MiscType.IRON_BAR, 5, 1, 10 * ForagingMineralsType.getPriceByName(item1Name));
+        } else if (item1Name.equals(ForagingMineralsType.IRIDIUM_ORE.name)) {
+            return artisanMiscHandleCoal(player, game, backpack, item1Name, block, 0, 4, MiscType.IRIDIUM_BAR, 5, 1, 10 * ForagingMineralsType.getPriceByName(item1Name));
+        }
+        return wrongItem(game);
     }
 
     private static @Nullable Response fishSmoker(String item1Name, Player player, Game game, Backpack backpack, ArtisanBlock block) {
         if (FishType.isFish(item1Name)) {
             // fish energy ?
-            return artisanFoodHandleFish(player, game, backpack, item1Name, block, 20, 1, FoodTypes.SMOKED_FISH, 1, 1, 2 * Objects.requireNonNull(FishType.getFishType(item1Name)).price);
-        }
-        else{
+            return artisanFoodHandleCoal(player, game, backpack, item1Name, block, 20, 1, FoodTypes.SMOKED_FISH, 1, 1, 2 * Objects.requireNonNull(FishType.getFishType(item1Name)).price);
+        } else {
             wrongItem(game);
-        } return null;
+        }
+        return null;
     }
-
 
     private static @NotNull Response preservesJar(String item1Name, Player player, Game game, Backpack backpack, ArtisanBlock block) {
         if (isVegetable(item1Name)) {
@@ -275,7 +286,7 @@ public class ArtisanController extends Controller {
         return new Response(true, foodTypes.name + " will be ready to collect in " + hours + " hours");
     }
 
-    private static @NotNull Response artisanFoodHandleFish(Player player, Game game, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, FoodTypes foodTypes, int itemCount, int productCount, int price) {
+    private static @NotNull Response artisanFoodHandleCoal(Player player, Game game, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, FoodTypes foodTypes, int itemCount, int productCount, int price) {
         if (player.getEnergy() < energy) {
             GameRepository.saveGame(game);
             return new Response(false, "you don't have enough energy");
@@ -287,7 +298,7 @@ public class ArtisanController extends Controller {
             return new Response(false, "You don't have enough " + item1Name);
         }
         Slot secondSlot = backpack.getSlotByItemName("Coal");
-        if(secondSlot == null || secondSlot.getCount() < itemCount) {
+        if (secondSlot == null || secondSlot.getCount() < itemCount) {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough coal");
         }
@@ -307,6 +318,40 @@ public class ArtisanController extends Controller {
         block.productSlot = new Slot(new Food(Quality.DEFAULT, foodTypes, price), productCount);
         GameRepository.saveGame(game);
         return new Response(true, foodTypes.name + " will be ready to collect in " + hours + " hours");
+    }
+
+    private static @NotNull Response artisanMiscHandleCoal(Player player, Game game, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, MiscType miscType, int itemCount, int productCount, int price) {
+        if (player.getEnergy() < energy) {
+            GameRepository.saveGame(game);
+            return new Response(false, "you don't have enough energy");
+        }
+
+        Slot slot = backpack.getSlotByItemName(item1Name);
+        if (slot == null || slot.getCount() < itemCount) {
+            GameRepository.saveGame(game);
+            return new Response(false, "You don't have enough " + item1Name);
+        }
+        Slot secondSlot = backpack.getSlotByItemName("Coal");
+        if (secondSlot == null || secondSlot.getCount() < 1) {
+            GameRepository.saveGame(game);
+            return new Response(false, "You don't have enough coal");
+        }
+        slot.setCount(slot.getCount() - itemCount);
+        if (slot.getCount() == 0) {
+            backpack.removeSlot(slot);
+        }
+        secondSlot.setCount(secondSlot.getCount() - 1);
+        if (secondSlot.getCount() == 0) {
+            backpack.removeSlot(secondSlot);
+        }
+
+        player.setEnergy(player.getEnergy() - energy);
+        block.beingUsed = true;
+        block.PrepTime = game.getDate().plusHours(hours);
+        block.canBeCollected = false;
+        block.productSlot = new Slot(new Misc(Quality.DEFAULT, miscType, price), productCount);
+        GameRepository.saveGame(game);
+        return new Response(true, miscType.name + " will be ready to collect in " + hours + " hours");
     }
 
     private static @NotNull Response cheesePress(String item1Name, Player player, Game game, ArtisanBlock block, Backpack backpack) {
