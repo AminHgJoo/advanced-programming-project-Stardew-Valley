@@ -470,6 +470,47 @@ public class ArtisanController extends Controller {
     }
 
     public static Response handleArtisanGet(Request request) {
-        return null;
+        String artisanName = request.body.get("artisanName");
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Farm farm = game.getCurrentPlayer().getFarm();
+        Player player = game.getCurrentPlayer();
+        Backpack backpack = player.getInventory();
+        ArtisanBlock block = farm.getArtisanBlock(artisanName);
+        if (block == null) {
+            GameRepository.saveGame(game);
+            return new Response(true, "artisan not found");
+        }
+        if (!block.beingUsed) {
+            GameRepository.saveGame(game);
+            return new Response(true, "no product found");
+        }
+        if (!block.canBeCollected) {
+            GameRepository.saveGame(game);
+            return new Response(true, "The product is not ready for collection");
+        }
+        Slot slot = block.productSlot;
+        Slot backPackSlot = backpack.getSlotByItemName(artisanName);
+        if (backPackSlot == null) {
+            if (backpack.getSlots().size() == backpack.getType().getMaxCapacity()) {
+                GameRepository.saveGame(game);
+                return new Response(true, "your backpack is full");
+            }
+            Slot slotToAdd = new Slot(slot.getItem(), slot.getCount());
+            backpack.addSlot(slotToAdd);
+            block.beingUsed = false;
+            block.canBeCollected = false;
+            block.productSlot = null;
+            GameRepository.saveGame(game);
+            return new Response(true, "you have collected " + slotToAdd.getCount() + " of " + slotToAdd.getItem().getName());
+        }
+        backPackSlot.setCount(backPackSlot.getCount() + slot.getCount());
+        int count = slot.getCount();
+        String itemName = backPackSlot.getItem().getName();
+        block.beingUsed = false;
+        block.canBeCollected = false;
+        block.productSlot = null;
+        GameRepository.saveGame(game);
+        return new Response(true, "you have collected " + count + " of " + itemName);
     }
 }
