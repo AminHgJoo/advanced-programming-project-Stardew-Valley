@@ -3,7 +3,7 @@ package com.example.models.enums.types.storeProductTypes;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.worldEnums.Season;
 
-public enum BlackSmithProducts implements StoreProduct {
+public enum BlackSmithProducts implements StoreProductInterface {
     COPPER_ORE("Copper Ore" , "A common ore that can be smelted into bars.",null,75,75,Double.POSITIVE_INFINITY, Season.values()),
     IRON_ORE("Iron Ore","A fairly common ore that can be smelted into bars.",null,150,150,Double.POSITIVE_INFINITY,Season.values()),
     COAL("Coal","A combustible rock that is useful for crafting and smelting.",null  , 150,150,Double.POSITIVE_INFINITY,Season.values()),

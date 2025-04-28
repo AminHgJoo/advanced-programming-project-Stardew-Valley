@@ -42,6 +42,8 @@ public class GameThread extends Thread {
             game.handleBuffExpiration();
             game.checkForSkillUpgrades();
             game.checkForCropNextStage();
+            game.reInitializeStoreProductsCount();
+
             GameRepository.saveGame(game);
         }
         //debug code

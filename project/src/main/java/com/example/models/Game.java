@@ -276,6 +276,14 @@ public class Game {
         }
     }
 
+    public void reInitializeStoreProductsCount(){
+        for (Store store : map.getVillage().getStores()){
+            for (StoreProduct product: store.getProducts()){
+                product.setAvailableCount(product.getType().getDailyLimit());
+            }
+        }
+    }
+
     public void checkForCropNextStage() {
         for (Farm farm : map.getFarms()) {
             for (Cell cell : farm.getCells()) {

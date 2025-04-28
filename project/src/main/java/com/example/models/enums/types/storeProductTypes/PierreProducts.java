@@ -3,7 +3,7 @@ package com.example.models.enums.types.storeProductTypes;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.worldEnums.Season;
 
-public enum PierreProducts implements StoreProduct{
+public enum PierreProducts implements StoreProductInterface {
     // General Items
     RICE("Rice", "A basic grain often served under vegetables.", null, 200, 200, Double.POSITIVE_INFINITY, Season.values()),
     WHEAT_FLOUR("Wheat Flour", "A common cooking ingredient made from crushed wheat seeds.", null, 100, 100, Double.POSITIVE_INFINITY, Season.values()),

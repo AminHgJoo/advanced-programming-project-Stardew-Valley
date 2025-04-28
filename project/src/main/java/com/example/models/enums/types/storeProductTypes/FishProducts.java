@@ -3,7 +3,7 @@ package com.example.models.enums.types.storeProductTypes;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.worldEnums.Season;
 
-public enum FishProducts implements StoreProduct {
+public enum FishProducts implements StoreProductInterface {
     FISH_SMOKER_RECIPE("Fish Smoker (Recipe)", "A recipe to make Fish Smoker", null, 10000, 10000, 1, null, Season.values()),
     TROUT_SOUP("Trout Soup", "Pretty salty.", null, 250, 250, 1, null, Season.values()),
     BAMBOO_POLE("Bamboo Pole", "Use in the water to catch fish.", null, 500, 500, 1, null, Season.values()),

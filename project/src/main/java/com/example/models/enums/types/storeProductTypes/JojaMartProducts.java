@@ -3,7 +3,7 @@ package com.example.models.enums.types.storeProductTypes;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.worldEnums.Season;
 
-public enum JojaMartProducts implements StoreProduct{
+public enum JojaMartProducts implements StoreProductInterface {
     JOJA_COLA("Joja Cola" , "The flagship product of Joja corporation.",null , 75,75,Double.POSITIVE_INFINITY,Season.values() ),
     ANCIENT_SEED("Ancient Seed" , "Could this still grow?" , null ,500,500,1,Season.values()),
     GRASS_STARTER("Grass Starter" , "Place this on your farm to start a new patch of grass." ,null, 125,125,Double.POSITIVE_INFINITY,Season.values()),

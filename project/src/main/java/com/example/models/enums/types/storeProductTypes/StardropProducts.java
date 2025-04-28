@@ -3,7 +3,7 @@ package com.example.models.enums.types.storeProductTypes;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.worldEnums.Season;
 
-public enum StardropProducts implements StoreProduct{
+public enum StardropProducts implements StoreProductInterface {
     BEER("Beer" , "Drink in moderation." , null , 400,400,Double.POSITIVE_INFINITY,Season.values()),
     SALAD("Salad" , "A healthy garden salad." , null , 220,220,Double.POSITIVE_INFINITY,Season.values()),
     BREAD("Bread","A crusty baguette.", null ,120,120,Double.POSITIVE_INFINITY,Season.values()),
