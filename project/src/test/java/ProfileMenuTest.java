@@ -2,10 +2,9 @@ import com.example.controllers.SignInMenuController;
 import com.example.models.App;
 import com.example.models.User;
 import com.example.models.enums.types.MenuTypes;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import com.example.utilities.Connection;
+import io.github.cdimascio.dotenv.Dotenv;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -19,6 +18,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ProfileMenuTest {
     private static User user;
     private static String password;
+
+    @BeforeAll
+    public static void init() {
+        Dotenv.configure()
+                .directory(System.getProperty("user.dir") + "/src/main/java/com/example/configs")
+                .filename("env." + System.getenv("APP_MODE").toLowerCase())
+                .systemProperties()
+                .load();
+        Connection.getDatabase();
+    }
+
 
     @Test
     @Order(1)

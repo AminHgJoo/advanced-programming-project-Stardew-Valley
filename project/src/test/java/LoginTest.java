@@ -2,6 +2,8 @@ import com.example.controllers.SignInMenuController;
 import com.example.models.App;
 import com.example.models.User;
 import com.example.models.enums.types.MenuTypes;
+import com.example.utilities.Connection;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,6 +21,12 @@ public class LoginTest {
 
     @BeforeAll
     public static void setUp() {
+        Dotenv.configure()
+                .directory(System.getProperty("user.dir") + "/src/main/java/com/example/configs")
+                .filename("env." + System.getenv("APP_MODE").toLowerCase())
+                .systemProperties()
+                .load();
+        Connection.getDatabase();
         logout();
         register();
     }

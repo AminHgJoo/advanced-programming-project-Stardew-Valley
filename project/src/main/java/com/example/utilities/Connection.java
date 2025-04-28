@@ -22,13 +22,7 @@ public class Connection {
                 database.getMapper().mapPackage("com.example.models.skills");
                 database.getMapper().mapPackage("com.example.models.buildings");
                 database.getMapper().mapPackage("com.example.models.NPCModels");
-//                database.getMapper().mapPackage("com.example.models.enums.types");
                 database.getMapper().mapPackage("com.example.models");
-                // Log mapped classes
-//                database.getMapper().getMappedEntities().forEach(entity -> {
-//                    testCodec(entity.getType(),database);
-//                });
-
                 database.ensureIndexes();
             } catch (Exception e) {
                 e.printStackTrace();
