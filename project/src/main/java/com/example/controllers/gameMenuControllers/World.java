@@ -8,7 +8,6 @@ import com.example.models.IO.Response;
 import com.example.models.enums.Quality;
 import com.example.models.enums.SkillLevel;
 import com.example.models.enums.types.itemTypes.*;
-import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.example.models.enums.types.mapObjectTypes.ForagingCropsType;
 import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.enums.worldEnums.Season;
@@ -929,6 +928,7 @@ public class World extends Controller {
         player.setEnergy(player.getEnergy() - energyCost);
         player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
+        //TODO: Handle foraging xp and farming xp.
         if (targetCell.getObjectOnCell() instanceof ForagingCrop) {
             ForagingCrop crop = (ForagingCrop) targetCell.getObjectOnCell();
 
@@ -957,11 +957,17 @@ public class World extends Controller {
 
                 GameRepository.saveGame(game);
                 return new Response(true, "Grass removed from tile.");
-            }
-        }
+            } else {//TODO: Handle foraging harvest.
 
-        GameRepository.saveGame(game);
-        return new Response(false, "Target cell isn't grass.");
+            } //TODO: Handle crop and tree harvest.
+        } else if (targetCell.getObjectOnCell() instanceof Crop) {
+
+        } else if (targetCell.getObjectOnCell() instanceof Tree) {
+
+        } else {
+            GameRepository.saveGame(game);
+            return new Response(false, "Target cell isn't grass.");
+        }
     }
 
     private static double getScytheEnergyCost() {

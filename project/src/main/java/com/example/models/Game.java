@@ -94,10 +94,12 @@ public class Game {
     }
 
     private void strikeLightningOnStormyDay() {
-        for (int i = 0; i < 3; i++) {
-            int targetX = (int) (Math.random() * 75);
-            int targetY = (int) (Math.random() * 50);
-            currentPlayer.getFarm().strikeLightning(targetX, targetY);
+        for (Player player : players) {
+            for (int i = 0; i < 3; i++) {
+                int targetX = (int) (Math.random() * 75);
+                int targetY = (int) (Math.random() * 50);
+                player.getFarm().strikeLightning(targetX, targetY);
+            }
         }
     }
 
