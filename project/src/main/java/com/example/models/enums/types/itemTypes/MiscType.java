@@ -32,6 +32,7 @@ public enum MiscType implements ItemType {
     WEDDING_RING("Wedding Ring", 1000, false, false),
     BASIC_RETAINING_SOIL("Basic Retaining Soil", 4, false, false),
     QUALITY_RETAINING_SOIL("Quality Retaining Soil", 5, false, false),
+    DELUXE_RETAINING_SOIL("Deluxe Retaining Soil", 5, false, false),
     CLOTH("Cloth", 100, false, false),
     CHERRY_BOMB("Cherry Bomb", 50, false, false),
     BOMB("Bomb", 50, false, false),

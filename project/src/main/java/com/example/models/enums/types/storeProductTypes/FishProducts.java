@@ -1,11 +1,12 @@
 package com.example.models.enums.types.storeProductTypes;
 
+import com.example.models.enums.types.itemTypes.FishType;
+import com.example.models.enums.types.itemTypes.FoodTypes;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.worldEnums.Season;
 
 public enum FishProducts implements StoreProductInterface {
-    FISH_SMOKER_RECIPE("Fish Smoker (Recipe)", "A recipe to make Fish Smoker", null, 10000, 10000, 1, null, Season.values()),
-    TROUT_SOUP("Trout Soup", "Pretty salty.", null, 250, 250, 1, null, Season.values()),
+    TROUT_SOUP("Trout Soup", "Pretty salty.", FoodTypes.TROUT_SOUP, 250, 250, 1, null, Season.values()),
     BAMBOO_POLE("Bamboo Pole", "Use in the water to catch fish.", null, 500, 500, 1, null, Season.values()),
     TRAINING_ROD("Training Rod", "It's a lot easier to use than other rods, but can only catch basic fish.", null, 25, 25, 1, null, Season.values()),
     FIBERGLASS_ROD("Fiberglass Rod", "Use in the water to catch fish.", null, 1800, 1800, 1, 2, Season.values()),
