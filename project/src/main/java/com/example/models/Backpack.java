@@ -88,11 +88,11 @@ public class Backpack {
         return seeds;
     }
 
-    public Seed findSeedByItemName(String itemName) {
+    public Slot findSeedByItemName(String itemName) {
         for (Slot slot : slots) {
             if (slot.getItem() instanceof Seed) {
                 if (slot.getItem().getName().compareToIgnoreCase(itemName) == 0) {
-                    return (Seed) slot.getItem();
+                    return slot;
                 }
             }
         }

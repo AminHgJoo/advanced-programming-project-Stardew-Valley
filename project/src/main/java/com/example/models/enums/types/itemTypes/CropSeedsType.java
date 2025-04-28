@@ -46,7 +46,7 @@ public enum CropSeedsType implements ItemType {
     SWEET_GEM_BERRY("Sweet Gem Berry", "Rare Seed", 2, 4, 6, 6, 6, 24, true, -1, 3000, false, 0, new Season[]{Season.FALL}, false),
     POWDER_MELON("Powder Melon", "Powdermelon Seeds", 1, 2, 1, 2, 1, 7, true, -1, 60, true, 63, new Season[]{Season.WINTER}, true),
     ANCIENT_FRUIT("Ancient Fruit", "Ancient Seeds", 2, 7, 7, 7, 5, 28, false, 7, 550, false, 0, new Season[]{Season.FALL, Season.SUMMER, Season.SPRING}, false),
-    ;
+    RANDOM_CROP("Random Crop", "Mixed Seeds", -1, -1, -1, -1, -1, -1, false, -1, -1, false, -1, null, false);;
 
     public final String name;
     public final String source;
@@ -85,8 +85,33 @@ public enum CropSeedsType implements ItemType {
 
     public static CropSeedsType findCropBySeed(String seed) {
         for (CropSeedsType crop : CropSeedsType.values()) {
-            if (crop.source.equals(seed)) {
+            if (crop.source.compareToIgnoreCase(seed) == 0) {
                 return crop;
+            }
+        }
+        return null;
+    }
+
+    public CropSeedsType getRandomCropSeedsType(Season season) {
+        if (name.compareToIgnoreCase("Random Crop") == 0) {
+            if (season == Season.SPRING) {
+                CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.CAULIFLOWER, CropSeedsType.PARSNIP, CropSeedsType.POTATO
+                        , CropSeedsType.BLUE_JAZZ, CropSeedsType.TULIP};
+                int rand = (int)(Math.random()*5);
+                return arr[rand];
+            } else if (season == Season.SUMMER) {
+                CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.CORN, CropSeedsType.HOT_PEPPER, CropSeedsType.RADISH
+                        , CropSeedsType.WHEAT, CropSeedsType.POPPY, CropSeedsType.SUNFLOWER, CropSeedsType.SUMMER_SPANGLE};
+                int rand = (int)(Math.random()*7);
+                return arr[rand];
+            } else if (season == Season.FALL) {
+                CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.ARTICHOKE, CropSeedsType.CORN, CropSeedsType.EGGPLANT,
+                        CropSeedsType.PUMPKIN, CropSeedsType.SUNFLOWER, CropSeedsType.FAIRY_ROSE};
+                int rand = (int)(Math.random()*6);
+                return arr[rand];
+            } else if (season == Season.WINTER) {
+                CropSeedsType[] arr = new CropSeedsType[]{POWDER_MELON};
+                return arr[0];
             }
         }
         return null;

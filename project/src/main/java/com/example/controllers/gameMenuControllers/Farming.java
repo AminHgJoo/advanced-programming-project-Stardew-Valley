@@ -7,8 +7,10 @@ import com.example.models.Game;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.Player;
+import com.example.models.Slot;
 import com.example.models.enums.Directions;
 import com.example.models.enums.types.itemTypes.CropSeedsType;
+import com.example.models.items.Misc;
 import com.example.models.items.Seed;
 import com.example.models.items.Tool;
 import com.example.models.mapModels.Cell;
@@ -42,10 +44,16 @@ public class Farming extends Controller {
         if (!cell.getObjectOnCell().type.equals("empty")) {
             return new Response(false, "Cell is not empty");
         }
-        // TODO check for seed existence
-        Seed playerSeed = player.getInventory().findSeedByItemName(seed);
-        if (playerSeed == null) {
+        Slot playerSeedSlot = player.getInventory().findSeedByItemName(seed);
+        if (playerSeedSlot == null) {
             return new Response(false, "Seed not found in player inventory");
+        }
+        playerSeedSlot.setCount(playerSeedSlot.getCount()  - 1);
+        if(playerSeedSlot.getCount() <= 0){
+            player.getInventory().getSlots().remove(playerSeedSlot);
+        }
+        if(cropSeedsType == CropSeedsType.RANDOM_CROP){
+            cropSeedsType = cropSeedsType.getRandomCropSeedsType(game.getSeason());
         }
         Crop plant = new Crop(cropSeedsType);
         cell.setObjectOnCell(plant);
@@ -70,6 +78,7 @@ public class Farming extends Controller {
     }
 
     public static Response handleFertilization(Request request) {
+        // TODO idk
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
         String fertilizer = request.body.get("fertilizer");
@@ -87,6 +96,14 @@ public class Farming extends Controller {
         }
         if (!cell.getObjectOnCell().type.equals("plant")) {
             return new Response(false, "Cell is not a plant");
+        }
+        Slot miscSlot = player.getInventory().getSlotByItemName(fertilizer);
+        if (miscSlot == null) {
+            return new Response(false, "Fertilizer not found");
+        }
+        miscSlot.setCount(miscSlot.getCount() - 1);
+        if(miscSlot.getCount() <= 0){
+            player.getInventory().getSlots().remove(miscSlot);
         }
         Crop p = (Crop) cell.getObjectOnCell();
         p.setHasBeenFertilized(true);
