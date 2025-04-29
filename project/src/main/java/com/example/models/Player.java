@@ -403,7 +403,7 @@ public class Player {
     public String friendShipToString(){
         StringBuilder builder = new StringBuilder();
         for(Friendship friendship : friendships){
-            builder.append("Friend : ").append(friendship.getPlayer().getUser().getUsername()).append("\n");
+            builder.append("Friend : ").append(friendship.getPlayer()).append("\n");
             builder.append("XP : ").append(friendship.getXp()).append("\n");
             builder.append("Level : ").append(friendship.getLevel()).append("\n");
             builder.append("------------------------------------------------------\n");

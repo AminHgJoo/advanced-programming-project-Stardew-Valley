@@ -91,6 +91,7 @@ public enum GameMenuCommands implements Command {
     TRADE_RESPOND_REJECT("^trade\\s+response\\s+–reject\\s+-i\\s+(?<id>\\d+)$"),
     TRADE_HISTORY("^trade\\s+history$"),
     MEET_NPC("^meet\\s+NPC\\s+(?<npcName>.+)$"),
+    TALK_NPC("^talk\\s+NPC\\s+(?<npcName>.+)\\s+-m\\s+(?<message>.*)$"),
     GIFT_NPC("^gift\\s+NPC\\s+(?<npcName>.+?)\\s+-i\\s+(?<item>.+)$"),
     FRIENDSHIP_NPC_LIST("^friendship\\s+NPC\\s+list$"),
     QUESTS_LIST("^quests\\s+list$"),

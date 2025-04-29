@@ -1,6 +1,7 @@
 package com.example.models;
 
 import com.example.Repositories.GameRepository;
+import com.example.models.NPCModels.NPC;
 import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
@@ -229,13 +230,22 @@ public class Game {
         for (Player player : players) {
             for (Player otherPlayer : players) {
                 if (!otherPlayer.getUser().equals(player.getUser())) {
-                    Friendship friendship = new Friendship(player);
+                    Friendship friendship = new Friendship(player.getUser().getUsername());
                     friendship.setLevel(0);
                     friendship.setXp(0);
                     player.getFriendships().add(friendship);
                 }
             }
         }
+        createNpcs();
+    }
+
+    public void createNpcs(){
+        map.getVillage().getNpcs().add(new NPC("Sebastian" , null));
+        map.getVillage().getNpcs().add(new NPC("Abigale" , null));
+        map.getVillage().getNpcs().add(new NPC("Harvey" , null));
+        map.getVillage().getNpcs().add(new NPC("Lia" , null));
+        map.getVillage().getNpcs().add(new NPC("Robin" , null));
     }
 
     public void checkForRecipeUnlocking() {

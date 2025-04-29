@@ -979,7 +979,7 @@ public class World extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "Target cell isn't grass.");
         }
-
+        return null;
     }
 
     private static double getScytheEnergyCost() {

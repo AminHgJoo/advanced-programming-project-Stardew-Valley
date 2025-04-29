@@ -64,6 +64,7 @@ public class FriendshipController extends Controller {
     }
 
     public static Response handleGift(Request request) {
+
         return null;
     }
 

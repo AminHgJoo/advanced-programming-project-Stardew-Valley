@@ -191,6 +191,8 @@ public class GameMenu implements Menu {
                 response = getTradeHistoryResponse(input);
             } else if (GameMenuCommands.MEET_NPC.matches(input)) {
                 response = getMeetNPCResponse(input);
+            }else if (GameMenuCommands.TALK_NPC.matches(input)) {
+                response = getTalkNpcResponse(input);
             } else if (GameMenuCommands.GIFT_NPC.matches(input)) {
                 response = getGiftNPCResponse(input);
             } else if (GameMenuCommands.FRIENDSHIP_NPC_LIST.matches(input)) {
@@ -796,6 +798,13 @@ public class GameMenu implements Menu {
         Request request = new Request(input);
         request.body.put("npcName", GameMenuCommands.MEET_NPC.getGroup(input, "npcName"));
         Response response = NPCController.handleMeetNPC(request);
+        return response;
+    }
+    private static Response getTalkNpcResponse(String input) {
+        Request request = new Request(input);
+        request.body.put("npcName", GameMenuCommands.TALK_NPC.getGroup(input, "npcName"));
+        request.body.put("message", GameMenuCommands.TALK_NPC.getGroup(input, "message"));
+        Response response = NPCController.handleTalkNPC(request);
         return response;
     }
 

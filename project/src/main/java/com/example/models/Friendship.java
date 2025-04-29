@@ -4,7 +4,7 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Friendship {
-    private Player player;
+    private String player;
     private int level;
     private int xp;
 
@@ -12,16 +12,16 @@ public class Friendship {
 
     }
 
-    public Friendship(Player player) {
+    public Friendship(String player) {
         this.player = player;
         this.level = 0;
     }
 
-    public Player getPlayer() {
+    public String getPlayer() {
         return player;
     }
 
-    public void setPlayer(Player player) {
+    public void setPlayer(String player) {
         this.player = player;
     }
 

@@ -41,32 +41,40 @@ public class GameRepository {
         if (game.getGameThread() != null) {
             game.getGameThread().setGame(game);
         }
-//        db.save(game);
+        db.save(game);
 
-        new Thread(() -> {
-            try {
-                db.save(game);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+//        new Thread(() -> {
+//            try {
+//                db.save(game);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
     }
 
     public static void saveGame(Game game, ArrayList<User> users) {
-        new Thread(() -> {
-            try {
-                db.save(game);
-                for (User u : users) {
-                    u.setCurrentGameId(game.get_id());
-                    u.setCurrentGame(null);
-                    u.getGames().add(game.get_id());
-                    u.setNumberOfGames(u.getNumberOfGames() + 1);
-                    UserRepository.saveUser(u);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+        db.save(game);
+        for (User u : users) {
+            u.setCurrentGameId(game.get_id());
+            u.setCurrentGame(null);
+            u.getGames().add(game.get_id());
+            u.setNumberOfGames(u.getNumberOfGames() + 1);
+            UserRepository.saveUser(u);
+        }
+//        new Thread(() -> {
+//            try {
+//                db.save(game);
+//                for (User u : users) {
+//                    u.setCurrentGameId(game.get_id());
+//                    u.setCurrentGame(null);
+//                    u.getGames().add(game.get_id());
+//                    u.setNumberOfGames(u.getNumberOfGames() + 1);
+//                    UserRepository.saveUser(u);
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
     }
 
     public static ArrayList<Game> findAllGames(boolean populateFlag) {

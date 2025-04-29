@@ -2,7 +2,9 @@ package com.example.models.enums.types.storeProductTypes;
 
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.worldEnums.Season;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public interface StoreProductInterface {
     public String getDescription();
 
