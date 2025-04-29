@@ -1,5 +1,6 @@
 package com.example.controllers.gameMenuControllers;
 
+import com.example.Repositories.GameRepository;
 import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
@@ -7,6 +8,7 @@ import com.example.models.IO.Response;
 import com.example.models.enums.Quality;
 import com.example.models.enums.types.MenuTypes;
 import com.example.models.enums.types.itemTypes.*;
+import com.example.models.enums.types.storeProductTypes.FishProducts;
 import com.example.models.items.*;
 import com.example.models.mapObjects.Crop;
 
@@ -76,8 +78,7 @@ public class DealingController extends Controller {
 
     public static Response handlePurchase(Request request) {
         User user = App.getLoggedInUser();
-        Game game = App.getLoggedInUser().getCurrentGame();
-        // TODO handle finding store
+        Game game = user.getCurrentGame();
         Store store = game.getMap().getVillage().getStore("");
         Player player = game.getCurrentPlayer();
         String productName = request.body.get("productName");
@@ -109,16 +110,35 @@ public class DealingController extends Controller {
         } else if (type instanceof MiscType) {
             item = new Misc((MiscType) type);
         } else if (type instanceof ForagingMineralsType) {
-            item = new ForagingMineral(Quality.DEFAULT,(ForagingMineralsType) type);
+            item = new ForagingMineral(Quality.DEFAULT, (ForagingMineralsType) type);
         } else if (type instanceof ToolTypes) {
-            type = (ToolTypes) type;
-//            item = new Tool(Quality.DEFAULT,type,(ToolTypes) type);
-            // TODO idk how to handle this
+            Quality q = Quality.DEFAULT;
+            if(p.getType() == FishProducts.BAMBOO_POLE){
+                q = Quality.SILVER;
+            }else if(p.getType() == FishProducts.TRAINING_ROD){
+                q = Quality.COPPER;
+            }else if(p.getType() == FishProducts.FIBERGLASS_ROD){
+                q = Quality.GOLD;
+            }else if(p.getType() == FishProducts.IRIDIUM_ROD){
+                q = Quality.IRIDIUM;
+            }
+            item = new Tool(q, (ToolTypes) type, (int) p.getType().getProductPrice(game.getSeason()));
         }
-        if(item == null){
+        if (item == null) {
             return new Response(false, "No such item");
         }
-        // TODO add to slot
+        Backpack backpack = player.getInventory();
+        Slot slot = backpack.getSlotByItemName(item.getName());
+        if (slot == null) {
+            if (backpack.getSlots().size() == backpack.getType().getMaxCapacity()) {
+                return new Response(false, "You don't have enough space in your backpack.");
+            }
+            Slot newSlot = new Slot(item, n);
+            backpack.addSlot(newSlot);
+        } else {
+            slot.setCount(slot.getCount() + 1);
+        }
+        GameRepository.saveGame(game);
         return null;
     }
 

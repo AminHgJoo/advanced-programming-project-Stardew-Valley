@@ -3,14 +3,15 @@ package com.example.models.enums.types.storeProductTypes;
 import com.example.models.enums.types.itemTypes.FishType;
 import com.example.models.enums.types.itemTypes.FoodTypes;
 import com.example.models.enums.types.itemTypes.ItemType;
+import com.example.models.enums.types.itemTypes.ToolTypes;
 import com.example.models.enums.worldEnums.Season;
 
 public enum FishProducts implements StoreProductInterface {
     TROUT_SOUP("Trout Soup", "Pretty salty.", FoodTypes.TROUT_SOUP, 250, 250, 1, null, Season.values()),
-    BAMBOO_POLE("Bamboo Pole", "Use in the water to catch fish.", null, 500, 500, 1, null, Season.values()),
-    TRAINING_ROD("Training Rod", "It's a lot easier to use than other rods, but can only catch basic fish.", null, 25, 25, 1, null, Season.values()),
-    FIBERGLASS_ROD("Fiberglass Rod", "Use in the water to catch fish.", null, 1800, 1800, 1, 2, Season.values()),
-    IRIDIUM_ROD("Iridium Rod", "Use in the water to catch fish.", null, 7500, 7500, 1, 4, Season.values());
+    BAMBOO_POLE("Bamboo Pole", "Use in the water to catch fish.", ToolTypes.FISHING_ROD, 500, 500, 1, null, Season.values()),
+    TRAINING_ROD("Training Rod", "It's a lot easier to use than other rods, but can only catch basic fish.", ToolTypes.FISHING_ROD, 25, 25, 1, null, Season.values()),
+    FIBERGLASS_ROD("Fiberglass Rod", "Use in the water to catch fish.", ToolTypes.FISHING_ROD, 1800, 1800, 1, 2, Season.values()),
+    IRIDIUM_ROD("Iridium Rod", "Use in the water to catch fish.", ToolTypes.FISHING_ROD, 7500, 7500, 1, 4, Season.values());
 
     private final String name;
     private final String description;

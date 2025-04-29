@@ -20,6 +20,12 @@ public class Tool extends Item {
         this.waterReserve = waterReserve;
     }
 
+    public Tool(Quality quality, ToolTypes type, int price) {
+        super(quality, 1, 0, 5, type.name);
+        this.type = type;
+        this.waterReserve = type.waterCapacity;
+    }
+
     /// Only in blacksmith shop.
     public void upgradeTool() {
 
