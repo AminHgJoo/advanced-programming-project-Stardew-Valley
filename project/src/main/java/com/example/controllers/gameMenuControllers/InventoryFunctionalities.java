@@ -211,24 +211,24 @@ public class InventoryFunctionalities extends Controller {
     }
 
     private static int[] getXAndYIncrement(String direction) {
-        if (direction.compareToIgnoreCase("u") == 0) {
+        if (direction.compareToIgnoreCase("up") == 0) {
             return new int[]{0, -1};
-        } else if (direction.compareToIgnoreCase("d") == 0) {
+        } else if (direction.compareToIgnoreCase("down") == 0) {
             return new int[]{0, 1};
-        } else if (direction.compareToIgnoreCase("r") == 0) {
+        } else if (direction.compareToIgnoreCase("right") == 0) {
             return new int[]{1, 0};
-        } else if (direction.compareToIgnoreCase("l") == 0) {
+        } else if (direction.compareToIgnoreCase("left") == 0) {
             return new int[]{-1, 0};
-        } else if (direction.compareToIgnoreCase("ur") == 0) {
+        } else if (direction.compareToIgnoreCase("up_right") == 0) {
             return new int[]{1, -1};
-        } else if (direction.compareToIgnoreCase("ul") == 0) {
+        } else if (direction.compareToIgnoreCase("up_left") == 0) {
             return new int[]{-1, -1};
-        } else if (direction.compareToIgnoreCase("dr") == 0) {
+        } else if (direction.compareToIgnoreCase("down_right") == 0) {
             return new int[]{1, 1};
-        } else if (direction.compareToIgnoreCase("dl") == 0) {
+        } else if (direction.compareToIgnoreCase("down_left") == 0) {
             return new int[]{-1, 1};
         } else {
-            return null;
+            return new int[]{10000, 10000};
         }
     }
 
@@ -237,10 +237,6 @@ public class InventoryFunctionalities extends Controller {
         String itemName = request.body.get("itemName");
 
         int[] xAndY = getXAndYIncrement(direction);
-
-        if (xAndY == null) {
-            return new Response(false, "Invalid direction.");
-        }
 
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
