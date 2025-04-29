@@ -146,6 +146,11 @@ public class ArtisanController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough " + item1Name);
         }
+        if (energy + player.getUsedEnergyInTurn() > 50) {
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
         slot.setCount(slot.getCount() - itemCount);
         if (slot.getCount() == 0) {
             backpack.removeSlot(slot);
@@ -249,6 +254,11 @@ public class ArtisanController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough " + item1Name);
         }
+        if (energy + player.getUsedEnergyInTurn() > 50) {
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
         slot.setCount(slot.getCount() - itemCount);
         if (slot.getCount() == 0) {
             backpack.removeSlot(slot);
@@ -273,6 +283,11 @@ public class ArtisanController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough " + item1Name);
         }
+        if (energy + player.getUsedEnergyInTurn() > 50) {
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
         slot.setCount(slot.getCount() - itemCount);
         if (slot.getCount() == 0) {
             backpack.removeSlot(slot);
@@ -302,6 +317,11 @@ public class ArtisanController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough coal");
         }
+        if (energy + player.getUsedEnergyInTurn() > 50) {
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
         slot.setCount(slot.getCount() - itemCount);
         if (slot.getCount() == 0) {
             backpack.removeSlot(slot);
@@ -336,6 +356,11 @@ public class ArtisanController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough coal");
         }
+        if (energy + player.getUsedEnergyInTurn() > 50) {
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
         slot.setCount(slot.getCount() - itemCount);
         if (slot.getCount() == 0) {
             backpack.removeSlot(slot);
@@ -376,6 +401,11 @@ public class ArtisanController extends Controller {
                 GameRepository.saveGame(game);
                 return new Response(false, "You don't have enough Goat Milk");
             }
+            if (100 + player.getUsedEnergyInTurn() > 50) {
+                return new Response(false, "You can't perform this activity. " +
+                        "You will exceed your energy usage limit.");
+            }
+            player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + 100);
             slot.setCount(slot.getCount() - 1);
             if (slot.getCount() == 0) {
                 backpack.removeSlot(slot);

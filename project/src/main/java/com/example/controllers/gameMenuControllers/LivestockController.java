@@ -172,31 +172,10 @@ public class LivestockController extends Controller {
         if (product == null) {
             return noProductFoundHandle(animal, equippedItem, player, game);
         }
-        if (animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT)) {
-            if (equippedItem == null || !equippedItem.getName().equals(ToolTypes.MILK_PAIL.name)) {
-                GameRepository.saveGame(game);
-                return new Response(false, "you have to equip milk pail first");
-            }
-            handleCollectProducts(product, backpack, productSlot, animal, player, game);
-           //  World.handleToolUse(request);
-            //TODO milk pail tool
-            player.setEnergy(player.getEnergy() -4);
-            return handleCollectProducts(product, backpack, productSlot, animal, player, game);
-        }
-        if (animal.getType().equals(AnimalType.SHEEP)) {
-            if (equippedItem == null || !equippedItem.getName().equals(ToolTypes.SHEAR.name)) {
-                GameRepository.saveGame(game);
-                return new Response(false, "you have to equip sheer first");
-            }
-           //  World.handleToolUse(request);
-            //TODO milk shear
-            player.setEnergy(player.getEnergy() -4);
-           return handleCollectProducts(product, backpack, productSlot, animal, player, game);
-        }
         return handleCollectProducts(product, backpack, productSlot, animal, player, game);
     }
 
-    private static @NotNull Response handleCollectProducts(Item product, Backpack backpack, Slot productSlot, Animal animal, Player player, Game game) {
+    public static @NotNull Response handleCollectProducts(Item product, Backpack backpack, Slot productSlot, Animal animal, Player player, Game game) {
         Item item = new Misc(((Misc) product).getMiscType(), ((Misc) product).getQuality());
         for (Slot slot : backpack.getSlots()) {
             if (slot.getItem().getName().equals(product.getName())) {
@@ -232,7 +211,7 @@ public class LivestockController extends Controller {
         return new Response(true, "you have collected " + animal.getType().productPerDay + " of " + product.getName());
     }
 
-    private static @NotNull Response noProductFoundHandle(Animal animal, Item equippedItem, Player player, Game game) {
+    public static @NotNull Response noProductFoundHandle(Animal animal, Item equippedItem, Player player, Game game) {
         GameRepository.saveGame(game);
         return new Response(false, "no product found");
     }

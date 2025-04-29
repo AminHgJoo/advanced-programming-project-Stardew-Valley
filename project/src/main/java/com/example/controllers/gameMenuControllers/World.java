@@ -7,22 +7,24 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.Quality;
 import com.example.models.enums.SkillLevel;
+import com.example.models.enums.types.AnimalType;
 import com.example.models.enums.types.itemTypes.*;
 import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.enums.worldEnums.Season;
 import com.example.models.enums.worldEnums.Weather;
-import com.example.models.items.Fish;
-import com.example.models.items.Food;
-import com.example.models.items.Misc;
-import com.example.models.items.Tool;
+import com.example.models.items.*;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapObjects.*;
+import com.example.models.mapObjects.ForagingMineral;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import static com.example.controllers.gameMenuControllers.LivestockController.handleCollectProducts;
+import static com.example.controllers.gameMenuControllers.LivestockController.noProductFoundHandle;
 
 public class World extends Controller {
     public static Response handleTimeQuery(Request request) {
@@ -214,24 +216,24 @@ public class World extends Controller {
     }
 
     private static int[] getXAndYIncrement(String direction) {
-        if (direction.compareToIgnoreCase("u") == 0) {
+        if (direction.compareToIgnoreCase("up") == 0) {
             return new int[]{0, -1};
-        } else if (direction.compareToIgnoreCase("d") == 0) {
+        } else if (direction.compareToIgnoreCase("down") == 0) {
             return new int[]{0, 1};
-        } else if (direction.compareToIgnoreCase("r") == 0) {
+        } else if (direction.compareToIgnoreCase("right") == 0) {
             return new int[]{1, 0};
-        } else if (direction.compareToIgnoreCase("l") == 0) {
+        } else if (direction.compareToIgnoreCase("left") == 0) {
             return new int[]{-1, 0};
-        } else if (direction.compareToIgnoreCase("ur") == 0) {
+        } else if (direction.compareToIgnoreCase("up_right") == 0) {
             return new int[]{1, -1};
-        } else if (direction.compareToIgnoreCase("ul") == 0) {
+        } else if (direction.compareToIgnoreCase("up_left") == 0) {
             return new int[]{-1, -1};
-        } else if (direction.compareToIgnoreCase("dr") == 0) {
+        } else if (direction.compareToIgnoreCase("down_right") == 0) {
             return new int[]{1, 1};
-        } else if (direction.compareToIgnoreCase("dl") == 0) {
+        } else if (direction.compareToIgnoreCase("down_left") == 0) {
             return new int[]{-1, 1};
         } else {
-            return null;
+            return new int[]{10000, 10000};
         }
     }
 
@@ -772,6 +774,7 @@ public class World extends Controller {
         int playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
+
         double energyCost = calculateFishingEnergyCost(skillEnergyDiscount, quality);
         double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
@@ -976,6 +979,7 @@ public class World extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "Target cell isn't grass.");
         }
+
     }
 
     private static double getScytheEnergyCost() {
@@ -993,11 +997,101 @@ public class World extends Controller {
 
     //TODO: Implement later.
     private static Response handleMilkPailUse(Request request) {
-        return null;
+        String direction = request.body.get("direction");
+        int[] dxAndDy = getXAndYIncrement(direction);
+        int dx = dxAndDy[0];
+        int dy = dxAndDy[1];
+
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Farm farm = player.getFarm();
+        Item equippedItem = player.getEquippedItem();
+        Backpack backpack = player.getInventory();
+        Slot productSlot = null;
+
+        int playerX = player.getCoordinate().getX();
+        int playerY = player.getCoordinate().getY();
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+        double energyCost = 4;
+        double currentEnergyUsed = player.getUsedEnergyInTurn();
+        double playerEnergy = player.getEnergy();
+
+        if (energyCost + currentEnergyUsed > 50) {
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+
+        if (playerEnergy - energyCost < 0) {
+            return new Response(false, "You don't have enough energy.");
+        }
+
+        if (targetCell == null || !(targetCell.getObjectOnCell() instanceof AnimalBlock)) {
+            return new Response(false, "Target cell not found.");
+        }
+        Animal animal = ((AnimalBlock) targetCell.getObjectOnCell()).animal;
+        if (animal == null) {
+            GameRepository.saveGame(game);
+            return new Response(false, "no animal found");
+        }
+        if (!animal.getType().equals(AnimalType.COW) && !animal.getType().equals(AnimalType.GOAT)) {
+            GameRepository.saveGame(game);
+            return new Response(false, "wrong cell selected");
+        }
+        Item product = animal.product;
+        if (product == null) {
+            return noProductFoundHandle(animal, equippedItem, player, game);
+        }
+        return handleCollectProducts(product, backpack, productSlot, animal, player, game);
     }
 
     //TODO: Implement later.
     private static Response handleShearUse(Request request) {
-        return null;
+        String direction = request.body.get("direction");
+        int[] dxAndDy = getXAndYIncrement(direction);
+        int dx = dxAndDy[0];
+        int dy = dxAndDy[1];
+
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Farm farm = player.getFarm();
+        Item equippedItem = player.getEquippedItem();
+        Backpack backpack = player.getInventory();
+        Slot productSlot = null;
+
+        int playerX = player.getCoordinate().getX();
+        int playerY = player.getCoordinate().getY();
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+        double energyCost = 4;
+        double currentEnergyUsed = player.getUsedEnergyInTurn();
+        double playerEnergy = player.getEnergy();
+
+        if (energyCost + currentEnergyUsed > 50) {
+            return new Response(false, "You can't perform this activity. " +
+                    "You will exceed your energy usage limit.");
+        }
+
+        if (playerEnergy - energyCost < 0) {
+            return new Response(false, "You don't have enough energy.");
+        }
+
+        if (targetCell == null || !(targetCell.getObjectOnCell() instanceof AnimalBlock)) {
+            return new Response(false, "Target cell not found.");
+        }
+        Animal animal = ((AnimalBlock) targetCell.getObjectOnCell()).animal;
+        if (animal == null) {
+            GameRepository.saveGame(game);
+            return new Response(false, "no animal found");
+        }
+        if (!animal.getType().equals(AnimalType.SHEEP)) {
+            GameRepository.saveGame(game);
+            return new Response(false, "wrong cell selected");
+        }
+        Item product = animal.product;
+        if (product == null) {
+            return noProductFoundHandle(animal, equippedItem, player, game);
+        }
+        return handleCollectProducts(product, backpack, productSlot, animal, player, game);
     }
 }
