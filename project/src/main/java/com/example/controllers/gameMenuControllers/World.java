@@ -8,7 +8,6 @@ import com.example.models.IO.Response;
 import com.example.models.enums.Quality;
 import com.example.models.enums.SkillLevel;
 import com.example.models.enums.types.itemTypes.*;
-import com.example.models.enums.types.mapObjectTypes.ForagingCropsType;
 import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.enums.worldEnums.Season;
 import com.example.models.enums.worldEnums.Weather;
@@ -118,7 +117,7 @@ public class World extends Controller {
         }
 
         Game currentGame = App.getLoggedInUser().getCurrentGame();
-        currentGame.getCurrentPlayer().getFarm().strikeLightning(targetX, targetY , currentGame.getDate());
+        currentGame.getCurrentPlayer().getFarm().strikeLightning(targetX, targetY, currentGame.getDate());
         GameRepository.saveGame(currentGame);
         return new Response(true, "Lightning summoned at target coordinates.");
     }
@@ -487,7 +486,7 @@ public class World extends Controller {
 
         if (tree.getTreeType() == TreeType.NORMAL_TREE) {
             int amountOfWood = (int) (Math.random() * 4 + 2);
-            targetCell.setObjectOnCell(new Tree(TreeType.TREE_BARK , game.getDate()));
+            targetCell.setObjectOnCell(new Tree(TreeType.TREE_BARK, game.getDate()));
 
             Backpack backpack = player.getInventory();
             Slot slot = backpack.getSlotByItemName("Wood");
@@ -930,37 +929,46 @@ public class World extends Controller {
 
         //TODO: Handle foraging xp and farming xp.
         if (targetCell.getObjectOnCell() instanceof ForagingCrop) {
+
             ForagingCrop crop = (ForagingCrop) targetCell.getObjectOnCell();
 
-            if (crop.getForagingCropsType().equals(ForagingCropsType.GRASS)) {
+            targetCell.setObjectOnCell(new EmptyCell());
 
-                targetCell.setObjectOnCell(new EmptyCell());
+            Backpack backpack = player.getInventory();
+            ItemType itemType = crop.getForagingCropsType().getHarvestedItemType();
+            Slot slot = null;
+            String name = null;
 
-                Backpack backpack = player.getInventory();
-                Slot slot = backpack.getSlotByItemName("Fiber");
+            if (itemType instanceof MiscType) {
+                slot = backpack.getSlotByItemName(((MiscType) itemType).name);
+                name = ((MiscType) itemType).name;
+            } else if (itemType instanceof FoodTypes) {
+                slot = backpack.getSlotByItemName(((FoodTypes) itemType).name);
+                name = ((FoodTypes) itemType).name;
+            }
 
-                if (player.getInventory().getType().getMaxCapacity() == player.getInventory().getSlots().size()) {
-                    if (slot == null) {
-                        System.out.println("You had no inventory space to collect the materials.");
-                    } else {
-                        slot.setCount(Math.min(slot.getCount() + 1, slot.getItem().getMaxStackSize()));
-                    }
+            int randomInt = (int) (Math.random() * 3) + 1;
+
+            if (player.getInventory().getType().getMaxCapacity() == player.getInventory().getSlots().size()) {
+                if (slot == null) {
+                    System.out.println("You had no inventory space to collect the materials.");
                 } else {
-                    if (slot == null) {
-                        backpack.getSlots()
-                                .add(new Slot(new Misc(MiscType.FIBER, Quality.DEFAULT), 1));
-                    } else {
-                        slot.setCount(Math.min(slot.getCount() + 1, slot.getItem().getMaxStackSize()));
-                    }
-                    System.out.println("Added one Fiber to your backpack.");
+                    slot.setCount(Math.min(slot.getCount() + randomInt, slot.getItem().getMaxStackSize()));
+                    System.out.println("Added x(" + randomInt + ") " + name + " to your backpack.");
                 }
+            } else {
+                if (slot == null) {
+                    backpack.getSlots().add(itemType.createAmountOfItem(randomInt));
+                } else {
+                    slot.setCount(Math.min(slot.getCount() + randomInt, slot.getItem().getMaxStackSize()));
+                }
+                System.out.println("Added x(" + randomInt + ") " + name + " to your backpack.");
+            }
 
-                GameRepository.saveGame(game);
-                return new Response(true, "Grass removed from tile.");
-            } else {//TODO: Handle foraging harvest.
-
-            } //TODO: Handle crop and tree harvest.
-        } else if (targetCell.getObjectOnCell() instanceof Crop) {
+            player.getForagingSkill().setXp(player.getForagingSkill().getXp() + 10);
+            GameRepository.saveGame(game);
+            return new Response(true, "Removed " + name + "from tile.");
+        } else if (targetCell.getObjectOnCell() instanceof Crop) { //TODO: Handle crop and tree harvest.
 
         } else if (targetCell.getObjectOnCell() instanceof Tree) {
 
