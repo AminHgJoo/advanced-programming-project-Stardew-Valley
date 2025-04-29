@@ -32,4 +32,17 @@ public class Friendship {
     public void setLevel(int level) {
         this.level = level;
     }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+        int diff = this.xp - (level + 1) * 100;
+        if (diff > 0) {
+            this.xp = diff;
+            this.level += 1;
+        }
+    }
 }

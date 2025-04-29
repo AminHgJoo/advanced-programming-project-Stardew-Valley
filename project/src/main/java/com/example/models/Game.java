@@ -40,6 +40,8 @@ public class Game {
     @Transient
     private GameThread gameThread;
     public boolean hasTurnCycleFinished;
+    private ArrayList<Message> messages = new ArrayList<>();
+
 
     public void advanceTime() {
         date = date.plusHours(1);
@@ -224,6 +226,16 @@ public class Game {
         this.weatherTomorrow = Weather.SUNNY;
         this.season = Season.SPRING;
         this.isGameOngoing = false;
+        for (Player player : players) {
+            for (Player otherPlayer : players) {
+                if (!otherPlayer.getUser().equals(player.getUser())) {
+                    Friendship friendship = new Friendship(player);
+                    friendship.setLevel(0);
+                    friendship.setXp(0);
+                    player.getFriendships().add(friendship);
+                }
+            }
+        }
     }
 
     public void checkForRecipeUnlocking() {
@@ -276,12 +288,21 @@ public class Game {
         }
     }
 
-    public void reInitializeStoreProductsCount(){
-        for (Store store : map.getVillage().getStores()){
-            for (StoreProduct product: store.getProducts()){
+    public void reInitializeStoreProductsCount() {
+        for (Store store : map.getVillage().getStores()) {
+            for (StoreProduct product : store.getProducts()) {
                 product.setAvailableCount(product.getType().getDailyLimit());
             }
         }
+    }
+
+    public Player findPlayerByUsername(String username) {
+        for (Player player : players) {
+            if (player.getUser().getUsername().compareToIgnoreCase(username) == 0) {
+                return player;
+            }
+        }
+        return null;
     }
 
     public void checkForCropNextStage() {
@@ -404,5 +425,13 @@ public class Game {
             currentPlayer = players.get(index + 1);
             return false;
         }
+    }
+
+    public ArrayList<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(ArrayList<Message> messages) {
+        this.messages = messages;
     }
 }

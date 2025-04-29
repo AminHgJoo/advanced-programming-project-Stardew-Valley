@@ -17,12 +17,15 @@ import com.example.models.skills.*;
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 @Embedded
 public class Player {
+    private static final Logger log = LoggerFactory.getLogger(Player.class);
     private Coordinate coordinate;
     private int money;
     private Backpack inventory;
@@ -45,6 +48,8 @@ public class Player {
     private TrashcanType trashcanType;
     private Item equippedItem;
     private double usedEnergyInTurn;
+    @Transient
+    private ArrayList<Message> notifications = new ArrayList<>();
 
     public Slot getRefrigeratorSlotByName(String slotName) {
         for (Slot slot : refrigeratorSlots) {
@@ -395,11 +400,58 @@ public class Player {
         return refrigeratorSlots;
     }
 
+    public String friendShipToString(){
+        StringBuilder builder = new StringBuilder();
+        for(Friendship friendship : friendships){
+            builder.append("Friend : ").append(friendship.getPlayer().getUser().getUsername()).append("\n");
+            builder.append("XP : ").append(friendship.getXp()).append("\n");
+            builder.append("Level : ").append(friendship.getLevel()).append("\n");
+            builder.append("------------------------------------------------------\n");
+        }
+        return builder.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
         return player.getUser_id().toString().equals(this.getUser_id().toString());
+    }
+
+    public ArrayList<Message> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(ArrayList<Message> notifications) {
+        this.notifications = notifications;
+    }
+
+    public String getNotificationsString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Notifications : ");
+        for (Message message : notifications) {
+            builder.append("From : ").append(message.getSender()).append("\n");
+            builder.append("Message : ").append(message.getMessage()).append("\n");
+            builder.append("------------------------------------------------------\n");
+        }
+        return builder.toString();
+    }
+
+    public void reInitNotifications(){
+        notifications.clear();
+    }
+
+    public void addXpToFriendShip(int xp ,Player player) {
+        Friendship friendship = null;
+        for(Friendship friendship1 : friendships){
+            if(friendship1.getPlayer().equals(player)){
+                friendship = friendship1;
+                break;
+            }
+        }
+        if(friendship != null){
+            friendship.setXp(friendship.getXp() + xp);
+        }
     }
 }

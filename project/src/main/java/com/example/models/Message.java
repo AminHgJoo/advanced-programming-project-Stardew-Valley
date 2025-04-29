@@ -1,0 +1,40 @@
+package com.example.models;
+
+import dev.morphia.annotations.Embedded;
+import org.bson.types.ObjectId;
+
+@Embedded
+public class Message {
+    private String sender;
+    private String recipient;
+    private String message;
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public Message() {
+    }
+
+    public Message(String sender, String recipient, String message) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+}
