@@ -34,7 +34,7 @@ public class Farming extends Controller {
         String dir = request.body.get("direction");
         Directions direction;
         try {
-            direction = Directions.valueOf(dir);
+            direction = Directions.getDir(dir);
         } catch (Exception e) {
             return new Response(false, "Invalid direction");
         }
@@ -91,7 +91,7 @@ public class Farming extends Controller {
         String dir = request.body.get("direction");
         Directions direction;
         try {
-            direction = Directions.valueOf(dir);
+            direction = Directions.getDir(dir);
         } catch (Exception e) {
             return new Response(false, "Invalid direction");
         }
@@ -153,7 +153,7 @@ public class Farming extends Controller {
         String dir = request.body.get("direction");
         Directions direction;
         try {
-            direction = Directions.valueOf(dir);
+            direction = Directions.getDir(dir);
         } catch (Exception e) {
             return new Response(false, "Invalid direction");
         }

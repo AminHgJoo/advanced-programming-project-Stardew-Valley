@@ -27,4 +27,13 @@ public enum Directions {
     public Coordinate getCoordinate(Coordinate coordinate) {
         return new Coordinate(coordinate.getX() + vector[0], coordinate.getY() + vector[1]);
     }
+
+    public static Directions getDir(String name){
+        for(Directions dir : Directions.values()){
+            if(dir.name().compareToIgnoreCase(name) == 0){
+                return dir;
+            }
+        }
+        return null;
+    }
 }
