@@ -44,6 +44,14 @@ public class Game {
     public boolean hasTurnCycleFinished;
     private ArrayList<Message> messages = new ArrayList<>();
 
+    public Trade getTradeById(int id) {
+        for(Trade trade : tradingHistory) {
+            if(trade.id == id && trade.secondPlayer.equals(currentPlayer)) {
+                return trade;
+            }
+        }
+        return null;
+    }
 
     public ArrayList<Trade> getPlayerTradeHistory(Player player) {
         ArrayList<Trade> trades = new ArrayList<>();
@@ -66,10 +74,10 @@ public class Game {
 
     }
 
-    public ArrayList<Trade> getPlayerTradeRequestsReceived(Player player) {
+    public ArrayList<Trade> getPlayerUndecidedTradeRequestsReceived(Player player) {
         ArrayList<Trade> trades = new ArrayList<>();
         for(Trade trade : tradingHistory) {
-            if(trade.secondPlayer.equals(player)) {
+            if(trade.secondPlayer.equals(player) && trade.tradeResult == 0) {
                 trades.add(trade);
             }
         }

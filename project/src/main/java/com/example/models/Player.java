@@ -36,7 +36,6 @@ public class Player {
     private ArrayList<ActiveBuff> activeBuffs = new ArrayList<>();
     private ArrayList<Slot> refrigeratorSlots = new ArrayList<>();
     private ObjectId user_id;
-    private int newTradeCount;
     @Transient
     private User user;
     private ArrayList<Friendship> friendships = new ArrayList<>();
@@ -75,7 +74,6 @@ public class Player {
         this.coordinate = new Coordinate(0, 0);
         this.equippedItem = null;
         this.isPlayerFainted = false;
-        this.newTradeCount = 0;
         initializeInventory();
         initializeSkills();
         initializeRecipes();
@@ -456,13 +454,5 @@ public class Player {
         }
     }
 
-
-    public int getNewTradeCount() {
-        return newTradeCount;
-    }
-
-    public void setNewTradeCount(int newTradeCount) {
-        this.newTradeCount = newTradeCount;
-    }
 
 }
