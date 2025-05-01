@@ -32,6 +32,7 @@ public class TradingController extends Controller {
     }
 
     public static Response handleTradeMoney(Request request) {
+
         return null;
     }
 
@@ -64,7 +65,7 @@ public class TradingController extends Controller {
         Backpack secondPlayerBackpack = secondPlayer.getInventory();
         int id = Integer.parseInt(request.body.get("id"));
         Trade trade = game.getTradeById(id);
-        if (trade == null) {
+        if (trade == null || trade.tradeResult != 0) {
             GameRepository.saveGame(game);
             return new Response(false, "no trade found");
         }
@@ -95,30 +96,28 @@ public class TradingController extends Controller {
             return new Response(false, firstPlayer.getUser().getUsername() + "'s backpack is full");
         }
         Slot tradeItemSlotInSecondPlayerBackpack = secondPlayerBackpack.getSlotByItemName(trade.tradeItem.getName());
-        if(tradeItemSlotInSecondPlayerBackpack == null && secondPlayerBackpack.getSlots().size() == secondPlayerBackpack.getType().getMaxCapacity()) {
+        if (tradeItemSlotInSecondPlayerBackpack == null && secondPlayerBackpack.getSlots().size() == secondPlayerBackpack.getType().getMaxCapacity()) {
             GameRepository.saveGame(game);
             return new Response(false, secondPlayer.getUser().getUsername() + "'s backpack is full");
         }
-        if(tradeItemSlotInSecondPlayerBackpack  == null){
+        if (tradeItemSlotInSecondPlayerBackpack == null) {
             Slot newSlot = new Slot(trade.tradeItem, trade.itemAmount);
             secondPlayerBackpack.addSlot(newSlot);
-        }
-        else{
+        } else {
             tradeItemSlotInSecondPlayerBackpack.setCount(tradeItemSlotInSecondPlayerBackpack.getCount() + targetAmount);
         }
         tradeItemSlotInFirstPlayerBackpack.setCount(tradeItemSlotInFirstPlayerBackpack.getCount() - targetAmount);
-        if(tradeItemSlotInFirstPlayerBackpack.getCount() <= 0){
+        if (tradeItemSlotInFirstPlayerBackpack.getCount() <= 0) {
             firstPlayerBackpack.removeSlot(tradeItemSlotInFirstPlayerBackpack);
         }
-        if(targetItemSlotInFirstPlayerBackpack == null){
+        if (targetItemSlotInFirstPlayerBackpack == null) {
             Slot newSlot = new Slot(trade.targetItem, targetAmount);
             firstPlayerBackpack.addSlot(newSlot);
-        }
-        else{
+        } else {
             targetItemSlotInFirstPlayerBackpack.setCount(targetItemSlotInFirstPlayerBackpack.getCount() + targetAmount);
         }
         targetItemSlotInSecondPlayerBackpack.setCount(targetItemSlotInSecondPlayerBackpack.getCount() - targetAmount);
-        if(targetItemSlotInSecondPlayerBackpack.getCount() <= 0){
+        if (targetItemSlotInSecondPlayerBackpack.getCount() <= 0) {
             secondPlayerBackpack.removeSlot(targetItemSlotInSecondPlayerBackpack);
         }
         secondPlayer.addXpToFriendShip(10, firstPlayer);
@@ -141,8 +140,7 @@ public class TradingController extends Controller {
         if (itemSlotInSecondPlayerBackpack == null) {
             Slot newSlot = new Slot(trade.tradeItem, trade.itemAmount);
             secondPlayerBackpack.addSlot(newSlot);
-        }
-        else{
+        } else {
             itemSlotInSecondPlayerBackpack.setCount(itemSlotInSecondPlayerBackpack.getCount() + trade.itemAmount);
         }
         tradeItemSlotInFirstPlayerBackpack.setCount(tradeItemSlotInFirstPlayerBackpack.getCount() - trade.itemAmount);
@@ -158,11 +156,37 @@ public class TradingController extends Controller {
     }
 
     public static Response handleResponseReject(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player secondPlayer = game.getCurrentPlayer();
+        int id = Integer.parseInt(request.body.get("id"));
+        Trade trade = game.getTradeById(id);
+        if (trade == null || trade.tradeResult != 0) {
+            GameRepository.saveGame(game);
+            return new Response(false, "no trade found");
+        }
+        trade.tradeResult = 2;
+        secondPlayer.addXpToFriendShip(-10, trade.firstPlayer);
+        GameRepository.saveGame(game);
+        return new Response(true, "trade rejected");
     }
 
     public static Response handleResponseHistory(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        ArrayList<Trade> trades = game.getPlayerTradeHistory(player);
+        if (trades.isEmpty()) {
+            GameRepository.saveGame(game);
+            return new Response(true, "no trades found");
+        }
+        StringBuilder output = new StringBuilder();
+        output.append("trade history:\n");
+        for (Trade trade : trades) {
+            output.append(trade.toString()).append("\n");
+        }
+        GameRepository.saveGame(game);
+        return new Response(true, output.toString());
     }
 
     public static Response handleTradeError(Request request) {

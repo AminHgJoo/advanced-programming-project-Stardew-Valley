@@ -56,7 +56,7 @@ public class Game {
     public ArrayList<Trade> getPlayerTradeHistory(Player player) {
         ArrayList<Trade> trades = new ArrayList<>();
         for(Trade trade : tradingHistory) {
-            if(trade.firstPlayer.equals(player) || trade.secondPlayer.equals(player)) {
+            if((trade.secondPlayer.equals(player) && trade.tradeResult == 1) || trade.firstPlayer.equals(player)) {
                 trades.add(trade);
             }
         }
