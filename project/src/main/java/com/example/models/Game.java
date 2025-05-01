@@ -38,11 +38,43 @@ public class Game {
     private Weather weatherToday;
     private Weather weatherTomorrow;
     private Season season;
+    private ArrayList<Trade>  tradingHistory = new ArrayList<>();
     @Transient
     private GameThread gameThread;
     public boolean hasTurnCycleFinished;
     private ArrayList<Message> messages = new ArrayList<>();
 
+
+    public ArrayList<Trade> getPlayerTradeHistory(Player player) {
+        ArrayList<Trade> trades = new ArrayList<>();
+        for(Trade trade : tradingHistory) {
+            if(trade.firstPlayer.equals(player) || trade.secondPlayer.equals(player)) {
+                trades.add(trade);
+            }
+        }
+        return trades;
+    }
+
+    public ArrayList<Trade> getPlayerTradeRequestsSent(Player player) {
+        ArrayList<Trade> trades = new ArrayList<>();
+        for(Trade trade : tradingHistory) {
+            if(trade.firstPlayer.equals(player)) {
+                trades.add(trade);
+            }
+        }
+        return trades;
+
+    }
+
+    public ArrayList<Trade> getPlayerTradeRequestsReceived(Player player) {
+        ArrayList<Trade> trades = new ArrayList<>();
+        for(Trade trade : tradingHistory) {
+            if(trade.secondPlayer.equals(player)) {
+                trades.add(trade);
+            }
+        }
+        return trades;
+    }
 
     public void advanceTime() {
         date = date.plusHours(1);

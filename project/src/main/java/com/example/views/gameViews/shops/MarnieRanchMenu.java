@@ -1,5 +1,6 @@
 package com.example.views.gameViews.shops;
 
+import com.example.controllers.gameMenuControllers.LivestockController;
 import com.example.controllers.gameMenuControllers.MarineRanchController;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
@@ -12,7 +13,7 @@ public class MarnieRanchMenu implements Menu {
     public void handleMenu(String input) {
         Response response = null;
         if (GameMenuCommands.BUY_ANIMAL.matches(input)) {
-            response = buyAnimal(input);
+            response = getBuyAnimalResponse(input);
         } else if (GameMenuCommands.EXIT_MENU.matches(input)) {
             response = leaveRanch(input);
         } else {
@@ -22,9 +23,12 @@ public class MarnieRanchMenu implements Menu {
         printResponse(response);
     }
 
-    private static Response buyAnimal(String input) {
+    private static Response getBuyAnimalResponse(String input) {
         Request request = new Request(input);
-        return MarineRanchController.buyAnimal(request);
+        request.body.put("animal", GameMenuCommands.BUY_ANIMAL.getGroup(input, "animal"));
+        request.body.put("name", GameMenuCommands.BUY_ANIMAL.getGroup(input, "name"));
+        Response response = LivestockController.handleBuyAnimal(request);
+        return response;
     }
 
     private static Response leaveRanch(String input) {
