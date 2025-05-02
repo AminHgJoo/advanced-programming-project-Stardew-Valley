@@ -105,8 +105,8 @@ public class GameMenu implements Menu {
                 response = getCraftInfoResponse(input);
             } else if (GameMenuCommands.PLANT.matches(input)) {
                 response = getPlantingResponse(input);
-            }else if(GameMenuCommands.PLACE_ITEM.matches(input)){
-                response =getPlantingTree(input);
+            } else if (GameMenuCommands.PLACE_ITEM.matches(input)) {
+                response = getPlantingTree(input);
             } else if (GameMenuCommands.SHOW_PLANT.matches(input)) {
                 response = getShowPlantResponse(input);
             } else if (GameMenuCommands.FERTILIZE.matches(input)) {
@@ -127,9 +127,7 @@ public class GameMenu implements Menu {
                 response = getShowCookingRecipesResponse(input);
             } else if (GameMenuCommands.EAT.matches(input)) {
                 response = getEatResponse(input);
-            } else if (GameMenuCommands.BUY_ANIMAL.matches(input)) {
-                response = getBuyAnimalResponse(input);
-            } else if (GameMenuCommands.PET.matches(input)) {
+            }  else if (GameMenuCommands.PET.matches(input)) {
                 response = getPetResponse(input);
             } else if (GameMenuCommands.CHEAT_SET_FRIENDSHIP.matches(input)) {
                 response = getChearSetFriendshipResponse(input);
@@ -179,19 +177,9 @@ public class GameMenu implements Menu {
                 response = getRespondMarriageRejectResponse(input);
             } else if (GameMenuCommands.START_TRADE.matches(input)) {
                 response = getStartTradeResponse(input);
-            } else if (GameMenuCommands.TRADE.matches(input)) {
-                response = getTradeResponse(input);
-            } else if (GameMenuCommands.TRADE_LIST.matches(input)) {
-                response = getTradeListResponse(input);
-            } else if (GameMenuCommands.TRADE_RESPOND_ACCEPT.matches(input)) {
-                response = getTradeRespondAcceptResponse(input);
-            } else if (GameMenuCommands.TRADE_RESPOND_REJECT.matches(input)) {
-                response = getTradeRespondRejectResponse(input);
-            } else if (GameMenuCommands.TRADE_HISTORY.matches(input)) {
-                response = getTradeHistoryResponse(input);
             } else if (GameMenuCommands.MEET_NPC.matches(input)) {
                 response = getMeetNPCResponse(input);
-            }else if (GameMenuCommands.TALK_NPC.matches(input)) {
+            } else if (GameMenuCommands.TALK_NPC.matches(input)) {
                 response = getTalkNpcResponse(input);
             } else if (GameMenuCommands.GIFT_NPC.matches(input)) {
                 response = getGiftNPCResponse(input);
@@ -323,7 +311,7 @@ public class GameMenu implements Menu {
         return response;
     }
 
-    private static Response getPlantingTree(String input){
+    private static Response getPlantingTree(String input) {
         Response response;
         Request request = new Request(input);
         request.body.put("seed", GameMenuCommands.PLANT.getGroup(input, "seed"));
@@ -567,13 +555,6 @@ public class GameMenu implements Menu {
         return response;
     }
 
-    private static Response getBuyAnimalResponse(String input) {
-        Request request = new Request(input);
-        request.body.put("animal", GameMenuCommands.BUY_ANIMAL.getGroup(input, "animal"));
-        request.body.put("name", GameMenuCommands.BUY_ANIMAL.getGroup(input, "name"));
-        Response response = LivestockController.handleBuyAnimal(request);
-        return response;
-    }
 
     private static Response getPetResponse(String input) {
         Request request = new Request(input);
@@ -755,44 +736,6 @@ public class GameMenu implements Menu {
         return response;
     }
 
-    private static Response getTradeResponse(String input) {
-        Request request = new Request(input);
-        request.body.put("username", GameMenuCommands.TRADE.getGroup(input, "username"));
-        request.body.put("item", GameMenuCommands.TRADE.getGroup(input, "item"));
-        request.body.put("type", GameMenuCommands.TRADE.getGroup(input, "type"));
-        request.body.put("amount", GameMenuCommands.TRADE.getGroup(input, "amount"));
-        request.body.put("price", GameMenuCommands.TRADE.getGroup(input, "price"));
-        request.body.put("targetItem", GameMenuCommands.TRADE.getGroup(input, "targetItem"));
-        request.body.put("targetAmount", GameMenuCommands.TRADE.getGroup(input, "targetAmount"));
-        Response response = TradingController.handleTrade(request);
-        return response;
-    }
-
-    private static Response getTradeListResponse(String input) {
-        Request request = new Request(input);
-        Response response = TradingController.handleTradeList(request);
-        return response;
-    }
-
-    private static Response getTradeRespondAcceptResponse(String input) {
-        Request request = new Request(input);
-        request.body.put("id", GameMenuCommands.TRADE_RESPOND_ACCEPT.getGroup(input, "id"));
-        Response response = TradingController.handleResponseAccept(request);
-        return response;
-    }
-
-    private static Response getTradeRespondRejectResponse(String input) {
-        Request request = new Request(input);
-        request.body.put("id", GameMenuCommands.TRADE_RESPOND_REJECT.getGroup(input, "id"));
-        Response response = TradingController.handleResponseReject(request);
-        return response;
-    }
-
-    private static Response getTradeHistoryResponse(String input) {
-        Request request = new Request(input);
-        Response response = TradingController.handleResponseHistory(request);
-        return response;
-    }
 
     private static Response getMeetNPCResponse(String input) {
         Request request = new Request(input);
@@ -800,6 +743,7 @@ public class GameMenu implements Menu {
         Response response = NPCController.handleMeetNPC(request);
         return response;
     }
+
     private static Response getTalkNpcResponse(String input) {
         Request request = new Request(input);
         request.body.put("npcName", GameMenuCommands.TALK_NPC.getGroup(input, "npcName"));

@@ -20,7 +20,6 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 @Embedded
@@ -400,9 +399,9 @@ public class Player {
         return refrigeratorSlots;
     }
 
-    public String friendShipToString(){
+    public String friendShipToString() {
         StringBuilder builder = new StringBuilder();
-        for(Friendship friendship : friendships){
+        for (Friendship friendship : friendships) {
             builder.append("Friend : ").append(friendship.getPlayer()).append("\n");
             builder.append("XP : ").append(friendship.getXp()).append("\n");
             builder.append("Level : ").append(friendship.getLevel()).append("\n");
@@ -438,20 +437,22 @@ public class Player {
         return builder.toString();
     }
 
-    public void reInitNotifications(){
+    public void reInitNotifications() {
         notifications.clear();
     }
 
-    public void addXpToFriendShip(int xp ,Player player) {
+    public void addXpToFriendShip(int xp, Player player) {
         Friendship friendship = null;
-        for(Friendship friendship1 : friendships){
-            if(friendship1.getPlayer().equals(player)){
+        for (Friendship friendship1 : friendships) {
+            if (friendship1.getPlayer().equals(player)) {
                 friendship = friendship1;
                 break;
             }
         }
-        if(friendship != null){
+        if (friendship != null) {
             friendship.setXp(friendship.getXp() + xp);
         }
     }
+
+
 }

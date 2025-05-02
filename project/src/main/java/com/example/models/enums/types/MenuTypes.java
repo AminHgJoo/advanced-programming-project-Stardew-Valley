@@ -3,6 +3,7 @@ package com.example.models.enums.types;
 import com.example.views.*;
 import com.example.views.gameViews.GameMenu;
 import com.example.views.gameViews.PlayerHomeMenu;
+import com.example.views.gameViews.TradeMenuView;
 import com.example.views.gameViews.shops.*;
 
 public enum MenuTypes {
@@ -19,7 +20,8 @@ public enum MenuTypes {
     PierreGeneralStoreMenu(new PierreGeneralStoreMenu()),
     FishShopMenu(new FishShopMenu()),
     TheStardropSaloonMenu(new TheStardropSaloonMenu()),
-    PlayerHomeMenu(new PlayerHomeMenu());
+    PlayerHomeMenu(new PlayerHomeMenu()),
+    TradeMenu(new TradeMenuView());
 
     private final Menu menu;
 
@@ -61,6 +63,8 @@ public enum MenuTypes {
             return "The Stardrop Saloon Menu";
         } else if (this == MenuTypes.PlayerHomeMenu) {
             return "Player Home Menu";
+        } else if (this == MenuTypes.TradeMenu) {
+            return "Trade Menu";
         } else {
             return "";
         }

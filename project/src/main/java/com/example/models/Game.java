@@ -38,11 +38,60 @@ public class Game {
     private Weather weatherToday;
     private Weather weatherTomorrow;
     private Season season;
+    public ArrayList<Trade>  tradingHistory = new ArrayList<>();
     @Transient
     private GameThread gameThread;
     public boolean hasTurnCycleFinished;
     private ArrayList<Message> messages = new ArrayList<>();
 
+    public Player getPlayerByUsername(String username) {
+        for(Player player : players) {
+            if(player.getUser().getUsername().equals(username)) {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    public Trade getTradeById(int id) {
+        for(Trade trade : tradingHistory) {
+            if(trade.id == id && trade.secondPlayer.equals(currentPlayer)) {
+                return trade;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Trade> getPlayerTradeHistory(Player player) {
+        ArrayList<Trade> trades = new ArrayList<>();
+        for(Trade trade : tradingHistory) {
+            if((trade.secondPlayer.equals(player) && trade.tradeResult == 1) || trade.firstPlayer.equals(player)) {
+                trades.add(trade);
+            }
+        }
+        return trades;
+    }
+
+    public ArrayList<Trade> getPlayerTradeRequestsSent(Player player) {
+        ArrayList<Trade> trades = new ArrayList<>();
+        for(Trade trade : tradingHistory) {
+            if(trade.firstPlayer.equals(player)) {
+                trades.add(trade);
+            }
+        }
+        return trades;
+
+    }
+
+    public ArrayList<Trade> getPlayerUndecidedTradeRequestsReceived(Player player) {
+        ArrayList<Trade> trades = new ArrayList<>();
+        for(Trade trade : tradingHistory) {
+            if(trade.secondPlayer.equals(player) && trade.tradeResult == 0) {
+                trades.add(trade);
+            }
+        }
+        return trades;
+    }
 
     public void advanceTime() {
         date = date.plusHours(1);
