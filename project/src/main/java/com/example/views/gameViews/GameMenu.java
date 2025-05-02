@@ -704,6 +704,7 @@ public class GameMenu implements Menu {
     private static Response getFlowerResponse(String input) {
         Request request = new Request(input);
         request.body.put("username", GameMenuCommands.FLOWER.getGroup(input, "username"));
+        request.body.put("flowerName", GameMenuCommands.FLOWER.getGroup(input, "flowerName"));
         Response response = FriendshipController.handleFlower(request);
         return response;
     }

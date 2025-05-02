@@ -43,6 +43,8 @@ public class GameThread extends Thread {
             game.checkForSkillUpgrades();
             game.checkForCropNextStage();
             game.reInitializeStoreProductsCount();
+            game.reInitializeNpc();
+            game.addPlayersMoney();
 
             GameRepository.saveGame(game);
         }

@@ -113,13 +113,13 @@ public class DealingController extends Controller {
             item = new ForagingMineral(Quality.DEFAULT, (ForagingMineralsType) type);
         } else if (type instanceof ToolTypes) {
             Quality q = Quality.DEFAULT;
-            if(p.getType() == FishProducts.BAMBOO_POLE){
+            if (p.getType() == FishProducts.BAMBOO_POLE) {
                 q = Quality.SILVER;
-            }else if(p.getType() == FishProducts.TRAINING_ROD){
+            } else if (p.getType() == FishProducts.TRAINING_ROD) {
                 q = Quality.COPPER;
-            }else if(p.getType() == FishProducts.FIBERGLASS_ROD){
+            } else if (p.getType() == FishProducts.FIBERGLASS_ROD) {
                 q = Quality.GOLD;
-            }else if(p.getType() == FishProducts.IRIDIUM_ROD){
+            } else if (p.getType() == FishProducts.IRIDIUM_ROD) {
                 q = Quality.IRIDIUM;
             }
             item = new Tool(q, (ToolTypes) type, (int) p.getType().getProductPrice(game.getSeason()));
@@ -151,6 +151,33 @@ public class DealingController extends Controller {
     }
 
     public static Response handleSellProduct(Request request) {
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        String productName = request.body.get("productName");
+
+        Slot productSlot = player.getInventory().getSlotByItemName(productName);
+        if (productSlot == null) {
+            return new Response(false, "No such product");
+        }
+        int n = productSlot.getCount();
+        if (request.body.get("count") != null) {
+            n = Integer.parseInt(request.body.get("count"));
+        }
+        productSlot.setCount(productSlot.getCount() - 1);
+        if (productSlot.getCount() == 0) {
+            player.getInventory().removeSlot(productSlot);
+        }
+        double money = productSlot.getItem().getValue() * n;
+        if (productSlot.getItem().getQuality() == Quality.SILVER) {
+            money = money * 1.25;
+        } else if (productSlot.getItem().getQuality() == Quality.GOLD) {
+            money = money * 1.5;
+        } else if (productSlot.getItem().getQuality() == Quality.IRIDIUM) {
+            money = money * 2;
+        }
+        player.setMoneyInNextDay(player.getMoneyInNextDay() + (int) money);
+        GameRepository.saveGame(game);
         return null;
     }
 

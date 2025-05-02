@@ -363,6 +363,20 @@ public class Game {
         }
     }
 
+    public void reInitializeNpc() {
+        for (NPC npc : map.getVillage().getNpcs()) {
+            npc.getGift().clear();
+            npc.getHasTalked().clear();
+        }
+    }
+
+    public void addPlayersMoney() {
+        for (Player player : players) {
+            player.setMoney(player.getMoney() + player.getMoneyInNextDay());
+            player.setMoneyInNextDay(0);
+        }
+    }
+
     public Player findPlayerByUsername(String username) {
         for (Player player : players) {
             if (player.getUser().getUsername().compareToIgnoreCase(username) == 0) {
@@ -502,9 +516,9 @@ public class Game {
         this.messages = messages;
     }
 
-    public NPC findNpcByName(String name){
-        for (NPC npc : map.getVillage().getNpcs()){
-            if(npc.getName().compareToIgnoreCase(name) == 0){
+    public NPC findNpcByName(String name) {
+        for (NPC npc : map.getVillage().getNpcs()) {
+            if (npc.getName().compareToIgnoreCase(name) == 0) {
                 return npc;
             }
         }

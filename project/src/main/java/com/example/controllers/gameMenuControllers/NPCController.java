@@ -1,5 +1,6 @@
 package com.example.controllers.gameMenuControllers;
 
+import com.example.Repositories.GameRepository;
 import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
@@ -23,6 +24,7 @@ public class NPCController extends Controller {
         if (!npc.getHasTalked().get(player.getUser().getUsername())) {
             npc.getHasTalked().put(player.getUser().getUsername(), true);
             player.addXpToNpcFriendship(20, npc);
+            GameRepository.saveGame(game);
         }
         String response = HuggingFaceChat.getNpcDialogue(message);
         return new Response(true, response);
@@ -60,6 +62,7 @@ public class NPCController extends Controller {
             }
             npc.getGift().put(player.getUser().getUsername(), true);
         }
+        GameRepository.saveGame(game);
         return new Response(true , "Gift has been sent.");
     }
 

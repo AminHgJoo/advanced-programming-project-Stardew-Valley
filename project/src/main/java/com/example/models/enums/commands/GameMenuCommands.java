@@ -80,7 +80,7 @@ public enum GameMenuCommands implements Command {
     GIFT_HISTORY("^gift\\s+history\\s+-u\\s+(?<username>.+)$"),
     GIFT_RATE("^gift\\s+rate\\s+-i\\s+(?<giftNumber>\\d+)\\s+-r\\s+(?<rate>\\d+)$"),
     HUG("^hug\\s+-u\\s+(?<username>.+)$"),
-    FLOWER("^flower\\s+-u\\s+(?<username>.+)$"),
+    FLOWER("^flower\\s+-u\\s+(?<username>.+)\\s+-f\\s+(?<flowerName>)$"),
     ASK_MARRIAGE("^ask\\s+marriage\\s+-u\\s+(?<username>.+?)\\s+-r\\s+(?<ring>.+)$"),
     RESPOND_MARRIAGE_ACCEPT("^respond\\s+–accept\\s+-u\\s+(?<username>.+)$"),
     RESPOND_MARRIAGE_REJECT("^respond\\s+–reject\\s+-u\\s+(?<username>.+)$"),

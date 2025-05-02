@@ -35,8 +35,8 @@ public class FriendshipController extends Controller {
         Message msg = new Message(user.getUsername(), friend.getUser().getUsername(), message);
         game.getMessages().add(msg);
         friend.getNotifications().add(msg);
-        player.addXpToFriendShip(20 ,friend);
-        friend.addXpToFriendShip(20 ,player);
+        player.addXpToFriendShip(20, friend);
+        friend.addXpToFriendShip(20, player);
 
         GameRepository.saveGame(game);
         return new Response(true, "Message has been sent");
@@ -81,11 +81,59 @@ public class FriendshipController extends Controller {
     }
 
     public static Response handleHug(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+
+        String username = request.body.get("username");
+
+        Player friend = game.findPlayerByUsername(username);
+        if (friend == null) {
+            return new Response(false, "Player not found");
+        }
+        player.addXpToFriendShip(60, friend);
+        friend.addXpToFriendShip(60, player);
+
+        GameRepository.saveGame(game);
+        return new Response(true, "You hugged " + username);
     }
 
     public static Response handleFlower(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+
+        String username = request.body.get("username");
+        String flowerName = request.body.get("flowerName");
+
+        Player friend = game.findPlayerByUsername(username);
+        if (friend == null) {
+            return new Response(false, "Player not found");
+        }
+        Slot flowerSlot = player.getInventory().getSlotByItemName(flowerName);
+        if (flowerSlot == null) {
+            return new Response(false, "Flower not found");
+        }
+        flowerSlot.setCount(flowerSlot.getCount() - 1);
+        if (flowerSlot.getCount() == 0) {
+            player.getInventory().removeSlot(flowerSlot);
+        }
+        Slot slot = friend.getInventory().getSlotByItemName(flowerName);
+        if (slot == null) {
+            friend.getInventory().addSlot(flowerSlot);
+        }else {
+            slot.setCount(slot.getCount() + 1);
+        }
+        Friendship friendship = player.findFriendshipByFriendName(username);
+        if(friendship.getLevel() == 2){
+            friendship.setLevel(3);
+            friend.findFriendshipByFriendName(player.getUser().getUsername()).setLevel(3);
+        }else {
+            player.addXpToFriendShip(100 ,friend);
+            friend.addXpToFriendShip(100 ,player);
+        }
+
+        return new Response(true , "Flower has been sent to " + username);
     }
 
     public static Response handleAskMarriage(Request request) {

@@ -50,6 +50,7 @@ public class Player {
     private double usedEnergyInTurn;
     @Transient
     private ArrayList<Message> notifications = new ArrayList<>();
+    private int moneyInNextDay = 0;
 
     public Slot getRefrigeratorSlotByName(String slotName) {
         for (Slot slot : refrigeratorSlots) {
@@ -424,6 +425,15 @@ public class Player {
         return builder.toString();
     }
 
+    public Friendship findFriendshipByFriendName(String player) {
+        for (Friendship friendship : friendships) {
+            if (friendship.getPlayer().equals(player)) {
+                return friendship;
+            }
+        }
+        return null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -479,5 +489,13 @@ public class Player {
         if (friendship != null) {
             friendship.setXp(friendship.getXp() + xp);
         }
+    }
+
+    public int getMoneyInNextDay() {
+        return moneyInNextDay;
+    }
+
+    public void setMoneyInNextDay(int moneyInNextDay) {
+        this.moneyInNextDay = moneyInNextDay;
     }
 }
