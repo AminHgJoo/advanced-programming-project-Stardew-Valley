@@ -2,13 +2,12 @@ package com.example.models.NPCModels;
 
 import com.example.models.Quest;
 import com.example.models.enums.types.itemTypes.*;
-import com.example.models.items.Food;
-import com.example.models.items.ForagingMineral;
-import com.example.models.items.Item;
+import com.example.models.items.*;
 import com.example.models.mapModels.Coordinate;
 import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Embedded
 public class NPC {
@@ -18,8 +17,9 @@ public class NPC {
     private ArrayList<NPCReward> rewards = new ArrayList<>();
     private Coordinate coordinate;
     private ArrayList<NPCFriendship> friendships = new ArrayList<>();
-    private ArrayList<NPCDialogue> dialogues = new ArrayList<>();
     private ArrayList<Quest> quests = new ArrayList<>();
+    private HashMap<String, Boolean> hasTalked = new HashMap<>();
+    private HashMap<String, Boolean> gift = new HashMap<>();
 
     public NPC() {
     }
@@ -59,59 +59,101 @@ public class NPC {
         return friendships;
     }
 
-    public ArrayList<NPCDialogue> getDialogues() {
-        return dialogues;
-    }
-
     public ArrayList<Quest> getQuests() {
         return quests;
     }
 
-    public void initializeNpcQuest(String name){
-        if(name.equals("Sebastian")){
-            quests.add(new Quest(ForagingMineralsType.IRON_ORE , 50));
+    public void initializeNpcQuest(String name) {
+        if (name.equals("Sebastian")) {
+            quests.add(new Quest(ForagingMineralsType.IRON_ORE, 50));
             quests.add(new Quest(FoodTypes.PUMPKIN_PIE, 1));
-            quests.add(new Quest(ForagingMineralsType.STONE , 150));
-        }else if(name.equals("Abigale")){
+            quests.add(new Quest(ForagingMineralsType.STONE, 150));
+        } else if (name.equals("Abigale")) {
             quests.add(new Quest(MiscType.GOLD_BAR, 1));
-            quests.add(new Quest(FoodTypes.PUMPKIN , 1));
-            quests.add(new Quest(FoodTypes.WHEAT , 50));
-        }else if(name.equals("Harvey")){
+            quests.add(new Quest(FoodTypes.PUMPKIN, 1));
+            quests.add(new Quest(FoodTypes.WHEAT, 50));
+        } else if (name.equals("Harvey")) {
             quests.add(new Quest(CropSeedsType.BLUE_JAZZ, 12));
             quests.add(new Quest(FishType.SALMON, 1));
             quests.add(new Quest(FoodTypes.WINE, 1));
-        }else if(name.equals("Lia")){
-            quests.add(new Quest(MiscType.WOOD , 10));
+        } else if (name.equals("Lia")) {
+            quests.add(new Quest(MiscType.WOOD, 10));
             quests.add(new Quest(FishType.SALMON, 1));
-            quests.add(new Quest(MiscType.WOOD , 200));
-        }else {
-            quests.add(new Quest(MiscType.WOOD , 80));
-            quests.add(new Quest(MiscType.IRON_BAR , 10));
-            quests.add(new Quest(MiscType.WOOD , 1000));
+            quests.add(new Quest(MiscType.WOOD, 200));
+        } else {
+            quests.add(new Quest(MiscType.WOOD, 80));
+            quests.add(new Quest(MiscType.IRON_BAR, 10));
+            quests.add(new Quest(MiscType.WOOD, 1000));
         }
     }
 
-    public void initializeNpcFavorites(String name){
-        if(name.equals("Sebastian")){
+    public void initializeNpcFavorites(String name) {
+        if (name.equals("Sebastian")) {
             favoriteItems.add(MiscType.WOOL);
             favoriteItems.add(FoodTypes.PUMPKIN_PIE);
             favoriteItems.add(FoodTypes.PIZZA);
-        }else if(name.equals("Abigale")){
+        } else if (name.equals("Abigale")) {
             favoriteItems.add(ForagingMineralsType.STONE);
             favoriteItems.add(ForagingMineralsType.IRON_ORE);
             favoriteItems.add(FoodTypes.COFFEE);
-        }else if(name.equals("Harvey")){
+        } else if (name.equals("Harvey")) {
             favoriteItems.add(FoodTypes.COFFEE);
             favoriteItems.add(FoodTypes.PICKLES);
             favoriteItems.add(FoodTypes.WINE);
-        }else if(name.equals("Lia")){
+        } else if (name.equals("Lia")) {
             favoriteItems.add(FoodTypes.SALAD);
             favoriteItems.add(FoodTypes.GRAPE);
             favoriteItems.add(FoodTypes.WINE);
-        }else {
+        } else {
             favoriteItems.add(FoodTypes.SPAGHETTI);
             favoriteItems.add(MiscType.WOOD);
             favoriteItems.add(MiscType.IRON_BAR);
         }
+    }
+
+    public HashMap<String, Boolean> getHasTalked() {
+        return hasTalked;
+    }
+
+    public void setHasTalked(HashMap<String, Boolean> hasTalked) {
+        this.hasTalked = hasTalked;
+    }
+
+    public HashMap<String, Boolean> getGift() {
+        return gift;
+    }
+
+    public void setGift(HashMap<String, Boolean> gift) {
+        this.gift = gift;
+    }
+
+    public boolean isItemInFavorite(Item item) {
+        ItemType type = null;
+        if (item instanceof Fish) {
+            type = ((Fish) item).getFishType();
+        } else if (item instanceof Food) {
+            type = ((Food) item).foodTypes;
+        } else if (item instanceof ForagingMineral) {
+            type = ((ForagingMineral) item).getType();
+        } else if (item instanceof Misc) {
+            type = ((Misc) item).getMiscType();
+        } else if (item instanceof Seed) {
+            type = ((Seed) item).getCropType();
+        } else if (item instanceof TreeSeed) {
+            type = ((TreeSeed) item).getTreeSeedsType();
+        }
+        if (favoriteItems.contains(type)) {
+            return true;
+        }
+        return false;
+    }
+
+    public String questsToString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Quests : \n");
+        for (int i = 0; i < quests.size(); i++) {
+            sb.append(i).append(" : ").append(quests.get(i).toString()).append("\n");
+        }
+        return sb.toString();
     }
 }

@@ -2,6 +2,7 @@ package com.example.models;
 
 import com.example.Repositories.UserRepository;
 import com.example.models.NPCModels.NPC;
+import com.example.models.NPCModels.NPCFriendship;
 import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
@@ -39,7 +40,7 @@ public class Player {
     @Transient
     private User user;
     private ArrayList<Friendship> friendships = new ArrayList<>();
-    private ArrayList<NPC> npcs = new ArrayList<>();
+    private ArrayList<NPCFriendship> npcs = new ArrayList<>();
     private ArrayList<Animal> animals = new ArrayList<>();
     private double energy;
     private double maxEnergy;
@@ -321,7 +322,7 @@ public class Player {
         return user;
     }
 
-    public ArrayList<NPC> getNpcs() {
+    public ArrayList<NPCFriendship> getNpcs() {
         return npcs;
     }
 
@@ -401,8 +402,21 @@ public class Player {
 
     public String friendShipToString() {
         StringBuilder builder = new StringBuilder();
+        builder.append("Friends : \n");
         for (Friendship friendship : friendships) {
             builder.append("Friend : ").append(friendship.getPlayer()).append("\n");
+            builder.append("XP : ").append(friendship.getXp()).append("\n");
+            builder.append("Level : ").append(friendship.getLevel()).append("\n");
+            builder.append("------------------------------------------------------\n");
+        }
+        return builder.toString();
+    }
+
+    public String npcFriendShipToString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("NPC Friends : \n");
+        for (NPCFriendship friendship : npcs) {
+            builder.append("Npc : ").append(friendship.getNpc()).append("\n");
             builder.append("XP : ").append(friendship.getXp()).append("\n");
             builder.append("Level : ").append(friendship.getLevel()).append("\n");
             builder.append("------------------------------------------------------\n");
@@ -444,7 +458,7 @@ public class Player {
     public void addXpToFriendShip(int xp, Player player) {
         Friendship friendship = null;
         for (Friendship friendship1 : friendships) {
-            if (friendship1.getPlayer().equals(player)) {
+            if (friendship1.getPlayer().equals(player.getUser().getUsername())) {
                 friendship = friendship1;
                 break;
             }
@@ -454,5 +468,16 @@ public class Player {
         }
     }
 
-
+    public void addXpToNpcFriendship(int xp, NPC npc) {
+        NPCFriendship friendship = null;
+        for (NPCFriendship friendship1 : npcs) {
+            if (friendship1.getNpc().equals(npc.getName())) {
+                friendship = friendship1;
+                break;
+            }
+        }
+        if (friendship != null) {
+            friendship.setXp(friendship.getXp() + xp);
+        }
+    }
 }

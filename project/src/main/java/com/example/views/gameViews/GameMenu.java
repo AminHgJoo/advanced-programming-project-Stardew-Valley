@@ -768,6 +768,7 @@ public class GameMenu implements Menu {
 
     private static Response getQuestListResponse(String input) {
         Request request = new Request(input);
+        request.body.put("npcName" , GameMenuCommands.QUESTS_LIST.getGroup(input, "npcName"));
         Response response = NPCController.handleQuestList(request);
         return response;
     }

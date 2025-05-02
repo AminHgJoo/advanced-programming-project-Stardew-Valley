@@ -96,7 +96,7 @@ public enum GameMenuCommands implements Command {
     TALK_NPC("^talk\\s+NPC\\s+(?<npcName>.+)\\s+-m\\s+(?<message>.*)$"),
     GIFT_NPC("^gift\\s+NPC\\s+(?<npcName>.+?)\\s+-i\\s+(?<item>.+)$"),
     FRIENDSHIP_NPC_LIST("^friendship\\s+NPC\\s+list$"),
-    QUESTS_LIST("^quests\\s+list$"),
+    QUESTS_LIST("^quests\\s+list\\s+-n\\s+(?<npcName>.*)$"),
     QUESTS_FINISH("^quests\\s+finish\\s+-i\\s+(?<index>\\d+)$"),
     SHOW_MENU(Command.SHOW_MENU),
     EXIT_MENU(Command.EXIT_MENU),

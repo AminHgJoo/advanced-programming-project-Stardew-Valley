@@ -2,6 +2,7 @@ package com.example.models;
 
 import com.example.Repositories.GameRepository;
 import com.example.models.NPCModels.NPC;
+import com.example.models.NPCModels.NPCFriendship;
 import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
@@ -38,15 +39,15 @@ public class Game {
     private Weather weatherToday;
     private Weather weatherTomorrow;
     private Season season;
-    public ArrayList<Trade>  tradingHistory = new ArrayList<>();
+    public ArrayList<Trade> tradingHistory = new ArrayList<>();
     @Transient
     private GameThread gameThread;
     public boolean hasTurnCycleFinished;
     private ArrayList<Message> messages = new ArrayList<>();
 
     public Player getPlayerByUsername(String username) {
-        for(Player player : players) {
-            if(player.getUser().getUsername().equals(username)) {
+        for (Player player : players) {
+            if (player.getUser().getUsername().equals(username)) {
                 return player;
             }
         }
@@ -54,8 +55,8 @@ public class Game {
     }
 
     public Trade getTradeById(int id) {
-        for(Trade trade : tradingHistory) {
-            if(trade.id == id && trade.secondPlayer.equals(currentPlayer)) {
+        for (Trade trade : tradingHistory) {
+            if (trade.id == id && trade.secondPlayer.equals(currentPlayer)) {
                 return trade;
             }
         }
@@ -64,8 +65,8 @@ public class Game {
 
     public ArrayList<Trade> getPlayerTradeHistory(Player player) {
         ArrayList<Trade> trades = new ArrayList<>();
-        for(Trade trade : tradingHistory) {
-            if((trade.secondPlayer.equals(player) && trade.tradeResult == 1) || trade.firstPlayer.equals(player)) {
+        for (Trade trade : tradingHistory) {
+            if ((trade.secondPlayer.equals(player) && trade.tradeResult == 1) || trade.firstPlayer.equals(player)) {
                 trades.add(trade);
             }
         }
@@ -74,8 +75,8 @@ public class Game {
 
     public ArrayList<Trade> getPlayerTradeRequestsSent(Player player) {
         ArrayList<Trade> trades = new ArrayList<>();
-        for(Trade trade : tradingHistory) {
-            if(trade.firstPlayer.equals(player)) {
+        for (Trade trade : tradingHistory) {
+            if (trade.firstPlayer.equals(player)) {
                 trades.add(trade);
             }
         }
@@ -85,8 +86,8 @@ public class Game {
 
     public ArrayList<Trade> getPlayerUndecidedTradeRequestsReceived(Player player) {
         ArrayList<Trade> trades = new ArrayList<>();
-        for(Trade trade : tradingHistory) {
-            if(trade.secondPlayer.equals(player) && trade.tradeResult == 0) {
+        for (Trade trade : tradingHistory) {
+            if (trade.secondPlayer.equals(player) && trade.tradeResult == 0) {
                 trades.add(trade);
             }
         }
@@ -287,14 +288,21 @@ public class Game {
             }
         }
         createNpcs();
+        for (Player player : players) {
+            for (NPC npc : map.getVillage().getNpcs()) {
+                NPCFriendship friendship = new NPCFriendship(player.getUser().getUsername(), npc.getName());
+                player.getNpcs().add(friendship);
+                npc.getFriendships().add(friendship);
+            }
+        }
     }
 
-    public void createNpcs(){
-        map.getVillage().getNpcs().add(new NPC("Sebastian" , null));
-        map.getVillage().getNpcs().add(new NPC("Abigale" , null));
-        map.getVillage().getNpcs().add(new NPC("Harvey" , null));
-        map.getVillage().getNpcs().add(new NPC("Lia" , null));
-        map.getVillage().getNpcs().add(new NPC("Robin" , null));
+    public void createNpcs() {
+        map.getVillage().getNpcs().add(new NPC("Sebastian", null));
+        map.getVillage().getNpcs().add(new NPC("Abigale", null));
+        map.getVillage().getNpcs().add(new NPC("Harvey", null));
+        map.getVillage().getNpcs().add(new NPC("Lia", null));
+        map.getVillage().getNpcs().add(new NPC("Robin", null));
     }
 
     public void checkForRecipeUnlocking() {
@@ -492,5 +500,14 @@ public class Game {
 
     public void setMessages(ArrayList<Message> messages) {
         this.messages = messages;
+    }
+
+    public NPC findNpcByName(String name){
+        for (NPC npc : map.getVillage().getNpcs()){
+            if(npc.getName().compareToIgnoreCase(name) == 0){
+                return npc;
+            }
+        }
+        return null;
     }
 }
