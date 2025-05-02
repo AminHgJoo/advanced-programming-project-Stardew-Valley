@@ -47,6 +47,11 @@ public enum TreeSeedsType implements ItemType {
         return null;
     }
 
+
+    public String getName(){
+        return name;
+    }
+
     @Override
     public Slot createAmountOfItem(int amount) {
         return new Slot(new TreeSeed(this), amount);

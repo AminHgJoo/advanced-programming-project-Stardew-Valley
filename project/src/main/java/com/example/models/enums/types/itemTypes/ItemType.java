@@ -6,4 +6,5 @@ import dev.morphia.annotations.Embedded;
 @Embedded
 public interface ItemType {
     Slot createAmountOfItem(int amount);
+    String getName();
 }

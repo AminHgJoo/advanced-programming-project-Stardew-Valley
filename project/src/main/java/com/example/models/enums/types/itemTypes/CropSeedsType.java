@@ -117,6 +117,9 @@ public enum CropSeedsType implements ItemType {
         return this;
     }
 
+    public String getName(){
+        return name;
+    }
     @Override
     public Slot createAmountOfItem(int amount) {
         return new Slot(new Seed(this), amount);

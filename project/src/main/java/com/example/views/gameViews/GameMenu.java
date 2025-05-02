@@ -776,6 +776,8 @@ public class GameMenu implements Menu {
 
     private static Response getQuestFinishResponse(String input) {
         Request request = new Request(input);
+        request.body.put("index", GameMenuCommands.QUESTS_FINISH.getGroup(input, "index"));
+        request.body.put("npcName", GameMenuCommands.QUESTS_FINISH.getGroup(input, "npcName"));
         Response response = NPCController.handleQuestFinish(request);
         return response;
     }

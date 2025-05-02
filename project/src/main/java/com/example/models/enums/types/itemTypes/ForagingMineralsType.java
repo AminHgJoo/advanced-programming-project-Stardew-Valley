@@ -41,6 +41,11 @@ public enum ForagingMineralsType implements ItemType {
         return 0;
     }
 
+
+    public String getName(){
+        return name;
+    }
+
     public int getSellPrice() {
         return sellPrice;
     }

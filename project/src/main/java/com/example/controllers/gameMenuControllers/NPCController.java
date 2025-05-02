@@ -6,8 +6,12 @@ import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.NPCModels.NPC;
+import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.items.Item;
+import com.example.models.items.Tool;
 import com.example.utilities.HuggingFaceChat;
+
+// TODO handle npc friendship level
 
 public class NPCController extends Controller {
     public static Response handleTalkNPC(Request request) {
@@ -49,6 +53,9 @@ public class NPCController extends Controller {
         if (itemSlot == null) {
             return new Response(false, "There is no item with this name.");
         }
+        if(itemSlot.getItem() instanceof Tool) {
+            return new Response(false, "You can't gift tool.");
+        }
         itemSlot.setCount(itemSlot.getCount() - 1);
         if (itemSlot.getCount() == 0) {
             player.getInventory().removeSlot(itemSlot);
@@ -88,6 +95,41 @@ public class NPCController extends Controller {
     }
 
     public static Response handleQuestFinish(Request request) {
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+
+        String npcName = request.body.get("npcName");
+        NPC npc = game.findNpcByName(npcName);
+        if (npc == null) {
+            return new Response(false, "There is no npc with this name.");
+        }
+        int index = Integer.parseInt(request.body.get("index"));
+        if(index >= 3){
+            return new Response(false, "Invalid quest index");
+        }
+        Quest q = npc.getQuests().get(index);
+        if(q.isCompleted()){
+            return new Response(false, "Quest is completed.");
+        }
+        ItemType type = q.getItem();
+
+        Slot itemSlot = player.getInventory().getSlotByItemName(type.getName());
+        if(itemSlot == null){
+            return new Response(false,"You don't have required items");
+        }
+        if(itemSlot.getCount() < q.getCount()){
+            return new Response(false,"You don't have enough required items");
+        }
+
+        itemSlot.setCount(itemSlot.getCount() - q.getCount());
+        if(itemSlot.getCount() == 0){
+            player.getInventory().removeSlot(itemSlot);
+        }
+        q.setCompleted(true);
+
+        // TODO give reward
+        GameRepository.saveGame(game);
         return null;
     }
 }

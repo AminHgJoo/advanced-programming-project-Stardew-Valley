@@ -163,6 +163,11 @@ public enum FoodTypes implements ItemType {
         return 0;
     }
 
+
+    public String getName(){
+        return name;
+    }
+
     @Override
     public Slot createAmountOfItem(int amount) {
         return new Slot(new Food(Quality.DEFAULT, this), amount);
