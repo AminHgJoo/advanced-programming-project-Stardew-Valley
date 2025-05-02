@@ -5,8 +5,10 @@ import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
+import com.example.models.enums.Quality;
 import com.example.models.enums.types.MenuTypes;
-import com.example.models.items.Item;
+import com.example.models.enums.types.itemTypes.*;
+import com.example.models.items.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -32,12 +34,171 @@ public class TradingController extends Controller {
     }
 
     public static Response handleTradeMoney(Request request) {
+        String username = request.body.get("username");
+        String type = request.body.get("type");
+        String itemName = request.body.get("item");
+        int amount = Integer.parseInt(request.body.get("amount"));
+        int price = Integer.parseInt(request.body.get("price"));
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player firstPlayer = game.getCurrentPlayer();
+        Player secondPlayer = game.getPlayerByUsername(username);
+        Backpack firstPlayerBackpack = firstPlayer.getInventory();
 
+        if (secondPlayer == null) {
+            GameRepository.saveGame(game);
+            return new Response(true, "no player found");
+        }
+        if (!type.equals("offer")) {
+            GameRepository.saveGame(game);
+            return new Response(true, "wrong type");
+        }
+        if (!isItem(itemName)) {
+            GameRepository.saveGame(game);
+            return new Response(true, "item does not exist");
+        }
+        if (amount <= 0) {
+            GameRepository.saveGame(game);
+            return new Response(false, "Amount must be greater than 0");
+        }
+        Slot slot = firstPlayerBackpack.getSlotByItemName(itemName);
+        if (slot == null || slot.getCount() < amount) {
+            GameRepository.saveGame(game);
+            return new Response(false, "you don't have enough " + itemName);
+        }
+        if (price <= 0) {
+            GameRepository.saveGame(game);
+            return new Response(false, "price must be greater than 0");
+        }
+        game.tradingHistory.add(new Trade(firstPlayer, secondPlayer, type, slot.getItem(), amount, price, null, 0, game.tradingHistory.size()));
+        GameRepository.saveGame(game);
+        return new Response(true, "offer sent successfully");
+    }
+
+    private static boolean isItem(String itemName) {
+        for (CropSeedsType type : CropSeedsType.values()) {
+            if (type.name().equals(itemName)) {
+                return true;
+            }
+        }
+        for (FishType type : FishType.values()) {
+            if (type.name().equals(itemName)) {
+                return true;
+            }
+        }
+        for (FoodTypes type : FoodTypes.values()) {
+            if (type.name().equals(itemName)) {
+                return true;
+            }
+        }
+        for (ForagingMineralsType type : ForagingMineralsType.values()) {
+            if (type.name().equals(itemName)) {
+                return true;
+            }
+        }
+        for (MiscType type : MiscType.values()) {
+            if (type.name().equals(itemName)) {
+                return true;
+            }
+        }
+        for (ToolTypes type : ToolTypes.values()) {
+            if (type.name().equals(itemName)) {
+                return true;
+            }
+        }
+        for (TreeSeedsType type : TreeSeedsType.values()) {
+            if (type.name().equals(itemName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static Item getItem(String itemName) {
+        for (CropSeedsType type : CropSeedsType.values()) {
+            if (type.name().equals(itemName)) {
+                return new Seed(type);
+            }
+        }
+        for (FishType type : FishType.values()) {
+            if (type.name().equals(itemName)) {
+                return new Fish(Quality.COPPER, type);
+            }
+        }
+        for (FoodTypes type : FoodTypes.values()) {
+            if (type.name().equals(itemName)) {
+                return new Food(Quality.DEFAULT, type);
+            }
+        }
+        for (ForagingMineralsType type : ForagingMineralsType.values()) {
+            if (type.name().equals(itemName)) {
+                return new ForagingMineral(Quality.DEFAULT, type);
+            }
+        }
+        for (MiscType type : MiscType.values()) {
+            if (type.name().equals(itemName)) {
+                return new Misc(type);
+            }
+        }
+        for (ToolTypes type : ToolTypes.values()) {
+            if (type.name().equals(itemName)) {
+                return new Tool(Quality.DEFAULT, type, 0);
+            }
+        }
+        for (TreeSeedsType type : TreeSeedsType.values()) {
+            if (type.name().equals(itemName)) {
+                return new TreeSeed(type);
+            }
+        }
         return null;
     }
 
     public static Response handleTradeItem(Request request) {
-        return null;
+        String username = request.body.get("username");
+        String type = request.body.get("type");
+        String itemName = request.body.get("item");
+        int amount = Integer.parseInt(request.body.get("amount"));
+        String targetItemName = request.body.get("targetItem");
+        int targetAmount = Integer.parseInt(request.body.get("targetAmount"));
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player firstPlayer = game.getCurrentPlayer();
+        Player secondPlayer = game.getPlayerByUsername(username);
+        Backpack firstPlayerBackpack = firstPlayer.getInventory();
+
+        if (secondPlayer == null) {
+            GameRepository.saveGame(game);
+            return new Response(true, "no player found");
+        }
+        if (!type.equals("request")) {
+            GameRepository.saveGame(game);
+            return new Response(true, "wrong type");
+        }
+        if (!isItem(itemName)) {
+            GameRepository.saveGame(game);
+            return new Response(true, "item does not exist");
+        }
+        if (amount <= 0) {
+            GameRepository.saveGame(game);
+            return new Response(false, "Amount must be greater than 0");
+        }
+        Slot slot = firstPlayerBackpack.getSlotByItemName(itemName);
+        if (slot == null || slot.getCount() < amount) {
+            GameRepository.saveGame(game);
+            return new Response(false, "you don't have enough " + itemName);
+        }
+        if (!isItem(targetItemName)) {
+            GameRepository.saveGame(game);
+            return new Response(false, "target item does not exist");
+        }
+        if (targetAmount <= 0) {
+            GameRepository.saveGame(game);
+            return new Response(false, "target amount must be greater than 0");
+        }
+
+        game.tradingHistory.add(new Trade(firstPlayer, secondPlayer, type, slot.getItem(), amount, 0, getItem(targetItemName), targetAmount, game.tradingHistory.size()));
+        GameRepository.saveGame(game);
+        return new Response(true, "request sent successfully");
     }
 
     public static Response handleTradeList(Request request) {
@@ -101,7 +262,7 @@ public class TradingController extends Controller {
             return new Response(false, secondPlayer.getUser().getUsername() + "'s backpack is full");
         }
         if (tradeItemSlotInSecondPlayerBackpack == null) {
-            Slot newSlot = new Slot(trade.tradeItem, trade.itemAmount);
+            Slot newSlot = new Slot(tradeItemSlotInFirstPlayerBackpack.getItem(), trade.itemAmount);
             secondPlayerBackpack.addSlot(newSlot);
         } else {
             tradeItemSlotInSecondPlayerBackpack.setCount(tradeItemSlotInSecondPlayerBackpack.getCount() + targetAmount);
@@ -111,7 +272,7 @@ public class TradingController extends Controller {
             firstPlayerBackpack.removeSlot(tradeItemSlotInFirstPlayerBackpack);
         }
         if (targetItemSlotInFirstPlayerBackpack == null) {
-            Slot newSlot = new Slot(trade.targetItem, targetAmount);
+            Slot newSlot = new Slot(targetItemSlotInSecondPlayerBackpack.getItem(), targetAmount);
             firstPlayerBackpack.addSlot(newSlot);
         } else {
             targetItemSlotInFirstPlayerBackpack.setCount(targetItemSlotInFirstPlayerBackpack.getCount() + targetAmount);
@@ -138,7 +299,7 @@ public class TradingController extends Controller {
             return new Response(false, "your backpack is full");
         }
         if (itemSlotInSecondPlayerBackpack == null) {
-            Slot newSlot = new Slot(trade.tradeItem, trade.itemAmount);
+            Slot newSlot = new Slot(tradeItemSlotInFirstPlayerBackpack.getItem(), trade.itemAmount);
             secondPlayerBackpack.addSlot(newSlot);
         } else {
             itemSlotInSecondPlayerBackpack.setCount(itemSlotInSecondPlayerBackpack.getCount() + trade.itemAmount);

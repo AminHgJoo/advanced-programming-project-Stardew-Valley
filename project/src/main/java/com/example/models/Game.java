@@ -38,11 +38,20 @@ public class Game {
     private Weather weatherToday;
     private Weather weatherTomorrow;
     private Season season;
-    private ArrayList<Trade>  tradingHistory = new ArrayList<>();
+    public ArrayList<Trade>  tradingHistory = new ArrayList<>();
     @Transient
     private GameThread gameThread;
     public boolean hasTurnCycleFinished;
     private ArrayList<Message> messages = new ArrayList<>();
+
+    public Player getPlayerByUsername(String username) {
+        for(Player player : players) {
+            if(player.getUser().getUsername().equals(username)) {
+                return player;
+            }
+        }
+        return null;
+    }
 
     public Trade getTradeById(int id) {
         for(Trade trade : tradingHistory) {
