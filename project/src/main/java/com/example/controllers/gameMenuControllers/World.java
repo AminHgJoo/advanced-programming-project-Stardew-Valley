@@ -148,7 +148,7 @@ public class World extends Controller {
 
     //TODO: Implement.
     public static Response handleGreenhouseBuilding(Request request) {
-        //TODO: once items are added, implement.
+
         return null;
     }
 
@@ -298,6 +298,40 @@ public class World extends Controller {
         return new Response(true, "Target cell has been tilled.");
     }
 
+    private static boolean canPickaxeMineThis(ForagingMineralsType target, Quality pickaxeQuality) {
+        if (pickaxeQuality == Quality.DEFAULT) {
+            if (target == ForagingMineralsType.STONE) {
+                return true;
+            } else if (target == ForagingMineralsType.COPPER_ORE) {
+                return true;
+            } else if (target == ForagingMineralsType.COAL) {
+                return true;
+            }
+            return false;
+        }
+        if (pickaxeQuality == Quality.COPPER) {
+            if (target == ForagingMineralsType.STONE) {
+                return true;
+            } else if (target == ForagingMineralsType.COPPER_ORE) {
+                return true;
+            } else if (target == ForagingMineralsType.COAL) {
+                return true;
+            } else if (target == ForagingMineralsType.IRON_ORE) {
+                return true;
+            }
+            return false;
+        }
+        if (pickaxeQuality == Quality.SILVER) {
+            if (target == ForagingMineralsType.GOLD_ORE) {
+                return false;
+            } else if (target == ForagingMineralsType.IRIDIUM_ORE) {
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+
     private static Response handlePickaxeUse(Request request, SkillLevel skillLevel
             , Quality quality, int skillEnergyDiscount) {
         String direction = request.body.get("direction");
@@ -340,6 +374,11 @@ public class World extends Controller {
 
             Backpack backpack = player.getInventory();
             Slot slot = backpack.getSlotByItemName(type.name);
+
+            if (!canPickaxeMineThis(type, quality)) {
+                GameRepository.saveGame(game);
+                return new Response(false, "Pickaxe is too weak to mine this block.");
+            }
 
             player.getMiningSkill().setXp(player.getMiningSkill().getXp() + 10);
 
@@ -443,7 +482,6 @@ public class World extends Controller {
         return new Response(false, "No operation was performed.");
     }
 
-    //TODO: Handle the fact that syrup was extracted and you must wait to harvest again!
     private static Response handleAxeUse(Request request, Quality quality, int skillEnergyDiscount) {
         String direction = request.body.get("direction");
         int[] dxAndDy = getXAndYIncrement(direction);
@@ -995,7 +1033,6 @@ public class World extends Controller {
         return energyCost;
     }
 
-    //TODO: Implement later.
     private static Response handleMilkPailUse(Request request) {
         String direction = request.body.get("direction");
         int[] dxAndDy = getXAndYIncrement(direction);
@@ -1045,7 +1082,6 @@ public class World extends Controller {
         return handleCollectProducts(product, backpack, productSlot, animal, player, game);
     }
 
-    //TODO: Implement later.
     private static Response handleShearUse(Request request) {
         String direction = request.body.get("direction");
         int[] dxAndDy = getXAndYIncrement(direction);
