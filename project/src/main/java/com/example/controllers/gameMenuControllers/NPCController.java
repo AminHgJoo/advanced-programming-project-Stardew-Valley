@@ -6,6 +6,7 @@ import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.NPCModels.NPC;
+import com.example.models.NPCModels.NPCFriendship;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.items.Item;
 import com.example.models.items.Tool;
@@ -91,7 +92,8 @@ public class NPCController extends Controller {
         if (npc == null) {
             return new Response(false, "There is no npc with this name.");
         }
-        return new Response(true , npc.questsToString());
+        NPCFriendship friendship = player.findFriendshipByNPC(npcName);
+        return new Response(true , npc.questsToString(friendship.getLevel()));
     }
 
     public static Response handleQuestFinish(Request request) {
@@ -129,6 +131,7 @@ public class NPCController extends Controller {
         q.setCompleted(true);
 
         // TODO give reward
+
         GameRepository.saveGame(game);
         return null;
     }

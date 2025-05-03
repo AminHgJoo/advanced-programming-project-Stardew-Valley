@@ -148,10 +148,10 @@ public class NPC {
         return false;
     }
 
-    public String questsToString() {
+    public String questsToString(int level) {
         StringBuilder sb = new StringBuilder();
         sb.append("Quests : \n");
-        for (int i = 0; i < quests.size(); i++) {
+        for (int i = 0; i < (level >= 1 ? quests.size() : quests.size() - 1); i++) {
             sb.append(i).append(" : ").append(quests.get(i).toString()).append("\n");
         }
         return sb.toString();

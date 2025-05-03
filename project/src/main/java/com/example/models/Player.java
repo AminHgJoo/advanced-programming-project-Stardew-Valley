@@ -434,6 +434,16 @@ public class Player {
         return null;
     }
 
+    public NPCFriendship findFriendshipByNPC(String npc) {
+        for (NPCFriendship friendship : npcs) {
+            if (friendship.getNpc().equals(npc)) {
+                return friendship;
+            }
+        }
+        return null;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
