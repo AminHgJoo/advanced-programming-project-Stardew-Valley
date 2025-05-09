@@ -46,6 +46,16 @@ public class Game {
     private ArrayList<Message> messages = new ArrayList<>();
 
 
+    public Farm getFarmByNumber(int number) {
+        for(Player p : players){
+            if(p.getFarm().getFarmNumber() == number){
+                return p.getFarm();
+            }
+        }
+        return null;
+    }
+
+
     public Player getPartner(Player player) {
         if (player.getPartnerName() == null)
             return null;
@@ -143,7 +153,7 @@ public class Game {
     private void handleArtisanUse() {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getFarm();
+        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         for (Cell cell : farm.getCells()) {
             MapObject objectONCell = cell.getObjectOnCell();
             if (objectONCell instanceof ArtisanBlock && ((ArtisanBlock) objectONCell).beingUsed) {
@@ -200,7 +210,7 @@ public class Game {
     public void resetAllAnimalDailyVariables() {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getFarm();
+        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         ArrayList<Animal> animals = game.getCurrentPlayer().getAnimals();
         for (Animal animal : animals) {
             if (animal.hasBeenPetToDay) {

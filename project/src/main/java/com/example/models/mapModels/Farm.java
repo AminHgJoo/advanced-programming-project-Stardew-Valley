@@ -21,6 +21,12 @@ import java.util.ArrayList;
 public class Farm {
     private ArrayList<Cell> cells;
     private ArrayList<Building> buildings;
+    private int farmNumber;
+    private static int lastFarmNumber;
+
+    static {
+        lastFarmNumber = 0;
+    }
 
     public Farm() {
 
@@ -29,6 +35,8 @@ public class Farm {
     public Farm(ArrayList<Cell> cells, ArrayList<Building> buildings) {
         this.cells = cells;
         this.buildings = buildings;
+        this.farmNumber = lastFarmNumber;
+        lastFarmNumber++;
     }
 
     public void showFarm(int x, int y, int size) {
@@ -375,5 +383,13 @@ public class Farm {
             }
         }
         System.out.println("Lightning has struck coordinates: " + targetX + ", " + targetY);
+    }
+
+    public int getFarmNumber() {
+        return farmNumber;
+    }
+
+    public void setFarmNumber(int farmNumber) {
+        this.farmNumber = farmNumber;
     }
 }

@@ -39,6 +39,7 @@ public class Player {
     private ArrayList<Slot> refrigeratorSlots = new ArrayList<>();
     private ObjectId user_id;
     private String partnerName;
+    private int currentPlaceNumber;
     @Transient
     private User user;
     private ArrayList<Friendship> friendships = new ArrayList<>();
@@ -286,6 +287,10 @@ public class Player {
         return farm;
     }
 
+    public Farm getCurrentFarm(Game game){
+        return game.getFarmByNumber(currentPlaceNumber);
+    }
+
     public void setEnergy(double energy) {
         this.energy = energy;
     }
@@ -320,6 +325,7 @@ public class Player {
 
     public void setFarm(Farm farm) {
         this.farm = farm;
+        this.currentPlaceNumber = farm.getFarmNumber();
     }
 
     public Backpack getInventory() {

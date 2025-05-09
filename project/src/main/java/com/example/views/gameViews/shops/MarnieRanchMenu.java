@@ -27,8 +27,7 @@ public class MarnieRanchMenu implements Menu {
         Request request = new Request(input);
         request.body.put("animal", GameMenuCommands.BUY_ANIMAL.getGroup(input, "animal"));
         request.body.put("name", GameMenuCommands.BUY_ANIMAL.getGroup(input, "name"));
-        Response response = LivestockController.handleBuyAnimal(request);
-        return response;
+        return LivestockController.handleBuyAnimal(request);
     }
 
     private static Response leaveRanch(String input) {

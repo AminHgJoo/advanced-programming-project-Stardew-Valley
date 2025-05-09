@@ -7,6 +7,7 @@ import com.example.models.IO.Response;
 import com.example.models.User;
 import com.example.utilities.Validation;
 
+//TODO Change username in games
 public class ProfileMenuController extends Controller {
     public static Response handleChangeUsername(Request request) {
         String username = request.body.get("username");

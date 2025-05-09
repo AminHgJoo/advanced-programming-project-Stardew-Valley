@@ -119,7 +119,7 @@ public class World extends Controller {
         }
 
         Game currentGame = App.getLoggedInUser().getCurrentGame();
-        currentGame.getCurrentPlayer().getFarm().strikeLightning(targetX, targetY, currentGame.getDate());
+        currentGame.getCurrentPlayer().getCurrentFarm(currentGame).strikeLightning(targetX, targetY, currentGame.getDate());
         GameRepository.saveGame(currentGame);
         return new Response(true, "Lightning summoned at target coordinates.");
     }
@@ -263,7 +263,7 @@ public class World extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getFarm();
+        Farm farm = player.getCurrentFarm(game);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -342,7 +342,7 @@ public class World extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getFarm();
+        Farm farm = player.getCurrentFarm(game);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -491,7 +491,7 @@ public class World extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getFarm();
+        Farm farm = player.getCurrentFarm(game);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -709,7 +709,7 @@ public class World extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getFarm();
+        Farm farm = player.getCurrentFarm(game);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -806,7 +806,7 @@ public class World extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getFarm();
+        Farm farm = player.getCurrentFarm(game);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -942,7 +942,7 @@ public class World extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getFarm();
+        Farm farm = player.getCurrentFarm(game);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -1042,7 +1042,7 @@ public class World extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getFarm();
+        Farm farm = player.getCurrentFarm(game);
         Item equippedItem = player.getEquippedItem();
         Backpack backpack = player.getInventory();
         Slot productSlot = null;
@@ -1091,7 +1091,7 @@ public class World extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = player.getFarm();
+        Farm farm = player.getCurrentFarm(game);
         Item equippedItem = player.getEquippedItem();
         Backpack backpack = player.getInventory();
         Slot productSlot = null;

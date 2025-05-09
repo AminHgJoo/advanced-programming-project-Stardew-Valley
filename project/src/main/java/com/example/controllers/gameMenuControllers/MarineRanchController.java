@@ -47,7 +47,7 @@ public class MarineRanchController extends Controller {
         }
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getFarm();
+        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         Animal animal = new Animal(name, type, cost);
         Player player = game.getCurrentPlayer();
         if (farm.doesAnimalExist(name)) {

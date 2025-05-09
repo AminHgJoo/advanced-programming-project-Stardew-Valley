@@ -22,12 +22,12 @@ public class MovementAndMap extends Controller {
         int y = Integer.parseInt(request.body.get("y"));
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Cell src = player.getFarm().findCellByCoordinate(player.getCoordinate().getX(), player.getCoordinate().getY());
-        Cell dest = player.getFarm().findCellByCoordinate(x, y).clone();
+        Cell src = player.getCurrentFarm(game).findCellByCoordinate(player.getCoordinate().getX(), player.getCoordinate().getY());
+        Cell dest = player.getCurrentFarm(game).findCellByCoordinate(x, y).clone();
         if (dest == null || !dest.getObjectOnCell().isWalkable) {
             return new Response(false, "destination is not valid");
         }
-        FindPath.pathBFS(src, dest, player.getFarm().getCells());
+        FindPath.pathBFS(src, dest, player.getCurrentFarm(game).getCells());
         double energy = dest.energy / 20;
         String message = "Your current energy is: " + player.getEnergy() + "\n" +
                 "The path energy cost is : " + energy + "\n" +
@@ -45,12 +45,12 @@ public class MovementAndMap extends Controller {
                 if (c.energy > player.getEnergy()) {
                     player.setPlayerFainted(true);
                     player.setEnergy(player.getEnergy() - c.energy / 20);
-                    player.getFarm().initialCells();
+                    player.getCurrentFarm(game).initialCells();
                     GameRepository.saveGame(game);
                     return new Response(false, "You have fainted");
                 }
                 if (c.energy + player.getUsedEnergyInTurn() > 50) {
-                    player.getFarm().initialCells();
+                    player.getCurrentFarm(game).initialCells();
                     GameRepository.saveGame(game);
                     return new Response(false, "You can not use this much energy");
                 }
@@ -58,11 +58,11 @@ public class MovementAndMap extends Controller {
             }
             player.setEnergy(player.getEnergy() - energy);
             player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
-            player.getFarm().initialCells();
+            player.getCurrentFarm(game).initialCells();
             GameRepository.saveGame(game);
             return new Response(true, "You successfully moved to the destination");
         } else {
-            player.getFarm().initialCells();
+            player.getCurrentFarm(game).initialCells();
             return new Response(false, "Movement process aborted");
         }
     }
@@ -70,7 +70,7 @@ public class MovementAndMap extends Controller {
     public static Response showFarm(Request request) {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getFarm();
+        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         farm.showFarm(Integer.parseInt(request.body.get("x"))
                 , Integer.parseInt(request.body.get("y")),
                 Integer.parseInt(request.body.get("size")));
@@ -81,7 +81,7 @@ public class MovementAndMap extends Controller {
     public static Response showFullFarm(Request request) {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getFarm();
+        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         farm.showEntireFarm();
         return new Response(true, "");
     }

@@ -29,7 +29,7 @@ public class ArtisanController extends Controller {
         String item1Name = request.body.get("item1Name");
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getFarm();
+        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         Player player = game.getCurrentPlayer();
         Backpack backpack = player.getInventory();
         ArtisanBlock block = farm.getArtisanBlock(artisanName);
@@ -504,7 +504,7 @@ public class ArtisanController extends Controller {
         String artisanName = request.body.get("artisanName");
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getFarm();
+        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         Player player = game.getCurrentPlayer();
         Backpack backpack = player.getInventory();
         ArtisanBlock block = farm.getArtisanBlock(artisanName);

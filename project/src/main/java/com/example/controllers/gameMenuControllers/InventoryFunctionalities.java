@@ -253,7 +253,7 @@ public class InventoryFunctionalities extends Controller {
             return new Response(false, "Item not found.");
         }
 
-        Cell targetCell = player.getFarm().findCellByCoordinate(playerX + dx, playerY + dy);
+        Cell targetCell = player.getCurrentFarm(game).findCellByCoordinate(playerX + dx, playerY + dy);
 
         if (targetCell == null) {
             return new Response(false, "Invalid placement location.");

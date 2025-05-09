@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class LivestockController extends Controller {
     public static Response handleBuyAnimal(Request request) {
-        return null;
+        return MarineRanchController.buyAnimal(request);
     }
 
     public static Response handlePet(Request request) {
@@ -84,7 +84,7 @@ public class LivestockController extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = game.getCurrentPlayer().getFarm();
+        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         Animal animal = player.getAnimalByName(animalName);
         Cell cell = farm.findCellByCoordinate(x, y);
         if (cell == null || !(cell.getObjectOnCell() instanceof EmptyCell) || animal == null) {
@@ -106,7 +106,7 @@ public class LivestockController extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Farm farm = game.getCurrentPlayer().getFarm();
+        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         Animal animal = player.getAnimalByName(animalName);
         if (animal == null) {
             GameRepository.saveGame(game);

@@ -39,7 +39,7 @@ public class Farming extends Controller {
             return new Response(false, "Invalid direction");
         }
         Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
-        Cell cell = player.getFarm().findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+        Cell cell = player.getCurrentFarm(game).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
         if (cell == null) {
             return new Response(false, "Cell not found");
         }
@@ -96,7 +96,7 @@ public class Farming extends Controller {
             return new Response(false, "Invalid direction");
         }
         Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
-        Cell cell = player.getFarm().findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+        Cell cell = player.getCurrentFarm(game).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
         if (cell == null) {
             return new Response(false, "Cell not found");
         }
@@ -134,7 +134,7 @@ public class Farming extends Controller {
         int y = Integer.parseInt(request.body.get("y"));
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
-        Cell cell = player.getFarm().findCellByCoordinate(x, y);
+        Cell cell = player.getCurrentFarm(game).findCellByCoordinate(x, y);
         if (cell == null) {
             return new Response(false, "Cell not found");
         }
@@ -158,7 +158,7 @@ public class Farming extends Controller {
             return new Response(false, "Invalid direction");
         }
         Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
-        Cell cell = player.getFarm().findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+        Cell cell = player.getCurrentFarm(game).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
         if (cell == null) {
             return new Response(false, "Cell not found");
         }
