@@ -6,10 +6,12 @@ import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.recipes.CraftingRecipes;
+import com.example.models.enums.types.itemTypes.CropSeedsType;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.types.itemTypes.TreeSeedsType;
 import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
+import com.example.models.enums.types.mapObjectTypes.ForagingSeedsType;
 import com.example.models.items.*;
 import com.example.models.items.buffs.ActiveBuff;
 import com.example.models.mapModels.Cell;
@@ -108,10 +110,16 @@ public class InventoryFunctionalities extends Controller {
         return null;
     }
 
-    //TODO: For crops, trees and all seeds/saplings.
     public static Response handleCraftInfoQuery(Request request) {
-        return null;
+        String queriedName = request.body.get("craftName");
 
+        for (CropSeedsType type : CropSeedsType.values()) {
+            if (queriedName.equals(type.name)) {
+                return new Response(true, type.toString());
+            }
+        }
+
+        return new Response(false, "Crop not found!");
     }
 
     public static Response handleShowCraftingRecipes(Request request) {

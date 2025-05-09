@@ -40,7 +40,7 @@ public class GameThread extends Thread {
             game.checkForRecipeUnlocking();
             game.handleBuffExpiration();
             game.checkForSkillUpgrades();
-            game.checkForCropNextStage();
+
             game.reInitializeStoreProductsCount();
             game.reInitializeNpc();
             game.addPlayersMoney(game);

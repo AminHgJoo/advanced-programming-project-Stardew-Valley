@@ -4,6 +4,8 @@ import com.example.models.Slot;
 import com.example.models.enums.worldEnums.Season;
 import com.example.models.items.Seed;
 
+import java.util.Arrays;
+
 public enum CropSeedsType implements ItemType {
     BLUE_JAZZ("Blue Jazz", "Jazz Seeds", 1, 2, 2, 2, -1, 7, true, -1, 50, true, 45, new Season[]{Season.SPRING}, false),
     CARROT("Carrot", "Carrot Seeds", 1, 1, 1, -1, -1, 3, true, -1, 35, true, 75, new Season[]{Season.SPRING}, false),
@@ -46,7 +48,7 @@ public enum CropSeedsType implements ItemType {
     SWEET_GEM_BERRY("Sweet Gem Berry", "Rare Seed", 2, 4, 6, 6, 6, 24, true, -1, 3000, false, 0, new Season[]{Season.FALL}, false),
     POWDER_MELON("Powder Melon", "Powdermelon Seeds", 1, 2, 1, 2, 1, 7, true, -1, 60, true, 63, new Season[]{Season.WINTER}, true),
     ANCIENT_FRUIT("Ancient Fruit", "Ancient Seeds", 2, 7, 7, 7, 5, 28, false, 7, 550, false, 0, new Season[]{Season.FALL, Season.SUMMER, Season.SPRING}, false),
-    RANDOM_CROP("Random Crop", "Mixed Seeds", -1, -1, -1, -1, -1, -1, false, -1, -1, false, -1, null, false);;
+    RANDOM_CROP("Random Crop", "Mixed Seeds", -1, -1, -1, -1, -1, -1, false, -1, -1, false, -1, null, false);
 
     public final String name;
     public final String source;
@@ -97,17 +99,17 @@ public enum CropSeedsType implements ItemType {
             if (season == Season.SPRING) {
                 CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.CAULIFLOWER, CropSeedsType.PARSNIP, CropSeedsType.POTATO
                         , CropSeedsType.BLUE_JAZZ, CropSeedsType.TULIP};
-                int rand = (int)(Math.random()*5);
+                int rand = (int) (Math.random() * 5);
                 return arr[rand];
             } else if (season == Season.SUMMER) {
                 CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.CORN, CropSeedsType.HOT_PEPPER, CropSeedsType.RADISH
                         , CropSeedsType.WHEAT, CropSeedsType.POPPY, CropSeedsType.SUNFLOWER, CropSeedsType.SUMMER_SPANGLE};
-                int rand = (int)(Math.random()*7);
+                int rand = (int) (Math.random() * 7);
                 return arr[rand];
             } else if (season == Season.FALL) {
                 CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.ARTICHOKE, CropSeedsType.CORN, CropSeedsType.EGGPLANT,
                         CropSeedsType.PUMPKIN, CropSeedsType.SUNFLOWER, CropSeedsType.FAIRY_ROSE};
-                int rand = (int)(Math.random()*6);
+                int rand = (int) (Math.random() * 6);
                 return arr[rand];
             } else if (season == Season.WINTER) {
                 CropSeedsType[] arr = new CropSeedsType[]{POWDER_MELON};
@@ -117,11 +119,49 @@ public enum CropSeedsType implements ItemType {
         return this;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
+
     @Override
     public Slot createAmountOfItem(int amount) {
         return new Slot(new Seed(this), amount);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Name: ").append(name).append("\n");
+        builder.append("Source: ").append(source).append("\n");
+        builder.append("Stages: ");
+        if (stageZeroDaysToNextStage != -1) {
+            builder.append(stageZeroDaysToNextStage).append("-");
+        }
+        if (stageOneDaysToNextStage != -1) {
+            builder.append(stageOneDaysToNextStage).append("-");
+        }
+        if (stageTwoDaysToNextStage != -1) {
+            builder.append(stageTwoDaysToNextStage).append("-");
+        }
+        if (stageThreeDaysToNextStage != -1) {
+            builder.append(stageThreeDaysToNextStage).append("-");
+        }
+        if (stageFourDaysToNextStage != -1) {
+            builder.append(stageFourDaysToNextStage).append("-");
+        }
+        builder.deleteCharAt(builder.length() - 1);
+        builder.append("\n");
+        builder.append("Total Harvest Time: ").append(totalHarvestTime).append("\n");
+        builder.append("One Time: ").append(oneTime).append("\n");
+        builder.append("Regrowth Time: ");
+        if (regrowthTime != -1) {
+            builder.append(regrowthTime);
+        }
+        builder.append("\n");
+        builder.append("Is Edible: ").append(isEdible).append("\n");
+        builder.append("Base Energy: ").append(energy).append("\n");
+        builder.append("Seasons :").append(Arrays.toString(season)).append("\n");
+        builder.append("Can be Giant :").append(canBeGiant).append("\n");
+        return builder.toString();
     }
 }

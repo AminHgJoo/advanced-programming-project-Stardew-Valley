@@ -23,4 +23,11 @@ public class Coordinate {
     public int getY() {
         return y;
     }
+
+    /// Eureka Indeed!
+    public static double calculateEuclideanDistance(Cell cell1, Cell cell2) {
+        Coordinate a = cell1.getCoordinate(), b = cell2.getCoordinate();
+
+        return Math.sqrt(Math.pow(b.getX() - a.getX(), 2) + Math.pow(b.getY() - a.getY(), 2));
+    }
 }

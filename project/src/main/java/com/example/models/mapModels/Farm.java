@@ -3,10 +3,10 @@ package com.example.models.mapModels;
 import com.example.models.Animal;
 import com.example.models.App;
 import com.example.models.Game;
-import com.example.models.User;
 import com.example.models.buildings.*;
 import com.example.models.enums.types.itemTypes.CropSeedsType;
 import com.example.models.enums.types.itemTypes.ForagingMineralsType;
+import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.example.models.enums.types.mapObjectTypes.ForagingCropsType;
 import com.example.models.enums.types.mapObjectTypes.ForagingSeedsType;
 import com.example.models.enums.types.mapObjectTypes.TreeType;
@@ -220,7 +220,6 @@ public class Farm {
         return new ForagingMineral(values[randomNumber]);
     }
 
-
     private static void addOneLake(ArrayList<Cell> farmCells) {
         for (int j = 37; j < 46; j++) {
             for (int i = 33; i < 41; i++) {
@@ -244,7 +243,6 @@ public class Farm {
             }
         }
     }
-
 
     private static void makeEmptyCells(ArrayList<Cell> farmCells) {
         for (int j = 0; j < 50; j++) {
@@ -369,11 +367,36 @@ public class Farm {
         return null;
     }
 
-    public void strikeLightning(int targetX, int targetY , LocalDateTime source) {
+    public boolean isCellCoveredByScarecrow(Cell queryCell) {
+        ArrayList<Cell> scarecrowCells = new ArrayList<>();
+        for (Cell farmCell : cells) {
+            if (farmCell.getObjectOnCell() instanceof ArtisanBlock) {
+                ArtisanBlock artisanBlock = (ArtisanBlock) farmCell.getObjectOnCell();
+                if (artisanBlock.getArtisanType() == ArtisanBlockType.DELUXE_SCARE_CROW
+                        || artisanBlock.getArtisanType() == ArtisanBlockType.SCARE_CROW) {
+                    scarecrowCells.add(farmCell);
+                }
+            }
+        }
+
+        for (Cell scarecrowCell : scarecrowCells) {
+            double distance = Coordinate.calculateEuclideanDistance(scarecrowCell, queryCell);
+            ArtisanBlock a = (ArtisanBlock)(scarecrowCell.getObjectOnCell());
+
+            double maxDistance = (a.getArtisanType() == ArtisanBlockType.SCARE_CROW) ? 8 : 12;
+
+            if (distance <= maxDistance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void strikeLightning(int targetX, int targetY, LocalDateTime source) {
         Cell targetCell = findCellByCoordinate(targetX, targetY);
         if (targetCell != null) {
             if (targetCell.getObjectOnCell() instanceof Tree) {
-                targetCell.setObjectOnCell(new Tree(TreeType.BURNT_TREE , source));
+                targetCell.setObjectOnCell(new Tree(TreeType.BURNT_TREE, source));
             }
             if (targetCell.getObjectOnCell() instanceof Crop) {
                 targetCell.setObjectOnCell(new EmptyCell());

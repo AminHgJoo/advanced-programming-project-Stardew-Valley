@@ -1,5 +1,6 @@
 package com.example.models.mapObjects;
 
+import com.example.models.App;
 import com.example.models.enums.types.itemTypes.CropSeedsType;
 import com.example.utilities.DateUtility;
 import dev.morphia.annotations.Embedded;
@@ -10,7 +11,6 @@ import java.time.LocalDateTime;
 @Embedded
 public class Crop extends MapObject {
     public CropSeedsType cropSeedsType;
-    private int daysToNextStage;
     private int stageNumber;
     private boolean hasBeenWateredToday = false;
     private boolean hasBeenFertilized = false;
@@ -19,11 +19,18 @@ public class Crop extends MapObject {
         super();
     }
 
+    public void pushBackDeadlines(int numOfDays) {
+        for (int i = stageNumber; i < growthDeadLines.length; i++) {
+            if (growthDeadLines[i] != null) {
+                growthDeadLines[i] = DateUtility.getLocalDate(growthDeadLines[i], numOfDays);
+            }
+        }
+    }
+
     public Crop(CropSeedsType plantType , LocalDateTime source) {
         super(true, "plant", "green");
         this.cropSeedsType = plantType;
         stageNumber = 0;
-        daysToNextStage = cropSeedsType.stageZeroDaysToNextStage;
         growthDeadLines[0] = DateUtility.getLocalDate(source, cropSeedsType.stageZeroDaysToNextStage);
         growthDeadLines[1] = DateUtility.getLocalDate(growthDeadLines[0], cropSeedsType.stageOneDaysToNextStage);
         growthDeadLines[2] = DateUtility.getLocalDate(growthDeadLines[1], cropSeedsType.stageTwoDaysToNextStage);
@@ -35,6 +42,7 @@ public class Crop extends MapObject {
     public LocalDateTime[] getGrowthDeadLines() {
         return growthDeadLines;
     }
+
     public boolean isHasBeenWateredToday() {
         return hasBeenWateredToday;
     }
@@ -44,11 +52,19 @@ public class Crop extends MapObject {
     }
 
     public int getDaysToNextStage() {
-        return daysToNextStage;
-    }
+        LocalDateTime deadLine = growthDeadLines[stageNumber];
 
-    public void setDaysToNextStage(int daysToNextStage) {
-        this.daysToNextStage = daysToNextStage;
+        if (deadLine == null) {
+            return -1;
+        }
+
+        LocalDateTime timeNow = App.getLoggedInUser().getCurrentGame().getDate();
+
+        int yearDifference = deadLine.getYear() - timeNow.getYear();
+        int monthDifference = deadLine.getMonthValue() - timeNow.getMonthValue();
+        int dayDifference = deadLine.getDayOfMonth() - timeNow.getDayOfMonth();
+
+        return yearDifference * 336 + monthDifference * 28 + dayDifference;
     }
 
     public int getStageNumber() {
@@ -63,7 +79,7 @@ public class Crop extends MapObject {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("name : ").append(cropSeedsType.name).append("\n");
-        builder.append("tim to next stage : ").append(daysToNextStage).append("\n");
+        builder.append("time to next stage : ").append(getDaysToNextStage()).append("\n");
         builder.append("stage number : ").append(stageNumber).append("\n");
         builder.append("has been watered today : ").append(hasBeenWateredToday).append("\n");
         builder.append("has been fertilized : ").append(hasBeenFertilized).append("\n");

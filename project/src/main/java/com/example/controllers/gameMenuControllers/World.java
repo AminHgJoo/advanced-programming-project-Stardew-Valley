@@ -968,7 +968,6 @@ public class World extends Controller {
         player.setEnergy(player.getEnergy() - energyCost);
         player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
-        //TODO: Handle farming xp.
         if (targetCell.getObjectOnCell() instanceof ForagingCrop) {
 
             ForagingCrop crop = (ForagingCrop) targetCell.getObjectOnCell();
@@ -1009,6 +1008,7 @@ public class World extends Controller {
             player.getForagingSkill().setXp(player.getForagingSkill().getXp() + 10);
             GameRepository.saveGame(game);
             return new Response(true, "Removed " + name + "from tile.");
+            //TODO: Handle farming xp.
         } else if (targetCell.getObjectOnCell() instanceof Crop) { //TODO: Handle crop and tree harvest.
 
         } else if (targetCell.getObjectOnCell() instanceof Tree) {

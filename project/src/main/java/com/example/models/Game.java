@@ -17,6 +17,7 @@ import com.example.models.mapModels.Farm;
 import com.example.models.mapModels.Map;
 import com.example.models.mapObjects.*;
 import com.example.models.skills.Skill;
+import com.example.utilities.RNG;
 import com.example.views.gameViews.GameThread;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
@@ -47,14 +48,13 @@ public class Game {
 
 
     public Farm getFarmByNumber(int number) {
-        for(Player p : players){
-            if(p.getFarm().getFarmNumber() == number){
+        for (Player p : players) {
+            if (p.getFarm().getFarmNumber() == number) {
                 return p.getFarm();
             }
         }
         return null;
     }
-
 
     public Player getPartner(Player player) {
         if (player.getPartnerName() == null)
@@ -115,18 +115,92 @@ public class Game {
         return trades;
     }
 
+    private void waterAllCrops() {
+        //TODO: Change implementation to not effect greenhouse crops.
+        for (Farm farm : getMap().getFarms()) {
+            for (Cell cell : farm.getCells()) {
+                if (cell.getObjectOnCell() instanceof Crop) {
+                    Crop crop = (Crop) cell.getObjectOnCell();
+                    crop.setHasBeenWateredToday(true);
+                }
+
+                if (cell.getObjectOnCell() instanceof Tree) {
+                    Tree tree = (Tree) cell.getObjectOnCell();
+                    tree.setHasBeenWateredToday(true);
+                }
+            }
+        }
+    }
+
+    private void resetAllCropsWater() {
+        for (Farm farm : getMap().getFarms()) {
+            for (Cell cell : farm.getCells()) {
+                if (cell.getObjectOnCell() instanceof Crop) {
+                    Crop crop = (Crop) cell.getObjectOnCell();
+                    crop.setHasBeenWateredToday(false);
+                }
+
+                if (cell.getObjectOnCell() instanceof Tree) {
+                    Tree tree = (Tree) cell.getObjectOnCell();
+                    tree.setHasBeenWateredToday(false);
+                }
+            }
+        }
+    }
+
+    private void handleCrowAttack() {
+        //TODO: Attack on tree fruits. Change implementation to not attack greenhouse crops.
+        for (Farm farm : getMap().getFarms()) {
+            ArrayList<Cell> cells = new ArrayList<>();
+            for (Cell cell : farm.getCells()) {
+                if (cell.getObjectOnCell() instanceof Crop) {
+                    cells.add(cell);
+                }
+            }
+            int howManyTrials = cells.size() / 16;
+            for (int i = 0; i < howManyTrials; i++) {
+                if (RNG.performRandomTrial(25)) {
+
+                    int randomInt = RNG.randomInt(0, cells.size() - 1);
+                    Cell cell = cells.get(randomInt);
+
+                    if (!farm.isCellCoveredByScarecrow(cell)) {
+                        cell.setObjectOnCell(new EmptyCell());
+                    }
+                }
+            }
+        }
+    }
+
     public void advanceTime() {
         date = date.plusHours(1);
         hasTurnCycleFinished = false;
+
         if (date.getHour() == 23) {
-            //TODO : next day has arrived
+            //New Day Operations.
+
             date = date.plusHours(10);
+
+            if (date.getDayOfMonth() == 29) {
+                date = date.minusDays(28);
+                date = date.plusMonths(1);
+            }
 
             gameThread.handleRefreshForaging();
 
             weatherToday = weatherTomorrow;
 
             determineAndSetWeatherTomorrow();
+
+            checkForCropNextStage();
+
+            resetAllCropsWater();
+
+            if (weatherToday == Weather.RAIN || weatherToday == Weather.STORM) {
+                waterAllCrops();
+            }
+
+            handleCrowAttack();
 
             resetAllAnimalDailyVariables();
 
@@ -187,20 +261,19 @@ public class Game {
     }
 
     public boolean checkSeasonChange() {
-        if (date.getMonthValue() >= 1 && date.getMonthValue() <= 3) {
+        if (date.getMonthValue() <= 3) {
             season = Season.SPRING;
             return true;
-        } else if (date.getMonthValue() >= 4 && date.getMonthValue() <= 6) {
+        } else if (date.getMonthValue() <= 6) {
             season = Season.SUMMER;
             return true;
-        } else if (date.getMonthValue() >= 7 && date.getMonthValue() <= 9) {
+        } else if (date.getMonthValue() <= 9) {
             season = Season.FALL;
             return true;
-        } else if (date.getMonthValue() >= 10 && date.getMonthValue() <= 12) {
+        } else {
             season = Season.WINTER;
             return true;
         }
-        return false;
     }
 
     public Game() {
@@ -415,7 +488,11 @@ public class Game {
                     for (int i = 0; i < 5; i++) {
                         LocalDateTime d = arr[i];
                         if (d != null && d.isAfter(date)) {
-                            crop.setStageNumber(i + 1);
+                            if (crop.isHasBeenWateredToday()) {
+                                crop.setStageNumber(i + 1);
+                            } else {
+                                crop.pushBackDeadlines(1);
+                            }
                         }
                     }
                 }
@@ -425,7 +502,11 @@ public class Game {
                     for (int i = 0; i < 5; i++) {
                         LocalDateTime d = arr[i];
                         if (d != null && d.isAfter(date)) {
-                            tree.setStageNumber(i + 1);
+                            if (tree.isHasBeenWateredToday()) {
+                                tree.setStageNumber(i + 1);
+                            } else {
+                                tree.pushBackDeadlines(1);
+                            }
                         }
                     }
                 }

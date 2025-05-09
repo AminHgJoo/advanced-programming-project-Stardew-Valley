@@ -17,9 +17,11 @@ public class Tree extends MapObject {
     public LocalDateTime[] getGrowthDeadLines() {
         return growthDeadLines;
     }
+
     public Tree() {
     }
-    public Tree(TreeType treeType , LocalDateTime source) {
+
+    public Tree(TreeType treeType, LocalDateTime source) {
         super(false, "tree", "green");
         this.treeType = treeType;
         growthDeadLines[0] = DateUtility.getLocalDate(source, treeType.stageOneTime);
@@ -27,6 +29,14 @@ public class Tree extends MapObject {
         growthDeadLines[2] = DateUtility.getLocalDate(growthDeadLines[1], treeType.stageTwoTime);
         growthDeadLines[3] = DateUtility.getLocalDate(growthDeadLines[2], treeType.stageThreeTime);
         growthDeadLines[4] = DateUtility.getLocalDate(growthDeadLines[3], treeType.stageFourTime);
+    }
+
+    public void pushBackDeadlines(int numOfDays) {
+        for (int i = stageNumber; i < growthDeadLines.length; i++) {
+            if (growthDeadLines[i] != null) {
+                growthDeadLines[i] = DateUtility.getLocalDate(growthDeadLines[i], numOfDays);
+            }
+        }
     }
 
     public TreeType getTreeType() {
