@@ -10,9 +10,10 @@ import java.util.ArrayList;
 public class Village {
     private final ArrayList<Store> stores = new ArrayList<>();
     private final ArrayList<NPC> npcs = new ArrayList<>();
+    private final ArrayList<Cell> cells = new ArrayList<>();
 
     public Village() {
-
+        initializeStores();
     }
 
     public void initializeStores() {
@@ -44,5 +45,9 @@ public class Village {
 
     public ArrayList<NPC> getNpcs() {
         return npcs;
+    }
+
+    public ArrayList<Cell> getCells() {
+        return cells;
     }
 }
