@@ -79,6 +79,7 @@ public class DealingController extends Controller {
     public static Response handlePurchase(Request request) {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
+        //TODO add stores and store products and fix getStore usages
         Store store = game.getMap().getVillage().getStore("");
         Player player = game.getCurrentPlayer();
         String productName = request.body.get("productName");

@@ -58,33 +58,40 @@ public class MarineRanchController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough money");
         }
+        Store store = game.getMap().getVillage().getStore("");
+        StoreProduct storeProduct = store.getProduct(animalTypeName);
+        if(storeProduct.getAvailableCount() <= 0){
+            GameRepository.saveGame(game);
+            return new Response(false, "daily limit reached");
+        }
         if (animalTypeName.equals("Cow")) {
-            return buyCow(farm, player, cost, animal, game, name);
+            return buyCow(farm, player, cost, animal, game, name, storeProduct);
         } else if (animalTypeName.equals("Goat")) {
-            return buyGoat(farm, player, cost, animal, game, name);
+            return buyGoat(farm, player, cost, animal, game, name, storeProduct);
         } else if (animalTypeName.equals("Duck")) {
-            return buyDuck(farm, player, cost, animal, game, name);
+            return buyDuck(farm, player, cost, animal, game, name, storeProduct);
         } else if (animalTypeName.equals("Sheep")) {
-            return buySheep(farm, player, cost, animal, game, name);
+            return buySheep(farm, player, cost, animal, game, name, storeProduct);
         } else if (animalTypeName.equals("Rabbit")) {
-            return buyRabbit(farm, player, cost, animal, game, name);
+            return buyRabbit(farm, player, cost, animal, game, name, storeProduct);
         } else if (animalTypeName.equals("Dinosaur")) {
-            return buyDinosaur(farm, player, cost, animal, game, name);
+            return buyDinosaur(farm, player, cost, animal, game, name, storeProduct);
         } else if (animalTypeName.equals("Pig")) {
-            return buyPig(farm, player, cost, animal, game, name);
+            return buyPig(farm, player, cost, animal, game, name, storeProduct);
         } else if (animalTypeName.equals("Chicken")) {
-            return buyChicken(farm, player, cost, animal, game, name);
+            return buyChicken(farm, player, cost, animal, game, name, storeProduct);
         }
         GameRepository.saveGame(game);
         return new Response(false, "invalid animal");
     }
 
-    private static Response buyChicken(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyChicken(Farm farm, Player player, int cost, Animal animal, Game game, String name, StoreProduct storeProduct) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop) {
                 if (((Coop) building).animals.size() < ((Coop) building).capacity) {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Coop) building).animals.add(animal);
+                    storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -94,12 +101,13 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Coop");
     }
 
-    private static Response buyPig(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyPig(Farm farm, Player player, int cost, Animal animal, Game game, String name, StoreProduct storeProduct) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && ((Barn) building).barnType.equals("Deluxe Barn")) {
                 if (((Barn) building).animals.size() < ((Barn) building).capacity) {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Barn) building).animals.add(animal);
+                    storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -109,12 +117,13 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Deluxe Barn");
     }
 
-    private static Response buyDinosaur(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyDinosaur(Farm farm, Player player, int cost, Animal animal, Game game, String name, StoreProduct storeProduct) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop && (((Coop) building).coopType.equals("Big Coop") || ((Coop) building).coopType.equals("Deluxe Coop"))) {
                 if (((Coop) building).animals.size() < ((Coop) building).capacity) {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Coop) building).animals.add(animal);
+                    storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -124,12 +133,13 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Big Coop");
     }
 
-    private static Response buyRabbit(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyRabbit(Farm farm, Player player, int cost, Animal animal, Game game, String name, StoreProduct storeProduct) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop && ((Coop) building).coopType.equals("Deluxe Coop")) {
                 if (((Coop) building).animals.size() < ((Coop) building).capacity) {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Coop) building).animals.add(animal);
+                    storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -139,12 +149,13 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Deluxe Coop");
     }
 
-    private static Response buySheep(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buySheep(Farm farm, Player player, int cost, Animal animal, Game game, String name, StoreProduct storeProduct) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && ((Barn) building).barnType.equals("Deluxe Barn")) {
                 if (((Barn) building).animals.size() < ((Barn) building).capacity) {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Barn) building).animals.add(animal);
+                    storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -154,12 +165,13 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Deluxe Barn");
     }
 
-    private static Response buyDuck(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyDuck(Farm farm, Player player, int cost, Animal animal, Game game, String name, StoreProduct storeProduct) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Coop && (((Coop) building).coopType.equals("Big Coop") || ((Coop) building).coopType.equals("Deluxe Coop"))) {
                 if (((Coop) building).animals.size() < ((Coop) building).capacity) {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Coop) building).animals.add(animal);
+                    storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -169,12 +181,13 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Big Coop");
     }
 
-    private static Response buyGoat(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyGoat(Farm farm, Player player, int cost, Animal animal, Game game, String name, StoreProduct storeProduct) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && (((Barn) building).barnType.equals("Big Barn") || ((Barn) building).barnType.equals("Deluxe Barn"))) {
                 if (((Barn) building).animals.size() < ((Barn) building).capacity) {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Barn) building).animals.add(animal);
+                    storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
@@ -184,12 +197,13 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Big Barn");
     }
 
-    private static Response buyCow(Farm farm, Player player, int cost, Animal animal, Game game, String name) {
+    private static Response buyCow(Farm farm, Player player, int cost, Animal animal, Game game, String name, StoreProduct storeProduct) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn) {
                 if (((Barn) building).animals.size() < ((Barn) building).capacity) {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Barn) building).animals.add(animal);
+                    storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
                 }
