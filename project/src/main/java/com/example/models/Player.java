@@ -255,7 +255,7 @@ public class Player {
         return null;
     }
 
-    //TODO: Debug Only Constructor. Not Usable.
+    ///Debug Only Constructor. Not Usable.
     private Player(Coordinate coordinate, int money, Farm farm, User user, double energy) {
         this.coordinate = coordinate;
         this.trashcanType = TrashcanType.DEFAULT;

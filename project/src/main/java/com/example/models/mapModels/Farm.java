@@ -2,7 +2,10 @@ package com.example.models.mapModels;
 
 import com.example.models.Animal;
 import com.example.models.App;
+import com.example.models.Game;
+import com.example.models.User;
 import com.example.models.buildings.*;
+import com.example.models.enums.types.itemTypes.CropSeedsType;
 import com.example.models.enums.types.itemTypes.ForagingMineralsType;
 import com.example.models.enums.types.mapObjectTypes.ForagingCropsType;
 import com.example.models.enums.types.mapObjectTypes.ForagingSeedsType;
@@ -132,7 +135,6 @@ public class Farm {
 
     private static void addRandomItems(ArrayList<Cell> farmCells) {
         for (Cell cell : farmCells) {
-            // TODO parameters
             int randomNumber = (int) (Math.random() * 8);
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -160,10 +162,12 @@ public class Farm {
         }
 
         for (Cell cell : cells) {
-            //TODO: Fix foraging seed into crops.
             int randomNumber = (int) (Math.random() * 150);
             if (cell.getObjectOnCell().type.equals("empty") && cell.isTilled() && randomNumber == 3) {
-                cell.setObjectOnCell(randomForagingSeed());
+                Game game = App.getLoggedInUser().getCurrentGame();
+                CropSeedsType cropSeedsType = CropSeedsType.values()[(int) (Math.random() * (CropSeedsType.values().length - 1))];
+                Crop crop = new Crop(cropSeedsType, game.getDate());
+                cell.setObjectOnCell(crop);
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
                 cell.setObjectOnCell(randomForagingCrop());
             }

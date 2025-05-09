@@ -968,7 +968,7 @@ public class World extends Controller {
         player.setEnergy(player.getEnergy() - energyCost);
         player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
-        //TODO: Handle foraging xp and farming xp.
+        //TODO: Handle farming xp.
         if (targetCell.getObjectOnCell() instanceof ForagingCrop) {
 
             ForagingCrop crop = (ForagingCrop) targetCell.getObjectOnCell();

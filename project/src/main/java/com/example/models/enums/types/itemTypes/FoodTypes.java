@@ -124,7 +124,7 @@ public enum FoodTypes implements ItemType {
     MEAD("Mead", 75, new FoodBuff("", 0, 0), 300),
     PALE_ALE("Pale Ale", 50, new FoodBuff("", 0, 0), 300),
     RAISINS("Raisins", 125, new FoodBuff("", 0, 0), 600),
-    //TODO: Determine based on base ingredient.
+    //Determined based on base ingredient.
     WINE("Wine", null, new FoodBuff("", 0, 0), null),
     JUICE("Juice", null, new FoodBuff("", 0, 0), null),
     DRIED_MUSHROOMS("Dried Mushrooms", 50, new FoodBuff("", 0, 0), null),

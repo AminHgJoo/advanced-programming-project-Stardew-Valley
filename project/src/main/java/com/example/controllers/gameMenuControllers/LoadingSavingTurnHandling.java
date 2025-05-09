@@ -77,7 +77,6 @@ public class LoadingSavingTurnHandling extends Controller {
     }
 
     public static Response handleLoadGame(Request request) {
-        //TODO: Ensure that 'currentGame' is correctly loaded from database onto user.
         if (App.getLoggedInUser().getCurrentGame() == null) {
             return new Response(false, "No saved game found.");
         }

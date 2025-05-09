@@ -187,7 +187,6 @@ public class Game {
     }
 
     public void resetAllAnimalDailyVariables() {
-        //TODO: Handle later
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Farm farm = game.getCurrentPlayer().getFarm();

@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// TODO optimizing the queiries
-
 public class UserRepository {
     private static final Datastore db = Connection.getDatabase();
 

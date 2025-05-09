@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class MovementAndMap extends Controller {
 
     public static Response handleWalking(Request request) {
-        // TODO test the walk functionality
         int x = Integer.parseInt(request.body.get("x"));
         int y = Integer.parseInt(request.body.get("y"));
         Game game = App.getLoggedInUser().getCurrentGame();

@@ -47,8 +47,6 @@ public class Store {
         return openHour <= hour && hour <= closeHour;
     }
 
-
-    // TODO do the to string stuff
     public String productsToString(Season season) {
         StringBuilder message = new StringBuilder();
         for (StoreProduct product : products) {

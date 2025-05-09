@@ -5,7 +5,6 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Cell {
-    //TODO : modify
     private MapObject objectOnCell;
     private Coordinate coordinate;
     private boolean isTilled;
