@@ -68,7 +68,7 @@ public class CarpenterShopController extends Controller {
 
     private static Response buildBarn(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
         if (wood != null && stone != null) {
-            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney() >= goldPrice) {
+            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney(game) >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
                 stone.setCount(stone.getCount() - stonePrice);
                 if (wood.getCount() == 0) {
@@ -77,7 +77,7 @@ public class CarpenterShopController extends Controller {
                 if (stone.getCount() == 0) {
                     backpack.removeSlot(stone);
                 }
-                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney() - goldPrice);
+                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney(game) - goldPrice, game);
 
                 Barn barn = new Barn();
                 barn.barnType = buildingName;
@@ -104,7 +104,7 @@ public class CarpenterShopController extends Controller {
 
     private static Response buildShipping(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
         if (wood != null && stone != null) {
-            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney() >= goldPrice) {
+            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney(game) >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
                 stone.setCount(stone.getCount() - stonePrice);
                 if (wood.getCount() == 0) {
@@ -113,7 +113,7 @@ public class CarpenterShopController extends Controller {
                 if (stone.getCount() == 0) {
                     backpack.removeSlot(stone);
                 }
-                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney() - goldPrice);
+                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney(game) - goldPrice, game);
                 farm.findCellByCoordinate(x, y).setObjectOnCell(new ArtisanBlock(ArtisanBlockType.SHIPPING_BIN));
                 GameRepository.saveGame(game);
                 return new Response(true, "You built a " + buildingName);
@@ -125,7 +125,7 @@ public class CarpenterShopController extends Controller {
 
     private static Response buildWell(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
         if (wood != null && stone != null) {
-            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney() >= goldPrice) {
+            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney(game) >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
                 stone.setCount(stone.getCount() - stonePrice);
                 if (wood.getCount() == 0) {
@@ -134,7 +134,7 @@ public class CarpenterShopController extends Controller {
                 if (stone.getCount() == 0) {
                     backpack.removeSlot(stone);
                 }
-                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney() - goldPrice);
+                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney(game) - goldPrice, game);
                 Well well = new Well();
                 well.wellType = buildingName;
                 for (int i = x; i < x + width; i++) {
@@ -154,7 +154,7 @@ public class CarpenterShopController extends Controller {
 
     private static Response buildCoop(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
         if (wood != null && stone != null) {
-            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney() >= goldPrice) {
+            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney(game) >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
                 stone.setCount(stone.getCount() - stonePrice);
                 if (wood.getCount() == 0) {
@@ -163,7 +163,7 @@ public class CarpenterShopController extends Controller {
                 if (stone.getCount() == 0) {
                     backpack.removeSlot(stone);
                 }
-                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney() - goldPrice);
+                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney(game) - goldPrice, game);
                 Coop coop = new Coop();
                 coop.coopType = buildingName;
                 for (int i = x; i < x + width; i++) {

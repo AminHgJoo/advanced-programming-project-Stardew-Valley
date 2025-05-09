@@ -93,7 +93,7 @@ public class DealingController extends Controller {
         if (p.getAvailableCount() < n) {
             return new Response(false, "Not enough available products");
         }
-        if (p.getType().getProductPrice(game.getSeason()) * n > player.getMoney()) {
+        if (p.getType().getProductPrice(game.getSeason()) * n > player.getMoney(game)) {
             return new Response(false, "Not enough money");
         }
         p.setAvailableCount(p.getAvailableCount() - n);
@@ -146,7 +146,7 @@ public class DealingController extends Controller {
         int count = Integer.parseInt(request.body.get("count"));
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
-        player.setMoney(player.getMoney() + count);
+        player.setMoney(player.getMoney(game) + count, game);
         return new Response(true, "Money added successfully");
     }
 

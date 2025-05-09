@@ -1,5 +1,6 @@
 package com.example.models;
 
+import com.example.Repositories.GameRepository;
 import com.example.Repositories.UserRepository;
 import com.example.models.NPCModels.NPC;
 import com.example.models.NPCModels.NPCFriendship;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 public class Player {
     private static final Logger log = LoggerFactory.getLogger(Player.class);
     private Coordinate coordinate;
-    private int money;
+    public int money;
     private Backpack inventory;
     private Farm farm;
     private ArrayList<Skill> skills = new ArrayList<>();
@@ -37,6 +38,7 @@ public class Player {
     private ArrayList<ActiveBuff> activeBuffs = new ArrayList<>();
     private ArrayList<Slot> refrigeratorSlots = new ArrayList<>();
     private ObjectId user_id;
+    private String partnerName;
     @Transient
     private User user;
     private ArrayList<Friendship> friendships = new ArrayList<>();
@@ -76,6 +78,7 @@ public class Player {
         this.coordinate = new Coordinate(0, 0);
         this.equippedItem = null;
         this.isPlayerFainted = false;
+        this.partnerName = null;
         initializeInventory();
         initializeSkills();
         initializeRecipes();
@@ -295,12 +298,24 @@ public class Player {
         this.coordinate = coordinate;
     }
 
-    public int getMoney() {
-        return money;
+    public int getMoney(Game game) {
+        if(partnerName == null) {
+            return money;
+        }
+        Player partner =  game.getPartner(this);
+        return partner.money + money;
     }
 
-    public void setMoney(int money) {
-        this.money = money;
+    public void setMoney(int money, Game game) {
+        if(partnerName == null) {
+            this.money = money;
+        }
+        else{
+            Player partner =  game.getPartner(this);
+            partner.money = 0;
+            this.money = money;
+        }
+
     }
 
     public void setFarm(Farm farm) {
@@ -507,5 +522,13 @@ public class Player {
 
     public void setMoneyInNextDay(int moneyInNextDay) {
         this.moneyInNextDay = moneyInNextDay;
+    }
+
+    public String getPartnerName() {
+        return partnerName;
+    }
+
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
     }
 }

@@ -227,7 +227,7 @@ public class LivestockController extends Controller {
             return new Response(false, "no animal found");
         }
         int price = (int) ((double) animal.getXp() / 1000 + 0.3) * animal.getType().price;
-        player.setMoney(player.getMoney() + price);
+        player.setMoney(player.getMoney(game) + price, game);
         player.getAnimals().remove(animal);
         GameRepository.saveGame(game);
         return new Response(true, "you have sold " + animalName + " for " + price);

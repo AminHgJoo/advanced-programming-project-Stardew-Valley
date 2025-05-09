@@ -289,7 +289,7 @@ public class TradingController extends Controller {
 
     private static @NotNull Response acceptOfferHandle(Trade trade, Player firstPlayer, Game game, Slot tradeItemSlotInFirstPlayerBackpack, Backpack secondPlayerBackpack, Backpack firstPlayerBackpack, Player secondPlayer) {
         int price = trade.tradePrice;
-        if (firstPlayer.getMoney() < price) {
+        if (firstPlayer.getMoney(game) < price) {
             GameRepository.saveGame(game);
             return new Response(false, "you have not enough money");
         }
@@ -308,8 +308,8 @@ public class TradingController extends Controller {
         if (tradeItemSlotInFirstPlayerBackpack.getCount() <= 0) {
             firstPlayerBackpack.removeSlot(tradeItemSlotInFirstPlayerBackpack);
         }
-        firstPlayer.setMoney(firstPlayer.getMoney() + price);
-        secondPlayer.setMoney(secondPlayer.getMoney() - price);
+        firstPlayer.setMoney(firstPlayer.getMoney(game) + price, game);
+        secondPlayer.setMoney(secondPlayer.getMoney(game) - price, game);
         secondPlayer.addXpToFriendShip(10, firstPlayer);
         trade.tradeResult = 1;
         GameRepository.saveGame(game);

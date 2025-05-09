@@ -53,7 +53,7 @@ public class InventoryFunctionalities extends Controller {
     private static Response removeItemHandle(int numberInt, Slot slot, Player player, Game game) {
         int cashBack = (numberInt * slot.getItem().getValue() *
                 player.getTrashcanRefundPercentage()) / 100;
-        player.setMoney(player.getMoney() + cashBack);
+        player.setMoney(player.getMoney(game) + cashBack, game);
         GameRepository.saveGame(game);
         return new Response(true, numberInt + " of item(s) successfully trashed!");
     }
@@ -61,7 +61,7 @@ public class InventoryFunctionalities extends Controller {
     private static Response removeSlotHandle(Slot slot, Player player, Backpack backpack, Game game) {
         int cashBack = (slot.getCount() * slot.getItem().getValue() *
                 player.getTrashcanRefundPercentage()) / 100;
-        player.setMoney(player.getMoney() + cashBack);
+        player.setMoney(player.getMoney(game) + cashBack, game);
         backpack.removeSlot(slot);
         GameRepository.saveGame(game);
         return new Response(true, "Item successfully trashed!" + "profit: " + cashBack);

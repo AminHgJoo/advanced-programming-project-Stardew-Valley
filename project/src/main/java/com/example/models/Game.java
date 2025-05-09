@@ -45,6 +45,17 @@ public class Game {
     public boolean hasTurnCycleFinished;
     private ArrayList<Message> messages = new ArrayList<>();
 
+
+    public Player getPartner(Player player) {
+        if (player.getPartnerName() == null)
+            return null;
+        for (Player p : players) {
+            if (p.getUser().getUsername().equals(player.getPartnerName()))
+                return p;
+        }
+        return null;
+    }
+
     public Player getPlayerByUsername(String username) {
         for (Player player : players) {
             if (player.getUser().getUsername().equals(username)) {
@@ -369,9 +380,9 @@ public class Game {
         }
     }
 
-    public void addPlayersMoney() {
+    public void addPlayersMoney(Game game) {
         for (Player player : players) {
-            player.setMoney(player.getMoney() + player.getMoneyInNextDay());
+            player.setMoney(player.getMoney(game) + player.getMoneyInNextDay(), game);
             player.setMoneyInNextDay(0);
         }
     }
