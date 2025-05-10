@@ -484,10 +484,15 @@ public class Player {
 
     public String getNotificationsString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Notifications : ");
+        builder.append("Notifications : ").append("\n");
         for (Message message : notifications) {
             builder.append("From : ").append(message.getSender()).append("\n");
             builder.append("Message : ").append(message.getMessage()).append("\n");
+            builder.append("------------------------------------------------------\n");
+        }
+        builder.append("Marriage Requests : ").append("\n");
+        for (MarriageRequest req : marriageRequests) {
+            builder.append("From : ").append(req.getFrom()).append("\n");
             builder.append("------------------------------------------------------\n");
         }
         return builder.toString();
