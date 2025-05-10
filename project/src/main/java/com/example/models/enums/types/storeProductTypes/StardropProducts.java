@@ -23,8 +23,8 @@ public enum StardropProducts implements StoreProductInterface {
     SPAGHETTI("Spaghetti", "An old favorite.", FoodTypes.SPAGHETTI, 240, 240, Double.POSITIVE_INFINITY, Season.values()),
     PIZZA("Pizza", "It's popular for all the right reasons.", FoodTypes.PIZZA, 600, 600, Double.POSITIVE_INFINITY, Season.values()),
     COFFEE("Coffee", "It smells delicious. This is sure to give you a boost.", FoodTypes.COFFEE, 300, 300, Double.POSITIVE_INFINITY, Season.values()),
-    WOOD("Wood", "A sturdy, yet flexible plant material with a wide variety of uses.", MiscType.WOOD, 10, 10, Double.POSITIVE_INFINITY, Season.values()),
-    STONE("Stone", "A common material with many uses in crafting and building.", ForagingMineralsType.STONE, 20, 20, Double.POSITIVE_INFINITY, Season.values());
+    WOOD_S("Stardrop Wood", "A sturdy, yet flexible plant material with a wide variety of uses.", MiscType.WOOD, 10, 10, Double.POSITIVE_INFINITY, Season.values()),
+    STONE_S("Stardrop Stone", "A common material with many uses in crafting and building.", ForagingMineralsType.STONE, 20, 20, Double.POSITIVE_INFINITY, Season.values());
 
     private final String name;
     private final String description;

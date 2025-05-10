@@ -12,7 +12,7 @@ import java.util.HashMap;
 @Embedded
 public class NPC {
     private String name;
-    private ArrayList<ItemType> favoriteItems = new ArrayList<>();
+    private ArrayList<FavoriteItem> favoriteItems = new ArrayList<>();
     private ArrayList<NPCRequest> npcRequests = new ArrayList<>();
     private ArrayList<NPCReward> rewards = new ArrayList<>();
     private Coordinate coordinate;
@@ -36,7 +36,7 @@ public class NPC {
         return name;
     }
 
-    public ArrayList<ItemType> getFavoriteItems() {
+    public ArrayList<FavoriteItem> getFavoriteItems() {
         return favoriteItems;
     }
 
@@ -90,25 +90,25 @@ public class NPC {
 
     public void initializeNpcFavorites(String name) {
         if (name.equals("Sebastian")) {
-            favoriteItems.add(MiscType.WOOL);
-            favoriteItems.add(FoodTypes.PUMPKIN_PIE);
-            favoriteItems.add(FoodTypes.PIZZA);
+            favoriteItems.add(new FavoriteItem(MiscType.WOOL));
+            favoriteItems.add(new FavoriteItem(FoodTypes.PUMPKIN_PIE));
+            favoriteItems.add(new FavoriteItem(FoodTypes.PIZZA));
         } else if (name.equals("Abigale")) {
-            favoriteItems.add(ForagingMineralsType.STONE);
-            favoriteItems.add(ForagingMineralsType.IRON_ORE);
-            favoriteItems.add(FoodTypes.COFFEE);
+            favoriteItems.add(new FavoriteItem(ForagingMineralsType.STONE));
+            favoriteItems.add(new FavoriteItem(ForagingMineralsType.IRON_ORE));
+            favoriteItems.add(new FavoriteItem(FoodTypes.COFFEE));
         } else if (name.equals("Harvey")) {
-            favoriteItems.add(FoodTypes.COFFEE);
-            favoriteItems.add(FoodTypes.PICKLES);
-            favoriteItems.add(FoodTypes.WINE);
+            favoriteItems.add(new FavoriteItem(FoodTypes.COFFEE));
+            favoriteItems.add(new FavoriteItem(FoodTypes.PICKLES));
+            favoriteItems.add(new FavoriteItem(FoodTypes.WINE));
         } else if (name.equals("Lia")) {
-            favoriteItems.add(FoodTypes.SALAD);
-            favoriteItems.add(FoodTypes.GRAPE);
-            favoriteItems.add(FoodTypes.WINE);
+            favoriteItems.add(new FavoriteItem(FoodTypes.SALAD));
+            favoriteItems.add(new FavoriteItem(FoodTypes.GRAPE));
+            favoriteItems.add(new FavoriteItem(FoodTypes.WINE));
         } else {
-            favoriteItems.add(FoodTypes.SPAGHETTI);
-            favoriteItems.add(MiscType.WOOD);
-            favoriteItems.add(MiscType.IRON_BAR);
+            favoriteItems.add(new FavoriteItem(FoodTypes.SPAGHETTI));
+            favoriteItems.add(new FavoriteItem(MiscType.WOOD));
+            favoriteItems.add(new FavoriteItem(MiscType.IRON_BAR));
         }
     }
 
@@ -167,7 +167,7 @@ public class NPC {
         } else if (item instanceof TreeSeed) {
             type = ((TreeSeed) item).getTreeSeedsType();
         }
-        if (favoriteItems.contains(type)) {
+        if (favoriteItems.contains(new FavoriteItem(type))) {
             return true;
         }
         return false;
