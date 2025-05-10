@@ -146,7 +146,6 @@ public class Farming extends Controller {
     }
 
     public static Response handleFertilization(Request request) {
-        // TODO idk
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
         String fertilizer = request.body.get("fertilizer");
@@ -174,6 +173,11 @@ public class Farming extends Controller {
             player.getInventory().getSlots().remove(miscSlot);
         }
         Crop p = (Crop) cell.getObjectOnCell();
+        if(fertilizer.compareToIgnoreCase("Speed-Gro") == 0){
+            p.setStageNumber(p.getStageNumber() + 1);
+        }
+        // TODO other fertilizer effect
+
         p.setHasBeenFertilized(true);
         GameRepository.saveGame(game);
         return new Response(true, "Fertilization was successful");

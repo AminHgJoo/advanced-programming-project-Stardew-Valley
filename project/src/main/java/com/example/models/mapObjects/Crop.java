@@ -15,6 +15,7 @@ public class Crop extends MapObject {
     private boolean hasBeenWateredToday = false;
     private boolean hasBeenFertilized = false;
     private LocalDateTime[] growthDeadLines = new LocalDateTime[5];
+
     public Crop() {
         super();
     }
