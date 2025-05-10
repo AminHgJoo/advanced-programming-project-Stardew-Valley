@@ -169,6 +169,10 @@ public class Game {
                 if (cell.getObjectOnCell() instanceof Crop) {
                     Crop crop = (Crop) cell.getObjectOnCell();
                     crop.setHasBeenWateredToday(false);
+                    if (crop.isHasBeenDeluxeFertilized()) {
+                        crop.setHasBeenDeluxeFertilized(false);
+                        crop.setHasBeenWateredToday(true);
+                    }
                 }
 
                 if (cell.getObjectOnCell() instanceof Tree) {
@@ -262,7 +266,7 @@ public class Game {
         for (Cell cell : farm.getCells()) {
             MapObject objectONCell = cell.getObjectOnCell();
             if (objectONCell instanceof ArtisanBlock && ((ArtisanBlock) objectONCell).beingUsed) {
-                if (((ArtisanBlock) objectONCell).PrepTime.isAfter(date)) {
+                if (((ArtisanBlock) objectONCell).prepTime.isAfter(date)) {
                     ((ArtisanBlock) objectONCell).canBeCollected = true;
                 }
             }

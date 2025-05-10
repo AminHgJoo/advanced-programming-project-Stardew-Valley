@@ -7,13 +7,12 @@ import dev.morphia.annotations.Embedded;
 
 import java.time.LocalDateTime;
 
-// TODO CROP STAGE
 @Embedded
 public class Crop extends MapObject {
     public CropSeedsType cropSeedsType;
     private int stageNumber;
     private boolean hasBeenWateredToday = false;
-    private boolean hasBeenFertilized = false;
+    private boolean hasBeenDeluxeFertilized = false;
     private LocalDateTime[] growthDeadLines = new LocalDateTime[5];
 
     public Crop() {
@@ -23,7 +22,14 @@ public class Crop extends MapObject {
     public void pushBackDeadlines(int numOfDays) {
         for (int i = stageNumber; i < growthDeadLines.length; i++) {
             if (growthDeadLines[i] != null) {
-                growthDeadLines[i] = DateUtility.getLocalDate(growthDeadLines[i], numOfDays);
+                if (numOfDays > 0)
+                    growthDeadLines[i] = DateUtility.getLocalDate(growthDeadLines[i], numOfDays);
+                else {
+                    growthDeadLines[i] = growthDeadLines[i].minusDays(-numOfDays);
+                    while (growthDeadLines[i].getDayOfMonth() >= 29) {
+                        growthDeadLines[i] = growthDeadLines[i].minusDays(1);
+                    }
+                }
             }
         }
     }
@@ -83,15 +89,15 @@ public class Crop extends MapObject {
         builder.append("time to next stage : ").append(getDaysToNextStage()).append("\n");
         builder.append("stage number : ").append(stageNumber).append("\n");
         builder.append("has been watered today : ").append(hasBeenWateredToday).append("\n");
-        builder.append("has been fertilized : ").append(hasBeenFertilized).append("\n");
+        builder.append("has been fertilized : ").append(hasBeenDeluxeFertilized).append("\n");
         return builder.toString();
     }
 
-    public boolean isHasBeenFertilized() {
-        return hasBeenFertilized;
+    public boolean isHasBeenDeluxeFertilized() {
+        return hasBeenDeluxeFertilized;
     }
 
-    public void setHasBeenFertilized(boolean hasBeenFertilized) {
-        this.hasBeenFertilized = hasBeenFertilized;
+    public void setHasBeenDeluxeFertilized(boolean hasBeenDeluxeFertilized) {
+        this.hasBeenDeluxeFertilized = hasBeenDeluxeFertilized;
     }
 }

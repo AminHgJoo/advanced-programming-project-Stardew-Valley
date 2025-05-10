@@ -23,7 +23,7 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 public class ArtisanController extends Controller {
-    //TODO: Time Tof
+
     public static Response handleArtisanUse(Request request) {
         String artisanName = request.body.get("artisanName");
         String item1Name = request.body.get("item1Name");
@@ -158,7 +158,13 @@ public class ArtisanController extends Controller {
         }
         player.setEnergy(player.getEnergy() - energy);
         block.beingUsed = true;
-        block.PrepTime = game.getDate().plusHours(hours);
+        block.prepTime = game.getDate().plusHours(hours);
+
+        if (block.prepTime.getDayOfMonth() >= 29) {
+            block.prepTime = block.prepTime.minusDays(28);
+            block.prepTime = block.prepTime.plusMonths(1);
+        }
+
         block.canBeCollected = false;
         block.productSlot = new Slot(new Misc(Quality.DEFAULT, miscType, price), productCount);
         GameRepository.saveGame(game);
@@ -266,7 +272,13 @@ public class ArtisanController extends Controller {
         }
         player.setEnergy(player.getEnergy() - energy);
         block.beingUsed = true;
-        block.PrepTime = game.getDate().plusHours(hours);
+        block.prepTime = game.getDate().plusHours(hours);
+
+        if (block.prepTime.getDayOfMonth() >= 29) {
+            block.prepTime = block.prepTime.minusDays(28);
+            block.prepTime = block.prepTime.plusMonths(1);
+        }
+
         block.canBeCollected = false;
         block.productSlot = new Slot(new ForagingMineral(Quality.DEFAULT, foragingMineralsType, price), productCount);
         GameRepository.saveGame(game);
@@ -295,7 +307,13 @@ public class ArtisanController extends Controller {
         }
         player.setEnergy(player.getEnergy() - energy);
         block.beingUsed = true;
-        block.PrepTime = game.getDate().plusHours(hours);
+        block.prepTime = game.getDate().plusHours(hours);
+
+        if (block.prepTime.getDayOfMonth() >= 29) {
+            block.prepTime = block.prepTime.minusDays(28);
+            block.prepTime = block.prepTime.plusMonths(1);
+        }
+
         block.canBeCollected = false;
         block.productSlot = new Slot(new Food(Quality.DEFAULT, foodTypes, price), productCount);
         GameRepository.saveGame(game);
@@ -334,7 +352,13 @@ public class ArtisanController extends Controller {
 
         player.setEnergy(player.getEnergy() - energy);
         block.beingUsed = true;
-        block.PrepTime = game.getDate().plusHours(hours);
+        block.prepTime = game.getDate().plusHours(hours);
+
+        if (block.prepTime.getDayOfMonth() >= 29) {
+            block.prepTime = block.prepTime.minusDays(28);
+            block.prepTime = block.prepTime.plusMonths(1);
+        }
+
         block.canBeCollected = false;
         block.productSlot = new Slot(new Food(Quality.DEFAULT, foodTypes, price), productCount);
         GameRepository.saveGame(game);
@@ -373,7 +397,13 @@ public class ArtisanController extends Controller {
 
         player.setEnergy(player.getEnergy() - energy);
         block.beingUsed = true;
-        block.PrepTime = game.getDate().plusHours(hours);
+        block.prepTime = game.getDate().plusHours(hours);
+
+        if (block.prepTime.getDayOfMonth() >= 29) {
+            block.prepTime = block.prepTime.minusDays(28);
+            block.prepTime = block.prepTime.plusMonths(1);
+        }
+
         block.canBeCollected = false;
         block.productSlot = new Slot(new Misc(Quality.DEFAULT, miscType, price), productCount);
         GameRepository.saveGame(game);
@@ -413,7 +443,13 @@ public class ArtisanController extends Controller {
             }
             player.setEnergy(player.getEnergy() - 100);
             block.beingUsed = true;
-            block.PrepTime = game.getDate().plusHours(3);
+            block.prepTime = game.getDate().plusHours(3);
+
+            if (block.prepTime.getDayOfMonth() >= 29) {
+                block.prepTime = block.prepTime.minusDays(28);
+                block.prepTime = block.prepTime.plusMonths(1);
+            }
+
             block.canBeCollected = false;
             block.productSlot = new Slot(new Food(Quality.DEFAULT, FoodTypes.GOAT_CHEESE, 400), 1);
             GameRepository.saveGame(game);
@@ -430,7 +466,13 @@ public class ArtisanController extends Controller {
             }
             player.setEnergy(player.getEnergy() - 100);
             block.beingUsed = true;
-            block.PrepTime = game.getDate().plusHours(3);
+            block.prepTime = game.getDate().plusHours(3);
+
+            if (block.prepTime.getDayOfMonth() >= 29) {
+                block.prepTime = block.prepTime.minusDays(28);
+                block.prepTime = block.prepTime.plusMonths(1);
+            }
+
             block.canBeCollected = false;
             block.productSlot = new Slot(new Food(Quality.DEFAULT, FoodTypes.GOAT_CHEESE, 600), 1);
             GameRepository.saveGame(game);
@@ -448,7 +490,13 @@ public class ArtisanController extends Controller {
         }
         player.setEnergy(player.getEnergy() - 75);
         block.beingUsed = true;
-        block.PrepTime = game.getDate().plusDays(4);
+        block.prepTime = game.getDate().plusDays(4);
+
+        if (block.prepTime.getDayOfMonth() >= 29) {
+            block.prepTime = block.prepTime.minusDays(28);
+            block.prepTime = block.prepTime.plusMonths(1);
+        }
+
         block.canBeCollected = false;
         block.productSlot = new Slot(new Food(Quality.DEFAULT, FoodTypes.HONEY), 1);
         GameRepository.saveGame(game);
@@ -472,7 +520,13 @@ public class ArtisanController extends Controller {
             }
             player.setEnergy(player.getEnergy() - 100);
             block.beingUsed = true;
-            block.PrepTime = game.getDate().plusHours(3);
+            block.prepTime = game.getDate().plusHours(3);
+
+            if (block.prepTime.getDayOfMonth() >= 29) {
+                block.prepTime = block.prepTime.minusDays(28);
+                block.prepTime = block.prepTime.plusMonths(1);
+            }
+
             block.canBeCollected = false;
             block.productSlot = new Slot(new Food(Quality.DEFAULT, FoodTypes.CHEESE, 230), 1);
             GameRepository.saveGame(game);
@@ -489,7 +543,13 @@ public class ArtisanController extends Controller {
             }
             player.setEnergy(player.getEnergy() - 100);
             block.beingUsed = true;
-            block.PrepTime = game.getDate().plusHours(3);
+            block.prepTime = game.getDate().plusHours(3);
+
+            if (block.prepTime.getDayOfMonth() >= 29) {
+                block.prepTime = block.prepTime.minusDays(28);
+                block.prepTime = block.prepTime.plusMonths(1);
+            }
+
             block.canBeCollected = false;
             block.productSlot = new Slot(new Food(Quality.DEFAULT, FoodTypes.CHEESE, 345), 1);
             GameRepository.saveGame(game);
