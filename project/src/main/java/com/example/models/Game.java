@@ -45,6 +45,7 @@ public class Game {
     private GameThread gameThread;
     public boolean hasTurnCycleFinished;
     private ArrayList<Message> messages = new ArrayList<>();
+    private ArrayList<Gift> gifts = new ArrayList<>();
 
     public Game(ArrayList<Player> players, Player currentPlayer) {
         this.hasTurnCycleFinished = false;
@@ -491,12 +492,12 @@ public class Game {
 
     public void npcGiveReward(Game game) {
         for (NPC npc : map.getVillage().getNpcs()) {
-            for(NPCFriendship f : npc.getFriendships()) {
-                if(f.getLevel() == 3){
-                    int rand = (int)(Math.random()*2);
-                    if(rand == 1){
+            for (NPCFriendship f : npc.getFriendships()) {
+                if (f.getLevel() == 3) {
+                    int rand = (int) (Math.random() * 2);
+                    if (rand == 1) {
                         Player p = game.findPlayerByUsername(f.getPlayer());
-                        p.addNpcReward(npc.getRewards().get(0) , npc , game);
+                        p.addNpcReward(npc.getRewards().get(0), npc, game);
                     }
                 }
             }
@@ -654,6 +655,22 @@ public class Game {
         for (NPC npc : map.getVillage().getNpcs()) {
             if (npc.getName().compareToIgnoreCase(name) == 0) {
                 return npc;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Gift> getGifts() {
+        return gifts;
+    }
+
+    public Gift findGiftByName(int index, String username) {
+        int counter = 0;
+        for (Gift g : gifts) {
+            if (g.getTo().equals(username)) {
+                if (counter == index)
+                    return g;
+                counter++;
             }
         }
         return null;

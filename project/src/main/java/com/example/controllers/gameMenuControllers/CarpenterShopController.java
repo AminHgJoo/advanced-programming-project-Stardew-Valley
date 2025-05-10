@@ -67,7 +67,7 @@ public class CarpenterShopController extends Controller {
     }
 
     private static Response buildBarn(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
-        Store store = game.getMap().getVillage().getStore("");
+        Store store = game.getMap().getVillage().getStore("Carpenter's Shop");
         Barn barn = new Barn();
         barn.barnType = buildingName;
         StoreProduct storeProduct = store.getProduct(buildingName);

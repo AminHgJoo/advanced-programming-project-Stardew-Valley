@@ -13,6 +13,7 @@ import com.example.models.enums.types.itemTypes.*;
 import com.example.models.enums.types.storeProductTypes.FishProducts;
 import com.example.models.items.*;
 import com.example.models.mapObjects.Crop;
+import com.example.utilities.MenuToStoreString;
 
 public class DealingController extends Controller {
     public static Response handleGoToStore(Request request) {
@@ -82,7 +83,8 @@ public class DealingController extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         //TODO add stores and store products and fix getStore usages
-        Store store = game.getMap().getVillage().getStore("");
+        Store store = game.getMap().getVillage().getStore(MenuToStoreString
+                .convertToString(App.getCurrMenuType().getMenu()));
         Player player = game.getCurrentPlayer();
         String productName = request.body.get("productName");
         int n = 1;
@@ -104,7 +106,7 @@ public class DealingController extends Controller {
         if (type == null) {
             Response res = handleBuyRecipe(productName, p, player);
             if (res.isSuccess()) {
-                player.setMoney((int) (player.money - p.getType().getProductPrice(game.getSeason()) * n), game);
+                player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason()) * n), game);
             }
             GameRepository.saveGame(game);
             return res;
@@ -149,7 +151,7 @@ public class DealingController extends Controller {
             } else {
                 slot.setCount(slot.getCount() + 1);
             }
-            player.setMoney((int) (player.money - p.getType().getProductPrice(game.getSeason()) * n), game);
+            player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason()) * n), game);
             GameRepository.saveGame(game);
             return new Response(true, "Purchased successfully");
         }
