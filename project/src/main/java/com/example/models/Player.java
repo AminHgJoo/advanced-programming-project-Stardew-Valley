@@ -45,6 +45,7 @@ public class Player {
     private ArrayList<Friendship> friendships = new ArrayList<>();
     private ArrayList<NPCFriendship> npcs = new ArrayList<>();
     private ArrayList<Animal> animals = new ArrayList<>();
+    private ArrayList<MarriageRequest> marriageRequests = new ArrayList<>();
     private double energy;
     private double maxEnergy;
     private boolean isPlayerFainted;
@@ -509,6 +510,19 @@ public class Player {
         }
     }
 
+    public void setFriendShipLevel(int level , Player player) {
+        Friendship friendship = null;
+        for (Friendship friendship1 : friendships) {
+            if (friendship1.getPlayer().equals(player.getUser().getUsername())) {
+                friendship = friendship1;
+                break;
+            }
+        }
+        if (friendship != null) {
+            friendship.setLevel(level);
+        }
+    }
+
     public void addXpToNpcFriendship(int xp, NPC npc) {
         NPCFriendship friendship = null;
         for (NPCFriendship friendship1 : npcs) {
@@ -536,5 +550,22 @@ public class Player {
 
     public void setPartnerName(String partnerName) {
         this.partnerName = partnerName;
+    }
+
+    public ArrayList<MarriageRequest> getMarriageRequests() {
+        return marriageRequests;
+    }
+
+    public void removeMarriageRequest(MarriageRequest marriageRequest) {
+        marriageRequests.remove(marriageRequest);
+    }
+
+    public MarriageRequest findRequestByUsername(String username) {
+        for (MarriageRequest marriageRequest : marriageRequests) {
+            if(marriageRequest.getFrom().compareToIgnoreCase(username) == 0){
+                return  marriageRequest;
+            }
+        }
+        return null;
     }
 }

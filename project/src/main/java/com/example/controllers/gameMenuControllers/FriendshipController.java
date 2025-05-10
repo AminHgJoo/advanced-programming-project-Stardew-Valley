@@ -5,6 +5,7 @@ import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
+import com.example.models.items.Misc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,14 +138,88 @@ public class FriendshipController extends Controller {
     }
 
     public static Response handleAskMarriage(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+
+        String username = request.body.get("username");
+        String ring = request.body.get("ring");
+
+        Player friend = game.findPlayerByUsername(username);
+        if (friend == null) {
+            return new Response(false, "Player not found");
+        }
+        Slot slot = player.getInventory().getSlotByItemName(ring);
+        if(slot == null){
+            return  new Response(false, "Ring not found");
+        }
+        Misc ringItem = (Misc) slot.getItem();
+        MarriageRequest marriageRequest = new MarriageRequest();
+        marriageRequest.setFrom(user.getUsername());
+        marriageRequest.setRing(ringItem);
+
+        friend.getMarriageRequests().add(marriageRequest);
+        GameRepository.saveGame(game);
+
+        return new Response(true , "Marriage request was sent");
     }
 
     public static Response handleRespondMarriageAccept(Request request) {
-        return null;
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+
+        String username = request.body.get("username");
+
+        Player friend = game.findPlayerByUsername(username);
+        if (friend == null) {
+            return new Response(false, "Player not found");
+        }
+        MarriageRequest marriageRequest = player.findRequestByUsername(username);
+        if(marriageRequest == null){
+            return new Response(false, "Marriage request not found");
+        }
+
+        Slot slot = friend.getInventory().getSlotByItemName(marriageRequest.getRing().getName());
+        slot.setCount(slot.getCount() - 1);
+        if(slot.getCount() == 0) {
+            friend.getInventory().removeSlot(slot);
+        }
+        Slot playerSlot = player.getInventory().getSlotByItemName(marriageRequest.getRing().getName());
+        if(playerSlot == null){
+            playerSlot = new Slot(marriageRequest.getRing(), 1);
+            player.getInventory().addSlot(playerSlot);
+        }else {
+            playerSlot.setCount(playerSlot.getCount() + 1);
+        }
+        friend.setFriendShipLevel(4 , player);
+        player.setFriendShipLevel(4 , friend);
+
+        friend.setPartnerName(user.getUsername());
+        player.setPartnerName(username);
+
+        player.removeMarriageRequest(marriageRequest);
+        GameRepository.saveGame(game);
+        return new Response(true ,"Yar mobarak bada ishala mobarak bada");
     }
 
     public static Response handleRespondMarriageReject(Request request) {
-        return null;
-    }
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+
+        String username = request.body.get("username");
+
+        Player friend = game.findPlayerByUsername(username);
+        if (friend == null) {
+            return new Response(false, "Player not found");
+        }
+        MarriageRequest marriageRequest = player.findRequestByUsername(username);
+        if(marriageRequest == null){
+            return new Response(false, "Marriage request not found");
+        }
+
+        player.removeMarriageRequest(marriageRequest);
+        GameRepository.saveGame(game);
+        return new Response(true ,":(( reject shodi");    }
 }
