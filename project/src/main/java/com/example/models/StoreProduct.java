@@ -14,6 +14,11 @@ public class StoreProduct {
     public StoreProduct() {
     }
 
+    public StoreProduct(StoreProductInterface type) {
+        this.type = type;
+        this.availableCount = type.getDailyLimit();
+    }
+
     public StoreProduct(Item item, int price) {
         this.item = item;
         this.price = price;

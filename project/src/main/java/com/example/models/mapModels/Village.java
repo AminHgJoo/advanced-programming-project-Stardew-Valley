@@ -2,6 +2,9 @@ package com.example.models.mapModels;
 
 import com.example.models.NPCModels.NPC;
 import com.example.models.Store;
+import com.example.models.StoreProduct;
+import com.example.models.enums.types.storeProductTypes.*;
+import com.example.models.items.Fish;
 import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
@@ -17,13 +20,42 @@ public class Village {
     }
 
     public void initializeStores() {
-        addStore(new Store("Clint", 9, 16, "Blacksmith"));
-        addStore(new Store("Morris", 9, 23, "JojaMart"));
-        addStore(new Store("Pierre", 9, 17, "Pierre's General Store"));
-        addStore(new Store("Robin", 9, 20, "Carpenter's Shop"));
-        addStore(new Store("Willy", 9, 17, "Fish Shop"));
-        addStore(new Store("Marnie", 9, 16, "Marnie's Shop"));
-        addStore(new Store("Gus", 12, 24, "The Stardrop Saloon"));
+        Store s1 = new Store("Clint", 9, 16, "Blacksmith");
+        Store s2 = new Store("Morris", 9, 23, "JojaMart");
+        Store s3 = new Store("Pierre", 9, 17, "Pierre's General Store");
+        Store s4 = new Store("Robin", 9, 20, "Carpenter's Shop");
+        Store s5 = new Store("Willy", 9, 17, "Fish Shop");
+        Store s6 = new Store("Marnie", 9, 16, "Marnie's Shop");
+        Store s7 = new Store("Gus", 12, 24, "The Stardrop Saloon");
+
+        for (BlackSmithProducts p : BlackSmithProducts.values()) {
+            StoreProduct sp = new StoreProduct(p);
+            s1.getProducts().add(sp);
+        }
+        for (JojaMartProducts p : JojaMartProducts.values()) {
+            StoreProduct sp = new StoreProduct(p);
+            s2.getProducts().add(sp);
+        }
+        for (PierreProducts p : PierreProducts.values()) {
+            StoreProduct sp = new StoreProduct(p);
+            s3.getProducts().add(sp);
+        }
+        for (FishProducts p : FishProducts.values()) {
+            StoreProduct sp = new StoreProduct(p);
+            s5.getProducts().add(sp);
+        }
+        for (StardropProducts p : StardropProducts.values()) {
+            StoreProduct sp = new StoreProduct(p);
+            s7.getProducts().add(sp);
+        }
+
+        addStore(s1);
+        addStore(s2);
+        addStore(s3);
+        addStore(s4);
+        addStore(s5);
+        addStore(s6);
+        addStore(s7);
     }
 
     public void addStore(Store store) {
