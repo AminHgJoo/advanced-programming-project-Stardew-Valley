@@ -1,13 +1,9 @@
 package com.example.models.enums.types.mapObjectTypes;
 
-import com.example.models.Slot;
-import com.example.models.enums.Quality;
 import com.example.models.enums.types.itemTypes.FoodTypes;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.worldEnums.Season;
-import com.example.models.items.Food;
-import com.example.models.items.Misc;
 
 public enum ForagingCropsType {
     GRASS(Season.values(), 0, 0, MiscType.FIBER),

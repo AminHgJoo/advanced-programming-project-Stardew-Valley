@@ -130,13 +130,13 @@ public class DealingController extends Controller {
                 item = new ForagingMineral(Quality.DEFAULT, (ForagingMineralsType) type);
             } else if (type instanceof ToolTypes) {
                 Quality q = Quality.DEFAULT;
-                if (p.getType() == FishProducts.BAMBOO_POLE) {
+                if (p.getType().getName().equals(FishProducts.BAMBOO_POLE)) {
                     q = Quality.SILVER;
-                } else if (p.getType() == FishProducts.TRAINING_ROD) {
+                } else if (p.getType().getName().equals(FishProducts.TRAINING_ROD)) {
                     q = Quality.COPPER;
-                } else if (p.getType() == FishProducts.FIBERGLASS_ROD) {
+                } else if (p.getType().getName().equals(FishProducts.FIBERGLASS_ROD)) {
                     q = Quality.GOLD;
-                } else if (p.getType() == FishProducts.IRIDIUM_ROD) {
+                } else if (p.getType().getName().equals(FishProducts.IRIDIUM_ROD)) {
                     q = Quality.IRIDIUM;
                 }
                 item = new Tool(q, (ToolTypes) type, (int) p.getType().getProductPrice(game.getSeason()));

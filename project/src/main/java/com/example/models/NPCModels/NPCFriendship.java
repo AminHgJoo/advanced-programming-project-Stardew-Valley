@@ -10,6 +10,10 @@ public class NPCFriendship {
     private int level = 0;
     private int xp = 0;
 
+    public NPCFriendship(){
+
+    }
+
     public NPCFriendship(String player, String npc) {
         this.player = player;
         this.npc = npc;

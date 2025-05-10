@@ -1,19 +1,30 @@
 package com.example.models.NPCModels;
 
+import com.example.models.enums.types.itemTypes.FoodTypes;
+import com.example.models.enums.types.itemTypes.ForagingMineralsType;
 import com.example.models.enums.types.itemTypes.ItemType;
+import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.items.Item;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class NPCReward {
     public int money;
-    public ItemType rewardItems;
     public int friendshipLevel;
     public int count;
+    private String fieldName;
+    private String enumName;
 
     public NPCReward(int money, ItemType rewardItems) {
         this.money = money;
-        this.rewardItems = rewardItems;
+        fieldName = rewardItems == null ? null : rewardItems.name();
+        if(rewardItems instanceof FoodTypes) {
+            enumName = "FoodTypes";
+        }else if(rewardItems instanceof MiscType) {
+            enumName = "MiscTypes";
+        }else if(rewardItems instanceof ForagingMineralsType) {
+            enumName = "ForagingMinerals";
+        }
     }
 
     public NPCReward(){
@@ -22,8 +33,27 @@ public class NPCReward {
 
     public NPCReward(int money, ItemType rewardItems, int friendshipLevel , int count) {
         this.money = money;
-        this.rewardItems = rewardItems;
-        this.friendshipLevel = friendshipLevel;
+        fieldName = rewardItems == null ? null : rewardItems.name();
+        if(rewardItems instanceof FoodTypes) {
+            enumName = "FoodTypes";
+        }else if(rewardItems instanceof MiscType) {
+            enumName = "MiscTypes";
+        }else if(rewardItems instanceof ForagingMineralsType) {
+            enumName = "ForagingMinerals";
+        }        this.friendshipLevel = friendshipLevel;
         this.count = count;
+    }
+
+    public ItemType getRewardItems() {
+        if(fieldName == null) {
+            return null;
+        }else if(enumName.trim().equals("FoodTypes")) {
+            return FoodTypes.valueOf(fieldName);
+        }else if(enumName.equals("MiscTypes")) {
+            return MiscType.valueOf(fieldName);
+        }else if(enumName.equals("ForagingMinerals")) {
+            return ForagingMineralsType.valueOf(fieldName);
+        }
+        return null;
     }
 }

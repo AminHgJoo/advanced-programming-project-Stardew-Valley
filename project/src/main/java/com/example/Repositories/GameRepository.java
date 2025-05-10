@@ -21,7 +21,6 @@ public class GameRepository {
                     .first();
             return game;
         } catch (Exception e) {
-//           System.out.println(e.getCause());
             System.out.println(e.getMessage());
             return null;
         }

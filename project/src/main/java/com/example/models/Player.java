@@ -635,12 +635,12 @@ public class Player {
     }
 
     public void addNpcReward(NPCReward reward, NPC npc, Game game) {
-        if (reward.rewardItems != null) {
-            Slot slot = this.getInventory().getSlotByItemName(reward.rewardItems.getName());
+        if (reward.getRewardItems() != null) {
+            Slot slot = this.getInventory().getSlotByItemName(reward.getRewardItems().getName());
             int level = npc.findFriendshipByName(user.getUsername()).getLevel();
             int mp = level >= 2 ? 2 : 1;
             if (slot == null) {
-                slot = new Slot(reward.rewardItems, reward.count * mp);
+                slot = new Slot(reward.getRewardItems(), reward.count * mp);
                 this.getInventory().addSlot(slot);
             } else {
                 slot.setCount(slot.getCount() + reward.count * mp);

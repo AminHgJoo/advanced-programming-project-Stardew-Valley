@@ -8,13 +8,19 @@ import java.net.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class HuggingFaceChat {
-    private static final String API_URL = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill";
+public class AIChat {
+    private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions";
     private static final String API_KEY = System.getProperty("AI_API_KEY"); // Replace with your token
 
     public static String getAIResponse(String userMessage) throws Exception {
         JSONObject payload = new JSONObject();
-        payload.put("inputs", userMessage);
+        payload.put("model", "deepseek/deepseek-chat-v3-0324:free");
+        JSONArray arr = new JSONArray();
+        JSONObject msg = new JSONObject();
+        msg.put("role", "user");
+        msg.put("content", userMessage);
+        arr.put(0,msg);
+        payload.put("messages", arr);
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -26,8 +32,9 @@ public class HuggingFaceChat {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        JSONArray jsonResponse = new JSONArray(response.body());
-        return jsonResponse.getJSONObject(0).getString("generated_text");
+        JSONObject jsonResponse = new JSONObject(response.body());
+        return jsonResponse.getJSONArray("choices")
+                .getJSONObject(0).getJSONObject("message").getString("content");
     }
 
     public static String getNpcDialogue(String message) {

@@ -29,23 +29,23 @@ public class Village {
         Store s7 = new Store("Gus", 12, 24, "The Stardrop Saloon");
 
         for (BlackSmithProducts p : BlackSmithProducts.values()) {
-            StoreProduct sp = new StoreProduct(p);
+            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()) , s1.getName());
             s1.getProducts().add(sp);
         }
         for (JojaMartProducts p : JojaMartProducts.values()) {
-            StoreProduct sp = new StoreProduct(p);
+            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()), s2.getName());
             s2.getProducts().add(sp);
         }
         for (PierreProducts p : PierreProducts.values()) {
-            StoreProduct sp = new StoreProduct(p);
+            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()), s3.getName());
             s3.getProducts().add(sp);
         }
         for (FishProducts p : FishProducts.values()) {
-            StoreProduct sp = new StoreProduct(p);
+            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()),s5.getName());
             s5.getProducts().add(sp);
         }
         for (StardropProducts p : StardropProducts.values()) {
-            StoreProduct sp = new StoreProduct(p);
+            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()),s7.getName());
             s7.getProducts().add(sp);
         }
 

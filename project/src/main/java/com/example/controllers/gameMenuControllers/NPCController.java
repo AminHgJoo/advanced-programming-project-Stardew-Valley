@@ -11,7 +11,7 @@ import com.example.models.NPCModels.NPCReward;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.items.Item;
 import com.example.models.items.Tool;
-import com.example.utilities.HuggingFaceChat;
+import com.example.utilities.AIChat;
 
 // TODO handle npc friendship level
 
@@ -27,12 +27,12 @@ public class NPCController extends Controller {
         if (npc == null) {
             return new Response(false, "There is no npc with this name.");
         }
-        if (!npc.getHasTalked().get(player.getUser().getUsername())) {
+        if (!npc.getHasTalked().getOrDefault(player.getUser().getUsername() , false)) {
             npc.getHasTalked().put(player.getUser().getUsername(), true);
             player.addXpToNpcFriendship(20, npc);
             GameRepository.saveGame(game);
         }
-        String response = HuggingFaceChat.getNpcDialogue(message);
+        String response = AIChat.getNpcDialogue(message);
         return new Response(true, response);
     }
 

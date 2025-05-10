@@ -1,33 +1,53 @@
 package com.example.models;
 
-import com.example.models.enums.types.itemTypes.ItemType;
-import com.example.models.items.Item;
+import com.example.models.enums.types.itemTypes.*;
 import dev.morphia.annotations.Embedded;
+import dev.morphia.annotations.Transient;
 
 @Embedded
 public class Quest {
     private int count;
-    private ItemType item;
     private boolean completed = false;
+    private String fieldName;
+    private String enumName;
 
     public Quest() {
 
     }
-    public Quest(ItemType item , int count) {
-        this.item = item;
+
+    public Quest(ItemType item, int count) {
+        this.fieldName = item.name();
+        if (item instanceof CropSeedsType) {
+            enumName = "CropSeedsType";
+        } else if (item instanceof MiscType) {
+            enumName = "MiscType";
+        } else if (item instanceof FoodTypes) {
+            enumName = "FoodTypes";
+        } else if (item instanceof ForagingMineralsType) {
+            enumName = "ForagingMineralsType";
+        }
         this.count = count;
     }
+
     public int getCount() {
         return count;
     }
+
     public void setCount(int count) {
         this.count = count;
     }
+
     public ItemType getItem() {
-        return item;
-    }
-    public void setItem(ItemType item) {
-        this.item = item;
+        if (enumName.trim().equals("CropSeedsType")) {
+            return CropSeedsType.valueOf(fieldName);
+        } else if (enumName.trim().equals("MiscType")) {
+            return MiscType.valueOf(fieldName);
+        } else if (enumName.trim().equals("FoodTypes")) {
+            return FoodTypes.valueOf(fieldName);
+        } else if (enumName.trim().equals("ForagingMineralsType")) {
+            return ForagingMineralsType.valueOf(fieldName);
+        }
+        return null;
     }
 
     public boolean isCompleted() {
@@ -36,5 +56,21 @@ public class Quest {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
+    public String getEnumName() {
+        return enumName;
+    }
+
+    public void setEnumName(String enumName) {
+        this.enumName = enumName;
     }
 }

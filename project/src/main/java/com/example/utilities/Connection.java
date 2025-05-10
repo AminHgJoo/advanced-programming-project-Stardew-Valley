@@ -1,5 +1,7 @@
 package com.example.utilities;
 
+import com.example.models.enums.types.itemTypes.ItemType;
+import com.example.models.enums.types.storeProductTypes.StoreProductInterface;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
@@ -22,6 +24,8 @@ public class Connection {
                 database.getMapper().mapPackage("com.example.models.skills");
                 database.getMapper().mapPackage("com.example.models.buildings");
                 database.getMapper().mapPackage("com.example.models.NPCModels");
+                database.getMapper().map(StoreProductInterface.class);
+                database.getMapper().map(ItemType.class);
                 database.getMapper().mapPackage("com.example.models");
                 database.ensureIndexes();
             } catch (Exception e) {
