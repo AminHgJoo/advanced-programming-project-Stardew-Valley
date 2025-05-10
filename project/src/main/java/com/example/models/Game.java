@@ -470,6 +470,20 @@ public class Game {
         }
     }
 
+    public void npcGiveReward(Game game) {
+        for (NPC npc : map.getVillage().getNpcs()) {
+            for(NPCFriendship f : npc.getFriendships()) {
+                if(f.getLevel() == 3){
+                    int rand = (int)(Math.random()*2);
+                    if(rand == 1){
+                        Player p = game.findPlayerByUsername(f.getPlayer());
+                        p.addNpcReward(npc.getRewards().get(0) , npc , game);
+                    }
+                }
+            }
+        }
+    }
+
     public Player findPlayerByUsername(String username) {
         for (Player player : players) {
             if (player.getUser().getUsername().compareToIgnoreCase(username) == 0) {

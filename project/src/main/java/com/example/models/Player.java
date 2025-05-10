@@ -4,6 +4,7 @@ import com.example.Repositories.GameRepository;
 import com.example.Repositories.UserRepository;
 import com.example.models.NPCModels.NPC;
 import com.example.models.NPCModels.NPCFriendship;
+import com.example.models.NPCModels.NPCReward;
 import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
@@ -288,7 +289,7 @@ public class Player {
         return farm;
     }
 
-    public Farm getCurrentFarm(Game game){
+    public Farm getCurrentFarm(Game game) {
         return game.getFarmByNumber(currentPlaceNumber);
     }
 
@@ -305,19 +306,18 @@ public class Player {
     }
 
     public int getMoney(Game game) {
-        if(partnerName == null) {
+        if (partnerName == null) {
             return money;
         }
-        Player partner =  game.getPartner(this);
+        Player partner = game.getPartner(this);
         return partner.money + money;
     }
 
     public void setMoney(int money, Game game) {
-        if(partnerName == null) {
+        if (partnerName == null) {
             this.money = money;
-        }
-        else{
-            Player partner =  game.getPartner(this);
+        } else {
+            Player partner = game.getPartner(this);
             partner.money = 0;
             this.money = money;
         }
@@ -515,7 +515,7 @@ public class Player {
         }
     }
 
-    public void setFriendShipLevel(int level , Player player) {
+    public void setFriendShipLevel(int level, Player player) {
         Friendship friendship = null;
         for (Friendship friendship1 : friendships) {
             if (friendship1.getPlayer().equals(player.getUser().getUsername())) {
@@ -567,10 +567,26 @@ public class Player {
 
     public MarriageRequest findRequestByUsername(String username) {
         for (MarriageRequest marriageRequest : marriageRequests) {
-            if(marriageRequest.getFrom().compareToIgnoreCase(username) == 0){
-                return  marriageRequest;
+            if (marriageRequest.getFrom().compareToIgnoreCase(username) == 0) {
+                return marriageRequest;
             }
         }
         return null;
+    }
+
+    public void addNpcReward(NPCReward reward, NPC npc, Game game) {
+        if (reward.rewardItems != null) {
+            Slot slot = this.getInventory().getSlotByItemName(reward.rewardItems.getName());
+            int level = npc.findFriendshipByName(user.getUsername()).getLevel();
+            int mp = level >= 2 ? 2 : 1;
+            if (slot == null) {
+                slot = new Slot(reward.rewardItems, reward.count * mp);
+                this.getInventory().addSlot(slot);
+            } else {
+                slot.setCount(slot.getCount() + reward.count * mp);
+            }
+            this.addXpToNpcFriendship(200 * reward.friendshipLevel, npc);
+            this.setMoney(this.money + reward.money * mp, game);
+        }
     }
 }

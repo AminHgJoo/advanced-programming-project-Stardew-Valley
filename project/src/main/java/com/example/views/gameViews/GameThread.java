@@ -45,6 +45,8 @@ public class GameThread extends Thread {
             game.reInitializeNpc();
             game.addPlayersMoney(game);
 
+            game.npcGiveReward(game);
+
             GameRepository.saveGame(game);
         }
         //debug code

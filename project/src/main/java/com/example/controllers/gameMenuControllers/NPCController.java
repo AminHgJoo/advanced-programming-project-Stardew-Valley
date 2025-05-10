@@ -132,18 +132,7 @@ public class NPCController extends Controller {
         q.setCompleted(true);
 
         NPCReward reward = npc.getRewards().get(index);
-        if(reward.rewardItems != null){
-            Slot slot = player.getInventory().getSlotByItemName(reward.rewardItems.getName());
-            int level = npc.findFriendshipByName(user.getUsername()).getLevel();
-            int mp = level >= 2 ? 2 : 1;
-            if(slot == null){
-                slot = new Slot(reward.rewardItems , reward.count*mp);
-                player.getInventory().addSlot(slot);
-            }else {
-                player.addXpToNpcFriendship(200,npc);
-                player.setMoney(player.money + reward.money*mp , game);
-            }
-        }
+       player.addNpcReward(reward , npc , game);
         GameRepository.saveGame(game);
         return null;
     }
