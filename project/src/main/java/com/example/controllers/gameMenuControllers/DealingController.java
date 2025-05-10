@@ -13,6 +13,7 @@ import com.example.models.enums.types.itemTypes.*;
 import com.example.models.enums.types.storeProductTypes.FishProducts;
 import com.example.models.items.*;
 import com.example.models.mapObjects.Crop;
+import com.example.utilities.MenuToStoreString;
 
 public class DealingController extends Controller {
     public static Response handleGoToStore(Request request) {
@@ -82,7 +83,8 @@ public class DealingController extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         //TODO add stores and store products and fix getStore usages
-        Store store = game.getMap().getVillage().getStore("");
+        Store store = game.getMap().getVillage().getStore(MenuToStoreString
+                .convertToString(App.getCurrMenuType().getMenu()));
         Player player = game.getCurrentPlayer();
         String productName = request.body.get("productName");
         int n = 1;
