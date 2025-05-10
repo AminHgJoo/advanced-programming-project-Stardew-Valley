@@ -18,6 +18,11 @@ import com.example.utilities.MenuToStoreString;
 public class DealingController extends Controller {
     public static Response handleGoToStore(Request request) {
         Game game = App.getLoggedInUser().getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        if(!player.isInVillage()){
+            GameRepository.saveGame(game);
+            return new Response(false, "You are not in the village");
+        }
         String name = request.body.get("storeName");
         boolean check = false;
         if (name.compareToIgnoreCase("Blacksmith") == 0) {
