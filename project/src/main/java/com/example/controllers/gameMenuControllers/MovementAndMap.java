@@ -15,8 +15,22 @@ import com.example.utilities.FindPath;
 import com.example.views.AppView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MovementAndMap extends Controller {
+    private static Coordinate getEmptyCoordinate(Player player, Player partner, ArrayList<Cell> cells) {
+        for(int i=60; i>=0; i--) {
+            for(int j=8; j<= 40; j++){
+                if(Objects.requireNonNull(Farm.getCellByCoordinate(i, j, cells)).getObjectOnCell().isWalkable){
+                    if(partner == null || (partner != null && !(partner.getCoordinate().getX() == i && partner.getCoordinate().getY() == j))) {
+                        return new Coordinate(i, j);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public static Response goToVillage(Request request) {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
@@ -45,13 +59,13 @@ public class MovementAndMap extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "you are already in the farm");
         }
+        player.setInVillage(false);
         player.setCurrentFarmNumber(partnerFarm.getFarmNumber());
-        if(partner.getCoordinate().getX() == 61 && partner.getCoordinate().getY() ==4) {
-            player.setCoordinate(new Coordinate(62, 4));
+        Coordinate coordinate = getEmptyCoordinate(player, partner, partnerFarm.getCells());
+        if(coordinate == null) {
             GameRepository.saveGame(game);
-            return new Response(true, "you are in your partner's farm");
-        }
-        player.setCoordinate(new Coordinate(61, 4));
+            return new Response(false, "no empty cell found");}
+        player.setCoordinate(coordinate);
         GameRepository.saveGame(game);
         return new Response(true, "you are in your partner's farm");
     }
@@ -62,16 +76,15 @@ public class MovementAndMap extends Controller {
         Player player = game.getCurrentPlayer();
         Player partner = game.getPartner(player);
         Farm playerFarm = player.getFarm();
-        if (partner != null && partner.getCoordinate().getX() == 61 && partner.getCoordinate().getY() == 4) {
-            player.setCurrentFarmNumber(playerFarm.getFarmNumber());
-            player.setCoordinate(new Coordinate(62, 4));
+        player.setInVillage(false);
+        Coordinate coordinate = getEmptyCoordinate(player, partner, playerFarm.getCells());
+        if(coordinate == null) {
             GameRepository.saveGame(game);
-            return new Response(true, "you in home");
+            return new Response(false, "no empty cell found");
         }
-        player.setCurrentFarmNumber(playerFarm.getFarmNumber());
-        player.setCoordinate(new Coordinate(61, 4));
+        player.setCoordinate(coordinate);
         GameRepository.saveGame(game);
-        return new Response(true, "you in home");
+        return new Response(true, "you are in home");
     }
 
     public static Response handleWalking(Request request) {
