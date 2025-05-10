@@ -9,6 +9,7 @@ import com.example.models.IO.Response;
 import com.example.models.Player;
 import com.example.models.User;
 import com.example.models.mapModels.Cell;
+import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
 import com.example.utilities.FindPath;
 import com.example.views.AppView;
@@ -16,6 +17,62 @@ import com.example.views.AppView;
 import java.util.ArrayList;
 
 public class MovementAndMap extends Controller {
+    public static Response goToVillage(Request request) {
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        if (player.isInVillage()) {
+            GameRepository.saveGame(game);
+            return new Response(false, "you are already in the village");
+        }
+        player.setInVillage(true);
+        GameRepository.saveGame(game);
+        return new Response(true, "you are in the village");
+    }
+
+    public static Response goToPartnerFarm(Request request) {
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Player partner = game.getPartner(player);
+        if (partner == null) {
+            GameRepository.saveGame(game);
+            return new Response(false, "you are single");
+        }
+        Farm playerFarm = player.getCurrentFarm(game);
+        Farm partnerFarm = partner.getFarm();
+        if (playerFarm == partnerFarm) {
+            GameRepository.saveGame(game);
+            return new Response(false, "you are already in the farm");
+        }
+        player.setCurrentFarmNumber(partnerFarm.getFarmNumber());
+        if(partner.getCoordinate().getX() == 61 && partner.getCoordinate().getY() ==4) {
+            player.setCoordinate(new Coordinate(62, 4));
+            GameRepository.saveGame(game);
+            return new Response(true, "you are in your partner's farm");
+        }
+        player.setCoordinate(new Coordinate(61, 4));
+        GameRepository.saveGame(game);
+        return new Response(true, "you are in your partner's farm");
+    }
+
+    public static Response walkHome(Request request) {
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Player partner = game.getPartner(player);
+        Farm playerFarm = player.getFarm();
+        if (partner != null && partner.getCoordinate().getX() == 61 && partner.getCoordinate().getY() == 4) {
+            player.setCurrentFarmNumber(playerFarm.getFarmNumber());
+            player.setCoordinate(new Coordinate(62, 4));
+            GameRepository.saveGame(game);
+            return new Response(true, "you in home");
+        }
+        player.setCurrentFarmNumber(playerFarm.getFarmNumber());
+        player.setCoordinate(new Coordinate(61, 4));
+        GameRepository.saveGame(game);
+        return new Response(true, "you in home");
+    }
 
     public static Response handleWalking(Request request) {
         int x = Integer.parseInt(request.body.get("x"));

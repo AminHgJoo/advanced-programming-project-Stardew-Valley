@@ -1,6 +1,5 @@
 package com.example.models;
 
-import com.example.Repositories.GameRepository;
 import com.example.Repositories.UserRepository;
 import com.example.models.NPCModels.NPC;
 import com.example.models.NPCModels.NPCFriendship;
@@ -41,7 +40,8 @@ public class Player {
     private ArrayList<Slot> refrigeratorSlots = new ArrayList<>();
     private ObjectId user_id;
     private String partnerName;
-    private int currentPlaceNumber;
+    private int currentFarmNumber;
+    private boolean isInVillage;
     @Transient
     private User user;
     private ArrayList<Friendship> friendships = new ArrayList<>();
@@ -67,10 +67,19 @@ public class Player {
         return null;
     }
 
+    public int getCurrentFarmNumber() {
+        return currentFarmNumber;
+    }
+
+    public void setCurrentFarmNumber(int currentFarmNumber) {
+        this.currentFarmNumber = currentFarmNumber;
+    }
+
     public Player() {
     }
 
     public Player(User user) {
+        this.isInVillage = false;
         this.user = user;
         this.user_id = user.get_id();
         this.inventory = new Backpack(BackpackType.DEFAULT);
@@ -291,7 +300,7 @@ public class Player {
     }
 
     public Farm getCurrentFarm(Game game) {
-        return game.getFarmByNumber(currentPlaceNumber);
+        return game.getFarmByNumber(currentFarmNumber);
     }
 
     public void setEnergy(double energy) {
@@ -327,7 +336,7 @@ public class Player {
 
     public void setFarm(Farm farm) {
         this.farm = farm;
-        this.currentPlaceNumber = farm.getFarmNumber();
+        this.currentFarmNumber = farm.getFarmNumber();
     }
 
     public Backpack getInventory() {
@@ -639,5 +648,13 @@ public class Player {
             this.addXpToNpcFriendship(200 * reward.friendshipLevel, npc);
             this.setMoney(this.money + reward.money * mp, game);
         }
+    }
+
+    public boolean isInVillage() {
+        return isInVillage;
+    }
+
+    public void setInVillage(boolean inVillage) {
+        isInVillage = inVillage;
     }
 }

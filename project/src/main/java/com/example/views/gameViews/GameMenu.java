@@ -8,6 +8,7 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;
 import com.example.views.Menu;
+import org.jetbrains.annotations.NotNull;
 
 public class GameMenu implements Menu {
 
@@ -127,7 +128,7 @@ public class GameMenu implements Menu {
                 response = getShowCookingRecipesResponse(input);
             } else if (GameMenuCommands.EAT.matches(input)) {
                 response = getEatResponse(input);
-            }  else if (GameMenuCommands.PET.matches(input)) {
+            } else if (GameMenuCommands.PET.matches(input)) {
                 response = getPetResponse(input);
             } else if (GameMenuCommands.CHEAT_SET_FRIENDSHIP.matches(input)) {
                 response = getChearSetFriendshipResponse(input);
@@ -193,12 +194,39 @@ public class GameMenu implements Menu {
                 response = getShowMenuResponse(input);
             } else if (GameMenuCommands.GO_TO_STORE.matches(input)) {
                 response = goToStore(input);
+            } else if (GameMenuCommands.GO_TO_VILLAGE.matches(input)) {
+                response = goToVillage(input);
+            } else if (GameMenuCommands.WALK_HOME.matches(input)) {
+                response = walkHome(input);
+            } else if (GameMenuCommands.GO_TO_PARTNER_FARM.matches(input)) {
+                response = goToPartnerFarm(input);
             } else {
                 response = getInvalidCommand();
             }
         }
 
         printResponse(response);
+    }
+
+    private static @NotNull Response goToPartnerFarm(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = MovementAndMap.goToPartnerFarm(request);
+        return response;
+    }
+
+    private static @NotNull Response walkHome(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = MovementAndMap.walkHome(request);
+        return response;
+    }
+
+    private static @NotNull Response goToVillage(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = MovementAndMap.goToVillage(request);
+        return response;
     }
 
     private static Response getEnterPlayerHomeResponse(String input) {
@@ -769,7 +797,7 @@ public class GameMenu implements Menu {
 
     private static Response getQuestListResponse(String input) {
         Request request = new Request(input);
-        request.body.put("npcName" , GameMenuCommands.QUESTS_LIST.getGroup(input, "npcName"));
+        request.body.put("npcName", GameMenuCommands.QUESTS_LIST.getGroup(input, "npcName"));
         Response response = NPCController.handleQuestList(request);
         return response;
     }

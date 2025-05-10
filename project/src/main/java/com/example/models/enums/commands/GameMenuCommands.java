@@ -6,6 +6,9 @@ import java.util.regex.Pattern;
 public enum GameMenuCommands implements Command {
     /// debug only command.
     SHOW_FARM("^show\\s+entire\\s+farm$"),
+    GO_TO_PARTNER_FARM("^go\\s+to\\s+partner\\s+farm$"),
+    WALK_HOME("^walk\\s+home$"),
+    GO_TO_VILLAGE("^go\\s+to\\s+village$"),
     GO_TO_STORE("^go\\s+to\\s+-n\\s+(?<storeName>.*)$"),
     GAME_NEW("^game\\s+new\\s+-u(?<users>(\\s+\\S+){1,3})$"),
     GAME_MAP("^game\\s+map\\s+(?<mapNumber>\\d+)$"),
