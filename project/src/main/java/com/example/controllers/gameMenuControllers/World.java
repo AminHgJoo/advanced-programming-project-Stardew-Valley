@@ -146,10 +146,58 @@ public class World extends Controller {
         return new Response(true, "Tomorrow's weather set successfully.");
     }
 
-    //TODO: Implement.
     public static Response handleGreenhouseBuilding(Request request) {
+        Game game = App.getLoggedInUser().getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Farm farm = player.getFarm();
+        Backpack backpack = player.getInventory();
 
-        return null;
+        Cell testCell = Farm.getCellByCoordinate(25, 4, farm.getCells());
+
+        if (testCell.getObjectOnCell() instanceof Water) {
+            return new Response(false, "Greenhouse already built.");
+        }
+
+        Slot slot = backpack.getSlotByItemName(MiscType.WOOD.name);
+
+        if (slot == null) {
+            return new Response(false, "You don't have any wood.");
+        }
+
+        if (slot.getCount() < 500) {
+            return new Response(false, "You don't have enough wood.");
+        }
+
+        if (player.getMoney(game) < 1000) {
+            return new Response(false, "You don't have enough money.");
+        }
+
+        slot.setCount(slot.getCount() - 500);
+
+        if (slot.getCount() == 0) {
+            backpack.getSlots().remove(slot);
+        }
+
+        player.setMoney(player.getMoney(game) - 1000, game);
+
+
+        //Greenhouse runs from x : [22, 28] & y : [3, 10]
+        for (int i = 23; i < 28; i++) {
+            for (int j = 4; j < 10; j++) {
+                Cell cell = Farm.getCellByCoordinate(i, j, farm.getCells());
+                cell.setObjectOnCell(new EmptyCell());
+            }
+        }
+
+        Cell cell = Farm.getCellByCoordinate(25, 10, farm.getCells());
+        cell.setObjectOnCell(new EmptyCell());
+
+        Cell cell1 = Farm.getCellByCoordinate(25, 4, farm.getCells());
+        cell1.setObjectOnCell(new Water());
+
+        GameRepository.saveGame(game);
+
+        return new Response(true, "Greenhouse built successfully.");
     }
 
     public static Response handleToolUse(Request request) {

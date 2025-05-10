@@ -268,13 +268,16 @@ public class Farm {
                 playerHomeCells.add(cell);
             }
         }
+        //Greenhouse runs from x : [22, 28] & y : [3, 10]
         for (int i = 22; i < 29; i++) {
             for (int j = 3; j < 11; j++) {
                 Cell cell = getCellByCoordinate(i, j, farmCells);
+
                 if (i != 22 && i != 28 && j != 3 && j != 10) {
                     cell.setObjectOnCell(new BuildingBlock(false, "Greenhouse"));
                 } else
-                    cell.setObjectOnCell(new BuildingBlock(true, "greenhouse"));
+                    cell.setObjectOnCell(new BuildingBlock(false, "Greenhouse"));
+
                 greenHouseCells.add(cell);
             }
         }
@@ -290,7 +293,7 @@ public class Farm {
         farmBuildings.add(new Mine(mineCells));
     }
 
-    private static Cell getCellByCoordinate(int x, int y, ArrayList<Cell> cells) {
+    public static Cell getCellByCoordinate(int x, int y, ArrayList<Cell> cells) {
         for (Cell cell : cells) {
             if (cell.getCoordinate().getX() == x && cell.getCoordinate().getY() == y) {
                 return cell;
@@ -393,6 +396,11 @@ public class Farm {
     }
 
     public void strikeLightning(int targetX, int targetY, LocalDateTime source) {
+        //Greenhouse Tile
+        if (targetX >= 22 && targetX <= 28 && targetY >= 3 && targetY <= 10) {
+            return;
+        }
+
         Cell targetCell = findCellByCoordinate(targetX, targetY);
         if (targetCell != null) {
             if (targetCell.getObjectOnCell() instanceof Tree) {

@@ -174,7 +174,6 @@ public class Farming extends Controller {
 
         Crop crop = (Crop) cell.getObjectOnCell();
 
-
         if (fertilizer.compareToIgnoreCase(MiscType.BASIC_FERTILIZER.name) == 0) {
             crop.pushBackDeadlines(-1);
         } else if (fertilizer.compareToIgnoreCase(MiscType.QUALITY_FERTILIZER.name) == 0) {

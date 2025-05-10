@@ -147,9 +147,16 @@ public class Game {
     }
 
     private void waterAllCrops() {
-        //TODO: Change implementation to not effect greenhouse crops.
         for (Farm farm : getMap().getFarms()) {
             for (Cell cell : farm.getCells()) {
+                int targetX = cell.getCoordinate().getX();
+                int targetY = cell.getCoordinate().getY();
+
+                //Greenhouse tiles.
+                if (targetX >= 22 && targetX <= 28 && targetY >= 3 && targetY <= 10) {
+                    continue;
+                }
+
                 if (cell.getObjectOnCell() instanceof Crop) {
                     Crop crop = (Crop) cell.getObjectOnCell();
                     crop.setHasBeenWateredToday(true);
@@ -184,7 +191,7 @@ public class Game {
     }
 
     private void handleCrowAttack() {
-        //TODO: Attack on tree fruits. Change implementation to not attack greenhouse crops.
+        //TODO: Attack on tree fruits.
         for (Farm farm : getMap().getFarms()) {
             ArrayList<Cell> cells = new ArrayList<>();
             for (Cell cell : farm.getCells()) {
@@ -198,6 +205,14 @@ public class Game {
 
                     int randomInt = RNG.randomInt(0, cells.size() - 1);
                     Cell cell = cells.get(randomInt);
+
+                    int targetX = cell.getCoordinate().getX();
+                    int targetY = cell.getCoordinate().getY();
+
+                    //Greenhouse tile
+                    if (targetX >= 22 && targetX <= 28 && targetY >= 3 && targetY <= 10) {
+                        continue;
+                    }
 
                     if (!farm.isCellCoveredByScarecrow(cell)) {
                         cell.setObjectOnCell(new EmptyCell());

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 public class Player {
     private static final Logger log = LoggerFactory.getLogger(Player.class);
     private Coordinate coordinate;
+    /// DO NOT USE THIS FIELD DIRECTLY
     public int money;
     private Backpack inventory;
     private Farm farm;
