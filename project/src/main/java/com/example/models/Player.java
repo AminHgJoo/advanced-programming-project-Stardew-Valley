@@ -482,18 +482,68 @@ public class Player {
         this.notifications = notifications;
     }
 
-    public String getNotificationsString() {
+    public String getNotificationsString(Game game) {
         StringBuilder builder = new StringBuilder();
         builder.append("Notifications : ").append("\n");
+        int counter = 1;
         for (Message message : notifications) {
+            builder.append(counter++).append("- \n");
             builder.append("From : ").append(message.getSender()).append("\n");
             builder.append("Message : ").append(message.getMessage()).append("\n");
             builder.append("------------------------------------------------------\n");
         }
+        counter = 1;
         builder.append("Marriage Requests : ").append("\n");
         for (MarriageRequest req : marriageRequests) {
+            builder.append(counter++).append("- \n");
             builder.append("From : ").append(req.getFrom()).append("\n");
             builder.append("------------------------------------------------------\n");
+        }
+        counter = 1;
+        builder.append("Gifts : ").append("\n");
+        for (Gift g : game.getGifts()) {
+            if (g.getTo().equals(user.getUsername())) {
+                builder.append(counter++).append("- \n");
+                builder.append("From : ").append(g.getFrom()).append("\n");
+                builder.append("Item : ").append(g.getItem().getName()).append("\n");
+                builder.append("Count : ").append(g.getAmount()).append("\n");
+                builder.append("------------------------------------------------------\n");
+            }
+        }
+        return builder.toString();
+    }
+
+    public String getGiftsString(Game game) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Gifts : ").append("\n");
+        int counter = 1;
+        for (Gift g : game.getGifts()) {
+            if (g.getTo().equals(user.getUsername())) {
+                builder.append(counter++).append("- \n");
+                builder.append("From : ").append(g.getFrom()).append("\n");
+                builder.append("Item : ").append(g.getItem().getName()).append("\n");
+                builder.append("Count : ").append(g.getAmount()).append("\n");
+                builder.append("------------------------------------------------------\n");
+            }
+        }
+        return builder.toString();
+    }
+
+    public String getGiftHistoryString(Game game, String username) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Gifts : ").append("\n");
+        int counter =1;
+        for (Gift g : game.getGifts()) {
+            if (g.getTo().equals(user.getUsername()) || g.getFrom().equals(user.getUsername())) {
+                if (g.getTo().compareToIgnoreCase(username) == 0 || g.getFrom().compareToIgnoreCase(username) == 0) {
+                    builder.append(counter++).append("- \n");
+                    builder.append("From : ").append(g.getFrom()).append("\n");
+                    builder.append("To : ").append(g.getTo()).append("\n");
+                    builder.append("Item : ").append(g.getItem().getName()).append("\n");
+                    builder.append("Count : ").append(g.getAmount()).append("\n");
+                    builder.append("------------------------------------------------------\n");
+                }
+            }
         }
         return builder.toString();
     }

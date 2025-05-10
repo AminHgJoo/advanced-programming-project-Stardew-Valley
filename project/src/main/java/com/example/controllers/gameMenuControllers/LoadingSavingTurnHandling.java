@@ -184,7 +184,7 @@ public class LoadingSavingTurnHandling extends Controller {
 
 
         responseString += ("It is " + game.getCurrentPlayer().getUser().getUsername() + "'s turn now!");
-        String notifs = game.getCurrentPlayer().getNotificationsString();
+        String notifs = game.getCurrentPlayer().getNotificationsString(game);
         game.getCurrentPlayer().reInitNotifications();
         GameRepository.saveGame(game);
         return new Response(true, responseString + "\n" + notifs);
