@@ -7,6 +7,7 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.NPCModels.NPC;
 import com.example.models.NPCModels.NPCFriendship;
+import com.example.models.NPCModels.NPCReward;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.items.Item;
 import com.example.models.items.Tool;
@@ -130,8 +131,17 @@ public class NPCController extends Controller {
         }
         q.setCompleted(true);
 
-        // TODO give reward
-
+        NPCReward reward = npc.getRewards().get(index);
+        if(reward.rewardItems != null){
+            Slot slot = player.getInventory().getSlotByItemName(reward.rewardItems.getName());
+            if(slot == null){
+                slot = new Slot(reward.rewardItems , reward.count);
+                player.getInventory().addSlot(slot);
+            }else {
+                player.addXpToNpcFriendship(200,npc);
+                player.setMoney(player.money + reward.money , game);
+            }
+        }
         GameRepository.saveGame(game);
         return null;
     }

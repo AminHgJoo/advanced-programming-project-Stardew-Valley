@@ -5,11 +5,11 @@ import com.example.models.NPCModels.NPCReward;
 import com.example.models.items.Item;
 
 public enum NPC {
-    SEBASTIAN("Sebastian", new Item[]{}, new NPCRequest(new Item[]{}), new NPCReward(5000, new Item[]{})),
-    ABIGAIL("Abigail", new Item[]{}, new NPCRequest(new Item[]{}), new NPCReward(500, new Item[]{})),
-    HARVEY("Harvey", new Item[]{}, new NPCRequest(new Item[]{}), new NPCReward(750, new Item[]{})),
-    LYA("Lya", new Item[]{}, new NPCRequest(new Item[]{}), new NPCReward(500, new Item[]{})),
-    ROBIN("Robin", new Item[]{}, new NPCRequest(new Item[]{}), new NPCReward(25000, new Item[]{})),
+    SEBASTIAN("Sebastian", null, new NPCRequest(null), new NPCReward(5000, null)),
+    ABIGAIL("Abigail", null, new NPCRequest(null), new NPCReward(500, null)),
+    HARVEY("Harvey", null, new NPCRequest(null), new NPCReward(750, null)),
+    LYA("Lya", null, new NPCRequest(null), new NPCReward(500, null)),
+    ROBIN("Robin", null, new NPCRequest(null), new NPCReward(25000, null)),
     CLINT("Clint", null, null, null),
     MORRIS("Morris", null, null, null),
     PIERRE("Pierre", null, null, null),

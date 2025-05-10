@@ -10,6 +10,7 @@ public class StoreProduct {
     private int price;
     private Item item;
     private double availableCount;
+
     public StoreProduct() {
     }
 
