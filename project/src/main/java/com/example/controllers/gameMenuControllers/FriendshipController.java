@@ -7,6 +7,7 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.items.Misc;
 import com.example.models.mapModels.Coordinate;
+import org.intellij.lang.annotations.Language;
 
 import java.util.List;
 
@@ -51,7 +52,6 @@ public class FriendshipController extends Controller {
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
 
-        // TODO players should be close together
         String username = request.body.get("username");
         List<Message> messages = game.getMessages().stream().filter((m) -> {
             return (m.getSender().compareToIgnoreCase(username) == 0) &&
