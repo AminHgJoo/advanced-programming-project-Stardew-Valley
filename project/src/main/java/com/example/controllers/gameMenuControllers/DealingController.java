@@ -106,7 +106,7 @@ public class DealingController extends Controller {
         if (type == null) {
             Response res = handleBuyRecipe(productName, p, player);
             if (res.isSuccess()) {
-                player.setMoney((int) (player.money - p.getType().getProductPrice(game.getSeason()) * n), game);
+                player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason()) * n), game);
             }
             GameRepository.saveGame(game);
             return res;
@@ -151,7 +151,7 @@ public class DealingController extends Controller {
             } else {
                 slot.setCount(slot.getCount() + 1);
             }
-            player.setMoney((int) (player.money - p.getType().getProductPrice(game.getSeason()) * n), game);
+            player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason()) * n), game);
             GameRepository.saveGame(game);
             return new Response(true, "Purchased successfully");
         }
