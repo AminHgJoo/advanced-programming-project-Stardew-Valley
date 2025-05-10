@@ -19,6 +19,7 @@ import com.example.models.items.TreeSeed;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapObjects.Crop;
+import com.example.models.mapObjects.EmptyCell;
 import com.example.models.mapObjects.Tree;
 
 public class Farming extends Controller {
@@ -70,9 +71,22 @@ public class Farming extends Controller {
             return new Response(false, "This crop can not be planted in this season");
         }
         Crop plant = new Crop(cropSeedsType, game.getDate());
-        // TODO can be giant  , page 35 in doc , a boolean field in crop to check if has been giant
-        if (cropSeedsType.canBeGiant) {
 
+        // x : [22,28] , y : [3,10]
+        if (cropSeedsType.canBeGiant) {
+            int arr[][]= player.getCurrentFarm(game).giantCropsTogether(cell);
+            if(arr != null){
+                int s = 0;
+                for (int i = 0; i < arr.length; i++) {
+                    int x = arr[i][0] + cellCoordinate.getX();
+                    int y = arr[i][1] + cellCoordinate.getY();
+                    Cell c = player.getCurrentFarm(game).findCellByCoordinate(x, y);
+                    s = Math.max(s, ((Crop)c.getObjectOnCell()).getStageNumber());
+                    c.setObjectOnCell(new EmptyCell());
+                }
+                plant.setGiant(true);
+                plant.setStageNumber(s);
+            }
         }
         cell.setObjectOnCell(plant);
         GameRepository.saveGame(game);

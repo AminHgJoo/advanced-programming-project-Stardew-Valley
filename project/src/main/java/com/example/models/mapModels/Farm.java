@@ -384,7 +384,7 @@ public class Farm {
 
         for (Cell scarecrowCell : scarecrowCells) {
             double distance = Coordinate.calculateEuclideanDistance(scarecrowCell, queryCell);
-            ArtisanBlock a = (ArtisanBlock)(scarecrowCell.getObjectOnCell());
+            ArtisanBlock a = (ArtisanBlock) (scarecrowCell.getObjectOnCell());
 
             double maxDistance = (a.getArtisanType() == ArtisanBlockType.SCARE_CROW) ? 8 : 12;
 
@@ -422,5 +422,36 @@ public class Farm {
 
     public void setFarmNumber(int farmNumber) {
         this.farmNumber = farmNumber;
+    }
+
+    public int[][] giantCropsTogether(Cell targetCell) {
+        int dir[][][] = {
+                {{0, 1}, {1, 0}, {1, 1}},
+                {{0, 1}, {-1, 0}, {-1, 1}},
+                {{0, -1}, {-1, 0}, {-1, -1}},
+                {{0, -1}, {1, 0}, {1, -1}}
+        };
+        for (int i = 0; i < 3; i++) {
+            int arr[][] = dir[i];
+            boolean check = true;
+            for (int j = 0; j < 3; j++) {
+                int x = arr[j][0] + targetCell.getCoordinate().getX();
+                int y = arr[j][1] + targetCell.getCoordinate().getY();
+                Cell c = findCellByCoordinate(x, y);
+                if (c != null) {
+                    if (c.getObjectOnCell() instanceof Crop crop) {
+                        Crop cellCrop = (Crop) targetCell.getObjectOnCell();
+                        if (crop.cropSeedsType != cellCrop.cropSeedsType) {
+                            check = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (check) {
+                return arr;
+            }
+        }
+        return null;
     }
 }
