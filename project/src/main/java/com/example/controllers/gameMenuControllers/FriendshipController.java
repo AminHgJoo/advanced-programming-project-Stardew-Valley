@@ -10,8 +10,6 @@ import com.example.models.mapModels.Coordinate;
 
 import java.util.List;
 
-// TODO handle friendship xp in thread
-
 public class FriendshipController extends Controller {
     public static Response handleFriendship(Request request) {
         User user = App.getLoggedInUser();

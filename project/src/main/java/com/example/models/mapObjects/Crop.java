@@ -14,6 +14,8 @@ public class Crop extends MapObject {
     private boolean hasBeenWateredToday = false;
     private boolean hasBeenDeluxeFertilized = false;
     private LocalDateTime[] growthDeadLines = new LocalDateTime[5];
+    private LocalDateTime harvestDeadLine;
+    private boolean isGiant = false;
 
     public Crop() {
         super();
@@ -44,6 +46,7 @@ public class Crop extends MapObject {
         growthDeadLines[3] = DateUtility.getLocalDate(growthDeadLines[2], cropSeedsType.stageThreeDaysToNextStage);
         growthDeadLines[4] = DateUtility.getLocalDate(growthDeadLines[3], cropSeedsType.stageFourDaysToNextStage);
         this.hasBeenWateredToday = false;
+        harvestDeadLine = null;
     }
 
     public LocalDateTime[] getGrowthDeadLines() {
@@ -99,5 +102,21 @@ public class Crop extends MapObject {
 
     public void setHasBeenDeluxeFertilized(boolean hasBeenDeluxeFertilized) {
         this.hasBeenDeluxeFertilized = hasBeenDeluxeFertilized;
+    }
+
+    public LocalDateTime getHarvestDeadLine() {
+        return harvestDeadLine;
+    }
+
+    public void setHarvestDeadLine(LocalDateTime harvestDeadLine) {
+        this.harvestDeadLine = harvestDeadLine;
+    }
+
+    public boolean isGiant() {
+        return isGiant;
+    }
+
+    public void setGiant(boolean giant) {
+        isGiant = giant;
     }
 }

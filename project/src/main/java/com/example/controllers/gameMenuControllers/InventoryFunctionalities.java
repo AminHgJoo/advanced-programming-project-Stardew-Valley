@@ -105,11 +105,6 @@ public class InventoryFunctionalities extends Controller {
 
     }
 
-    // TODO BLACKSMITH
-    public static Response handleToolUpgrade(Request request) {
-        return null;
-    }
-
     public static Response handleCraftInfoQuery(Request request) {
         String queriedName = request.body.get("craftName");
 

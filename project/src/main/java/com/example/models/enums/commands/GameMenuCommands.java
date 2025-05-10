@@ -39,7 +39,6 @@ public enum GameMenuCommands implements Command {
     TOOLS_EQUIP("^tools\\s+equip\\s+(?<toolName>.+)$"),
     TOOLS_SHOW_CURRENT("^tools\\s+show\\s+current$"),
     TOOLS_SHOW_AVAILABLE("^tools\\s+show\\s+available$"),
-    TOOLS_UPGRADE("^tools\\s+upgrade\\s+(?<toolName>.+)$"),
     TOOLS_USE_DIRECTION("^tools\\s+use\\s+-d\\s+(?<direction>.+)$"),
     CRAFT_INFO("^craftinfo\\s+-n\\s+(?<craftName>.+)$"),
     PLANT("^plant\\s+-s\\s+(?<seed>.+?)\\s+-d\\s+(?<direction>.+)$"),

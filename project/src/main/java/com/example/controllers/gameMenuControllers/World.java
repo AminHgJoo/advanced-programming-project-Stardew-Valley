@@ -1057,7 +1057,29 @@ public class World extends Controller {
             GameRepository.saveGame(game);
             return new Response(true, "Removed " + name + "from tile.");
             //TODO: Handle farming xp.
-        } else if (targetCell.getObjectOnCell() instanceof Crop) { //TODO: Handle crop and tree harvest.
+        } else if (targetCell.getObjectOnCell() instanceof Crop crop) {
+            //TODO: Handle crop and tree harvest.
+            if (crop.getHarvestDeadLine() == null || crop.getHarvestDeadLine().isAfter(game.getDate())) {
+                return new Response(false, "Crop isn't ready for harvest.");
+            }
+
+            int amountToHarvest = crop.isGiant() ? 10 : 1;
+
+            Backpack backpack = player.getInventory();
+            Slot slot = backpack.getSlotByItemName(crop.cropSeedsType.name);
+
+            if (slot == null) {
+                if (backpack.getType().getMaxCapacity() == player.getInventory().getSlots().size()) {
+                    GameRepository.saveGame(game);
+                    return new Response(false, "Not enough inventory space.");
+                }
+
+                Slot newSlot = new Slot()
+
+            } else {
+
+            }
+
 
         } else if (targetCell.getObjectOnCell() instanceof Tree) {
 

@@ -98,8 +98,6 @@ public class GameMenu implements Menu {
                 response = getShowCurrentToolsResponse(input);
             } else if (GameMenuCommands.TOOLS_SHOW_AVAILABLE.matches(input)) {
                 response = getShowAvailableToolsResponse(input);
-            } else if (GameMenuCommands.TOOLS_UPGRADE.matches(input)) {
-                response = getUpgradeToolsResponse(input);
             } else if (GameMenuCommands.TOOLS_USE_DIRECTION.matches(input)) {
                 response = getUseToolsResponse(input);
             } else if (GameMenuCommands.CRAFT_INFO.matches(input)) {
@@ -370,14 +368,6 @@ public class GameMenu implements Menu {
         Request request = new Request(input);
         request.body.put("direction", GameMenuCommands.TOOLS_USE_DIRECTION.getGroup(input, "direction"));
         response = World.handleToolUse(request);
-        return response;
-    }
-
-    private static Response getUpgradeToolsResponse(String input) {
-        Response response;
-        Request request = new Request(input);
-        request.body.put("toolName", GameMenuCommands.TOOLS_UPGRADE.getGroup(input, "toolName"));
-        response = InventoryFunctionalities.handleToolUpgrade(request);
         return response;
     }
 

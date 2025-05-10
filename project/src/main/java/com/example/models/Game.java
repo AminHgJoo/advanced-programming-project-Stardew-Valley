@@ -524,6 +524,10 @@ public class Game {
                         if (d != null && d.isAfter(date)) {
                             if (crop.isHasBeenWateredToday()) {
                                 crop.setStageNumber(i + 1);
+                                if (crop.getStageNumber() == 5
+                                        || crop.getGrowthDeadLines()[crop.getStageNumber()] == null) {
+                                    crop.setHarvestDeadLine(date);
+                                }
                             } else {
                                 crop.pushBackDeadlines(1);
                             }

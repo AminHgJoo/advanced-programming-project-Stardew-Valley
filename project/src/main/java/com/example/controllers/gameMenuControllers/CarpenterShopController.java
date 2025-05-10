@@ -45,7 +45,6 @@ public class CarpenterShopController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "You cannot build on the selected cell");
         }
-        //TODO daily limit
         if (buildingName.equals("Barn")) {
             return buildBarn(wood, stone, game, x, y, farm, buildingName, 350, 150, 7, 4, 6000, backpack);
         } else if (buildingName.equals("Big Barn")) {
@@ -75,7 +74,6 @@ public class CarpenterShopController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "daily limit reached");
         }
-        //TODO kharabe;
         if (wood != null && stone != null) {
             if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney(game) >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
