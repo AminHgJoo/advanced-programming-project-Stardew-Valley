@@ -11,7 +11,6 @@ import com.example.models.items.Misc;
 import com.example.models.items.TreeSeed;
 
 public enum CraftingRecipes {
-
     CHERRY_BOMB("Cherry Bomb", "Destroys everything in a 3 tile radius.", 0, 1, 0, 0, 50,
             new Slot[]{new Slot(new ForagingMineral(Quality.DEFAULT, ForagingMineralsType.COPPER_ORE), 4), new Slot(new ForagingMineral(Quality.DEFAULT, ForagingMineralsType.COAL), 1)},
             MiscType.CHERRY_BOMB),
@@ -94,6 +93,15 @@ public enum CraftingRecipes {
         this.fishingLevel = fishingLevel;
         this.ingredients = ingredients;
         this.resultItemType = resultItemType;
+    }
+
+    public static CraftingRecipes findByName(String name){
+        for(CraftingRecipes  cr : CraftingRecipes.values()){
+            if(cr.name.compareToIgnoreCase(name) == 0){
+                return cr;
+            }
+        }
+        return null;
     }
 
     @Override

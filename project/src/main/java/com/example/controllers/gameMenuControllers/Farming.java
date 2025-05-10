@@ -10,11 +10,10 @@ import com.example.models.Player;
 import com.example.models.Slot;
 import com.example.models.enums.Directions;
 import com.example.models.enums.types.itemTypes.CropSeedsType;
+import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.types.itemTypes.TreeSeedsType;
 import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.enums.worldEnums.Season;
-import com.example.models.items.Misc;
-import com.example.models.items.Seed;
 import com.example.models.items.Tool;
 import com.example.models.items.TreeSeed;
 import com.example.models.mapModels.Cell;
@@ -53,26 +52,26 @@ public class Farming extends Controller {
         if (playerSeedSlot == null) {
             return new Response(false, "Seed not found in player inventory");
         }
-        playerSeedSlot.setCount(playerSeedSlot.getCount()  - 1);
-        if(playerSeedSlot.getCount() <= 0){
+        playerSeedSlot.setCount(playerSeedSlot.getCount() - 1);
+        if (playerSeedSlot.getCount() <= 0) {
             player.getInventory().getSlots().remove(playerSeedSlot);
         }
-        if(cropSeedsType == CropSeedsType.RANDOM_CROP){
+        if (cropSeedsType == CropSeedsType.RANDOM_CROP) {
             cropSeedsType = cropSeedsType.getRandomCropSeedsType(game.getSeason());
         }
         boolean check = false;
         for (Season season : cropSeedsType.season) {
-            if(season == game.getSeason()){
+            if (season == game.getSeason()) {
                 check = true;
                 break;
             }
         }
-        if(!check){
+        if (!check) {
             return new Response(false, "This crop can not be planted in this season");
         }
-        Crop plant = new Crop(cropSeedsType , game.getDate());
+        Crop plant = new Crop(cropSeedsType, game.getDate());
         // TODO can be giant  , page 35 in doc , a boolean field in crop to check if has been giant
-        if(cropSeedsType.canBeGiant){
+        if (cropSeedsType.canBeGiant) {
 
         }
         cell.setObjectOnCell(plant);
@@ -84,8 +83,8 @@ public class Farming extends Controller {
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
         String seed = request.body.get("seed");
-        TreeSeedsType treeSeedsType =  TreeSeedsType.findTreeTypeByName(seed);
-        if(treeSeedsType == null) {
+        TreeSeedsType treeSeedsType = TreeSeedsType.findTreeTypeByName(seed);
+        if (treeSeedsType == null) {
             return new Response(false, "Tree seed not found");
         }
         String dir = request.body.get("direction");
@@ -107,23 +106,23 @@ public class Farming extends Controller {
             return new Response(false, "Cell is not empty");
         }
         Slot playerSeedSlot = player.getInventory().findTreeSeedByItemName(seed);
-        playerSeedSlot.setCount(playerSeedSlot.getCount()  - 1);
-        if(playerSeedSlot.getCount() <= 0){
+        playerSeedSlot.setCount(playerSeedSlot.getCount() - 1);
+        if (playerSeedSlot.getCount() <= 0) {
             player.getInventory().getSlots().remove(playerSeedSlot);
         }
         TreeSeed treeSeed = (TreeSeed) playerSeedSlot.getItem();
         boolean check = false;
         for (Season season : treeSeed.getTreeSeedsType().growthSeasons) {
-            if(season == game.getSeason()){
+            if (season == game.getSeason()) {
                 check = true;
                 break;
             }
         }
-        if(!check){
+        if (!check) {
             return new Response(false, "This tree can not be planted in this season");
         }
         TreeType treeType = TreeType.findTreeTypeByName(seed);
-        Tree tree = new Tree(treeType ,game.getDate());
+        Tree tree = new Tree(treeType, game.getDate());
         cell.setObjectOnCell(tree);
         GameRepository.saveGame(game);
         return new Response(true, "Planting was successful");
@@ -169,16 +168,19 @@ public class Farming extends Controller {
             return new Response(false, "Fertilizer not found");
         }
         miscSlot.setCount(miscSlot.getCount() - 1);
-        if(miscSlot.getCount() <= 0){
+        if (miscSlot.getCount() <= 0) {
             player.getInventory().getSlots().remove(miscSlot);
         }
-        Crop p = (Crop) cell.getObjectOnCell();
-        if(fertilizer.compareToIgnoreCase("Speed-Gro") == 0){
-            p.setStageNumber(p.getStageNumber() + 1);
-        }
-        // TODO other fertilizer effect
 
-        p.setHasBeenFertilized(true);
+        Crop crop = (Crop) cell.getObjectOnCell();
+
+
+        if (fertilizer.compareToIgnoreCase(MiscType.BASIC_FERTILIZER.name) == 0) {
+            crop.pushBackDeadlines(-1);
+        } else if (fertilizer.compareToIgnoreCase(MiscType.QUALITY_FERTILIZER.name) == 0) {
+            crop.setHasBeenDeluxeFertilized(true);
+        }
+
         GameRepository.saveGame(game);
         return new Response(true, "Fertilization was successful");
     }

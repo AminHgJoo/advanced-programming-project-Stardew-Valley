@@ -4,7 +4,8 @@ import com.example.models.enums.types.itemTypes.*;
 import com.example.models.enums.worldEnums.Season;
 
 public enum PierreProducts implements StoreProductInterface {
-    // General Items
+    DEHYDRATOR("Dehydrator" , "A recipe to make Dehydrator",null ,10000 , 10000,1 , Season.values()),
+    GRASS_STARTER_RECIPE("Grass Starter Recipe" , "A recipe to make Grass Starter",null ,1000 , 1000,1 , Season.values()),
     RICE("Rice", "A basic grain often served under vegetables.", FoodTypes.RICE, 200, 200, Double.POSITIVE_INFINITY, Season.values()),
     WHEAT_FLOUR("Wheat Flour", "A common cooking ingredient made from crushed wheat seeds.", FoodTypes.WHEAT_FLOUR, 100, 100, Double.POSITIVE_INFINITY, Season.values()),
     BOUQUET("Bouquet", "A gift that shows your romantic interest.\n(Unlocked after reaching level 2 friendship with a player)", MiscType.BOUQUET, 1000, 1000, 2, Season.values()),

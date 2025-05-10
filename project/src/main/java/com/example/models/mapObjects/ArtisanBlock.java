@@ -4,13 +4,12 @@ import com.example.models.Slot;
 import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import dev.morphia.annotations.Embedded;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 
 @Embedded
 public class ArtisanBlock extends MapObject {
     private ArtisanBlockType artisanType;
-    public LocalDateTime PrepTime;
+    public LocalDateTime prepTime;
     public Slot productSlot;
     public boolean beingUsed;
     public boolean canBeCollected;
