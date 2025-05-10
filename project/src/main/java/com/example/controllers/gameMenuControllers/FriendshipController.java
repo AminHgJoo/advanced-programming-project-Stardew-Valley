@@ -6,8 +6,8 @@ import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.items.Misc;
+import com.example.models.mapModels.Coordinate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 // TODO handle friendship xp in thread
@@ -32,15 +32,20 @@ public class FriendshipController extends Controller {
         if (friend == null) {
             return new Response(false, "Player not found");
         }
+        if ((player.isInVillage() && friend.isInVillage()) ||
+                (player.getCurrentFarm(game) == friend.getCurrentFarm(game) &&
+                        (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
+            Message msg = new Message(user.getUsername(), friend.getUser().getUsername(), message);
+            game.getMessages().add(msg);
+            friend.getNotifications().add(msg);
+            player.addXpToFriendShip(20, friend);
+            friend.addXpToFriendShip(20, player);
 
-        Message msg = new Message(user.getUsername(), friend.getUser().getUsername(), message);
-        game.getMessages().add(msg);
-        friend.getNotifications().add(msg);
-        player.addXpToFriendShip(20, friend);
-        friend.addXpToFriendShip(20, player);
-
+            GameRepository.saveGame(game);
+            return new Response(true, "Message has been sent");
+        }
         GameRepository.saveGame(game);
-        return new Response(true, "Message has been sent");
+        return new Response(false, "long distance");
     }
 
     public static Response handleTalkHistory(Request request) {
@@ -109,7 +114,7 @@ public class FriendshipController extends Controller {
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
 
-        return new Response(true , player.getGiftsString(game));
+        return new Response(true, player.getGiftsString(game));
     }
 
     public static Response handleGiftHistory(Request request) {
@@ -119,7 +124,7 @@ public class FriendshipController extends Controller {
 
         String username = request.body.get("username");
 
-        return new Response(true , player.getGiftHistoryString(game , username));
+        return new Response(true, player.getGiftHistoryString(game, username));
     }
 
     public static Response handleGiftRate(Request request) {
@@ -130,18 +135,18 @@ public class FriendshipController extends Controller {
         int index = Integer.parseInt(request.body.get("giftNumber"));
         int rate = Integer.parseInt(request.body.get("rate"));
 
-        Gift g = game.findGiftByName(index-1,user.getUsername());
-        if(g == null) {
+        Gift g = game.findGiftByName(index - 1, user.getUsername());
+        if (g == null) {
             return new Response(false, "Gift not found");
         }
         g.setRate(rate);
-        int xp = (rate-3)*30 + 15;
+        int xp = (rate - 3) * 30 + 15;
         Player friend = game.findPlayerByUsername(g.getFrom());
         friend.addXpToFriendShip(xp, player);
         player.addXpToFriendShip(xp, friend);
 
         GameRepository.saveGame(game);
-        return new Response(true , "Successfully rate the gift");
+        return new Response(true, "Successfully rate the gift");
     }
 
     public static Response handleHug(Request request) {
@@ -155,12 +160,19 @@ public class FriendshipController extends Controller {
         if (friend == null) {
             return new Response(false, "Player not found");
         }
-        player.addXpToFriendShip(60, friend);
-        friend.addXpToFriendShip(60, player);
+        if ((player.isInVillage() && friend.isInVillage()) ||
+                (player.getCurrentFarm(game) == friend.getCurrentFarm(game) &&
+                        (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
+            player.addXpToFriendShip(60, friend);
+            friend.addXpToFriendShip(60, player);
 
+            GameRepository.saveGame(game);
+            return new Response(true, "You hugged " + username);
+        }
         GameRepository.saveGame(game);
-        return new Response(true, "You hugged " + username);
+        return new Response(false, "long distance");
     }
+
 
     public static Response handleFlower(Request request) {
         User user = App.getLoggedInUser();
@@ -171,33 +183,39 @@ public class FriendshipController extends Controller {
         String flowerName = request.body.get("flowerName");
 
         Player friend = game.findPlayerByUsername(username);
-        if (friend == null) {
-            return new Response(false, "Player not found");
-        }
-        Slot flowerSlot = player.getInventory().getSlotByItemName(flowerName);
-        if (flowerSlot == null) {
-            return new Response(false, "Flower not found");
-        }
-        flowerSlot.setCount(flowerSlot.getCount() - 1);
-        if (flowerSlot.getCount() == 0) {
-            player.getInventory().removeSlot(flowerSlot);
-        }
-        Slot slot = friend.getInventory().getSlotByItemName(flowerName);
-        if (slot == null) {
-            friend.getInventory().addSlot(flowerSlot);
-        } else {
-            slot.setCount(slot.getCount() + 1);
-        }
-        Friendship friendship = player.findFriendshipByFriendName(username);
-        if (friendship.getLevel() == 2) {
-            friendship.setLevel(3);
-            friend.findFriendshipByFriendName(player.getUser().getUsername()).setLevel(3);
-        } else {
-            player.addXpToFriendShip(100, friend);
-            friend.addXpToFriendShip(100, player);
-        }
+        if ((player.isInVillage() && friend.isInVillage()) ||
+                (player.getCurrentFarm(game) == friend.getCurrentFarm(game) &&
+                        (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
+            if (friend == null) {
+                return new Response(false, "Player not found");
+            }
+            Slot flowerSlot = player.getInventory().getSlotByItemName(flowerName);
+            if (flowerSlot == null) {
+                return new Response(false, "Flower not found");
+            }
+            flowerSlot.setCount(flowerSlot.getCount() - 1);
+            if (flowerSlot.getCount() == 0) {
+                player.getInventory().removeSlot(flowerSlot);
+            }
+            Slot slot = friend.getInventory().getSlotByItemName(flowerName);
+            if (slot == null) {
+                friend.getInventory().addSlot(flowerSlot);
+            } else {
+                slot.setCount(slot.getCount() + 1);
+            }
+            Friendship friendship = player.findFriendshipByFriendName(username);
+            if (friendship.getLevel() == 2) {
+                friendship.setLevel(3);
+                friend.findFriendshipByFriendName(player.getUser().getUsername()).setLevel(3);
+            } else {
+                player.addXpToFriendShip(100, friend);
+                friend.addXpToFriendShip(100, player);
+            }
 
-        return new Response(true, "Flower has been sent to " + username);
+            return new Response(true, "Flower has been sent to " + username);
+        }
+        GameRepository.saveGame(game);
+        return new Response(false, "long distance");
     }
 
     public static Response handleAskMarriage(Request request) {

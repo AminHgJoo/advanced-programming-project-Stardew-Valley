@@ -1,5 +1,6 @@
 package com.example.models.mapModels;
 
+import com.example.models.Player;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
@@ -28,6 +29,10 @@ public class Coordinate {
     public static double calculateEuclideanDistance(Cell cell1, Cell cell2) {
         Coordinate a = cell1.getCoordinate(), b = cell2.getCoordinate();
 
+        return Math.sqrt(Math.pow(b.getX() - a.getX(), 2) + Math.pow(b.getY() - a.getY(), 2));
+    }
+
+    public static double calculateEuclideanDistance(Coordinate a, Coordinate b) {
         return Math.sqrt(Math.pow(b.getX() - a.getX(), 2) + Math.pow(b.getY() - a.getY(), 2));
     }
 }

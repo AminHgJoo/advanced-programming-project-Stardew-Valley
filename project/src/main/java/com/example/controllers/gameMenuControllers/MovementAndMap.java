@@ -92,6 +92,10 @@ public class MovementAndMap extends Controller {
         int y = Integer.parseInt(request.body.get("y"));
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
+        if(player.isInVillage()) {
+            GameRepository.saveGame(game);
+            return new Response(false, "can't walk in village");
+        }
         Cell src = player.getCurrentFarm(game).findCellByCoordinate(player.getCoordinate().getX(), player.getCoordinate().getY());
         Cell dest = player.getCurrentFarm(game).findCellByCoordinate(x, y).clone();
         if (dest == null || !dest.getObjectOnCell().isWalkable) {
