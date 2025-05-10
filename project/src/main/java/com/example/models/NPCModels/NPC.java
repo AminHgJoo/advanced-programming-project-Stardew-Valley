@@ -181,4 +181,13 @@ public class NPC {
         }
         return sb.toString();
     }
+
+    public NPCFriendship findFriendshipByName(String name) {
+        for (NPCFriendship friendship : friendships) {
+            if(friendship.getPlayer().compareToIgnoreCase(name) == 0) {
+                return friendship;
+            }
+        }
+        return null;
+    }
 }
