@@ -1,12 +1,15 @@
 package com.example.models.enums.types.mapObjectTypes;
 
 import com.example.models.enums.types.itemTypes.FoodTypes;
+import com.example.models.enums.types.itemTypes.ForagingMineralsType;
+import com.example.models.enums.types.itemTypes.ItemType;
+import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.worldEnums.Season;
 
 public enum TreeType {
-    TREE_BARK("Tree Bark", "alaki", -1, null, -1, -1, false, -1, (Season[]) null),
-    BURNT_TREE("Burnt Tree", "alaki", -1, null, -1, -1, false, -1, (Season[]) null),
-    NORMAL_TREE("Normal Tree", "alaki", -1, null, -1, -1, false, -1, (Season[]) null),
+    TREE_BARK("Tree Bark", "alaki", -1, MiscType.WOOD, -1, -1, false, -1, (Season[]) null),
+    BURNT_TREE("Burnt Tree", "alaki", -1, ForagingMineralsType.COAL, -1, -1, false, -1, (Season[]) null),
+    NORMAL_TREE("Normal Tree", "alaki", -1, MiscType.WOOD, -1, -1, false, -1, (Season[]) null),
     // source
     APRICOT_TREE("Apricot Tree", "Apricot Sapling", 7, FoodTypes.APRICOT, 1, 59, true, 38, Season.SPRING),
     CHERRY_TREE("Cherry Tree", "Cherry Sapling", 7, FoodTypes.CHERRY, 1, 80, true, 38, Season.SPRING),
@@ -29,7 +32,7 @@ public enum TreeType {
     final public int stageTwoTime;
     final public int stageThreeTime;
     final public int stageFourTime;
-    final public FoodTypes fruitItem;
+    final public ItemType fruitItem;
     final public int harvestCycleTime;
     final public int fruitSellPrice;
     final public boolean isFruitEdible;
@@ -53,7 +56,7 @@ public enum TreeType {
         this.seasonsOfGrowth = seasonsOfGrowth;
     }
 
-    TreeType(String name, String source, int stagesTime, FoodTypes fruitItem, int harvestCycleTime, int fruitSellPrice
+    TreeType(String name, String source, int stagesTime, ItemType fruitItem, int harvestCycleTime, int fruitSellPrice
             , boolean isFruitEdible, int fruitEnergy, Season[] seasonsOfGrowth) {
         this.name = name;
         this.source = source;

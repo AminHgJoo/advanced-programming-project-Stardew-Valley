@@ -17,6 +17,7 @@ import com.example.models.mapModels.Farm;
 import com.example.models.mapModels.Map;
 import com.example.models.mapObjects.*;
 import com.example.models.skills.Skill;
+import com.example.utilities.DateUtility;
 import com.example.utilities.RNG;
 import com.example.views.gameViews.GameThread;
 import dev.morphia.annotations.Entity;
@@ -192,20 +193,29 @@ public class Game {
     }
 
     private void handleCrowAttack() {
-        //TODO: Attack on tree fruits.
+
         for (Farm farm : getMap().getFarms()) {
-            ArrayList<Cell> cells = new ArrayList<>();
+            ArrayList<Cell> cropCells = new ArrayList<>();
+            ArrayList<Cell> treeCells = new ArrayList<>();
+
             for (Cell cell : farm.getCells()) {
                 if (cell.getObjectOnCell() instanceof Crop) {
-                    cells.add(cell);
+                    cropCells.add(cell);
                 }
             }
-            int howManyTrials = cells.size() / 16;
+
+            for (Cell cell : farm.getCells()) {
+                if (cell.getObjectOnCell() instanceof Tree) {
+                    treeCells.add(cell);
+                }
+            }
+
+            int howManyTrials = cropCells.size() / 16;
             for (int i = 0; i < howManyTrials; i++) {
                 if (RNG.performRandomTrial(25)) {
 
-                    int randomInt = RNG.randomInt(0, cells.size() - 1);
-                    Cell cell = cells.get(randomInt);
+                    int randomInt = RNG.randomInt(0, cropCells.size() - 1);
+                    Cell cell = cropCells.get(randomInt);
 
                     int targetX = cell.getCoordinate().getX();
                     int targetY = cell.getCoordinate().getY();
@@ -217,6 +227,21 @@ public class Game {
 
                     if (!farm.isCellCoveredByScarecrow(cell)) {
                         cell.setObjectOnCell(new EmptyCell());
+                    }
+                }
+            }
+
+            howManyTrials = treeCells.size() / 16;
+            for (int i = 0; i < howManyTrials; i++) {
+                if (RNG.performRandomTrial(25)) {
+                    int randomInt = RNG.randomInt(0, treeCells.size() - 1);
+                    Cell cell = treeCells.get(randomInt);
+
+                    if (!farm.isCellCoveredByScarecrow(cell)) {
+                        Tree tree = (Tree) cell.getObjectOnCell();
+                        if (tree.getHarvestDeadLine() != null && tree.getTreeType().harvestCycleTime != -1) {
+                            tree.setHarvestDeadLine(DateUtility.getLocalDate(tree.getHarvestDeadLine(), 1));
+                        }
                     }
                 }
             }
@@ -516,8 +541,7 @@ public class Game {
     public void checkForCropNextStage() {
         for (Farm farm : map.getFarms()) {
             for (Cell cell : farm.getCells()) {
-                if (cell.getObjectOnCell() instanceof Crop) {
-                    Crop crop = (Crop) cell.getObjectOnCell();
+                if (cell.getObjectOnCell() instanceof Crop crop) {
                     LocalDateTime[] arr = crop.getGrowthDeadLines();
                     for (int i = 0; i < 5; i++) {
                         LocalDateTime d = arr[i];
@@ -534,14 +558,16 @@ public class Game {
                         }
                     }
                 }
-                if (cell.getObjectOnCell() instanceof Tree) {
-                    Tree tree = (Tree) cell.getObjectOnCell();
+                if (cell.getObjectOnCell() instanceof Tree tree) {
                     LocalDateTime[] arr = tree.getGrowthDeadLines();
                     for (int i = 0; i < 5; i++) {
                         LocalDateTime d = arr[i];
                         if (d != null && d.isAfter(date)) {
                             if (tree.isHasBeenWateredToday()) {
                                 tree.setStageNumber(i + 1);
+                                if (tree.getStageNumber() == 5) {
+                                    tree.setHarvestDeadLine(date);
+                                }
                             } else {
                                 tree.pushBackDeadlines(1);
                             }

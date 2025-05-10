@@ -1,5 +1,6 @@
 package com.example.models.mapObjects;
 
+import com.example.models.App;
 import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.utilities.DateUtility;
 import dev.morphia.annotations.Embedded;
@@ -12,7 +13,7 @@ public class Tree extends MapObject {
     private boolean hasBeenWateredToday;
     private int stageNumber = 0;
     private LocalDateTime[] growthDeadLines = new LocalDateTime[5];
-
+    private LocalDateTime harvestDeadLine = null;
 
     public LocalDateTime[] getGrowthDeadLines() {
         return growthDeadLines;
@@ -29,6 +30,9 @@ public class Tree extends MapObject {
         growthDeadLines[2] = DateUtility.getLocalDate(growthDeadLines[1], treeType.stageTwoTime);
         growthDeadLines[3] = DateUtility.getLocalDate(growthDeadLines[2], treeType.stageThreeTime);
         growthDeadLines[4] = DateUtility.getLocalDate(growthDeadLines[3], treeType.stageFourTime);
+        if (growthDeadLines[0] == null) {
+            growthDeadLines[0] = App.getLoggedInUser().getCurrentGame().getDate();
+        }
     }
 
     public void pushBackDeadlines(int numOfDays) {
@@ -57,5 +61,13 @@ public class Tree extends MapObject {
 
     public void setStageNumber(int stageNumber) {
         this.stageNumber = stageNumber;
+    }
+
+    public LocalDateTime getHarvestDeadLine() {
+        return harvestDeadLine;
+    }
+
+    public void setHarvestDeadLine(LocalDateTime harvestDeadLine) {
+        this.harvestDeadLine = harvestDeadLine;
     }
 }

@@ -68,7 +68,7 @@ public enum MiscType implements ItemType {
     }
 
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 

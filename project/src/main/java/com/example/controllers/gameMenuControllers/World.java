@@ -17,6 +17,7 @@ import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapObjects.*;
 import com.example.models.mapObjects.ForagingMineral;
+import com.example.utilities.DateUtility;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -1016,9 +1017,7 @@ public class World extends Controller {
         player.setEnergy(player.getEnergy() - energyCost);
         player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
-        if (targetCell.getObjectOnCell() instanceof ForagingCrop) {
-
-            ForagingCrop crop = (ForagingCrop) targetCell.getObjectOnCell();
+        if (targetCell.getObjectOnCell() instanceof ForagingCrop crop) {
 
             targetCell.setObjectOnCell(new EmptyCell());
 
@@ -1056,9 +1055,8 @@ public class World extends Controller {
             player.getForagingSkill().setXp(player.getForagingSkill().getXp() + 10);
             GameRepository.saveGame(game);
             return new Response(true, "Removed " + name + "from tile.");
-            //TODO: Handle farming xp.
         } else if (targetCell.getObjectOnCell() instanceof Crop crop) {
-            //TODO: Handle crop and tree harvest.
+
             if (crop.getHarvestDeadLine() == null || crop.getHarvestDeadLine().isAfter(game.getDate())) {
                 return new Response(false, "Crop isn't ready for harvest.");
             }
@@ -1074,20 +1072,86 @@ public class World extends Controller {
                     return new Response(false, "Not enough inventory space.");
                 }
 
-                Slot newSlot = new Slot()
+                Slot newSlot = new Slot(FoodTypes.getFoodTypeByName(crop.cropSeedsType.name), amountToHarvest);
+                backpack.getSlots().add(newSlot);
 
-            } else {
+                if (crop.cropSeedsType.oneTime) {
+                    targetCell.setObjectOnCell(new EmptyCell());
+                } else {
+                    crop.setHarvestDeadLine(DateUtility.getLocalDate(game.getDate(), crop.cropSeedsType.regrowthTime));
+                }
 
+                player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
+
+                GameRepository.saveGame(game);
+                return new Response(true, "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
             }
 
+            if (crop.cropSeedsType.oneTime) {
+                targetCell.setObjectOnCell(new EmptyCell());
+            } else {
+                crop.setHarvestDeadLine(DateUtility.getLocalDate(game.getDate(), crop.cropSeedsType.regrowthTime));
+            }
 
-        } else if (targetCell.getObjectOnCell() instanceof Tree) {
+            player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
+
+            slot.setCount(Math.min(slot.getCount() + amountToHarvest, slot.getItem().getMaxStackSize()));
+            GameRepository.saveGame(game);
+
+            return new Response(true, "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
+        } else if (targetCell.getObjectOnCell() instanceof Tree tree) {
+
+            if (tree.getHarvestDeadLine() == null || tree.getHarvestDeadLine().isAfter(game.getDate())) {
+                return new Response(false, "Tree isn't ready for harvest.");
+            }
+
+            int amountToHarvest = 1;
+
+            Backpack backpack = player.getInventory();
+            Slot slot = backpack.getSlotByItemName(tree.getTreeType().fruitItem.getName());
+
+            if (slot == null) {
+                if (backpack.getType().getMaxCapacity() == player.getInventory().getSlots().size()) {
+                    GameRepository.saveGame(game);
+                    return new Response(false, "Not enough inventory space.");
+                }
+
+                Slot newSlot = tree.getTreeType().fruitItem.createAmountOfItem(amountToHarvest);
+                backpack.getSlots().add(newSlot);
+
+                if (tree.getTreeType() == TreeType.BURNT_TREE) {
+                    targetCell.setObjectOnCell(new EmptyCell());
+                } else if (tree.getTreeType() == TreeType.NORMAL_TREE || tree.getTreeType() == TreeType.TREE_BARK) {
+                    //very necessary!
+                } else {
+                    tree.setHarvestDeadLine(DateUtility.getLocalDate(game.getDate(), tree.getTreeType().harvestCycleTime));
+                }
+
+                player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
+
+                GameRepository.saveGame(game);
+                return new Response(true, "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
+            }
+
+            slot.setCount(Math.min(slot.getCount() + amountToHarvest, slot.getItem().getMaxStackSize()));
+
+            if (tree.getTreeType() == TreeType.BURNT_TREE) {
+                targetCell.setObjectOnCell(new EmptyCell());
+            } else if (tree.getTreeType() == TreeType.NORMAL_TREE || tree.getTreeType() == TreeType.TREE_BARK) {
+                return new Response(false, "Can't harvest a normal tree or bark.");
+            } else {
+                tree.setHarvestDeadLine(DateUtility.getLocalDate(game.getDate(), tree.getTreeType().harvestCycleTime));
+            }
+
+            player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
+
+            GameRepository.saveGame(game);
+            return new Response(true, "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
 
         } else {
             GameRepository.saveGame(game);
             return new Response(false, "Target cell isn't grass.");
         }
-        return null;
     }
 
     private static double getScytheEnergyCost() {
