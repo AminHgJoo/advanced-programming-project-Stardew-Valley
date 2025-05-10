@@ -3,12 +3,13 @@ package com.example.models.enums.types.storeProductTypes;
 import com.example.models.enums.types.itemTypes.ForagingMineralsType;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.types.itemTypes.MiscType;
+import com.example.models.enums.types.itemTypes.ToolTypes;
 import com.example.models.enums.worldEnums.Season;
 
 public enum MarnieProduct implements StoreProductInterface {
-    HAY("Hay", "Dried grass used as animal food.", MiscType.WOOD, 50, 50, Double.POSITIVE_INFINITY, Season.values()),
-    MILK_PAIL("Milk Pail", "Gather milk from your animals.", ForagingMineralsType.STONE, 1000, 1000, 1, Season.values()),
-    SHEARS("Shears", "Use this to collect wool from sheep", ForagingMineralsType.STONE, 1000, 1000, 1, Season.values()),
+    HAY("Hay", "Dried grass used as animal food.", MiscType.HAY, 50, 50, Double.POSITIVE_INFINITY, Season.values()),
+    MILK_PAIL("Milk Pail", "Gather milk from your animals.", ToolTypes.MILK_PAIL, 1000, 1000, 1, Season.values()),
+    SHEARS("Shears", "Use this to collect wool from sheep", ToolTypes.SHEAR, 1000, 1000, 1, Season.values()),
     CHICKEN("Chicken", "Well cared-for chickens lay eggs every day. Lives in the coop.", ForagingMineralsType.STONE, 20, 20, 2, Season.values()),
     COW("Cow", "Can be milked daily. A milk pail is required to harvest the milk. Lives in the barn.", ForagingMineralsType.STONE, 20, 20, 2, Season.values()),
     GOAT("Goat", "Happy provide goat milk every other day. A milk pail is required to harvest the milk. Lives in the barn.", ForagingMineralsType.STONE, 20, 20, 2, Season.values()),
