@@ -12,11 +12,13 @@ import com.example.models.enums.types.itemTypes.*;
 import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.enums.worldEnums.Season;
 import com.example.models.enums.worldEnums.Weather;
-import com.example.models.items.*;
+import com.example.models.items.Fish;
+import com.example.models.items.Item;
+import com.example.models.items.Misc;
+import com.example.models.items.Tool;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapObjects.*;
-import com.example.models.mapObjects.ForagingMineral;
 import com.example.utilities.DateUtility;
 
 import java.time.DayOfWeek;
@@ -417,6 +419,7 @@ public class World extends Controller {
         player.setEnergy(player.getEnergy() - energyCost);
         player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
+        //Mine Cells : x : [0, 9] y : [0, 11]
         if (targetCell.getObjectOnCell() instanceof ForagingMineral) {
 
             ForagingMineralsType type = ((ForagingMineral) targetCell.getObjectOnCell()).getFMType();
@@ -430,6 +433,13 @@ public class World extends Controller {
             }
 
             player.getMiningSkill().setXp(player.getMiningSkill().getXp() + 10);
+
+            int cellX = targetCell.getCoordinate().getX();
+            int cellY = targetCell.getCoordinate().getY();
+
+            boolean check = cellX <= 9 && cellY <= 11;
+
+            targetCell.setObjectOnCell(check ? new BuildingBlock(true, "Mine") : new EmptyCell());
 
             int count = 1;
             if (skillLevel.ordinal() <= 2) {

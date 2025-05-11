@@ -208,24 +208,11 @@ public class Farm {
                 cell.setObjectOnCell(randomForagingCrop());
             }
             int randomNumber2 = (int) (Math.random() * 15);
-            if (cell.getObjectOnCell().type.equals("empty") && randomNumber2 == 2 && isMineCell(cell)) {
+
+            if (cell.getObjectOnCell().type.compareToIgnoreCase("Mine") == 0 && randomNumber2 == 2 && isMineCell(cell)) {
                 cell.setObjectOnCell(randomForagingMineral());
             }
         }
-    }
-
-    private static ForagingSeed randomForagingSeed() {
-        ForagingSeedsType[] allValues = ForagingSeedsType.values();
-        ArrayList<ForagingSeedsType> validValues = new ArrayList<>();
-
-        for (int i = 0; i < allValues.length; i++) {
-            if (allValues[i].getSeasons().length > 1 || allValues[i].getSeasons()[0] == App.getLoggedInUser().getCurrentGame().getSeason()) {
-                validValues.add(allValues[i]);
-            }
-        }
-
-        int randomNumber = (int) (Math.random() * validValues.size());
-        return new ForagingSeed(validValues.get(randomNumber));
     }
 
     private static ForagingCrop randomForagingCrop() {
@@ -309,6 +296,7 @@ public class Farm {
                 greenHouseCells.add(cell);
             }
         }
+        //Mine Cells : x : [0, 9] y : [0, 11]
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 12; j++) {
                 Cell cell = getCellByCoordinate(i, j, farmCells);
