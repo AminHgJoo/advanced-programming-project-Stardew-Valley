@@ -8,9 +8,14 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.Player;
 import com.example.models.User;
+import com.example.models.buildings.Building;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
+import com.example.models.mapObjects.BuildingBlock;
+import com.example.models.mapObjects.DroppedItem;
+import com.example.models.mapObjects.EmptyCell;
+import com.example.models.mapObjects.Water;
 import com.example.utilities.FindPath;
 import com.example.utilities.Tile;
 import com.example.views.AppView;
@@ -19,6 +24,41 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class MovementAndMap extends Controller {
+    public static Response cheatEmptyRectangle(Request request) {
+        int x = Integer.parseInt(request.body.get("x"));
+        int y = Integer.parseInt(request.body.get("y"));
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        Farm farm = player.getCurrentFarm(game);
+        ArrayList<Cell> cells = farm.getCells();
+        Cell cell = Farm.getCellByCoordinate(x, y, cells);
+        if(cell == null) {
+            GameRepository.saveGame(game);
+            return new Response(false, "no cell found");
+        }
+        for(int i=0; i<7; i++){
+            for(int j=0; j<4; j++){
+              Cell testCell =   Farm.getCellByCoordinate(x + i, y + j, cells);
+                if(testCell == null ||
+                        testCell.getObjectOnCell() instanceof Water ||
+                testCell.getObjectOnCell() instanceof DroppedItem ||
+                testCell.getObjectOnCell() instanceof BuildingBlock) {
+                    GameRepository.saveGame(game);
+                    return new Response(false, "can't empty rectangle");
+                }
+            }
+        }
+        for(int i=0; i<7; i++){
+            for(int j=0; j<4; j++){
+                Cell testCell =   Farm.getCellByCoordinate(x + i, y + j, cells);
+                testCell.setObjectOnCell(new EmptyCell());
+        }
+        }
+        GameRepository.saveGame(game);
+        return new Response(true, "rectangle is now empty");
+    }
+
     private static Coordinate getEmptyCoordinate(Player player, Player partner, ArrayList<Cell> cells) {
         for (int i = 60; i >= 0; i--) {
             for (int j = 8; j <= 40; j++) {
@@ -104,7 +144,7 @@ public class MovementAndMap extends Controller {
             return new Response(false, "destination is not valid");
         }
         FindPath.pathBFS(src, dest, player.getCurrentFarm(game).getCells());
-        double energy =  dest.energy / (double) 20;
+        double energy = dest.energy / (double) 20;
         String message = "Your current energy is: " + player.getEnergy() + "\n" +
                 "The path energy cost is : " + energy + "\n" +
                 "Do you want to move the path? (Y/N): ";

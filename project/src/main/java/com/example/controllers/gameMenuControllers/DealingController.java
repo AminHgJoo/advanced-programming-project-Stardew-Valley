@@ -9,10 +9,14 @@ import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
 import com.example.models.enums.types.MenuTypes;
+import com.example.models.enums.types.inventoryEnums.TrashcanType;
 import com.example.models.enums.types.itemTypes.*;
+import com.example.models.enums.types.storeProductTypes.BlackSmithProducts;
 import com.example.models.enums.types.storeProductTypes.FishProducts;
 import com.example.models.items.*;
 import com.example.utilities.MenuToStoreString;
+
+// TODO backpack item overflow
 
 public class DealingController extends Controller {
     public static Response handleGoToStore(Request request) {
@@ -60,8 +64,7 @@ public class DealingController extends Controller {
                 check = true;
                 App.setCurrMenuType(MenuTypes.TheStardropSaloonMenu);
             }
-        }
-        else if (name.compareToIgnoreCase("Marnie’s Ranch") == 0) {
+        } else if (name.compareToIgnoreCase("Marnie’s Ranch") == 0) {
             Store store = game.getMap().getVillage().getStore(name);
             if (store.isOpen(game.getDate().getHour())) {
                 check = true;
@@ -78,15 +81,15 @@ public class DealingController extends Controller {
 
     public static Response handleShowAllProducts(Request request) {
         Game game = App.getLoggedInUser().getCurrentGame();
-        String name = request.body.get("storeName");
-        Store store = game.getMap().getVillage().getStore(name);
+        Store store = game.getMap().getVillage().getStore(MenuToStoreString
+                .convertToString(App.getCurrMenuType().getMenu()));
         return new Response(true, store.productsToString(game.getSeason()));
     }
 
     public static Response handleShowAvailableProducts(Request request) {
         Game game = App.getLoggedInUser().getCurrentGame();
-        String name = request.body.get("storeName");
-        Store store = game.getMap().getVillage().getStore(name);
+        Store store = game.getMap().getVillage().getStore(MenuToStoreString
+                .convertToString(App.getCurrMenuType().getMenu()));
         return new Response(true, store.availableProductsToString(game.getSeason()));
     }
 
@@ -113,10 +116,25 @@ public class DealingController extends Controller {
         }
         p.setAvailableCount(p.getAvailableCount() - n);
         ItemType type = p.getType().getItemType();
-        if (type == null) {
+        if (type == null && p.getType().getIngredient() == null) {
             Response res = handleBuyRecipe(productName, p, player);
             if (res.isSuccess()) {
                 player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason()) * n), game);
+            }
+            GameRepository.saveGame(game);
+            return res;
+        }else if(type == null && p.getType().getIngredient() != null) {
+            Response res = handleUpgradeTool(productName , p, player);
+            if(res.isSuccess()){
+                Slot slot = player.getInventory().getSlotByItemName(p.getType().getIngredient().getName());
+                if(slot == null || slot.getCount() < 5){
+                    return  new Response (false , "you don't have enough ingredients");
+                }
+                slot.setCount(slot.getCount() - 5);
+                if(slot.getCount() == 0){
+                    player.getInventory().removeSlot(slot);
+                }
+                player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason())), game);
             }
             GameRepository.saveGame(game);
             return res;
@@ -136,13 +154,13 @@ public class DealingController extends Controller {
                 item = new ForagingMineral(Quality.DEFAULT, (ForagingMineralsType) type);
             } else if (type instanceof ToolTypes) {
                 Quality q = Quality.DEFAULT;
-                if (p.getType().getName().equals(FishProducts.BAMBOO_POLE)) {
+                if (p.getType().getName().equals(FishProducts.BAMBOO_POLE.getName())) {
                     q = Quality.SILVER;
-                } else if (p.getType().getName().equals(FishProducts.TRAINING_ROD)) {
+                } else if (p.getType().getName().equals(FishProducts.TRAINING_ROD.getName())) {
                     q = Quality.COPPER;
-                } else if (p.getType().getName().equals(FishProducts.FIBERGLASS_ROD)) {
+                } else if (p.getType().getName().equals(FishProducts.FIBERGLASS_ROD.getName())) {
                     q = Quality.GOLD;
-                } else if (p.getType().getName().equals(FishProducts.IRIDIUM_ROD)) {
+                } else if (p.getType().getName().equals(FishProducts.IRIDIUM_ROD.getName())) {
                     q = Quality.IRIDIUM;
                 }
                 item = new Tool(q, (ToolTypes) type, (int) p.getType().getProductPrice(game.getSeason()));
@@ -218,6 +236,23 @@ public class DealingController extends Controller {
             return new Response(true, name + " successfully added to recipes");
         }
         return new Response(false, "Recipe not found");
+    }
+
+    public static Response handleUpgradeTool(String name , StoreProduct p  , Player player){
+        BlackSmithProducts trashCan  = BlackSmithProducts.findTrashCanUpgrade(name);
+        BlackSmithProducts tool = BlackSmithProducts.findSteelToolUpgrade(name);
+        if(trashCan != null){
+            TrashcanType type = trashCan.getTrashcan();
+            player.setTrashcanType(type);
+        }else if(tool != null){
+            Quality q = tool.getTool();
+            if(player.getEquippedItem() instanceof Tool t){
+                t.setQuality(q);
+            }else {
+                return  new Response(false, "Your equipped item must be a tool");
+            }
+        }
+        return new Response(false , "Upgrade option not found");
     }
 
     public static Response handleLeaveShop(Request request) {

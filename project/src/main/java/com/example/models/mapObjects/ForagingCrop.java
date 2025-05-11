@@ -13,7 +13,7 @@ public class ForagingCrop extends MapObject {
     }
 
     public ForagingCrop(ForagingCropsType type, boolean canBeHarvested) {
-        super(true, "foragingCrop", "black");
+        super(true, "foragingCrop", "green");
         this.foragingCropsType = type;
         this.canBeHarvested = canBeHarvested;
     }

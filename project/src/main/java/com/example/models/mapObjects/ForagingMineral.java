@@ -21,6 +21,11 @@ public class ForagingMineral extends MapObject {
         this.fMType = type;
     }
 
+    @Override
+    public String toString() {
+        return "M";
+    }
+
     public void setFMType(ForagingMineralsType type) {
         this.fMType = type;
     }

@@ -11,10 +11,13 @@ import com.example.models.buildings.Well;
 import com.example.models.enums.types.MenuTypes;
 import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
+import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapObjects.ArtisanBlock;
 import com.example.models.mapObjects.BuildingBlock;
 import com.example.models.mapObjects.EmptyCell;
+
+import java.util.ArrayList;
 
 public class CarpenterShopController extends Controller {
     public static Response leaveCarpenterShop(Request request) {
@@ -69,6 +72,8 @@ public class CarpenterShopController extends Controller {
         Store store = game.getMap().getVillage().getStore("Carpenter's Shop");
         Barn barn = new Barn();
         barn.barnType = buildingName;
+        ArrayList<Cell> barnCells = new ArrayList<>();
+
         StoreProduct storeProduct = store.getProduct(buildingName);
         if (storeProduct.getAvailableCount() <= 0) {
             GameRepository.saveGame(game);
@@ -89,7 +94,7 @@ public class CarpenterShopController extends Controller {
                 for (int i = x; i < x + width; i++) {
                     for (int j = y; j < y + height; j++) {
                         farm.findCellByCoordinate(i, j).setObjectOnCell(new BuildingBlock(true, buildingName));
-                        barn.buildingCells.add(farm.findCellByCoordinate(i, j));
+                        barnCells.add(farm.findCellByCoordinate(i, j));
                     }
                 }
                 int capacity = 4;
@@ -98,6 +103,7 @@ public class CarpenterShopController extends Controller {
                 else if (buildingName.equals("Deluxe Barn"))
                     capacity = 12;
                 barn.capacity = capacity;
+                barn.buildingCells = barnCells;
                 farm.getBuildings().add(barn);
                 storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                 GameRepository.saveGame(game);
@@ -133,6 +139,7 @@ public class CarpenterShopController extends Controller {
         Store store = game.getMap().getVillage().getStore("");
         Well well = new Well();
         well.wellType = buildingName;
+        ArrayList<Cell> wellCells = new ArrayList<>();
         StoreProduct storeProduct = store.getProduct(buildingName);
         if (storeProduct.getAvailableCount() <= 0) {
             GameRepository.saveGame(game);
@@ -152,9 +159,10 @@ public class CarpenterShopController extends Controller {
                 for (int i = x; i < x + width; i++) {
                     for (int j = y; j < y + height; j++) {
                         farm.findCellByCoordinate(i, j).setObjectOnCell(new BuildingBlock(true, buildingName));
-                        well.buildingCells.add(farm.findCellByCoordinate(i, j));
+                        wellCells.add(farm.findCellByCoordinate(i, j));
                     }
                 }
+                well.buildingCells = wellCells;
                 farm.getBuildings().add(well);
                 storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                 GameRepository.saveGame(game);
@@ -169,6 +177,7 @@ public class CarpenterShopController extends Controller {
         Store store = game.getMap().getVillage().getStore("");
         Coop coop = new Coop();
         coop.coopType = buildingName;
+        ArrayList<Cell> coopCells = new ArrayList<>();
         StoreProduct storeProduct = store.getProduct(buildingName);
         if (storeProduct.getAvailableCount() <= 0) {
             GameRepository.saveGame(game);
@@ -188,7 +197,7 @@ public class CarpenterShopController extends Controller {
                 for (int i = x; i < x + width; i++) {
                     for (int j = y; j < y + height; j++) {
                         farm.findCellByCoordinate(i, j).setObjectOnCell(new BuildingBlock(true, buildingName));
-                        coop.buildingCells.add(farm.findCellByCoordinate(i, j));
+                        coopCells.add(farm.findCellByCoordinate(i, j));
                     }
                 }
                 int capacity = 4;
@@ -197,6 +206,7 @@ public class CarpenterShopController extends Controller {
                 else if (buildingName.equals("Deluxe Coop"))
                     capacity = 12;
                 coop.capacity = capacity;
+                coop.buildingCells = coopCells;
                 farm.getBuildings().add(coop);
                 storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                 GameRepository.saveGame(game);
