@@ -39,9 +39,9 @@ public class Farm {
         lastFarmNumber++;
     }
 
-    public void showFarm(int x, int y, int size) {
-        int playerX = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate().getX();
-        int playerY = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate().getY();
+    public void showFarm(int x, int y, int size, Game game) {
+        int playerX = game.getCurrentPlayer().getCoordinate().getX();
+        int playerY = game.getCurrentPlayer().getCoordinate().getY();
 
         for (Cell cell : cells) {
             Coordinate coordinate = cell.getCoordinate();

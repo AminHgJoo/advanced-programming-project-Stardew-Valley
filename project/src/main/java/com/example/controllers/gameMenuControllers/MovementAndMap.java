@@ -148,7 +148,7 @@ public class MovementAndMap extends Controller {
         Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         farm.showFarm(Integer.parseInt(request.body.get("x"))
                 , Integer.parseInt(request.body.get("y")),
-                Integer.parseInt(request.body.get("size")));
+                Integer.parseInt(request.body.get("size")), game);
         return new Response(true, "");
     }
 
