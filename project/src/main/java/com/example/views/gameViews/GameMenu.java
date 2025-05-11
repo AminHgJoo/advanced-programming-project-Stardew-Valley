@@ -198,12 +198,24 @@ public class GameMenu implements Menu {
                 response = walkHome(input);
             } else if (GameMenuCommands.GO_TO_PARTNER_FARM.matches(input)) {
                 response = goToPartnerFarm(input);
+            } else if (GameMenuCommands.CHEAT_ADD_SKILL_XP.matches(input)) {
+                response = cheatAddSkillXp(input);
+
             } else {
                 response = getInvalidCommand();
             }
         }
 
         printResponse(response);
+    }
+
+    private static @NotNull Response cheatAddSkillXp(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("skill", GameMenuCommands.CHEAT_ADD_SKILL_XP.getGroup(input, "skill"));
+        request.body.put("amount", GameMenuCommands.CHEAT_ADD_SKILL_XP.getGroup(input, "amount"));
+        response = InventoryFunctionalities.cheatAddSkillXP(request);
+        return response;
     }
 
     private static @NotNull Response goToPartnerFarm(String input) {

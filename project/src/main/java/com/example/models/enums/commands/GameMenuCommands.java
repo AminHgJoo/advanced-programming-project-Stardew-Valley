@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 public enum GameMenuCommands implements Command {
     /// debug only command.
+    CHEAT_ADD_SKILL_XP("^cheat\\s+add\\s+-s\\s+(?<skill>.+?)\\s+xp\\s+-a\\s+(?<amount>\\d+)$"),
     SHOW_FARM("^show\\s+entire\\s+farm$"),
     GO_TO_PARTNER_FARM("^go\\s+to\\s+partner\\s+farm$"),
     WALK_HOME("^walk\\s+home$"),

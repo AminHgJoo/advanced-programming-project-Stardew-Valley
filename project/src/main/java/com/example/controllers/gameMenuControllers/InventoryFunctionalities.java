@@ -23,6 +23,27 @@ import com.example.models.mapObjects.EmptyCell;
 import java.util.HashMap;
 
 public class InventoryFunctionalities extends Controller {
+    public static Response cheatAddSkillXP(Request request) {
+        String skill = request.body.get("skill");
+        String amount = request.body.get("amount");
+        User user = App.getLoggedInUser();
+        Game game = user.getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        if (skill.compareToIgnoreCase("farming") == 0) {
+            player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + Integer.parseInt(amount));
+        } else if (skill.compareToIgnoreCase("foraging") == 0) {
+            player.getUnbuffedForagingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + Integer.parseInt(amount));
+        } else if (skill.compareToIgnoreCase("fishing") == 0) {
+            player.getUnbuffedFishingSkill().setXp(player.getUnbuffedFishingSkill().getXp() + Integer.parseInt(amount));
+        } else if (skill.compareToIgnoreCase("mining") == 0) {
+            player.getUnbuffedMiningSkill().setXp(player.getUnbuffedMiningSkill().getXp() + Integer.parseInt(amount));
+        } else {
+            GameRepository.saveGame(game);
+            return new Response(false, "wrong skill name");
+        }
+        GameRepository.saveGame(game);
+        return new Response(true, amount + " successfully added to " + skill + " skill");
+    }
 
     public static Response handleShowInventory(Request request) {
         User user = App.getLoggedInUser();
