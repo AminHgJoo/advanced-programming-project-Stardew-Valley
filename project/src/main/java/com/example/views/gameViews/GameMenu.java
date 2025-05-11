@@ -204,7 +204,6 @@ public class GameMenu implements Menu {
                 response = cheatEmptyRectangle(input);
             } else if (GameMenuCommands.SHOW_MONEY.matches(input)) {
                 response = showMoney(input);
-
             } else {
                 response = getInvalidCommand();
             }

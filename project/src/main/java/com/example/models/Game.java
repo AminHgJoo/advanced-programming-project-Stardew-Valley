@@ -382,22 +382,15 @@ public class Game {
         Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         ArrayList<Animal> animals = game.getCurrentPlayer().getAnimals();
         for (Animal animal : animals) {
-            if (animal.hasBeenPetToDay) {
-                animal.setXp(animal.getXp() + 15);
-            } else
+            if (!animal.hasBeenPetToDay)
                 animal.setXp(animal.getXp() - 10);
             animal.hasBeenPetToDay = false;
             if (animal.hasBeenFedByHay || animal.hasBeenFedByGrass)
                 animal.hasBeenFedYesterday = true;
             if (!animal.hasBeenFedByGrass && !animal.hasBeenFedByHay)
                 animal.setXp(animal.getXp() - 20);
-            AnimalBlock animalBlock = farm.getAnimalBlock(animal);
-            if (animalBlock != null) {
+            if (!animal.isInside) {
                 animal.setXp(animal.getXp() - 20);
-            }
-            if (animal.getType().equals(AnimalType.SHEEP) || animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT)) {
-                if (animal.hasBeenHarvested)
-                    animal.setXp(animal.getXp() + 5);
             }
             if (animal.hasBeenFedYesterday) {
                 double randNum = 0.5 + Math.random();

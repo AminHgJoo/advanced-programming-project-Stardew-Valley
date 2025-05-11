@@ -9,7 +9,6 @@ import com.example.models.enums.types.itemTypes.CropSeedsType;
 import com.example.models.enums.types.itemTypes.ForagingMineralsType;
 import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.example.models.enums.types.mapObjectTypes.ForagingCropsType;
-import com.example.models.enums.types.mapObjectTypes.ForagingSeedsType;
 import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.mapObjects.*;
 import dev.morphia.annotations.Embedded;
@@ -47,11 +46,11 @@ public class Farm {
         int ownerY = -1;
         int partnerX = -1;
         int partnerY = -1;
-        if(owner.getCurrentFarm(game) == this && !owner.isInVillage()){
-             ownerX = owner.getCoordinate().getX();
-             ownerY = owner.getCoordinate().getY();
+        if (owner.getCurrentFarm(game) == this && !owner.isInVillage()) {
+            ownerX = owner.getCoordinate().getX();
+            ownerY = owner.getCoordinate().getY();
         }
-        if(partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()){
+        if (partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()) {
             partnerX = partner.getCoordinate().getX();
             partnerY = partner.getCoordinate().getY();
         }
@@ -65,7 +64,7 @@ public class Farm {
             if (Math.abs(x - xOfCell) <= size / 2 && Math.abs(y - yOfCell) <= size / 2) {
                 if (xOfCell == ownerX && yOfCell == ownerY)
                     System.out.print("\u001B[34m " + "O" + "\033[0m");
-                else if(xOfCell == partnerX && yOfCell == partnerY)
+                else if (xOfCell == partnerX && yOfCell == partnerY)
                     System.out.print("\u001B[34m " + "P" + "\033[0m");
                 else if (cell.getObjectOnCell().color.equals("blue"))
                     System.out.print("\u001B[34m " + cell.getObjectOnCell().toString() + "\033[0m");
@@ -79,6 +78,8 @@ public class Farm {
                     System.out.print("\u001B[90m " + cell.getObjectOnCell().toString() + "\033[0m");
                 else if (cell.getObjectOnCell().color.equals("gray"))
                     System.out.print("\u001B[37m " + cell.getObjectOnCell().toString() + "\033[0m");
+                else if (cell.getObjectOnCell().color.equals("purple"))
+                    System.out.print("\u001B[35m " + cell.getObjectOnCell().toString() + "\033[0m");
                 if (xOfCell - x == size / 2) {
                     System.out.print("\n");
                 }
@@ -94,6 +95,23 @@ public class Farm {
         return null;
     }
 
+    public void removeAnimalFromBuilding(Animal animal) {
+        for (Building building : buildings) {
+            if (building instanceof Barn) {
+                if (((Barn) building).animals.contains(animal)) {
+                    ((Barn) building).animals.remove(animal);
+                    return;
+                }
+            }
+            if (building instanceof Coop) {
+                if (((Coop) building).animals.contains(animal)) {
+                    ((Coop) building).animals.remove(animal);
+                    return;
+                }
+            }
+        }
+    }
+
     /// Debug method.
     public void showEntireFarm(Game game) {
         Player owner = game.getCurrentPlayer();
@@ -102,11 +120,11 @@ public class Farm {
         int ownerY = -1;
         int partnerX = -1;
         int partnerY = -1;
-        if(owner.getCurrentFarm(game) == this && !owner.isInVillage()){
+        if (owner.getCurrentFarm(game) == this && !owner.isInVillage()) {
             ownerX = owner.getCoordinate().getX();
             ownerY = owner.getCoordinate().getY();
         }
-        if(partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()){
+        if (partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()) {
             partnerX = partner.getCoordinate().getX();
             partnerY = partner.getCoordinate().getY();
         }
@@ -123,7 +141,7 @@ public class Farm {
 
             if (cell.getCoordinate().getX() == ownerX && cell.getCoordinate().getY() == ownerY)
                 System.out.print("\u001B[34m " + "O" + "\033[0m");
-            else if(cell.getCoordinate().getX() == partnerX && cell.getCoordinate().getY() == partnerY)
+            else if (cell.getCoordinate().getX() == partnerX && cell.getCoordinate().getY() == partnerY)
                 System.out.print("\u001B[34m " + "P" + "\033[0m");
             else if (cell.getObjectOnCell().color.equals("blue"))
                 System.out.print("\u001B[34m " + cell.getObjectOnCell().toString() + "\033[0m");
@@ -137,6 +155,8 @@ public class Farm {
                 System.out.print("\u001B[90m " + cell.getObjectOnCell().toString() + "\033[0m");
             else if (cell.getObjectOnCell().color.equals("gray"))
                 System.out.print("\u001B[37m " + cell.getObjectOnCell().toString() + "\033[0m");
+            else if (cell.getObjectOnCell().color.equals("purple"))
+                System.out.print("\u001B[35m " + cell.getObjectOnCell().toString() + "\033[0m");
 
             cellIndex++;
             if (cellIndex % 75 == 0)
@@ -356,18 +376,18 @@ public class Farm {
         return false;
     }
 
-    public Animal findAnimal(String animalName) {
+    public Building getAnimalBuilding(Animal animal) {
         for (Building b : getBuildings()) {
             if (b instanceof Coop) {
-                for (Animal animal : ((Coop) b).animals) {
-                    if (animal.getName().equals(animalName)) {
-                        return animal;
+                for (Animal a : ((Coop) b).animals) {
+                    if (a == animal) {
+                        return b;
                     }
                 }
             } else if (b instanceof Barn) {
-                for (Animal animal : ((Barn) b).animals) {
-                    if (animal.getName().equals(animalName)) {
-                        return animal;
+                for (Animal a : ((Barn) b).animals) {
+                    if (a == animal) {
+                        return b;
                     }
                 }
             }
@@ -375,11 +395,11 @@ public class Farm {
         return null;
     }
 
-    public AnimalBlock getAnimalBlock(Animal animal) {
+    public Cell getAnimalBlock(Animal animal) {
         for (Cell cell : getCells()) {
             if (cell.getObjectOnCell() instanceof AnimalBlock) {
                 if (((AnimalBlock) cell.getObjectOnCell()).animal == animal) {
-                    return (AnimalBlock) cell.getObjectOnCell();
+                    return cell;
                 }
             }
         }

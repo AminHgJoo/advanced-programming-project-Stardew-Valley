@@ -174,7 +174,7 @@ public class CarpenterShopController extends Controller {
     }
 
     private static Response buildCoop(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
-        Store store = game.getMap().getVillage().getStore("");
+        Store store = game.getMap().getVillage().getStore("Carpenter's Shop");
         Coop coop = new Coop();
         coop.coopType = buildingName;
         ArrayList<Cell> coopCells = new ArrayList<>();

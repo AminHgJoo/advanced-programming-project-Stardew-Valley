@@ -16,6 +16,7 @@ public class Animal {
     public boolean hasBeenFedYesterday;
     public boolean hasBeenHarvested;
     public Item product;
+    public boolean isInside;
 
     public Animal() {
     }
@@ -27,6 +28,7 @@ public class Animal {
         this.hasBeenPetToDay = false;
         this.hasBeenFedByHay = false;
         this.xp = 0;
+        this.isInside = true;
     }
 
 
@@ -59,6 +61,11 @@ public class Animal {
     }
 
     public void setXp(int xp) {
-        this.xp = xp;
+        if(xp <0)
+            this.xp = 0;
+        else if(xp > 1000)
+            this.xp = 1000;
+        else
+            this.xp = xp;
     }
 }

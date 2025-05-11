@@ -10,7 +10,9 @@ import com.example.models.buildings.Building;
 import com.example.models.buildings.Coop;
 import com.example.models.enums.types.AnimalType;
 import com.example.models.enums.types.MenuTypes;
+import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
+import com.example.models.mapObjects.AnimalBlock;
 
 public class MarineRanchController extends Controller {
     public static Response leaveRanch(Request request) {
@@ -47,7 +49,7 @@ public class MarineRanchController extends Controller {
         }
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
+        Farm farm = game.getCurrentPlayer().getFarm();
         Animal animal = new Animal(name, type, cost);
         Player player = game.getCurrentPlayer();
         if (farm.doesAnimalExist(name)) {
@@ -92,6 +94,7 @@ public class MarineRanchController extends Controller {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Coop) building).animals.add(animal);
                     player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
                     storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
@@ -102,6 +105,15 @@ public class MarineRanchController extends Controller {
         return new Response(false, "you need to build another Coop");
     }
 
+    private static void addAnimalToBuilding(Animal animal, Building building) {
+        for(Cell cell : building.buildingCells){
+            if(!(cell.getObjectOnCell() instanceof AnimalBlock)){
+                cell.setObjectOnCell(new AnimalBlock(animal));
+                break;
+            }
+        }
+    }
+
     private static Response buyPig(Farm farm, Player player, int cost, Animal animal, Game game, String name, StoreProduct storeProduct) {
         for (Building building : farm.getBuildings()) {
             if (building instanceof Barn && ((Barn) building).barnType.equals("Deluxe Barn")) {
@@ -109,6 +121,7 @@ public class MarineRanchController extends Controller {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Barn) building).animals.add(animal);
                     player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
                     storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
@@ -126,6 +139,7 @@ public class MarineRanchController extends Controller {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Coop) building).animals.add(animal);
                     player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
                     storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
@@ -143,6 +157,7 @@ public class MarineRanchController extends Controller {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Coop) building).animals.add(animal);
                     player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
                     storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
@@ -160,6 +175,7 @@ public class MarineRanchController extends Controller {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Barn) building).animals.add(animal);
                     player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
                     storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
@@ -177,6 +193,7 @@ public class MarineRanchController extends Controller {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Coop) building).animals.add(animal);
                     player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
                     storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
@@ -194,6 +211,7 @@ public class MarineRanchController extends Controller {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Barn) building).animals.add(animal);
                     player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
                     storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
@@ -211,6 +229,7 @@ public class MarineRanchController extends Controller {
                     player.setMoney(player.getMoney(game) - cost, game);
                     ((Barn) building).animals.add(animal);
                     player.getAnimals().add(animal);
+                    addAnimalToBuilding(animal, building);
                     storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
                     GameRepository.saveGame(game);
                     return new Response(true, "you have bought " + name);
