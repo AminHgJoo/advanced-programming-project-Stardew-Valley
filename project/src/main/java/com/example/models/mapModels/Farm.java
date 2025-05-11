@@ -47,11 +47,11 @@ public class Farm {
         int ownerY = -1;
         int partnerX = -1;
         int partnerY = -1;
-        if(owner.getCurrentFarm(game) == this){
+        if(owner.getCurrentFarm(game) == this && !owner.isInVillage()){
              ownerX = owner.getCoordinate().getX();
              ownerY = owner.getCoordinate().getY();
         }
-        if(partner != null && partner.getCurrentFarm(game) == this){
+        if(partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()){
             partnerX = partner.getCoordinate().getX();
             partnerY = partner.getCoordinate().getY();
         }
@@ -102,11 +102,11 @@ public class Farm {
         int ownerY = -1;
         int partnerX = -1;
         int partnerY = -1;
-        if(owner.getCurrentFarm(game) == this){
+        if(owner.getCurrentFarm(game) == this && !owner.isInVillage()){
             ownerX = owner.getCoordinate().getX();
             ownerY = owner.getCoordinate().getY();
         }
-        if(partner != null && partner.getCurrentFarm(game) == this){
+        if(partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()){
             partnerX = partner.getCoordinate().getX();
             partnerY = partner.getCoordinate().getY();
         }
