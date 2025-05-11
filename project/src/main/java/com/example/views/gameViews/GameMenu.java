@@ -200,13 +200,23 @@ public class GameMenu implements Menu {
                 response = goToPartnerFarm(input);
             } else if (GameMenuCommands.CHEAT_ADD_SKILL_XP.matches(input)) {
                 response = cheatAddSkillXp(input);
-
+            } else if (GameMenuCommands.CHEAT_EMPTY_RECTANGLE.matches(input)) {
+                response = cheatEmptyRectangle(input);
             } else {
                 response = getInvalidCommand();
             }
         }
 
         printResponse(response);
+    }
+
+    private static @NotNull Response cheatEmptyRectangle(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("x", GameMenuCommands.CHEAT_EMPTY_RECTANGLE.getGroup(input, "x"));
+        request.body.put("y", GameMenuCommands.CHEAT_EMPTY_RECTANGLE.getGroup(input, "y"));
+        response = MovementAndMap.cheatEmptyRectangle(request);
+        return response;
     }
 
     private static @NotNull Response cheatAddSkillXp(String input) {
