@@ -31,8 +31,6 @@ public interface StoreProductInterface {
         return inSeason;
     }
 
-    ItemType getIngredient();
-
     default double getProductPrice(Season season) {
         if (isInSeason(season)) {
             return getPrice();
