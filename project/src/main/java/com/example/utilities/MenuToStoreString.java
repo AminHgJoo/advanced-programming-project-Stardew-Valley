@@ -12,7 +12,7 @@ public class MenuToStoreString {
         } else if (menu instanceof FishShopMenu) {
             return "Fish Shop";
         } else if (menu instanceof JojaMartShopMenu) {
-            return "Joja Mart";
+            return "JojaMart";
         } else if (menu instanceof MarnieRanchMenu) {
             return "Marnie's Shop";
         } else if (menu instanceof PierreGeneralStoreMenu) {

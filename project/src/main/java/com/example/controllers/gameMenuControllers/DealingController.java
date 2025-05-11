@@ -244,10 +244,12 @@ public class DealingController extends Controller {
         if(trashCan != null){
             TrashcanType type = trashCan.getTrashcan();
             player.setTrashcanType(type);
+            return new Response(true, "Trashcan successfully updated");
         }else if(tool != null){
             Quality q = tool.getTool();
             if(player.getEquippedItem() instanceof Tool t){
                 t.setQuality(q);
+                return new Response(true, "Tool successfully updated");
             }else {
                 return  new Response(false, "Your equipped item must be a tool");
             }

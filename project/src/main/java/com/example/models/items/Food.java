@@ -16,6 +16,8 @@ public class Food extends Item {
 
     /// To be used in enums only!
     public Food(FoodTypes foodTypes) {
+        super(Quality.DEFAULT, Integer.MAX_VALUE, foodTypes.value, -foodTypes.energy, foodTypes.name);
+        this.foodTypes = foodTypes;
     }
 
     public Food(Quality quality, FoodTypes foodTypes) {
