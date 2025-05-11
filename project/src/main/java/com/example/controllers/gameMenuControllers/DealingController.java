@@ -64,7 +64,7 @@ public class DealingController extends Controller {
                 check = true;
                 App.setCurrMenuType(MenuTypes.TheStardropSaloonMenu);
             }
-        } else if (name.compareToIgnoreCase("Marnie’s Ranch") == 0) {
+        } else if (name.compareToIgnoreCase("Marnie's Ranch") == 0) {
             Store store = game.getMap().getVillage().getStore(name);
             if (store.isOpen(game.getDate().getHour())) {
                 check = true;

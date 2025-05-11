@@ -202,12 +202,22 @@ public class GameMenu implements Menu {
                 response = cheatAddSkillXp(input);
             } else if (GameMenuCommands.CHEAT_EMPTY_RECTANGLE.matches(input)) {
                 response = cheatEmptyRectangle(input);
+            } else if (GameMenuCommands.SHOW_MONEY.matches(input)) {
+                response = showMoney(input);
+
             } else {
                 response = getInvalidCommand();
             }
         }
 
         printResponse(response);
+    }
+
+    private static @NotNull Response showMoney(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = World.showMoney(request);
+        return response;
     }
 
     private static @NotNull Response cheatEmptyRectangle(String input) {
