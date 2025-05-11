@@ -311,17 +311,17 @@ public class InventoryFunctionalities extends Controller {
                     backpack.getSlots().remove(slotToPlace);
                 }
             } else if (misc.getMiscType().isPlacable) {
-                targetCell.setObjectOnCell(new DroppedItem("gray", slotToPlace.getCount(), slotToPlace.getItem()));
+                targetCell.setObjectOnCell(new DroppedItem(slotToPlace.getCount(), slotToPlace.getItem()));
                 slotToPlace.setCount(slotToPlace.getCount() - 1);
                 if (slotToPlace.getCount() == 0) {
                     backpack.getSlots().remove(slotToPlace);
                 }
             } else {
-                targetCell.setObjectOnCell(new DroppedItem("gray", slotToPlace.getCount(), slotToPlace.getItem()));
+                targetCell.setObjectOnCell(new DroppedItem(slotToPlace.getCount(), slotToPlace.getItem()));
                 backpack.getSlots().remove(slotToPlace);
             }
         } else {
-            targetCell.setObjectOnCell(new DroppedItem("gray", slotToPlace.getCount(), slotToPlace.getItem()));
+            targetCell.setObjectOnCell(new DroppedItem(slotToPlace.getCount(), slotToPlace.getItem()));
             backpack.getSlots().remove(slotToPlace);
         }
 

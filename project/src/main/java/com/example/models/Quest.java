@@ -8,7 +8,7 @@ public class Quest {
     private int count;
     private boolean completed = false;
     private String fieldName = "";
-    private String enumName= "";
+    private String enumName = "";
 
     public Quest() {
 
@@ -47,7 +47,7 @@ public class Quest {
             return FoodTypes.valueOf(fieldName);
         } else if (enumName.equals("ForagingMineralsType")) {
             return ForagingMineralsType.valueOf(fieldName);
-        }else if(enumName.equals("FishType")){
+        } else if (enumName.equals("FishType")) {
             return FishType.valueOf(fieldName);
         }
         return null;

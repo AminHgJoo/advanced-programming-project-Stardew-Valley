@@ -7,10 +7,10 @@ import java.util.regex.Pattern;
 
 public enum GameMenuCommands implements Command {
 
-    /// debug only command.
     SHOW_MONEY("^show\\s+money$"),
     CHEAT_EMPTY_RECTANGLE("^cheat\\s+empty\\s+rectangle\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
     CHEAT_ADD_SKILL_XP("^cheat\\s+add\\s+-s\\s+(?<skill>.+?)\\s+xp\\s+-a\\s+(?<amount>\\d+)$"),
+    /// Debug only command.
     SHOW_FARM("^show\\s+entire\\s+farm$"),
     GO_TO_PARTNER_FARM("^go\\s+to\\s+partner\\s+farm$"),
     WALK_HOME("^walk\\s+home$"),
@@ -110,7 +110,6 @@ public enum GameMenuCommands implements Command {
     EXIT_MENU(Command.EXIT_MENU),
     ENTER_MENU(Command.ENTER_MENU);
 
-    @Language("Regexp")
     private final String regex;
 
     GameMenuCommands(@Language("Regexp") String regex) {

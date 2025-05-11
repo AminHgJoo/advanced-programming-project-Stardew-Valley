@@ -8,7 +8,6 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.Player;
 import com.example.models.User;
-import com.example.models.buildings.Building;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
@@ -33,27 +32,27 @@ public class MovementAndMap extends Controller {
         Farm farm = player.getCurrentFarm(game);
         ArrayList<Cell> cells = farm.getCells();
         Cell cell = Farm.getCellByCoordinate(x, y, cells);
-        if(cell == null) {
+        if (cell == null) {
             GameRepository.saveGame(game);
             return new Response(false, "no cell found");
         }
-        for(int i=0; i<7; i++){
-            for(int j=0; j<4; j++){
-              Cell testCell =   Farm.getCellByCoordinate(x + i, y + j, cells);
-                if(testCell == null ||
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 4; j++) {
+                Cell testCell = Farm.getCellByCoordinate(x + i, y + j, cells);
+                if (testCell == null ||
                         testCell.getObjectOnCell() instanceof Water ||
-                testCell.getObjectOnCell() instanceof DroppedItem ||
-                testCell.getObjectOnCell() instanceof BuildingBlock) {
+                        testCell.getObjectOnCell() instanceof DroppedItem ||
+                        testCell.getObjectOnCell() instanceof BuildingBlock) {
                     GameRepository.saveGame(game);
                     return new Response(false, "can't empty rectangle");
                 }
             }
         }
-        for(int i=0; i<7; i++){
-            for(int j=0; j<4; j++){
-                Cell testCell =   Farm.getCellByCoordinate(x + i, y + j, cells);
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 4; j++) {
+                Cell testCell = Farm.getCellByCoordinate(x + i, y + j, cells);
                 testCell.setObjectOnCell(new EmptyCell());
-        }
+            }
         }
         GameRepository.saveGame(game);
         return new Response(true, "rectangle is now empty");
@@ -200,8 +199,17 @@ public class MovementAndMap extends Controller {
     }
 
     public static Response handleMapHelp(Request request) {
-        return new Response(true, "The player is shown by blue 'P', " +
-                "all other icons show the first letter of their type and corresponding color.");
+        return new Response(true, "The owner is shown by blue 'O', any other non-owner players are shown as blue 'P' " +
+                "all other icons show the first letter of their type and corresponding color; a quick guide is provided below:\n"
+                + "B : Building tiles. (includes the mine, greenhouse, and player home.)\n"
+                + "E : Empty cells\n"
+                + "W : Water cells\n"
+                + "M : Foraging Minerals\n"
+                + "C : Crops\n"
+                + "T : Trees\n"
+                + "F : Foraging Crops\n"
+                + "D : Dropped Item\n"
+                + "A : Artisan Blocks\n");
     }
 
     public static Response handleShowEnergy(Request request) {

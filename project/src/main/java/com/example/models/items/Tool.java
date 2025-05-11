@@ -11,7 +11,6 @@ public class Tool extends Item {
 
     public Tool() {
         super();
-        type = null;
     }
 
     public Tool(Quality quality, int value, double energyCost, String name, ToolTypes type, int waterReserve) {

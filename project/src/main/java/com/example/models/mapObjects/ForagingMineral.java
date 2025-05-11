@@ -8,7 +8,6 @@ public class ForagingMineral extends MapObject {
     private ForagingMineralsType fMType;
 
     public ForagingMineral() {
-
     }
 
     public ForagingMineral(ForagingMineralsType type, String color, String name) {

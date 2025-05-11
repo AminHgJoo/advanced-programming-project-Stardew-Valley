@@ -8,7 +8,8 @@ public class FoodBuff {
     private int duration;
     private String affectedField;
 
-    public FoodBuff() {}
+    public FoodBuff() {
+    }
 
     public FoodBuff(String affectedField, int increment, int duration) {
         this.affectedField = affectedField;

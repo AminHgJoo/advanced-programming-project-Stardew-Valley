@@ -12,8 +12,8 @@ public class DroppedItem extends MapObject {
         super();
     }
 
-    public DroppedItem(String color, int quantity, Item item) {
-        super(true, "droppedItem", color);
+    public DroppedItem(int quantity, Item item) {
+        super(true, "droppedItem", "red");
         this.quantity = quantity;
         this.item = item;
     }

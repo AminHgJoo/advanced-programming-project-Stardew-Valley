@@ -10,7 +10,6 @@ public class NPCFriendship {
     private int xp = 0;
 
     public NPCFriendship() {
-
     }
 
     public NPCFriendship(String player, String npc) {

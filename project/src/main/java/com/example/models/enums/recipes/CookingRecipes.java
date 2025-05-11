@@ -9,6 +9,8 @@ import com.example.models.items.Fish;
 import com.example.models.items.Food;
 import com.example.models.items.Misc;
 
+import java.util.Arrays;
+
 public enum CookingRecipes {
 
     FRIED_EGG("Fried Egg", 0, 0, 0, 0, FoodTypes.FRIED_EGG,
@@ -68,6 +70,18 @@ public enum CookingRecipes {
     public final FoodTypes craftingResultType;
     public final Slot[] ingredients;
 
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(name).append("\n");
+        stringBuilder.append("Farming Level: ").append(farmingLevel).append("\n");
+        stringBuilder.append("Mining Level: ").append(miningLevel).append("\n");
+        stringBuilder.append("Foraging Level: ").append(foragingLevel).append("\n");
+        stringBuilder.append("Fishing Level: ").append(fishingLevel).append("\n");
+        stringBuilder.append(Arrays.toString(ingredients)).append("\n");
+        return stringBuilder.toString();
+    }
+
     CookingRecipes(String name, int farmingLevel, int miningLevel, int foragingLevel, int fishingLevel
             , FoodTypes craftingResultType, Slot[] ingredients) {
         this.name = name;
@@ -98,10 +112,5 @@ public enum CookingRecipes {
             }
         }
         return null;
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 }

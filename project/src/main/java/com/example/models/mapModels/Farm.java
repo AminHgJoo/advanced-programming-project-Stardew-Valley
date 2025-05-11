@@ -9,7 +9,6 @@ import com.example.models.enums.types.itemTypes.CropSeedsType;
 import com.example.models.enums.types.itemTypes.ForagingMineralsType;
 import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.example.models.enums.types.mapObjectTypes.ForagingCropsType;
-import com.example.models.enums.types.mapObjectTypes.ForagingSeedsType;
 import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.mapObjects.*;
 import dev.morphia.annotations.Embedded;
@@ -47,11 +46,11 @@ public class Farm {
         int ownerY = -1;
         int partnerX = -1;
         int partnerY = -1;
-        if(owner.getCurrentFarm(game) == this && !owner.isInVillage()){
-             ownerX = owner.getCoordinate().getX();
-             ownerY = owner.getCoordinate().getY();
+        if (owner.getCurrentFarm(game) == this && !owner.isInVillage()) {
+            ownerX = owner.getCoordinate().getX();
+            ownerY = owner.getCoordinate().getY();
         }
-        if(partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()){
+        if (partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()) {
             partnerX = partner.getCoordinate().getX();
             partnerY = partner.getCoordinate().getY();
         }
@@ -65,7 +64,7 @@ public class Farm {
             if (Math.abs(x - xOfCell) <= size / 2 && Math.abs(y - yOfCell) <= size / 2) {
                 if (xOfCell == ownerX && yOfCell == ownerY)
                     System.out.print("\u001B[34m " + "O" + "\033[0m");
-                else if(xOfCell == partnerX && yOfCell == partnerY)
+                else if (xOfCell == partnerX && yOfCell == partnerY)
                     System.out.print("\u001B[34m " + "P" + "\033[0m");
                 else if (cell.getObjectOnCell().color.equals("blue"))
                     System.out.print("\u001B[34m " + cell.getObjectOnCell().toString() + "\033[0m");
@@ -102,11 +101,11 @@ public class Farm {
         int ownerY = -1;
         int partnerX = -1;
         int partnerY = -1;
-        if(owner.getCurrentFarm(game) == this && !owner.isInVillage()){
+        if (owner.getCurrentFarm(game) == this && !owner.isInVillage()) {
             ownerX = owner.getCoordinate().getX();
             ownerY = owner.getCoordinate().getY();
         }
-        if(partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()){
+        if (partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()) {
             partnerX = partner.getCoordinate().getX();
             partnerY = partner.getCoordinate().getY();
         }
@@ -123,7 +122,7 @@ public class Farm {
 
             if (cell.getCoordinate().getX() == ownerX && cell.getCoordinate().getY() == ownerY)
                 System.out.print("\u001B[34m " + "O" + "\033[0m");
-            else if(cell.getCoordinate().getX() == partnerX && cell.getCoordinate().getY() == partnerY)
+            else if (cell.getCoordinate().getX() == partnerX && cell.getCoordinate().getY() == partnerY)
                 System.out.print("\u001B[34m " + "P" + "\033[0m");
             else if (cell.getObjectOnCell().color.equals("blue"))
                 System.out.print("\u001B[34m " + cell.getObjectOnCell().toString() + "\033[0m");

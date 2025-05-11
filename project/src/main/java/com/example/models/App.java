@@ -12,7 +12,7 @@ public class App {
     private static User loggedInUser = UserRepository.getStayLoggedInUser();
     private static MenuTypes currMenuType = MenuTypes.SignInMenu;
 
-    private static HashMap<String, ItemType> allItemTypes = new HashMap<>();
+    private static final HashMap<String, ItemType> allItemTypes = new HashMap<>();
 
     static {
         for (CropSeedsType cropSeedsType : CropSeedsType.values()) {
