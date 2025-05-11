@@ -7,10 +7,10 @@ import java.util.regex.Pattern;
 
 public enum GameMenuCommands implements Command {
 
-    /// debug only command.
     SHOW_MONEY("^show\\s+money$"),
     CHEAT_EMPTY_RECTANGLE("^cheat\\s+empty\\s+rectangle\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
     CHEAT_ADD_SKILL_XP("^cheat\\s+add\\s+-s\\s+(?<skill>.+?)\\s+xp\\s+-a\\s+(?<amount>\\d+)$"),
+    /// Debug only command.
     SHOW_FARM("^show\\s+entire\\s+farm$"),
     GO_TO_PARTNER_FARM("^go\\s+to\\s+partner\\s+farm$"),
     WALK_HOME("^walk\\s+home$"),
@@ -88,7 +88,7 @@ public enum GameMenuCommands implements Command {
     GIFT_HISTORY("^gift\\s+history\\s+-u\\s+(?<username>.+)$"),
     GIFT_RATE("^gift\\s+rate\\s+-i\\s+(?<giftNumber>\\d+)\\s+-r\\s+(?<rate>\\d+)$"),
     HUG("^hug\\s+-u\\s+(?<username>.+)$"),
-    FLOWER("^flower\\s+-u\\s+(?<username>.+)\\s+-f\\s+(?<flowerName>.+)$"),
+    FLOWER("^flower\\s+-u\\s+(?<username>.+?)\\s+-f\\s+(?<flowerName>.+)$"),
     ASK_MARRIAGE("^ask\\s+marriage\\s+-u\\s+(?<username>.+?)\\s+-r\\s+(?<ring>.+)$"),
     RESPOND_MARRIAGE_ACCEPT("^respond\\s+–accept\\s+-u\\s+(?<username>.+)$"),
     RESPOND_MARRIAGE_REJECT("^respond\\s+–reject\\s+-u\\s+(?<username>.+)$"),
@@ -101,16 +101,15 @@ public enum GameMenuCommands implements Command {
     TRADE_RESPOND_REJECT("^trade\\s+response\\s+–reject\\s+-i\\s+(?<id>\\d+)$"),
     TRADE_HISTORY("^trade\\s+history$"),
     MEET_NPC("^meet\\s+(NPC|npc)\\s+(?<npcName>.+)$"),
-    TALK_NPC("^talk\\s+(NPC|npc)\\s+(?<npcName>.+)\\s+-m\\s+(?<message>.*)$"),
+    TALK_NPC("^talk\\s+(NPC|npc)\\s+(?<npcName>.+?)\\s+-m\\s+(?<message>.*)$"),
     GIFT_NPC("^gift\\s+(NPC|npc)\\s+(?<npcName>.+?)\\s+-i\\s+(?<item>.+)$"),
     FRIENDSHIP_NPC_LIST("^friendship\\s+(NPC|npc)\\s+list$"),
     QUESTS_LIST("^quests\\s+list\\s+-n\\s+(?<npcName>.+)$"),
-    QUESTS_FINISH("^quests\\s+finish\\s+-n\\s+(?<npcName>.+)\\s+-i\\s+(?<index>\\d+)$"),
+    QUESTS_FINISH("^quests\\s+finish\\s+-n\\s+(?<npcName>.+?)\\s+-i\\s+(?<index>\\d+)$"),
     SHOW_MENU(Command.SHOW_MENU),
     EXIT_MENU(Command.EXIT_MENU),
     ENTER_MENU(Command.ENTER_MENU);
 
-    @Language("Regexp")
     private final String regex;
 
     GameMenuCommands(@Language("Regexp") String regex) {

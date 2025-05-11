@@ -7,7 +7,6 @@ import dev.morphia.annotations.Embedded;
 public class Farming extends Skill {
     @Override
     public void learn() {
-
     }
 
     public Farming() {

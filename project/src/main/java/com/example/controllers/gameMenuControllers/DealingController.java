@@ -123,15 +123,15 @@ public class DealingController extends Controller {
             }
             GameRepository.saveGame(game);
             return res;
-        }else if(type == null && p.getType().getIngredient() != null) {
-            Response res = handleUpgradeTool(productName , p, player);
-            if(res.isSuccess()){
+        } else if (type == null && p.getType().getIngredient() != null) {
+            Response res = handleUpgradeTool(productName, p, player);
+            if (res.isSuccess()) {
                 Slot slot = player.getInventory().getSlotByItemName(p.getType().getIngredient().getName());
-                if(slot == null || slot.getCount() < 5){
-                    return  new Response (false , "you don't have enough ingredients");
+                if (slot == null || slot.getCount() < 5) {
+                    return new Response(false, "you don't have enough ingredients");
                 }
                 slot.setCount(slot.getCount() - 5);
-                if(slot.getCount() == 0){
+                if (slot.getCount() == 0) {
                     player.getInventory().removeSlot(slot);
                 }
                 player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason())), game);
@@ -238,23 +238,23 @@ public class DealingController extends Controller {
         return new Response(false, "Recipe not found");
     }
 
-    public static Response handleUpgradeTool(String name , StoreProduct p  , Player player){
-        BlackSmithProducts trashCan  = BlackSmithProducts.findTrashCanUpgrade(name);
+    public static Response handleUpgradeTool(String name, StoreProduct p, Player player) {
+        BlackSmithProducts trashCan = BlackSmithProducts.findTrashCanUpgrade(name);
         BlackSmithProducts tool = BlackSmithProducts.findSteelToolUpgrade(name);
-        if(trashCan != null){
+        if (trashCan != null) {
             TrashcanType type = trashCan.getTrashcan();
             player.setTrashcanType(type);
             return new Response(true, "Trashcan successfully updated");
-        }else if(tool != null){
+        } else if (tool != null) {
             Quality q = tool.getTool();
-            if(player.getEquippedItem() instanceof Tool t){
+            if (player.getEquippedItem() instanceof Tool t) {
                 t.setQuality(q);
                 return new Response(true, "Tool successfully updated");
-            }else {
-                return  new Response(false, "Your equipped item must be a tool");
+            } else {
+                return new Response(false, "Your equipped item must be a tool");
             }
         }
-        return new Response(false , "Upgrade option not found");
+        return new Response(false, "Upgrade option not found");
     }
 
     public static Response handleLeaveShop(Request request) {

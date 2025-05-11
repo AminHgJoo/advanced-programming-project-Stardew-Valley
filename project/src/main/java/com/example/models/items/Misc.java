@@ -26,7 +26,6 @@ public class Misc extends Item {
 
     public Misc() {
         super();
-        miscType = null;
     }
 
     public Misc(MiscType miscType, Quality quality) {

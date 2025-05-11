@@ -26,9 +26,7 @@ public class NPCReward {
         }
     }
 
-    public NPCReward() {
-
-    }
+    public NPCReward() {}
 
     public NPCReward(int money, ItemType rewardItems, int friendshipLevel, int count) {
         this.money = money;

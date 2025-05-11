@@ -10,6 +10,8 @@ import com.example.models.items.ForagingMineral;
 import com.example.models.items.Misc;
 import com.example.models.items.TreeSeed;
 
+import java.util.Arrays;
+
 public enum CraftingRecipes {
     CHERRY_BOMB("Cherry Bomb", "Destroys everything in a 3 tile radius.", 0, 1, 0, 0, 50,
             new Slot[]{new Slot(new ForagingMineral(Quality.DEFAULT, ForagingMineralsType.COPPER_ORE), 4), new Slot(new ForagingMineral(Quality.DEFAULT, ForagingMineralsType.COAL), 1)},
@@ -82,6 +84,20 @@ public enum CraftingRecipes {
     public final Slot[] ingredients;
     public final ItemType resultItemType;
 
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(name).append(": ");
+        stringBuilder.append(description).append("\n");
+        stringBuilder.append("Farming level: ").append(farmingLevel).append("\n");
+        stringBuilder.append("Mining level: ").append(miningLevel).append("\n");
+        stringBuilder.append("Foraging level: ").append(foragingLevel).append("\n");
+        stringBuilder.append("Fishing level: ").append(fishingLevel).append("\n");
+        stringBuilder.append("Selling price: ").append(sellingPrice).append("\n");
+        stringBuilder.append(Arrays.toString(ingredients)).append("\n");
+        return stringBuilder.toString();
+    }
+
     CraftingRecipes(String name, String description, int farmingLevel, int miningLevel, int foragingLevel
             , int fishingLevel, int sellingPrice, Slot[] ingredients, ItemType resultItemType) {
         this.name = name;
@@ -102,10 +118,5 @@ public enum CraftingRecipes {
             }
         }
         return null;
-    }
-
-    @Override
-    public String toString() {
-        return name + " Recipe: " + description;
     }
 }

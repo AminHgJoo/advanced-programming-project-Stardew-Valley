@@ -1,7 +1,6 @@
 package com.example.utilities;
 
 import com.example.models.mapModels.Cell;
-import com.example.models.mapModels.Farm;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -21,7 +20,7 @@ public class FindPath {
     }
 
     public static void pathBFS(Tile src, Tile dest, ArrayList<Cell> arr) {
-        for (Cell c : arr){
+        for (Cell c : arr) {
             cells.add(new Tile(c));
         }
         boolean[][] visited = new boolean[75][50];

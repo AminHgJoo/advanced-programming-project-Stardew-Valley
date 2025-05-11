@@ -52,7 +52,7 @@ public class UserRepository {
 
     public static void removeStayLoggedInUser() {
         String envFilePath = System.getProperty("user.dir");
-        if(!envFilePath.contains("project")){
+        if (!envFilePath.contains("project")) {
             envFilePath += "/project";
         }
         if (System.getenv("APP_MODE").equals("TEST")) {

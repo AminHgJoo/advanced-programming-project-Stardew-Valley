@@ -8,14 +8,14 @@ public enum AllProducts {
     IRON_ORE("Iron Ore", "A fairly common ore that can be smelted into bars.", ForagingMineralsType.IRON_ORE, 150, 150, Double.POSITIVE_INFINITY, Season.values()),
     COAL("Coal", "A combustible rock that is useful for crafting and smelting.", ForagingMineralsType.COAL, 150, 150, Double.POSITIVE_INFINITY, Season.values()),
     GOLD_ORE("Gold Ore", "A precious ore that can be smelted into bars.", ForagingMineralsType.GOLD_ORE, 400, 400, Double.POSITIVE_INFINITY, Season.values()),
-    COPPER_TOOL("Copper Tool", MiscType.COPPER_BAR, 2000,2000,1, Season.values()),
-    STEEL_TOOL("Steel Tool", MiscType.IRON_BAR, 5000,5000,1, Season.values()),
-    GOLD_TOOL("Gold Tool", MiscType.GOLD_BAR, 10000,10000,1, Season.values()),
-    IRIDIUM_TOOL("Iridium Tool", MiscType.IRIDIUM_BAR, 25000,25000,1, Season.values()),
-    COPPER_TRASH_CAN("Copper Trash Can", MiscType.COPPER_BAR, 1000,1000,1, Season.values()),
-    STEEL_TRASH_CAN("Steel Trash Can", MiscType.COPPER_BAR, 2500,2500,1, Season.values()),
-    GOLD_TRASH_CAN("Gold Trash Can", MiscType.COPPER_BAR, 5000,5000,1, Season.values()),
-    IRIDIUM_TRASH_CAN("Iridium Trash Can", MiscType.COPPER_BAR, 12500,12500,1, Season.values()),
+    COPPER_TOOL("Copper Tool", MiscType.COPPER_BAR, 2000, 2000, 1, Season.values()),
+    STEEL_TOOL("Steel Tool", MiscType.IRON_BAR, 5000, 5000, 1, Season.values()),
+    GOLD_TOOL("Gold Tool", MiscType.GOLD_BAR, 10000, 10000, 1, Season.values()),
+    IRIDIUM_TOOL("Iridium Tool", MiscType.IRIDIUM_BAR, 25000, 25000, 1, Season.values()),
+    COPPER_TRASH_CAN("Copper Trash Can", MiscType.COPPER_BAR, 1000, 1000, 1, Season.values()),
+    STEEL_TRASH_CAN("Steel Trash Can", MiscType.COPPER_BAR, 2500, 2500, 1, Season.values()),
+    GOLD_TRASH_CAN("Gold Trash Can", MiscType.COPPER_BAR, 5000, 5000, 1, Season.values()),
+    IRIDIUM_TRASH_CAN("Iridium Trash Can", MiscType.COPPER_BAR, 12500, 12500, 1, Season.values()),
     WOOD("Wood", "A sturdy, yet flexible plant material with a wide variety of uses.", MiscType.WOOD, 10, 10, Double.POSITIVE_INFINITY, Season.values()),
     STONE("Stone", "A common material with many uses in crafting and building.", ForagingMineralsType.STONE, 20, 20, Double.POSITIVE_INFINITY, Season.values()),
     BARN("Barn", "Houses 4 barn-dwelling animals.", ForagingMineralsType.STONE, 20, 20, 1, Season.values()),
@@ -213,7 +213,7 @@ public enum AllProducts {
         }
     }
 
-    AllProducts(String name , ItemType ingredient, int price , double outOfSeasonPrice, double dailyLimit, Season[] seasons) {
+    AllProducts(String name, ItemType ingredient, int price, double outOfSeasonPrice, double dailyLimit, Season[] seasons) {
         this.name = name;
         this.ingredient = ingredient;
         this.price = price;

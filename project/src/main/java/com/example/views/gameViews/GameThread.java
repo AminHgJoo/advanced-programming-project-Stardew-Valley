@@ -2,10 +2,7 @@ package com.example.views.gameViews;
 
 import com.example.Repositories.GameRepository;
 import com.example.models.Game;
-import com.example.models.mapModels.Farm;
 import dev.morphia.annotations.Transient;
-
-import java.util.ArrayList;
 
 public class GameThread extends Thread {
     @Transient
@@ -40,8 +37,6 @@ public class GameThread extends Thread {
             game.checkForRecipeUnlocking();
             game.handleBuffExpiration();
             game.checkForSkillUpgrades();
-
-            //TODO: IS DAILY?
 
             GameRepository.saveGame(game);
         }
