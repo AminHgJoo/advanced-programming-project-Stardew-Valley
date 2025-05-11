@@ -155,7 +155,7 @@ public class MovementAndMap extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
-        farm.showEntireFarm();
+        farm.showEntireFarm(game);
         return new Response(true, "");
     }
 

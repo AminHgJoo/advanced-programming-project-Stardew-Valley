@@ -95,10 +95,21 @@ public class Farm {
     }
 
     /// Debug method.
-    public void showEntireFarm() {
-        int playerX = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate().getX();
-        int playerY = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate().getY();
-
+    public void showEntireFarm(Game game) {
+        Player owner = game.getCurrentPlayer();
+        Player partner = game.getPartner(owner);
+        int ownerX = -1;
+        int ownerY = -1;
+        int partnerX = -1;
+        int partnerY = -1;
+        if(owner.getCurrentFarm(game) == this){
+            ownerX = owner.getCoordinate().getX();
+            ownerY = owner.getCoordinate().getY();
+        }
+        if(partner != null && partner.getCurrentFarm(game) == this){
+            partnerX = partner.getCoordinate().getX();
+            partnerY = partner.getCoordinate().getY();
+        }
         for (int i = 0; i < 152; i++) {
             System.out.print("_");
         }
@@ -110,7 +121,9 @@ public class Farm {
             if (cellIndex % 75 == 0)
                 System.out.print("|");
 
-            if (cell.getCoordinate().getX() == playerX && cell.getCoordinate().getY() == playerY)
+            if (cell.getCoordinate().getX() == ownerX && cell.getCoordinate().getY() == ownerY)
+                System.out.print("\u001B[34m " + "O" + "\033[0m");
+            else if(cell.getCoordinate().getX() == partnerX && cell.getCoordinate().getY() == partnerY)
                 System.out.print("\u001B[34m " + "P" + "\033[0m");
             else if (cell.getObjectOnCell().color.equals("blue"))
                 System.out.print("\u001B[34m " + cell.getObjectOnCell().toString() + "\033[0m");
