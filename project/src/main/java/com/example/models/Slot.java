@@ -1,9 +1,14 @@
 package com.example.models;
 
 import com.example.models.enums.Quality;
-import com.example.models.enums.types.itemTypes.*;
-import com.example.models.enums.types.storeProductTypes.FishProducts;
-import com.example.models.items.*;
+import com.example.models.enums.types.itemTypes.FoodTypes;
+import com.example.models.enums.types.itemTypes.ForagingMineralsType;
+import com.example.models.enums.types.itemTypes.ItemType;
+import com.example.models.enums.types.itemTypes.MiscType;
+import com.example.models.items.Food;
+import com.example.models.items.ForagingMineral;
+import com.example.models.items.Item;
+import com.example.models.items.Misc;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
@@ -13,8 +18,8 @@ public class Slot {
 
     public Slot() {
     }
-    
-    public Slot(ItemType type , int count) {
+
+    public Slot(ItemType type, int count) {
         Item item = null;
         if (type instanceof FoodTypes) {
             item = new Food((FoodTypes) type);

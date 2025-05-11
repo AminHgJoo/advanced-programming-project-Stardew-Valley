@@ -1,12 +1,12 @@
 package com.example.utilities;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class AIChat {
     private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions";
@@ -19,7 +19,7 @@ public class AIChat {
         JSONObject msg = new JSONObject();
         msg.put("role", "user");
         msg.put("content", userMessage);
-        arr.put(0,msg);
+        arr.put(0, msg);
         payload.put("messages", arr);
 
         HttpClient client = HttpClient.newHttpClient();

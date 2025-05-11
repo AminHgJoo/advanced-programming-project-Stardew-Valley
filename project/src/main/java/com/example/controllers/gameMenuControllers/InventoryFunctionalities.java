@@ -11,7 +11,6 @@ import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.types.itemTypes.TreeSeedsType;
 import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
-import com.example.models.enums.types.mapObjectTypes.ForagingSeedsType;
 import com.example.models.items.*;
 import com.example.models.items.buffs.ActiveBuff;
 import com.example.models.mapModels.Cell;

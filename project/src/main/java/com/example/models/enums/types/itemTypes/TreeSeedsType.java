@@ -38,7 +38,7 @@ public enum TreeSeedsType implements ItemType {
         this.value = value;
     }
 
-    public static TreeSeedsType findTreeTypeByName(String name){
+    public static TreeSeedsType findTreeTypeByName(String name) {
         for (TreeSeedsType tree : TreeSeedsType.values()) {
             if (tree.name.compareToIgnoreCase(name) == 0) {
                 return tree;
@@ -48,7 +48,7 @@ public enum TreeSeedsType implements ItemType {
     }
 
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 

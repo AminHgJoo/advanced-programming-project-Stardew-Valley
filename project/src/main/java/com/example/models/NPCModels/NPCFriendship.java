@@ -1,6 +1,5 @@
 package com.example.models.NPCModels;
 
-import com.example.models.Player;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
@@ -10,7 +9,7 @@ public class NPCFriendship {
     private int level = 0;
     private int xp = 0;
 
-    public NPCFriendship(){
+    public NPCFriendship() {
 
     }
 

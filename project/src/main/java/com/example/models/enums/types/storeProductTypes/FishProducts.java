@@ -1,6 +1,5 @@
 package com.example.models.enums.types.storeProductTypes;
 
-import com.example.models.enums.types.itemTypes.FishType;
 import com.example.models.enums.types.itemTypes.FoodTypes;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.types.itemTypes.ToolTypes;

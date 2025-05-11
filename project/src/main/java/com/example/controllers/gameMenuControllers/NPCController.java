@@ -27,7 +27,7 @@ public class NPCController extends Controller {
         if (npc == null) {
             return new Response(false, "There is no npc with this name.");
         }
-        if (!npc.getHasTalked().getOrDefault(player.getUser().getUsername() , false)) {
+        if (!npc.getHasTalked().getOrDefault(player.getUser().getUsername(), false)) {
             npc.getHasTalked().put(player.getUser().getUsername(), true);
             player.addXpToNpcFriendship(20, npc);
             GameRepository.saveGame(game);
@@ -55,7 +55,7 @@ public class NPCController extends Controller {
         if (itemSlot == null) {
             return new Response(false, "There is no item with this name.");
         }
-        if(itemSlot.getItem() instanceof Tool) {
+        if (itemSlot.getItem() instanceof Tool) {
             return new Response(false, "You can't gift tool.");
         }
         itemSlot.setCount(itemSlot.getCount() - 1);
@@ -72,7 +72,7 @@ public class NPCController extends Controller {
             npc.getGift().put(player.getUser().getUsername(), true);
         }
         GameRepository.saveGame(game);
-        return new Response(true , "Gift has been sent.");
+        return new Response(true, "Gift has been sent.");
     }
 
     public static Response handleFriendshipNPCList(Request request) {
@@ -94,7 +94,7 @@ public class NPCController extends Controller {
             return new Response(false, "There is no npc with this name.");
         }
         NPCFriendship friendship = player.findFriendshipByNPC(npcName);
-        return new Response(true , npc.questsToString(friendship.getLevel()));
+        return new Response(true, npc.questsToString(friendship.getLevel()));
     }
 
     public static Response handleQuestFinish(Request request) {
@@ -108,31 +108,31 @@ public class NPCController extends Controller {
             return new Response(false, "There is no npc with this name.");
         }
         int index = Integer.parseInt(request.body.get("index"));
-        if(index >= 3){
+        if (index >= 3) {
             return new Response(false, "Invalid quest index");
         }
         Quest q = npc.getQuests().get(index);
-        if(q.isCompleted()){
+        if (q.isCompleted()) {
             return new Response(false, "Quest is completed.");
         }
         ItemType type = q.getItem();
 
         Slot itemSlot = player.getInventory().getSlotByItemName(type.getName());
-        if(itemSlot == null){
-            return new Response(false,"You don't have required items");
+        if (itemSlot == null) {
+            return new Response(false, "You don't have required items");
         }
-        if(itemSlot.getCount() < q.getCount()){
-            return new Response(false,"You don't have enough required items");
+        if (itemSlot.getCount() < q.getCount()) {
+            return new Response(false, "You don't have enough required items");
         }
 
         itemSlot.setCount(itemSlot.getCount() - q.getCount());
-        if(itemSlot.getCount() == 0){
+        if (itemSlot.getCount() == 0) {
             player.getInventory().removeSlot(itemSlot);
         }
         q.setCompleted(true);
 
         NPCReward reward = npc.getRewards().get(index);
-       player.addNpcReward(reward , npc , game);
+        player.addNpcReward(reward, npc, game);
         GameRepository.saveGame(game);
         return null;
     }

@@ -36,7 +36,7 @@ public class Crop extends MapObject {
         }
     }
 
-    public Crop(CropSeedsType plantType , LocalDateTime source) {
+    public Crop(CropSeedsType plantType, LocalDateTime source) {
         super(true, "plant", "green");
         this.cropSeedsType = plantType;
         stageNumber = 0;

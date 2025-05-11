@@ -72,9 +72,9 @@ public enum TreeType {
         this.seasonsOfGrowth = seasonsOfGrowth;
     }
 
-    public static TreeType findTreeTypeByName(String seedType){
+    public static TreeType findTreeTypeByName(String seedType) {
         for (TreeType tree : TreeType.values()) {
-            if(tree.source.compareToIgnoreCase(seedType) == 0){
+            if (tree.source.compareToIgnoreCase(seedType) == 0) {
                 return tree;
             }
         }

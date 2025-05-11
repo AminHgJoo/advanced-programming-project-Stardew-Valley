@@ -74,14 +74,14 @@ public class Farming extends Controller {
 
         // x : [22,28] , y : [3,10]
         if (cropSeedsType.canBeGiant) {
-            int arr[][]= player.getCurrentFarm(game).giantCropsTogether(cell);
-            if(arr != null){
+            int arr[][] = player.getCurrentFarm(game).giantCropsTogether(cell);
+            if (arr != null) {
                 int s = 0;
                 for (int i = 0; i < arr.length; i++) {
                     int x = arr[i][0] + cellCoordinate.getX();
                     int y = arr[i][1] + cellCoordinate.getY();
                     Cell c = player.getCurrentFarm(game).findCellByCoordinate(x, y);
-                    s = Math.max(s, ((Crop)c.getObjectOnCell()).getStageNumber());
+                    s = Math.max(s, ((Crop) c.getObjectOnCell()).getStageNumber());
                     c.setObjectOnCell(new EmptyCell());
                 }
                 plant.setGiant(true);

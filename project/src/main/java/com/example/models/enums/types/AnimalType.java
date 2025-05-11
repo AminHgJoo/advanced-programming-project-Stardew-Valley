@@ -9,9 +9,9 @@ public enum AnimalType {
     DUCK(2, 8, 1200),
     RABBIT(4, 12, 8000),
     DINOSAUR(7, 8, 14000),
-    COW(1, 4,1500),
-    GOAT(2, 8,4000),
-    SHEEP(3, 12,8000),
+    COW(1, 4, 1500),
+    GOAT(2, 8, 4000),
+    SHEEP(3, 12, 8000),
     PIG(1, 12, 16000),
     ;
 

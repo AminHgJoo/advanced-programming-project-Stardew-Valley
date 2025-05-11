@@ -12,14 +12,13 @@ import com.example.models.enums.types.MenuTypes;
 import com.example.models.enums.types.itemTypes.*;
 import com.example.models.enums.types.storeProductTypes.FishProducts;
 import com.example.models.items.*;
-import com.example.models.mapObjects.Crop;
 import com.example.utilities.MenuToStoreString;
 
 public class DealingController extends Controller {
     public static Response handleGoToStore(Request request) {
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
-        if(!player.isInVillage()){
+        if (!player.isInVillage()) {
             GameRepository.saveGame(game);
             return new Response(false, "You are not in the village");
         }

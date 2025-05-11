@@ -1,7 +1,6 @@
 package com.example.models;
 
 import com.example.models.enums.types.storeProductTypes.AllProducts;
-import com.example.models.enums.types.storeProductTypes.StoreProductInterface;
 import com.example.models.items.Item;
 import dev.morphia.annotations.Embedded;
 
@@ -16,7 +15,7 @@ public class StoreProduct {
     public StoreProduct() {
     }
 
-    public StoreProduct(AllProducts type , String storeName) {
+    public StoreProduct(AllProducts type, String storeName) {
         this.type = type;
         this.availableCount = type.getDailyLimit();
         this.storeName = storeName;

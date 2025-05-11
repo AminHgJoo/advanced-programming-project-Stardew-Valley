@@ -11,11 +11,11 @@ public class Gift {
     private int amount;
     private int rate = 0;
 
-    public Gift(){
+    public Gift() {
 
     }
 
-    public Gift(String from , String to , Item item , int amount) {
+    public Gift(String from, String to, Item item, int amount) {
         this.from = from;
         this.to = to;
         this.item = item;

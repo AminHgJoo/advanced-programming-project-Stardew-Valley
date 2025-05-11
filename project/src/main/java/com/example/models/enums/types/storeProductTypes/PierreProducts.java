@@ -4,8 +4,8 @@ import com.example.models.enums.types.itemTypes.*;
 import com.example.models.enums.worldEnums.Season;
 
 public enum PierreProducts implements StoreProductInterface {
-    DEHYDRATOR("Dehydrator" , "A recipe to make Dehydrator",null ,10000 , 10000,1 , Season.values()),
-    GRASS_STARTER_RECIPE("Grass Starter Recipe" , "A recipe to make Grass Starter",null ,1000 , 1000,1 , Season.values()),
+    DEHYDRATOR("Dehydrator", "A recipe to make Dehydrator", null, 10000, 10000, 1, Season.values()),
+    GRASS_STARTER_RECIPE("Grass Starter Recipe", "A recipe to make Grass Starter", null, 1000, 1000, 1, Season.values()),
     RICE_P("Pierre Rice", "A basic grain often served under vegetables.", FoodTypes.RICE, 200, 200, Double.POSITIVE_INFINITY, Season.values()),
     WHEAT_FLOUR_P("Pierre Wheat Flour", "A common cooking ingredient made from crushed wheat seeds.", FoodTypes.WHEAT_FLOUR, 100, 100, Double.POSITIVE_INFINITY, Season.values()),
     BOUQUET("Bouquet", "A gift that shows your romantic interest.\n(Unlocked after reaching level 2 friendship with a player)", MiscType.BOUQUET, 1000, 1000, 2, Season.values()),
@@ -37,13 +37,13 @@ public enum PierreProducts implements StoreProductInterface {
     TOMATO_SEEDS_P("Pierre Tomato Seeds", "Plant these in the summer. Takes 11 days to mature, and continues to produce after first harvest.", CropSeedsType.TOMATO, 50, 75, 5, new Season[]{Season.SUMMER}),
     BLUEBERRY_SEEDS("Blueberry Seeds", "Plant these in the summer. Takes 13 days to mature, and continues to produce after first harvest.", CropSeedsType.BLUEBERRY, 80, 120, 5, new Season[]{Season.SUMMER}),
     PEPPER_SEEDS_P("Pierre Pepper Seeds", "Plant these in the summer. Takes 5 days to mature, and continues to produce after first harvest.", CropSeedsType.HOT_PEPPER, 40, 60, 5, new Season[]{Season.SUMMER}),
-    WHEAT_SEEDS_P("Pierre Wheat Seeds", "Plant these in the summer or fall. Takes 4 days to mature. Harvest with the scythe.", CropSeedsType.WHEAT, 10, 15, 5, new Season[]{Season.SUMMER , Season.FALL}),
+    WHEAT_SEEDS_P("Pierre Wheat Seeds", "Plant these in the summer or fall. Takes 4 days to mature. Harvest with the scythe.", CropSeedsType.WHEAT, 10, 15, 5, new Season[]{Season.SUMMER, Season.FALL}),
     RADISH_SEEDS_P("Pierre Radish Seeds", "Plant these in the summer. Takes 6 days to mature.", CropSeedsType.RADISH, 40, 60, 5, new Season[]{Season.SUMMER}),
     POPPY_SEEDS_P("Pierre Poppy Seeds", "Plant in summer. Produces a bright red flower in 7 days.", CropSeedsType.POPPY, 100, 150, 5, new Season[]{Season.SUMMER}),
     SPANGLE_SEEDS_P("Pierre Spangle Seeds", "Plant in summer. Takes 8 days to produce a vibrant tropical flower. Assorted colors.", CropSeedsType.SUMMER_SPANGLE, 50, 75, 5, new Season[]{Season.SUMMER}),
     HOPS_STARTER_P("Pierre Hops Starter", "Plant these in the summer. Takes 11 days to grow, but keeps producing after that. Grows on a trellis.", CropSeedsType.HOPS, 60, 90, 5, new Season[]{Season.SUMMER}),
-    CORN_SEEDS_P("Pierre Corn Seeds", "Plant these in the summer or fall. Takes 14 days to mature, and continues to produce after first harvest.", CropSeedsType.CORN, 150, 225, 5, new Season[]{Season.SUMMER , Season.FALL}),
-    SUNFLOWER_SEEDS_P("Pierre Sunflower Seeds", "Plant in summer or fall. Takes 8 days to produce a large sunflower. Yields more seeds at harvest.", CropSeedsType.SUNFLOWER, 200, 300, 5, new Season[]{Season.SUMMER , Season.FALL}),
+    CORN_SEEDS_P("Pierre Corn Seeds", "Plant these in the summer or fall. Takes 14 days to mature, and continues to produce after first harvest.", CropSeedsType.CORN, 150, 225, 5, new Season[]{Season.SUMMER, Season.FALL}),
+    SUNFLOWER_SEEDS_P("Pierre Sunflower Seeds", "Plant in summer or fall. Takes 8 days to produce a large sunflower. Yields more seeds at harvest.", CropSeedsType.SUNFLOWER, 200, 300, 5, new Season[]{Season.SUMMER, Season.FALL}),
     RED_CABBAGE_SEEDS("Red Cabbage Seeds", "Plant these in the summer. Takes 9 days to mature.", CropSeedsType.RED_CABBAGE, 100, 150, 5, new Season[]{Season.SUMMER}),
     EGGPLANT_SEEDS_P("Pierre Eggplant Seeds", "Plant these in the fall. Takes 5 days to mature, and continues to produce after first harvest.", CropSeedsType.EGGPLANT, 20, 30, 5, new Season[]{Season.FALL}),
     PUMPKIN_SEEDS_P("Pierre Pumpkin Seeds", "Plant these in the fall. Takes 13 days to mature.", CropSeedsType.PUMPKIN, 100, 150, 5, new Season[]{Season.FALL}),
@@ -62,7 +62,8 @@ public enum PierreProducts implements StoreProductInterface {
     private final double outOfSeasonPrice;
     private final double dailyLimit;
     private Season[] seasons;
-    PierreProducts(String name,String description, ItemType itemType,int price, double outOfSeasonPrice, double dailyLimit , Season[] seasons) {
+
+    PierreProducts(String name, String description, ItemType itemType, int price, double outOfSeasonPrice, double dailyLimit, Season[] seasons) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -71,18 +72,23 @@ public enum PierreProducts implements StoreProductInterface {
         this.seasons = seasons;
         this.itemType = itemType;
     }
+
     public String getDescription() {
         return description;
     }
+
     public int getPrice() {
         return price;
     }
+
     public double getOutOfSeasonPrice() {
         return outOfSeasonPrice;
     }
+
     public double getDailyLimit() {
         return dailyLimit;
     }
+
     public Season[] getSeasons() {
         return seasons;
     }

@@ -114,25 +114,25 @@ public class NPC {
 
     public void initializeNpcRewards(String name) {
         if (name.equals("Sebastian")) {
-           rewards.add(new NPCReward(0,ForagingMineralsType.DIAMOND,0,3));
-           rewards.add(new NPCReward(5000,null,0,0));
-           rewards.add(new NPCReward(0,ForagingMineralsType.QUARTZ,0,50));
+            rewards.add(new NPCReward(0, ForagingMineralsType.DIAMOND, 0, 3));
+            rewards.add(new NPCReward(5000, null, 0, 0));
+            rewards.add(new NPCReward(0, ForagingMineralsType.QUARTZ, 0, 50));
         } else if (name.equals("Abigale")) {
-            rewards.add(new NPCReward(0,null,1,0));
-            rewards.add(new NPCReward(500,null,0,0));
-            rewards.add(new NPCReward(0,MiscType.IRIDIUM_SPRINKLER,0,1));
+            rewards.add(new NPCReward(0, null, 1, 0));
+            rewards.add(new NPCReward(500, null, 0, 0));
+            rewards.add(new NPCReward(0, MiscType.IRIDIUM_SPRINKLER, 0, 1));
         } else if (name.equals("Harvey")) {
-            rewards.add(new NPCReward(750,null,0,0));
-            rewards.add(new NPCReward(0,null,1,0));
-            rewards.add(new NPCReward(0,FoodTypes.SALAD,0,5));
+            rewards.add(new NPCReward(750, null, 0, 0));
+            rewards.add(new NPCReward(0, null, 1, 0));
+            rewards.add(new NPCReward(0, FoodTypes.SALAD, 0, 5));
         } else if (name.equals("Lia")) {
-            rewards.add(new NPCReward(500,null,0,0));
-            rewards.add(new NPCReward(0,FoodTypes.SALMON_DINNER,0,1));
-            rewards.add(new NPCReward(0,MiscType.DELUXE_SCARE_CROW,0,3));
+            rewards.add(new NPCReward(500, null, 0, 0));
+            rewards.add(new NPCReward(0, FoodTypes.SALMON_DINNER, 0, 1));
+            rewards.add(new NPCReward(0, MiscType.DELUXE_SCARE_CROW, 0, 3));
         } else {
-            rewards.add(new NPCReward(1000,null,0,0));
-            rewards.add(new NPCReward(0,MiscType.BEE_HOUSE,0,3));
-            rewards.add(new NPCReward(25000,MiscType.BEE_HOUSE,0,0));
+            rewards.add(new NPCReward(1000, null, 0, 0));
+            rewards.add(new NPCReward(0, MiscType.BEE_HOUSE, 0, 3));
+            rewards.add(new NPCReward(25000, MiscType.BEE_HOUSE, 0, 0));
         }
     }
 
@@ -184,7 +184,7 @@ public class NPC {
 
     public NPCFriendship findFriendshipByName(String name) {
         for (NPCFriendship friendship : friendships) {
-            if(friendship.getPlayer().compareToIgnoreCase(name) == 0) {
+            if (friendship.getPlayer().compareToIgnoreCase(name) == 0) {
                 return friendship;
             }
         }

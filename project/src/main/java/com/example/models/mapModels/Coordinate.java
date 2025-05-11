@@ -1,6 +1,5 @@
 package com.example.models.mapModels;
 
-import com.example.models.Player;
 import dev.morphia.annotations.Embedded;
 
 @Embedded

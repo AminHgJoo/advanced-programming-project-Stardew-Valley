@@ -2,8 +2,6 @@ package com.example.models.enums.types.storeProductTypes;
 
 import com.example.models.enums.types.itemTypes.*;
 import com.example.models.enums.worldEnums.Season;
-import com.example.models.items.TreeSeed;
-import com.example.models.mapObjects.Tree;
 
 public enum AllProducts {
     COPPER_ORE("Copper Ore", "A common ore that can be smelted into bars.", ForagingMineralsType.COPPER_ORE, 75, 75, Double.POSITIVE_INFINITY, Season.values()),
@@ -231,10 +229,9 @@ public enum AllProducts {
     }
 
     public ItemType getItemType() {
-        if(fieldName == null){
+        if (fieldName == null) {
             return null;
-        }
-        else if (enumName.equals("CropSeedsType")) {
+        } else if (enumName.equals("CropSeedsType")) {
             return CropSeedsType.valueOf(fieldName);
         } else if (enumName.equals("MiscType")) {
             return MiscType.valueOf(fieldName);

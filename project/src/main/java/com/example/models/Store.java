@@ -52,42 +52,45 @@ public class Store {
         for (StoreProduct product : products) {
             message.append("name ").append(": ").append(product.getType().getName()).append("\n");
             message.append("price ").append(": ");
-            if(product.getType().isInSeason(season)){
+            if (product.getType().isInSeason(season)) {
                 message.append(product.getType().getPrice());
-            }else {
+            } else {
                 message.append(product.getType().getOutOfSeasonPrice());
             }
             message.append("\n");
         }
         return message.toString();
     }
-    public ArrayList<StoreProduct> getAvailableProducts(){
+
+    public ArrayList<StoreProduct> getAvailableProducts() {
         ArrayList<StoreProduct> availableProducts = new ArrayList<>();
         for (StoreProduct product : products) {
-            if(product.getAvailableCount()>0){
+            if (product.getAvailableCount() > 0) {
                 availableProducts.add(product);
             }
         }
         return availableProducts;
     }
+
     public String availableProductsToString(Season season) {
         ArrayList<StoreProduct> availableProducts = getAvailableProducts();
         StringBuilder message = new StringBuilder();
         for (StoreProduct product : availableProducts) {
             message.append("name ").append(": ").append(product.getType().getName()).append("\n");
             message.append("price ").append(": ");
-            if(product.getType().isInSeason(season)){
+            if (product.getType().isInSeason(season)) {
                 message.append(product.getType().getPrice());
-            }else {
+            } else {
                 message.append(product.getType().getOutOfSeasonPrice());
             }
             message.append("\n");
         }
         return message.toString();
     }
+
     public StoreProduct getProduct(String productName) {
         for (StoreProduct product : products) {
-            if(product.getType().getName().compareToIgnoreCase(productName) == 0){
+            if (product.getType().getName().compareToIgnoreCase(productName) == 0) {
                 return product;
             }
         }
