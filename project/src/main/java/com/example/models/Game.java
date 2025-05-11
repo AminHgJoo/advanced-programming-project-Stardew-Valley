@@ -436,11 +436,7 @@ public class Game {
 
 
     public void createNpcs() {
-        map.getVillage().getNpcs().add(new NPC("Sebastian", null));
-        map.getVillage().getNpcs().add(new NPC("Abigale", null));
-        map.getVillage().getNpcs().add(new NPC("Harvey", null));
-        map.getVillage().getNpcs().add(new NPC("Lia", null));
-        map.getVillage().getNpcs().add(new NPC("Robin", null));
+
     }
 
     public void checkForRecipeUnlocking() {

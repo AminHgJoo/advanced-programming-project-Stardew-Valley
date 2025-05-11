@@ -7,8 +7,8 @@ import dev.morphia.annotations.Embedded;
 public class Quest {
     private int count;
     private boolean completed = false;
-    private String fieldName;
-    private String enumName;
+    private String fieldName = "";
+    private String enumName= "";
 
     public Quest() {
 
@@ -24,6 +24,8 @@ public class Quest {
             enumName = "FoodTypes";
         } else if (item instanceof ForagingMineralsType) {
             enumName = "ForagingMineralsType";
+        } else if (item instanceof FishType) {
+            enumName = "FishType";
         }
         this.count = count;
     }
@@ -37,14 +39,16 @@ public class Quest {
     }
 
     public ItemType getItem() {
-        if (enumName.trim().equals("CropSeedsType")) {
+        if (enumName.equals("CropSeedsType")) {
             return CropSeedsType.valueOf(fieldName);
-        } else if (enumName.trim().equals("MiscType")) {
+        } else if (enumName.equals("MiscType")) {
             return MiscType.valueOf(fieldName);
-        } else if (enumName.trim().equals("FoodTypes")) {
+        } else if (enumName.equals("FoodTypes")) {
             return FoodTypes.valueOf(fieldName);
-        } else if (enumName.trim().equals("ForagingMineralsType")) {
+        } else if (enumName.equals("ForagingMineralsType")) {
             return ForagingMineralsType.valueOf(fieldName);
+        }else if(enumName.equals("FishType")){
+            return FishType.valueOf(fieldName);
         }
         return null;
     }
@@ -71,5 +75,10 @@ public class Quest {
 
     public void setEnumName(String enumName) {
         this.enumName = enumName;
+    }
+
+    @Override
+    public String toString() {
+        return fieldName + " " + count;
     }
 }

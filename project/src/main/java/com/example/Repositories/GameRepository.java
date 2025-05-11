@@ -19,8 +19,8 @@ public class GameRepository {
             Game game = db.find(Game.class)
                     .filter(Filters.eq("_id", new ObjectId(id)))
                     .first();
-//            if(game != null && game.getCurrentPlayer() != null)
-//            game.setCurrentPlayer(game.findPlayerByUsername(game.getCurrentPlayer().getUser().getUsername()));
+            if (game != null && game.getCurrentPlayer() != null)
+                game.setCurrentPlayer(game.findPlayerByUsername(game.getCurrentPlayer().getUser().getUsername()));
             return game;
         } catch (Exception e) {
             System.out.println(e.getMessage());
