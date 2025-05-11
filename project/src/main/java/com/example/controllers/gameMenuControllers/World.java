@@ -30,6 +30,14 @@ import static com.example.controllers.gameMenuControllers.LivestockController.ha
 import static com.example.controllers.gameMenuControllers.LivestockController.noProductFoundHandle;
 
 public class World extends Controller {
+    public static Response showMoney(Request request) {
+        Game game = App.getLoggedInUser().getCurrentGame();
+        Player player = game.getCurrentPlayer();
+        String money = String.valueOf(player.getMoney(game));
+        GameRepository.saveGame(game);
+        return new Response(true, money);
+    }
+
     public static Response handleTimeQuery(Request request) {
         Response response = new Response();
         response.setSuccess(true);

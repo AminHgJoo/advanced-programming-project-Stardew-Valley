@@ -29,7 +29,7 @@ public class Village {
         Store s3 = new Store("Pierre", 9, 17, "Pierre's General Store");
         Store s4 = new Store("Robin", 9, 20, "Carpenter's Shop");
         Store s5 = new Store("Willy", 9, 17, "Fish Shop");
-        Store s6 = new Store("Marnie", 9, 16, "Marnie's Shop");
+        Store s6 = new Store("Marnie", 9, 16, "Marnie's Ranch");
         Store s7 = new Store("Gus", 12, 24, "The Stardrop Saloon");
 
         for (BlackSmithProducts p : BlackSmithProducts.values()) {

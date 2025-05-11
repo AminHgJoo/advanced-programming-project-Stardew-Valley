@@ -73,7 +73,7 @@ public class LivestockController extends Controller {
                     append("friendship xp: ").append(animal.getXp()).append("\n\n");
         }
         GameRepository.saveGame(game);
-        return new Response(true, animals.toString());
+        return new Response(true, animalString.toString());
     }
 
     public static Response handleShepherd(Request request) {
@@ -126,7 +126,7 @@ public class LivestockController extends Controller {
         }
         animal.hasBeenFedByHay = true;
         GameRepository.saveGame(game);
-        return new Response(true, "you have shepherd");
+        return new Response(true, "you have fed " + animalName);
     }
 
     public static Response handleProduces(Request request) {
@@ -225,7 +225,7 @@ public class LivestockController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "no animal found");
         }
-        int price = (int) ((double) animal.getXp() / 1000 + 0.3) * animal.getType().price;
+        int price = (int) (((double) animal.getXp() / 1000 + 0.3) * (double)animal.getType().price);
         player.setMoney(player.getMoney(game) + price, game);
         player.getAnimals().remove(animal);
         GameRepository.saveGame(game);
