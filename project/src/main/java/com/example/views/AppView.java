@@ -22,7 +22,7 @@ public class AppView {
         User user = UserRepository.getStayLoggedInUser();
         App.setLoggedInUser(user);
         if (App.getLoggedInUser() != null) {
-            App.setCurrMenuType(MenuTypes.MainMenu);
+            App.setCurrMenuType(MenuTypes.GameMenu);
         }
     }
 

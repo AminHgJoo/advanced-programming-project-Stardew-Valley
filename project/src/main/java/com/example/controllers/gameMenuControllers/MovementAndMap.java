@@ -12,6 +12,7 @@ import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
 import com.example.utilities.FindPath;
+import com.example.utilities.Tile;
 import com.example.views.AppView;
 
 import java.util.ArrayList;
@@ -97,8 +98,8 @@ public class MovementAndMap extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "can't walk in village");
         }
-        Cell src = player.getCurrentFarm(game).findCellByCoordinate(player.getCoordinate().getX(), player.getCoordinate().getY());
-        Cell dest = player.getCurrentFarm(game).findCellByCoordinate(x, y).clone();
+        Tile src = new Tile(player.getCurrentFarm(game).findCellByCoordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
+        Tile dest = new Tile(player.getCurrentFarm(game).findCellByCoordinate(x, y).clone());
         if (dest == null || !dest.getObjectOnCell().isWalkable) {
             return new Response(false, "destination is not valid");
         }
@@ -110,22 +111,20 @@ public class MovementAndMap extends Controller {
         System.out.println(message);
         String answer = AppView.scanner.nextLine();
         if (answer.compareToIgnoreCase("Y") == 0) {
-            ArrayList<Cell> path = new ArrayList<Cell>();
+            ArrayList<Tile> path = new ArrayList<Tile>();
             while (dest != null) {
                 path.add(dest);
                 dest = dest.prev;
             }
             path.reversed();
-            for (Cell c : path) {
+            for (Tile c : path) {
                 if (c.energy > player.getEnergy()) {
                     player.setPlayerFainted(true);
                     player.setEnergy(player.getEnergy() - c.energy / 20);
-                    player.getCurrentFarm(game).initialCells();
                     GameRepository.saveGame(game);
                     return new Response(false, "You have fainted");
                 }
                 if (c.energy + player.getUsedEnergyInTurn() > 50) {
-                    player.getCurrentFarm(game).initialCells();
                     GameRepository.saveGame(game);
                     return new Response(false, "You can not use this much energy");
                 }
@@ -133,7 +132,6 @@ public class MovementAndMap extends Controller {
             }
             player.setEnergy(player.getEnergy() - energy);
             player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
-            player.getCurrentFarm(game).initialCells();
             GameRepository.saveGame(game);
             return new Response(true, "You successfully moved to the destination");
         } else {
