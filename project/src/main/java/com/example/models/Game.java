@@ -248,6 +248,13 @@ public class Game {
         }
     }
 
+    public void handleRefreshForaging() {
+        ArrayList<Farm> allFarms = getMap().getFarms();
+        for (Farm farm : allFarms) {
+            farm.foragingRefresh();
+        }
+    }
+
     public void advanceTime() {
         date = date.plusHours(1);
         hasTurnCycleFinished = false;
@@ -262,27 +269,8 @@ public class Game {
                 date = date.plusMonths(1);
             }
 
-            gameThread.handleRefreshForaging();
+            newDayBackgroundChecks();
 
-            weatherToday = weatherTomorrow;
-
-            determineAndSetWeatherTomorrow();
-
-            checkForCropNextStage();
-
-            resetAllCropsWater();
-
-            if (weatherToday == Weather.RAIN || weatherToday == Weather.STORM) {
-                waterAllCrops();
-            }
-
-            handleCrowAttack();
-
-            resetAllAnimalDailyVariables();
-
-            if (weatherToday == Weather.STORM) {
-                strikeLightningOnStormyDay();
-            }
             for (Player player : players) {
                 if (player.isPlayerFainted()) {
                     player.setPlayerFainted(false);
@@ -298,6 +286,38 @@ public class Game {
             date = date.plusMonths(1);
         }
         handleArtisanUse();
+    }
+
+    /// Only called in advance time cheats.
+    public void newDayBackgroundChecks() {
+
+        handleRefreshForaging();
+
+        weatherToday = weatherTomorrow;
+
+        determineAndSetWeatherTomorrow();
+
+        checkForCropNextStage();
+
+        resetAllCropsWater();
+
+        if (weatherToday == Weather.RAIN || weatherToday == Weather.STORM) {
+            waterAllCrops();
+        }
+
+        handleCrowAttack();
+
+        resetAllAnimalDailyVariables();
+
+        reInitializeStoreProductsCount();
+        reInitializeNpc();
+        addPlayersMoney(this);
+
+        if (weatherToday == Weather.STORM) {
+            strikeLightningOnStormyDay();
+        }
+
+        npcGiveReward(this);
     }
 
     private void handleArtisanUse() {

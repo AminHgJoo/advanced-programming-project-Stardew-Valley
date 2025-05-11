@@ -41,11 +41,7 @@ public class GameThread extends Thread {
             game.handleBuffExpiration();
             game.checkForSkillUpgrades();
 
-            game.reInitializeStoreProductsCount();
-            game.reInitializeNpc();
-            game.addPlayersMoney(game);
-
-            game.npcGiveReward(game);
+            //TODO: IS DAILY?
 
             GameRepository.saveGame(game);
         }
@@ -53,10 +49,4 @@ public class GameThread extends Thread {
         System.out.println("Thread Exiting...");
     }
 
-    public void handleRefreshForaging() {
-        ArrayList<Farm> allFarms = game.getMap().getFarms();
-        for (Farm farm : allFarms) {
-            farm.foragingRefresh();
-        }
-    }
 }

@@ -91,8 +91,13 @@ public class World extends Controller {
         nextDateTime = currentDateTime.plusDays(howManyDays);
         nextDateTime = nextDateTime.plusHours(howManyHours);
         nextDateTime = nextDateTime.plusMonths(howManyMonths);
+        boolean check = nextDateTime.getMonthValue() - currentDateTime.getMonthValue() > 0
+                || nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0;
         currentGame.setDate(nextDateTime);
         currentGame.checkSeasonChange();
+        if (check) {
+            currentGame.newDayBackgroundChecks();
+        }
         GameRepository.saveGame(currentGame);
         return new Response(true, "Date and time set successfully.");
     }
@@ -111,11 +116,17 @@ public class World extends Controller {
         }
         nextDateTime = currentDateTime.plusDays(howManyDays);
         nextDateTime = nextDateTime.plusMonths(howManyMonths);
+        boolean check = (nextDateTime.getMonthValue() - currentDateTime.getMonthValue() > 0)
+                || (nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0);
         currentGame.setDate(nextDateTime);
+        if (check) {
+            currentGame.newDayBackgroundChecks();
+        }
         currentGame.checkSeasonChange();
         GameRepository.saveGame(currentGame);
         return new Response(true, "Date set successfully.");
     }
+
 
     public static Response handleSeasonQuery(Request request) {
         return new Response(true, App.getLoggedInUser().getCurrentGame().getSeason().toString());
