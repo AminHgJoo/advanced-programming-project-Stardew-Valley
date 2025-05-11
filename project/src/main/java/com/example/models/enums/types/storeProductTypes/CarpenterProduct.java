@@ -15,7 +15,7 @@ public enum CarpenterProduct implements StoreProductInterface {
     BIG_COOP("Big Coop", "Houses 8 coop-dwelling animals. Unlocks ducks.", ForagingMineralsType.STONE, 20, 20, 1, Season.values()),
     DELUXE_COOP("Deluxe Coop", "Houses 12 coop-dwelling animals. Unlocks rabbits.", ForagingMineralsType.STONE, 20, 20, 1, Season.values()),
     WELL("Well", "Provides a place for you to refill your watering can.", ForagingMineralsType.STONE, 20, 20, 1, Season.values()),
-    SHIPPING_BIN("Shipping Bin", "Items placed in it will be included in the nightly shipment.", ForagingMineralsType.STONE, 20, 20, Double.POSITIVE_INFINITY, Season.values()),
+    SHIPPING_BIN("Shipping Bin", "Items placed in it will be included in the nightly shipment.", ForagingMineralsType.STONE, 20, 20, 1, Season.values()),
     ;
     private final String name;
     private final String description;
