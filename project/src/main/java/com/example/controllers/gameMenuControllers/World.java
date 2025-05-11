@@ -566,12 +566,10 @@ public class World extends Controller {
         player.setEnergy(player.getEnergy() - energyCost);
         player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
-        if (!(targetCell.getObjectOnCell() instanceof Tree)) {
+        if (!(targetCell.getObjectOnCell() instanceof Tree tree)) {
             GameRepository.saveGame(game);
             return new Response(false, "Target cell is invalid.");
         }
-
-        Tree tree = (Tree) targetCell.getObjectOnCell();
 
         if (tree.getTreeType() == TreeType.NORMAL_TREE) {
             int amountOfWood = (int) (Math.random() * 4 + 2);
@@ -623,128 +621,51 @@ public class World extends Controller {
                 GameRepository.saveGame(game);
                 return new Response(true, "You received " + amountOfWood + " wood.");
             }
-        } else if (tree.getTreeType() == TreeType.OAK_TREE) {
-            int amountOfResin = (int) (Math.random() * 2 + 1);
+        } else if (tree.getTreeType() == TreeType.BURNT_TREE) {
+            targetCell.setObjectOnCell(new EmptyCell());
 
             Backpack backpack = player.getInventory();
-            Slot slot = backpack.getSlotByItemName("Oak Resin");
+            Slot slot = backpack.getSlotByItemName(ForagingMineralsType.COAL.name);
 
-            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
-                if (slot == null) {
+            if (slot == null) {
+                if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
                     GameRepository.saveGame(game);
                     return new Response(false,
-                            "Tree was harvested; however, your backpack was full. The product wasn't added to your backpack.");
+                            "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
-                slot.setCount(Math.min(slot.getCount() + amountOfResin, slot.getItem().getMaxStackSize()));
+
+                Slot slotToAdd = tree.getTreeType().fruitItem.createAmountOfItem(1);
+                backpack.getSlots().add(slotToAdd);
                 GameRepository.saveGame(game);
-                return new Response(true, "You received " + amountOfResin + " Oak Resin.");
+                return new Response(true, "You received " + 1 + " coal.");
             } else {
-                if (slot == null) {
-                    backpack.getSlots().add(new Slot(new Food(Quality.DEFAULT, FoodTypes.OAK_RESIN), amountOfResin));
-                } else {
-                    slot.setCount(Math.min(slot.getCount() + amountOfResin, slot.getItem().getMaxStackSize()));
-                }
+                slot.setCount(Math.min(slot.getCount() + 1, slot.getItem().getMaxStackSize()));
                 GameRepository.saveGame(game);
-                return new Response(true, "You received " + amountOfResin + " Oak Resin.");
-            }
-        } else if (tree.getTreeType() == TreeType.MAPLE_TREE) {
-            int amountOfSyrup = (int) (Math.random() * 2 + 1);
-
-            Backpack backpack = player.getInventory();
-            Slot slot = backpack.getSlotByItemName("Maple Syrup");
-
-            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
-                if (slot == null) {
-                    GameRepository.saveGame(game);
-                    return new Response(false,
-                            "Tree was harvested; however, your backpack was full. The product wasn't added to your backpack.");
-                }
-                slot.setCount(Math.min(slot.getCount() + amountOfSyrup, slot.getItem().getMaxStackSize()));
-                GameRepository.saveGame(game);
-                return new Response(true, "You received " + amountOfSyrup + " Maple Syrup.");
-            } else {
-                if (slot == null) {
-                    backpack.getSlots().add(new Slot(new Food(Quality.DEFAULT, FoodTypes.MAPLE_SYRUP), amountOfSyrup));
-                } else {
-                    slot.setCount(Math.min(slot.getCount() + amountOfSyrup, slot.getItem().getMaxStackSize()));
-                }
-                GameRepository.saveGame(game);
-                return new Response(true, "You received " + amountOfSyrup + " Maple Syrup.");
-            }
-        } else if (tree.getTreeType() == TreeType.PINE_TREE) {
-            int amountOfTar = (int) (Math.random() * 2 + 1);
-
-            Backpack backpack = player.getInventory();
-            Slot slot = backpack.getSlotByItemName("Pine Tar");
-
-            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
-                if (slot == null) {
-                    GameRepository.saveGame(game);
-                    return new Response(false,
-                            "Tree was harvested; however, your backpack was full. The product wasn't added to your backpack.");
-                }
-                slot.setCount(Math.min(slot.getCount() + amountOfTar, slot.getItem().getMaxStackSize()));
-                GameRepository.saveGame(game);
-                return new Response(true, "You received " + amountOfTar + " Pine Tar.");
-            } else {
-                if (slot == null) {
-                    backpack.getSlots().add(new Slot(new Food(Quality.DEFAULT, FoodTypes.PINE_TAR), amountOfTar));
-                } else {
-                    slot.setCount(Math.min(slot.getCount() + amountOfTar, slot.getItem().getMaxStackSize()));
-                }
-                GameRepository.saveGame(game);
-                return new Response(true, "You received " + amountOfTar + " Pine Tar.");
-            }
-        } else if (tree.getTreeType() == TreeType.MAHOGANY_TREE) {
-            int amountOfSap = (int) (Math.random() * 2 + 1);
-
-            Backpack backpack = player.getInventory();
-            Slot slot = backpack.getSlotByItemName("Sap");
-
-            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
-                if (slot == null) {
-                    GameRepository.saveGame(game);
-                    return new Response(false,
-                            "Tree was harvested; however, your backpack was full. The product wasn't added to your backpack.");
-                }
-                slot.setCount(Math.min(slot.getCount() + amountOfSap, slot.getItem().getMaxStackSize()));
-                GameRepository.saveGame(game);
-                return new Response(true, "You received " + amountOfSap + " Sap.");
-            } else {
-                if (slot == null) {
-                    backpack.getSlots().add(new Slot(new Food(Quality.DEFAULT, FoodTypes.SAP), amountOfSap));
-                } else {
-                    slot.setCount(Math.min(slot.getCount() + amountOfSap, slot.getItem().getMaxStackSize()));
-                }
-                GameRepository.saveGame(game);
-                return new Response(true, "You received " + amountOfSap + " Sap.");
-            }
-        } else if (tree.getTreeType() == TreeType.MYSTIC_TREE) {
-            int amountOfSyrup = (int) (Math.random() * 2 + 1);
-
-            Backpack backpack = player.getInventory();
-            Slot slot = backpack.getSlotByItemName("Mystic Syrup");
-
-            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
-                if (slot == null) {
-                    GameRepository.saveGame(game);
-                    return new Response(false,
-                            "Tree was harvested; however, your backpack was full. The product wasn't added to your backpack.");
-                }
-                slot.setCount(Math.min(slot.getCount() + amountOfSyrup, slot.getItem().getMaxStackSize()));
-                GameRepository.saveGame(game);
-                return new Response(true, "You received " + amountOfSyrup + " Mystic Syrup.");
-            } else {
-                if (slot == null) {
-                    backpack.getSlots().add(new Slot(new Food(Quality.DEFAULT, FoodTypes.MYSTIC_SYRUP), amountOfSyrup));
-                } else {
-                    slot.setCount(Math.min(slot.getCount() + amountOfSyrup, slot.getItem().getMaxStackSize()));
-                }
-                GameRepository.saveGame(game);
-                return new Response(true, "You received " + amountOfSyrup + " Mystic Syrup.");
+                return new Response(true, "You received " + 1 + " coal.");
             }
         } else {
-            return new Response(false, "Target tree is not harvestable.");
+            targetCell.setObjectOnCell(new EmptyCell());
+
+            Backpack backpack = player.getInventory();
+            Slot slot = backpack.getSlotByItemName(TreeSeedsType.findTreeTypeByName(tree.getTreeType().source).name);
+
+            if (slot == null) {
+                if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                    GameRepository.saveGame(game);
+                    return new Response(false
+                            , "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
+                }
+
+                Slot slotToAdd = TreeSeedsType.findTreeTypeByName(tree.getTreeType().source).createAmountOfItem(2);
+                backpack.getSlots().add(slotToAdd);
+
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + 2 + " tree seeds.");
+            } else {
+                slot.setCount(Math.min(slot.getCount() + 2, slot.getItem().getMaxStackSize()));
+                GameRepository.saveGame(game);
+                return new Response(true, "You received " + 2 + " tree seeds.");
+            }
         }
     }
 
@@ -1116,16 +1037,16 @@ public class World extends Controller {
                     return new Response(false, "Not enough inventory space.");
                 }
 
-                Slot newSlot = tree.getTreeType().fruitItem.createAmountOfItem(amountToHarvest);
-                backpack.getSlots().add(newSlot);
-
-                if (tree.getTreeType() == TreeType.BURNT_TREE) {
-                    targetCell.setObjectOnCell(new EmptyCell());
-                } else if (tree.getTreeType() == TreeType.NORMAL_TREE || tree.getTreeType() == TreeType.TREE_BARK) {
-                    //very necessary!
+                if (tree.getTreeType() == TreeType.NORMAL_TREE
+                        || tree.getTreeType() == TreeType.TREE_BARK
+                        || tree.getTreeType() == TreeType.BURNT_TREE) {
+                    return new Response(false, "Tree isn't harvestable.");
                 } else {
                     tree.setHarvestDeadLine(DateUtility.getLocalDate(game.getDate(), tree.getTreeType().harvestCycleTime));
                 }
+
+                Slot newSlot = tree.getTreeType().fruitItem.createAmountOfItem(amountToHarvest);
+                backpack.getSlots().add(newSlot);
 
                 player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
 
@@ -1133,15 +1054,15 @@ public class World extends Controller {
                 return new Response(true, "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
             }
 
-            slot.setCount(Math.min(slot.getCount() + amountToHarvest, slot.getItem().getMaxStackSize()));
-
-            if (tree.getTreeType() == TreeType.BURNT_TREE) {
-                targetCell.setObjectOnCell(new EmptyCell());
-            } else if (tree.getTreeType() == TreeType.NORMAL_TREE || tree.getTreeType() == TreeType.TREE_BARK) {
-                return new Response(false, "Can't harvest a normal tree or bark.");
+            if (tree.getTreeType() == TreeType.NORMAL_TREE
+                    || tree.getTreeType() == TreeType.TREE_BARK
+                    || tree.getTreeType() == TreeType.BURNT_TREE) {
+                return new Response(false, "Can't harvest a normal, burnt tree or bark.");
             } else {
                 tree.setHarvestDeadLine(DateUtility.getLocalDate(game.getDate(), tree.getTreeType().harvestCycleTime));
             }
+
+            slot.setCount(Math.min(slot.getCount() + amountToHarvest, slot.getItem().getMaxStackSize()));
 
             player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
 
@@ -1150,7 +1071,7 @@ public class World extends Controller {
 
         } else {
             GameRepository.saveGame(game);
-            return new Response(false, "Target cell isn't grass.");
+            return new Response(false, "Target cell isn't a valid use case of the scythe.");
         }
     }
 

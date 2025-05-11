@@ -11,7 +11,7 @@ public enum TreeSeedsType implements ItemType {
     MAHOGANY_SEEDS(Season.values(), "Mahogany Seeds", 0),
     MUSHROOM_TREE_SEEDS(Season.values(), "Mushroom Tree Seeds", 0),
     //Non Foraging seeds
-    MYSTIC_TREE_SEED(Season.values(), "Mystic tree seed", 100),
+    MYSTIC_TREE_SEED(Season.values(), "Mystic Tree Seed", 100),
     APRICOT_SAPLING(Season.SPRING, "Apricot Sapling", 0),
     CHERRY_SAPLING(Season.SPRING, "Cherry Sapling", 0),
     BANANA_SAPLING(Season.SUMMER, "Banana Sapling", 0),
