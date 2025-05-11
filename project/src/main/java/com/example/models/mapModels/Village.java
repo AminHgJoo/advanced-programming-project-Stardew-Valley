@@ -52,7 +52,14 @@ public class Village {
             StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()), s7.getName());
             s7.getProducts().add(sp);
         }
-
+        for(MarnieProduct p : MarnieProduct.values()){
+            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()), s6.getName());
+            s6.getProducts().add(sp);
+        }
+        for(CarpenterProduct p : CarpenterProduct.values()){
+            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()), s4.getName());
+            s4.getProducts().add(sp);
+        }
         addStore(s1);
         addStore(s2);
         addStore(s3);
