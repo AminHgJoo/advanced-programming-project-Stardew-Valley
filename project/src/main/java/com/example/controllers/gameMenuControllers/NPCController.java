@@ -27,6 +27,9 @@ public class NPCController extends Controller {
         if (npc == null) {
             return new Response(false, "There is no npc with this name.");
         }
+        if(!player.isInVillage()){
+            return new Response(false, "You are not in the village.");
+        }
         if (!npc.getHasTalked().getOrDefault(player.getUser().getUsername(), false)) {
             npc.getHasTalked().put(player.getUser().getUsername(), true);
             player.addXpToNpcFriendship(20, npc);
@@ -62,7 +65,7 @@ public class NPCController extends Controller {
         if (itemSlot.getCount() == 0) {
             player.getInventory().removeSlot(itemSlot);
         }
-        if (npc.getGift().get(player.getUser().getUsername())) {
+        if (!npc.getGift().getOrDefault(player.getUser().getUsername() , false)) {
             Item item = itemSlot.getItem();
             if (npc.isItemInFavorite(item)) {
                 player.addXpToNpcFriendship(200, npc);
@@ -134,6 +137,6 @@ public class NPCController extends Controller {
         NPCReward reward = npc.getRewards().get(index);
         player.addNpcReward(reward, npc, game);
         GameRepository.saveGame(game);
-        return null;
+        return new Response(true , "Quest has been finished");
     }
 }
