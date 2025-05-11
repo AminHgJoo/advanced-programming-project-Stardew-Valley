@@ -3,6 +3,7 @@ package com.example.models.mapModels;
 import com.example.models.Animal;
 import com.example.models.App;
 import com.example.models.Game;
+import com.example.models.Player;
 import com.example.models.buildings.*;
 import com.example.models.enums.types.itemTypes.CropSeedsType;
 import com.example.models.enums.types.itemTypes.ForagingMineralsType;
@@ -40,8 +41,20 @@ public class Farm {
     }
 
     public void showFarm(int x, int y, int size, Game game) {
-        int playerX = game.getCurrentPlayer().getCoordinate().getX();
-        int playerY = game.getCurrentPlayer().getCoordinate().getY();
+        Player owner = game.getCurrentPlayer();
+        Player partner = game.getPartner(owner);
+        int ownerX = -1;
+        int ownerY = -1;
+        int partnerX = -1;
+        int partnerY = -1;
+        if(owner.getCurrentFarm(game) == this){
+             ownerX = owner.getCoordinate().getX();
+             ownerY = owner.getCoordinate().getY();
+        }
+        if(partner != null && partner.getCurrentFarm(game) == this){
+            partnerX = partner.getCoordinate().getX();
+            partnerY = partner.getCoordinate().getY();
+        }
 
         for (Cell cell : cells) {
             Coordinate coordinate = cell.getCoordinate();
@@ -50,7 +63,9 @@ public class Farm {
             int yOfCell = coordinate.getY();
 
             if (Math.abs(x - xOfCell) <= size / 2 && Math.abs(y - yOfCell) <= size / 2) {
-                if (xOfCell == playerX && yOfCell == playerY)
+                if (xOfCell == ownerX && yOfCell == ownerY)
+                    System.out.print("\u001B[34m " + "O" + "\033[0m");
+                else if(xOfCell == partnerX && yOfCell == partnerY)
                     System.out.print("\u001B[34m " + "P" + "\033[0m");
                 else if (cell.getObjectOnCell().color.equals("blue"))
                     System.out.print("\u001B[34m " + cell.getObjectOnCell().toString() + "\033[0m");
