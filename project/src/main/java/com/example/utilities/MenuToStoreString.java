@@ -14,7 +14,7 @@ public class MenuToStoreString {
         } else if (menu instanceof JojaMartShopMenu) {
             return "JojaMart";
         } else if (menu instanceof MarnieRanchMenu) {
-            return "Marnie's Shop";
+            return "Marnie's Ranch";
         } else if (menu instanceof PierreGeneralStoreMenu) {
             return "Pierre's General Store";
         } else if (menu instanceof TheStardropSaloonMenu) {

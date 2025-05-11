@@ -29,6 +29,7 @@ public class Animal {
         this.xp = 0;
     }
 
+
     public String getName() {
         return name;
     }

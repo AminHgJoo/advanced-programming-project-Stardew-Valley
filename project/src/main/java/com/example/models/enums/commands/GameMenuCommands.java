@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 public enum GameMenuCommands implements Command {
 
     /// debug only command.
+    SHOW_MONEY("^show\\s+money$"),
     CHEAT_EMPTY_RECTANGLE("^cheat\\s+empty\\s+rectangle\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
     CHEAT_ADD_SKILL_XP("^cheat\\s+add\\s+-s\\s+(?<skill>.+?)\\s+xp\\s+-a\\s+(?<amount>\\d+)$"),
     SHOW_FARM("^show\\s+entire\\s+farm$"),
