@@ -26,14 +26,14 @@ public class FishShopMenu implements Menu {
 
     public static Response getShowAllProductsResponse(String input) {
         Request request = new Request(input);
-        Response response = DealingController.handleShowAllProducts(request);
-        return response;
+        request.body.put("storeName", GameMenuCommands.SHOW_ALL_PRODUCTS.getGroup(input, "storeName"));
+        return DealingController.handleShowAllProducts(request);
     }
 
     public static Response getShowAvailableProductsResponse(String input) {
         Request request = new Request(input);
-        Response response = DealingController.handleShowAvailableProducts(request);
-        return response;
+        request.body.put("storeName", GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.getGroup(input, "storeName"));
+        return DealingController.handleShowAvailableProducts(request);
     }
 
     public static Response getPurchaseResponse(String input) {

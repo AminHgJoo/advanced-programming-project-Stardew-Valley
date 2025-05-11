@@ -124,15 +124,15 @@ public class Player {
 
     private void initializeInventory() {
         this.inventory.getSlots().add(
-                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Hoe", ToolTypes.HOE, 0), 1));
+                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Hoe", ToolTypes.HOE, 0), 1));
         this.inventory.getSlots().add(
-                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Pickaxe", ToolTypes.PICKAXE, 0), 1));
+                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Pickaxe", ToolTypes.PICKAXE, 0), 1));
         this.inventory.getSlots().add(
-                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Axe", ToolTypes.AXE, 0), 1));
+                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Axe", ToolTypes.AXE, 0), 1));
         this.inventory.getSlots().add(
-                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Water Can", ToolTypes.WATERING_CAN_DEFAULT, 40), 1));
+                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Watering Can", ToolTypes.WATERING_CAN_DEFAULT, 40), 1));
         this.inventory.getSlots().add(
-                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Default Scythe", ToolTypes.SCYTHE, 0), 1));
+                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Scythe", ToolTypes.SCYTHE, 0), 1));
     }
 
     public Farming getFarmingSkill() {

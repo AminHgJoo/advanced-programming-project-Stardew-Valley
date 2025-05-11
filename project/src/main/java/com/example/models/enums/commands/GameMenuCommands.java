@@ -1,17 +1,20 @@
 package com.example.models.enums.commands;
 
+import org.intellij.lang.annotations.Language;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum GameMenuCommands implements Command {
+
     /// debug only command.
     CHEAT_ADD_SKILL_XP("^cheat\\s+add\\s+-s\\s+(?<skill>.+?)\\s+xp\\s+-a\\s+(?<amount>\\d+)$"),
     SHOW_FARM("^show\\s+entire\\s+farm$"),
     GO_TO_PARTNER_FARM("^go\\s+to\\s+partner\\s+farm$"),
     WALK_HOME("^walk\\s+home$"),
     GO_TO_VILLAGE("^go\\s+to\\s+village$"),
-    GO_TO_STORE("^go\\s+to\\s+-n\\s+(?<storeName>.*)$"),
-    GAME_NEW("^game\\s+new\\s+-u(?<users>(\\s+\\S+){1,3})$"),
+    GO_TO_STORE("^go\\s+to\\s+-n\\s+(?<storeName>.+)$"),
+    GAME_NEW("^game\\s+new\\s+-u(?<users>(\\s+\\S+){1,3})\\s*$"),
     GAME_MAP("^game\\s+map\\s+(?<mapNumber>\\d+)$"),
     LOAD_GAME("^load\\s+game$"),
     EXIT_GAME("^exit\\s+game$"),
@@ -21,8 +24,8 @@ public enum GameMenuCommands implements Command {
     DATE("^date$"),
     DATETIME("^datetime$"),
     DAY_OF_WEEK("^day\\s+of\\s+the\\s+week$"),
-    CHEAT_ADVANCE_TIME("^cheat\\s+advance\\s+time\\s+(?<X>\\d+)h$"),
-    CHEAT_ADVANCE_DATE("^cheat\\s+advance\\s+date\\s+(?<X>\\d+)d$"),
+    CHEAT_ADVANCE_TIME("^cheat\\s+advance\\s+time\\s+(?<X>\\d+)\\s*h$"),
+    CHEAT_ADVANCE_DATE("^cheat\\s+advance\\s+date\\s+(?<X>\\d+)\\s*d$"),
     SEASON("^season$"),
     CHEAT_THOR("^cheat\\s+Thor\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
     WEATHER("^weather$"),
@@ -70,9 +73,9 @@ public enum GameMenuCommands implements Command {
     SELL_ANIMAL("^sell\\s+animal\\s+-n\\s+(?<name>.+)$"),
     ARTISAN_USE("^artisan\\s+use\\s+(?<artisanName>.+?)\\s+(?<item1Name>.+)$"),
     ARTISAN_GET("^artisan\\s+get\\s+(?<artisanName>.+)$"),
-    SHOW_ALL_PRODUCTS("^show\\s+all\\s+products$"),
-    SHOW_ALL_AVAILABLE_PRODUCTS("^show\\s+all\\s+available\\s+products$"),
-    PURCHASE("purchase\\s+(?<productName>.+?)(\\s+-n\\s+(?<count>\\d+))?"),
+    SHOW_ALL_PRODUCTS("^show\\s+all\\s+products\\s+-n\\s+(?<storeName>.+)$"),
+    SHOW_ALL_AVAILABLE_PRODUCTS("^show\\s+all\\s+available\\s+products\\s+-n\\s+(?<storeName>.+)$"),
+    PURCHASE("^purchase\\s+(?<productName>.+?)(\\s+-n\\s+(?<count>\\d+))?$"),
     CHEAT_ADD_DOLLARS("^cheat\\s+add\\s+(?<count>\\d+)\\s+dollars$"),
     SELL_PRODUCT("^sell\\s+(?<productName>.+?)\\s+-n\\s+(?<count>\\d+)$"),
     FRIENDSHIPS("^friendships$"),
@@ -83,7 +86,7 @@ public enum GameMenuCommands implements Command {
     GIFT_HISTORY("^gift\\s+history\\s+-u\\s+(?<username>.+)$"),
     GIFT_RATE("^gift\\s+rate\\s+-i\\s+(?<giftNumber>\\d+)\\s+-r\\s+(?<rate>\\d+)$"),
     HUG("^hug\\s+-u\\s+(?<username>.+)$"),
-    FLOWER("^flower\\s+-u\\s+(?<username>.+)\\s+-f\\s+(?<flowerName>)$"),
+    FLOWER("^flower\\s+-u\\s+(?<username>.+)\\s+-f\\s+(?<flowerName>.+)$"),
     ASK_MARRIAGE("^ask\\s+marriage\\s+-u\\s+(?<username>.+?)\\s+-r\\s+(?<ring>.+)$"),
     RESPOND_MARRIAGE_ACCEPT("^respond\\s+–accept\\s+-u\\s+(?<username>.+)$"),
     RESPOND_MARRIAGE_REJECT("^respond\\s+–reject\\s+-u\\s+(?<username>.+)$"),
@@ -95,19 +98,20 @@ public enum GameMenuCommands implements Command {
     TRADE_RESPOND_ACCEPT("^trade\\s+response\\s+–accept\\s+-i\\s+(?<id>\\d+)$"),
     TRADE_RESPOND_REJECT("^trade\\s+response\\s+–reject\\s+-i\\s+(?<id>\\d+)$"),
     TRADE_HISTORY("^trade\\s+history$"),
-    MEET_NPC("^meet\\s+NPC\\s+(?<npcName>.+)$"),
-    TALK_NPC("^talk\\s+NPC\\s+(?<npcName>.+)\\s+-m\\s+(?<message>.*)$"),
-    GIFT_NPC("^gift\\s+NPC\\s+(?<npcName>.+?)\\s+-i\\s+(?<item>.+)$"),
-    FRIENDSHIP_NPC_LIST("^friendship\\s+NPC\\s+list$"),
-    QUESTS_LIST("^quests\\s+list\\s+-n\\s+(?<npcName>.*)$"),
-    QUESTS_FINISH("^quests\\s+finish\\s+-n\\s+(?<npcName>.*)\\s+-i\\s+(?<index>\\d+)$"),
+    MEET_NPC("^meet\\s+(NPC|npc)\\s+(?<npcName>.+)$"),
+    TALK_NPC("^talk\\s+(NPC|npc)\\s+(?<npcName>.+)\\s+-m\\s+(?<message>.*)$"),
+    GIFT_NPC("^gift\\s+(NPC|npc)\\s+(?<npcName>.+?)\\s+-i\\s+(?<item>.+)$"),
+    FRIENDSHIP_NPC_LIST("^friendship\\s+(NPC|npc)\\s+list$"),
+    QUESTS_LIST("^quests\\s+list\\s+-n\\s+(?<npcName>.+)$"),
+    QUESTS_FINISH("^quests\\s+finish\\s+-n\\s+(?<npcName>.+)\\s+-i\\s+(?<index>\\d+)$"),
     SHOW_MENU(Command.SHOW_MENU),
     EXIT_MENU(Command.EXIT_MENU),
     ENTER_MENU(Command.ENTER_MENU);
 
+    @Language("Regexp")
     private final String regex;
 
-    GameMenuCommands(String regex) {
+    GameMenuCommands(@Language("Regexp") String regex) {
         this.regex = regex;
     }
 

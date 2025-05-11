@@ -1,5 +1,7 @@
 package com.example.models.enums.commands;
 
+import org.intellij.lang.annotations.Language;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,7 +13,7 @@ public enum MainMenuCommands implements Command {
 
     private final String regex;
 
-    MainMenuCommands(String regex) {
+    MainMenuCommands(@Language("Regexp") String regex) {
         this.regex = regex;
     }
 

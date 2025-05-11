@@ -61,7 +61,7 @@ public enum ForagingCropsType {
     ForagingCropsType(Season season, int cost, int energy, ItemType harvestedItemType, String name) {
         this.seasons = new Season[]{season};
         this.cost = cost;
-        this.energy = -energy;
+        this.energy = energy;
         this.harvestedItemType = harvestedItemType;
         this.name = name;
     }

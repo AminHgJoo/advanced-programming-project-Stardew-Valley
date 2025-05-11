@@ -46,6 +46,11 @@ public class Tool extends Item {
 
     }
 
+    @Override
+    public String toString() {
+        return this.quality.toString() + " " + this.name;
+    }
+
     public ToolTypes getType() {
         return type;
     }
@@ -60,5 +65,10 @@ public class Tool extends Item {
 
     public void setQuality(Quality quality) {
         this.quality = quality;
+    }
+
+    @Override
+    public String getName() {
+        return this.toString();
     }
 }
