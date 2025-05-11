@@ -13,7 +13,7 @@ public class FindPath {
 
     public static void pathBFS(Cell src, Cell dest, ArrayList<Cell> arr) {
         cells = arr;
-        boolean[][] visited = new boolean[9][10];
+        boolean[][] visited = new boolean[75][50];
         Queue<Cell> queue = new PriorityQueue<>(new CellComparator());
         queue.add(src);
         visited[src.getCoordinate().getX()][src.getCoordinate().getY()] = true;
@@ -22,7 +22,7 @@ public class FindPath {
             for (int[] dir : DIRECTIONS) {
                 int newX = curr.getCoordinate().getX() + dir[0];
                 int newY = curr.getCoordinate().getY() + dir[1];
-                if (newX >= 0 && newX < 9 && newY >= 0 && newY < 10 && !visited[newX][newY]) {
+                if (newX >= 0 && newX < 75 && newY >= 0 && newY < 50 && !visited[newX][newY]) {
                     Cell neighbour = findCell(newX, newY);
                     if (!neighbour.getObjectOnCell().isWalkable) {
                         continue;
@@ -49,9 +49,6 @@ public class FindPath {
                     }
                     neighbour.energy = (neighbour.distance + 10 * neighbour.turns);
                     visited[neighbour.getCoordinate().getX()][neighbour.getCoordinate().getY()] = true;
-                    if ((newX == 0 && newY == 3) || (newX == 1 && newY == 3)) {
-                        int x = 5;
-                    }
                     queue.add(neighbour);
                 }
             }
