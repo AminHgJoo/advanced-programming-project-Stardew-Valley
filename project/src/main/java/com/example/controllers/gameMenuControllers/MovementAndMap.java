@@ -103,7 +103,7 @@ public class MovementAndMap extends Controller {
             return new Response(false, "destination is not valid");
         }
         FindPath.pathBFS(src, dest, player.getCurrentFarm(game).getCells());
-        double energy = dest.energy / 20;
+        double energy =  dest.energy / (double) 20;
         String message = "Your current energy is: " + player.getEnergy() + "\n" +
                 "The path energy cost is : " + energy + "\n" +
                 "Do you want to move the path? (Y/N): ";
