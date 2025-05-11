@@ -271,7 +271,7 @@ public class Player {
         return null;
     }
 
-    ///Debug Only Constructor. Not Usable.
+    /// Debug Only Constructor. Not Usable.
     private Player(Coordinate coordinate, int money, Farm farm, User user, double energy) {
         this.coordinate = coordinate;
         this.trashcanType = TrashcanType.DEFAULT;
@@ -542,7 +542,7 @@ public class Player {
     public String getGiftHistoryString(Game game, String username) {
         StringBuilder builder = new StringBuilder();
         builder.append("Gifts : ").append("\n");
-        int counter =1;
+        int counter = 1;
         for (Gift g : game.getGifts()) {
             if (g.getTo().equals(user.getUsername()) || g.getFrom().equals(user.getUsername())) {
                 if (g.getTo().compareToIgnoreCase(username) == 0 || g.getFrom().compareToIgnoreCase(username) == 0) {

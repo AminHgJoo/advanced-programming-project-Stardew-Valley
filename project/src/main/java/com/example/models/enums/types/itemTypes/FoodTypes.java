@@ -149,22 +149,30 @@ public enum FoodTypes implements ItemType {
 
     public static int getEnergy(String itemName) {
         for (FoodTypes type : FoodTypes.values()) {
-            if(type.name.equals(itemName))
+            if (type.name.equals(itemName))
                 return type.energy;
         }
         return 0;
     }
 
     public static int getPrice(String itemName) {
-        for(FoodTypes t : FoodTypes.values()) {
-            if(t.name.equals(itemName))
+        for (FoodTypes t : FoodTypes.values()) {
+            if (t.name.equals(itemName))
                 return t.value;
         }
         return 0;
     }
 
+    public static FoodTypes getFoodTypeByName(String name) {
+        for (FoodTypes t : FoodTypes.values()) {
+            if (t.name.compareToIgnoreCase(name) == 0) {
+                return t;
+            }
+        }
+        return null;
+    }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 

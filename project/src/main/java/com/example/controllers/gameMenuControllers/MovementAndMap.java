@@ -19,10 +19,10 @@ import java.util.Objects;
 
 public class MovementAndMap extends Controller {
     private static Coordinate getEmptyCoordinate(Player player, Player partner, ArrayList<Cell> cells) {
-        for(int i=60; i>=0; i--) {
-            for(int j=8; j<= 40; j++){
-                if(Objects.requireNonNull(Farm.getCellByCoordinate(i, j, cells)).getObjectOnCell().isWalkable){
-                    if(partner == null || (partner != null && !(partner.getCoordinate().getX() == i && partner.getCoordinate().getY() == j))) {
+        for (int i = 60; i >= 0; i--) {
+            for (int j = 8; j <= 40; j++) {
+                if (Objects.requireNonNull(Farm.getCellByCoordinate(i, j, cells)).getObjectOnCell().isWalkable) {
+                    if (partner == null || (partner != null && !(partner.getCoordinate().getX() == i && partner.getCoordinate().getY() == j))) {
                         return new Coordinate(i, j);
                     }
                 }
@@ -62,9 +62,10 @@ public class MovementAndMap extends Controller {
         player.setInVillage(false);
         player.setCurrentFarmNumber(partnerFarm.getFarmNumber());
         Coordinate coordinate = getEmptyCoordinate(player, partner, partnerFarm.getCells());
-        if(coordinate == null) {
+        if (coordinate == null) {
             GameRepository.saveGame(game);
-            return new Response(false, "no empty cell found");}
+            return new Response(false, "no empty cell found");
+        }
         player.setCoordinate(coordinate);
         GameRepository.saveGame(game);
         return new Response(true, "you are in your partner's farm");
@@ -78,7 +79,7 @@ public class MovementAndMap extends Controller {
         Farm playerFarm = player.getFarm();
         player.setInVillage(false);
         Coordinate coordinate = getEmptyCoordinate(player, partner, playerFarm.getCells());
-        if(coordinate == null) {
+        if (coordinate == null) {
             GameRepository.saveGame(game);
             return new Response(false, "no empty cell found");
         }
@@ -92,7 +93,7 @@ public class MovementAndMap extends Controller {
         int y = Integer.parseInt(request.body.get("y"));
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
-        if(player.isInVillage()) {
+        if (player.isInVillage()) {
             GameRepository.saveGame(game);
             return new Response(false, "can't walk in village");
         }
@@ -102,7 +103,7 @@ public class MovementAndMap extends Controller {
             return new Response(false, "destination is not valid");
         }
         FindPath.pathBFS(src, dest, player.getCurrentFarm(game).getCells());
-        double energy = dest.energy / 20;
+        double energy =  dest.energy / (double) 20;
         String message = "Your current energy is: " + player.getEnergy() + "\n" +
                 "The path energy cost is : " + energy + "\n" +
                 "Do you want to move the path? (Y/N): ";

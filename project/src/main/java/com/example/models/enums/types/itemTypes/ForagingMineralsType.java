@@ -42,7 +42,7 @@ public enum ForagingMineralsType implements ItemType {
     }
 
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 

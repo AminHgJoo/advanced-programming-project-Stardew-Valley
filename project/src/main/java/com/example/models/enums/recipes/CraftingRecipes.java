@@ -95,9 +95,9 @@ public enum CraftingRecipes {
         this.resultItemType = resultItemType;
     }
 
-    public static CraftingRecipes findByName(String name){
-        for(CraftingRecipes  cr : CraftingRecipes.values()){
-            if(cr.name.compareToIgnoreCase(name) == 0){
+    public static CraftingRecipes findByName(String name) {
+        for (CraftingRecipes cr : CraftingRecipes.values()) {
+            if (cr.name.compareToIgnoreCase(name) == 0) {
                 return cr;
             }
         }

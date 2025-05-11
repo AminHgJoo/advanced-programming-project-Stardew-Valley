@@ -40,23 +40,23 @@ public enum FishType implements ItemType {
     }
 
     public static boolean isFish(String itemName) {
-        for(FishType f : FishType.values()) {
-            if(f.name.equals(itemName))
+        for (FishType f : FishType.values()) {
+            if (f.name.equals(itemName))
                 return true;
         }
         return false;
     }
 
     public static FishType getFishType(String itemName) {
-        for(FishType f : FishType.values()) {
-            if(f.name.equals(itemName))
+        for (FishType f : FishType.values()) {
+            if (f.name.equals(itemName))
                 return f;
         }
         return null;
     }
 
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 

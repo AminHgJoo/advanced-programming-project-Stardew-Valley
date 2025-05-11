@@ -51,7 +51,6 @@ public class FriendshipController extends Controller {
         Game game = user.getCurrentGame();
         Player player = game.getCurrentPlayer();
 
-        // TODO players should be close together
         String username = request.body.get("username");
         List<Message> messages = game.getMessages().stream().filter((m) -> {
             return (m.getSender().compareToIgnoreCase(username) == 0) &&

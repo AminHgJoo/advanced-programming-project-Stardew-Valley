@@ -60,7 +60,7 @@ public class MarineRanchController extends Controller {
         }
         Store store = game.getMap().getVillage().getStore("Marnie's Shop");
         StoreProduct storeProduct = store.getProduct(animalTypeName);
-        if(storeProduct.getAvailableCount() <= 0){
+        if (storeProduct.getAvailableCount() <= 0) {
             GameRepository.saveGame(game);
             return new Response(false, "daily limit reached");
         }

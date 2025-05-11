@@ -4,7 +4,6 @@ import com.example.models.NPCModels.NPC;
 import com.example.models.Store;
 import com.example.models.StoreProduct;
 import com.example.models.enums.types.storeProductTypes.*;
-import com.example.models.items.Fish;
 import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class Village {
         Store s7 = new Store("Gus", 12, 24, "The Stardrop Saloon");
 
         for (BlackSmithProducts p : BlackSmithProducts.values()) {
-            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()) , s1.getName());
+            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()), s1.getName());
             s1.getProducts().add(sp);
         }
         for (JojaMartProducts p : JojaMartProducts.values()) {
@@ -41,11 +40,11 @@ public class Village {
             s3.getProducts().add(sp);
         }
         for (FishProducts p : FishProducts.values()) {
-            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()),s5.getName());
+            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()), s5.getName());
             s5.getProducts().add(sp);
         }
         for (StardropProducts p : StardropProducts.values()) {
-            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()),s7.getName());
+            StoreProduct sp = new StoreProduct(AllProducts.valueOf(p.name()), s7.getName());
             s7.getProducts().add(sp);
         }
 

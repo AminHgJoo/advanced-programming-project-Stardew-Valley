@@ -7,7 +7,6 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.types.AnimalType;
 import com.example.models.enums.types.itemTypes.MiscType;
-import com.example.models.enums.types.itemTypes.ToolTypes;
 import com.example.models.enums.worldEnums.Weather;
 import com.example.models.items.Item;
 import com.example.models.items.Misc;
@@ -190,7 +189,7 @@ public class LivestockController extends Controller {
 
     private static @NotNull Response addToExistingSlotHandle(Slot productSlot, Animal animal, Player player, Game game, Item product) {
         productSlot.setCount(productSlot.getCount() + animal.getType().productPerDay);
-        if(animal.getType().equals(AnimalType.SHEEP) ||animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT))
+        if (animal.getType().equals(AnimalType.SHEEP) || animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT))
             animal.hasBeenHarvested = true;
         animal.product = null;
         GameRepository.saveGame(game);
@@ -204,7 +203,7 @@ public class LivestockController extends Controller {
         }
         Slot newSlot = new Slot(item, animal.getType().productPerDay);
         backpack.addSlot(newSlot);
-        if(animal.getType().equals(AnimalType.SHEEP) ||animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT))
+        if (animal.getType().equals(AnimalType.SHEEP) || animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT))
             animal.hasBeenHarvested = true;
         animal.product = null;
         GameRepository.saveGame(game);

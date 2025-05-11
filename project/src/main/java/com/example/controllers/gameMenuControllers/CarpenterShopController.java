@@ -70,7 +70,7 @@ public class CarpenterShopController extends Controller {
         Barn barn = new Barn();
         barn.barnType = buildingName;
         StoreProduct storeProduct = store.getProduct(buildingName);
-        if(storeProduct.getAvailableCount() <= 0){
+        if (storeProduct.getAvailableCount() <= 0) {
             GameRepository.saveGame(game);
             return new Response(false, "daily limit reached");
         }
@@ -134,7 +134,7 @@ public class CarpenterShopController extends Controller {
         Well well = new Well();
         well.wellType = buildingName;
         StoreProduct storeProduct = store.getProduct(buildingName);
-        if(storeProduct.getAvailableCount() <= 0){
+        if (storeProduct.getAvailableCount() <= 0) {
             GameRepository.saveGame(game);
             return new Response(false, "daily limit reached");
         }
@@ -170,7 +170,7 @@ public class CarpenterShopController extends Controller {
         Coop coop = new Coop();
         coop.coopType = buildingName;
         StoreProduct storeProduct = store.getProduct(buildingName);
-        if(storeProduct.getAvailableCount() <= 0){
+        if (storeProduct.getAvailableCount() <= 0) {
             GameRepository.saveGame(game);
             return new Response(false, "daily limit reached");
         }

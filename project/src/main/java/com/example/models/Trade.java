@@ -20,7 +20,7 @@ public class Trade {
     public Trade() {
     }
 
-    public Trade(Player firstPlayer, Player secondPlayer, String tradeType, Item item, int itemAmount, int tradePrice, Item targetItem, int targetAmount,int id) {
+    public Trade(Player firstPlayer, Player secondPlayer, String tradeType, Item item, int itemAmount, int tradePrice, Item targetItem, int targetAmount, int id) {
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
         this.tradeType = tradeType;
@@ -37,9 +37,9 @@ public class Trade {
     @Override
     public String toString() {
         String result = "undecided";
-        if(tradeResult == 1)
+        if (tradeResult == 1)
             result = "accepted";
-        else if(tradeResult == 2)
+        else if (tradeResult == 2)
             result = "rejected";
         if (tradeType.equals("offer"))
             return "Trade{" +

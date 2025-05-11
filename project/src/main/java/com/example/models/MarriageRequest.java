@@ -8,7 +8,7 @@ public class MarriageRequest {
     private String from;
     private Misc ring;
 
-    public MarriageRequest(){
+    public MarriageRequest() {
 
     }
 

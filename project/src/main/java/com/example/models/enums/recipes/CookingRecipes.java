@@ -91,9 +91,9 @@ public enum CookingRecipes {
         this.ingredients = new Slot[]{ingredient};
     }
 
-    public static CookingRecipes findByName(String name){
-        for(CookingRecipes  cr : CookingRecipes.values()){
-            if(cr.name.compareToIgnoreCase(name) == 0){
+    public static CookingRecipes findByName(String name) {
+        for (CookingRecipes cr : CookingRecipes.values()) {
+            if (cr.name.compareToIgnoreCase(name) == 0) {
                 return cr;
             }
         }

@@ -1,7 +1,6 @@
 package com.example.views.gameViews.shops;
 
 import com.example.controllers.gameMenuControllers.CarpenterShopController;
-import com.example.models.Game;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;

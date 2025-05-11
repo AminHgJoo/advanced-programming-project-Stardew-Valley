@@ -1,7 +1,6 @@
 package com.example.models;
 
 import dev.morphia.annotations.Embedded;
-import org.bson.types.ObjectId;
 
 @Embedded
 public class Message {

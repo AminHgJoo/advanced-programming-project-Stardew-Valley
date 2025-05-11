@@ -2,7 +2,6 @@ package com.example.models;
 
 import com.example.models.enums.types.itemTypes.*;
 import dev.morphia.annotations.Embedded;
-import dev.morphia.annotations.Transient;
 
 @Embedded
 public class Quest {

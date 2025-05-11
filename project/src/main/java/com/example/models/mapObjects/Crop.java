@@ -14,7 +14,7 @@ public class Crop extends MapObject {
     private boolean hasBeenWateredToday = false;
     private boolean hasBeenDeluxeFertilized = false;
     private LocalDateTime[] growthDeadLines = new LocalDateTime[5];
-    private LocalDateTime harvestDeadLine;
+    private LocalDateTime harvestDeadLine = null;
     private boolean isGiant = false;
 
     public Crop() {
@@ -36,7 +36,7 @@ public class Crop extends MapObject {
         }
     }
 
-    public Crop(CropSeedsType plantType , LocalDateTime source) {
+    public Crop(CropSeedsType plantType, LocalDateTime source) {
         super(true, "plant", "green");
         this.cropSeedsType = plantType;
         stageNumber = 0;

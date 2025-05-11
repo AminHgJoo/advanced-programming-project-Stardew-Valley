@@ -1,4 +1,3 @@
-
 package com.example.models.enums.types.storeProductTypes;
 
 import com.example.models.enums.types.itemTypes.ForagingMineralsType;

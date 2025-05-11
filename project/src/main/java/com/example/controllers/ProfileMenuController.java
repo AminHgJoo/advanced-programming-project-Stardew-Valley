@@ -1,13 +1,17 @@
 package com.example.controllers;
 
+import com.example.Repositories.GameRepository;
 import com.example.Repositories.UserRepository;
-import com.example.models.App;
+import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
-import com.example.models.User;
+import com.example.models.NPCModels.NPC;
+import com.example.models.NPCModels.NPCFriendship;
 import com.example.utilities.Validation;
 
-//TODO Change username in games
+import java.util.ArrayList;
+
+
 public class ProfileMenuController extends Controller {
     public static Response handleChangeUsername(Request request) {
         String username = request.body.get("username");
@@ -20,6 +24,32 @@ public class ProfileMenuController extends Controller {
         }
         while (UserRepository.findUserByUsername(username) != null) {
             username = username + (int) (Math.random() * 69420);
+        }
+        ArrayList<Game> games = GameRepository.findAllGames(true);
+        for (Game game : games) {
+            Player p = null;
+            for (Player player : game.getPlayers())
+                if (player.getUser() == user) {
+                    p = player;
+                }
+            if (p != null) {
+                Player partner = game.getPartner(p);
+                for (Player player : game.getPlayers()) {
+                    Friendship friendship = player.findFriendshipByFriendName(user.getUsername());
+                    if (friendship != null) {
+                        friendship.setPlayer(username);
+                    }
+                }
+                if (partner != null) {
+                    partner.setPartnerName(username);
+                }
+                for (NPC npc : game.getMap().getVillage().getNpcs()) {
+                    NPCFriendship npcFriendship = npc.findFriendshipByName(user.getUsername());
+                    if (npcFriendship != null) {
+                        npcFriendship.setPlayer(username);
+                    }
+                }
+            }
         }
         user.setUsername(username);
         UserRepository.saveUser(user);

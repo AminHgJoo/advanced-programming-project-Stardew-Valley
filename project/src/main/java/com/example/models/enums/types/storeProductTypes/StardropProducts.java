@@ -5,18 +5,17 @@ import com.example.models.enums.types.itemTypes.ForagingMineralsType;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.worldEnums.Season;
-import com.example.models.items.Food;
 
 public enum StardropProducts implements StoreProductInterface {
-    HASHBROWNS("Hashbrowns" , "A recipe to make Hashbrowns",null, 50,50,1,Season.values()),
-    OMELET("Omelet" , "A recipe to make Omelet",null, 100,100,1,Season.values()),
-    PANCAKES("Pancakes" , "A recipe to make Pancakes",null, 100,100,1,Season.values()),
-    BREAD_RECIPE("Bread Recipe" , "A recipe to make Bread",null, 100,100,1,Season.values()),
-    TORTILLA("Tortilla" , "A recipe to make Tortilla",null, 100,100,1,Season.values()),
-    PIZZA_RECIPE("Pizza Recipe" , "A recipe to make Pizza",null, 150,150,1,Season.values()),
-    MAKI_ROLL("Maki Roll" , "A recipe to make Maki Roll",null, 300,300,1,Season.values()),
-    TRIPLE_SHOT_ESPRESSO("Triple Shot Espresso" , "A recipe to make Triple Shot Espresso",null, 5000,5000,1,Season.values()),
-    COOKIE("Cookie" , "A recipe to make Cookie",null, 300,300,1,Season.values()),
+    HASHBROWNS("Hashbrowns", "A recipe to make Hashbrowns", null, 50, 50, 1, Season.values()),
+    OMELET("Omelet", "A recipe to make Omelet", null, 100, 100, 1, Season.values()),
+    PANCAKES("Pancakes", "A recipe to make Pancakes", null, 100, 100, 1, Season.values()),
+    BREAD_RECIPE("Bread Recipe", "A recipe to make Bread", null, 100, 100, 1, Season.values()),
+    TORTILLA("Tortilla", "A recipe to make Tortilla", null, 100, 100, 1, Season.values()),
+    PIZZA_RECIPE("Pizza Recipe", "A recipe to make Pizza", null, 150, 150, 1, Season.values()),
+    MAKI_ROLL("Maki Roll", "A recipe to make Maki Roll", null, 300, 300, 1, Season.values()),
+    TRIPLE_SHOT_ESPRESSO("Triple Shot Espresso", "A recipe to make Triple Shot Espresso", null, 5000, 5000, 1, Season.values()),
+    COOKIE("Cookie", "A recipe to make Cookie", null, 300, 300, 1, Season.values()),
     BEER("Beer", "Drink in moderation.", FoodTypes.BEER, 400, 400, Double.POSITIVE_INFINITY, Season.values()),
     SALAD("Salad", "A healthy garden salad.", FoodTypes.SALAD, 220, 220, Double.POSITIVE_INFINITY, Season.values()),
     BREAD("Bread", "A crusty baguette.", FoodTypes.BREAD, 120, 120, Double.POSITIVE_INFINITY, Season.values()),

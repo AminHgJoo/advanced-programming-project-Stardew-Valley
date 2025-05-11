@@ -1,12 +1,17 @@
 package com.example.models.enums.types.mapObjectTypes;
 
 import com.example.models.enums.types.itemTypes.FoodTypes;
+import com.example.models.enums.types.itemTypes.ForagingMineralsType;
+import com.example.models.enums.types.itemTypes.ItemType;
+import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.enums.worldEnums.Season;
 
+import java.util.Arrays;
+
 public enum TreeType {
-    TREE_BARK("Tree Bark", "alaki", -1, null, -1, -1, false, -1, (Season[]) null),
-    BURNT_TREE("Burnt Tree", "alaki", -1, null, -1, -1, false, -1, (Season[]) null),
-    NORMAL_TREE("Normal Tree", "alaki", -1, null, -1, -1, false, -1, (Season[]) null),
+    TREE_BARK("Tree Bark", "alaki", -1, MiscType.WOOD, -1, -1, false, -1, (Season[]) null),
+    BURNT_TREE("Burnt Tree", "alaki", -1, ForagingMineralsType.COAL, -1, -1, false, -1, (Season[]) null),
+    NORMAL_TREE("Normal Tree", "alaki", -1, MiscType.WOOD, -1, -1, false, -1, (Season[]) null),
     // source
     APRICOT_TREE("Apricot Tree", "Apricot Sapling", 7, FoodTypes.APRICOT, 1, 59, true, 38, Season.SPRING),
     CHERRY_TREE("Cherry Tree", "Cherry Sapling", 7, FoodTypes.CHERRY, 1, 80, true, 38, Season.SPRING),
@@ -29,12 +34,30 @@ public enum TreeType {
     final public int stageTwoTime;
     final public int stageThreeTime;
     final public int stageFourTime;
-    final public FoodTypes fruitItem;
+    final public ItemType fruitItem;
     final public int harvestCycleTime;
     final public int fruitSellPrice;
     final public boolean isFruitEdible;
     final public int fruitEnergy;
     final public Season[] seasonsOfGrowth;
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append("Name: ").append(name).append("\n");
+        str.append("Source: ").append(source).append("\n");
+        str.append("Stage One Time: ").append(stageOneTime).append("\n");
+        str.append("Stage Two Time: ").append(stageTwoTime).append("\n");
+        str.append("Stage Three Time: ").append(stageThreeTime).append("\n");
+        str.append("Stage Four Time: ").append(stageFourTime).append("\n");
+        str.append("Fruit Item: ").append(fruitItem.getName()).append("\n");
+        str.append("Harvest Cycle Time: ").append(harvestCycleTime).append("\n");
+        str.append("Fruit Sell Price: ").append(fruitSellPrice).append("\n");
+        str.append("Is Fruit Edible: ").append(isFruitEdible).append("\n");
+        str.append("Fruit Energy: ").append(fruitEnergy).append("\n");
+        str.append("Seasons Of Growth: ").append(Arrays.toString(seasonsOfGrowth)).append("\n");
+        return str.toString();
+    }
 
     /// Generic Constructor.
     TreeType(String name, String source, int stageOneTime, int stageTwoTime, int stageThreeTime, int stageFourTime
@@ -53,7 +76,7 @@ public enum TreeType {
         this.seasonsOfGrowth = seasonsOfGrowth;
     }
 
-    TreeType(String name, String source, int stagesTime, FoodTypes fruitItem, int harvestCycleTime, int fruitSellPrice
+    TreeType(String name, String source, int stagesTime, ItemType fruitItem, int harvestCycleTime, int fruitSellPrice
             , boolean isFruitEdible, int fruitEnergy, Season[] seasonsOfGrowth) {
         this.name = name;
         this.source = source;
@@ -69,9 +92,9 @@ public enum TreeType {
         this.seasonsOfGrowth = seasonsOfGrowth;
     }
 
-    public static TreeType findTreeTypeByName(String seedType){
+    public static TreeType findTreeTypeByName(String seedType) {
         for (TreeType tree : TreeType.values()) {
-            if(tree.source.compareToIgnoreCase(seedType) == 0){
+            if (tree.source.compareToIgnoreCase(seedType) == 0) {
                 return tree;
             }
         }
