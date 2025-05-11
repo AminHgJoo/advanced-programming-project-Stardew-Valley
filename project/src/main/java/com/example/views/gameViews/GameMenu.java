@@ -104,7 +104,7 @@ public class GameMenu implements Menu {
                 response = getCraftInfoResponse(input);
             } else if (GameMenuCommands.PLANT.matches(input)) {
                 response = getPlantingResponse(input);
-            } else if (GameMenuCommands.PLACE_ITEM.matches(input)) {
+            } else if (GameMenuCommands.PLANT_TREE.matches(input)) {
                 response = getPlantingTree(input);
             } else if (GameMenuCommands.SHOW_PLANT.matches(input)) {
                 response = getShowPlantResponse(input);
@@ -129,11 +129,11 @@ public class GameMenu implements Menu {
             } else if (GameMenuCommands.PET.matches(input)) {
                 response = getPetResponse(input);
             } else if (GameMenuCommands.CHEAT_SET_FRIENDSHIP.matches(input)) {
-                response = getChearSetFriendshipResponse(input);
+                response = getCheatSetFriendshipResponse(input);
             } else if (GameMenuCommands.ANIMALS.matches(input)) {
                 response = getAnimalsResponse(input);
             } else if (GameMenuCommands.SHEPHERD.matches(input)) {
-                response = getShepherResponse(input);
+                response = getShepherdResponse(input);
             } else if (GameMenuCommands.FEED_HAY.matches(input)) {
                 response = getFeedHayResponse(input);
             } else if (GameMenuCommands.PRODUCES.matches(input)) {
@@ -613,7 +613,7 @@ public class GameMenu implements Menu {
         return response;
     }
 
-    private static Response getChearSetFriendshipResponse(String input) {
+    private static Response getCheatSetFriendshipResponse(String input) {
         Request request = new Request(input);
         request.body.put("animalName", GameMenuCommands.CHEAT_SET_FRIENDSHIP.getGroup(input, "animalName"));
         request.body.put("amount", GameMenuCommands.CHEAT_SET_FRIENDSHIP.getGroup(input, "amount"));
@@ -627,7 +627,7 @@ public class GameMenu implements Menu {
         return response;
     }
 
-    private static Response getShepherResponse(String input) {
+    private static Response getShepherdResponse(String input) {
         Request request = new Request(input);
         request.body.put("animalName", GameMenuCommands.SHEPHERD.getGroup(input, "animalName"));
         request.body.put("x", GameMenuCommands.SHEPHERD.getGroup(input, "x"));

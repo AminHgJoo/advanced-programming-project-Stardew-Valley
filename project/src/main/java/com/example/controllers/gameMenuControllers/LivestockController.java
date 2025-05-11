@@ -68,9 +68,9 @@ public class LivestockController extends Controller {
             animalString.append("name: ").
                     append(animal.getName()).append("\n").
                     append("friendship level: ").append(animal.getXp()).append("\n").
-                    append("hasBeenPetToDay: ").append(animal.hasBeenPetToDay).append("\n").
-                    append("hasBeenFedToDay: ").append(animal.hasBeenFedByHay || animal.hasBeenFedByGrass).append("\n").
-                    append("xp: ").append(animal.getXp()).append("\n\n");
+                    append("has Been Pet Today: ").append(animal.hasBeenPetToDay).append("\n").
+                    append("has Been Fed Today: ").append(animal.hasBeenFedByHay || animal.hasBeenFedByGrass).append("\n").
+                    append("friendship xp: ").append(animal.getXp()).append("\n\n");
         }
         GameRepository.saveGame(game);
         return new Response(true, animalString.toString());

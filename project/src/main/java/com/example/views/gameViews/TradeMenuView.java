@@ -83,12 +83,12 @@ public class TradeMenuView implements Menu {
 
     private static Response getTradeItemResponse(String input) {
         Request request = new Request(input);
-        request.body.put("username", GameMenuCommands.TRADE_MONEY.getGroup(input, "username"));
-        request.body.put("item", GameMenuCommands.TRADE_MONEY.getGroup(input, "item"));
-        request.body.put("type", GameMenuCommands.TRADE_MONEY.getGroup(input, "type"));
-        request.body.put("amount", GameMenuCommands.TRADE_MONEY.getGroup(input, "amount"));
-        request.body.put("targetItem", GameMenuCommands.TRADE_MONEY.getGroup(input, "targetItem"));
-        request.body.put("targetAmount", GameMenuCommands.TRADE_MONEY.getGroup(input, "targetAmount"));
+        request.body.put("username", GameMenuCommands.TRADE_ITEM.getGroup(input, "username"));
+        request.body.put("item", GameMenuCommands.TRADE_ITEM.getGroup(input, "item"));
+        request.body.put("type", GameMenuCommands.TRADE_ITEM.getGroup(input, "type"));
+        request.body.put("amount", GameMenuCommands.TRADE_ITEM.getGroup(input, "amount"));
+        request.body.put("targetItem", GameMenuCommands.TRADE_ITEM.getGroup(input, "targetItem"));
+        request.body.put("targetAmount", GameMenuCommands.TRADE_ITEM.getGroup(input, "targetAmount"));
         Response response = TradingController.handleTradeItem(request);
         return response;
     }

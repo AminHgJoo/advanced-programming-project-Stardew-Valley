@@ -1,5 +1,7 @@
 package com.example.models.enums.commands;
 
+import org.intellij.lang.annotations.Language;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +18,7 @@ public enum SignInMenuCommands implements Command {
 
     private final String regex;
 
-    SignInMenuCommands(String regex) {
+    SignInMenuCommands(@Language("Regexp") String regex) {
         this.regex = regex;
     }
 
