@@ -398,7 +398,6 @@ public class Game {
     public void resetAllAnimalDailyVariables() {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         ArrayList<Animal> animals = game.getCurrentPlayer().getAnimals();
         for (Animal animal : animals) {
             if (!animal.hasBeenPetToDay)
