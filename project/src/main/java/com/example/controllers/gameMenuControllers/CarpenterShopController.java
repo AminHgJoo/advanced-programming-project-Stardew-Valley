@@ -31,7 +31,7 @@ public class CarpenterShopController extends Controller {
         int y = Integer.parseInt(request.body.get("y"));
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
+        Farm farm = game.getCurrentPlayer().getFarm();
         Backpack backpack = game.getCurrentPlayer().getInventory();
         Slot wood = null;
         Slot stone = null;
