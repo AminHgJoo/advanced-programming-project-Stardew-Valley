@@ -199,6 +199,10 @@ public class DealingController extends Controller {
         Player player = game.getCurrentPlayer();
         String productName = request.body.get("productName");
 
+
+        if(!player.isNearShippingBin()){
+            return new Response(false , "You msut be near a shipping bin");
+        }
         Slot productSlot = player.getInventory().getSlotByItemName(productName);
         if (productSlot == null) {
             return new Response(false, "No such product");

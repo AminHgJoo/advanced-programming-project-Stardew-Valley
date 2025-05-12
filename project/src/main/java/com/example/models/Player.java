@@ -10,11 +10,15 @@ import com.example.models.enums.recipes.CraftingRecipes;
 import com.example.models.enums.types.inventoryEnums.BackpackType;
 import com.example.models.enums.types.inventoryEnums.TrashcanType;
 import com.example.models.enums.types.itemTypes.ToolTypes;
+import com.example.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.example.models.items.Item;
 import com.example.models.items.Tool;
 import com.example.models.items.buffs.ActiveBuff;
+import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
+import com.example.models.mapObjects.ArtisanBlock;
+import com.example.models.mapObjects.DroppedItem;
 import com.example.models.skills.*;
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
@@ -423,6 +427,23 @@ public class Player {
 
     public ArrayList<Friendship> getFriendships() {
         return friendships;
+    }
+
+    public boolean isNearShippingBin(){
+        int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+        for (int[] dir : DIRECTIONS){
+            int x = coordinate.getX() + dir[0];
+            int y = coordinate.getY() + dir[1];
+            Cell c = getFarm().findCellByCoordinate(x, y);
+            if(c != null){
+                if(c.getObjectOnCell() instanceof ArtisanBlock ab){
+                    if(ab.getArtisanType().equals(ArtisanBlockType.SHIPPING_BIN)){
+                        return  true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public ArrayList<ActiveBuff> getActiveBuffs() {
