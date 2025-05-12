@@ -139,6 +139,9 @@ public class MovementAndMap extends Controller {
             return new Response(false, "can't walk in village");
         }
         Tile src = new Tile(player.getCurrentFarm(game).findCellByCoordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
+        if(player.getCurrentFarm(game).findCellByCoordinate(x, y) == null) {
+            return new Response(false, "destination is not valid");
+        }
         Tile dest = new Tile(player.getCurrentFarm(game).findCellByCoordinate(x, y).clone());
         if (dest == null || !dest.getObjectOnCell().isWalkable) {
             return new Response(false, "destination is not valid");

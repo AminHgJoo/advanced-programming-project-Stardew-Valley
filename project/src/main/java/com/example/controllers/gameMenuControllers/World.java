@@ -838,6 +838,10 @@ public class World extends Controller {
             int playerLevel = player.getFishingSkill().getLevel().levelNumber;
             int numberOfFishes = (int) (((double) randomNumber)
                     * weatherModifier * (double) (playerLevel + 2));
+            if (numberOfFishes == 0) {
+                GameRepository.saveGame(game);
+                return new Response(false, "You could not catch fish");
+            }
             ArrayList<FishType> values = getValidFishTypes(game.getSeason(), playerLevel);
             int randomFishNumber = (int) (Math.random() * values.size());
             FishType fishType = values.get(randomFishNumber);
@@ -852,7 +856,7 @@ public class World extends Controller {
             Backpack backpack = player.getInventory();
             player.getFishingSkill().setXp(player.getFishingSkill().getXp() + 5);
 
-            if (backpack.getType().getMaxCapacity() >= backpack.getSlots().size()) {
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
                 GameRepository.saveGame(game);
                 return new Response(false, "You didn't have enough space. But caught a fish anyways.");
             }
