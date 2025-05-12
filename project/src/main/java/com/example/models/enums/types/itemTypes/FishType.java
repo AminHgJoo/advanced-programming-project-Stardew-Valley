@@ -61,7 +61,7 @@ public enum FishType implements ItemType {
     }
 
     @Override
-    public Slot createAmountOfItem(int amount) {
+    public Slot createAmountOfItem(int amount, Quality quality) {
         return new Slot(new Fish(Quality.DEFAULT, this), amount);
     }
 }

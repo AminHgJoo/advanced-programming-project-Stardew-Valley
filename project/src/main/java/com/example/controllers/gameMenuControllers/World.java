@@ -663,7 +663,7 @@ public class World extends Controller {
                             "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
 
-                Slot slotToAdd = tree.getTreeType().fruitItem.createAmountOfItem(1);
+                Slot slotToAdd = tree.getTreeType().fruitItem.createAmountOfItem(1, Quality.DEFAULT);
                 backpack.getSlots().add(slotToAdd);
                 GameRepository.saveGame(game);
                 return new Response(true, "You received " + 1 + " coal.");
@@ -685,7 +685,7 @@ public class World extends Controller {
                             , "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
 
-                Slot slotToAdd = TreeSeedsType.findTreeTypeByName(tree.getTreeType().source).createAmountOfItem(2);
+                Slot slotToAdd = TreeSeedsType.findTreeTypeByName(tree.getTreeType().source).createAmountOfItem(2, Quality.DEFAULT);
                 backpack.getSlots().add(slotToAdd);
 
                 GameRepository.saveGame(game);
@@ -999,7 +999,7 @@ public class World extends Controller {
                 }
             } else {
                 if (slot == null) {
-                    backpack.getSlots().add(itemType.createAmountOfItem(randomInt));
+                    backpack.getSlots().add(itemType.createAmountOfItem(randomInt, Quality.DEFAULT));
                 } else {
                     slot.setCount(Math.min(slot.getCount() + randomInt, slot.getItem().getMaxStackSize()));
                 }
@@ -1078,7 +1078,7 @@ public class World extends Controller {
                     tree.setHarvestDeadLine(DateUtility.getLocalDate(game.getDate(), tree.getTreeType().harvestCycleTime));
                 }
 
-                Slot newSlot = tree.getTreeType().fruitItem.createAmountOfItem(amountToHarvest);
+                Slot newSlot = tree.getTreeType().fruitItem.createAmountOfItem(amountToHarvest, Quality.DEFAULT);
                 backpack.getSlots().add(newSlot);
 
                 player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);

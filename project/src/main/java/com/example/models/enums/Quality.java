@@ -19,6 +19,26 @@ public enum Quality {
         return qualityLevel;
     }
 
+    public static Quality getQualityByName(final String name) {
+        for (Quality quality : values()) {
+            if (quality.name.compareToIgnoreCase(name) == 0) {
+                return quality;
+            }
+        }
+
+        if (name.compareToIgnoreCase("Training") == 0) {
+            return Quality.COPPER;
+        }
+        if (name.compareToIgnoreCase("Bamboo") == 0) {
+            return Quality.SILVER;
+        }
+        if (name.compareToIgnoreCase("Fiberglass") == 0) {
+            return Quality.GOLD;
+        }
+
+        return null;
+    }
+
     Quality(String name, double priceFactor) {
         this.name = name;
         this.priceFactor = priceFactor;

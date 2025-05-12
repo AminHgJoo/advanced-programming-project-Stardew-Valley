@@ -1,6 +1,7 @@
 package com.example.models.enums.types.itemTypes;
 
 import com.example.models.Slot;
+import com.example.models.enums.Quality;
 import com.example.models.enums.worldEnums.Season;
 import com.example.models.items.TreeSeed;
 
@@ -53,7 +54,7 @@ public enum TreeSeedsType implements ItemType {
     }
 
     @Override
-    public Slot createAmountOfItem(int amount) {
+    public Slot createAmountOfItem(int amount, Quality quality) {
         return new Slot(new TreeSeed(this), amount);
     }
 }

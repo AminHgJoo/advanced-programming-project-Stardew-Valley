@@ -27,13 +27,12 @@ public enum ToolTypes implements ItemType {
         this.name = name;
     }
 
-
     public String getName() {
         return name;
     }
 
     @Override
-    public Slot createAmountOfItem(int amount) {
-        return new Slot(new Tool(Quality.DEFAULT, 0, 0, this.name, this, this.waterCapacity), 1);
+    public Slot createAmountOfItem(int amount, Quality quality) {
+        return new Slot(new Tool(quality, 0, 0, this.name, this, this.waterCapacity), 1);
     }
 }

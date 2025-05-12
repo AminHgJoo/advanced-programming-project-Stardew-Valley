@@ -5,6 +5,7 @@ import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
+import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CraftingRecipes;
 import com.example.models.enums.types.itemTypes.CropSeedsType;
 import com.example.models.enums.types.itemTypes.ItemType;
@@ -19,8 +20,11 @@ import com.example.models.mapModels.Cell;
 import com.example.models.mapObjects.ArtisanBlock;
 import com.example.models.mapObjects.DroppedItem;
 import com.example.models.mapObjects.EmptyCell;
+import org.intellij.lang.annotations.Language;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InventoryFunctionalities extends Controller {
     public static Response cheatAddSkillXP(Request request) {
@@ -335,11 +339,19 @@ public class InventoryFunctionalities extends Controller {
 
         HashMap<String, ItemType> allItemsList = App.getAllItemTypes();
 
+        @Language("Regexp")
+        String toolsRegex = "(?<quality>Default|Copper|Silver|Gold|Iridium|Training|Bamboo|Fiberglass) " +
+                "(?<toolName>Axe|Hoe|Pickaxe|Fishing Rod|Scythe)";
+        Pattern pattern = Pattern.compile(toolsRegex);
+        Matcher matcher = pattern.matcher(itemName);
+
+        boolean matchFound = matcher.matches();
+
         Game game = App.getLoggedInUser().getCurrentGame();
         Player player = game.getCurrentPlayer();
         Backpack backpack = player.getInventory();
 
-        if (!allItemsList.containsKey(itemName)) {
+        if (!allItemsList.containsKey(itemName) && !matchFound) {
             return new Response(false, "Item doesn't exist.");
         }
 
@@ -348,9 +360,15 @@ public class InventoryFunctionalities extends Controller {
         }
 
         Slot slot = backpack.getSlotByItemName(itemName);
-        Slot toBeAddedSlot = allItemsList.get(itemName).createAmountOfItem(count);
+
+        Quality quality = Quality.DEFAULT;
+
+        if (matchFound) {
+            quality = Quality.getQualityByName(matcher.group("quality"));
+        }
 
         if (slot == null) {
+            Slot toBeAddedSlot = allItemsList.get(matchFound ? matcher.group("toolName") : itemName).createAmountOfItem(count, quality);
             backpack.getSlots().add(toBeAddedSlot);
         } else {
             slot.setCount(Math.min(slot.getCount() + count, slot.getItem().getMaxStackSize()));
