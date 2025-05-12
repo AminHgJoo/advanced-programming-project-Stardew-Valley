@@ -9,6 +9,7 @@ import com.example.models.enums.Quality;
 import com.example.models.enums.recipes.CookingRecipes;
 import com.example.models.enums.recipes.CraftingRecipes;
 import com.example.models.enums.types.MenuTypes;
+import com.example.models.enums.types.inventoryEnums.BackpackType;
 import com.example.models.enums.types.inventoryEnums.TrashcanType;
 import com.example.models.enums.types.itemTypes.*;
 import com.example.models.enums.types.storeProductTypes.BlackSmithProducts;
@@ -117,6 +118,19 @@ public class DealingController extends Controller {
         p.setAvailableCount(p.getAvailableCount() - n);
         ItemType type = p.getType().getItemType();
         if (type == null && p.getType().getIngredient() == null) {
+            if (p.getType().getName().equals("Large Pack")) {
+                player.getInventory().setType(BackpackType.GIANT);
+                player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason())), game);
+                return new Response(true, "Your backpack is Large now");
+            } else if (p.getType().getName().equals("Deluxe Pack")) {
+                if (player.getInventory().getType() != BackpackType.DEFAULT) {
+                    player.getInventory().setType(BackpackType.DELUXE);
+                    player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason())), game);
+                } else {
+                    return new Response(false, "You must first by Large Pack");
+                }
+                return new Response(true, "Your backpack is Deluxe now");
+            }
             Response res = handleBuyRecipe(productName, p, player);
             if (res.isSuccess()) {
                 player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason()) * n), game);
@@ -200,8 +214,8 @@ public class DealingController extends Controller {
         String productName = request.body.get("productName");
 
 
-        if(!player.isNearShippingBin()){
-            return new Response(false , "You msut be near a shipping bin");
+        if (!player.isNearShippingBin()) {
+            return new Response(false, "You msut be near a shipping bin");
         }
         Slot productSlot = player.getInventory().getSlotByItemName(productName);
         if (productSlot == null) {
@@ -211,8 +225,8 @@ public class DealingController extends Controller {
         if (request.body.get("count") != null) {
             n = Integer.parseInt(request.body.get("count"));
         }
-        if(n > productSlot.getCount()){
-            return new Response(false ,"You don't have enough item");
+        if (n > productSlot.getCount()) {
+            return new Response(false, "You don't have enough item");
         }
         productSlot.setCount(productSlot.getCount() - n);
         if (productSlot.getCount() == 0) {
@@ -228,7 +242,7 @@ public class DealingController extends Controller {
         }
         player.setMoneyInNextDay(player.getMoneyInNextDay() + (int) money);
         GameRepository.saveGame(game);
-        return new Response(true , "Item was successfully sold");
+        return new Response(true, "Item was successfully sold");
     }
 
     public static Response handleBuyRecipe(String name, StoreProduct p, Player player) {

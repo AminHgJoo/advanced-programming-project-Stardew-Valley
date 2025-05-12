@@ -1,5 +1,6 @@
 package com.example.models.enums.types.storeProductTypes;
 
+import com.example.models.enums.types.inventoryEnums.BackpackType;
 import com.example.models.enums.types.itemTypes.*;
 import com.example.models.enums.worldEnums.Season;
 
@@ -53,7 +54,9 @@ public enum PierreProducts implements StoreProductInterface {
     FAIRY_SEEDS_P("Pierre Fairy Seeds", "Plant in fall. Takes 12 days to produce a mysterious flower. Assorted Colors.", CropSeedsType.FAIRY_ROSE, 200, 300, 5, new Season[]{Season.FALL}),
     AMARANTH_SEEDS_P("Pierre Amaranth Seeds", "Plant these in the fall. Takes 7 days to grow. Harvest with the scythe.", CropSeedsType.AMARANTH, 70, 105, 5, new Season[]{Season.FALL}),
     GRAPE_STARTER_P("Pierre Grape Starter", "Plant these in the fall. Takes 10 days to grow, but keeps producing after that. Grows on a trellis.", CropSeedsType.GRAPE, 60, 90, 5, new Season[]{Season.FALL}),
-    ARTICHOKE_SEEDS("Artichoke Seeds", "Plant these in the fall. Takes 8 days to mature.", CropSeedsType.ARTICHOKE, 30, 45, 5, new Season[]{Season.FALL});
+    ARTICHOKE_SEEDS("Artichoke Seeds", "Plant these in the fall. Takes 8 days to mature.", CropSeedsType.ARTICHOKE, 30, 45, 5, new Season[]{Season.FALL}),
+    LARGE_PACK("Large Pack", "Unlocks the 2nd row of inventory (12 more slots, total 24).", null , 2000,2000,1 , Season.values()),
+    DELUXE_PACK("Deluxe Pack", "Unlocks the 3rd row of inventory (infinite slots).", null , 10000,10000,1 , Season.values());
 
     private final String name;
     private final String description;
