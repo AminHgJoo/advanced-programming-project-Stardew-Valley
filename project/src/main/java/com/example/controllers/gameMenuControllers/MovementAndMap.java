@@ -20,6 +20,7 @@ import com.example.utilities.Tile;
 import com.example.views.AppView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MovementAndMap extends Controller {
@@ -142,7 +143,7 @@ public class MovementAndMap extends Controller {
         if (dest == null || !dest.getObjectOnCell().isWalkable) {
             return new Response(false, "destination is not valid");
         }
-        FindPath.pathBFS(src, dest, player.getCurrentFarm(game).getCells());
+        dest = FindPath.pathBFS(src, dest, player.getCurrentFarm(game).getCells());
         double energy = dest.energy / (double) 20;
         String message = "Your current energy is: " + player.getEnergy() + "\n" +
                 "The path energy cost is : " + energy + "\n" +
@@ -152,25 +153,30 @@ public class MovementAndMap extends Controller {
         if (answer.compareToIgnoreCase("Y") == 0) {
             ArrayList<Tile> path = new ArrayList<Tile>();
             while (dest != null) {
+                if(dest.prev != null){
+                    dest.energy -= dest.prev.energy;
+                }
+                dest.energy /= 20
+                ;
                 path.add(dest);
                 dest = dest.prev;
             }
-            path.reversed();
-            for (Tile c : path) {
+            List<Tile> arr = path.reversed();
+            for (Tile c : arr) {
                 if (c.energy > player.getEnergy()) {
                     player.setPlayerFainted(true);
-                    player.setEnergy(player.getEnergy() - c.energy / 20);
+                    player.setEnergy(player.getEnergy() - c.energy );
                     GameRepository.saveGame(game);
                     return new Response(false, "You have fainted");
                 }
-                if (c.energy + player.getUsedEnergyInTurn() > 50) {
+                if (c.energy  + player.getUsedEnergyInTurn() > 50) {
                     GameRepository.saveGame(game);
                     return new Response(false, "You can not use this much energy");
                 }
                 player.setCoordinate(c.getCoordinate());
+                player.setEnergy(player.getEnergy() - c.energy);
+                player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + c.energy);
             }
-            player.setEnergy(player.getEnergy() - energy);
-            player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
             GameRepository.saveGame(game);
             return new Response(true, "You successfully moved to the destination");
         } else {

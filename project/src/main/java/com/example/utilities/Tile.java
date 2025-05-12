@@ -64,7 +64,15 @@ public class Tile {
     }
 
     @Override
-    public Cell clone() {
-        return new Cell(objectOnCell, coordinate);
+    public Tile clone() {
+        return new Tile(objectOnCell, coordinate);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tile cell = (Tile) o;
+        return coordinate.getX() == cell.coordinate.getX() && coordinate.getY() == cell.coordinate.getY();
     }
 }

@@ -64,4 +64,12 @@ public class Cell {
     public Cell clone() {
         return new Cell(objectOnCell, coordinate);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cell cell = (Cell) o;
+        return coordinate.getX() == cell.coordinate.getX() && coordinate.getY() == cell.coordinate.getY();
+    }
 }
