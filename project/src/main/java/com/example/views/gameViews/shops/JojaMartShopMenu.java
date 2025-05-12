@@ -26,14 +26,12 @@ public class JojaMartShopMenu implements Menu {
 
     public static Response getShowAllProductsResponse(String input) {
         Request request = new Request(input);
-        request.body.put("storeName", GameMenuCommands.SHOW_ALL_PRODUCTS.getGroup(input, "storeName"));
         Response response = DealingController.handleShowAllProducts(request);
         return response;
     }
 
     public static Response getShowAvailableProductsResponse(String input) {
         Request request = new Request(input);
-        request.body.put("storeName", GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.getGroup(input, "storeName"));
         Response response = DealingController.handleShowAvailableProducts(request);
         return response;
     }

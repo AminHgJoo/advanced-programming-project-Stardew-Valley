@@ -26,13 +26,11 @@ public class BlacksmithShopMenu implements Menu {
 
     public static Response getShowAllProductsResponse(String input) {
         Request request = new Request(input);
-        request.body.put("storeName", GameMenuCommands.SHOW_ALL_PRODUCTS.getGroup(input, "storeName"));
         return DealingController.handleShowAllProducts(request);
     }
 
     public static Response getShowAvailableProductsResponse(String input) {
         Request request = new Request(input);
-        request.body.put("storeName", GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.getGroup(input, "storeName"));
         return DealingController.handleShowAvailableProducts(request);
     }
 
