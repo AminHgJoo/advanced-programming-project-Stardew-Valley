@@ -321,6 +321,8 @@ public class Game {
         }
 
         npcGiveReward(this);
+
+        handleArtisanUse();
     }
 
     private void handleCropDeath() {
