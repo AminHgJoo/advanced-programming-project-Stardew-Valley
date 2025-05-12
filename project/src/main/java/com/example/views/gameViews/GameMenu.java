@@ -14,7 +14,6 @@ public class GameMenu implements Menu {
 
     public void handleMenu(String input) {
         Response response = null;
-
         if (App.getLoggedInUser().getCurrentGame() == null
                 || !App.getLoggedInUser().getCurrentGame().isGameOngoing()) {
 

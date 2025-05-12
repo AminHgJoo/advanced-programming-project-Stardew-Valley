@@ -7,6 +7,7 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;
 import com.example.views.Menu;
+import com.example.views.gameViews.GameMenu;
 
 public class MarnieRanchMenu implements Menu {
 
@@ -23,11 +24,11 @@ public class MarnieRanchMenu implements Menu {
             response = getPurchaseResponse(input);
         } else if (GameMenuCommands.EXIT_MENU.matches(input)) {
             response = leaveRanch(input);
-        } else {
-            response = getInvalidCommand();
         }
 
-        printResponse(response);
+        if (response != null)
+            printResponse(response);
+        else new GameMenu().handleMenu(input);
     }
 
     private static Response getBuyAnimalResponse(String input) {
@@ -41,6 +42,7 @@ public class MarnieRanchMenu implements Menu {
         Request request = new Request(input);
         return MarineRanchController.leaveRanch(request);
     }
+
     public static Response getShowAllProductsResponse(String input) {
         Request request = new Request(input);
         Response response = DealingController.handleShowAllProducts(request);

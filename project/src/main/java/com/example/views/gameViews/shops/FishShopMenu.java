@@ -5,6 +5,7 @@ import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.enums.commands.GameMenuCommands;
 import com.example.views.Menu;
+import com.example.views.gameViews.GameMenu;
 
 public class FishShopMenu implements Menu {
     @Override
@@ -18,10 +19,10 @@ public class FishShopMenu implements Menu {
             response = getPurchaseResponse(input);
         } else if (GameMenuCommands.EXIT_MENU.matches(input)) {
             response = getExitShopResponse(input);
-        } else {
-            response = getInvalidCommand();
         }
-        printResponse(response);
+        if (response != null)
+            printResponse(response);
+        else new GameMenu().handleMenu(input);
     }
 
     public static Response getShowAllProductsResponse(String input) {
