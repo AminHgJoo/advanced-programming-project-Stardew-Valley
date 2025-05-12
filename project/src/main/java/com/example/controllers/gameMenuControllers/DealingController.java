@@ -211,7 +211,10 @@ public class DealingController extends Controller {
         if (request.body.get("count") != null) {
             n = Integer.parseInt(request.body.get("count"));
         }
-        productSlot.setCount(productSlot.getCount() - 1);
+        if(n > productSlot.getCount()){
+            return new Response(false ,"You don't have enough item");
+        }
+        productSlot.setCount(productSlot.getCount() - n);
         if (productSlot.getCount() == 0) {
             player.getInventory().removeSlot(productSlot);
         }
@@ -225,7 +228,7 @@ public class DealingController extends Controller {
         }
         player.setMoneyInNextDay(player.getMoneyInNextDay() + (int) money);
         GameRepository.saveGame(game);
-        return null;
+        return new Response(true , "Item was successfully sold");
     }
 
     public static Response handleBuyRecipe(String name, StoreProduct p, Player player) {
