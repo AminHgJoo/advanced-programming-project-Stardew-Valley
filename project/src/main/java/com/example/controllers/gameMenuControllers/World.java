@@ -663,7 +663,7 @@ public class World extends Controller {
                             "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
 
-                Slot slotToAdd = tree.getTreeType().fruitItem.createAmountOfItem(1);
+                Slot slotToAdd = tree.getTreeType().fruitItem.createAmountOfItem(1, Quality.DEFAULT);
                 backpack.getSlots().add(slotToAdd);
                 GameRepository.saveGame(game);
                 return new Response(true, "You received " + 1 + " coal.");
@@ -685,7 +685,7 @@ public class World extends Controller {
                             , "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
 
-                Slot slotToAdd = TreeSeedsType.findTreeTypeByName(tree.getTreeType().source).createAmountOfItem(2);
+                Slot slotToAdd = TreeSeedsType.findTreeTypeByName(tree.getTreeType().source).createAmountOfItem(2, Quality.DEFAULT);
                 backpack.getSlots().add(slotToAdd);
 
                 GameRepository.saveGame(game);
@@ -740,8 +740,7 @@ public class World extends Controller {
             return new Response(true, "Water filled successfully.");
         }
 
-        if (targetCell.getObjectOnCell() instanceof Tree) {
-            Tree tree = (Tree) targetCell.getObjectOnCell();
+        if (targetCell.getObjectOnCell() instanceof Tree tree) {
             if (equippedTool.getWaterReserve() == 0) {
                 GameRepository.saveGame(game);
                 return new Response(false, "Watering can is empty.");
@@ -751,13 +750,13 @@ public class World extends Controller {
             return new Response(true, "Tree watered successfully.");
         }
 
-        if (targetCell.getObjectOnCell() instanceof Crop) {
-            Crop crop = (Crop) targetCell.getObjectOnCell();
+        if (targetCell.getObjectOnCell() instanceof Crop crop) {
             if (equippedTool.getWaterReserve() == 0) {
                 GameRepository.saveGame(game);
                 return new Response(false, "Watering can is empty.");
             }
             crop.setHasBeenWateredToday(true);
+            crop.setLastWateringDate(game.getDate());
             GameRepository.saveGame(game);
             return new Response(true, "Crop watered successfully.");
         }
@@ -999,7 +998,7 @@ public class World extends Controller {
                 }
             } else {
                 if (slot == null) {
-                    backpack.getSlots().add(itemType.createAmountOfItem(randomInt));
+                    backpack.getSlots().add(itemType.createAmountOfItem(randomInt, Quality.DEFAULT));
                 } else {
                     slot.setCount(Math.min(slot.getCount() + randomInt, slot.getItem().getMaxStackSize()));
                 }
@@ -1032,7 +1031,7 @@ public class World extends Controller {
                 if (crop.cropSeedsType.oneTime) {
                     targetCell.setObjectOnCell(new EmptyCell());
                 } else {
-                    crop.setHarvestDeadLine(DateUtility.getLocalDate(game.getDate(), crop.cropSeedsType.regrowthTime));
+                    crop.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), crop.cropSeedsType.regrowthTime));
                 }
 
                 player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
@@ -1044,7 +1043,7 @@ public class World extends Controller {
             if (crop.cropSeedsType.oneTime) {
                 targetCell.setObjectOnCell(new EmptyCell());
             } else {
-                crop.setHarvestDeadLine(DateUtility.getLocalDate(game.getDate(), crop.cropSeedsType.regrowthTime));
+                crop.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), crop.cropSeedsType.regrowthTime));
             }
 
             player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
@@ -1075,10 +1074,10 @@ public class World extends Controller {
                         || tree.getTreeType() == TreeType.BURNT_TREE) {
                     return new Response(false, "Tree isn't harvestable.");
                 } else {
-                    tree.setHarvestDeadLine(DateUtility.getLocalDate(game.getDate(), tree.getTreeType().harvestCycleTime));
+                    tree.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), tree.getTreeType().harvestCycleTime));
                 }
 
-                Slot newSlot = tree.getTreeType().fruitItem.createAmountOfItem(amountToHarvest);
+                Slot newSlot = tree.getTreeType().fruitItem.createAmountOfItem(amountToHarvest, Quality.DEFAULT);
                 backpack.getSlots().add(newSlot);
 
                 player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
@@ -1092,7 +1091,7 @@ public class World extends Controller {
                     || tree.getTreeType() == TreeType.BURNT_TREE) {
                 return new Response(false, "Can't harvest a normal, burnt tree or bark.");
             } else {
-                tree.setHarvestDeadLine(DateUtility.getLocalDate(game.getDate(), tree.getTreeType().harvestCycleTime));
+                tree.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), tree.getTreeType().harvestCycleTime));
             }
 
             slot.setCount(Math.min(slot.getCount() + amountToHarvest, slot.getItem().getMaxStackSize()));

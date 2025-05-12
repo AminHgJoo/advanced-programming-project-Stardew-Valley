@@ -1,6 +1,7 @@
 package com.example.models.enums.types.itemTypes;
 
 import com.example.models.Slot;
+import com.example.models.enums.Quality;
 import com.example.models.items.Misc;
 
 public enum MiscType implements ItemType {
@@ -83,7 +84,7 @@ public enum MiscType implements ItemType {
     }
 
     @Override
-    public Slot createAmountOfItem(int amount) {
+    public Slot createAmountOfItem(int amount, Quality quality) {
         return new Slot(new Misc(this), amount);
     }
 }

@@ -177,7 +177,7 @@ public enum FoodTypes implements ItemType {
     }
 
     @Override
-    public Slot createAmountOfItem(int amount) {
+    public Slot createAmountOfItem(int amount, Quality quality) {
         return new Slot(new Food(Quality.DEFAULT, this), amount);
     }
 }

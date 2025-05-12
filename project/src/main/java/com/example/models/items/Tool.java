@@ -47,6 +47,24 @@ public class Tool extends Item {
 
     @Override
     public String toString() {
+        if (type == ToolTypes.WATERING_CAN_DEFAULT ||
+                type == ToolTypes.WATERING_CAN_COPPER ||
+                type == ToolTypes.WATERING_CAN_IRON ||
+                type == ToolTypes.WATERING_CAN_GOLD ||
+                type == ToolTypes.WATERING_CAN_IRIDIUM) {
+            return name;
+        }
+        if (type == ToolTypes.FISHING_ROD) {
+            String qualityStr;
+            switch (quality) {
+                case COPPER -> qualityStr = "Training";
+                case SILVER -> qualityStr = "Bamboo";
+                case GOLD -> qualityStr = "Fiberglass";
+                case IRIDIUM -> qualityStr = "Iridium";
+                default -> qualityStr = null;
+            }
+            return qualityStr + " " + name;
+        }
         return this.quality.toString() + " " + this.name;
     }
 

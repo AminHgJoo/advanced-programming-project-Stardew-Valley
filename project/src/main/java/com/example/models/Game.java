@@ -181,6 +181,7 @@ public class Game {
                     if (crop.isHasBeenDeluxeFertilized()) {
                         crop.setHasBeenDeluxeFertilized(false);
                         crop.setHasBeenWateredToday(true);
+                        crop.setLastWateringDate(date);
                     }
                 }
 
@@ -240,7 +241,7 @@ public class Game {
                     if (!farm.isCellCoveredByScarecrow(cell)) {
                         Tree tree = (Tree) cell.getObjectOnCell();
                         if (tree.getHarvestDeadLine() != null && tree.getTreeType().harvestCycleTime != -1) {
-                            tree.setHarvestDeadLine(DateUtility.getLocalDate(tree.getHarvestDeadLine(), 1));
+                            tree.setHarvestDeadLine(DateUtility.getLocalDateTime(tree.getHarvestDeadLine(), 1));
                         }
                     }
                 }
@@ -301,6 +302,8 @@ public class Game {
 
         resetAllCropsWater();
 
+        handleCropDeath();
+
         if (weatherToday == Weather.RAIN || weatherToday == Weather.STORM) {
             waterAllCrops();
         }
@@ -318,6 +321,20 @@ public class Game {
         }
 
         npcGiveReward(this);
+    }
+
+    private void handleCropDeath() {
+        for (Farm farm : getMap().getFarms()) {
+            for (Cell cell : farm.getCells()) {
+                if (cell.getObjectOnCell() instanceof Crop crop) {
+                    int howManyDaysWithoutWater = DateUtility.getDayDifference(crop.getLastWateringDate(), date);
+                    if (howManyDaysWithoutWater >= 2) {
+                        cell.setObjectOnCell(new EmptyCell());
+                        System.out.println("Crop at x " + cell.getCoordinate().getX() + " y " + cell.getCoordinate().getY() + " has died.");
+                    }
+                }
+            }
+        }
     }
 
     private void handleArtisanUse() {

@@ -51,7 +51,7 @@ public enum ForagingMineralsType implements ItemType {
     }
 
     @Override
-    public Slot createAmountOfItem(int amount) {
+    public Slot createAmountOfItem(int amount, Quality quality) {
         return new Slot(new ForagingMineral(Quality.DEFAULT, this), amount);
     }
 }
