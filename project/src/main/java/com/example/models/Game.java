@@ -327,7 +327,7 @@ public class Game {
         for (Cell cell : farm.getCells()) {
             MapObject objectONCell = cell.getObjectOnCell();
             if (objectONCell instanceof ArtisanBlock && ((ArtisanBlock) objectONCell).beingUsed) {
-                if (((ArtisanBlock) objectONCell).prepTime.isAfter(date)) {
+                if (((ArtisanBlock) objectONCell).prepTime.isBefore(date)) {
                     ((ArtisanBlock) objectONCell).canBeCollected = true;
                 }
             }

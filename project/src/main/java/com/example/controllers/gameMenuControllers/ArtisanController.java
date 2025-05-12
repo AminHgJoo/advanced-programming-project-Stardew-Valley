@@ -137,26 +137,17 @@ public class ArtisanController extends Controller {
     }
 
     private static @NotNull Response artisanMiscHandle(Player player, Game game, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, MiscType miscType, int itemCount, int productCount, int price) {
-        if (player.getEnergy() < energy) {
-            GameRepository.saveGame(game);
-            return new Response(false, "you don't have enough energy");
-        }
 
         Slot slot = backpack.getSlotByItemName(item1Name);
         if (slot == null || slot.getCount() < itemCount) {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough " + item1Name);
         }
-        if (energy + player.getUsedEnergyInTurn() > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
-        }
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
+
         slot.setCount(slot.getCount() - itemCount);
         if (slot.getCount() == 0) {
             backpack.removeSlot(slot);
         }
-        player.setEnergy(player.getEnergy() - energy);
         block.beingUsed = true;
         block.prepTime = game.getDate().plusHours(hours);
 
@@ -207,13 +198,13 @@ public class ArtisanController extends Controller {
         else if (item1Name.equals("Coffee Bean"))
             return artisanFoodHandle(player, game, backpack, item1Name, block, 75, 2, FoodTypes.COFFEE, 5, 1, FoodTypes.COFFEE.value);
         else if (item1Name.equals("Honey"))
-            return artisanFoodHandle(player, game, backpack, item1Name, block, 100, 10, FoodTypes.MEAD, 5, 1, 300);
+            return artisanFoodHandle(player, game, backpack, item1Name, block, 100, 10, FoodTypes.MEAD, 1, 1, 300);
         else if (item1Name.equals("Hops"))
             return artisanFoodHandle(player, game, backpack, item1Name, block, 50, 72, FoodTypes.PALE_ALE, 1, 1, 300);
         else if (isFruit(item1Name))
-            return artisanFoodHandle(player, game, backpack, item1Name, block, 7 * FoodTypes.getEnergy(item1Name) / 4, 168, FoodTypes.WINE, 5, 1, FoodTypes.getPrice(item1Name) * 3);
+            return artisanFoodHandle(player, game, backpack, item1Name, block, 7 * FoodTypes.getEnergy(item1Name) / 4, 168, FoodTypes.WINE, 1, 1, FoodTypes.getPrice(item1Name) * 3);
         else if (isVegetable(item1Name))
-            return artisanFoodHandle(player, game, backpack, item1Name, block, 2 * FoodTypes.getEnergy(item1Name), 168, FoodTypes.JUICE, 5, 1, 9 * FoodTypes.getPrice(item1Name) / 4);
+            return artisanFoodHandle(player, game, backpack, item1Name, block, 2 * FoodTypes.getEnergy(item1Name), 168, FoodTypes.JUICE, 1, 1, 9 * FoodTypes.getPrice(item1Name) / 4);
         else {
             GameRepository.saveGame(game);
             return new Response(true, "wrong item selected");
@@ -251,26 +242,16 @@ public class ArtisanController extends Controller {
     }
 
     private static @NotNull Response artisanForagingMineralHandle(Player player, Game game, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, ForagingMineralsType foragingMineralsType, int itemCount, int productCount, int price) {
-        if (player.getEnergy() < energy) {
-            GameRepository.saveGame(game);
-            return new Response(false, "you don't have enough energy");
-        }
 
         Slot slot = backpack.getSlotByItemName(item1Name);
         if (slot == null || slot.getCount() < itemCount) {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough " + item1Name);
         }
-        if (energy + player.getUsedEnergyInTurn() > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
-        }
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
         slot.setCount(slot.getCount() - itemCount);
         if (slot.getCount() == 0) {
             backpack.removeSlot(slot);
         }
-        player.setEnergy(player.getEnergy() - energy);
         block.beingUsed = true;
         block.prepTime = game.getDate().plusHours(hours);
 
@@ -286,26 +267,16 @@ public class ArtisanController extends Controller {
     }
 
     private static @NotNull Response artisanFoodHandle(Player player, Game game, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, FoodTypes foodTypes, int itemCount, int productCount, int price) {
-        if (player.getEnergy() < energy) {
-            GameRepository.saveGame(game);
-            return new Response(false, "you don't have enough energy");
-        }
 
         Slot slot = backpack.getSlotByItemName(item1Name);
         if (slot == null || slot.getCount() < itemCount) {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough " + item1Name);
         }
-        if (energy + player.getUsedEnergyInTurn() > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
-        }
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
         slot.setCount(slot.getCount() - itemCount);
         if (slot.getCount() == 0) {
             backpack.removeSlot(slot);
         }
-        player.setEnergy(player.getEnergy() - energy);
         block.beingUsed = true;
         block.prepTime = game.getDate().plusHours(hours);
 
@@ -315,16 +286,12 @@ public class ArtisanController extends Controller {
         }
 
         block.canBeCollected = false;
-        block.productSlot = new Slot(new Food(Quality.DEFAULT, foodTypes, price), productCount);
+        block.productSlot = new Slot(new Food(Quality.DEFAULT, foodTypes, price, energy), productCount);
         GameRepository.saveGame(game);
         return new Response(true, foodTypes.name + " will be ready to collect in " + hours + " hours");
     }
 
     private static @NotNull Response artisanFoodHandleCoal(Player player, Game game, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, FoodTypes foodTypes, int itemCount, int productCount, int price) {
-        if (player.getEnergy() < energy) {
-            GameRepository.saveGame(game);
-            return new Response(false, "you don't have enough energy");
-        }
 
         Slot slot = backpack.getSlotByItemName(item1Name);
         if (slot == null || slot.getCount() < itemCount) {
@@ -336,11 +303,6 @@ public class ArtisanController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough coal");
         }
-        if (energy + player.getUsedEnergyInTurn() > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
-        }
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
         slot.setCount(slot.getCount() - itemCount);
         if (slot.getCount() == 0) {
             backpack.removeSlot(slot);
@@ -350,7 +312,6 @@ public class ArtisanController extends Controller {
             backpack.removeSlot(secondSlot);
         }
 
-        player.setEnergy(player.getEnergy() - energy);
         block.beingUsed = true;
         block.prepTime = game.getDate().plusHours(hours);
 
@@ -360,16 +321,12 @@ public class ArtisanController extends Controller {
         }
 
         block.canBeCollected = false;
-        block.productSlot = new Slot(new Food(Quality.DEFAULT, foodTypes, price), productCount);
+        block.productSlot = new Slot(new Food(Quality.DEFAULT, foodTypes, price, energy), productCount);
         GameRepository.saveGame(game);
         return new Response(true, foodTypes.name + " will be ready to collect in " + hours + " hours");
     }
 
     private static @NotNull Response artisanMiscHandleCoal(Player player, Game game, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, MiscType miscType, int itemCount, int productCount, int price) {
-        if (player.getEnergy() < energy) {
-            GameRepository.saveGame(game);
-            return new Response(false, "you don't have enough energy");
-        }
 
         Slot slot = backpack.getSlotByItemName(item1Name);
         if (slot == null || slot.getCount() < itemCount) {
@@ -381,11 +338,6 @@ public class ArtisanController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "You don't have enough coal");
         }
-        if (energy + player.getUsedEnergyInTurn() > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
-        }
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energy);
         slot.setCount(slot.getCount() - itemCount);
         if (slot.getCount() == 0) {
             backpack.removeSlot(slot);
@@ -395,7 +347,6 @@ public class ArtisanController extends Controller {
             backpack.removeSlot(secondSlot);
         }
 
-        player.setEnergy(player.getEnergy() - energy);
         block.beingUsed = true;
         block.prepTime = game.getDate().plusHours(hours);
 
@@ -422,26 +373,16 @@ public class ArtisanController extends Controller {
     }
 
     private static @NotNull Response goatCheeseHandle(Player player, Game game, String item1Name, Backpack backpack, ArtisanBlock block) {
-        if (player.getEnergy() < 100) {
-            GameRepository.saveGame(game);
-            return new Response(false, "You don't have enough energy");
-        }
         if (item1Name.equals("Goat Milk")) {
             Slot slot = backpack.getSlotByItemName(item1Name);
             if (slot == null) {
                 GameRepository.saveGame(game);
                 return new Response(false, "You don't have enough Goat Milk");
             }
-            if (100 + player.getUsedEnergyInTurn() > 50) {
-                return new Response(false, "You can't perform this activity. " +
-                        "You will exceed your energy usage limit.");
-            }
-            player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + 100);
             slot.setCount(slot.getCount() - 1);
             if (slot.getCount() == 0) {
                 backpack.removeSlot(slot);
             }
-            player.setEnergy(player.getEnergy() - 100);
             block.beingUsed = true;
             block.prepTime = game.getDate().plusHours(3);
 
@@ -464,7 +405,6 @@ public class ArtisanController extends Controller {
             if (slot.getCount() == 0) {
                 backpack.removeSlot(slot);
             }
-            player.setEnergy(player.getEnergy() - 100);
             block.beingUsed = true;
             block.prepTime = game.getDate().plusHours(3);
 
@@ -484,11 +424,6 @@ public class ArtisanController extends Controller {
     }
 
     private static @NotNull Response honeyHandle(Player player, Game game, ArtisanBlock block) {
-        if (player.getEnergy() < 75) {
-            GameRepository.saveGame(game);
-            return new Response(false, "You don't have enough energy");
-        }
-        player.setEnergy(player.getEnergy() - 75);
         block.beingUsed = true;
         block.prepTime = game.getDate().plusDays(4);
 
@@ -504,10 +439,6 @@ public class ArtisanController extends Controller {
     }
 
     private static @NotNull Response cheeseHandle(Player player, Game game, String item1Name, ArtisanBlock block, Backpack backpack) {
-        if (player.getEnergy() < 100) {
-            GameRepository.saveGame(game);
-            return new Response(false, "You don't have enough energy");
-        }
         if (item1Name.equals("Milk")) {
             Slot slot = backpack.getSlotByItemName(item1Name);
             if (slot == null) {
@@ -518,7 +449,6 @@ public class ArtisanController extends Controller {
             if (slot.getCount() == 0) {
                 backpack.removeSlot(slot);
             }
-            player.setEnergy(player.getEnergy() - 100);
             block.beingUsed = true;
             block.prepTime = game.getDate().plusHours(3);
 
@@ -541,7 +471,6 @@ public class ArtisanController extends Controller {
             if (slot.getCount() == 0) {
                 backpack.removeSlot(slot);
             }
-            player.setEnergy(player.getEnergy() - 100);
             block.beingUsed = true;
             block.prepTime = game.getDate().plusHours(3);
 

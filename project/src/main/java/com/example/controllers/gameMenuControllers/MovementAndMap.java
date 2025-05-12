@@ -245,6 +245,7 @@ public class MovementAndMap extends Controller {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         game.getCurrentPlayer().setEnergy(Double.POSITIVE_INFINITY);
+        game.getCurrentPlayer().setUsedEnergyInTurn(Double.NEGATIVE_INFINITY);
         GameRepository.saveGame(game);
         return new Response(true, "energy successfully set to infinity");
     }

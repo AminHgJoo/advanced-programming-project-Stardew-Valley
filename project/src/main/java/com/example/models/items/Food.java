@@ -31,6 +31,11 @@ public class Food extends Item {
         this.foodTypes = foodTypes;
         this.foodBuff = foodTypes.foodBuff;
     }
+    public Food(Quality quality, FoodTypes foodTypes, int value, int energy) {
+        super(quality, Integer.MAX_VALUE, value, energy, foodTypes.name);
+        this.foodTypes = foodTypes;
+        this.foodBuff = foodTypes.foodBuff;
+    }
 
     @Override
     public void useItem() {

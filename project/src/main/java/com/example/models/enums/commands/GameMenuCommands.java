@@ -73,7 +73,7 @@ public enum GameMenuCommands implements Command {
     PRODUCES("^produces$"),
     COLLECT_PRODUCE("^collect\\s+produce\\s+-n\\s+(?<name>.+)$"),
     SELL_ANIMAL("^sell\\s+animal\\s+-n\\s+(?<name>.+)$"),
-    ARTISAN_USE("^artisan\\s+use\\s+(?<artisanName>.+?)\\s+(?<item1Name>.+)$"),
+    ARTISAN_USE("^artisan\\s+use\\s+(?<artisanName>.+)\\s+(?<item1Name>.+)$"),
     ARTISAN_GET("^artisan\\s+get\\s+(?<artisanName>.+)$"),
     SHOW_ALL_PRODUCTS("^show\\s+all\\s+products\\s+-n\\s+(?<storeName>.+)$"),
     SHOW_ALL_AVAILABLE_PRODUCTS("^show\\s+all\\s+available\\s+products\\s+-n\\s+(?<storeName>.+)$"),
