@@ -15,6 +15,7 @@ public class Crop extends MapObject {
     private boolean hasBeenDeluxeFertilized = false;
     private LocalDateTime[] growthDeadLines = new LocalDateTime[5];
     private LocalDateTime harvestDeadLine = null;
+    private LocalDateTime lastWateringDate = null;
     private boolean isGiant = false;
 
     public Crop() {
@@ -25,7 +26,7 @@ public class Crop extends MapObject {
         for (int i = stageNumber; i < growthDeadLines.length; i++) {
             if (growthDeadLines[i] != null) {
                 if (numOfDays > 0)
-                    growthDeadLines[i] = DateUtility.getLocalDate(growthDeadLines[i], numOfDays);
+                    growthDeadLines[i] = DateUtility.getLocalDateTime(growthDeadLines[i], numOfDays);
                 else {
                     growthDeadLines[i] = growthDeadLines[i].minusDays(-numOfDays);
                     while (growthDeadLines[i].getDayOfMonth() >= 29) {
@@ -39,12 +40,13 @@ public class Crop extends MapObject {
     public Crop(CropSeedsType plantType, LocalDateTime source) {
         super(true, "plant", "green");
         this.cropSeedsType = plantType;
+        this.lastWateringDate = source;
         stageNumber = 0;
-        growthDeadLines[0] = DateUtility.getLocalDate(source, cropSeedsType.stageZeroDaysToNextStage);
-        growthDeadLines[1] = DateUtility.getLocalDate(growthDeadLines[0], cropSeedsType.stageOneDaysToNextStage);
-        growthDeadLines[2] = DateUtility.getLocalDate(growthDeadLines[1], cropSeedsType.stageTwoDaysToNextStage);
-        growthDeadLines[3] = DateUtility.getLocalDate(growthDeadLines[2], cropSeedsType.stageThreeDaysToNextStage);
-        growthDeadLines[4] = DateUtility.getLocalDate(growthDeadLines[3], cropSeedsType.stageFourDaysToNextStage);
+        growthDeadLines[0] = DateUtility.getLocalDateTime(source, cropSeedsType.stageZeroDaysToNextStage);
+        growthDeadLines[1] = DateUtility.getLocalDateTime(growthDeadLines[0], cropSeedsType.stageOneDaysToNextStage);
+        growthDeadLines[2] = DateUtility.getLocalDateTime(growthDeadLines[1], cropSeedsType.stageTwoDaysToNextStage);
+        growthDeadLines[3] = DateUtility.getLocalDateTime(growthDeadLines[2], cropSeedsType.stageThreeDaysToNextStage);
+        growthDeadLines[4] = DateUtility.getLocalDateTime(growthDeadLines[3], cropSeedsType.stageFourDaysToNextStage);
         this.hasBeenWateredToday = false;
         harvestDeadLine = null;
     }
@@ -118,5 +120,13 @@ public class Crop extends MapObject {
 
     public void setGiant(boolean giant) {
         isGiant = giant;
+    }
+
+    public LocalDateTime getLastWateringDate() {
+        return lastWateringDate;
+    }
+
+    public void setLastWateringDate(LocalDateTime lastWateringDate) {
+        this.lastWateringDate = lastWateringDate;
     }
 }

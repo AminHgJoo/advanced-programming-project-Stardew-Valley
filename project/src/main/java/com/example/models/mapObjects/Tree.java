@@ -25,11 +25,11 @@ public class Tree extends MapObject {
     public Tree(TreeType treeType, LocalDateTime source) {
         super(false, "tree", "green");
         this.treeType = treeType;
-        growthDeadLines[0] = DateUtility.getLocalDate(source, treeType.stageOneTime);
-        growthDeadLines[1] = DateUtility.getLocalDate(growthDeadLines[0], treeType.stageOneTime);
-        growthDeadLines[2] = DateUtility.getLocalDate(growthDeadLines[1], treeType.stageTwoTime);
-        growthDeadLines[3] = DateUtility.getLocalDate(growthDeadLines[2], treeType.stageThreeTime);
-        growthDeadLines[4] = DateUtility.getLocalDate(growthDeadLines[3], treeType.stageFourTime);
+        growthDeadLines[0] = DateUtility.getLocalDateTime(source, treeType.stageOneTime);
+        growthDeadLines[1] = DateUtility.getLocalDateTime(growthDeadLines[0], treeType.stageOneTime);
+        growthDeadLines[2] = DateUtility.getLocalDateTime(growthDeadLines[1], treeType.stageTwoTime);
+        growthDeadLines[3] = DateUtility.getLocalDateTime(growthDeadLines[2], treeType.stageThreeTime);
+        growthDeadLines[4] = DateUtility.getLocalDateTime(growthDeadLines[3], treeType.stageFourTime);
         if (growthDeadLines[0] == null) {
             growthDeadLines[0] = App.getLoggedInUser().getCurrentGame().getDate();
         }
@@ -38,7 +38,7 @@ public class Tree extends MapObject {
     public void pushBackDeadlines(int numOfDays) {
         for (int i = stageNumber; i < growthDeadLines.length; i++) {
             if (growthDeadLines[i] != null) {
-                growthDeadLines[i] = DateUtility.getLocalDate(growthDeadLines[i], numOfDays);
+                growthDeadLines[i] = DateUtility.getLocalDateTime(growthDeadLines[i], numOfDays);
             }
         }
     }
