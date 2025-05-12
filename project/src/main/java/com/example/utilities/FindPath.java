@@ -1,6 +1,7 @@
 package com.example.utilities;
 
 import com.example.models.mapModels.Cell;
+import com.example.models.mapModels.Farm;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,7 +20,7 @@ public class FindPath {
         return arr;
     }
 
-    public static void pathBFS(Tile src, Tile dest, ArrayList<Cell> arr) {
+    public static Tile pathBFS(Tile src, Tile dest, ArrayList<Cell> arr) {
         for (Cell c : arr) {
             cells.add(new Tile(c));
         }
@@ -29,6 +30,10 @@ public class FindPath {
         visited[src.getCoordinate().getX()][src.getCoordinate().getY()] = true;
         while (!queue.isEmpty()) {
             Tile curr = queue.poll();
+            if (curr.equals(dest)) {
+                dest = curr;
+                break;
+            }
             for (int[] dir : DIRECTIONS) {
                 int newX = curr.getCoordinate().getX() + dir[0];
                 int newY = curr.getCoordinate().getY() + dir[1];
@@ -46,23 +51,13 @@ public class FindPath {
                     } else {
                         neighbour.turns = neighbour.prev.turns + 1;
                     }
-                    for (int[] dir2 : DIRECTIONS) {
-                        int i = newX + dir2[0];
-                        int j = newY + dir2[1];
-                        Tile d = findCell(i, j);
-                        if (d != null && i == dest.getCoordinate().getX() && j == dest.getCoordinate().getY()) {
-                            d.prev = neighbour;
-                            if (!(neighbour.diffXPrev() == d.diffXPrev() && neighbour.diffYPrev() == d.diffYPrev())) {
-                                neighbour.turns += 1;
-                            }
-                        }
-                    }
                     neighbour.energy = (neighbour.distance + 10 * neighbour.turns);
                     visited[neighbour.getCoordinate().getX()][neighbour.getCoordinate().getY()] = true;
                     queue.add(neighbour);
                 }
             }
         }
+        return dest;
     }
 
     public static class CellComparator implements Comparator<Tile> {
