@@ -63,7 +63,7 @@ public class Game {
         for (Player player : players) {
             for (Player otherPlayer : players) {
                 if (!otherPlayer.getUser().equals(player.getUser())) {
-                    Friendship friendship = new Friendship(player.getUser().getUsername());
+                    Friendship friendship = new Friendship(otherPlayer.getUser().getUsername());
                     friendship.setLevel(0);
                     friendship.setXp(0);
                     player.getFriendships().add(friendship);

@@ -8,7 +8,7 @@ import com.example.models.enums.worldEnums.Season;
 
 public enum StardropProducts implements StoreProductInterface {
     HASHBROWNS("Hashbrowns", "A recipe to make Hashbrowns", null, 50, 50, 1, Season.values()),
-    OMELET("Omelet", "A recipe to make Omelet", null, 100, 100, 1, Season.values()),
+    OMELET("Omelette", "A recipe to make Omelet", null, 100, 100, 1, Season.values()),
     PANCAKES("Pancakes", "A recipe to make Pancakes", null, 100, 100, 1, Season.values()),
     BREAD_RECIPE("Bread Recipe", "A recipe to make Bread", null, 100, 100, 1, Season.values()),
     TORTILLA("Tortilla", "A recipe to make Tortilla", null, 100, 100, 1, Season.values()),

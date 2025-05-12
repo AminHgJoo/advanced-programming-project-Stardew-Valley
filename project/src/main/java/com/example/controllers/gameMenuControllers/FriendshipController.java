@@ -103,7 +103,7 @@ public class FriendshipController extends Controller {
         game.getGifts().add(gift);
 
         GameRepository.saveGame(game);
-        return null;
+        return new Response(true, "Gift was successfully sent");
     }
 
     public static Response handleGiftList(Request request) {
@@ -132,7 +132,7 @@ public class FriendshipController extends Controller {
         int index = Integer.parseInt(request.body.get("giftNumber"));
         int rate = Integer.parseInt(request.body.get("rate"));
 
-        Gift g = game.findGiftByName(index - 1, user.getUsername());
+        Gift g = game.findGiftByName(index - 1, player.getUser().getUsername());
         if (g == null) {
             return new Response(false, "Gift not found");
         }
@@ -233,7 +233,7 @@ public class FriendshipController extends Controller {
         }
         Misc ringItem = (Misc) slot.getItem();
         MarriageRequest marriageRequest = new MarriageRequest();
-        marriageRequest.setFrom(user.getUsername());
+        marriageRequest.setFrom(player.getUser().getUsername());
         marriageRequest.setRing(ringItem);
 
         friend.getMarriageRequests().add(marriageRequest);
