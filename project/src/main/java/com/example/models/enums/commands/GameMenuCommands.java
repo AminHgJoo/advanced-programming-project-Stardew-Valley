@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 public enum GameMenuCommands implements Command {
 
+    WALK_ADD_COORDS("^walk\\s+add\\s+-l\\s+(?<x>-?\\d+)\\s*,\\s*(?<y>-?\\d+)$"),
+    SHOW_COORDS("^show\\s+coordinates$"),
     SHOW_MONEY("^show\\s+money$"),
     CHEAT_EMPTY_RECTANGLE("^cheat\\s+empty\\s+rectangle\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
     CHEAT_ADD_SKILL_XP("^cheat\\s+add\\s+-s\\s+(?<skill>.+?)\\s+xp\\s+-a\\s+(?<amount>\\d+)$"),

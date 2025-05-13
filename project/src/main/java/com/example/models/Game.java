@@ -272,15 +272,6 @@ public class Game {
 
             newDayBackgroundChecks();
 
-            for (Player player : players) {
-                if (player.isPlayerFainted()) {
-                    player.setPlayerFainted(false);
-                    player.setEnergy(player.getMaxEnergy() * 0.75);
-                } else {
-                    player.setEnergy(player.getMaxEnergy());
-                }
-                player.setUsedEnergyInTurn(0);
-            }
         }
         if (date.getDayOfMonth() == 29) {
             date = date.minusDays(28);
@@ -291,6 +282,16 @@ public class Game {
 
     /// Only called in advance time cheats.
     public void newDayBackgroundChecks() {
+
+        for (Player player : players) {
+            if (player.isPlayerFainted()) {
+                player.setPlayerFainted(false);
+                player.setEnergy(player.getMaxEnergy() * 0.75);
+            } else {
+                player.setEnergy(player.getMaxEnergy());
+            }
+            player.setUsedEnergyInTurn(0);
+        }
 
         handleRefreshForaging();
 

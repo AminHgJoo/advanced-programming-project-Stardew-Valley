@@ -45,6 +45,8 @@ public class GameMenu implements Menu {
             }
             if (GameMenuCommands.SHOW_FARM.matches(input)) {
                 response = getShowFullFarmResponse(input);
+            } else if (GameMenuCommands.SHOW_COORDS.matches(input)) {
+                response = getShowCoordsResponse(input);
             } else if (GameMenuCommands.EXIT_GAME.matches(input)) {
                 response = getExitGameResponse(input);
             } else if (GameMenuCommands.NEXT_TURN.matches(input)) {
@@ -203,12 +205,26 @@ public class GameMenu implements Menu {
                 response = cheatEmptyRectangle(input);
             } else if (GameMenuCommands.SHOW_MONEY.matches(input)) {
                 response = showMoney(input);
+            } else if (GameMenuCommands.WALK_ADD_COORDS.matches(input)) {
+                response = getWalkAddCoordsResponse(input);
             } else {
                 response = getInvalidCommand();
             }
         }
 
         printResponse(response);
+    }
+
+    private static Response getWalkAddCoordsResponse(String input) {
+        Request request = new Request(input);
+        request.body.put("x", GameMenuCommands.WALK_ADD_COORDS.getGroup(input, "x"));
+        request.body.put("y", GameMenuCommands.WALK_ADD_COORDS.getGroup(input, "y"));
+        return MovementAndMap.handleAddCoords(request);
+    }
+
+    private static Response getShowCoordsResponse(String input) {
+        Request request = new Request(input);
+        return MovementAndMap.showCoords(request);
     }
 
     private static @NotNull Response showMoney(String input) {

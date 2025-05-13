@@ -87,8 +87,7 @@ public class Crop extends MapObject {
         this.stageNumber = stageNumber;
     }
 
-    @Override
-    public String toString() {
+    public String cropDesc() {
         StringBuilder builder = new StringBuilder();
         builder.append("name : ").append(cropSeedsType.name).append("\n");
         builder.append("time to next stage : ").append(getDaysToNextStage()).append("\n");

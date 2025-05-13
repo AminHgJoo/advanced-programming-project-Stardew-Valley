@@ -115,12 +115,12 @@ public class DealingController extends Controller {
         if (p.getType().getProductPrice(game.getSeason()) * n > player.getMoney(game)) {
             return new Response(false, "Not enough money");
         }
-        p.setAvailableCount(p.getAvailableCount() - n);
         ItemType type = p.getType().getItemType();
         if (type == null && p.getType().getIngredient() == null) {
             if (p.getType().getName().equals("Large Pack")) {
                 player.getInventory().setType(BackpackType.GIANT);
                 player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason())), game);
+                p.setAvailableCount(p.getAvailableCount() - n);
                 return new Response(true, "Your backpack is Large now");
             } else if (p.getType().getName().equals("Deluxe Pack")) {
                 if (player.getInventory().getType() != BackpackType.DEFAULT) {
@@ -129,10 +129,12 @@ public class DealingController extends Controller {
                 } else {
                     return new Response(false, "You must first by Large Pack");
                 }
+                p.setAvailableCount(p.getAvailableCount() - n);
                 return new Response(true, "Your backpack is Deluxe now");
             }
             Response res = handleBuyRecipe(productName, p, player);
             if (res.isSuccess()) {
+                p.setAvailableCount(p.getAvailableCount() - n);
                 player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason()) * n), game);
             }
             GameRepository.saveGame(game);
@@ -140,14 +142,6 @@ public class DealingController extends Controller {
         } else if (type == null && p.getType().getIngredient() != null) {
             Response res = handleUpgradeTool(productName, p, player);
             if (res.isSuccess()) {
-                Slot slot = player.getInventory().getSlotByItemName(p.getType().getIngredient().getName());
-                if (slot == null || slot.getCount() < 5) {
-                    return new Response(false, "you don't have enough ingredients");
-                }
-                slot.setCount(slot.getCount() - 5);
-                if (slot.getCount() == 0) {
-                    player.getInventory().removeSlot(slot);
-                }
                 player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason())), game);
             }
             GameRepository.saveGame(game);
@@ -194,6 +188,7 @@ public class DealingController extends Controller {
                 slot.setCount(slot.getCount() + 1);
             }
             player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason()) * n), game);
+            p.setAvailableCount(p.getAvailableCount() - n);
             GameRepository.saveGame(game);
             return new Response(true, "Purchased successfully");
         }
@@ -215,7 +210,7 @@ public class DealingController extends Controller {
 
 
         if (!player.isNearShippingBin()) {
-            return new Response(false, "You msut be near a shipping bin");
+            return new Response(false, "You must be near a shipping bin");
         }
         Slot productSlot = player.getInventory().getSlotByItemName(productName);
         if (productSlot == null) {
@@ -269,7 +264,18 @@ public class DealingController extends Controller {
         } else if (tool != null) {
             Quality q = tool.getTool();
             if (player.getEquippedItem() instanceof Tool t) {
+                p.setAvailableCount(p.getAvailableCount() - 1);
+                Slot slot = player.getInventory().getSlotByItemName(p.getType().getIngredient().getName());
+                if (slot == null || slot.getCount() < 5) {
+                    return new Response(false, "you don't have enough ingredients");
+                }
+                slot.setCount(slot.getCount() - 5);
+                if (slot.getCount() == 0) {
+                    player.getInventory().removeSlot(slot);
+                }
+                Slot s = player.getInventory().getSlotByItemName(t.getName());
                 t.setQuality(q);
+                ((Tool)s.getItem()).setQuality(q);
                 return new Response(true, "Tool successfully updated");
             } else {
                 return new Response(false, "Your equipped item must be a tool");

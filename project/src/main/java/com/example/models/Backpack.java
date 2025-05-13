@@ -56,6 +56,7 @@ public class Backpack {
         for (Slot slot : slots) {
             output.append(slot.toString()).append("\n");
         }
+        output.append(slots.size()).append("\n");
         return output.toString();
     }
 

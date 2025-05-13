@@ -116,8 +116,14 @@ public class LoadingSavingTurnHandling extends Controller {
             game.setGameOngoing(false);
             game.getGameThread().keepRunning = false;
             game.hasTurnCycleFinished = false;
+            for (Player p : game.getPlayers()) {
+                User u = p.getUser();
+                int m = u.getMoneyHighScore();
+                u.setMoneyHighScore(Math.max(m, p.getMoney(game)));
+                UserRepository.saveUser(u);
+            }
+                App.setCurrMenuType(MenuTypes.GameMenu);
             GameRepository.saveGame(game);
-            App.setCurrMenuType(MenuTypes.GameMenu);
 
             return new Response(true, "Exiting and saving game. Redirecting to game menu...");
         } else {

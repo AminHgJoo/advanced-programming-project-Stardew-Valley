@@ -16,7 +16,7 @@ public class App {
 
     static {
         for (CropSeedsType cropSeedsType : CropSeedsType.values()) {
-            allItemTypes.put(cropSeedsType.name, cropSeedsType);
+            allItemTypes.put(cropSeedsType.source, cropSeedsType);
         }
         for (FishType fishType : FishType.values()) {
             allItemTypes.put(fishType.name, fishType);
