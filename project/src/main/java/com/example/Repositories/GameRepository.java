@@ -92,12 +92,12 @@ public class GameRepository {
     }
 
     public static void removeGame(Game game) {
+        db.delete(game);
         for (Player player : game.getPlayers()) {
             player.getUser().setCurrentGame(null);
             player.getUser().setCurrentGameId(null);
             player.getUser().getGames().remove(game.get_id());
             UserRepository.saveUser(player.getUser());
         }
-        db.delete(game);
     }
 }
