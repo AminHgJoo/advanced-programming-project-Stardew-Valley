@@ -81,9 +81,9 @@ public class Game {
     }
 
     public Farm getFarmByNumber(int number) {
-        for (Player p : players) {
-            if (p.getFarm().getFarmNumber() == number) {
-                return p.getFarm();
+        for (Farm f : map.getFarms()) {
+            if (f.getFarmNumber() == number) {
+                return f;
             }
         }
         return null;
@@ -179,7 +179,6 @@ public class Game {
                     Crop crop = (Crop) cell.getObjectOnCell();
                     crop.setHasBeenWateredToday(false);
                     if (crop.isHasBeenDeluxeFertilized()) {
-                        crop.setHasBeenDeluxeFertilized(false);
                         crop.setHasBeenWateredToday(true);
                         crop.setLastWateringDate(date);
                     }

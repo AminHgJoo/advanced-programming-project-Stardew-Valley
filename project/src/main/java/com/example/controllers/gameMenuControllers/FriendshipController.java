@@ -86,7 +86,7 @@ public class FriendshipController extends Controller {
         if (slot.getCount() < amount) {
             return new Response(false, "You don't have enough item");
         }
-        Gift gift = new Gift(user.getUsername(), username, slot.getItem(), amount);
+        Gift gift = new Gift(player.getUser().getUsername(), username, slot.getItem(), amount);
         slot.setCount(slot.getCount() - amount);
         if (slot.getCount() <= 0) {
             player.getInventory().removeSlot(slot);

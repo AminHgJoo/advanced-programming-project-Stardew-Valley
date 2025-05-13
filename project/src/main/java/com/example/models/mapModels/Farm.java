@@ -191,7 +191,7 @@ public class Farm {
 
     private static void addRandomItems(ArrayList<Cell> farmCells) {
         for (Cell cell : farmCells) {
-            int randomNumber = (int) (Math.random() * 8);
+            int randomNumber = (int) (Math.random() * 5);
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE, LocalDateTime.parse("2025-01-01 09:00:00", dateTimeFormatter)));
@@ -199,7 +199,7 @@ public class Farm {
                 cell.setObjectOnCell(new ForagingMineral(ForagingMineralsType.STONE, "gray", "Stone"));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
                 cell.setObjectOnCell(randomForagingCrop());
-            } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 4 && isMineCell(cell)) {
+            } else if (cell.getObjectOnCell().type.equals("Mine") && (randomNumber == 4 || randomNumber == 3) && isMineCell(cell)) {
                 cell.setObjectOnCell(randomForagingMineral());
             }
         }
@@ -213,7 +213,7 @@ public class Farm {
                 count++;
             }
         }
-        if (count >= 2500) {
+        if (count >= 3200) {
             return;
         }
 
@@ -289,7 +289,7 @@ public class Farm {
     }
 
     private static boolean isMineCell(Cell cell) {
-        return cell.getCoordinate().getX() <= 9 && cell.getCoordinate().getX() >= 0 && cell.getCoordinate().getY() <= 11 && cell.getCoordinate().getY() >= 0;
+        return cell.getCoordinate().getX() <= 9 && cell.getCoordinate().getY() <= 11;
     }
 
     private static void addBuildings(ArrayList<Building> farmBuildings, ArrayList<Cell> farmCells) {

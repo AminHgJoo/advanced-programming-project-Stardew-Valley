@@ -159,7 +159,7 @@ public class LoadingSavingTurnHandling extends Controller {
         game.getGameThread().keepRunning = false;
         game.setGameOngoing(false);
         loggedInUser.setCurrentGame(null);
-        loggedInUser.getGames().remove(game);
+        loggedInUser.getGames().remove(game.get_id());
         GameRepository.removeGame(game);
         return new Response(true, "The game has been deleted successfully. Going to game menu...");
     }

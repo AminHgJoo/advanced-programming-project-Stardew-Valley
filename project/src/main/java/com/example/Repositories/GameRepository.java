@@ -21,6 +21,12 @@ public class GameRepository {
                     .first();
             if (game != null && game.getCurrentPlayer() != null)
                 game.setCurrentPlayer(game.findPlayerByUsername(game.getCurrentPlayer().getUser().getUsername()));
+            if(game != null){
+                for (Player player : game.getPlayers()) {
+                    player.setFarm(game.getFarmByNumber(player.getFarm().getFarmNumber()));
+                }
+            }
+
             return game;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -86,12 +92,12 @@ public class GameRepository {
     }
 
     public static void removeGame(Game game) {
-        new Thread(() -> {
-            for (Player player : game.getPlayers()) {
-                player.getUser().setCurrentGame(null);
-                UserRepository.saveUser(player.getUser());
-            }
-            db.delete(game);
-        }).start();
+        for (Player player : game.getPlayers()) {
+            player.getUser().setCurrentGame(null);
+            player.getUser().setCurrentGameId(null);
+            player.getUser().getGames().remove(game.get_id());
+            UserRepository.saveUser(player.getUser());
+        }
+        db.delete(game);
     }
 }
