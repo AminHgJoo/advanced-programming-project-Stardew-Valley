@@ -431,6 +431,7 @@ public class Farm {
         return false;
     }
 
+
     public void strikeLightning(int targetX, int targetY, LocalDateTime source) {
         //Greenhouse Tile
         if (targetX >= 22 && targetX <= 28 && targetY >= 3 && targetY <= 10) {
