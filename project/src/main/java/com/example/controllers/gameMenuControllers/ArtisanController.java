@@ -26,15 +26,13 @@ public class ArtisanController extends Controller {
 
     public static Response handleArtisanUse(Request request) {
         String artisanName = request.body.get("artisanName");
-        String item1Name = request.body.get("item1Name");
+        String item1Name = request.body.getOrDefault("item1Name", " ");
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
         Player player = game.getCurrentPlayer();
         Backpack backpack = player.getInventory();
         ArtisanBlock block = farm.getArtisanBlock(artisanName);
-        if (artisanName.equals("Bee"))
-            block = farm.getArtisanBlock("Bee House");
         if (block == null) {
             GameRepository.saveGame(game);
             return new Response(false, "Artisan does not exist");
@@ -43,7 +41,7 @@ public class ArtisanController extends Controller {
             GameRepository.saveGame(game);
             return new Response(false, "Artisan already used");
         }
-        if (artisanName.equals("Bee")) {
+        if (artisanName.equals("Bee House")) {
             return honeyHandle(player, game, block);
         } else if (artisanName.equals("Cheese Press")) {
             return cheesePress(item1Name, player, game, block, backpack);
@@ -51,7 +49,7 @@ public class ArtisanController extends Controller {
             return keg(item1Name, player, game, backpack, block);
         } else if (artisanName.equals("Dehydrator")) {
             return Dehydrator(item1Name, player, game, backpack, block);
-        } else if (artisanName.equals("Charcoal Kiln")) {
+        } else if (artisanName.equals("Charcoal Klin")) {
             return charCoalKiln(item1Name, player, game, backpack, block);
         } else if (artisanName.equals("Loom")) {
             loom(item1Name, player, game, backpack, block);
@@ -135,7 +133,7 @@ public class ArtisanController extends Controller {
     }
 
     private static void loom(String item1Name, Player player, Game game, Backpack backpack, ArtisanBlock block) {
-        if (item1Name.equals("Loom")) {
+        if (item1Name.equals("Wool")) {
             artisanMiscHandle(player, game, backpack, item1Name, block, 0, 4, MiscType.CLOTH, 1, 1, 470);
         } else {
             GameRepository.saveGame(game);
