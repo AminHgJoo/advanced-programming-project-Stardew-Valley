@@ -67,13 +67,18 @@ public class Farming extends Controller {
                 break;
             }
         }
-        if (!check) {
+        boolean greenhouseCheck = cellCoordinate.getX() >= 22
+                && cellCoordinate.getX() <= 28
+                && cellCoordinate.getY() >= 3
+                && cellCoordinate.getY() <= 10;
+
+        if (!check && !greenhouseCheck) {
             return new Response(false, "This crop can not be planted in this season");
         }
         Crop plant = new Crop(cropSeedsType, game.getDate());
 
-        // x : [22,28] , y : [3,10]
-        if (cropSeedsType.canBeGiant) {
+        //Greenhouse coords: x : [22,28] , y : [3,10]
+        if (cropSeedsType.canBeGiant && !greenhouseCheck) {
             int arr[][] = player.getCurrentFarm(game).giantCropsTogether(cell);
             if (arr != null) {
                 int s = 0;
@@ -155,7 +160,7 @@ public class Farming extends Controller {
             return new Response(false, "Cell is not a plant");
         }
         Crop plant = (Crop) cell.getObjectOnCell();
-        return new Response(true, plant.toString());
+        return new Response(true, plant.cropDesc());
     }
 
     public static Response handleFertilization(Request request) {

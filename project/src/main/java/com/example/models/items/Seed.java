@@ -43,6 +43,11 @@ public class Seed extends Item {
 
     }
 
+    @Override
+    public String getName() {
+        return cropSeedsType.source;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

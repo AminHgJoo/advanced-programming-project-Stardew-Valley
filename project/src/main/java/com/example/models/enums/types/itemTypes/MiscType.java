@@ -54,6 +54,7 @@ public enum MiscType implements ItemType {
     PRESERVES_JAR("Preserves Jar", 0, true, true),
     DEHYDRATOR("Dehydrator", 0, true, true),
     FISH_SMOKER("Fish Smoker", 0, true, true),
+    SHIPPING_BIN("Shipping Bin", 0, true, true),
     ;
 
     final public String name;

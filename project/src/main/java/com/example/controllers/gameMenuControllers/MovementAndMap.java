@@ -24,6 +24,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class MovementAndMap extends Controller {
+    public static Response showCoords(Request request) {
+        Coordinate coordinate = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate();
+        return new Response(true, "x: " + coordinate.getX() + " y: " + coordinate.getY());
+    }
+
     public static Response cheatEmptyRectangle(Request request) {
         int x = Integer.parseInt(request.body.get("x"));
         int y = Integer.parseInt(request.body.get("y"));
@@ -129,6 +134,14 @@ public class MovementAndMap extends Controller {
         return new Response(true, "you are in home");
     }
 
+    public static Response handleAddCoords(Request request) {
+        Request newReq = new Request(request.command);
+        Coordinate c = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate();
+        newReq.body.put("x", String.valueOf(c.getX() + Integer.parseInt(request.body.get("x"))));
+        newReq.body.put("y", String.valueOf(c.getY() + Integer.parseInt(request.body.get("y"))));
+        return MovementAndMap.handleWalking(newReq);
+    }
+
     public static Response handleWalking(Request request) {
         int x = Integer.parseInt(request.body.get("x"));
         int y = Integer.parseInt(request.body.get("y"));
@@ -139,7 +152,7 @@ public class MovementAndMap extends Controller {
             return new Response(false, "can't walk in village");
         }
         Tile src = new Tile(player.getCurrentFarm(game).findCellByCoordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
-        if(player.getCurrentFarm(game).findCellByCoordinate(x, y) == null) {
+        if (player.getCurrentFarm(game).findCellByCoordinate(x, y) == null) {
             return new Response(false, "destination is not valid");
         }
         Tile dest = new Tile(player.getCurrentFarm(game).findCellByCoordinate(x, y).clone());
@@ -156,7 +169,7 @@ public class MovementAndMap extends Controller {
         if (answer.compareToIgnoreCase("Y") == 0) {
             ArrayList<Tile> path = new ArrayList<Tile>();
             while (dest != null) {
-                if(dest.prev != null){
+                if (dest.prev != null) {
                     dest.energy -= dest.prev.energy;
                 }
                 dest.energy /= 20
@@ -168,11 +181,12 @@ public class MovementAndMap extends Controller {
             for (Tile c : arr) {
                 if (c.energy > player.getEnergy()) {
                     player.setPlayerFainted(true);
-                    player.setEnergy(player.getEnergy() - c.energy );
+                    player.setEnergy(player.getEnergy() - c.energy);
+                    LoadingSavingTurnHandling.handleNextTurn(null);
                     GameRepository.saveGame(game);
                     return new Response(false, "You have fainted");
                 }
-                if (c.energy  + player.getUsedEnergyInTurn() > 50) {
+                if (c.energy + player.getUsedEnergyInTurn() > 50) {
                     GameRepository.saveGame(game);
                     return new Response(false, "You can not use this much energy");
                 }
