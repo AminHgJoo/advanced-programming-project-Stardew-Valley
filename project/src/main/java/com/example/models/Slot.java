@@ -39,7 +39,7 @@ public class Slot {
 
     @Override
     public String toString() {
-        return "item=" + item.getName() + ", count=" + count;
+        return "item=" + item.getName() + ", count=" + count + ", value=" + item.getValue();
     }
 
     public Item getItem() {

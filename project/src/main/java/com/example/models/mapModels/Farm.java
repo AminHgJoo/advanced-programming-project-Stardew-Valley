@@ -481,7 +481,13 @@ public class Farm {
                             check = false;
                             break;
                         }
+                    }else {
+                        check = false;
+                        break;
                     }
+                }else {
+                    check = false;
+                    break;
                 }
             }
             if (check) {

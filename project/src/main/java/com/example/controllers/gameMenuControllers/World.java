@@ -98,6 +98,7 @@ public class World extends Controller {
         if (check) {
             currentGame.newDayBackgroundChecks();
         }
+        currentGame.handleArtisanUse();
         GameRepository.saveGame(currentGame);
         return new Response(true, "Date and time set successfully.");
     }

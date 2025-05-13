@@ -38,6 +38,9 @@ public class Farming extends Controller {
         } catch (Exception e) {
             return new Response(false, "Invalid direction");
         }
+        if(direction == null){
+            return new Response(false, "Invalid direction");
+        }
         Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
         Cell cell = player.getCurrentFarm(game).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
         if (cell == null) {
@@ -78,6 +81,7 @@ public class Farming extends Controller {
         Crop plant = new Crop(cropSeedsType, game.getDate());
 
         //Greenhouse coords: x : [22,28] , y : [3,10]
+        cell.setObjectOnCell(plant);
         if (cropSeedsType.canBeGiant && !greenhouseCheck) {
             int arr[][] = player.getCurrentFarm(game).giantCropsTogether(cell);
             if (arr != null) {
@@ -93,7 +97,6 @@ public class Farming extends Controller {
                 plant.setStageNumber(s);
             }
         }
-        cell.setObjectOnCell(plant);
         GameRepository.saveGame(game);
         return new Response(true, "Planting was successful");
     }

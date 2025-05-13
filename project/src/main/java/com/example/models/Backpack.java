@@ -56,7 +56,10 @@ public class Backpack {
         for (Slot slot : slots) {
             output.append(slot.toString()).append("\n");
         }
+        output.append("Filled slots: ");
         output.append(slots.size()).append("\n");
+        output.append("Maximum slots: ");
+        output.append(type.getMaxCapacity()).append("\n");
         return output.toString();
     }
 

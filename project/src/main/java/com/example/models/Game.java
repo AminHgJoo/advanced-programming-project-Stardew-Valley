@@ -340,7 +340,7 @@ public class Game {
         }
     }
 
-    private void handleArtisanUse() {
+    public void handleArtisanUse() {
         User user = App.getLoggedInUser();
         Game game = user.getCurrentGame();
         Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
