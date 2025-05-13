@@ -33,11 +33,17 @@ public class ArtisanController extends Controller {
         Player player = game.getCurrentPlayer();
         Backpack backpack = player.getInventory();
         ArtisanBlock block = farm.getArtisanBlock(artisanName);
+        if (artisanName.equals("Bee"))
+            block = farm.getArtisanBlock("Bee House");
         if (block == null) {
             GameRepository.saveGame(game);
             return new Response(false, "Artisan does not exist");
         }
-        if (artisanName.equals("Bee House")) {
+        if(block.beingUsed){
+            GameRepository.saveGame(game);
+            return new Response(false, "Artisan already used");
+        }
+        if (artisanName.equals("Bee")) {
             return honeyHandle(player, game, block);
         } else if (artisanName.equals("Cheese Press")) {
             return cheesePress(item1Name, player, game, block, backpack);
