@@ -11,7 +11,7 @@ import com.example.models.enums.types.itemTypes.FoodTypes;
 import com.example.models.enums.types.itemTypes.ForagingMineralsType;
 import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.items.Food;
-import com.example.models.items.ForagingMineral;
+import com.example.models.items.ForagingMineralItem;
 import com.example.models.items.Misc;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapObjects.ArtisanBlock;
@@ -265,7 +265,7 @@ public class ArtisanController extends Controller {
         }
 
         block.canBeCollected = false;
-        block.productSlot = new Slot(new ForagingMineral(Quality.DEFAULT, foragingMineralsType, price), productCount);
+        block.productSlot = new Slot(new ForagingMineralItem(Quality.DEFAULT, foragingMineralsType, price), productCount);
         GameRepository.saveGame(game);
         return new Response(true, foragingMineralsType.name + " will be ready to collect in " + hours + " hours");
     }

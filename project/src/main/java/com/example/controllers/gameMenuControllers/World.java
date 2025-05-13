@@ -12,10 +12,7 @@ import com.example.models.enums.types.itemTypes.*;
 import com.example.models.enums.types.mapObjectTypes.TreeType;
 import com.example.models.enums.worldEnums.Season;
 import com.example.models.enums.worldEnums.Weather;
-import com.example.models.items.Fish;
-import com.example.models.items.Item;
-import com.example.models.items.Misc;
-import com.example.models.items.Tool;
+import com.example.models.items.*;
 import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapObjects.*;
@@ -127,7 +124,6 @@ public class World extends Controller {
         GameRepository.saveGame(currentGame);
         return new Response(true, "Date set successfully.");
     }
-
 
     public static Response handleSeasonQuery(Request request) {
         return new Response(true, App.getLoggedInUser().getCurrentGame().getSeason().toString());
@@ -452,7 +448,7 @@ public class World extends Controller {
                 return new Response(false, "Pickaxe is too weak to mine this block.");
             }
 
-            player.getMiningSkill().setXp(player.getMiningSkill().getXp() + 10);
+            player.getUnbuffedMiningSkill().setXp(player.getUnbuffedMiningSkill().getXp() + 10);
 
             int cellX = targetCell.getCoordinate().getX();
             int cellY = targetCell.getCoordinate().getY();
@@ -476,7 +472,7 @@ public class World extends Controller {
             } else {
                 if (slot == null) {
                     backpack.getSlots().add(new
-                            Slot(new com.example.models.items.ForagingMineral(Quality.DEFAULT, type), count));
+                            Slot(new ForagingMineralItem(Quality.DEFAULT, type), count));
                 } else {
                     slot.setCount(Math.min(slot.getItem().getMaxStackSize(), slot.getCount() + count));
                 }
@@ -854,7 +850,7 @@ public class World extends Controller {
 
             Fish fish = new Fish(fishQuality, fishType);
             Backpack backpack = player.getInventory();
-            player.getFishingSkill().setXp(player.getFishingSkill().getXp() + 5);
+            player.getUnbuffedFishingSkill().setXp(player.getUnbuffedFishingSkill().getXp() + 5);
 
             if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
                 GameRepository.saveGame(game);
@@ -1006,7 +1002,7 @@ public class World extends Controller {
                 System.out.println("Added x(" + randomInt + ") " + name + " to your backpack.");
             }
 
-            player.getForagingSkill().setXp(player.getForagingSkill().getXp() + 10);
+            player.getUnbuffedForagingSkill().setXp(player.getUnbuffedForagingSkill().getXp() + 10);
             GameRepository.saveGame(game);
             return new Response(true, "Removed " + name + "from tile.");
         } else if (targetCell.getObjectOnCell() instanceof Crop crop) {

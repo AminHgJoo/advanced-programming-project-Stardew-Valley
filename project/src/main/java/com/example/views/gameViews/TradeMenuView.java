@@ -27,6 +27,8 @@ public class TradeMenuView implements Menu {
             response = getTradeRespondRejectResponse(input);
         } else if (GameMenuCommands.TRADE_HISTORY.matches(input)) {
             response = getTradeHistoryResponse(input);
+        } else {
+            response = getInvalidCommand();
         }
         printResponse(response);
     }

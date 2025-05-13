@@ -2,7 +2,7 @@ package com.example.models.enums.types.itemTypes;
 
 import com.example.models.Slot;
 import com.example.models.enums.Quality;
-import com.example.models.items.ForagingMineral;
+import com.example.models.items.ForagingMineralItem;
 
 public enum ForagingMineralsType implements ItemType {
     STONE(2, "Stone"),
@@ -52,6 +52,6 @@ public enum ForagingMineralsType implements ItemType {
 
     @Override
     public Slot createAmountOfItem(int amount, Quality quality) {
-        return new Slot(new ForagingMineral(Quality.DEFAULT, this), amount);
+        return new Slot(new ForagingMineralItem(Quality.DEFAULT, this), amount);
     }
 }

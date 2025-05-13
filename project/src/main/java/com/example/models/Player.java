@@ -18,7 +18,6 @@ import com.example.models.mapModels.Cell;
 import com.example.models.mapModels.Coordinate;
 import com.example.models.mapModels.Farm;
 import com.example.models.mapObjects.ArtisanBlock;
-import com.example.models.mapObjects.DroppedItem;
 import com.example.models.skills.*;
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
@@ -141,8 +140,7 @@ public class Player {
 
     public Farming getFarmingSkill() {
         for (Skill skill : skills) {
-            if (skill instanceof Farming) {
-                Farming farming = (Farming) skill;
+            if (skill instanceof Farming farming) {
                 Farming clone = new Farming(farming.getLevel(), farming.getXp());
 
                 for (ActiveBuff activeBuff : activeBuffs) {
@@ -429,16 +427,16 @@ public class Player {
         return friendships;
     }
 
-    public boolean isNearShippingBin(){
+    public boolean isNearShippingBin() {
         int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
-        for (int[] dir : DIRECTIONS){
+        for (int[] dir : DIRECTIONS) {
             int x = coordinate.getX() + dir[0];
             int y = coordinate.getY() + dir[1];
             Cell c = getFarm().findCellByCoordinate(x, y);
-            if(c != null){
-                if(c.getObjectOnCell() instanceof ArtisanBlock ab){
-                    if(ab.getArtisanType().equals(ArtisanBlockType.SHIPPING_BIN)){
-                        return  true;
+            if (c != null) {
+                if (c.getObjectOnCell() instanceof ArtisanBlock ab) {
+                    if (ab.getArtisanType().equals(ArtisanBlockType.SHIPPING_BIN)) {
+                        return true;
                     }
                 }
             }

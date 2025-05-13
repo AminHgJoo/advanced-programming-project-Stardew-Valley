@@ -158,8 +158,8 @@ public class NPC {
             type = ((Fish) item).getFishType();
         } else if (item instanceof Food) {
             type = ((Food) item).foodTypes;
-        } else if (item instanceof ForagingMineral) {
-            type = ((ForagingMineral) item).getType();
+        } else if (item instanceof ForagingMineralItem) {
+            type = ((ForagingMineralItem) item).getType();
         } else if (item instanceof Misc) {
             type = ((Misc) item).getMiscType();
         } else if (item instanceof Seed) {

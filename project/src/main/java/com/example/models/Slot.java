@@ -6,7 +6,7 @@ import com.example.models.enums.types.itemTypes.ForagingMineralsType;
 import com.example.models.enums.types.itemTypes.ItemType;
 import com.example.models.enums.types.itemTypes.MiscType;
 import com.example.models.items.Food;
-import com.example.models.items.ForagingMineral;
+import com.example.models.items.ForagingMineralItem;
 import com.example.models.items.Item;
 import com.example.models.items.Misc;
 import dev.morphia.annotations.Embedded;
@@ -26,7 +26,7 @@ public class Slot {
         } else if (type instanceof MiscType) {
             item = new Misc((MiscType) type);
         } else if (type instanceof ForagingMineralsType) {
-            item = new ForagingMineral(Quality.DEFAULT, (ForagingMineralsType) type);
+            item = new ForagingMineralItem(Quality.DEFAULT, (ForagingMineralsType) type);
         }
         this.item = item;
         this.count = count;

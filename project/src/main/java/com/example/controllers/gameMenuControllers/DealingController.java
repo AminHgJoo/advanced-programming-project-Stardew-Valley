@@ -159,7 +159,7 @@ public class DealingController extends Controller {
             } else if (type instanceof MiscType) {
                 item = new Misc((MiscType) type);
             } else if (type instanceof ForagingMineralsType) {
-                item = new ForagingMineral(Quality.DEFAULT, (ForagingMineralsType) type);
+                item = new ForagingMineralItem(Quality.DEFAULT, (ForagingMineralsType) type);
             } else if (type instanceof ToolTypes) {
                 Quality q = Quality.DEFAULT;
                 if (p.getType().getName().equals(FishProducts.BAMBOO_POLE.getName())) {

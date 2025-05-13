@@ -77,37 +77,37 @@ public class TradingController extends Controller {
 
     private static boolean isItem(String itemName) {
         for (CropSeedsType type : CropSeedsType.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return true;
             }
         }
         for (FishType type : FishType.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return true;
             }
         }
         for (FoodTypes type : FoodTypes.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return true;
             }
         }
         for (ForagingMineralsType type : ForagingMineralsType.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return true;
             }
         }
         for (MiscType type : MiscType.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return true;
             }
         }
         for (ToolTypes type : ToolTypes.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return true;
             }
         }
         for (TreeSeedsType type : TreeSeedsType.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return true;
             }
         }
@@ -116,37 +116,37 @@ public class TradingController extends Controller {
 
     private static Item getItem(String itemName) {
         for (CropSeedsType type : CropSeedsType.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return new Seed(type);
             }
         }
         for (FishType type : FishType.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return new Fish(Quality.COPPER, type);
             }
         }
         for (FoodTypes type : FoodTypes.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return new Food(Quality.DEFAULT, type);
             }
         }
         for (ForagingMineralsType type : ForagingMineralsType.values()) {
-            if (type.name().equals(itemName)) {
-                return new ForagingMineral(Quality.DEFAULT, type);
+            if (type.name.equals(itemName)) {
+                return new ForagingMineralItem(Quality.DEFAULT, type);
             }
         }
         for (MiscType type : MiscType.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return new Misc(type);
             }
         }
         for (ToolTypes type : ToolTypes.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return new Tool(Quality.DEFAULT, type, 0);
             }
         }
         for (TreeSeedsType type : TreeSeedsType.values()) {
-            if (type.name().equals(itemName)) {
+            if (type.name.equals(itemName)) {
                 return new TreeSeed(type);
             }
         }
