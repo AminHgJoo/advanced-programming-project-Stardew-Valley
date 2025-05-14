@@ -570,9 +570,9 @@ public class Game {
             for (Cell cell : farm.getCells()) {
                 if (cell.getObjectOnCell() instanceof Crop crop) {
                     LocalDateTime[] arr = crop.getGrowthDeadLines();
-                    for (int i = 0; i < 5; i++) {
+                    for (int i = crop.getStageNumber(); i < 5; i++) {
                         LocalDateTime d = arr[i];
-                        if (d != null && d.isAfter(date)) {
+                        if (d != null && !d.isAfter(date)) {
                             if (crop.isHasBeenWateredToday()) {
                                 crop.setStageNumber(i + 1);
                                 if (crop.getStageNumber() == 5
