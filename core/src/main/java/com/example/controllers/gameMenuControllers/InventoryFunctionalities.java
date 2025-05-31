@@ -31,8 +31,8 @@ public class InventoryFunctionalities extends Controller {
         String skill = request.body.get("skill");
         String amount = request.body.get("amount");
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         if (skill.compareToIgnoreCase("farming") == 0) {
             player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + Integer.parseInt(amount));
         } else if (skill.compareToIgnoreCase("foraging") == 0) {
@@ -42,17 +42,17 @@ public class InventoryFunctionalities extends Controller {
         } else if (skill.compareToIgnoreCase("mining") == 0) {
             player.getUnbuffedMiningSkill().setXp(player.getUnbuffedMiningSkill().getXp() + Integer.parseInt(amount));
         } else {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "wrong skill name");
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, amount + " successfully added to " + skill + " skill");
     }
 
     public static Response handleShowInventory(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Backpack backpack = game.getCurrentPlayer().getInventory();
+        GameData gameData = user.getCurrentGame();
+        Backpack backpack = gameData.getCurrentPlayer().getInventory();
         String output = backpack.showInventory();
         if (output.isEmpty())
             return new Response(true, "Your Backpack is empty!");
@@ -63,57 +63,57 @@ public class InventoryFunctionalities extends Controller {
         String itemName = request.body.get("itemName");
         String number = request.body.get("number");
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Backpack backpack = game.getCurrentPlayer().getInventory();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Backpack backpack = gameData.getCurrentPlayer().getInventory();
         Slot slot = backpack.getSlotByItemName(itemName);
         if (slot == null)
             return new Response(false, "item(s) does not exist!");
         if (number == null)
-            return removeSlotHandle(slot, player, backpack, game);
+            return removeSlotHandle(slot, player, backpack, gameData);
         int numberInt = Integer.parseInt(number);
         slot.setCount(slot.getCount() - numberInt);
         if (slot.getCount() <= 0)
-            return removeSlotHandle(slot, player, backpack, game);
-        return removeItemHandle(numberInt, slot, player, game);
+            return removeSlotHandle(slot, player, backpack, gameData);
+        return removeItemHandle(numberInt, slot, player, gameData);
     }
 
-    private static Response removeItemHandle(int numberInt, Slot slot, Player player, Game game) {
+    private static Response removeItemHandle(int numberInt, Slot slot, Player player, GameData gameData) {
         int cashBack = (numberInt * slot.getItem().getValue() *
                 player.getTrashcanRefundPercentage()) / 100;
-        player.setMoney(player.getMoney(game) + cashBack, game);
-        GameRepository.saveGame(game);
+        player.setMoney(player.getMoney(gameData) + cashBack, gameData);
+        GameRepository.saveGame(gameData);
         return new Response(true, numberInt + " of item(s) successfully trashed!");
     }
 
-    private static Response removeSlotHandle(Slot slot, Player player, Backpack backpack, Game game) {
+    private static Response removeSlotHandle(Slot slot, Player player, Backpack backpack, GameData gameData) {
         int cashBack = (slot.getCount() * slot.getItem().getValue() *
                 player.getTrashcanRefundPercentage()) / 100;
-        player.setMoney(player.getMoney(game) + cashBack, game);
+        player.setMoney(player.getMoney(gameData) + cashBack, gameData);
         backpack.removeSlot(slot);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Item successfully trashed!" + "profit: " + cashBack);
     }
 
     public static Response handleToolEquip(Request request) {
         String toolName = request.body.get("toolName");
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Backpack backpack = game.getCurrentPlayer().getInventory();
+        GameData gameData = user.getCurrentGame();
+        Backpack backpack = gameData.getCurrentPlayer().getInventory();
         Slot slot = backpack.getSlotByItemName(toolName);
         if (slot == null)
             return new Response(false, "item(s) does not exist!");
         if (!(slot.getItem() instanceof Tool))
             return new Response(false, "item(s) is not a tool!");
-        game.getCurrentPlayer().setEquippedItem(slot.getItem());
-        GameRepository.saveGame(game);
+        gameData.getCurrentPlayer().setEquippedItem(slot.getItem());
+        GameRepository.saveGame(gameData);
         return new Response(true, "Equipped " + toolName + " successfully!");
     }
 
     public static Response handleEquippedToolQuery(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Item item = game.getCurrentPlayer().getEquippedItem();
+        GameData gameData = user.getCurrentGame();
+        Item item = gameData.getCurrentPlayer().getEquippedItem();
         if (item == null)
             return new Response(false, "No equipped tool found!");
         return new Response(true, item.getName());
@@ -122,8 +122,8 @@ public class InventoryFunctionalities extends Controller {
 
     public static Response handleShowTools(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Backpack backpack = game.getCurrentPlayer().getInventory();
+        GameData gameData = user.getCurrentGame();
+        Backpack backpack = gameData.getCurrentPlayer().getInventory();
         String output = backpack.showTools();
         if (output.isEmpty())
             return new Response(true, "No tools found!");
@@ -160,8 +160,8 @@ public class InventoryFunctionalities extends Controller {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Crafting Recipes:\n");
 
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         for (CraftingRecipes craftingRecipes : player.getUnlockedCraftingRecipes()) {
             stringBuilder.append(craftingRecipes.toString()).append("\n");
@@ -174,8 +174,8 @@ public class InventoryFunctionalities extends Controller {
         String itemName = request.body.get("itemName");
         CraftingRecipes targetRecipe = null;
 
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         for (CraftingRecipes craftingRecipes : player.getUnlockedCraftingRecipes()) {
             if (craftingRecipes.name.compareToIgnoreCase(itemName) == 0) {
@@ -210,12 +210,12 @@ public class InventoryFunctionalities extends Controller {
             Slot playerSlot = backpack.getSlotByItemName(ingredient.getItem().getName());
 
             if (playerSlot == null) {
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(false, "You don't have the required materials to craft this item!");
             }
 
             if (playerSlot.getCount() < ingredient.getCount()) {
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(false, "You don't have the required materials to craft this item!");
             }
         }
@@ -247,7 +247,7 @@ public class InventoryFunctionalities extends Controller {
             destinationSlot.setCount(destinationSlot.getCount() + craftedItemSlot.getCount());
         }
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "You crafted " + targetRecipe.name);
     }
 
@@ -279,8 +279,8 @@ public class InventoryFunctionalities extends Controller {
 
         int[] xAndY = getXAndYIncrement(direction);
 
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         Backpack backpack = player.getInventory();
 
         int dx = xAndY[0];
@@ -294,7 +294,7 @@ public class InventoryFunctionalities extends Controller {
             return new Response(false, "Item not found.");
         }
 
-        Cell targetCell = player.getCurrentFarm(game).findCellByCoordinate(playerX + dx, playerY + dy);
+        Cell targetCell = player.getCurrentFarm(gameData).findCellByCoordinate(playerX + dx, playerY + dy);
 
         if (targetCell == null) {
             return new Response(false, "Invalid placement location.");
@@ -329,7 +329,7 @@ public class InventoryFunctionalities extends Controller {
             backpack.getSlots().remove(slotToPlace);
         }
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Item placed successfully on Coordinates : x = " + (playerX + dx) + ", y = " + (playerY + dy));
     }
 
@@ -347,8 +347,8 @@ public class InventoryFunctionalities extends Controller {
 
         boolean matchFound = matcher.matches();
 
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         Backpack backpack = player.getInventory();
 
         if (!allItemsList.containsKey(itemName) && !matchFound) {
@@ -374,15 +374,15 @@ public class InventoryFunctionalities extends Controller {
             slot.setCount(Math.min(slot.getCount() + count, slot.getItem().getMaxStackSize()));
         }
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Item added successfully.");
     }
 
     public static Response handleEating(Request request) {
         String foodName = request.body.get("foodName");
 
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         Backpack backpack = player.getInventory();
 
         Slot slot = backpack.getSlotByItemName(foodName);
@@ -405,7 +405,7 @@ public class InventoryFunctionalities extends Controller {
         player.getActiveBuffs().add(new ActiveBuff(food.foodBuff));
         player.setEnergy(Math.min(player.getEnergy() - food.getEnergyCost(), player.getMaxEnergy()));
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "You successfully consumed: " + food.getName());
     }
 }

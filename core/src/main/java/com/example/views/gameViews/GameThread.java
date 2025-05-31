@@ -1,20 +1,20 @@
 package com.example.views.gameViews;
 
 import com.example.Repositories.GameRepository;
-import com.example.models.Game;
+import com.example.models.GameData;
 import dev.morphia.annotations.Transient;
 
 public class GameThread extends Thread {
     @Transient
-    private Game game;
+    private GameData gameData;
     public boolean keepRunning = false;
 
-    public GameThread(Game game) {
-        this.game = game;
+    public GameThread(GameData gameData) {
+        this.gameData = gameData;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
+    public void setGame(GameData gameData) {
+        this.gameData = gameData;
     }
 
     public void run() {
@@ -24,21 +24,21 @@ public class GameThread extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (game.hasTurnCycleFinished) {
-                game.advanceTime();
-                GameRepository.saveGame(game);
+            if (gameData.hasTurnCycleFinished) {
+                gameData.advanceTime();
+                GameRepository.saveGame(gameData);
             }
-            boolean check = game.checkSeasonChange();
+            boolean check = gameData.checkSeasonChange();
 
             if (check) {
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
             }
 
-            game.checkForRecipeUnlocking();
-            game.handleBuffExpiration();
-            game.checkForSkillUpgrades();
+            gameData.checkForRecipeUnlocking();
+            gameData.handleBuffExpiration();
+            gameData.checkForSkillUpgrades();
 
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
         }
         //debug code
         System.out.println("Thread Exiting...");

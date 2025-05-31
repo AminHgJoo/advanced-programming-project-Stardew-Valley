@@ -21,53 +21,53 @@ import com.example.utilities.MenuToStoreString;
 
 public class DealingController extends Controller {
     public static Response handleGoToStore(Request request) {
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         if (!player.isInVillage()) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "You are not in the village");
         }
         String name = request.body.get("storeName");
         boolean check = false;
         if (name.compareToIgnoreCase("Blacksmith") == 0) {
-            Store store = game.getMap().getVillage().getStore(name);
-            if (store.isOpen(game.getDate().getHour())) {
+            Store store = gameData.getMap().getVillage().getStore(name);
+            if (store.isOpen(gameData.getDate().getHour())) {
                 check = true;
                 App.setCurrMenuType(MenuTypes.BlacksmithShopMenu);
             }
         } else if (name.compareToIgnoreCase("JojaMart") == 0) {
-            Store store = game.getMap().getVillage().getStore(name);
-            if (store.isOpen(game.getDate().getHour())) {
+            Store store = gameData.getMap().getVillage().getStore(name);
+            if (store.isOpen(gameData.getDate().getHour())) {
                 check = true;
                 App.setCurrMenuType(MenuTypes.JojaMartShopMenu);
             }
         } else if (name.compareToIgnoreCase("Pierre's General Store") == 0) {
-            Store store = game.getMap().getVillage().getStore(name);
-            if (store.isOpen(game.getDate().getHour())) {
+            Store store = gameData.getMap().getVillage().getStore(name);
+            if (store.isOpen(gameData.getDate().getHour())) {
                 check = true;
                 App.setCurrMenuType(MenuTypes.PierreGeneralStoreMenu);
             }
         } else if (name.compareToIgnoreCase("Carpenter's Shop") == 0) {
-            Store store = game.getMap().getVillage().getStore(name);
-            if (store.isOpen(game.getDate().getHour())) {
+            Store store = gameData.getMap().getVillage().getStore(name);
+            if (store.isOpen(gameData.getDate().getHour())) {
                 check = true;
                 App.setCurrMenuType(MenuTypes.CarpenterShopMenu);
             }
         } else if (name.compareToIgnoreCase("Fish Shop") == 0) {
-            Store store = game.getMap().getVillage().getStore(name);
-            if (store.isOpen(game.getDate().getHour())) {
+            Store store = gameData.getMap().getVillage().getStore(name);
+            if (store.isOpen(gameData.getDate().getHour())) {
                 check = true;
                 App.setCurrMenuType(MenuTypes.FishShopMenu);
             }
         } else if (name.compareToIgnoreCase("The Stardrop Saloon") == 0) {
-            Store store = game.getMap().getVillage().getStore(name);
-            if (store.isOpen(game.getDate().getHour())) {
+            Store store = gameData.getMap().getVillage().getStore(name);
+            if (store.isOpen(gameData.getDate().getHour())) {
                 check = true;
                 App.setCurrMenuType(MenuTypes.TheStardropSaloonMenu);
             }
         } else if (name.compareToIgnoreCase("Marnie's Ranch") == 0) {
-            Store store = game.getMap().getVillage().getStore(name);
-            if (store.isOpen(game.getDate().getHour())) {
+            Store store = gameData.getMap().getVillage().getStore(name);
+            if (store.isOpen(gameData.getDate().getHour())) {
                 check = true;
                 App.setCurrMenuType(MenuTypes.MarnieRanchMenu);
             }
@@ -81,25 +81,25 @@ public class DealingController extends Controller {
     }
 
     public static Response handleShowAllProducts(Request request) {
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Store store = game.getMap().getVillage().getStore(MenuToStoreString
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Store store = gameData.getMap().getVillage().getStore(MenuToStoreString
                 .convertToString(App.getCurrMenuType().getMenu()));
-        return new Response(true, store.productsToString(game.getSeason()));
+        return new Response(true, store.productsToString(gameData.getSeason()));
     }
 
     public static Response handleShowAvailableProducts(Request request) {
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Store store = game.getMap().getVillage().getStore(MenuToStoreString
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Store store = gameData.getMap().getVillage().getStore(MenuToStoreString
                 .convertToString(App.getCurrMenuType().getMenu()));
-        return new Response(true, store.availableProductsToString(game.getSeason()));
+        return new Response(true, store.availableProductsToString(gameData.getSeason()));
     }
 
     public static Response handlePurchase(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Store store = game.getMap().getVillage().getStore(MenuToStoreString
+        GameData gameData = user.getCurrentGame();
+        Store store = gameData.getMap().getVillage().getStore(MenuToStoreString
                 .convertToString(App.getCurrMenuType().getMenu()));
-        Player player = game.getCurrentPlayer();
+        Player player = gameData.getCurrentPlayer();
         String productName = request.body.get("productName");
         int n = 1;
         if (request.body.get("count") != null) {
@@ -112,20 +112,20 @@ public class DealingController extends Controller {
         if (p.getAvailableCount() < n) {
             return new Response(false, "Not enough available products");
         }
-        if (p.getType().getProductPrice(game.getSeason()) * n > player.getMoney(game)) {
+        if (p.getType().getProductPrice(gameData.getSeason()) * n > player.getMoney(gameData)) {
             return new Response(false, "Not enough money");
         }
         ItemType type = p.getType().getItemType();
         if (type == null && p.getType().getIngredient() == null) {
             if (p.getType().getName().equals("Large Pack")) {
                 player.getInventory().setType(BackpackType.GIANT);
-                player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason())), game);
+                player.setMoney((int) (player.getMoney(gameData) - p.getType().getProductPrice(gameData.getSeason())), gameData);
                 p.setAvailableCount(p.getAvailableCount() - n);
                 return new Response(true, "Your backpack is Large now");
             } else if (p.getType().getName().equals("Deluxe Pack")) {
                 if (player.getInventory().getType() != BackpackType.DEFAULT) {
                     player.getInventory().setType(BackpackType.DELUXE);
-                    player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason())), game);
+                    player.setMoney((int) (player.getMoney(gameData) - p.getType().getProductPrice(gameData.getSeason())), gameData);
                 } else {
                     return new Response(false, "You must first by Large Pack");
                 }
@@ -135,16 +135,16 @@ public class DealingController extends Controller {
             Response res = handleBuyRecipe(productName, p, player);
             if (res.isSuccess()) {
                 p.setAvailableCount(p.getAvailableCount() - n);
-                player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason()) * n), game);
+                player.setMoney((int) (player.getMoney(gameData) - p.getType().getProductPrice(gameData.getSeason()) * n), gameData);
             }
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return res;
         } else if (type == null && p.getType().getIngredient() != null) {
             Response res = handleUpgradeTool(productName, p, player);
             if (res.isSuccess()) {
-                player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason())), game);
+                player.setMoney((int) (player.getMoney(gameData) - p.getType().getProductPrice(gameData.getSeason())), gameData);
             }
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return res;
         } else {
             Item item = null;
@@ -171,7 +171,7 @@ public class DealingController extends Controller {
                 } else if (p.getType().getName().equals(FishProducts.IRIDIUM_ROD.getName())) {
                     q = Quality.IRIDIUM;
                 }
-                item = new Tool(q, (ToolTypes) type, (int) p.getType().getProductPrice(game.getSeason()));
+                item = new Tool(q, (ToolTypes) type, (int) p.getType().getProductPrice(gameData.getSeason()));
             }
             if (item == null) {
                 return new Response(false, "No such item");
@@ -187,25 +187,25 @@ public class DealingController extends Controller {
             } else {
                 slot.setCount(slot.getCount() + 1);
             }
-            player.setMoney((int) (player.getMoney(game) - p.getType().getProductPrice(game.getSeason()) * n), game);
+            player.setMoney((int) (player.getMoney(gameData) - p.getType().getProductPrice(gameData.getSeason()) * n), gameData);
             p.setAvailableCount(p.getAvailableCount() - n);
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "Purchased successfully");
         }
     }
 
     public static Response handleCheatAddDollars(Request request) {
         int count = Integer.parseInt(request.body.get("count"));
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        player.setMoney(player.getMoney(game) + count, game);
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        player.setMoney(player.getMoney(gameData) + count, gameData);
         return new Response(true, "Money added successfully");
     }
 
     public static Response handleSellProduct(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         String productName = request.body.get("productName");
 
 
@@ -236,7 +236,7 @@ public class DealingController extends Controller {
             money = money * 2;
         }
         player.setMoneyInNextDay(player.getMoneyInNextDay() + (int) money);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Item was successfully sold");
     }
 

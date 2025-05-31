@@ -15,8 +15,8 @@ public class Cooking extends Controller {
     public static Response handlePickFromRefrigerator(Request request) {
         String item = request.body.get("item");
 
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         Backpack backpack = player.getInventory();
 
         Slot fridgeSlot = player.getRefrigeratorSlotByName(item);
@@ -39,15 +39,15 @@ public class Cooking extends Controller {
             backpackSlot.setCount(Math.min(backpackSlot.getCount() + fridgeSlot.getCount(), backpackSlot.getItem().getMaxStackSize()));
         }
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Food has been added to your backpack.");
     }
 
     public static Response handlePutIntoRefrigerator(Request request) {
         String item = request.body.get("item");
 
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         Backpack backpack = player.getInventory();
 
         Slot backpackSlot = backpack.getSlotByItemName(item);
@@ -70,7 +70,7 @@ public class Cooking extends Controller {
             fridgeSlot.setCount(Math.min(fridgeSlot.getCount() + backpackSlot.getCount(), fridgeSlot.getItem().getMaxStackSize()));
         }
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Food has been placed in the refrigerator.");
     }
 
@@ -78,8 +78,8 @@ public class Cooking extends Controller {
         String itemName = request.body.get("itemName");
         CookingRecipes targetRecipe = null;
 
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         for (CookingRecipes recipes : player.getUnlockedCookingRecipes()) {
             if (recipes.name.compareToIgnoreCase(itemName) == 0) {
@@ -124,7 +124,7 @@ public class Cooking extends Controller {
             }
 
             if (cumulativeCount < ingredient.getCount()) {
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(false, "You don't have the ingredients to cook this recipe.");
             }
         }
@@ -134,7 +134,7 @@ public class Cooking extends Controller {
             Slot fishSlot = backpack.getFirstFish();
 
             if (fishSlot == null) {
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(false, "You don't have the fish to cook this recipe.");
             }
 
@@ -184,7 +184,7 @@ public class Cooking extends Controller {
             destinationSlot.setCount(destinationSlot.getCount() + cookedItemSlot.getCount());
         }
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "You cooked " + itemName);
     }
 
@@ -192,8 +192,8 @@ public class Cooking extends Controller {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Cooking recipes : \n");
 
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player currentPlayer = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player currentPlayer = gameData.getCurrentPlayer();
 
         for (CookingRecipes recipe : currentPlayer.getUnlockedCookingRecipes()) {
             stringBuilder.append(recipe.toString()).append("\n");

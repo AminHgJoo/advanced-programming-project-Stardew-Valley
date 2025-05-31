@@ -30,9 +30,9 @@ public class CarpenterShopController extends Controller {
         int x = Integer.parseInt(request.body.get("x"));
         int y = Integer.parseInt(request.body.get("y"));
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getFarm();
-        Backpack backpack = game.getCurrentPlayer().getInventory();
+        GameData gameData = user.getCurrentGame();
+        Farm farm = gameData.getCurrentPlayer().getFarm();
+        Backpack backpack = gameData.getCurrentPlayer().getInventory();
         Slot wood = null;
         Slot stone = null;
 
@@ -45,42 +45,42 @@ public class CarpenterShopController extends Controller {
                 stone = slot;
         }
         if (!buildCheck(buildingName, farm, x, y)) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "You cannot build on the selected cell");
         }
         if (buildingName.equals("Barn")) {
-            return buildBarn(wood, stone, game, x, y, farm, buildingName, 350, 150, 7, 4, 6000, backpack);
+            return buildBarn(wood, stone, gameData, x, y, farm, buildingName, 350, 150, 7, 4, 6000, backpack);
         } else if (buildingName.equals("Big Barn")) {
-            return buildBarn(wood, stone, game, x, y, farm, buildingName, 450, 200, 7, 4, 12000, backpack);
+            return buildBarn(wood, stone, gameData, x, y, farm, buildingName, 450, 200, 7, 4, 12000, backpack);
         } else if (buildingName.equals("Deluxe Barn")) {
-            return buildBarn(wood, stone, game, x, y, farm, buildingName, 550, 300, 7, 4, 25000, backpack);
+            return buildBarn(wood, stone, gameData, x, y, farm, buildingName, 550, 300, 7, 4, 25000, backpack);
         } else if (buildingName.equals("Coop")) {
-            return buildCoop(wood, stone, game, x, y, farm, buildingName, 300, 100, 6, 3, 4000, backpack);
+            return buildCoop(wood, stone, gameData, x, y, farm, buildingName, 300, 100, 6, 3, 4000, backpack);
         } else if (buildingName.equals("Big Coop")) {
-            return buildCoop(wood, stone, game, x, y, farm, buildingName, 400, 150, 6, 3, 10000, backpack);
+            return buildCoop(wood, stone, gameData, x, y, farm, buildingName, 400, 150, 6, 3, 10000, backpack);
         } else if (buildingName.equals("Deluxe Coop")) {
-            return buildCoop(wood, stone, game, x, y, farm, buildingName, 500, 200, 6, 3, 20000, backpack);
+            return buildCoop(wood, stone, gameData, x, y, farm, buildingName, 500, 200, 6, 3, 20000, backpack);
         } else if (buildingName.equals("Well")) {
-            return buildWell(wood, stone, game, x, y, farm, buildingName, 75, 75, 3, 3, 1000, backpack);
+            return buildWell(wood, stone, gameData, x, y, farm, buildingName, 75, 75, 3, 3, 1000, backpack);
         }
-        return buildShipping(wood, stone, game, x, y, farm, buildingName, 150, 150, 1, 1, 250, backpack);
+        return buildShipping(wood, stone, gameData, x, y, farm, buildingName, 150, 150, 1, 1, 250, backpack);
 
 
     }
 
-    private static Response buildBarn(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
-        Store store = game.getMap().getVillage().getStore("Carpenter's Shop");
+    private static Response buildBarn(Slot wood, Slot stone, GameData gameData, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
+        Store store = gameData.getMap().getVillage().getStore("Carpenter's Shop");
         Barn barn = new Barn();
         barn.barnType = buildingName;
         ArrayList<Cell> barnCells = new ArrayList<>();
 
         StoreProduct storeProduct = store.getProduct(buildingName);
         if (storeProduct.getAvailableCount() <= 0) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "daily limit reached");
         }
         if (wood != null && stone != null) {
-            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney(game) >= goldPrice) {
+            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && gameData.getCurrentPlayer().getMoney(gameData) >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
                 stone.setCount(stone.getCount() - stonePrice);
                 if (wood.getCount() == 0) {
@@ -89,7 +89,7 @@ public class CarpenterShopController extends Controller {
                 if (stone.getCount() == 0) {
                     backpack.removeSlot(stone);
                 }
-                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney(game) - goldPrice, game);
+                gameData.getCurrentPlayer().setMoney(gameData.getCurrentPlayer().getMoney(gameData) - goldPrice, gameData);
 
                 for (int i = x; i < x + width; i++) {
                     for (int j = y; j < y + height; j++) {
@@ -106,17 +106,17 @@ public class CarpenterShopController extends Controller {
                 barn.buildingCells = barnCells;
                 farm.getBuildings().add(barn);
                 storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You built a " + buildingName);
             }
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(false, "You don't have enough money.");
     }
 
-    private static Response buildShipping(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
+    private static Response buildShipping(Slot wood, Slot stone, GameData gameData, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
         if (wood != null && stone != null) {
-            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney(game) >= goldPrice) {
+            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && gameData.getCurrentPlayer().getMoney(gameData) >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
                 stone.setCount(stone.getCount() - stonePrice);
                 if (wood.getCount() == 0) {
@@ -125,28 +125,28 @@ public class CarpenterShopController extends Controller {
                 if (stone.getCount() == 0) {
                     backpack.removeSlot(stone);
                 }
-                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney(game) - goldPrice, game);
+                gameData.getCurrentPlayer().setMoney(gameData.getCurrentPlayer().getMoney(gameData) - goldPrice, gameData);
                 farm.findCellByCoordinate(x, y).setObjectOnCell(new ArtisanBlock(ArtisanBlockType.SHIPPING_BIN));
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You built a " + buildingName);
             }
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(false, "You don't have enough money.");
     }
 
-    private static Response buildWell(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
-        Store store = game.getMap().getVillage().getStore("");
+    private static Response buildWell(Slot wood, Slot stone, GameData gameData, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
+        Store store = gameData.getMap().getVillage().getStore("");
         Well well = new Well();
         well.wellType = buildingName;
         ArrayList<Cell> wellCells = new ArrayList<>();
         StoreProduct storeProduct = store.getProduct(buildingName);
         if (storeProduct.getAvailableCount() <= 0) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "daily limit reached");
         }
         if (wood != null && stone != null) {
-            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney(game) >= goldPrice) {
+            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && gameData.getCurrentPlayer().getMoney(gameData) >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
                 stone.setCount(stone.getCount() - stonePrice);
                 if (wood.getCount() == 0) {
@@ -155,7 +155,7 @@ public class CarpenterShopController extends Controller {
                 if (stone.getCount() == 0) {
                     backpack.removeSlot(stone);
                 }
-                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney(game) - goldPrice, game);
+                gameData.getCurrentPlayer().setMoney(gameData.getCurrentPlayer().getMoney(gameData) - goldPrice, gameData);
                 for (int i = x; i < x + width; i++) {
                     for (int j = y; j < y + height; j++) {
                         farm.findCellByCoordinate(i, j).setObjectOnCell(new BuildingBlock(true, buildingName));
@@ -165,26 +165,26 @@ public class CarpenterShopController extends Controller {
                 well.buildingCells = wellCells;
                 farm.getBuildings().add(well);
                 storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You built a " + buildingName);
             }
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(false, "You don't have enough money.");
     }
 
-    private static Response buildCoop(Slot wood, Slot stone, Game game, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
-        Store store = game.getMap().getVillage().getStore("Carpenter's Shop");
+    private static Response buildCoop(Slot wood, Slot stone, GameData gameData, int x, int y, Farm farm, String buildingName, int woodPrice, int stonePrice, int width, int height, int goldPrice, Backpack backpack) {
+        Store store = gameData.getMap().getVillage().getStore("Carpenter's Shop");
         Coop coop = new Coop();
         coop.coopType = buildingName;
         ArrayList<Cell> coopCells = new ArrayList<>();
         StoreProduct storeProduct = store.getProduct(buildingName);
         if (storeProduct.getAvailableCount() <= 0) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "daily limit reached");
         }
         if (wood != null && stone != null) {
-            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && game.getCurrentPlayer().getMoney(game) >= goldPrice) {
+            if (wood.getCount() >= woodPrice && stone.getCount() >= stonePrice && gameData.getCurrentPlayer().getMoney(gameData) >= goldPrice) {
                 wood.setCount(wood.getCount() - woodPrice);
                 stone.setCount(stone.getCount() - stonePrice);
                 if (wood.getCount() == 0) {
@@ -193,7 +193,7 @@ public class CarpenterShopController extends Controller {
                 if (stone.getCount() == 0) {
                     backpack.removeSlot(stone);
                 }
-                game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney(game) - goldPrice, game);
+                gameData.getCurrentPlayer().setMoney(gameData.getCurrentPlayer().getMoney(gameData) - goldPrice, gameData);
                 for (int i = x; i < x + width; i++) {
                     for (int j = y; j < y + height; j++) {
                         farm.findCellByCoordinate(i, j).setObjectOnCell(new BuildingBlock(true, buildingName));
@@ -209,11 +209,11 @@ public class CarpenterShopController extends Controller {
                 coop.buildingCells = coopCells;
                 farm.getBuildings().add(coop);
                 storeProduct.setAvailableCount(storeProduct.getAvailableCount() - 1);
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You built a " + buildingName);
             }
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(false, "You don't have enough money.");
     }
 

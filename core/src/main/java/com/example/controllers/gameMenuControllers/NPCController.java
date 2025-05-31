@@ -18,12 +18,12 @@ import com.example.utilities.AIChat;
 public class NPCController extends Controller {
     public static Response handleTalkNPC(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String npcName = request.body.get("npcName");
         String message = request.body.get("message");
-        NPC npc = game.findNpcByName(npcName);
+        NPC npc = gameData.findNpcByName(npcName);
         if (npc == null) {
             return new Response(false, "There is no npc with this name.");
         }
@@ -33,7 +33,7 @@ public class NPCController extends Controller {
         if (!npc.getHasTalked().getOrDefault(player.getUser().getUsername(), false)) {
             npc.getHasTalked().put(player.getUser().getUsername(), true);
             player.addXpToNpcFriendship(20, npc);
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
         }
         String response = AIChat.getNpcDialogue(message);
         return new Response(true, response);
@@ -45,12 +45,12 @@ public class NPCController extends Controller {
 
     public static Response handleGiftNPC(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String npcName = request.body.get("npcName");
         String itemName = request.body.get("item");
-        NPC npc = game.findNpcByName(npcName);
+        NPC npc = gameData.findNpcByName(npcName);
         if (npc == null) {
             return new Response(false, "There is no npc with this name.");
         }
@@ -74,25 +74,25 @@ public class NPCController extends Controller {
             }
             npc.getGift().put(player.getUser().getUsername(), true);
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Gift has been sent.");
     }
 
     public static Response handleFriendshipNPCList(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         return new Response(true, player.npcFriendShipToString());
     }
 
     public static Response handleQuestList(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String npcName = request.body.get("npcName");
-        NPC npc = game.findNpcByName(npcName);
+        NPC npc = gameData.findNpcByName(npcName);
         if (npc == null) {
             return new Response(false, "There is no npc with this name.");
         }
@@ -102,11 +102,11 @@ public class NPCController extends Controller {
 
     public static Response handleQuestFinish(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String npcName = request.body.get("npcName");
-        NPC npc = game.findNpcByName(npcName);
+        NPC npc = gameData.findNpcByName(npcName);
         if (npc == null) {
             return new Response(false, "There is no npc with this name.");
         }
@@ -135,8 +135,8 @@ public class NPCController extends Controller {
         q.setCompleted(true);
 
         NPCReward reward = npc.getRewards().get(index);
-        player.addNpcReward(reward, npc, game);
-        GameRepository.saveGame(game);
+        player.addNpcReward(reward, npc, gameData);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Quest has been finished");
     }
 }

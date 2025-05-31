@@ -3,7 +3,7 @@ package com.example.controllers.gameMenuControllers;
 import com.example.Repositories.GameRepository;
 import com.example.controllers.Controller;
 import com.example.models.App;
-import com.example.models.Game;
+import com.example.models.GameData;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.Player;
@@ -24,8 +24,8 @@ import com.example.models.mapObjects.Tree;
 
 public class Farming extends Controller {
     public static Response handleSeedPlanting(Request request) {
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         String seed = request.body.get("seed");
         CropSeedsType cropSeedsType = CropSeedsType.findCropBySeed(seed);
         if (cropSeedsType == null) {
@@ -42,7 +42,7 @@ public class Farming extends Controller {
             return new Response(false, "Invalid direction");
         }
         Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
-        Cell cell = player.getCurrentFarm(game).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+        Cell cell = player.getCurrentFarm(gameData).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
         if (cell == null) {
             return new Response(false, "Cell not found");
         }
@@ -61,11 +61,11 @@ public class Farming extends Controller {
             player.getInventory().getSlots().remove(playerSeedSlot);
         }
         if (cropSeedsType == CropSeedsType.RANDOM_CROP) {
-            cropSeedsType = cropSeedsType.getRandomCropSeedsType(game.getSeason());
+            cropSeedsType = cropSeedsType.getRandomCropSeedsType(gameData.getSeason());
         }
         boolean check = false;
         for (Season season : cropSeedsType.season) {
-            if (season == game.getSeason()) {
+            if (season == gameData.getSeason()) {
                 check = true;
                 break;
             }
@@ -78,18 +78,18 @@ public class Farming extends Controller {
         if (!check && !greenhouseCheck) {
             return new Response(false, "This crop can not be planted in this season");
         }
-        Crop plant = new Crop(cropSeedsType, game.getDate());
+        Crop plant = new Crop(cropSeedsType, gameData.getDate());
 
         //Greenhouse coords: x : [22,28] , y : [3,10]
         cell.setObjectOnCell(plant);
         if (cropSeedsType.canBeGiant && !greenhouseCheck) {
-            int arr[][] = player.getCurrentFarm(game).giantCropsTogether(cell);
+            int arr[][] = player.getCurrentFarm(gameData).giantCropsTogether(cell);
             if (arr != null) {
                 int s = 0;
                 for (int i = 0; i < arr.length; i++) {
                     int x = arr[i][0] + cellCoordinate.getX();
                     int y = arr[i][1] + cellCoordinate.getY();
-                    Cell c = player.getCurrentFarm(game).findCellByCoordinate(x, y);
+                    Cell c = player.getCurrentFarm(gameData).findCellByCoordinate(x, y);
                     s = Math.max(s, ((Crop) c.getObjectOnCell()).getStageNumber());
                     c.setObjectOnCell(new EmptyCell());
                 }
@@ -97,13 +97,13 @@ public class Farming extends Controller {
                 plant.setStageNumber(s);
             }
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Planting was successful");
     }
 
     public static Response handleTreePlanting(Request request) {
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         String seed = request.body.get("seed");
         TreeSeedsType treeSeedsType = TreeSeedsType.findTreeTypeByName(seed);
         if (treeSeedsType == null) {
@@ -117,7 +117,7 @@ public class Farming extends Controller {
             return new Response(false, "Invalid direction");
         }
         Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
-        Cell cell = player.getCurrentFarm(game).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+        Cell cell = player.getCurrentFarm(gameData).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
         if (cell == null) {
             return new Response(false, "Cell not found");
         }
@@ -135,7 +135,7 @@ public class Farming extends Controller {
         TreeSeed treeSeed = (TreeSeed) playerSeedSlot.getItem();
         boolean check = false;
         for (Season season : treeSeed.getTreeSeedsType().growthSeasons) {
-            if (season == game.getSeason()) {
+            if (season == gameData.getSeason()) {
                 check = true;
                 break;
             }
@@ -144,18 +144,18 @@ public class Farming extends Controller {
             return new Response(false, "This tree can not be planted in this season");
         }
         TreeType treeType = TreeType.findTreeTypeByName(seed);
-        Tree tree = new Tree(treeType, game.getDate());
+        Tree tree = new Tree(treeType, gameData.getDate());
         cell.setObjectOnCell(tree);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Planting was successful");
     }
 
     public static Response handleShowPlant(Request request) {
         int x = Integer.parseInt(request.body.get("x"));
         int y = Integer.parseInt(request.body.get("y"));
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Cell cell = player.getCurrentFarm(game).findCellByCoordinate(x, y);
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Cell cell = player.getCurrentFarm(gameData).findCellByCoordinate(x, y);
         if (cell == null) {
             return new Response(false, "Cell not found");
         }
@@ -167,8 +167,8 @@ public class Farming extends Controller {
     }
 
     public static Response handleFertilization(Request request) {
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         String fertilizer = request.body.get("fertilizer");
         String dir = request.body.get("direction");
         Directions direction;
@@ -178,7 +178,7 @@ public class Farming extends Controller {
             return new Response(false, "Invalid direction");
         }
         Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
-        Cell cell = player.getCurrentFarm(game).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+        Cell cell = player.getCurrentFarm(gameData).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
         if (cell == null) {
             return new Response(false, "Cell not found");
         }
@@ -202,13 +202,13 @@ public class Farming extends Controller {
             crop.setHasBeenDeluxeFertilized(true);
         }
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Fertilization was successful");
     }
 
     public static Response handleHowMuchWater(Request request) {
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         Tool wateringCan = player.getInventory().getWateringCan();
         return new Response(true, "You have " + wateringCan.getWaterReserve() + " water");
     }

@@ -30,7 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Entity("games")
-public class Game {
+public class GameData {
     @Id
     private ObjectId _id;
     private ArrayList<Player> players;
@@ -48,7 +48,7 @@ public class Game {
     private ArrayList<Message> messages = new ArrayList<>();
     private ArrayList<Gift> gifts = new ArrayList<>();
 
-    public Game(ArrayList<Player> players, Player currentPlayer) {
+    public GameData(ArrayList<Player> players, Player currentPlayer) {
         this.hasTurnCycleFinished = false;
         this.players = players;
         this.map = Map.makeMap();
@@ -341,8 +341,8 @@ public class Game {
 
     public void handleArtisanUse() {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Farm farm = gameData.getCurrentPlayer().getCurrentFarm(gameData);
         for (Cell cell : farm.getCells()) {
             MapObject objectONCell = cell.getObjectOnCell();
             if (objectONCell instanceof ArtisanBlock && ((ArtisanBlock) objectONCell).beingUsed) {
@@ -351,17 +351,17 @@ public class Game {
                 }
             }
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
     }
 
     private void strikeLightningOnStormyDay() {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
+        GameData gameData = user.getCurrentGame();
         for (Player player : players) {
             for (int i = 0; i < 3; i++) {
                 int targetX = (int) (Math.random() * 75);
                 int targetY = (int) (Math.random() * 50);
-                player.getFarm().strikeLightning(targetX, targetY, game.getDate());
+                player.getFarm().strikeLightning(targetX, targetY, gameData.getDate());
             }
         }
     }
@@ -391,14 +391,14 @@ public class Game {
         }
     }
 
-    public Game() {
+    public GameData() {
 
     }
 
     public void resetAllAnimalDailyVariables() {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        ArrayList<Animal> animals = game.getCurrentPlayer().getAnimals();
+        GameData gameData = user.getCurrentGame();
+        ArrayList<Animal> animals = gameData.getCurrentPlayer().getAnimals();
         for (Animal animal : animals) {
             if (!animal.hasBeenPetToDay)
                 animal.setXp(animal.getXp() - 10);
@@ -462,7 +462,7 @@ public class Game {
                 animal.product = item;
             }
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
     }
 
 
@@ -535,21 +535,21 @@ public class Game {
         }
     }
 
-    public void addPlayersMoney(Game game) {
+    public void addPlayersMoney(GameData gameData) {
         for (Player player : players) {
-            player.setMoney(player.getMoney(game) + player.getMoneyInNextDay(), game);
+            player.setMoney(player.getMoney(gameData) + player.getMoneyInNextDay(), gameData);
             player.setMoneyInNextDay(0);
         }
     }
 
-    public void npcGiveReward(Game game) {
+    public void npcGiveReward(GameData gameData) {
         for (NPC npc : map.getVillage().getNpcs()) {
             for (NPCFriendship f : npc.getFriendships()) {
                 if (f.getLevel() == 3) {
                     int rand = (int) (Math.random() * 2);
                     if (rand == 1) {
-                        Player p = game.findPlayerByUsername(f.getPlayer());
-                        p.addNpcReward(npc.getRewards().get(0), npc, game);
+                        Player p = gameData.findPlayerByUsername(f.getPlayer());
+                        p.addNpcReward(npc.getRewards().get(0), npc, gameData);
                     }
                 }
             }
@@ -692,7 +692,7 @@ public class Game {
     public boolean cycleToNextPlayer() {
         int index = players.indexOf(currentPlayer);
         if (index == players.size() - 1) {
-            currentPlayer = players.getFirst();
+            currentPlayer = players.get(0);
             return true;
         } else {
             currentPlayer = players.get(index + 1);

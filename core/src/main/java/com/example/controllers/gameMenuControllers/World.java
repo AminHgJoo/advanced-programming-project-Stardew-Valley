@@ -28,10 +28,10 @@ import static com.example.controllers.gameMenuControllers.LivestockController.no
 
 public class World extends Controller {
     public static Response showMoney(Request request) {
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        String money = String.valueOf(player.getMoney(game));
-        GameRepository.saveGame(game);
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        String money = String.valueOf(player.getMoney(gameData));
+        GameRepository.saveGame(gameData);
         return new Response(true, money);
     }
 
@@ -71,7 +71,7 @@ public class World extends Controller {
         int amountOfHours = Integer.parseInt(request.body.get("X"));
         LocalDateTime currentDateTime = App.getLoggedInUser().getCurrentGame().getDate();
         LocalDateTime nextDateTime;
-        Game currentGame = App.getLoggedInUser().getCurrentGame();
+        GameData currentGameData = App.getLoggedInUser().getCurrentGame();
         int howManyDays = amountOfHours / 24;
         int howManyHours = amountOfHours % 24;
         int howManyMonths = howManyDays / 28;
@@ -90,13 +90,13 @@ public class World extends Controller {
         nextDateTime = nextDateTime.plusMonths(howManyMonths);
         boolean check = nextDateTime.getMonthValue() - currentDateTime.getMonthValue() > 0
                 || nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0;
-        currentGame.setDate(nextDateTime);
-        currentGame.checkSeasonChange();
+        currentGameData.setDate(nextDateTime);
+        currentGameData.checkSeasonChange();
         if (check) {
-            currentGame.newDayBackgroundChecks();
+            currentGameData.newDayBackgroundChecks();
         }
-        currentGame.handleArtisanUse();
-        GameRepository.saveGame(currentGame);
+        currentGameData.handleArtisanUse();
+        GameRepository.saveGame(currentGameData);
         return new Response(true, "Date and time set successfully.");
     }
 
@@ -104,7 +104,7 @@ public class World extends Controller {
         int amountOfDays = Integer.parseInt(request.body.get("X"));
         LocalDateTime currentDateTime = App.getLoggedInUser().getCurrentGame().getDate();
         LocalDateTime nextDateTime;
-        Game currentGame = App.getLoggedInUser().getCurrentGame();
+        GameData currentGameData = App.getLoggedInUser().getCurrentGame();
         int howManyDays = amountOfDays % 28;
         int howManyMonths = amountOfDays / 28;
         int currentDay = currentDateTime.getDayOfMonth();
@@ -116,12 +116,12 @@ public class World extends Controller {
         nextDateTime = nextDateTime.plusMonths(howManyMonths);
         boolean check = (nextDateTime.getMonthValue() - currentDateTime.getMonthValue() > 0)
                 || (nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0);
-        currentGame.setDate(nextDateTime);
+        currentGameData.setDate(nextDateTime);
         if (check) {
-            currentGame.newDayBackgroundChecks();
+            currentGameData.newDayBackgroundChecks();
         }
-        currentGame.checkSeasonChange();
-        GameRepository.saveGame(currentGame);
+        currentGameData.checkSeasonChange();
+        GameRepository.saveGame(currentGameData);
         return new Response(true, "Date set successfully.");
     }
 
@@ -137,9 +137,9 @@ public class World extends Controller {
             return new Response(false, "Coordinates out of bounds.");
         }
 
-        Game currentGame = App.getLoggedInUser().getCurrentGame();
-        currentGame.getCurrentPlayer().getCurrentFarm(currentGame).strikeLightning(targetX, targetY, currentGame.getDate());
-        GameRepository.saveGame(currentGame);
+        GameData currentGameData = App.getLoggedInUser().getCurrentGame();
+        currentGameData.getCurrentPlayer().getCurrentFarm(currentGameData).strikeLightning(targetX, targetY, currentGameData.getDate());
+        GameRepository.saveGame(currentGameData);
         return new Response(true, "Lightning summoned at target coordinates.");
     }
 
@@ -155,19 +155,19 @@ public class World extends Controller {
     public static Response handleSetWeatherCheat(Request request) {
         String type = request.body.get("Type");
         Weather weather = Weather.getWeatherByName(type);
-        Game game = App.getLoggedInUser().getCurrentGame();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
         if (weather == null) {
             return new Response(false, "Weather type is invalid.");
         } else {
-            game.setWeatherTomorrow(weather);
-            GameRepository.saveGame(game);
+            gameData.setWeatherTomorrow(weather);
+            GameRepository.saveGame(gameData);
         }
         return new Response(true, "Tomorrow's weather set successfully.");
     }
 
     public static Response handleGreenhouseBuilding(Request request) {
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         Farm farm = player.getFarm();
         Backpack backpack = player.getInventory();
 
@@ -187,7 +187,7 @@ public class World extends Controller {
             return new Response(false, "You don't have enough wood.");
         }
 
-        if (player.getMoney(game) < 1000) {
+        if (player.getMoney(gameData) < 1000) {
             return new Response(false, "You don't have enough money.");
         }
 
@@ -197,7 +197,7 @@ public class World extends Controller {
             backpack.getSlots().remove(slot);
         }
 
-        player.setMoney(player.getMoney(game) - 1000, game);
+        player.setMoney(player.getMoney(gameData) - 1000, gameData);
 
 
         //Greenhouse runs from x : [22, 28] & y : [3, 10]
@@ -214,15 +214,15 @@ public class World extends Controller {
         Cell cell1 = Farm.getCellByCoordinate(25, 4, farm.getCells());
         cell1.setObjectOnCell(new Water());
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
 
         return new Response(true, "Greenhouse built successfully.");
     }
 
     public static Response handleToolUse(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         if (player.getEquippedItem() == null) {
             return new Response(false, "You have no equipped item.");
@@ -310,11 +310,11 @@ public class World extends Controller {
             answer = 0;
         }
 
-        Game game = App.getLoggedInUser().getCurrentGame();
-        if (game.getWeatherToday() == Weather.SNOW) {
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        if (gameData.getWeatherToday() == Weather.SNOW) {
             answer *= 2;
         }
-        if (game.getWeatherToday() == Weather.RAIN) {
+        if (gameData.getWeatherToday() == Weather.RAIN) {
             answer *= 1.5;
         }
 
@@ -328,9 +328,9 @@ public class World extends Controller {
         int dy = dxAndDy[1];
 
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Farm farm = player.getCurrentFarm(gameData);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -356,12 +356,12 @@ public class World extends Controller {
         player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
         if (!(targetCell.getObjectOnCell() instanceof EmptyCell)) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "Target cell is invalid.");
         }
 
         targetCell.setTilled(true);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Target cell has been tilled.");
     }
 
@@ -407,9 +407,9 @@ public class World extends Controller {
         int dy = dxAndDy[1];
 
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Farm farm = player.getCurrentFarm(gameData);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -444,7 +444,7 @@ public class World extends Controller {
             Slot slot = backpack.getSlotByItemName(type.name);
 
             if (!canPickaxeMineThis(type, quality)) {
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(false, "Pickaxe is too weak to mine this block.");
             }
 
@@ -479,7 +479,7 @@ public class World extends Controller {
                 System.out.println("Added " + count + " to backpack.");
             }
 
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "Mined stone/mineral at target cell.");
         }
 
@@ -492,24 +492,24 @@ public class World extends Controller {
 
             if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
                 if (backpackSlot == null) {
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(false, "Backpack was full! Couldn't retrieve item from the ground.");
                 } else {
                     backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxStackSize()));
                     targetCell.setObjectOnCell(new EmptyCell());
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
                 }
             } else {
                 if (backpackSlot == null) {
                     backpack.getSlots().add(droppedSlot);
                     targetCell.setObjectOnCell(new EmptyCell());
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
                 } else {
                     backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxStackSize()));
                     targetCell.setObjectOnCell(new EmptyCell());
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + droppedItem.getQuantity() + ").");
                 }
             }
@@ -524,24 +524,24 @@ public class World extends Controller {
 
             if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
                 if (backpackSlot == null) {
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(false, "Backpack was full! Couldn't retrieve item from the ground.");
                 } else {
                     backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxStackSize()));
                     targetCell.setObjectOnCell(new EmptyCell());
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
                 }
             } else {
                 if (backpackSlot == null) {
                     backpack.getSlots().add(droppedSlot);
                     targetCell.setObjectOnCell(new EmptyCell());
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
                 } else {
                     backpackSlot.setCount(Math.min(backpackSlot.getCount() + droppedSlot.getCount(), backpackSlot.getItem().getMaxStackSize()));
                     targetCell.setObjectOnCell(new EmptyCell());
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(true, "Item has been added to the backpack: " + droppedSlot.getItem().getName() + " x(" + 1 + ").");
                 }
             }
@@ -549,11 +549,11 @@ public class World extends Controller {
 
         if (targetCell.getObjectOnCell() instanceof EmptyCell) {
             targetCell.setTilled(false);
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "Target cell has been untilled.");
         }
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(false, "No operation was performed.");
     }
 
@@ -564,9 +564,9 @@ public class World extends Controller {
         int dy = dxAndDy[1];
 
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Farm farm = player.getCurrentFarm(gameData);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -593,25 +593,25 @@ public class World extends Controller {
         player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
         if (!(targetCell.getObjectOnCell() instanceof Tree tree)) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "Target cell is invalid.");
         }
 
         if (tree.getTreeType() == TreeType.NORMAL_TREE) {
             int amountOfWood = (int) (Math.random() * 4 + 2);
-            targetCell.setObjectOnCell(new Tree(TreeType.TREE_BARK, game.getDate()));
+            targetCell.setObjectOnCell(new Tree(TreeType.TREE_BARK, gameData.getDate()));
 
             Backpack backpack = player.getInventory();
             Slot slot = backpack.getSlotByItemName("Wood");
 
             if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
                 if (slot == null) {
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(false,
                             "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
                 slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You received " + amountOfWood + " wood.");
             } else {
                 if (slot == null) {
@@ -619,7 +619,7 @@ public class World extends Controller {
                 } else {
                     slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
                 }
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You received " + amountOfWood + " wood.");
             }
         } else if (tree.getTreeType() == TreeType.TREE_BARK) {
@@ -631,12 +631,12 @@ public class World extends Controller {
 
             if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
                 if (slot == null) {
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(false,
                             "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
                 slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You received " + amountOfWood + " wood.");
             } else {
                 if (slot == null) {
@@ -644,7 +644,7 @@ public class World extends Controller {
                 } else {
                     slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
                 }
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You received " + amountOfWood + " wood.");
             }
         } else if (tree.getTreeType() == TreeType.BURNT_TREE) {
@@ -655,18 +655,18 @@ public class World extends Controller {
 
             if (slot == null) {
                 if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(false,
                             "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
 
                 Slot slotToAdd = tree.getTreeType().fruitItem.createAmountOfItem(1, Quality.DEFAULT);
                 backpack.getSlots().add(slotToAdd);
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You received " + 1 + " coal.");
             } else {
                 slot.setCount(Math.min(slot.getCount() + 1, slot.getItem().getMaxStackSize()));
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You received " + 1 + " coal.");
             }
         } else {
@@ -677,7 +677,7 @@ public class World extends Controller {
 
             if (slot == null) {
                 if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(false
                             , "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
@@ -685,11 +685,11 @@ public class World extends Controller {
                 Slot slotToAdd = TreeSeedsType.findTreeTypeByName(tree.getTreeType().source).createAmountOfItem(2, Quality.DEFAULT);
                 backpack.getSlots().add(slotToAdd);
 
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You received " + 2 + " tree seeds.");
             } else {
                 slot.setCount(Math.min(slot.getCount() + 2, slot.getItem().getMaxStackSize()));
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "You received " + 2 + " tree seeds.");
             }
         }
@@ -703,9 +703,9 @@ public class World extends Controller {
         int dy = dxAndDy[1];
 
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Farm farm = player.getCurrentFarm(gameData);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -733,32 +733,32 @@ public class World extends Controller {
 
         if (targetCell.getObjectOnCell() instanceof Water) {
             equippedTool.setWaterReserve(wateringCanType.waterCapacity);
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "Water filled successfully.");
         }
 
         if (targetCell.getObjectOnCell() instanceof Tree tree) {
             if (equippedTool.getWaterReserve() == 0) {
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(false, "Watering can is empty.");
             }
             tree.setHasBeenWateredToday(true);
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "Tree watered successfully.");
         }
 
         if (targetCell.getObjectOnCell() instanceof Crop crop) {
             if (equippedTool.getWaterReserve() == 0) {
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(false, "Watering can is empty.");
             }
             crop.setHasBeenWateredToday(true);
-            crop.setLastWateringDate(game.getDate());
-            GameRepository.saveGame(game);
+            crop.setLastWateringDate(gameData.getDate());
+            GameRepository.saveGame(gameData);
             return new Response(true, "Crop watered successfully.");
         }
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(false, "No operation was performed.");
     }
 
@@ -781,11 +781,11 @@ public class World extends Controller {
             answer = 0;
         }
 
-        Game game = App.getLoggedInUser().getCurrentGame();
-        if (game.getWeatherToday() == Weather.SNOW) {
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        if (gameData.getWeatherToday() == Weather.SNOW) {
             answer *= 2;
         }
-        if (game.getWeatherToday() == Weather.RAIN) {
+        if (gameData.getWeatherToday() == Weather.RAIN) {
             answer *= 1.5;
         }
 
@@ -799,9 +799,9 @@ public class World extends Controller {
         int dy = dxAndDy[1];
 
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Farm farm = player.getCurrentFarm(gameData);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -830,15 +830,15 @@ public class World extends Controller {
 
         if (targetCell.getObjectOnCell() instanceof Water) {
             int randomNumber = (int) (Math.random() * 2);
-            double weatherModifier = setWeatherModifierFishing(game);
+            double weatherModifier = setWeatherModifierFishing(gameData);
             int playerLevel = player.getFishingSkill().getLevel().levelNumber;
             int numberOfFishes = (int) (((double) randomNumber)
                     * weatherModifier * (double) (playerLevel + 2));
             if (numberOfFishes == 0) {
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(false, "You could not catch fish");
             }
-            ArrayList<FishType> values = getValidFishTypes(game.getSeason(), playerLevel);
+            ArrayList<FishType> values = getValidFishTypes(gameData.getSeason(), playerLevel);
             int randomFishNumber = (int) (Math.random() * values.size());
             FishType fishType = values.get(randomFishNumber);
 
@@ -853,17 +853,17 @@ public class World extends Controller {
             player.getUnbuffedFishingSkill().setXp(player.getUnbuffedFishingSkill().getXp() + 5);
 
             if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(false, "You didn't have enough space. But caught a fish anyways.");
             }
 
             addFishes(fish, backpack, numberOfFishes);
 
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "Fishing done! You caught " + numberOfFishes + " of " + fishType.name);
         }
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(false, "Target cell isn't water.");
     }
 
@@ -919,13 +919,13 @@ public class World extends Controller {
         return 1.2;
     }
 
-    private static double setWeatherModifierFishing(Game game) {
+    private static double setWeatherModifierFishing(GameData gameData) {
         double weatherModifier;
-        if (game.getWeatherToday().equals(Weather.SUNNY))
+        if (gameData.getWeatherToday().equals(Weather.SUNNY))
             weatherModifier = 1.5;
-        else if (game.getWeatherToday().equals(Weather.RAIN))
+        else if (gameData.getWeatherToday().equals(Weather.RAIN))
             weatherModifier = 1.2;
-        else if (game.getWeatherToday().equals(Weather.STORM))
+        else if (gameData.getWeatherToday().equals(Weather.STORM))
             weatherModifier = 0.5;
         else
             weatherModifier = 1.0;
@@ -939,9 +939,9 @@ public class World extends Controller {
         int dy = dxAndDy[1];
 
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Farm farm = player.getCurrentFarm(gameData);
 
         int playerX = player.getCoordinate().getX();
         int playerY = player.getCoordinate().getY();
@@ -1003,11 +1003,11 @@ public class World extends Controller {
             }
 
             player.getUnbuffedForagingSkill().setXp(player.getUnbuffedForagingSkill().getXp() + 10);
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "Removed " + name + "from tile.");
         } else if (targetCell.getObjectOnCell() instanceof Crop crop) {
 
-            if (crop.getHarvestDeadLine() == null || crop.getHarvestDeadLine().isAfter(game.getDate())) {
+            if (crop.getHarvestDeadLine() == null || crop.getHarvestDeadLine().isAfter(gameData.getDate())) {
                 return new Response(false, "Crop isn't ready for harvest.");
             }
 
@@ -1018,7 +1018,7 @@ public class World extends Controller {
 
             if (slot == null) {
                 if (backpack.getType().getMaxCapacity() == player.getInventory().getSlots().size()) {
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(false, "Not enough inventory space.");
                 }
 
@@ -1028,30 +1028,30 @@ public class World extends Controller {
                 if (crop.cropSeedsType.oneTime) {
                     targetCell.setObjectOnCell(new EmptyCell());
                 } else {
-                    crop.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), crop.cropSeedsType.regrowthTime));
+                    crop.setHarvestDeadLine(DateUtility.getLocalDateTime(gameData.getDate(), crop.cropSeedsType.regrowthTime));
                 }
 
                 player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
 
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
             }
 
             if (crop.cropSeedsType.oneTime) {
                 targetCell.setObjectOnCell(new EmptyCell());
             } else {
-                crop.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), crop.cropSeedsType.regrowthTime));
+                crop.setHarvestDeadLine(DateUtility.getLocalDateTime(gameData.getDate(), crop.cropSeedsType.regrowthTime));
             }
 
             player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
 
             slot.setCount(Math.min(slot.getCount() + amountToHarvest, slot.getItem().getMaxStackSize()));
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
 
             return new Response(true, "Added x(" + amountToHarvest + ") of " + crop.cropSeedsType.name + " to your backpack.");
         } else if (targetCell.getObjectOnCell() instanceof Tree tree) {
 
-            if (tree.getHarvestDeadLine() == null || tree.getHarvestDeadLine().isAfter(game.getDate())) {
+            if (tree.getHarvestDeadLine() == null || tree.getHarvestDeadLine().isAfter(gameData.getDate())) {
                 return new Response(false, "Tree isn't ready for harvest.");
             }
 
@@ -1062,7 +1062,7 @@ public class World extends Controller {
 
             if (slot == null) {
                 if (backpack.getType().getMaxCapacity() == player.getInventory().getSlots().size()) {
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(false, "Not enough inventory space.");
                 }
 
@@ -1071,7 +1071,7 @@ public class World extends Controller {
                         || tree.getTreeType() == TreeType.BURNT_TREE) {
                     return new Response(false, "Tree isn't harvestable.");
                 } else {
-                    tree.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), tree.getTreeType().harvestCycleTime));
+                    tree.setHarvestDeadLine(DateUtility.getLocalDateTime(gameData.getDate(), tree.getTreeType().harvestCycleTime));
                 }
 
                 Slot newSlot = tree.getTreeType().fruitItem.createAmountOfItem(amountToHarvest, Quality.DEFAULT);
@@ -1079,7 +1079,7 @@ public class World extends Controller {
 
                 player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
 
-                GameRepository.saveGame(game);
+                GameRepository.saveGame(gameData);
                 return new Response(true, "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
             }
 
@@ -1088,30 +1088,30 @@ public class World extends Controller {
                     || tree.getTreeType() == TreeType.BURNT_TREE) {
                 return new Response(false, "Can't harvest a normal, burnt tree or bark.");
             } else {
-                tree.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), tree.getTreeType().harvestCycleTime));
+                tree.setHarvestDeadLine(DateUtility.getLocalDateTime(gameData.getDate(), tree.getTreeType().harvestCycleTime));
             }
 
             slot.setCount(Math.min(slot.getCount() + amountToHarvest, slot.getItem().getMaxStackSize()));
 
             player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
 
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "Added x(" + amountToHarvest + ") of " + tree.getTreeType().fruitItem.getName() + " to your backpack.");
 
         } else {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "Target cell isn't a valid use case of the scythe.");
         }
     }
 
     private static double getScytheEnergyCost() {
-        Game game = App.getLoggedInUser().getCurrentGame();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
 
         double energyCost = 2;
-        if (game.getWeatherToday() == Weather.SNOW) {
+        if (gameData.getWeatherToday() == Weather.SNOW) {
             energyCost *= 2;
         }
-        if (game.getWeatherToday() == Weather.RAIN) {
+        if (gameData.getWeatherToday() == Weather.RAIN) {
             energyCost *= 1.5;
         }
         return energyCost;
@@ -1124,9 +1124,9 @@ public class World extends Controller {
         int dy = dxAndDy[1];
 
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Farm farm = player.getCurrentFarm(gameData);
         Item equippedItem = player.getEquippedItem();
         Backpack backpack = player.getInventory();
         Slot productSlot = null;
@@ -1152,18 +1152,18 @@ public class World extends Controller {
         }
         Animal animal = ((AnimalBlock) targetCell.getObjectOnCell()).animal;
         if (animal == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "no animal found");
         }
         if (!animal.getType().equals(AnimalType.COW) && !animal.getType().equals(AnimalType.GOAT)) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "wrong cell selected");
         }
         Item product = animal.product;
         if (product == null) {
-            return noProductFoundHandle(animal, equippedItem, player, game);
+            return noProductFoundHandle(animal, equippedItem, player, gameData);
         }
-        return handleCollectProducts(product, backpack, productSlot, animal, player, game);
+        return handleCollectProducts(product, backpack, productSlot, animal, player, gameData);
     }
 
     private static Response handleShearUse(Request request) {
@@ -1173,9 +1173,9 @@ public class World extends Controller {
         int dy = dxAndDy[1];
 
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Farm farm = player.getCurrentFarm(gameData);
         Item equippedItem = player.getEquippedItem();
         Backpack backpack = player.getInventory();
         Slot productSlot = null;
@@ -1201,17 +1201,17 @@ public class World extends Controller {
         }
         Animal animal = ((AnimalBlock) targetCell.getObjectOnCell()).animal;
         if (animal == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "no animal found");
         }
         if (!animal.getType().equals(AnimalType.SHEEP)) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "wrong cell selected");
         }
         Item product = animal.product;
         if (product == null) {
-            return noProductFoundHandle(animal, equippedItem, player, game);
+            return noProductFoundHandle(animal, equippedItem, player, gameData);
         }
-        return handleCollectProducts(product, backpack, productSlot, animal, player, game);
+        return handleCollectProducts(product, backpack, productSlot, animal, player, gameData);
     }
 }

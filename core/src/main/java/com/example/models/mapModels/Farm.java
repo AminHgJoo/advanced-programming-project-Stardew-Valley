@@ -2,7 +2,7 @@ package com.example.models.mapModels;
 
 import com.example.models.Animal;
 import com.example.models.App;
-import com.example.models.Game;
+import com.example.models.GameData;
 import com.example.models.Player;
 import com.example.models.buildings.*;
 import com.example.models.enums.types.itemTypes.CropSeedsType;
@@ -39,18 +39,18 @@ public class Farm {
         lastFarmNumber++;
     }
 
-    public void showFarm(int x, int y, int size, Game game) {
-        Player owner = game.getCurrentPlayer();
-        Player partner = game.getPartner(owner);
+    public void showFarm(int x, int y, int size, GameData gameData) {
+        Player owner = gameData.getCurrentPlayer();
+        Player partner = gameData.getPartner(owner);
         int ownerX = -1;
         int ownerY = -1;
         int partnerX = -1;
         int partnerY = -1;
-        if (owner.getCurrentFarm(game) == this && !owner.isInVillage()) {
+        if (owner.getCurrentFarm(gameData) == this && !owner.isInVillage()) {
             ownerX = owner.getCoordinate().getX();
             ownerY = owner.getCoordinate().getY();
         }
-        if (partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()) {
+        if (partner != null && partner.getCurrentFarm(gameData) == this && !partner.isInVillage()) {
             partnerX = partner.getCoordinate().getX();
             partnerY = partner.getCoordinate().getY();
         }
@@ -113,18 +113,18 @@ public class Farm {
     }
 
     /// Debug method.
-    public void showEntireFarm(Game game) {
-        Player owner = game.getCurrentPlayer();
-        Player partner = game.getPartner(owner);
+    public void showEntireFarm(GameData gameData) {
+        Player owner = gameData.getCurrentPlayer();
+        Player partner = gameData.getPartner(owner);
         int ownerX = -1;
         int ownerY = -1;
         int partnerX = -1;
         int partnerY = -1;
-        if (owner.getCurrentFarm(game) == this && !owner.isInVillage()) {
+        if (owner.getCurrentFarm(gameData) == this && !owner.isInVillage()) {
             ownerX = owner.getCoordinate().getX();
             ownerY = owner.getCoordinate().getY();
         }
-        if (partner != null && partner.getCurrentFarm(game) == this && !partner.isInVillage()) {
+        if (partner != null && partner.getCurrentFarm(gameData) == this && !partner.isInVillage()) {
             partnerX = partner.getCoordinate().getX();
             partnerY = partner.getCoordinate().getY();
         }
@@ -220,9 +220,9 @@ public class Farm {
         for (Cell cell : cells) {
             int randomNumber = (int) (Math.random() * 150);
             if (cell.getObjectOnCell().type.equals("empty") && cell.isTilled() && randomNumber == 3) {
-                Game game = App.getLoggedInUser().getCurrentGame();
+                GameData gameData = App.getLoggedInUser().getCurrentGame();
                 CropSeedsType cropSeedsType = CropSeedsType.values()[(int) (Math.random() * (CropSeedsType.values().length - 1))];
-                Crop crop = new Crop(cropSeedsType, game.getDate());
+                Crop crop = new Crop(cropSeedsType, gameData.getDate());
                 cell.setObjectOnCell(crop);
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
                 cell.setObjectOnCell(randomForagingCrop());

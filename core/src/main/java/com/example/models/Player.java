@@ -301,8 +301,8 @@ public class Player {
         return farm;
     }
 
-    public Farm getCurrentFarm(Game game) {
-        return game.getFarmByNumber(currentFarmNumber);
+    public Farm getCurrentFarm(GameData gameData) {
+        return gameData.getFarmByNumber(currentFarmNumber);
     }
 
     public void setEnergy(double energy) {
@@ -317,19 +317,19 @@ public class Player {
         this.coordinate = coordinate;
     }
 
-    public int getMoney(Game game) {
+    public int getMoney(GameData gameData) {
         if (partnerName == null) {
             return money;
         }
-        Player partner = game.getPartner(this);
+        Player partner = gameData.getPartner(this);
         return partner.money + money;
     }
 
-    public void setMoney(int money, Game game) {
+    public void setMoney(int money, GameData gameData) {
         if (partnerName == null) {
             this.money = money;
         } else {
-            Player partner = game.getPartner(this);
+            Player partner = gameData.getPartner(this);
             partner.money = 0;
             this.money = money;
         }
@@ -511,7 +511,7 @@ public class Player {
         this.notifications = notifications;
     }
 
-    public String getNotificationsString(Game game) {
+    public String getNotificationsString(GameData gameData) {
         StringBuilder builder = new StringBuilder();
         builder.append("Notifications : ").append("\n");
         int counter = 1;
@@ -530,7 +530,7 @@ public class Player {
         }
         counter = 1;
         builder.append("Gifts : ").append("\n");
-        for (Gift g : game.getGifts()) {
+        for (Gift g : gameData.getGifts()) {
             if (g.getTo().equals(user.getUsername())) {
                 builder.append(counter++).append("- \n");
                 builder.append("From : ").append(g.getFrom()).append("\n");
@@ -542,11 +542,11 @@ public class Player {
         return builder.toString();
     }
 
-    public String getGiftsString(Game game) {
+    public String getGiftsString(GameData gameData) {
         StringBuilder builder = new StringBuilder();
         builder.append("Gifts : ").append("\n");
         int counter = 1;
-        for (Gift g : game.getGifts()) {
+        for (Gift g : gameData.getGifts()) {
             if (g.getTo().equals(user.getUsername())) {
                 builder.append(counter++).append("- \n");
                 builder.append("From : ").append(g.getFrom()).append("\n");
@@ -558,11 +558,11 @@ public class Player {
         return builder.toString();
     }
 
-    public String getGiftHistoryString(Game game, String username) {
+    public String getGiftHistoryString(GameData gameData, String username) {
         StringBuilder builder = new StringBuilder();
         builder.append("Gifts : ").append("\n");
         int counter = 1;
-        for (Gift g : game.getGifts()) {
+        for (Gift g : gameData.getGifts()) {
             if (g.getTo().equals(user.getUsername()) || g.getFrom().equals(user.getUsername())) {
                 if (g.getTo().compareToIgnoreCase(username) == 0 || g.getFrom().compareToIgnoreCase(username) == 0) {
                     builder.append(counter++).append("- \n");
@@ -653,7 +653,7 @@ public class Player {
         return null;
     }
 
-    public void addNpcReward(NPCReward reward, NPC npc, Game game) {
+    public void addNpcReward(NPCReward reward, NPC npc, GameData gameData) {
         if (reward.getRewardItems() != null) {
             Slot slot = this.getInventory().getSlotByItemName(reward.getRewardItems().getName());
             int level = npc.findFriendshipByName(getUser().getUsername()).getLevel();
@@ -666,7 +666,7 @@ public class Player {
                 slot.setCount(slot.getCount() + reward.count * mp);
             }
             this.addXpToNpcFriendship(200 * reward.friendshipLevel, npc);
-            this.setMoney(this.money + reward.money * mp, game);
+            this.setMoney(this.money + reward.money * mp, gameData);
         }
     }
 

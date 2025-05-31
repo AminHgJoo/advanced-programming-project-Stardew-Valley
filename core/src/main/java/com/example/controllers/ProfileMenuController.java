@@ -25,16 +25,16 @@ public class ProfileMenuController extends Controller {
         while (UserRepository.findUserByUsername(username) != null) {
             username = username + (int) (Math.random() * 69420);
         }
-        ArrayList<Game> games = GameRepository.findAllGames(true);
-        for (Game game : games) {
+        ArrayList<GameData> gameData = GameRepository.findAllGames(true);
+        for (GameData gameData : gameData) {
             Player p = null;
-            for (Player player : game.getPlayers())
+            for (Player player : gameData.getPlayers())
                 if (player.getUser() == user) {
                     p = player;
                 }
             if (p != null) {
-                Player partner = game.getPartner(p);
-                for (Player player : game.getPlayers()) {
+                Player partner = gameData.getPartner(p);
+                for (Player player : gameData.getPlayers()) {
                     Friendship friendship = player.findFriendshipByFriendName(user.getUsername());
                     if (friendship != null) {
                         friendship.setPlayer(username);
@@ -43,7 +43,7 @@ public class ProfileMenuController extends Controller {
                 if (partner != null) {
                     partner.setPartnerName(username);
                 }
-                for (NPC npc : game.getMap().getVillage().getNpcs()) {
+                for (NPC npc : gameData.getMap().getVillage().getNpcs()) {
                     NPCFriendship npcFriendship = npc.findFriendshipByName(user.getUsername());
                     if (npcFriendship != null) {
                         npcFriendship.setPlayer(username);

@@ -13,46 +13,46 @@ import java.util.List;
 public class FriendshipController extends Controller {
     public static Response handleFriendship(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         return new Response(true, player.friendShipToString());
     }
 
     public static Response handleTalk(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String username = request.body.get("username");
         String message = request.body.get("message");
 
-        Player friend = game.findPlayerByUsername(username);
+        Player friend = gameData.findPlayerByUsername(username);
         if (friend == null) {
             return new Response(false, "Player not found");
         }
         if ((player.isInVillage() && friend.isInVillage()) ||
-                (player.getCurrentFarm(game) == friend.getCurrentFarm(game) &&
+                (player.getCurrentFarm(gameData) == friend.getCurrentFarm(gameData) &&
                         (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
             Message msg = new Message(user.getUsername(), friend.getUser().getUsername(), message);
-            game.getMessages().add(msg);
+            gameData.getMessages().add(msg);
             friend.getNotifications().add(msg);
             player.addXpToFriendShip(20, friend);
             friend.addXpToFriendShip(20, player);
 
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "Message has been sent");
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(false, "long distance");
     }
 
     public static Response handleTalkHistory(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String username = request.body.get("username");
-        List<Message> messages = game.getMessages().stream().filter((m) -> {
+        List<Message> messages = gameData.getMessages().stream().filter((m) -> {
             return (m.getSender().compareToIgnoreCase(username) == 0) &&
                     (m.getRecipient().compareToIgnoreCase(player.getUser().getUsername())) == 0;
         }).toList();
@@ -68,14 +68,14 @@ public class FriendshipController extends Controller {
 
     public static Response handleGift(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String username = request.body.get("username");
         String itemName = request.body.get("item");
         int amount = Integer.parseInt(request.body.get("amount"));
 
-        Player friend = game.findPlayerByUsername(username);
+        Player friend = gameData.findPlayerByUsername(username);
         if (friend == null) {
             return new Response(false, "Player not found");
         }
@@ -100,88 +100,88 @@ public class FriendshipController extends Controller {
             fSlot.setCount(fSlot.getCount() + amount);
         }
 
-        game.getGifts().add(gift);
+        gameData.getGifts().add(gift);
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Gift was successfully sent");
     }
 
     public static Response handleGiftList(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
-        return new Response(true, player.getGiftsString(game));
+        return new Response(true, player.getGiftsString(gameData));
     }
 
     public static Response handleGiftHistory(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String username = request.body.get("username");
 
-        return new Response(true, player.getGiftHistoryString(game, username));
+        return new Response(true, player.getGiftHistoryString(gameData, username));
     }
 
     public static Response handleGiftRate(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         int index = Integer.parseInt(request.body.get("giftNumber"));
         int rate = Integer.parseInt(request.body.get("rate"));
 
-        Gift g = game.findGiftByName(index - 1, player.getUser().getUsername());
+        Gift g = gameData.findGiftByName(index - 1, player.getUser().getUsername());
         if (g == null) {
             return new Response(false, "Gift not found");
         }
         g.setRate(rate);
         int xp = (rate - 3) * 30 + 15;
-        Player friend = game.findPlayerByUsername(g.getFrom());
+        Player friend = gameData.findPlayerByUsername(g.getFrom());
         friend.addXpToFriendShip(xp, player);
         player.addXpToFriendShip(xp, friend);
 
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Successfully rate the gift");
     }
 
     public static Response handleHug(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String username = request.body.get("username");
 
-        Player friend = game.findPlayerByUsername(username);
+        Player friend = gameData.findPlayerByUsername(username);
         if (friend == null) {
             return new Response(false, "Player not found");
         }
         if ((player.isInVillage() && friend.isInVillage()) ||
-                (player.getCurrentFarm(game) == friend.getCurrentFarm(game) &&
+                (player.getCurrentFarm(gameData) == friend.getCurrentFarm(gameData) &&
                         (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
             player.addXpToFriendShip(60, friend);
             friend.addXpToFriendShip(60, player);
 
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "You hugged " + username);
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(false, "long distance");
     }
 
 
     public static Response handleFlower(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String username = request.body.get("username");
         String flowerName = request.body.get("flowerName");
 
-        Player friend = game.findPlayerByUsername(username);
+        Player friend = gameData.findPlayerByUsername(username);
         if ((player.isInVillage() && friend.isInVillage()) ||
-                (player.getCurrentFarm(game) == friend.getCurrentFarm(game) &&
+                (player.getCurrentFarm(gameData) == friend.getCurrentFarm(gameData) &&
                         (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
             if (friend == null) {
                 return new Response(false, "Player not found");
@@ -211,19 +211,19 @@ public class FriendshipController extends Controller {
 
             return new Response(true, "Flower has been sent to " + username);
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(false, "long distance");
     }
 
     public static Response handleAskMarriage(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String username = request.body.get("username");
         String ring = request.body.get("ring");
 
-        Player friend = game.findPlayerByUsername(username);
+        Player friend = gameData.findPlayerByUsername(username);
         if (friend == null) {
             return new Response(false, "Player not found");
         }
@@ -237,19 +237,19 @@ public class FriendshipController extends Controller {
         marriageRequest.setRing(ringItem);
 
         friend.getMarriageRequests().add(marriageRequest);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
 
         return new Response(true, "Marriage request was sent");
     }
 
     public static Response handleRespondMarriageAccept(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String username = request.body.get("username");
 
-        Player friend = game.findPlayerByUsername(username);
+        Player friend = gameData.findPlayerByUsername(username);
         if (friend == null) {
             return new Response(false, "Player not found");
         }
@@ -277,18 +277,18 @@ public class FriendshipController extends Controller {
         player.setPartnerName(username);
 
         player.removeMarriageRequest(marriageRequest);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "Yar mobarak bada ishala mobarak bada");
     }
 
     public static Response handleRespondMarriageReject(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
 
         String username = request.body.get("username");
 
-        Player friend = game.findPlayerByUsername(username);
+        Player friend = gameData.findPlayerByUsername(username);
         if (friend == null) {
             return new Response(false, "Player not found");
         }
@@ -298,7 +298,7 @@ public class FriendshipController extends Controller {
         }
 
         player.removeMarriageRequest(marriageRequest);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, ":(( reject shodi");
     }
 }

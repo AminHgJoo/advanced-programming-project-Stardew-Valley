@@ -3,7 +3,7 @@ package com.example.controllers.gameMenuControllers;
 import com.example.Repositories.GameRepository;
 import com.example.controllers.Controller;
 import com.example.models.App;
-import com.example.models.Game;
+import com.example.models.GameData;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.Player;
@@ -33,13 +33,13 @@ public class MovementAndMap extends Controller {
         int x = Integer.parseInt(request.body.get("x"));
         int y = Integer.parseInt(request.body.get("y"));
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = player.getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Farm farm = player.getCurrentFarm(gameData);
         ArrayList<Cell> cells = farm.getCells();
         Cell cell = Farm.getCellByCoordinate(x, y, cells);
         if (cell == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "no cell found");
         }
         for (int i = 0; i < 7; i++) {
@@ -49,7 +49,7 @@ public class MovementAndMap extends Controller {
                         testCell.getObjectOnCell() instanceof Water ||
                         testCell.getObjectOnCell() instanceof DroppedItem ||
                         testCell.getObjectOnCell() instanceof BuildingBlock) {
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(false, "can't empty rectangle");
                 }
             }
@@ -60,7 +60,7 @@ public class MovementAndMap extends Controller {
                 testCell.setObjectOnCell(new EmptyCell());
             }
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "rectangle is now empty");
     }
 
@@ -79,58 +79,58 @@ public class MovementAndMap extends Controller {
 
     public static Response goToVillage(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         if (player.isInVillage()) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "you are already in the village");
         }
         player.setInVillage(true);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "you are in the village");
     }
 
     public static Response goToPartnerFarm(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Player partner = game.getPartner(player);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Player partner = gameData.getPartner(player);
         if (partner == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "you are single");
         }
-        Farm playerFarm = player.getCurrentFarm(game);
+        Farm playerFarm = player.getCurrentFarm(gameData);
         Farm partnerFarm = partner.getFarm();
         if (playerFarm == partnerFarm) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "you are already in the farm");
         }
         player.setInVillage(false);
         player.setCurrentFarmNumber(partnerFarm.getFarmNumber());
         Coordinate coordinate = getEmptyCoordinate(player, partner, partnerFarm.getCells());
         if (coordinate == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "no empty cell found");
         }
         player.setCoordinate(coordinate);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "you are in your partner's farm");
     }
 
     public static Response walkHome(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Player partner = game.getPartner(player);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Player partner = gameData.getPartner(player);
         Farm playerFarm = player.getFarm();
         player.setInVillage(false);
         Coordinate coordinate = getEmptyCoordinate(player, partner, playerFarm.getCells());
         if (coordinate == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "no empty cell found");
         }
         player.setCoordinate(coordinate);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "you are in home");
     }
 
@@ -145,21 +145,21 @@ public class MovementAndMap extends Controller {
     public static Response handleWalking(Request request) {
         int x = Integer.parseInt(request.body.get("x"));
         int y = Integer.parseInt(request.body.get("y"));
-        Game game = App.getLoggedInUser().getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         if (player.isInVillage()) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "can't walk in village");
         }
-        Tile src = new Tile(player.getCurrentFarm(game).findCellByCoordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
-        if (player.getCurrentFarm(game).findCellByCoordinate(x, y) == null) {
+        Tile src = new Tile(player.getCurrentFarm(gameData).findCellByCoordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
+        if (player.getCurrentFarm(gameData).findCellByCoordinate(x, y) == null) {
             return new Response(false, "destination is not valid");
         }
-        Tile dest = new Tile(player.getCurrentFarm(game).findCellByCoordinate(x, y).clone());
+        Tile dest = new Tile(player.getCurrentFarm(gameData).findCellByCoordinate(x, y).clone());
         if (dest == null || !dest.getObjectOnCell().isWalkable) {
             return new Response(false, "destination is not valid");
         }
-        dest = FindPath.pathBFS(src, dest, player.getCurrentFarm(game).getCells());
+        dest = FindPath.pathBFS(src, dest, player.getCurrentFarm(gameData).getCells());
         double energy = dest.energy / (double) 20;
         String message = "Your current energy is: " + player.getEnergy() + "\n" +
                 "The path energy cost is : " + energy + "\n" +
@@ -183,41 +183,41 @@ public class MovementAndMap extends Controller {
                     player.setPlayerFainted(true);
                     player.setEnergy(player.getEnergy() - c.energy);
                     LoadingSavingTurnHandling.handleNextTurn(null);
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(false, "You have fainted");
                 }
                 if (c.energy + player.getUsedEnergyInTurn() > 50) {
-                    GameRepository.saveGame(game);
+                    GameRepository.saveGame(gameData);
                     return new Response(false, "You can not use this much energy");
                 }
                 player.setCoordinate(c.getCoordinate());
                 player.setEnergy(player.getEnergy() - c.energy);
                 player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + c.energy);
             }
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "You successfully moved to the destination");
         } else {
-            player.getCurrentFarm(game).initialCells();
+            player.getCurrentFarm(gameData).initialCells();
             return new Response(false, "Movement process aborted");
         }
     }
 
     public static Response showFarm(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Farm farm = gameData.getCurrentPlayer().getCurrentFarm(gameData);
         farm.showFarm(Integer.parseInt(request.body.get("x"))
                 , Integer.parseInt(request.body.get("y")),
-                Integer.parseInt(request.body.get("size")), game);
+                Integer.parseInt(request.body.get("size")), gameData);
         return new Response(true, "");
     }
 
     /// debug method
     public static Response showFullFarm(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Farm farm = game.getCurrentPlayer().getFarm();
-        farm.showEntireFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Farm farm = gameData.getCurrentPlayer().getFarm();
+        farm.showEntireFarm(gameData);
         return new Response(true, "");
     }
 
@@ -237,8 +237,8 @@ public class MovementAndMap extends Controller {
 
     public static Response handleShowEnergy(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        double energy = game.getCurrentPlayer().getEnergy();
+        GameData gameData = user.getCurrentGame();
+        double energy = gameData.getCurrentPlayer().getEnergy();
         if (energy == Double.POSITIVE_INFINITY) {
             return new Response(true, "infinity");
         }
@@ -249,18 +249,18 @@ public class MovementAndMap extends Controller {
     public static Response handleSetEnergy(Request request) {
         String energy = request.body.get("value");
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        game.getCurrentPlayer().setEnergy(Double.parseDouble(energy));
-        GameRepository.saveGame(game);
+        GameData gameData = user.getCurrentGame();
+        gameData.getCurrentPlayer().setEnergy(Double.parseDouble(energy));
+        GameRepository.saveGame(gameData);
         return new Response(true, "energy successfully set to " + energy);
     }
 
     public static Response handleUnlimitedEnergy(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        game.getCurrentPlayer().setEnergy(Double.POSITIVE_INFINITY);
-        game.getCurrentPlayer().setUsedEnergyInTurn(Double.NEGATIVE_INFINITY);
-        GameRepository.saveGame(game);
+        GameData gameData = user.getCurrentGame();
+        gameData.getCurrentPlayer().setEnergy(Double.POSITIVE_INFINITY);
+        gameData.getCurrentPlayer().setUsedEnergyInTurn(Double.NEGATIVE_INFINITY);
+        GameRepository.saveGame(gameData);
         return new Response(true, "energy successfully set to infinity");
     }
 }

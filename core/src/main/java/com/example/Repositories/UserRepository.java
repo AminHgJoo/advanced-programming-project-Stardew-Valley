@@ -1,6 +1,6 @@
 package com.example.Repositories;
 
-import com.example.models.Game;
+import com.example.models.GameData;
 import com.example.models.Player;
 import com.example.models.User;
 import com.example.utilities.Connection;
@@ -90,8 +90,8 @@ public class UserRepository {
         }
     }
 
-    public static void populateUsersOfPlayers(Game game) {
-        for (Player player : game.getPlayers()) {
+    public static void populateUsersOfPlayers(GameData gameData) {
+        for (Player player : gameData.getPlayers()) {
             User user = db.find(User.class).filter("_id", player.getUser_id().toString()).first();
             player.setUser(user);
         }

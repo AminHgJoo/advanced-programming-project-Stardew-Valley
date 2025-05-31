@@ -30,16 +30,16 @@ public class LivestockController extends Controller {
     public static Response handlePet(Request request) {
         String petName = request.body.get("name");
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         Animal animal = player.getAnimalByName(petName);
         if (animal == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "Animal not found");
         }
         animal.hasBeenPetToDay = true;
         animal.setXp(animal.getXp() + 15);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "you have pet " + petName);
     }
 
@@ -47,25 +47,25 @@ public class LivestockController extends Controller {
         String animalName = request.body.get("animalName");
         int amount = Integer.parseInt(request.body.get("amount"));
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         Animal animal = player.getAnimalByName(animalName);
         if (animal == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "Animal not found");
         }
         animal.setXp(amount);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "your xp is: " + animal.getXp());
     }
 
     public static Response handleAnimals(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         ArrayList<Animal> animals = player.getAnimals();
         if (animals.isEmpty()) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "No animals found");
         }
         StringBuilder animalString = new StringBuilder();
@@ -77,7 +77,7 @@ public class LivestockController extends Controller {
                     append("has Been Fed Today: ").append(animal.hasBeenFedByHay || animal.hasBeenFedByGrass).append("\n").
                     append("friendship xp: ").append(animal.getXp()).append("\n\n");
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, animalString.toString());
     }
 
@@ -86,9 +86,9 @@ public class LivestockController extends Controller {
         int x = Integer.parseInt(request.body.get("x"));
         int y = Integer.parseInt(request.body.get("y"));
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = game.getCurrentPlayer().getFarm();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Farm farm = gameData.getCurrentPlayer().getFarm();
         Animal animal = player.getAnimalByName(animalName);
         Cell cell = farm.findCellByCoordinate(x, y);
         Cell animalBlock = farm.getAnimalBlock(animal);
@@ -100,14 +100,14 @@ public class LivestockController extends Controller {
                         animalBlock.setObjectOnCell(new EmptyCell());
                         cell.setObjectOnCell(new AnimalBlock(animal));
                         animal.isInside = true;
-                        GameRepository.saveGame(game);
+                        GameRepository.saveGame(gameData);
                         return new Response(true, "you have shepherd " + animal.getName());
                     } else if (((Barn) b).barnType.equals("Big Barn") && (animal.getType().equals(AnimalType.COW) ||
                             animal.getType().equals(AnimalType.GOAT))) {
                         cell.setObjectOnCell(new AnimalBlock(animal));
                         animalBlock.setObjectOnCell(new EmptyCell());
                         animal.isInside = true;
-                        GameRepository.saveGame(game);
+                        GameRepository.saveGame(gameData);
                         return new Response(true, "you have shepherd " + animal.getName());
                     } else if (((Barn) b).barnType.equals("Deluxe Barn") && (animal.getType().equals(AnimalType.COW) ||
                             animal.getType().equals(AnimalType.GOAT) || animal.getType().equals(AnimalType.SHEEP) ||
@@ -115,7 +115,7 @@ public class LivestockController extends Controller {
                         cell.setObjectOnCell(new AnimalBlock(animal));
                         animalBlock.setObjectOnCell(new EmptyCell());
                         animal.isInside = true;
-                        GameRepository.saveGame(game);
+                        GameRepository.saveGame(gameData);
                         return new Response(true, "you have shepherd " + animal.getName());
                     }
                 } else if (b instanceof Coop && b.buildingCells.contains(cell)) {
@@ -123,14 +123,14 @@ public class LivestockController extends Controller {
                         cell.setObjectOnCell(new AnimalBlock(animal));
                         animalBlock.setObjectOnCell(new EmptyCell());
                         animal.isInside = true;
-                        GameRepository.saveGame(game);
+                        GameRepository.saveGame(gameData);
                         return new Response(true, "you have shepherd " + animal.getName());
                     } else if (((Coop) b).coopType.equals("Big Coop") && (animal.getType().equals(AnimalType.Chicken) ||
                             animal.getType().equals(AnimalType.DUCK) || animal.getType().equals(AnimalType.DINOSAUR))) {
                         cell.setObjectOnCell(new AnimalBlock(animal));
                         animalBlock.setObjectOnCell(new EmptyCell());
                         animal.isInside = true;
-                        GameRepository.saveGame(game);
+                        GameRepository.saveGame(gameData);
                         return new Response(true, "you have shepherd " + animal.getName());
                     } else if (((Coop) b).coopType.equals("Deluxe Coop") && (animal.getType().equals(AnimalType.Chicken) ||
                             animal.getType().equals(AnimalType.DUCK) || animal.getType().equals(AnimalType.RABBIT) ||
@@ -138,7 +138,7 @@ public class LivestockController extends Controller {
                         cell.setObjectOnCell(new AnimalBlock(animal));
                         animalBlock.setObjectOnCell(new EmptyCell());
                         animal.isInside = true;
-                        GameRepository.saveGame(game);
+                        GameRepository.saveGame(gameData);
                         return new Response(true, "you have shepherd " + animal.getName());
                     }
                 }
@@ -146,15 +146,15 @@ public class LivestockController extends Controller {
         }
 
         if (cell == null || !(cell.getObjectOnCell() instanceof EmptyCell) || animal == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "cell not found or not empty or no animal found");
         }
         if(!animal.isInside) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "animal is already outside");
         }
-        if (game.getWeatherToday() == Weather.SNOW || game.getWeatherToday() == Weather.STORM || game.getWeatherToday() == Weather.RAIN) {
-            GameRepository.saveGame(game);
+        if (gameData.getWeatherToday() == Weather.SNOW || gameData.getWeatherToday() == Weather.STORM || gameData.getWeatherToday() == Weather.RAIN) {
+            GameRepository.saveGame(gameData);
             return new Response(true, "bad weather quality");
         }
 
@@ -167,19 +167,19 @@ public class LivestockController extends Controller {
         animal.hasBeenFedByGrass = true;
         animal.isInside = false;
         animal.setXp(animal.getXp() + 8);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "you have shepherd " + animalName);
     }
 
     public static Response handleFeedHay(Request request) {
         String animalName = request.body.get("animalName");
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        Farm farm = game.getCurrentPlayer().getCurrentFarm(game);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        Farm farm = gameData.getCurrentPlayer().getCurrentFarm(gameData);
         Animal animal = player.getAnimalByName(animalName);
         if (animal == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "no animal found");
         }
         Backpack backpack = player.getInventory();
@@ -196,14 +196,14 @@ public class LivestockController extends Controller {
             backpack.removeSlot(haySlot);
         }
         animal.hasBeenFedByHay = true;
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "you have fed " + animalName);
     }
 
     public static Response handleProduces(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        ArrayList<Animal> allAnimals = game.getCurrentPlayer().getAnimals();
+        GameData gameData = user.getCurrentGame();
+        ArrayList<Animal> allAnimals = gameData.getCurrentPlayer().getAnimals();
         ArrayList<Animal> desiredAnimals = new ArrayList<>();
         for (Animal animal : allAnimals) {
             if (animal.product != null) {
@@ -211,7 +211,7 @@ public class LivestockController extends Controller {
             }
         }
         if (desiredAnimals.isEmpty()) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "No products found");
         }
         StringBuilder animalString = new StringBuilder();
@@ -220,32 +220,32 @@ public class LivestockController extends Controller {
                     .append(" product: ").append(animal.product.getName()).append(" ").
                     append(animal.product.getQuality()).append("\n");
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, animalString.toString());
     }
 
     public static Response handleCollectProduce(Request request) {
         String animalName = request.body.get("name");
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         Animal animal = player.getAnimalByName(animalName);
         Item equippedItem = player.getEquippedItem();
         Backpack backpack = player.getInventory();
         Slot productSlot = null;
 
         if (animal == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "no animal found");
         }
         Item product = animal.product;
         if (product == null) {
-            return noProductFoundHandle(animal, equippedItem, player, game);
+            return noProductFoundHandle(animal, equippedItem, player, gameData);
         }
-        return handleCollectProducts(product, backpack, productSlot, animal, player, game);
+        return handleCollectProducts(product, backpack, productSlot, animal, player, gameData);
     }
 
-    public static @NotNull Response handleCollectProducts(Item product, Backpack backpack, Slot productSlot, Animal animal, Player player, Game game) {
+    public static @NotNull Response handleCollectProducts(Item product, Backpack backpack, Slot productSlot, Animal animal, Player player, GameData gameData) {
         Item item = new Misc(((Misc) product).getMiscType(), ((Misc) product).getQuality());
         for (Slot slot : backpack.getSlots()) {
             if (slot.getItem().getName().equals(product.getName())) {
@@ -253,25 +253,25 @@ public class LivestockController extends Controller {
             }
         }
         if (productSlot == null) {
-            return addNewSlotForProductHandle(backpack, animal, player, game, item, product);
+            return addNewSlotForProductHandle(backpack, animal, player, gameData, item, product);
         }
-        return addToExistingSlotHandle(productSlot, animal, player, game, product);
+        return addToExistingSlotHandle(productSlot, animal, player, gameData, product);
     }
 
-    private static @NotNull Response addToExistingSlotHandle(Slot productSlot, Animal animal, Player player, Game game, Item product) {
+    private static @NotNull Response addToExistingSlotHandle(Slot productSlot, Animal animal, Player player, GameData gameData, Item product) {
         productSlot.setCount(productSlot.getCount() + animal.getType().productPerDay);
         if (animal.getType().equals(AnimalType.SHEEP) || animal.getType().equals(AnimalType.COW) || animal.getType().equals(AnimalType.GOAT)) {
             animal.hasBeenHarvested = true;
             animal.setXp(animal.getXp() + 15);
         }
         animal.product = null;
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "you have collected " + animal.getType().productPerDay + " of " + product.getName());
     }
 
-    private static @NotNull Response addNewSlotForProductHandle(Backpack backpack, Animal animal, Player player, Game game, Item item, Item product) {
+    private static @NotNull Response addNewSlotForProductHandle(Backpack backpack, Animal animal, Player player, GameData gameData, Item item, Item product) {
         if (backpack.getSlots().size() == backpack.getType().getMaxCapacity()) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "your backpack is full");
         }
         Slot newSlot = new Slot(item, animal.getType().productPerDay);
@@ -281,30 +281,30 @@ public class LivestockController extends Controller {
             animal.setXp(animal.getXp() + 5);
         }
         animal.product = null;
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "you have collected " + animal.getType().productPerDay + " of " + product.getName());
     }
 
-    public static @NotNull Response noProductFoundHandle(Animal animal, Item equippedItem, Player player, Game game) {
-        GameRepository.saveGame(game);
+    public static @NotNull Response noProductFoundHandle(Animal animal, Item equippedItem, Player player, GameData gameData) {
+        GameRepository.saveGame(gameData);
         return new Response(false, "no product found");
     }
 
     public static Response handleSellAnimal(Request request) {
         String animalName = request.body.get("name");
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         Animal animal = player.getAnimalByName(animalName);
         if (animal == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "no animal found");
         }
         int price = (int) (((double) animal.getXp() / 1000 + 0.3) * (double) animal.getType().price);
-        player.setMoney(player.getMoney(game) + price, game);
+        player.setMoney(player.getMoney(gameData) + price, gameData);
         player.getAnimals().remove(animal);
         player.getFarm().removeAnimalFromBuilding(animal);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "you have sold " + animalName + " for " + price);
     }
 }

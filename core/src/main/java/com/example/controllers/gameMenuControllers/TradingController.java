@@ -16,20 +16,20 @@ import java.util.ArrayList;
 public class TradingController extends Controller {
     public static Response handleStartTrade(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         App.setCurrMenuType(MenuTypes.TradeMenu);
         StringBuilder output = new StringBuilder();
         output.append("welcome to the Trading Menu");
         output.append("\n");
         output.append("new trading requests:\n");
-        for (Trade trade : game.getPlayerUndecidedTradeRequestsReceived(player)) {
+        for (Trade trade : gameData.getPlayerUndecidedTradeRequestsReceived(player)) {
             if (!trade.shown) {
                 output.append(trade.toString()).append("\n");
                 trade.shown = true;
             }
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, output.toString());
     }
 
@@ -40,38 +40,38 @@ public class TradingController extends Controller {
         int amount = Integer.parseInt(request.body.get("amount"));
         int price = Integer.parseInt(request.body.get("price"));
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player firstPlayer = game.getCurrentPlayer();
-        Player secondPlayer = game.getPlayerByUsername(username);
+        GameData gameData = user.getCurrentGame();
+        Player firstPlayer = gameData.getCurrentPlayer();
+        Player secondPlayer = gameData.getPlayerByUsername(username);
         Backpack firstPlayerBackpack = firstPlayer.getInventory();
 
         if (secondPlayer == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "no player found");
         }
         if (!type.equals("offer")) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "wrong type");
         }
         if (!isItem(itemName)) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "item does not exist");
         }
         if (amount <= 0) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "Amount must be greater than 0");
         }
         Slot slot = firstPlayerBackpack.getSlotByItemName(itemName);
         if (slot == null || slot.getCount() < amount) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "you don't have enough " + itemName);
         }
         if (price <= 0) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "price must be greater than 0");
         }
-        game.tradingHistory.add(new Trade(firstPlayer, secondPlayer, type, slot.getItem(), amount, price, null, 0, game.tradingHistory.size()));
-        GameRepository.saveGame(game);
+        gameData.tradingHistory.add(new Trade(firstPlayer, secondPlayer, type, slot.getItem(), amount, price, null, 0, gameData.tradingHistory.size()));
+        GameRepository.saveGame(gameData);
         return new Response(true, "offer sent successfully");
     }
 
@@ -161,53 +161,53 @@ public class TradingController extends Controller {
         String targetItemName = request.body.get("targetItem");
         int targetAmount = Integer.parseInt(request.body.get("targetAmount"));
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player firstPlayer = game.getCurrentPlayer();
-        Player secondPlayer = game.getPlayerByUsername(username);
+        GameData gameData = user.getCurrentGame();
+        Player firstPlayer = gameData.getCurrentPlayer();
+        Player secondPlayer = gameData.getPlayerByUsername(username);
         Backpack firstPlayerBackpack = firstPlayer.getInventory();
 
         if (secondPlayer == null) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "no player found");
         }
         if (!type.equals("request")) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "wrong type");
         }
         if (!isItem(itemName)) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "item does not exist");
         }
         if (amount <= 0) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "Amount must be greater than 0");
         }
         Slot slot = firstPlayerBackpack.getSlotByItemName(itemName);
         if (slot == null || slot.getCount() < amount) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "you don't have enough " + itemName);
         }
         if (!isItem(targetItemName)) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "target item does not exist");
         }
         if (targetAmount <= 0) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "target amount must be greater than 0");
         }
 
-        game.tradingHistory.add(new Trade(firstPlayer, secondPlayer, type, slot.getItem(), amount, 0, getItem(targetItemName), targetAmount, game.tradingHistory.size()));
-        GameRepository.saveGame(game);
+        gameData.tradingHistory.add(new Trade(firstPlayer, secondPlayer, type, slot.getItem(), amount, 0, getItem(targetItemName), targetAmount, gameData.tradingHistory.size()));
+        GameRepository.saveGame(gameData);
         return new Response(true, "request sent successfully");
     }
 
     public static Response handleTradeList(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        ArrayList<Trade> trades = game.getPlayerUndecidedTradeRequestsReceived(player);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        ArrayList<Trade> trades = gameData.getPlayerUndecidedTradeRequestsReceived(player);
         if (trades.isEmpty()) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "no undecided trade requests found");
         }
         StringBuilder output = new StringBuilder();
@@ -215,50 +215,50 @@ public class TradingController extends Controller {
         for (Trade trade : trades) {
             output.append(trade.toString()).append("\n");
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, output.toString());
     }
 
     public static Response handleResponseAccept(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player secondPlayer = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player secondPlayer = gameData.getCurrentPlayer();
         Backpack secondPlayerBackpack = secondPlayer.getInventory();
         int id = Integer.parseInt(request.body.get("id"));
-        Trade trade = game.getTradeById(id);
+        Trade trade = gameData.getTradeById(id);
         if (trade == null || trade.tradeResult != 0) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "no trade found");
         }
         Player firstPlayer = trade.firstPlayer;
         Backpack firstPlayerBackpack = firstPlayer.getInventory();
         Slot tradeItemSlotInFirstPlayerBackpack = firstPlayerBackpack.getSlotByItemName(trade.tradeItem.getName());
         if (tradeItemSlotInFirstPlayerBackpack == null || tradeItemSlotInFirstPlayerBackpack.getCount() < trade.itemAmount) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, firstPlayer.getUser().getUsername() + " doesn't have enough " + trade.tradeItem.getName());
         }
         if (trade.tradeType.equals("offer")) {
-            return acceptOfferHandle(trade, firstPlayer, game, tradeItemSlotInFirstPlayerBackpack, secondPlayerBackpack, firstPlayerBackpack, secondPlayer);
+            return acceptOfferHandle(trade, firstPlayer, gameData, tradeItemSlotInFirstPlayerBackpack, secondPlayerBackpack, firstPlayerBackpack, secondPlayer);
         }
-        return acceptRequestHandle(trade, secondPlayerBackpack, game, firstPlayerBackpack, firstPlayer, secondPlayer, tradeItemSlotInFirstPlayerBackpack);
+        return acceptRequestHandle(trade, secondPlayerBackpack, gameData, firstPlayerBackpack, firstPlayer, secondPlayer, tradeItemSlotInFirstPlayerBackpack);
     }
 
-    private static @NotNull Response acceptRequestHandle(Trade trade, Backpack secondPlayerBackpack, Game game, Backpack firstPlayerBackpack, Player firstPlayer, Player secondPlayer, Slot tradeItemSlotInFirstPlayerBackpack) {
+    private static @NotNull Response acceptRequestHandle(Trade trade, Backpack secondPlayerBackpack, GameData gameData, Backpack firstPlayerBackpack, Player firstPlayer, Player secondPlayer, Slot tradeItemSlotInFirstPlayerBackpack) {
         Item targetItem = trade.targetItem;
         int targetAmount = trade.targetAmount;
         Slot targetItemSlotInSecondPlayerBackpack = secondPlayerBackpack.getSlotByItemName(targetItem.getName());
         if (targetItemSlotInSecondPlayerBackpack == null || targetItemSlotInSecondPlayerBackpack.getCount() < targetAmount) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "you don't have enough amount of " + targetItem.getName());
         }
         Slot targetItemSlotInFirstPlayerBackpack = firstPlayerBackpack.getSlotByItemName(targetItem.getName());
         if (targetItemSlotInFirstPlayerBackpack == null && (firstPlayerBackpack.getSlots().size() == firstPlayerBackpack.getType().getMaxCapacity())) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, firstPlayer.getUser().getUsername() + "'s backpack is full");
         }
         Slot tradeItemSlotInSecondPlayerBackpack = secondPlayerBackpack.getSlotByItemName(trade.tradeItem.getName());
         if (tradeItemSlotInSecondPlayerBackpack == null && secondPlayerBackpack.getSlots().size() == secondPlayerBackpack.getType().getMaxCapacity()) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, secondPlayer.getUser().getUsername() + "'s backpack is full");
         }
         if (tradeItemSlotInSecondPlayerBackpack == null) {
@@ -283,19 +283,19 @@ public class TradingController extends Controller {
         }
         secondPlayer.addXpToFriendShip(10, firstPlayer);
         trade.tradeResult = 1;
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "trade successful");
     }
 
-    private static @NotNull Response acceptOfferHandle(Trade trade, Player firstPlayer, Game game, Slot tradeItemSlotInFirstPlayerBackpack, Backpack secondPlayerBackpack, Backpack firstPlayerBackpack, Player secondPlayer) {
+    private static @NotNull Response acceptOfferHandle(Trade trade, Player firstPlayer, GameData gameData, Slot tradeItemSlotInFirstPlayerBackpack, Backpack secondPlayerBackpack, Backpack firstPlayerBackpack, Player secondPlayer) {
         int price = trade.tradePrice;
-        if (firstPlayer.getMoney(game) < price) {
-            GameRepository.saveGame(game);
+        if (firstPlayer.getMoney(gameData) < price) {
+            GameRepository.saveGame(gameData);
             return new Response(false, "you have not enough money");
         }
         Slot itemSlotInSecondPlayerBackpack = secondPlayerBackpack.getSlotByItemName(trade.tradeItem.getName());
         if (itemSlotInSecondPlayerBackpack == null && secondPlayerBackpack.getSlots().size() == secondPlayerBackpack.getType().getMaxCapacity()) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "your backpack is full");
         }
         if (itemSlotInSecondPlayerBackpack == null) {
@@ -308,37 +308,37 @@ public class TradingController extends Controller {
         if (tradeItemSlotInFirstPlayerBackpack.getCount() <= 0) {
             firstPlayerBackpack.removeSlot(tradeItemSlotInFirstPlayerBackpack);
         }
-        firstPlayer.setMoney(firstPlayer.getMoney(game) + price, game);
-        secondPlayer.setMoney(secondPlayer.getMoney(game) - price, game);
+        firstPlayer.setMoney(firstPlayer.getMoney(gameData) + price, gameData);
+        secondPlayer.setMoney(secondPlayer.getMoney(gameData) - price, gameData);
         secondPlayer.addXpToFriendShip(10, firstPlayer);
         trade.tradeResult = 1;
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "trade successful");
     }
 
     public static Response handleResponseReject(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player secondPlayer = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player secondPlayer = gameData.getCurrentPlayer();
         int id = Integer.parseInt(request.body.get("id"));
-        Trade trade = game.getTradeById(id);
+        Trade trade = gameData.getTradeById(id);
         if (trade == null || trade.tradeResult != 0) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(false, "no trade found");
         }
         trade.tradeResult = 2;
         secondPlayer.addXpToFriendShip(-10, trade.firstPlayer);
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, "trade rejected");
     }
 
     public static Response handleResponseHistory(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
-        ArrayList<Trade> trades = game.getPlayerTradeHistory(player);
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
+        ArrayList<Trade> trades = gameData.getPlayerTradeHistory(player);
         if (trades.isEmpty()) {
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
             return new Response(true, "no trades found");
         }
         StringBuilder output = new StringBuilder();
@@ -346,7 +346,7 @@ public class TradingController extends Controller {
         for (Trade trade : trades) {
             output.append(trade.toString()).append("\n");
         }
-        GameRepository.saveGame(game);
+        GameRepository.saveGame(gameData);
         return new Response(true, output.toString());
     }
 

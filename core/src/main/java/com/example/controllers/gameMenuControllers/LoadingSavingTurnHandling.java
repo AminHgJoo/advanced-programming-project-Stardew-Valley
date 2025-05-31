@@ -4,7 +4,7 @@ import com.example.Repositories.GameRepository;
 import com.example.Repositories.UserRepository;
 import com.example.controllers.Controller;
 import com.example.models.App;
-import com.example.models.Game;
+import com.example.models.GameData;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;
 import com.example.models.Player;
@@ -39,9 +39,9 @@ public class LoadingSavingTurnHandling extends Controller {
             Player player = new Player(user);
             players.add(player);
         }
-        Game game = new Game(players, players.get(0));
+        GameData gameData = new GameData(players, players.get(0));
         for (Player player : players) {
-            player.getUser().setCurrentGame(game);
+            player.getUser().setCurrentGame(gameData);
         }
         isWaitingForChoosingMap = true;
         return new Response(true, "The game has been made successfully. Awaiting each user's map choice...\n" +
@@ -50,28 +50,28 @@ public class LoadingSavingTurnHandling extends Controller {
 
     public static Response handleMapSelection(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        Player player = game.getCurrentPlayer();
+        GameData gameData = user.getCurrentGame();
+        Player player = gameData.getCurrentPlayer();
         int mapNumber = Integer.parseInt(request.body.get("mapNumber"));
         if (mapNumber != 1 && mapNumber != 2) {
             return new Response(false, "Invalid map number");
         }
         Farm farm = Farm.makeFarm(mapNumber);
-        game.getMap().addFarm(farm);
+        gameData.getMap().addFarm(farm);
         player.setFarm(farm);
-        boolean check = game.cycleToNextPlayer();
+        boolean check = gameData.cycleToNextPlayer();
         if (check) {
             isWaitingForChoosingMap = false;
         }
         String responseString = player.getUser().getUsername() + " has chosen their farm.";
         if (check) {
             ArrayList<User> users = new ArrayList<>();
-            for (Player player1 : game.getPlayers()) {
+            for (Player player1 : gameData.getPlayers()) {
                 users.add(player1.getUser());
                 player1.setUser(null);
             }
             responseString += "\nAll farm selection successful! Game successfully created!";
-            GameRepository.saveGame(game, users);
+            GameRepository.saveGame(gameData, users);
         }
         return new Response(true, responseString);
     }
@@ -81,49 +81,49 @@ public class LoadingSavingTurnHandling extends Controller {
             return new Response(false, "No saved game found.");
         }
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
-        ArrayList<Player> players = game.getPlayers();
-        Player firstPlayer = players.getFirst();
+        GameData gameData = user.getCurrentGame();
+        ArrayList<Player> players = gameData.getPlayers();
+        Player firstPlayer = players.get(0);
         Player loader = null;
         for (Player player : players) {
             User u = UserRepository.findUserById(player.getUser_id().toString());
             player.setUser(u);
             if (player.getUser().equals(user)) {
-                game.setCurrentPlayer(player);
+                gameData.setCurrentPlayer(player);
                 loader = player;
                 break;
             }
         }
-        game.setGameOngoing(true);
+        gameData.setGameOngoing(true);
         int loaderIndex = players.indexOf(loader);
         players.set(0, loader);
         players.set(loaderIndex, firstPlayer);
 
-        game.setGameThread(new GameThread(game));
-        game.getGameThread().keepRunning = true;
-        game.getGameThread().start();
-        GameRepository.saveGame(game);
+        gameData.setGameThread(new GameThread(gameData));
+        gameData.getGameThread().keepRunning = true;
+        gameData.getGameThread().start();
+        GameRepository.saveGame(gameData);
 
         return new Response(true, "The game has been loaded successfully. Welcome "
                 + user.getUsername());
     }
 
     public static Response handleExitGame(Request request) {
-        Game game = App.getLoggedInUser().getCurrentGame();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
 
-        if (game.getCurrentPlayer().getUser().equals(App.getLoggedInUser())) {
+        if (gameData.getCurrentPlayer().getUser().equals(App.getLoggedInUser())) {
 
-            game.setGameOngoing(false);
-            game.getGameThread().keepRunning = false;
-            game.hasTurnCycleFinished = false;
-            for (Player p : game.getPlayers()) {
+            gameData.setGameOngoing(false);
+            gameData.getGameThread().keepRunning = false;
+            gameData.hasTurnCycleFinished = false;
+            for (Player p : gameData.getPlayers()) {
                 User u = p.getUser();
                 int m = u.getMoneyHighScore();
-                u.setMoneyHighScore(Math.max(m, p.getMoney(game)));
+                u.setMoneyHighScore(Math.max(m, p.getMoney(gameData)));
                 UserRepository.saveUser(u);
             }
                 App.setCurrMenuType(MenuTypes.GameMenu);
-            GameRepository.saveGame(game);
+            GameRepository.saveGame(gameData);
 
             return new Response(true, "Exiting and saving game. Redirecting to game menu...");
         } else {
@@ -133,66 +133,66 @@ public class LoadingSavingTurnHandling extends Controller {
 
     public static Response handleForceDeleteGame(Request request) {
 
-        Game game = App.getLoggedInUser().getCurrentGame();
+        GameData gameData = App.getLoggedInUser().getCurrentGame();
         User loggedInUser = App.getLoggedInUser();
 
-        if (!game.getCurrentPlayer().getUser().equals(App.getLoggedInUser())) {
+        if (!gameData.getCurrentPlayer().getUser().equals(App.getLoggedInUser())) {
             return new Response(false, "Only the logged in user can force delete the game.");
         }
 
         System.out.println("Attempting to delete the game. Initializing voting sequence...");
-        game.cycleToNextPlayer();
+        gameData.cycleToNextPlayer();
 
         boolean success = false;
         while (!success) {
             System.out.println("Awaiting confirmation (Y/n) from player "
-                    + game.getCurrentPlayer().getUser().getUsername());
+                    + gameData.getCurrentPlayer().getUser().getUsername());
             String answer = AppView.scanner.nextLine();
             if (answer.compareToIgnoreCase("y") == 0) {
                 System.out.println("Confirmation received.");
-                success = game.cycleToNextPlayer();
+                success = gameData.cycleToNextPlayer();
             } else {
-                game.setCurrentPlayer(game.findPlayerByUser(loggedInUser));
+                gameData.setCurrentPlayer(gameData.findPlayerByUser(loggedInUser));
                 return new Response(true, "Confirmation not received. Aborting...");
             }
         }
-        game.getGameThread().keepRunning = false;
-        game.setGameOngoing(false);
+        gameData.getGameThread().keepRunning = false;
+        gameData.setGameOngoing(false);
         loggedInUser.setCurrentGame(null);
-        loggedInUser.getGames().remove(game.get_id());
-        GameRepository.removeGame(game);
+        loggedInUser.getGames().remove(gameData.get_id());
+        GameRepository.removeGame(gameData);
         return new Response(true, "The game has been deleted successfully. Going to game menu...");
     }
 
     public static Response handleNextTurn(Request request) {
         User user = App.getLoggedInUser();
-        Game game = user.getCurrentGame();
+        GameData gameData = user.getCurrentGame();
 
-        int numberOfPlayers = game.getPlayers().size();
+        int numberOfPlayers = gameData.getPlayers().size();
         int playerIndex;
 
-        game.getCurrentPlayer().setUsedEnergyInTurn(0);
+        gameData.getCurrentPlayer().setUsedEnergyInTurn(0);
 
         String responseString = "";
         do {
-            playerIndex = game.getPlayers().indexOf(game.getCurrentPlayer());
+            playerIndex = gameData.getPlayers().indexOf(gameData.getCurrentPlayer());
             if (playerIndex == numberOfPlayers - 1) {
-                game.setCurrentPlayer(game.getPlayers().getFirst());
-                game.hasTurnCycleFinished = true;
+                gameData.setCurrentPlayer(gameData.getPlayers().get(0));
+                gameData.hasTurnCycleFinished = true;
             } else {
-                game.setCurrentPlayer(game.getPlayers().get(playerIndex + 1));
+                gameData.setCurrentPlayer(gameData.getPlayers().get(playerIndex + 1));
             }
-            if (game.getCurrentPlayer().isPlayerFainted()) {
+            if (gameData.getCurrentPlayer().isPlayerFainted()) {
                 responseString +=
-                        ("Player " + game.getCurrentPlayer().getUser().getUsername() + " was fainted and skipped.\n");
+                        ("Player " + gameData.getCurrentPlayer().getUser().getUsername() + " was fainted and skipped.\n");
             }
-        } while (game.getCurrentPlayer().isPlayerFainted());
+        } while (gameData.getCurrentPlayer().isPlayerFainted());
 
 
-        responseString += ("It is " + game.getCurrentPlayer().getUser().getUsername() + "'s turn now!");
-        String notifs = game.getCurrentPlayer().getNotificationsString(game);
-        game.getCurrentPlayer().reInitNotifications();
-        GameRepository.saveGame(game);
+        responseString += ("It is " + gameData.getCurrentPlayer().getUser().getUsername() + "'s turn now!");
+        String notifs = gameData.getCurrentPlayer().getNotificationsString(gameData);
+        gameData.getCurrentPlayer().reInitNotifications();
+        GameRepository.saveGame(gameData);
         return new Response(true, responseString + "\n" + notifs);
     }
 }

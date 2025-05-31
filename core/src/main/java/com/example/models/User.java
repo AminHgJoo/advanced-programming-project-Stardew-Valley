@@ -24,7 +24,7 @@ public class User {
     private int numberOfGames;
     private ObjectId currentGameId;
     @Transient
-    private Game currentGame;
+    private GameData currentGameData;
     private final ArrayList<ObjectId> games = new ArrayList<>();
 
     public User() {
@@ -43,7 +43,7 @@ public class User {
         this.username = username;
         this.moneyHighScore = 0;
         this.numberOfGames = 0;
-        this.currentGame = null;
+        this.currentGameData = null;
     }
 
     public User(String gender
@@ -55,7 +55,7 @@ public class User {
         this.username = username;
         this.moneyHighScore = 0;
         this.numberOfGames = 0;
-        this.currentGame = null;
+        this.currentGameData = null;
     }
 
     public String getUsername() {
@@ -130,15 +130,15 @@ public class User {
         this.numberOfGames = numberOfGames;
     }
 
-    public Game getCurrentGame() {
-        if (currentGame == null && currentGameId != null) {
-            currentGame = GameRepository.findGameById(currentGameId.toString(), true);
+    public GameData getCurrentGame() {
+        if (currentGameData == null && currentGameId != null) {
+            currentGameData = GameRepository.findGameById(currentGameId.toString(), true);
         }
-        return currentGame;
+        return currentGameData;
     }
 
-    public void setCurrentGame(Game currentGame) {
-        this.currentGame = currentGame;
+    public void setCurrentGame(GameData currentGameData) {
+        this.currentGameData = currentGameData;
     }
 
     public ArrayList<ObjectId> getGames() {
@@ -150,7 +150,7 @@ public class User {
     }
 
     public void populateGame() {
-        currentGame = GameRepository.findGameById(currentGame.get_id().toString(), true);
+        currentGameData = GameRepository.findGameById(currentGameData.get_id().toString(), true);
     }
 
     @Override

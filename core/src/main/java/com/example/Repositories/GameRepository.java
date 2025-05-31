@@ -1,6 +1,6 @@
 package com.example.Repositories;
 
-import com.example.models.Game;
+import com.example.models.GameData;
 import com.example.models.Player;
 import com.example.models.User;
 import com.example.utilities.Connection;
@@ -14,39 +14,39 @@ import java.util.ArrayList;
 public class GameRepository {
     private static final Datastore db = Connection.getDatabase();
 
-    public static Game findGameById(String id, boolean populateFlag) {
+    public static GameData findGameById(String id, boolean populateFlag) {
         try {
-            Game game = db.find(Game.class)
+            GameData gameData = db.find(GameData.class)
                     .filter(Filters.eq("_id", new ObjectId(id)))
                     .first();
-            if (game != null && game.getCurrentPlayer() != null)
-                game.setCurrentPlayer(game.findPlayerByUsername(game.getCurrentPlayer().getUser().getUsername()));
-            if(game != null){
-                for (Player player : game.getPlayers()) {
-                    player.setFarm(game.getFarmByNumber(player.getFarm().getFarmNumber()));
+            if (gameData != null && gameData.getCurrentPlayer() != null)
+                gameData.setCurrentPlayer(gameData.findPlayerByUsername(gameData.getCurrentPlayer().getUser().getUsername()));
+            if(gameData != null){
+                for (Player player : gameData.getPlayers()) {
+                    player.setFarm(gameData.getFarmByNumber(player.getFarm().getFarmNumber()));
                 }
             }
 
-            return game;
+            return gameData;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }
     }
 
-    public static void populateUserOfPlayers(Game game) {
-        if (game == null) return;
-        for (Player player : game.getPlayers()) {
+    public static void populateUserOfPlayers(GameData gameData) {
+        if (gameData == null) return;
+        for (Player player : gameData.getPlayers()) {
             player.setUser(UserRepository.findUserById(player.getUser_id().toString()));
         }
-        game.getCurrentPlayer().setUser(UserRepository.findUserById(game.getCurrentPlayer().getUser_id().toString()));
+        gameData.getCurrentPlayer().setUser(UserRepository.findUserById(gameData.getCurrentPlayer().getUser_id().toString()));
     }
 
-    public static void saveGame(Game game) {
-        if (game.getGameThread() != null) {
-            game.getGameThread().setGame(game);
+    public static void saveGame(GameData gameData) {
+        if (gameData.getGameThread() != null) {
+            gameData.getGameThread().setGame(gameData);
         }
-        db.save(game);
+        db.save(gameData);
 
 //        new Thread(() -> {
 //            try {
@@ -57,12 +57,12 @@ public class GameRepository {
 //        }).start();
     }
 
-    public static void saveGame(Game game, ArrayList<User> users) {
-        db.save(game);
+    public static void saveGame(GameData gameData, ArrayList<User> users) {
+        db.save(gameData);
         for (User u : users) {
-            u.setCurrentGameId(game.get_id());
+            u.setCurrentGameId(gameData.get_id());
             u.setCurrentGame(null);
-            u.getGames().add(game.get_id());
+            u.getGames().add(gameData.get_id());
             u.setNumberOfGames(u.getNumberOfGames() + 1);
             UserRepository.saveUser(u);
         }
@@ -82,21 +82,21 @@ public class GameRepository {
 //        }).start();
     }
 
-    public static ArrayList<Game> findAllGames(boolean populateFlag) {
-        ArrayList<Game> games = new ArrayList<>(db.find(Game.class).iterator().toList());
-        return games;
+    public static ArrayList<GameData> findAllGames(boolean populateFlag) {
+        ArrayList<GameData> gameData = new ArrayList<>(db.find(GameData.class).iterator().toList());
+        return gameData;
     }
 
-    public static Query<Game> updateGame(Game game) {
-        return db.find(Game.class).filter(Filters.eq("_id", game.get_id().toString()));
+    public static Query<GameData> updateGame(GameData gameData) {
+        return db.find(GameData.class).filter(Filters.eq("_id", gameData.get_id().toString()));
     }
 
-    public static void removeGame(Game game) {
-        db.delete(game);
-        for (Player player : game.getPlayers()) {
+    public static void removeGame(GameData gameData) {
+        db.delete(gameData);
+        for (Player player : gameData.getPlayers()) {
             player.getUser().setCurrentGame(null);
             player.getUser().setCurrentGameId(null);
-            player.getUser().getGames().remove(game.get_id());
+            player.getUser().getGames().remove(gameData.get_id());
             UserRepository.saveUser(player.getUser());
         }
     }
