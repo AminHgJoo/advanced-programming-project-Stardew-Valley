@@ -1,0 +1,47 @@
+package com.example.views.gameViews;
+
+import com.example.Repositories.GameRepository;
+import com.example.models.Game;
+import dev.morphia.annotations.Transient;
+
+public class GameThread extends Thread {
+    @Transient
+    private Game game;
+    public boolean keepRunning = false;
+
+    public GameThread(Game game) {
+        this.game = game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public void run() {
+        while (keepRunning) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (game.hasTurnCycleFinished) {
+                game.advanceTime();
+                GameRepository.saveGame(game);
+            }
+            boolean check = game.checkSeasonChange();
+
+            if (check) {
+                GameRepository.saveGame(game);
+            }
+
+            game.checkForRecipeUnlocking();
+            game.handleBuffExpiration();
+            game.checkForSkillUpgrades();
+
+            GameRepository.saveGame(game);
+        }
+        //debug code
+        System.out.println("Thread Exiting...");
+    }
+
+}
