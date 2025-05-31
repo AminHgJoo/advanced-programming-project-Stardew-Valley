@@ -25,8 +25,8 @@ public class ProfileMenuController extends Controller {
         while (UserRepository.findUserByUsername(username) != null) {
             username = username + (int) (Math.random() * 69420);
         }
-        ArrayList<GameData> gameData = GameRepository.findAllGames(true);
-        for (GameData gameData : gameData) {
+        ArrayList<GameData> gameStuff = GameRepository.findAllGames(true);
+        for (GameData gameData : gameStuff) {
             Player p = null;
             for (Player player : gameData.getPlayers())
                 if (player.getUser() == user) {

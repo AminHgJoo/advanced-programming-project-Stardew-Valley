@@ -10,6 +10,18 @@ public interface Command {
     @Language("Regexp")
     String SHOW_MENU = "^show\\s+current\\s+menu$";
 
+    String buildCommand(Object... args);
+
+    default String formatRegex(String regex) {
+        String string = regex.replaceAll("\\\\s\\+", " ");
+        string = string.replaceAll("\\(\\?<([^>]+)>[^)]+\\)", "%s");
+        string = string.replaceAll("\\\\s\\*", " ");
+        string = string.replaceAll("\\$", "");
+        string = string.replaceAll("\\^", "");
+
+        return string;
+    }
+
     boolean matches(String input);
 
     String getGroup(String input, String group);

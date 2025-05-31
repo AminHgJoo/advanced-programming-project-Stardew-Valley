@@ -1,6 +1,7 @@
 package com.example.models.enums.commands;
 
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -102,10 +103,10 @@ public enum GameMenuCommands implements Command {
     TRADE_RESPOND_ACCEPT("^trade\\s+response\\s+–accept\\s+-i\\s+(?<id>\\d+)$"),
     TRADE_RESPOND_REJECT("^trade\\s+response\\s+–reject\\s+-i\\s+(?<id>\\d+)$"),
     TRADE_HISTORY("^trade\\s+history$"),
-    MEET_NPC("^meet\\s+(NPC|npc)\\s+(?<npcName>.+)$"),
-    TALK_NPC("^talk\\s+(NPC|npc)\\s+(?<npcName>.+?)\\s+-m\\s+(?<message>.*)$"),
-    GIFT_NPC("^gift\\s+(NPC|npc)\\s+(?<npcName>.+?)\\s+-i\\s+(?<item>.+)$"),
-    FRIENDSHIP_NPC_LIST("^friendship\\s+(NPC|npc)\\s+list$"),
+    MEET_NPC("^meet\\s+NPC\\s+(?<npcName>.+)$"),
+    TALK_NPC("^talk\\s+NPC\\s+(?<npcName>.+?)\\s+-m\\s+(?<message>.*)$"),
+    GIFT_NPC("^gift\\s+NPC\\s+(?<npcName>.+?)\\s+-i\\s+(?<item>.+)$"),
+    FRIENDSHIP_NPC_LIST("^friendship\\s+NPC\\s+list$"),
     QUESTS_LIST("^quests\\s+list\\s+-n\\s+(?<npcName>.+)$"),
     QUESTS_FINISH("^quests\\s+finish\\s+-n\\s+(?<npcName>.+?)\\s+-i\\s+(?<index>\\d+)$"),
     SHOW_MENU(Command.SHOW_MENU),
@@ -121,6 +122,13 @@ public enum GameMenuCommands implements Command {
     private Matcher getMatcher(String input) {
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(input);
+    }
+
+    @Override
+    public String buildCommand(Object... args) {
+        String string = formatRegex(regex);
+
+        return String.format(string, args);
     }
 
     @Override

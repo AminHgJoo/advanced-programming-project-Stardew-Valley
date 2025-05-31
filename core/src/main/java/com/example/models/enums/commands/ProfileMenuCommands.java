@@ -27,6 +27,13 @@ public enum ProfileMenuCommands implements Command {
     }
 
     @Override
+    public String buildCommand(Object... args) {
+        String string = formatRegex(regex);
+
+        return String.format(string, args);
+    }
+
+    @Override
     public boolean matches(String input) {
         return getMatcher(input).matches();
     }
