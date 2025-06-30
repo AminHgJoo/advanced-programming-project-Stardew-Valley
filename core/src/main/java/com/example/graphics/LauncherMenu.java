@@ -2,12 +2,13 @@ package com.example.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.GameMain;
 
@@ -20,7 +21,6 @@ public class LauncherMenu implements Screen {
     public LauncherMenu(GameMain gameMain) {
         this.background = AssetManager.getTextures().get("launcherBackground");
         this.skin = AssetManager.getSkin();
-
         this.gameMain = gameMain;
 
         initializeStage();
@@ -34,10 +34,37 @@ public class LauncherMenu implements Screen {
         stage.addActor(backgroundImage);
 
         Table table = new Table(skin);
-        table.setFillParent(true);
-        table.center();
 
+        Label versionNumber = new Label("v1.0.0", skin);
+        versionNumber.setFontScale(2f);
+        versionNumber.setColor(Color.GOLD);
+        versionNumber.setPosition(10, 10);
+        stage.addActor(versionNumber);
 
+        TextButton loginButton = new TextButton("Login", skin);
+        loginButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                gameMain.setScreen(new LoginMenu(gameMain));
+                dispose();
+            }
+        });
+
+        TextButton registerButton = new TextButton("Register", skin);
+        registerButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                gameMain.setScreen(new SignUpMenu(gameMain));
+                dispose();
+            }
+        });
+
+        table.padTop(50);
+        table.add(loginButton).width(300).height(60).pad(10);
+        table.pack();
+        table.setPosition(stage.getWidth() / 2f - table.getWidth() / 2f, stage.getHeight() * 0.25f);
+        table.row();
+        table.add(registerButton).width(300).height(60).pad(10);
 
         stage.addActor(table);
 
@@ -78,6 +105,5 @@ public class LauncherMenu implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        background.dispose();
     }
 }

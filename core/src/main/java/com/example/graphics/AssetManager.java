@@ -27,4 +27,12 @@ public class AssetManager {
     public static HashMap<String, Texture> getTextures() {
         return textures;
     }
+
+    public static void disposeAssets() {
+        for (String key : textures.keySet()) {
+            if (textures.get(key) != null) {
+                textures.get(key).dispose();
+            }
+        }
+    }
 }

@@ -14,6 +14,14 @@ public enum SecurityQuestion {
         this.question = question;
     }
 
+    public static String[] listAllQuestions() {
+        String[] questions = new String[SecurityQuestion.values().length];
+        for (int i = 0; i < SecurityQuestion.values().length; i++) {
+            questions[i] = SecurityQuestion.values()[i].question;
+        }
+        return questions;
+    }
+
     public String getQuestion() {
         return question;
     }

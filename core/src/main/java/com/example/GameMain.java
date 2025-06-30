@@ -16,7 +16,7 @@ public class GameMain extends Game {
 
     @Override
     public void create() {
-        //TODO:
+        //TODO: load/play music.
         AssetManager.loadAssets();
         this.setScreen(new LauncherMenu(this));
     }
@@ -35,6 +35,10 @@ public class GameMain extends Game {
         if (screen != null) {
             screen.dispose();
         }
+        if (AssetManager.getSkin() != null) {
+            AssetManager.getSkin().dispose();
+        }
+        AssetManager.disposeAssets();
     }
 
     @Override
