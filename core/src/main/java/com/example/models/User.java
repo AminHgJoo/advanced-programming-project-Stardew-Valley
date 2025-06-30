@@ -1,6 +1,6 @@
 package com.example.models;
 
-import com.example.Repositories.GameRepository;
+import com.example.repositories.GameRepository;
 import com.example.models.enums.SecurityQuestion;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;

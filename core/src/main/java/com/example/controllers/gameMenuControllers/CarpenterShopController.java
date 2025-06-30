@@ -1,6 +1,6 @@
 package com.example.controllers.gameMenuControllers;
 
-import com.example.Repositories.GameRepository;
+import com.example.repositories.GameRepository;
 import com.example.controllers.Controller;
 import com.example.models.*;
 import com.example.models.IO.Request;

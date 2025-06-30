@@ -1,7 +1,7 @@
 package com.example.controllers;
 
-import com.example.Repositories.GameRepository;
-import com.example.Repositories.UserRepository;
+import com.example.repositories.GameRepository;
+import com.example.repositories.UserRepository;
 import com.example.models.*;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;

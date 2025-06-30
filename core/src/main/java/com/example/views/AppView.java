@@ -1,6 +1,6 @@
 package com.example.views;
 
-import com.example.Repositories.UserRepository;
+import com.example.repositories.UserRepository;
 import com.example.models.App;
 import com.example.models.User;
 import com.example.models.enums.types.MenuTypes;

@@ -1,4 +1,4 @@
-package com.example.Repositories;
+package com.example.repositories;
 
 import com.example.models.GameData;
 import com.example.models.Player;

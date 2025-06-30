@@ -1,6 +1,6 @@
 package com.example.controllers;
 
-import com.example.Repositories.UserRepository;
+import com.example.repositories.UserRepository;
 import com.example.models.App;
 import com.example.models.IO.Request;
 import com.example.models.IO.Response;

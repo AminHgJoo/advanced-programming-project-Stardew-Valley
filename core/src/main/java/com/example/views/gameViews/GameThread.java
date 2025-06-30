@@ -1,6 +1,6 @@
 package com.example.views.gameViews;
 
-import com.example.Repositories.GameRepository;
+import com.example.repositories.GameRepository;
 import com.example.models.GameData;
 import dev.morphia.annotations.Transient;
 

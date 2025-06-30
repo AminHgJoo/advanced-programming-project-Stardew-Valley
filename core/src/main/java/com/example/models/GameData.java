@@ -1,6 +1,6 @@
 package com.example.models;
 
-import com.example.Repositories.GameRepository;
+import com.example.repositories.GameRepository;
 import com.example.models.NPCModels.NPC;
 import com.example.models.NPCModels.NPCFriendship;
 import com.example.models.enums.Quality;

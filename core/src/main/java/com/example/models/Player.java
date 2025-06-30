@@ -1,6 +1,6 @@
 package com.example.models;
 
-import com.example.Repositories.UserRepository;
+import com.example.repositories.UserRepository;
 import com.example.models.NPCModels.NPC;
 import com.example.models.NPCModels.NPCFriendship;
 import com.example.models.NPCModels.NPCReward;
