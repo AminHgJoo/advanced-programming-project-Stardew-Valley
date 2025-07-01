@@ -14,6 +14,7 @@ public class AssetManager {
         //TODO:
         loadSkin();
         textures.put("launcherBackground", new Texture("images/launcher_background.png"));
+        textures.put("profileBackground", new Texture("images/profile_background.png"));
     }
 
     private static void loadSkin() {
