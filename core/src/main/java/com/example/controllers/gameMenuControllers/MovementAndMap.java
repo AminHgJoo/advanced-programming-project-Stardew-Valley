@@ -177,7 +177,7 @@ public class MovementAndMap extends Controller {
                 path.add(dest);
                 dest = dest.prev;
             }
-            List<Tile> arr = path.reversed();
+            List<Tile> arr = path;
             for (Tile c : arr) {
                 if (c.energy > player.getEnergy()) {
                     player.setPlayerFainted(true);

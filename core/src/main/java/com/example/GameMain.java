@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.example.graphics.AssetManager;
 import com.example.graphics.LauncherMenu;
+import com.example.graphics.MainMenu;
 
 import java.util.Objects;
 
