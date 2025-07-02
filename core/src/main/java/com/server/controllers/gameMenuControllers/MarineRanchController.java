@@ -11,7 +11,7 @@ import com.common.models.enums.types.MenuTypes;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.AnimalBlock;
-import com.common.repositories.GameRepository;
+import com.server.repositories.GameRepository;
 import com.server.controllers.Controller;
 
 public class MarineRanchController extends Controller {

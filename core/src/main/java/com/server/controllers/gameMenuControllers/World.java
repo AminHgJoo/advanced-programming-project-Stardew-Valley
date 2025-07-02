@@ -14,8 +14,8 @@ import com.common.models.items.*;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.*;
-import com.common.repositories.GameRepository;
-import com.common.utilities.DateUtility;
+import com.server.repositories.GameRepository;
+import com.server.utilities.DateUtility;
 import com.server.controllers.Controller;
 
 import java.time.DayOfWeek;

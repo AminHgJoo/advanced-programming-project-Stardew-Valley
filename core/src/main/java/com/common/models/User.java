@@ -1,7 +1,7 @@
 package com.common.models;
 
 import com.common.models.enums.SecurityQuestion;
-import com.common.repositories.GameRepository;
+import com.server.repositories.GameRepository;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;

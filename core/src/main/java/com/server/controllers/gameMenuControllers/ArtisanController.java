@@ -13,7 +13,7 @@ import com.common.models.items.ForagingMineralItem;
 import com.common.models.items.Misc;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.ArtisanBlock;
-import com.common.repositories.GameRepository;
+import com.server.repositories.GameRepository;
 import com.server.controllers.Controller;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -14,7 +14,7 @@ import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.ArtisanBlock;
 import com.common.models.mapObjects.BuildingBlock;
 import com.common.models.mapObjects.EmptyCell;
-import com.common.repositories.GameRepository;
+import com.server.repositories.GameRepository;
 import com.server.controllers.Controller;
 
 import java.util.ArrayList;

@@ -13,10 +13,10 @@ import com.common.models.mapObjects.BuildingBlock;
 import com.common.models.mapObjects.DroppedItem;
 import com.common.models.mapObjects.EmptyCell;
 import com.common.models.mapObjects.Water;
-import com.common.repositories.GameRepository;
-import com.common.utilities.FindPath;
-import com.common.utilities.Tile;
-import com.common.views.AppView;
+import com.server.repositories.GameRepository;
+import com.server.utilities.FindPath;
+import com.server.utilities.Tile;
+import com.server.views.AppView;
 import com.server.controllers.Controller;
 
 import java.util.ArrayList;

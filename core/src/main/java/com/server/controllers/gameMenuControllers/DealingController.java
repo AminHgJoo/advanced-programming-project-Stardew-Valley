@@ -13,8 +13,8 @@ import com.common.models.enums.types.itemTypes.*;
 import com.common.models.enums.types.storeProductTypes.BlackSmithProducts;
 import com.common.models.enums.types.storeProductTypes.FishProducts;
 import com.common.models.items.*;
-import com.common.repositories.GameRepository;
-import com.common.utilities.MenuToStoreString;
+import com.server.repositories.GameRepository;
+import com.server.utilities.MenuToStoreString;
 import com.server.controllers.Controller;
 
 // TODO backpack item overflow

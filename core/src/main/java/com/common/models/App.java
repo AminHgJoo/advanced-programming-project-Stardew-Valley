@@ -2,7 +2,7 @@ package com.common.models;
 
 import com.common.models.enums.types.MenuTypes;
 import com.common.models.enums.types.itemTypes.*;
-import com.common.repositories.UserRepository;
+import com.server.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;

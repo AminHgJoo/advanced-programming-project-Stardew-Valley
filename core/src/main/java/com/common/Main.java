@@ -1,6 +1,6 @@
 package com.common;
 
-import com.common.views.AppView;
+import com.server.views.AppView;
 
 /*TODO: This class is now irrelevant.*/
 public class Main {

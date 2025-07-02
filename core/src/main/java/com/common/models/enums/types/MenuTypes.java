@@ -1,14 +1,13 @@
 package com.common.models.enums.types;
 
-import com.common.views.*;
-import com.common.views.gameViews.GameMenu;
-import com.common.views.gameViews.PlayerHomeMenu;
-import com.common.views.gameViews.TradeMenuView;
-import com.common.views.gameViews.shops.*;
+import com.server.views.*;
+import com.server.views.gameViews.GameMenu;
+import com.server.views.gameViews.PlayerHomeMenu;
+import com.server.views.gameViews.TradeMenuView;
+import com.server.views.gameViews.shops.*;
 
 public enum MenuTypes {
     ExitMenu(new ExitMenu()),
-    AvatarMenu(new AvatarMenu()),
     GameMenu(new GameMenu()),
     MainMenu(new MainMenu()),
     ProfileMenu(new ProfileMenu()),
@@ -37,8 +36,6 @@ public enum MenuTypes {
     public String toString() {
         if (this == MenuTypes.ExitMenu) {
             return "Exit Menu";
-        } else if (this == MenuTypes.AvatarMenu) {
-            return "Avatar Menu";
         } else if (this == MenuTypes.GameMenu) {
             return "Game Menu";
         } else if (this == MenuTypes.MainMenu) {

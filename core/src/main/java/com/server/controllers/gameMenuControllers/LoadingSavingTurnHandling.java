@@ -8,10 +8,10 @@ import com.common.models.Player;
 import com.common.models.User;
 import com.common.models.enums.types.MenuTypes;
 import com.common.models.mapModels.Farm;
-import com.common.repositories.GameRepository;
-import com.common.repositories.UserRepository;
-import com.common.views.AppView;
-import com.common.views.gameViews.GameThread;
+import com.server.repositories.GameRepository;
+import com.server.repositories.UserRepository;
+import com.server.views.AppView;
+import com.server.views.gameViews.GameThread;
 import com.server.controllers.Controller;
 
 import java.util.ArrayList;

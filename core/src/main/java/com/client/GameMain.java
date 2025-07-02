@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.client.utils.AssetManager;
 import com.client.views.LauncherMenu;
+import com.client.views.MainMenu;
 
 public class GameMain extends Game {
     public Music music = null;

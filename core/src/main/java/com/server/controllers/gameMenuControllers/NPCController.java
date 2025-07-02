@@ -9,8 +9,8 @@ import com.common.models.NPCModels.NPCReward;
 import com.common.models.enums.types.itemTypes.ItemType;
 import com.common.models.items.Item;
 import com.common.models.items.Tool;
-import com.common.repositories.GameRepository;
-import com.common.utilities.AIChat;
+import com.server.repositories.GameRepository;
+import com.server.utilities.AIChat;
 import com.server.controllers.Controller;
 
 // TODO handle npc friendship level

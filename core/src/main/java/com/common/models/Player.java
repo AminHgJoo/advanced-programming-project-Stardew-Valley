@@ -18,7 +18,7 @@ import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.ArtisanBlock;
 import com.common.models.skills.*;
-import com.common.repositories.UserRepository;
+import com.server.repositories.UserRepository;
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;

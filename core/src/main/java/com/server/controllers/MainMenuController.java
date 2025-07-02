@@ -4,7 +4,7 @@ import com.common.models.App;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.types.MenuTypes;
-import com.common.repositories.UserRepository;
+import com.server.repositories.UserRepository;
 
 public class MainMenuController extends Controller {
     public static Response handleLogout(Request request) {

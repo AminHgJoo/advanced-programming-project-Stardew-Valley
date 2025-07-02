@@ -6,8 +6,8 @@ import com.common.models.IO.Response;
 import com.common.models.User;
 import com.common.models.enums.SecurityQuestion;
 import com.common.models.enums.types.MenuTypes;
-import com.common.repositories.UserRepository;
-import com.common.utilities.Validation;
+import com.server.repositories.UserRepository;
+import com.server.utilities.Validation;
 
 public class SignInMenuController extends Controller {
 

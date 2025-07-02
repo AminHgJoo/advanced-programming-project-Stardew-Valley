@@ -5,7 +5,7 @@ import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.items.Misc;
 import com.common.models.mapModels.Coordinate;
-import com.common.repositories.GameRepository;
+import com.server.repositories.GameRepository;
 import com.server.controllers.Controller;
 
 import java.util.List;

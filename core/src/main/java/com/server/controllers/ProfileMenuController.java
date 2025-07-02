@@ -5,9 +5,9 @@ import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.NPCModels.NPC;
 import com.common.models.NPCModels.NPCFriendship;
-import com.common.repositories.GameRepository;
-import com.common.repositories.UserRepository;
-import com.common.utilities.Validation;
+import com.server.repositories.GameRepository;
+import com.server.repositories.UserRepository;
+import com.server.utilities.Validation;
 
 import java.util.ArrayList;
 
