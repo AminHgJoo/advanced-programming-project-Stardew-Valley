@@ -430,7 +430,7 @@ public class GameData {
                     else if (animal.getType().equals(AnimalType.RABBIT))
                         item = new Misc(MiscType.RABBITS_FOOT, quality);
                     else if (animal.getType().equals(AnimalType.DINOSAUR))
-                        item = new Misc(MiscType.DINOSAUR, quality);
+                        item = new Misc(MiscType.DINOSAUR_EGG, quality);
                     else if (animal.getType().equals(AnimalType.COW))
                         item = new Misc(MiscType.BIG_MILK, quality);
                     else if (animal.getType().equals(AnimalType.GOAT))
@@ -447,7 +447,7 @@ public class GameData {
                     else if (animal.getType().equals(AnimalType.RABBIT))
                         item = new Misc(MiscType.WOOL, quality);
                     else if (animal.getType().equals(AnimalType.DINOSAUR))
-                        item = new Misc(MiscType.DINOSAUR, quality);
+                        item = new Misc(MiscType.DINOSAUR_EGG, quality);
                     else if (animal.getType().equals(AnimalType.COW))
                         item = new Misc(MiscType.MILK, quality);
                     else if (animal.getType().equals(AnimalType.GOAT))

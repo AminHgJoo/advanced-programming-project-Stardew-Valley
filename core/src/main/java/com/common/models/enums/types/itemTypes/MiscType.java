@@ -18,7 +18,7 @@ public enum MiscType implements ItemType {
     DUCK_FEATHER("Duck Feather", 250, false, false),
     WOOL("Wool", 340, false, false),
     RABBITS_FOOT("Rabbit's Foot", 565, false, false),
-    DINOSAUR("Dinosaur", 350, false, false),
+    DINOSAUR_EGG("Dinosaur Egg", 350, false, false),
     MILK("Milk", 125, false, false),
     BIG_MILK("Big Milk", 190, false, false),
     GOAT_MILK("Goat Milk", 225, false, false),
