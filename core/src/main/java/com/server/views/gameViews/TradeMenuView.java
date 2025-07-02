@@ -4,7 +4,7 @@ import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.GameMenuCommands;
 import com.server.views.Menu;
-import com.server.controllers.gameMenuControllers.TradingController;
+import com.server.controllers_old.gameMenuControllers.TradingController;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,4 +1,4 @@
-package com.server.controllers.gameMenuControllers;
+package com.server.controllers_old.gameMenuControllers;
 
 import com.common.models.App;
 import com.common.models.GameData;
@@ -20,7 +20,7 @@ import com.common.models.mapObjects.Crop;
 import com.common.models.mapObjects.EmptyCell;
 import com.common.models.mapObjects.Tree;
 import com.server.repositories.GameRepository;
-import com.server.controllers.Controller;
+import com.server.controllers_old.Controller;
 
 public class Farming extends Controller {
     public static Response handleSeedPlanting(Request request) {

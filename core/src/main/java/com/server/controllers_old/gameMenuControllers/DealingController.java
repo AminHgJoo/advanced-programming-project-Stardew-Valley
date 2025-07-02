@@ -1,4 +1,4 @@
-package com.server.controllers.gameMenuControllers;
+package com.server.controllers_old.gameMenuControllers;
 
 import com.common.models.*;
 import com.common.models.IO.Request;
@@ -15,7 +15,7 @@ import com.common.models.enums.types.storeProductTypes.FishProducts;
 import com.common.models.items.*;
 import com.server.repositories.GameRepository;
 import com.server.utilities.MenuToStoreString;
-import com.server.controllers.Controller;
+import com.server.controllers_old.Controller;
 
 // TODO backpack item overflow
 

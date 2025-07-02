@@ -6,8 +6,8 @@ import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.GameMenuCommands;
 import com.server.views.Menu;
-import com.server.controllers.Controller;
-import com.server.controllers.gameMenuControllers.*;
+import com.server.controllers_old.Controller;
+import com.server.controllers_old.gameMenuControllers.*;
 import org.jetbrains.annotations.NotNull;
 
 public class GameMenu implements Menu {

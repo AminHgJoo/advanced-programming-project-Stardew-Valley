@@ -1,4 +1,4 @@
-package com.server.controllers.gameMenuControllers;
+package com.server.controllers_old.gameMenuControllers;
 
 import com.common.models.*;
 import com.common.models.IO.Request;
@@ -12,7 +12,7 @@ import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.AnimalBlock;
 import com.server.repositories.GameRepository;
-import com.server.controllers.Controller;
+import com.server.controllers_old.Controller;
 
 public class MarineRanchController extends Controller {
     public static Response leaveRanch(Request request) {

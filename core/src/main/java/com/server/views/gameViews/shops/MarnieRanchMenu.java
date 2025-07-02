@@ -5,9 +5,9 @@ import com.common.models.IO.Response;
 import com.common.models.enums.commands.GameMenuCommands;
 import com.server.views.Menu;
 import com.server.views.gameViews.GameMenu;
-import com.server.controllers.gameMenuControllers.DealingController;
-import com.server.controllers.gameMenuControllers.LivestockController;
-import com.server.controllers.gameMenuControllers.MarineRanchController;
+import com.server.controllers_old.gameMenuControllers.DealingController;
+import com.server.controllers_old.gameMenuControllers.LivestockController;
+import com.server.controllers_old.gameMenuControllers.MarineRanchController;
 
 public class MarnieRanchMenu implements Menu {
 

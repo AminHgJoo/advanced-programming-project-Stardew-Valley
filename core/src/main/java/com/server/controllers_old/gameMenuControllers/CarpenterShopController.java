@@ -1,4 +1,4 @@
-package com.server.controllers.gameMenuControllers;
+package com.server.controllers_old.gameMenuControllers;
 
 import com.common.models.*;
 import com.common.models.IO.Request;
@@ -15,7 +15,7 @@ import com.common.models.mapObjects.ArtisanBlock;
 import com.common.models.mapObjects.BuildingBlock;
 import com.common.models.mapObjects.EmptyCell;
 import com.server.repositories.GameRepository;
-import com.server.controllers.Controller;
+import com.server.controllers_old.Controller;
 
 import java.util.ArrayList;
 

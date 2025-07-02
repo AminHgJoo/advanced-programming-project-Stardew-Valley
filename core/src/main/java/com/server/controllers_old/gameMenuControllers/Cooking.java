@@ -1,4 +1,4 @@
-package com.server.controllers.gameMenuControllers;
+package com.server.controllers_old.gameMenuControllers;
 
 import com.common.models.*;
 import com.common.models.IO.Request;
@@ -8,7 +8,7 @@ import com.common.models.enums.recipes.CookingRecipes;
 import com.common.models.enums.types.MenuTypes;
 import com.common.models.items.Food;
 import com.server.repositories.GameRepository;
-import com.server.controllers.Controller;
+import com.server.controllers_old.Controller;
 
 public class Cooking extends Controller {
 

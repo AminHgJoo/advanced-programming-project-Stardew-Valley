@@ -1,4 +1,4 @@
-package com.server.controllers.gameMenuControllers;
+package com.server.controllers_old.gameMenuControllers;
 
 import com.common.models.App;
 import com.common.models.GameData;
@@ -17,7 +17,7 @@ import com.server.repositories.GameRepository;
 import com.server.utilities.FindPath;
 import com.server.utilities.Tile;
 import com.server.views.AppView;
-import com.server.controllers.Controller;
+import com.server.controllers_old.Controller;
 
 import java.util.ArrayList;
 import java.util.List;

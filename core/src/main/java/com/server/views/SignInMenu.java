@@ -3,7 +3,7 @@ package com.server.views;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.SignInMenuCommands;
-import com.server.controllers.SignInMenuController;
+import com.server.controllers_old.SignInMenuController;
 
 public class SignInMenu implements Menu {
 

@@ -3,7 +3,7 @@ package com.server.views;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.MainMenuCommands;
-import com.server.controllers.MainMenuController;
+import com.server.controllers_old.MainMenuController;
 
 public class MainMenu implements Menu {
     private static Response getEnterMenuResponse(String input) {

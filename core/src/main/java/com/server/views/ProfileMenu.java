@@ -3,7 +3,7 @@ package com.server.views;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.ProfileMenuCommands;
-import com.server.controllers.ProfileMenuController;
+import com.server.controllers_old.ProfileMenuController;
 
 public class ProfileMenu implements Menu {
 

@@ -1,4 +1,4 @@
-package com.server.controllers.gameMenuControllers;
+package com.server.controllers_old.gameMenuControllers;
 
 import com.common.models.*;
 import com.common.models.IO.Request;
@@ -16,15 +16,15 @@ import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.*;
 import com.server.repositories.GameRepository;
 import com.server.utilities.DateUtility;
-import com.server.controllers.Controller;
+import com.server.controllers_old.Controller;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import static com.server.controllers.gameMenuControllers.LivestockController.handleCollectProducts;
-import static com.server.controllers.gameMenuControllers.LivestockController.noProductFoundHandle;
+import static com.server.controllers_old.gameMenuControllers.LivestockController.handleCollectProducts;
+import static com.server.controllers_old.gameMenuControllers.LivestockController.noProductFoundHandle;
 
 public class World extends Controller {
     public static Response showMoney(Request request) {

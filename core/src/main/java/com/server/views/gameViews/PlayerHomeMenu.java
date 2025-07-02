@@ -4,7 +4,7 @@ import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.GameMenuCommands;
 import com.server.views.Menu;
-import com.server.controllers.gameMenuControllers.Cooking;
+import com.server.controllers_old.gameMenuControllers.Cooking;
 
 public class PlayerHomeMenu implements Menu {
     private static Response getCookingPrepareResponse(String input) {

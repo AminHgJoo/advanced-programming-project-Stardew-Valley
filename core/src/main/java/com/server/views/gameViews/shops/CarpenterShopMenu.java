@@ -5,8 +5,8 @@ import com.common.models.IO.Response;
 import com.common.models.enums.commands.GameMenuCommands;
 import com.server.views.Menu;
 import com.server.views.gameViews.GameMenu;
-import com.server.controllers.gameMenuControllers.CarpenterShopController;
-import com.server.controllers.gameMenuControllers.DealingController;
+import com.server.controllers_old.gameMenuControllers.CarpenterShopController;
+import com.server.controllers_old.gameMenuControllers.DealingController;
 
 public class CarpenterShopMenu implements Menu {
     private static Response build(String input) {
