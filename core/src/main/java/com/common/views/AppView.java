@@ -1,9 +1,9 @@
 package com.common.views;
 
-import com.common.repositories.UserRepository;
 import com.common.models.App;
 import com.common.models.User;
 import com.common.models.enums.types.MenuTypes;
+import com.common.repositories.UserRepository;
 import com.common.utilities.Connection;
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -14,10 +14,10 @@ public class AppView {
 
     static {
         Dotenv.configure()
-                .directory(System.getProperty("user.dir") + "/project/src/main/java/com/example/configs")
-                .filename("env." + System.getenv("APP_MODE").toLowerCase())
-                .systemProperties()
-                .load();
+            .directory(System.getProperty("user.dir") + "/project/src/main/java/com/example/configs")
+            .filename("env." + System.getenv("APP_MODE").toLowerCase())
+            .systemProperties()
+            .load();
         Connection.getDatabase();
         User user = UserRepository.getStayLoggedInUser();
         App.setLoggedInUser(user);

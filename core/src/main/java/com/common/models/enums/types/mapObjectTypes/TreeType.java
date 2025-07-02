@@ -41,6 +41,63 @@ public enum TreeType {
     final public int fruitEnergy;
     final public Season[] seasonsOfGrowth;
 
+    /// Generic Constructor.
+    TreeType(String name, String source, int stageOneTime, int stageTwoTime, int stageThreeTime, int stageFourTime
+        , FoodTypes fruitItem, int harvestCycleTime, int fruitSellPrice, boolean isFruitEdible, int fruitEnergy, Season[] seasonsOfGrowth) {
+        this.name = name;
+        this.source = name;
+        this.stageOneTime = stageOneTime;
+        this.stageTwoTime = stageTwoTime;
+        this.stageThreeTime = stageThreeTime;
+        this.stageFourTime = stageFourTime;
+        this.fruitItem = fruitItem;
+        this.harvestCycleTime = harvestCycleTime;
+        this.fruitSellPrice = fruitSellPrice;
+        this.isFruitEdible = isFruitEdible;
+        this.fruitEnergy = fruitEnergy;
+        this.seasonsOfGrowth = seasonsOfGrowth;
+    }
+
+    TreeType(String name, String source, int stagesTime, ItemType fruitItem, int harvestCycleTime, int fruitSellPrice
+        , boolean isFruitEdible, int fruitEnergy, Season[] seasonsOfGrowth) {
+        this.name = name;
+        this.source = source;
+        this.stageOneTime = stagesTime;
+        this.stageTwoTime = stagesTime;
+        this.stageThreeTime = stagesTime;
+        this.stageFourTime = stagesTime;
+        this.fruitItem = fruitItem;
+        this.harvestCycleTime = harvestCycleTime;
+        this.fruitSellPrice = fruitSellPrice;
+        this.isFruitEdible = isFruitEdible;
+        this.fruitEnergy = fruitEnergy;
+        this.seasonsOfGrowth = seasonsOfGrowth;
+    }
+
+    TreeType(String name, String source, int stagesTime, FoodTypes foodTypes, int harvestCycleTime, int fruitSellPrice, boolean b, int fruitEnergy, Season season) {
+        this.name = name;
+        this.source = source;
+        this.stageOneTime = stagesTime;
+        this.stageTwoTime = stagesTime;
+        this.stageThreeTime = stagesTime;
+        this.stageFourTime = stagesTime;
+        this.fruitItem = foodTypes;
+        this.fruitEnergy = fruitEnergy;
+        this.harvestCycleTime = harvestCycleTime;
+        this.fruitSellPrice = fruitSellPrice;
+        this.isFruitEdible = b;
+        this.seasonsOfGrowth = new Season[]{season};
+    }
+
+    public static TreeType findTreeTypeByName(String seedType) {
+        for (TreeType tree : TreeType.values()) {
+            if (tree.source.compareToIgnoreCase(seedType) == 0) {
+                return tree;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
@@ -57,62 +114,5 @@ public enum TreeType {
         str.append("Fruit Energy: ").append(fruitEnergy).append("\n");
         str.append("Seasons Of Growth: ").append(Arrays.toString(seasonsOfGrowth)).append("\n");
         return str.toString();
-    }
-
-    /// Generic Constructor.
-    TreeType(String name, String source, int stageOneTime, int stageTwoTime, int stageThreeTime, int stageFourTime
-            , FoodTypes fruitItem, int harvestCycleTime, int fruitSellPrice, boolean isFruitEdible, int fruitEnergy, Season[] seasonsOfGrowth) {
-        this.name = name;
-        this.source = name;
-        this.stageOneTime = stageOneTime;
-        this.stageTwoTime = stageTwoTime;
-        this.stageThreeTime = stageThreeTime;
-        this.stageFourTime = stageFourTime;
-        this.fruitItem = fruitItem;
-        this.harvestCycleTime = harvestCycleTime;
-        this.fruitSellPrice = fruitSellPrice;
-        this.isFruitEdible = isFruitEdible;
-        this.fruitEnergy = fruitEnergy;
-        this.seasonsOfGrowth = seasonsOfGrowth;
-    }
-
-    TreeType(String name, String source, int stagesTime, ItemType fruitItem, int harvestCycleTime, int fruitSellPrice
-            , boolean isFruitEdible, int fruitEnergy, Season[] seasonsOfGrowth) {
-        this.name = name;
-        this.source = source;
-        this.stageOneTime = stagesTime;
-        this.stageTwoTime = stagesTime;
-        this.stageThreeTime = stagesTime;
-        this.stageFourTime = stagesTime;
-        this.fruitItem = fruitItem;
-        this.harvestCycleTime = harvestCycleTime;
-        this.fruitSellPrice = fruitSellPrice;
-        this.isFruitEdible = isFruitEdible;
-        this.fruitEnergy = fruitEnergy;
-        this.seasonsOfGrowth = seasonsOfGrowth;
-    }
-
-    public static TreeType findTreeTypeByName(String seedType) {
-        for (TreeType tree : TreeType.values()) {
-            if (tree.source.compareToIgnoreCase(seedType) == 0) {
-                return tree;
-            }
-        }
-        return null;
-    }
-
-    TreeType(String name, String source, int stagesTime, FoodTypes foodTypes, int harvestCycleTime, int fruitSellPrice, boolean b, int fruitEnergy, Season season) {
-        this.name = name;
-        this.source = source;
-        this.stageOneTime = stagesTime;
-        this.stageTwoTime = stagesTime;
-        this.stageThreeTime = stagesTime;
-        this.stageFourTime = stagesTime;
-        this.fruitItem = foodTypes;
-        this.fruitEnergy = fruitEnergy;
-        this.harvestCycleTime = harvestCycleTime;
-        this.fruitSellPrice = fruitSellPrice;
-        this.isFruitEdible = b;
-        this.seasonsOfGrowth = new Season[]{season};
     }
 }

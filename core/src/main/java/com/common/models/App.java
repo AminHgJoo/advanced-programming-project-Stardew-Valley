@@ -1,19 +1,17 @@
 package com.common.models;
 
+import com.common.models.enums.types.MenuTypes;
 import com.common.models.enums.types.itemTypes.*;
 import com.common.repositories.UserRepository;
-import com.common.models.enums.types.MenuTypes;
-import com.example.models.enums.types.itemTypes.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class App {
     final private static ArrayList<User> users = new ArrayList<>();
+    private static final HashMap<String, ItemType> allItemTypes = new HashMap<>();
     private static User loggedInUser = UserRepository.getStayLoggedInUser();
     private static MenuTypes currMenuType = MenuTypes.SignInMenu;
-
-    private static final HashMap<String, ItemType> allItemTypes = new HashMap<>();
 
     static {
         for (CropSeedsType cropSeedsType : CropSeedsType.values()) {

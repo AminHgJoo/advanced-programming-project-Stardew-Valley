@@ -1,7 +1,5 @@
 package com.server.controllers.gameMenuControllers;
 
-import com.common.repositories.GameRepository;
-import com.server.controllers.Controller;
 import com.common.models.App;
 import com.common.models.GameData;
 import com.common.models.IO.Request;
@@ -15,9 +13,11 @@ import com.common.models.mapObjects.BuildingBlock;
 import com.common.models.mapObjects.DroppedItem;
 import com.common.models.mapObjects.EmptyCell;
 import com.common.models.mapObjects.Water;
+import com.common.repositories.GameRepository;
 import com.common.utilities.FindPath;
 import com.common.utilities.Tile;
 import com.common.views.AppView;
+import com.server.controllers.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +46,9 @@ public class MovementAndMap extends Controller {
             for (int j = 0; j < 4; j++) {
                 Cell testCell = Farm.getCellByCoordinate(x + i, y + j, cells);
                 if (testCell == null ||
-                        testCell.getObjectOnCell() instanceof Water ||
-                        testCell.getObjectOnCell() instanceof DroppedItem ||
-                        testCell.getObjectOnCell() instanceof BuildingBlock) {
+                    testCell.getObjectOnCell() instanceof Water ||
+                    testCell.getObjectOnCell() instanceof DroppedItem ||
+                    testCell.getObjectOnCell() instanceof BuildingBlock) {
                     GameRepository.saveGame(gameData);
                     return new Response(false, "can't empty rectangle");
                 }
@@ -162,8 +162,8 @@ public class MovementAndMap extends Controller {
         dest = FindPath.pathBFS(src, dest, player.getCurrentFarm(gameData).getCells());
         double energy = dest.energy / (double) 20;
         String message = "Your current energy is: " + player.getEnergy() + "\n" +
-                "The path energy cost is : " + energy + "\n" +
-                "Do you want to move the path? (Y/N): ";
+            "The path energy cost is : " + energy + "\n" +
+            "Do you want to move the path? (Y/N): ";
         System.out.println(message);
         String answer = AppView.scanner.nextLine();
         if (answer.compareToIgnoreCase("Y") == 0) {
@@ -207,8 +207,8 @@ public class MovementAndMap extends Controller {
         GameData gameData = user.getCurrentGame();
         Farm farm = gameData.getCurrentPlayer().getCurrentFarm(gameData);
         farm.showFarm(Integer.parseInt(request.body.get("x"))
-                , Integer.parseInt(request.body.get("y")),
-                Integer.parseInt(request.body.get("size")), gameData);
+            , Integer.parseInt(request.body.get("y")),
+            Integer.parseInt(request.body.get("size")), gameData);
         return new Response(true, "");
     }
 
@@ -223,16 +223,16 @@ public class MovementAndMap extends Controller {
 
     public static Response handleMapHelp(Request request) {
         return new Response(true, "The owner is shown by blue 'O', any other non-owner players are shown as blue 'P' " +
-                "all other icons show the first letter of their type and corresponding color; a quick guide is provided below:\n"
-                + "B : Building tiles. (includes the mine, greenhouse, and player home.)\n"
-                + "E : Empty cells\n"
-                + "W : Water cells\n"
-                + "M : Foraging Minerals\n"
-                + "C : Crops\n"
-                + "T : Trees\n"
-                + "F : Foraging Crops\n"
-                + "D : Dropped Item\n"
-                + "A : Artisan Blocks\n");
+            "all other icons show the first letter of their type and corresponding color; a quick guide is provided below:\n"
+            + "B : Building tiles. (includes the mine, greenhouse, and player home.)\n"
+            + "E : Empty cells\n"
+            + "W : Water cells\n"
+            + "M : Foraging Minerals\n"
+            + "C : Crops\n"
+            + "T : Trees\n"
+            + "F : Foraging Crops\n"
+            + "D : Dropped Item\n"
+            + "A : Artisan Blocks\n");
     }
 
     public static Response handleShowEnergy(Request request) {

@@ -1,7 +1,7 @@
 package com.common.models;
 
-import com.common.repositories.GameRepository;
 import com.common.models.enums.SecurityQuestion;
+import com.common.repositories.GameRepository;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 @Entity("users")
 public class User {
+    private final ArrayList<ObjectId> games = new ArrayList<>();
     @Id
     private ObjectId _id;
     private String username;
@@ -25,7 +26,6 @@ public class User {
     private ObjectId currentGameId;
     @Transient
     private GameData currentGameData;
-    private final ArrayList<ObjectId> games = new ArrayList<>();
 
     public User() {
 
@@ -33,7 +33,7 @@ public class User {
 
     /// Does not have any usages. set to private to prevent errors and mistakes.
     private User(SecurityQuestion question, String answer, String gender
-            , String email, String nickname, String password, String username) {
+        , String email, String nickname, String password, String username) {
         this.question = question;
         this.answer = answer;
         this.gender = gender;
@@ -47,7 +47,7 @@ public class User {
     }
 
     public User(String gender
-            , String email, String nickname, String password, String username) {
+        , String email, String nickname, String password, String username) {
         this.gender = gender;
         this.email = email;
         this.nickname = nickname;

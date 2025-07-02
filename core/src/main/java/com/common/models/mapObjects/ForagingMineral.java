@@ -25,11 +25,11 @@ public class ForagingMineral extends MapObject {
         return "M";
     }
 
-    public void setFMType(ForagingMineralsType type) {
-        this.fMType = type;
-    }
-
     public ForagingMineralsType getFMType() {
         return fMType;
+    }
+
+    public void setFMType(ForagingMineralsType type) {
+        this.fMType = type;
     }
 }

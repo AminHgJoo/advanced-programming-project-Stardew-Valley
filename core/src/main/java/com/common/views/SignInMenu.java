@@ -1,43 +1,11 @@
 package com.common.views;
 
-import com.server.controllers.SignInMenuController;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.SignInMenuCommands;
+import com.server.controllers.SignInMenuController;
 
 public class SignInMenu implements Menu {
-
-    public void handleMenu(String input) {
-        Response response = null;
-        if (SignInMenuCommands.LIST_QUESTIONS.matches(input)) {
-            response = getListQuestionsResponse(input);
-        } else if (SignInMenuController.isProgramWaitingForQuestion) {
-            if (SignInMenuCommands.PICK_QUESTION.matches(input)) {
-                response = getPickQuestionResponse(input);
-            } else {
-                response = getInvalidCommand();
-            }
-        } else if (SignInMenuController.getUserOfForgetPassword() != null && !SignInMenuController.isProgramWaitingForAnswer) {
-            response = getChangePasswordResponse(input);
-        } else if (SignInMenuCommands.EXIT_MENU.matches(input)) {
-            response = getExitMenuResponse(input);
-        } else if (SignInMenuCommands.ENTER_MENU.matches(input)) {
-            response = getEnterMenuResponse(input);
-        } else if (SignInMenuCommands.SHOW_MENU.matches(input)) {
-            response = getShowMenuResponse(input);
-        } else if (SignInMenuCommands.ANSWER.matches(input)) {
-            response = getAnswerResponse(input);
-        } else if (SignInMenuCommands.REGISTER.matches(input)) {
-            response = getRegisterResponse(input);
-        } else if (SignInMenuCommands.LOGIN.matches(input)) {
-            response = getLoginResponse(input);
-        } else if (SignInMenuCommands.FORGET.matches(input)) {
-            response = getForgetPasswordResponse(input);
-        } else {
-            response = getInvalidCommand();
-        }
-        printResponse(response);
-    }
 
     private static Response getChangePasswordResponse(String input) {
         Request request = new Request(input);
@@ -112,5 +80,37 @@ public class SignInMenu implements Menu {
         request.body.put("answer", SignInMenuCommands.ANSWER.getGroup(input, "answer"));
         Response response = SignInMenuController.handleAnswer(request);
         return response;
+    }
+
+    public void handleMenu(String input) {
+        Response response = null;
+        if (SignInMenuCommands.LIST_QUESTIONS.matches(input)) {
+            response = getListQuestionsResponse(input);
+        } else if (SignInMenuController.isProgramWaitingForQuestion) {
+            if (SignInMenuCommands.PICK_QUESTION.matches(input)) {
+                response = getPickQuestionResponse(input);
+            } else {
+                response = getInvalidCommand();
+            }
+        } else if (SignInMenuController.getUserOfForgetPassword() != null && !SignInMenuController.isProgramWaitingForAnswer) {
+            response = getChangePasswordResponse(input);
+        } else if (SignInMenuCommands.EXIT_MENU.matches(input)) {
+            response = getExitMenuResponse(input);
+        } else if (SignInMenuCommands.ENTER_MENU.matches(input)) {
+            response = getEnterMenuResponse(input);
+        } else if (SignInMenuCommands.SHOW_MENU.matches(input)) {
+            response = getShowMenuResponse(input);
+        } else if (SignInMenuCommands.ANSWER.matches(input)) {
+            response = getAnswerResponse(input);
+        } else if (SignInMenuCommands.REGISTER.matches(input)) {
+            response = getRegisterResponse(input);
+        } else if (SignInMenuCommands.LOGIN.matches(input)) {
+            response = getLoginResponse(input);
+        } else if (SignInMenuCommands.FORGET.matches(input)) {
+            response = getForgetPasswordResponse(input);
+        } else {
+            response = getInvalidCommand();
+        }
+        printResponse(response);
     }
 }

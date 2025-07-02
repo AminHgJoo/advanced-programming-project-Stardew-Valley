@@ -3,8 +3,6 @@ package com.common.models.NPCModels;
 import com.common.models.Quest;
 import com.common.models.enums.types.itemTypes.*;
 import com.common.models.items.*;
-import com.example.models.enums.types.itemTypes.*;
-import com.example.models.items.*;
 import com.common.models.mapModels.Coordinate;
 import dev.morphia.annotations.Embedded;
 

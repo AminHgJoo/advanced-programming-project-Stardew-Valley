@@ -1,7 +1,5 @@
 package com.common.models;
 
-import com.common.models.mapObjects.*;
-import com.common.repositories.GameRepository;
 import com.common.models.NPCModels.NPC;
 import com.common.models.NPCModels.NPCFriendship;
 import com.common.models.enums.Quality;
@@ -16,8 +14,9 @@ import com.common.models.items.Misc;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapModels.Map;
-import com.example.models.mapObjects.*;
+import com.common.models.mapObjects.*;
 import com.common.models.skills.Skill;
+import com.common.repositories.GameRepository;
 import com.common.utilities.DateUtility;
 import com.common.utilities.RNG;
 import com.common.views.gameViews.GameThread;
@@ -32,6 +31,8 @@ import java.util.ArrayList;
 
 @Entity("games")
 public class GameData {
+    public ArrayList<Trade> tradingHistory = new ArrayList<>();
+    public boolean hasTurnCycleFinished;
     @Id
     private ObjectId _id;
     private ArrayList<Player> players;
@@ -42,10 +43,8 @@ public class GameData {
     private Weather weatherToday;
     private Weather weatherTomorrow;
     private Season season;
-    public ArrayList<Trade> tradingHistory = new ArrayList<>();
     @Transient
     private GameThread gameThread;
-    public boolean hasTurnCycleFinished;
     private ArrayList<Message> messages = new ArrayList<>();
     private ArrayList<Gift> gifts = new ArrayList<>();
 
@@ -79,6 +78,10 @@ public class GameData {
                 npc.getFriendships().add(friendship);
             }
         }
+    }
+
+    public GameData() {
+
     }
 
     public Farm getFarmByNumber(int number) {
@@ -372,7 +375,7 @@ public class GameData {
         do {
             randomNumber = (int) (Math.random() * 4);
         } while (!Weather.values()[randomNumber]
-                .isWeatherPossibleInThisSeason(App.getLoggedInUser().getCurrentGame().getSeason()));
+            .isWeatherPossibleInThisSeason(App.getLoggedInUser().getCurrentGame().getSeason()));
         weatherTomorrow = Weather.values()[randomNumber];
     }
 
@@ -390,10 +393,6 @@ public class GameData {
             season = Season.WINTER;
             return true;
         }
-    }
-
-    public GameData() {
-
     }
 
     public void resetAllAnimalDailyVariables() {
@@ -475,17 +474,17 @@ public class GameData {
         for (Player player : players) {
             for (CraftingRecipes craftingRecipes : CraftingRecipes.values()) {
                 if (!player.getUnlockedCraftingRecipes().contains(craftingRecipes)
-                        && isPlayerLevelOk(player, craftingRecipes.farmingLevel
-                        , craftingRecipes.foragingLevel, craftingRecipes.fishingLevel
-                        , craftingRecipes.miningLevel)) {
+                    && isPlayerLevelOk(player, craftingRecipes.farmingLevel
+                    , craftingRecipes.foragingLevel, craftingRecipes.fishingLevel
+                    , craftingRecipes.miningLevel)) {
                     player.getUnlockedCraftingRecipes().add(craftingRecipes);
                 }
             }
             for (CookingRecipes cookingRecipes : CookingRecipes.values()) {
                 if (!player.getUnlockedCookingRecipes().contains(cookingRecipes)
-                        && isPlayerLevelOk(player, cookingRecipes.farmingLevel
-                        , cookingRecipes.foragingLevel, cookingRecipes.fishingLevel
-                        , cookingRecipes.miningLevel)) {
+                    && isPlayerLevelOk(player, cookingRecipes.farmingLevel
+                    , cookingRecipes.foragingLevel, cookingRecipes.fishingLevel
+                    , cookingRecipes.miningLevel)) {
                     player.getUnlockedCookingRecipes().add(cookingRecipes);
                 }
             }
@@ -493,11 +492,11 @@ public class GameData {
     }
 
     private boolean isPlayerLevelOk(Player player, int farmingLevel
-            , int foragingLevel, int fishingLevel, int miningLevel) {
+        , int foragingLevel, int fishingLevel, int miningLevel) {
         return player.getUnbuffedFarmingSkill().getLevel().levelNumber >= farmingLevel &&
-                player.getUnbuffedForagingSkill().getLevel().levelNumber >= foragingLevel &&
-                player.getUnbuffedFishingSkill().getLevel().levelNumber >= fishingLevel &&
-                player.getUnbuffedMiningSkill().getLevel().levelNumber >= miningLevel;
+            player.getUnbuffedForagingSkill().getLevel().levelNumber >= foragingLevel &&
+            player.getUnbuffedFishingSkill().getLevel().levelNumber >= fishingLevel &&
+            player.getUnbuffedMiningSkill().getLevel().levelNumber >= miningLevel;
     }
 
     public void checkForSkillUpgrades() {
@@ -513,7 +512,7 @@ public class GameData {
                 }
                 if (skill.getLevel().xpToNextLevel <= skill.getXp()) {
                     System.out.println(player.getUser().getUsername() + "'s " + skill + " Skill has leveled up to level "
-                            + skill.getLevel().getNextLevel().toString());
+                        + skill.getLevel().getNextLevel().toString());
                     skill.setXp((int) (skill.getXp() - skill.getLevel().getXpToNextLevel()));
                     skill.setLevel(skill.getLevel().getNextLevel());
                 }
@@ -577,7 +576,7 @@ public class GameData {
                             if (crop.isHasBeenWateredToday()) {
                                 crop.setStageNumber(i + 1);
                                 if (crop.getStageNumber() == 5
-                                        || crop.getGrowthDeadLines()[crop.getStageNumber()] == null) {
+                                    || crop.getGrowthDeadLines()[crop.getStageNumber()] == null) {
                                     crop.setHarvestDeadLine(date);
                                 }
                             } else {

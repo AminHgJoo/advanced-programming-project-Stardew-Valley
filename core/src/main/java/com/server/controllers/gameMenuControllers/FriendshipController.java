@@ -1,13 +1,12 @@
 package com.server.controllers.gameMenuControllers;
 
 import com.common.models.*;
-import com.common.repositories.GameRepository;
-import com.server.controllers.Controller;
-import com.example.models.*;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.items.Misc;
 import com.common.models.mapModels.Coordinate;
+import com.common.repositories.GameRepository;
+import com.server.controllers.Controller;
 
 import java.util.List;
 
@@ -32,8 +31,8 @@ public class FriendshipController extends Controller {
             return new Response(false, "Player not found");
         }
         if ((player.isInVillage() && friend.isInVillage()) ||
-                (player.getCurrentFarm(gameData) == friend.getCurrentFarm(gameData) &&
-                        (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
+            (player.getCurrentFarm(gameData) == friend.getCurrentFarm(gameData) &&
+                (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
             Message msg = new Message(user.getUsername(), friend.getUser().getUsername(), message);
             gameData.getMessages().add(msg);
             friend.getNotifications().add(msg);
@@ -55,7 +54,7 @@ public class FriendshipController extends Controller {
         String username = request.body.get("username");
         List<Message> messages = gameData.getMessages().stream().filter((m) -> {
             return (m.getSender().compareToIgnoreCase(username) == 0) &&
-                    (m.getRecipient().compareToIgnoreCase(player.getUser().getUsername())) == 0;
+                (m.getRecipient().compareToIgnoreCase(player.getUser().getUsername())) == 0;
         }).toList();
 
         StringBuilder builder = new StringBuilder();
@@ -159,8 +158,8 @@ public class FriendshipController extends Controller {
             return new Response(false, "Player not found");
         }
         if ((player.isInVillage() && friend.isInVillage()) ||
-                (player.getCurrentFarm(gameData) == friend.getCurrentFarm(gameData) &&
-                        (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
+            (player.getCurrentFarm(gameData) == friend.getCurrentFarm(gameData) &&
+                (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
             player.addXpToFriendShip(60, friend);
             friend.addXpToFriendShip(60, player);
 
@@ -182,8 +181,8 @@ public class FriendshipController extends Controller {
 
         Player friend = gameData.findPlayerByUsername(username);
         if ((player.isInVillage() && friend.isInVillage()) ||
-                (player.getCurrentFarm(gameData) == friend.getCurrentFarm(gameData) &&
-                        (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
+            (player.getCurrentFarm(gameData) == friend.getCurrentFarm(gameData) &&
+                (Coordinate.calculateEuclideanDistance(player.getCoordinate(), friend.getCoordinate()) <= Math.sqrt(2)))) {
             if (friend == null) {
                 return new Response(false, "Player not found");
             }

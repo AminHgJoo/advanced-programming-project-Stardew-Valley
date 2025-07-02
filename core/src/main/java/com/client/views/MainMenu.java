@@ -18,9 +18,9 @@ import com.client.utils.AssetManager;
 
 public class MainMenu implements Screen {
     private final GameMain gameMain;
-    private Stage stage;
     private final Skin skin;
     private final Texture background;
+    private Stage stage;
 
     public MainMenu(GameMain gameMain) {
         this.gameMain = gameMain;

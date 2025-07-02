@@ -39,7 +39,7 @@ public class Connection {
         try {
             Codec<?> codec = datastore.getCodecRegistry().get(clazz);
             System.out.println(clazz.getSimpleName() + ": " +
-                    (codec != null ? "OK" : "NULL CODEC"));
+                (codec != null ? "OK" : "NULL CODEC"));
         } catch (CodecConfigurationException e) {
             System.out.println(clazz.getSimpleName() + ": ERROR - " + e.getMessage());
         }

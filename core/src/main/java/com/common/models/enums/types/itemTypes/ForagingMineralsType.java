@@ -24,8 +24,8 @@ public enum ForagingMineralsType implements ItemType {
     IRIDIUM_ORE(100, "Iridium Ore"),
     COAL(15, "Coal");
 
-    private final int sellPrice;
     public final String name;
+    private final int sellPrice;
 
     ForagingMineralsType(int sellPrice, String name) {
         this.sellPrice = sellPrice;

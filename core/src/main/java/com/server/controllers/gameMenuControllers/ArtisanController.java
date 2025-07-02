@@ -1,9 +1,6 @@
 package com.server.controllers.gameMenuControllers;
 
 import com.common.models.*;
-import com.common.repositories.GameRepository;
-import com.server.controllers.Controller;
-import com.example.models.*;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.Quality;
@@ -16,6 +13,8 @@ import com.common.models.items.ForagingMineralItem;
 import com.common.models.items.Misc;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.ArtisanBlock;
+import com.common.repositories.GameRepository;
+import com.server.controllers.Controller;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,7 +37,7 @@ public class ArtisanController extends Controller {
             GameRepository.saveGame(gameData);
             return new Response(false, "Artisan does not exist");
         }
-        if(block.beingUsed){
+        if (block.beingUsed) {
             GameRepository.saveGame(gameData);
             return new Response(false, "Artisan already used");
         }
@@ -191,8 +190,8 @@ public class ArtisanController extends Controller {
 
     private static boolean isMushroom(String itemName) {
         return itemName.equals(FoodTypes.CHANTERELLE.name) || itemName.equals(FoodTypes.COMMON_MUSHROOM.name) ||
-                itemName.equals(FoodTypes.MOREL.name) || itemName.equals(FoodTypes.PURPLE_MUSHROOM.name) ||
-                itemName.equals(FoodTypes.RED_MUSHROOM.name);
+            itemName.equals(FoodTypes.MOREL.name) || itemName.equals(FoodTypes.PURPLE_MUSHROOM.name) ||
+            itemName.equals(FoodTypes.RED_MUSHROOM.name);
     }
 
     private static @NotNull Response keg(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
@@ -218,32 +217,32 @@ public class ArtisanController extends Controller {
 
     private static boolean isFruit(String itemName) {
         return itemName.equals(FoodTypes.ANCIENT_FRUIT.name) || itemName.equals(FoodTypes.APPLE.name) ||
-                itemName.equals(FoodTypes.APRICOT.name) || itemName.equals(FoodTypes.BANANA.name) ||
-                itemName.equals(FoodTypes.BLACKBERRY.name) || itemName.equals(FoodTypes.CHERRY.name) ||
-                itemName.equals(FoodTypes.CRANBERRIES.name) || itemName.equals(FoodTypes.CRYSTAL_FRUIT.name) ||
-                itemName.equals(FoodTypes.GRAPE.name) || itemName.equals(FoodTypes.BLUEBERRY.name) ||
-                itemName.equals(FoodTypes.HOT_PEPPER.name) || itemName.equals(FoodTypes.MANGO.name) ||
-                itemName.equals(FoodTypes.MELON.name) || itemName.equals(FoodTypes.ORANGE.name) ||
-                itemName.equals(FoodTypes.PEACH.name) || itemName.equals(FoodTypes.POMEGRANATE.name) ||
-                itemName.equals(FoodTypes.POWDER_MELON.name) || itemName.equals(FoodTypes.RHUBARB.name) ||
-                itemName.equals(FoodTypes.SALMON_BERRY.name) || itemName.equals(FoodTypes.SPICE_BERRY.name) ||
-                itemName.equals(FoodTypes.STARFRUIT.name) || itemName.equals(FoodTypes.STRAWBERRY.name) ||
-                itemName.equals(FoodTypes.WILD_PLUM.name)
-                ;
+            itemName.equals(FoodTypes.APRICOT.name) || itemName.equals(FoodTypes.BANANA.name) ||
+            itemName.equals(FoodTypes.BLACKBERRY.name) || itemName.equals(FoodTypes.CHERRY.name) ||
+            itemName.equals(FoodTypes.CRANBERRIES.name) || itemName.equals(FoodTypes.CRYSTAL_FRUIT.name) ||
+            itemName.equals(FoodTypes.GRAPE.name) || itemName.equals(FoodTypes.BLUEBERRY.name) ||
+            itemName.equals(FoodTypes.HOT_PEPPER.name) || itemName.equals(FoodTypes.MANGO.name) ||
+            itemName.equals(FoodTypes.MELON.name) || itemName.equals(FoodTypes.ORANGE.name) ||
+            itemName.equals(FoodTypes.PEACH.name) || itemName.equals(FoodTypes.POMEGRANATE.name) ||
+            itemName.equals(FoodTypes.POWDER_MELON.name) || itemName.equals(FoodTypes.RHUBARB.name) ||
+            itemName.equals(FoodTypes.SALMON_BERRY.name) || itemName.equals(FoodTypes.SPICE_BERRY.name) ||
+            itemName.equals(FoodTypes.STARFRUIT.name) || itemName.equals(FoodTypes.STRAWBERRY.name) ||
+            itemName.equals(FoodTypes.WILD_PLUM.name)
+            ;
     }
 
     private static boolean isVegetable(String itemName) {
         return itemName.equals(FoodTypes.AMARANTH.name) || itemName.equals(FoodTypes.ARTICHOKE.name) ||
-                itemName.equals(FoodTypes.BEET.name) || itemName.equals(FoodTypes.BOK_CHOY.name) ||
-                itemName.equals(FoodTypes.BROCCOLI.name) || itemName.equals(FoodTypes.CARROT.name) ||
-                itemName.equals(FoodTypes.CAULIFLOWER.name) || itemName.equals(FoodTypes.CORN.name) ||
-                itemName.equals(FoodTypes.EGGPLANT.name) || itemName.equals(FoodTypes.FIDDLE_HEAD_FERN.name) ||
-                itemName.equals(FoodTypes.GARLIC.name) || itemName.equals(FoodTypes.GREEN_BEAN.name) ||
-                itemName.equals(FoodTypes.HOPS.name) || itemName.equals(FoodTypes.KALE.name) ||
-                itemName.equals(FoodTypes.PUMPKIN.name) || itemName.equals(FoodTypes.RADISH.name) ||
-                itemName.equals(FoodTypes.RED_CABBAGE.name) || itemName.equals(FoodTypes.SUMMER_SQUASH.name) ||
-                itemName.equals(FoodTypes.TOMATO.name) || itemName.equals(FoodTypes.UNMILLED_RICE.name) ||
-                itemName.equals(FoodTypes.WHEAT.name) || itemName.equals(FoodTypes.YAM.name);
+            itemName.equals(FoodTypes.BEET.name) || itemName.equals(FoodTypes.BOK_CHOY.name) ||
+            itemName.equals(FoodTypes.BROCCOLI.name) || itemName.equals(FoodTypes.CARROT.name) ||
+            itemName.equals(FoodTypes.CAULIFLOWER.name) || itemName.equals(FoodTypes.CORN.name) ||
+            itemName.equals(FoodTypes.EGGPLANT.name) || itemName.equals(FoodTypes.FIDDLE_HEAD_FERN.name) ||
+            itemName.equals(FoodTypes.GARLIC.name) || itemName.equals(FoodTypes.GREEN_BEAN.name) ||
+            itemName.equals(FoodTypes.HOPS.name) || itemName.equals(FoodTypes.KALE.name) ||
+            itemName.equals(FoodTypes.PUMPKIN.name) || itemName.equals(FoodTypes.RADISH.name) ||
+            itemName.equals(FoodTypes.RED_CABBAGE.name) || itemName.equals(FoodTypes.SUMMER_SQUASH.name) ||
+            itemName.equals(FoodTypes.TOMATO.name) || itemName.equals(FoodTypes.UNMILLED_RICE.name) ||
+            itemName.equals(FoodTypes.WHEAT.name) || itemName.equals(FoodTypes.YAM.name);
     }
 
     private static @NotNull Response artisanForagingMineralHandle(Player player, GameData gameData, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, ForagingMineralsType foragingMineralsType, int itemCount, int productCount, int price) {

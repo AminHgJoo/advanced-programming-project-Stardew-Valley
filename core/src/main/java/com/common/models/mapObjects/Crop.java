@@ -22,6 +22,20 @@ public class Crop extends MapObject {
         super();
     }
 
+    public Crop(CropSeedsType plantType, LocalDateTime source) {
+        super(true, "plant", "green");
+        this.cropSeedsType = plantType;
+        this.lastWateringDate = source;
+        stageNumber = 0;
+        growthDeadLines[0] = DateUtility.getLocalDateTime(source, cropSeedsType.stageZeroDaysToNextStage);
+        growthDeadLines[1] = DateUtility.getLocalDateTime(growthDeadLines[0], cropSeedsType.stageOneDaysToNextStage);
+        growthDeadLines[2] = DateUtility.getLocalDateTime(growthDeadLines[1], cropSeedsType.stageTwoDaysToNextStage);
+        growthDeadLines[3] = DateUtility.getLocalDateTime(growthDeadLines[2], cropSeedsType.stageThreeDaysToNextStage);
+        growthDeadLines[4] = DateUtility.getLocalDateTime(growthDeadLines[3], cropSeedsType.stageFourDaysToNextStage);
+        this.hasBeenWateredToday = false;
+        harvestDeadLine = null;
+    }
+
     public void pushBackDeadlines(int numOfDays) {
         for (int i = stageNumber; i < growthDeadLines.length; i++) {
             if (growthDeadLines[i] != null) {
@@ -35,20 +49,6 @@ public class Crop extends MapObject {
                 }
             }
         }
-    }
-
-    public Crop(CropSeedsType plantType, LocalDateTime source) {
-        super(true, "plant", "green");
-        this.cropSeedsType = plantType;
-        this.lastWateringDate = source;
-        stageNumber = 0;
-        growthDeadLines[0] = DateUtility.getLocalDateTime(source, cropSeedsType.stageZeroDaysToNextStage);
-        growthDeadLines[1] = DateUtility.getLocalDateTime(growthDeadLines[0], cropSeedsType.stageOneDaysToNextStage);
-        growthDeadLines[2] = DateUtility.getLocalDateTime(growthDeadLines[1], cropSeedsType.stageTwoDaysToNextStage);
-        growthDeadLines[3] = DateUtility.getLocalDateTime(growthDeadLines[2], cropSeedsType.stageThreeDaysToNextStage);
-        growthDeadLines[4] = DateUtility.getLocalDateTime(growthDeadLines[3], cropSeedsType.stageFourDaysToNextStage);
-        this.hasBeenWateredToday = false;
-        harvestDeadLine = null;
     }
 
     public LocalDateTime[] getGrowthDeadLines() {

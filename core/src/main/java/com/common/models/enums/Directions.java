@@ -20,14 +20,6 @@ public enum Directions {
         vector[1] = y;
     }
 
-    public int[] getVector() {
-        return vector;
-    }
-
-    public Coordinate getCoordinate(Coordinate coordinate) {
-        return new Coordinate(coordinate.getX() + vector[0], coordinate.getY() + vector[1]);
-    }
-
     public static Directions getDir(String name) {
         for (Directions dir : Directions.values()) {
             if (dir.name().compareToIgnoreCase(name) == 0) {
@@ -35,5 +27,13 @@ public enum Directions {
             }
         }
         return null;
+    }
+
+    public int[] getVector() {
+        return vector;
+    }
+
+    public Coordinate getCoordinate(Coordinate coordinate) {
+        return new Coordinate(coordinate.getX() + vector[0], coordinate.getY() + vector[1]);
     }
 }

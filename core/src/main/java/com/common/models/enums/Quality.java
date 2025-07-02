@@ -14,9 +14,10 @@ public enum Quality {
     private final int qualityLevel;
     private final double priceFactor;
 
-    /// returns ordinal value.
-    public int getQualityLevel() {
-        return qualityLevel;
+    Quality(String name, double priceFactor) {
+        this.name = name;
+        this.priceFactor = priceFactor;
+        this.qualityLevel = ordinal();
     }
 
     public static Quality getQualityByName(final String name) {
@@ -39,10 +40,9 @@ public enum Quality {
         return null;
     }
 
-    Quality(String name, double priceFactor) {
-        this.name = name;
-        this.priceFactor = priceFactor;
-        this.qualityLevel = ordinal();
+    /// returns ordinal value.
+    public int getQualityLevel() {
+        return qualityLevel;
     }
 
     public double getPriceFactor() {

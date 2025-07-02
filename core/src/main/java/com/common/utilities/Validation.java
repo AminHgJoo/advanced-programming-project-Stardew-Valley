@@ -114,7 +114,7 @@ public class Validation {
 
     private static boolean invalidFrontAndEndChars(String string) {
         if (!string.substring(0, 1).matches("[a-zA-Z\\d]")
-                || !string.substring(string.length() - 1).matches("[a-zA-Z\\d]")) {
+            || !string.substring(string.length() - 1).matches("[a-zA-Z\\d]")) {
             return true;
         }
         return false;

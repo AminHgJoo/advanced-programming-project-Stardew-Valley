@@ -1,35 +1,12 @@
 package com.common.views.gameViews;
 
-import com.server.controllers.gameMenuControllers.Cooking;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.GameMenuCommands;
 import com.common.views.Menu;
+import com.server.controllers.gameMenuControllers.Cooking;
 
 public class PlayerHomeMenu implements Menu {
-    @Override
-    public void handleMenu(String input) {
-        Response response = null;
-
-        if (GameMenuCommands.COOKING_REFRIGERATOR_PICK.matches(input)) {
-            response = getCookingPickRefrigeratorResponse(input);
-        } else if (GameMenuCommands.COOKING_REFRIGERATOR_PUT.matches(input)) {
-            response = getCookingRefrigeratorPutResponse(input);
-        } else if (GameMenuCommands.COOKING_SHOW_RECIPES.matches(input)) {
-            response = getShowCookingRecipesResponse(input);
-        } else if (GameMenuCommands.COOKING_PREPARE.matches(input)) {
-            response = getCookingPrepareResponse(input);
-        } else if (GameMenuCommands.EXIT_HOME.matches(input)) {
-            response = getExitPlayerHomeResponse(input);
-        } else if (GameMenuCommands.SHOW_MENU.matches(input)) {
-            response = getShowMenuResponse(input);
-        } else {
-            response = getInvalidCommand();
-        }
-
-        printResponse(response);
-    }
-
     private static Response getCookingPrepareResponse(String input) {
         Request request = new Request(input);
         request.body.put("itemName", GameMenuCommands.COOKING_PREPARE.getGroup(input, "itemName"));
@@ -68,5 +45,28 @@ public class PlayerHomeMenu implements Menu {
         Request request = new Request(input);
         response = Cooking.handleShowCookingRecipes(request);
         return response;
+    }
+
+    @Override
+    public void handleMenu(String input) {
+        Response response = null;
+
+        if (GameMenuCommands.COOKING_REFRIGERATOR_PICK.matches(input)) {
+            response = getCookingPickRefrigeratorResponse(input);
+        } else if (GameMenuCommands.COOKING_REFRIGERATOR_PUT.matches(input)) {
+            response = getCookingRefrigeratorPutResponse(input);
+        } else if (GameMenuCommands.COOKING_SHOW_RECIPES.matches(input)) {
+            response = getShowCookingRecipesResponse(input);
+        } else if (GameMenuCommands.COOKING_PREPARE.matches(input)) {
+            response = getCookingPrepareResponse(input);
+        } else if (GameMenuCommands.EXIT_HOME.matches(input)) {
+            response = getExitPlayerHomeResponse(input);
+        } else if (GameMenuCommands.SHOW_MENU.matches(input)) {
+            response = getShowMenuResponse(input);
+        } else {
+            response = getInvalidCommand();
+        }
+
+        printResponse(response);
     }
 }

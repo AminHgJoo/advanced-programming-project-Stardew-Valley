@@ -1,220 +1,16 @@
 package com.common.views.gameViews;
 
-import com.server.controllers.Controller;
-import com.example.controllers.gameMenuControllers.*;
 import com.common.models.App;
 import com.common.models.GameData;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.GameMenuCommands;
 import com.common.views.Menu;
+import com.server.controllers.Controller;
 import com.server.controllers.gameMenuControllers.*;
 import org.jetbrains.annotations.NotNull;
 
 public class GameMenu implements Menu {
-
-    public void handleMenu(String input) {
-        Response response = null;
-        if (App.getLoggedInUser().getCurrentGame() == null
-                || !App.getLoggedInUser().getCurrentGame().isGameOngoing()) {
-
-            if (LoadingSavingTurnHandling.isWaitingForChoosingMap) {
-                if (GameMenuCommands.GAME_MAP.matches(input)) {
-                    response = getGameMapResponse(input);
-                } else {
-                    response = getInvalidCommand();
-                }
-            } else if (GameMenuCommands.GAME_NEW.matches(input)) {
-                response = getNewGameResponse(input);
-            } else if (GameMenuCommands.LOAD_GAME.matches(input)) {
-                response = getLoadGameResponse(input);
-            } else if (GameMenuCommands.SHOW_MENU.matches(input)) {
-                response = getShowMenuResponse(input);
-            } else if (GameMenuCommands.EXIT_MENU.matches(input)) {
-                response = getExitMenuResponse(input);
-            } else if (GameMenuCommands.ENTER_MENU.matches(input)) {
-                response = getEnterMenuResponse(input);
-            } else {
-                response = getInvalidCommand();
-            }
-        } else {
-            GameData gameData = App.getLoggedInUser().getCurrentGame();
-            if (gameData.getGameThread() == null) {
-                gameData.setGameThread(new GameThread(gameData));
-                gameData.getGameThread().keepRunning = true;
-                gameData.getGameThread().start();
-            }
-            if (GameMenuCommands.SHOW_FARM.matches(input)) {
-                response = getShowFullFarmResponse(input);
-            } else if (GameMenuCommands.SHOW_COORDS.matches(input)) {
-                response = getShowCoordsResponse(input);
-            } else if (GameMenuCommands.EXIT_GAME.matches(input)) {
-                response = getExitGameResponse(input);
-            } else if (GameMenuCommands.NEXT_TURN.matches(input)) {
-                response = getNextTurnResponse(input);
-            } else if (GameMenuCommands.FORCE_DELETE_GAME.matches(input)) {
-                response = getForceDeleteGameResponse(input);
-            } else if (GameMenuCommands.TIME.matches(input)) {
-                response = getTimeResponse(input);
-            } else if (GameMenuCommands.DATE.matches(input)) {
-                response = getDateResponse(input);
-            } else if (GameMenuCommands.DATETIME.matches(input)) {
-                response = getDateTimeResponse(input);
-            } else if (GameMenuCommands.DAY_OF_WEEK.matches(input)) {
-                response = getDayOfWeekResponse(input);
-            } else if (GameMenuCommands.CHEAT_ADVANCE_TIME.matches(input)) {
-                response = getCheatAdvanceTimeResponse(input);
-            } else if (GameMenuCommands.CHEAT_ADVANCE_DATE.matches(input)) {
-                response = getCheatAdvanceDateResponse(input);
-            } else if (GameMenuCommands.SEASON.matches(input)) {
-                response = getSeasonResponse(input);
-            } else if (GameMenuCommands.CHEAT_THOR.matches(input)) {
-                response = getCheatThorResponse(input);
-            } else if (GameMenuCommands.WEATHER.matches(input)) {
-                response = getWeatherResponse(input);
-            } else if (GameMenuCommands.WEATHER_FORECAST.matches(input)) {
-                response = getWeatherForecastResponse(input);
-            } else if (GameMenuCommands.CHEAT_WEATHER_SET.matches(input)) {
-                response = getWeatherSetResponse(input);
-            } else if (GameMenuCommands.GREEN_HOUSE_BUILD.matches(input)) {
-                response = getGreenhouseBuildResponse(input);
-            } else if (GameMenuCommands.WALK.matches(input)) {
-                response = getWalkResponse(input);
-            } else if (GameMenuCommands.PRINT_MAP.matches(input)) {
-                response = getShowFarmResponse(input);
-            } else if (GameMenuCommands.HELP_READING_MAP.matches(input)) {
-                response = getMapHelpResponse(input);
-            } else if (GameMenuCommands.ENERGY_SHOW.matches(input)) {
-                response = getShowEnergyResponse(input);
-            } else if (GameMenuCommands.ENERGY_SET_VALUE.matches(input)) {
-                response = getSetEnergyValueResponse(input);
-            } else if (GameMenuCommands.ENERGY_UNLIMITED.matches(input)) {
-                response = getEnergyUnlimitedResponse(input);
-            } else if (GameMenuCommands.INVENTORY_SHOW.matches(input)) {
-                response = getShowInventoryResponse(input);
-            } else if (GameMenuCommands.INVENTORY_TRASH.matches(input)) {
-                response = getInventoryTrashResponse(input);
-            } else if (GameMenuCommands.TOOLS_EQUIP.matches(input)) {
-                response = getToolsEquipResponse(input);
-            } else if (GameMenuCommands.TOOLS_SHOW_CURRENT.matches(input)) {
-                response = getShowCurrentToolsResponse(input);
-            } else if (GameMenuCommands.TOOLS_SHOW_AVAILABLE.matches(input)) {
-                response = getShowAvailableToolsResponse(input);
-            } else if (GameMenuCommands.TOOLS_USE_DIRECTION.matches(input)) {
-                response = getUseToolsResponse(input);
-            } else if (GameMenuCommands.CRAFT_INFO.matches(input)) {
-                response = getCraftInfoResponse(input);
-            } else if (GameMenuCommands.PLANT.matches(input)) {
-                response = getPlantingResponse(input);
-            } else if (GameMenuCommands.PLANT_TREE.matches(input)) {
-                response = getPlantingTree(input);
-            } else if (GameMenuCommands.SHOW_PLANT.matches(input)) {
-                response = getShowPlantResponse(input);
-            } else if (GameMenuCommands.FERTILIZE.matches(input)) {
-                response = getFertilizeResponse(input);
-            } else if (GameMenuCommands.HOW_MUCH_WATER.matches(input)) {
-                response = getHowMuchWaterResponse(input);
-            } else if (GameMenuCommands.CRAFTING_SHOW_RECIPES.matches(input)) {
-                response = getShowCraftingRecipesResponse(input);
-            } else if (GameMenuCommands.CRAFTING_CRAFT.matches(input)) {
-                response = getCraftingResponse(input);
-            } else if (GameMenuCommands.PLACE_ITEM.matches(input)) {
-                response = getPlaceItemResponse(input);
-            } else if (GameMenuCommands.CHEAT_ADD_ITEM.matches(input)) {
-                response = getAddItemCheatResponse(input);
-            } else if (GameMenuCommands.ENTER_HOME.matches(input)) {
-                response = getEnterPlayerHomeResponse(input);
-            } else if (GameMenuCommands.COOKING_SHOW_RECIPES.matches(input)) {
-                response = getShowCookingRecipesResponse(input);
-            } else if (GameMenuCommands.EAT.matches(input)) {
-                response = getEatResponse(input);
-            } else if (GameMenuCommands.PET.matches(input)) {
-                response = getPetResponse(input);
-            } else if (GameMenuCommands.CHEAT_SET_FRIENDSHIP.matches(input)) {
-                response = getCheatSetFriendshipResponse(input);
-            } else if (GameMenuCommands.ANIMALS.matches(input)) {
-                response = getAnimalsResponse(input);
-            } else if (GameMenuCommands.SHEPHERD.matches(input)) {
-                response = getShepherdResponse(input);
-            } else if (GameMenuCommands.FEED_HAY.matches(input)) {
-                response = getFeedHayResponse(input);
-            } else if (GameMenuCommands.PRODUCES.matches(input)) {
-                response = getProducesResponse(input);
-            } else if (GameMenuCommands.COLLECT_PRODUCE.matches(input)) {
-                response = getCollectProduceResponse(input);
-            } else if (GameMenuCommands.SELL_ANIMAL.matches(input)) {
-                response = getSellAnimalResponse(input);
-            } else if (GameMenuCommands.ARTISAN_USE.matches(input)) {
-                response = getArtisanUseResponse(input);
-            } else if (GameMenuCommands.ARTISAN_GET.matches(input)) {
-                response = getArtisanGetResponse(input);
-            } else if (GameMenuCommands.CHEAT_ADD_DOLLARS.matches(input)) {
-                response = getCheatAddDollarsResponse(input);
-            } else if (GameMenuCommands.SELL_PRODUCT.matches(input)) {
-                response = getSellProductResponse(input);
-            } else if (GameMenuCommands.FRIENDSHIPS.matches(input)) {
-                response = getFriendshipResponse(input);
-            } else if (GameMenuCommands.TALK.matches(input)) {
-                response = getTalkResponse(input);
-            } else if (GameMenuCommands.TALK_HISTORY.matches(input)) {
-                response = getTalkHistoryResponse(input);
-            } else if (GameMenuCommands.GIFT.matches(input)) {
-                response = getGiftResponse(input);
-            } else if (GameMenuCommands.GIFT_LIST.matches(input)) {
-                response = getGiftListResponse(input);
-            } else if (GameMenuCommands.GIFT_HISTORY.matches(input)) {
-                response = getGiftHistoryResponse(input);
-            } else if (GameMenuCommands.GIFT_RATE.matches(input)) {
-                response = getGiftRateResponse(input);
-            } else if (GameMenuCommands.HUG.matches(input)) {
-                response = getHugResponse(input);
-            } else if (GameMenuCommands.FLOWER.matches(input)) {
-                response = getFlowerResponse(input);
-            } else if (GameMenuCommands.ASK_MARRIAGE.matches(input)) {
-                response = getAskMarriageResponse(input);
-            } else if (GameMenuCommands.RESPOND_MARRIAGE_ACCEPT.matches(input)) {
-                response = getRespondMarriageAcceptResponse(input);
-            } else if (GameMenuCommands.RESPOND_MARRIAGE_REJECT.matches(input)) {
-                response = getRespondMarriageRejectResponse(input);
-            } else if (GameMenuCommands.START_TRADE.matches(input)) {
-                response = getStartTradeResponse(input);
-            } else if (GameMenuCommands.MEET_NPC.matches(input)) {
-                response = getMeetNPCResponse(input);
-            } else if (GameMenuCommands.TALK_NPC.matches(input)) {
-                response = getTalkNpcResponse(input);
-            } else if (GameMenuCommands.GIFT_NPC.matches(input)) {
-                response = getGiftNPCResponse(input);
-            } else if (GameMenuCommands.FRIENDSHIP_NPC_LIST.matches(input)) {
-                response = getFriendshipNPCListResponse(input);
-            } else if (GameMenuCommands.QUESTS_LIST.matches(input)) {
-                response = getQuestListResponse(input);
-            } else if (GameMenuCommands.QUESTS_FINISH.matches(input)) {
-                response = getQuestFinishResponse(input);
-            } else if (GameMenuCommands.SHOW_MENU.matches(input)) {
-                response = getShowMenuResponse(input);
-            } else if (GameMenuCommands.GO_TO_STORE.matches(input)) {
-                response = goToStore(input);
-            } else if (GameMenuCommands.GO_TO_VILLAGE.matches(input)) {
-                response = goToVillage(input);
-            } else if (GameMenuCommands.WALK_HOME.matches(input)) {
-                response = walkHome(input);
-            } else if (GameMenuCommands.GO_TO_PARTNER_FARM.matches(input)) {
-                response = goToPartnerFarm(input);
-            } else if (GameMenuCommands.CHEAT_ADD_SKILL_XP.matches(input)) {
-                response = cheatAddSkillXp(input);
-            } else if (GameMenuCommands.CHEAT_EMPTY_RECTANGLE.matches(input)) {
-                response = cheatEmptyRectangle(input);
-            } else if (GameMenuCommands.SHOW_MONEY.matches(input)) {
-                response = showMoney(input);
-            } else if (GameMenuCommands.WALK_ADD_COORDS.matches(input)) {
-                response = getWalkAddCoordsResponse(input);
-            } else {
-                response = getInvalidCommand();
-            }
-        }
-
-        printResponse(response);
-    }
 
     private static Response getWalkAddCoordsResponse(String input) {
         Request request = new Request(input);
@@ -620,7 +416,6 @@ public class GameMenu implements Menu {
         return response;
     }
 
-
     private static Response getPetResponse(String input) {
         Request request = new Request(input);
         request.body.put("name", GameMenuCommands.PET.getGroup(input, "name"));
@@ -802,7 +597,6 @@ public class GameMenu implements Menu {
         return response;
     }
 
-
     private static Response getMeetNPCResponse(String input) {
         Request request = new Request(input);
         request.body.put("npcName", GameMenuCommands.MEET_NPC.getGroup(input, "npcName"));
@@ -864,6 +658,209 @@ public class GameMenu implements Menu {
         Request request = new Request(input);
         Response response = Controller.handleShowMenu(request);
         return response;
+    }
+
+    public void handleMenu(String input) {
+        Response response = null;
+        if (App.getLoggedInUser().getCurrentGame() == null
+            || !App.getLoggedInUser().getCurrentGame().isGameOngoing()) {
+
+            if (LoadingSavingTurnHandling.isWaitingForChoosingMap) {
+                if (GameMenuCommands.GAME_MAP.matches(input)) {
+                    response = getGameMapResponse(input);
+                } else {
+                    response = getInvalidCommand();
+                }
+            } else if (GameMenuCommands.GAME_NEW.matches(input)) {
+                response = getNewGameResponse(input);
+            } else if (GameMenuCommands.LOAD_GAME.matches(input)) {
+                response = getLoadGameResponse(input);
+            } else if (GameMenuCommands.SHOW_MENU.matches(input)) {
+                response = getShowMenuResponse(input);
+            } else if (GameMenuCommands.EXIT_MENU.matches(input)) {
+                response = getExitMenuResponse(input);
+            } else if (GameMenuCommands.ENTER_MENU.matches(input)) {
+                response = getEnterMenuResponse(input);
+            } else {
+                response = getInvalidCommand();
+            }
+        } else {
+            GameData gameData = App.getLoggedInUser().getCurrentGame();
+            if (gameData.getGameThread() == null) {
+                gameData.setGameThread(new GameThread(gameData));
+                gameData.getGameThread().keepRunning = true;
+                gameData.getGameThread().start();
+            }
+            if (GameMenuCommands.SHOW_FARM.matches(input)) {
+                response = getShowFullFarmResponse(input);
+            } else if (GameMenuCommands.SHOW_COORDS.matches(input)) {
+                response = getShowCoordsResponse(input);
+            } else if (GameMenuCommands.EXIT_GAME.matches(input)) {
+                response = getExitGameResponse(input);
+            } else if (GameMenuCommands.NEXT_TURN.matches(input)) {
+                response = getNextTurnResponse(input);
+            } else if (GameMenuCommands.FORCE_DELETE_GAME.matches(input)) {
+                response = getForceDeleteGameResponse(input);
+            } else if (GameMenuCommands.TIME.matches(input)) {
+                response = getTimeResponse(input);
+            } else if (GameMenuCommands.DATE.matches(input)) {
+                response = getDateResponse(input);
+            } else if (GameMenuCommands.DATETIME.matches(input)) {
+                response = getDateTimeResponse(input);
+            } else if (GameMenuCommands.DAY_OF_WEEK.matches(input)) {
+                response = getDayOfWeekResponse(input);
+            } else if (GameMenuCommands.CHEAT_ADVANCE_TIME.matches(input)) {
+                response = getCheatAdvanceTimeResponse(input);
+            } else if (GameMenuCommands.CHEAT_ADVANCE_DATE.matches(input)) {
+                response = getCheatAdvanceDateResponse(input);
+            } else if (GameMenuCommands.SEASON.matches(input)) {
+                response = getSeasonResponse(input);
+            } else if (GameMenuCommands.CHEAT_THOR.matches(input)) {
+                response = getCheatThorResponse(input);
+            } else if (GameMenuCommands.WEATHER.matches(input)) {
+                response = getWeatherResponse(input);
+            } else if (GameMenuCommands.WEATHER_FORECAST.matches(input)) {
+                response = getWeatherForecastResponse(input);
+            } else if (GameMenuCommands.CHEAT_WEATHER_SET.matches(input)) {
+                response = getWeatherSetResponse(input);
+            } else if (GameMenuCommands.GREEN_HOUSE_BUILD.matches(input)) {
+                response = getGreenhouseBuildResponse(input);
+            } else if (GameMenuCommands.WALK.matches(input)) {
+                response = getWalkResponse(input);
+            } else if (GameMenuCommands.PRINT_MAP.matches(input)) {
+                response = getShowFarmResponse(input);
+            } else if (GameMenuCommands.HELP_READING_MAP.matches(input)) {
+                response = getMapHelpResponse(input);
+            } else if (GameMenuCommands.ENERGY_SHOW.matches(input)) {
+                response = getShowEnergyResponse(input);
+            } else if (GameMenuCommands.ENERGY_SET_VALUE.matches(input)) {
+                response = getSetEnergyValueResponse(input);
+            } else if (GameMenuCommands.ENERGY_UNLIMITED.matches(input)) {
+                response = getEnergyUnlimitedResponse(input);
+            } else if (GameMenuCommands.INVENTORY_SHOW.matches(input)) {
+                response = getShowInventoryResponse(input);
+            } else if (GameMenuCommands.INVENTORY_TRASH.matches(input)) {
+                response = getInventoryTrashResponse(input);
+            } else if (GameMenuCommands.TOOLS_EQUIP.matches(input)) {
+                response = getToolsEquipResponse(input);
+            } else if (GameMenuCommands.TOOLS_SHOW_CURRENT.matches(input)) {
+                response = getShowCurrentToolsResponse(input);
+            } else if (GameMenuCommands.TOOLS_SHOW_AVAILABLE.matches(input)) {
+                response = getShowAvailableToolsResponse(input);
+            } else if (GameMenuCommands.TOOLS_USE_DIRECTION.matches(input)) {
+                response = getUseToolsResponse(input);
+            } else if (GameMenuCommands.CRAFT_INFO.matches(input)) {
+                response = getCraftInfoResponse(input);
+            } else if (GameMenuCommands.PLANT.matches(input)) {
+                response = getPlantingResponse(input);
+            } else if (GameMenuCommands.PLANT_TREE.matches(input)) {
+                response = getPlantingTree(input);
+            } else if (GameMenuCommands.SHOW_PLANT.matches(input)) {
+                response = getShowPlantResponse(input);
+            } else if (GameMenuCommands.FERTILIZE.matches(input)) {
+                response = getFertilizeResponse(input);
+            } else if (GameMenuCommands.HOW_MUCH_WATER.matches(input)) {
+                response = getHowMuchWaterResponse(input);
+            } else if (GameMenuCommands.CRAFTING_SHOW_RECIPES.matches(input)) {
+                response = getShowCraftingRecipesResponse(input);
+            } else if (GameMenuCommands.CRAFTING_CRAFT.matches(input)) {
+                response = getCraftingResponse(input);
+            } else if (GameMenuCommands.PLACE_ITEM.matches(input)) {
+                response = getPlaceItemResponse(input);
+            } else if (GameMenuCommands.CHEAT_ADD_ITEM.matches(input)) {
+                response = getAddItemCheatResponse(input);
+            } else if (GameMenuCommands.ENTER_HOME.matches(input)) {
+                response = getEnterPlayerHomeResponse(input);
+            } else if (GameMenuCommands.COOKING_SHOW_RECIPES.matches(input)) {
+                response = getShowCookingRecipesResponse(input);
+            } else if (GameMenuCommands.EAT.matches(input)) {
+                response = getEatResponse(input);
+            } else if (GameMenuCommands.PET.matches(input)) {
+                response = getPetResponse(input);
+            } else if (GameMenuCommands.CHEAT_SET_FRIENDSHIP.matches(input)) {
+                response = getCheatSetFriendshipResponse(input);
+            } else if (GameMenuCommands.ANIMALS.matches(input)) {
+                response = getAnimalsResponse(input);
+            } else if (GameMenuCommands.SHEPHERD.matches(input)) {
+                response = getShepherdResponse(input);
+            } else if (GameMenuCommands.FEED_HAY.matches(input)) {
+                response = getFeedHayResponse(input);
+            } else if (GameMenuCommands.PRODUCES.matches(input)) {
+                response = getProducesResponse(input);
+            } else if (GameMenuCommands.COLLECT_PRODUCE.matches(input)) {
+                response = getCollectProduceResponse(input);
+            } else if (GameMenuCommands.SELL_ANIMAL.matches(input)) {
+                response = getSellAnimalResponse(input);
+            } else if (GameMenuCommands.ARTISAN_USE.matches(input)) {
+                response = getArtisanUseResponse(input);
+            } else if (GameMenuCommands.ARTISAN_GET.matches(input)) {
+                response = getArtisanGetResponse(input);
+            } else if (GameMenuCommands.CHEAT_ADD_DOLLARS.matches(input)) {
+                response = getCheatAddDollarsResponse(input);
+            } else if (GameMenuCommands.SELL_PRODUCT.matches(input)) {
+                response = getSellProductResponse(input);
+            } else if (GameMenuCommands.FRIENDSHIPS.matches(input)) {
+                response = getFriendshipResponse(input);
+            } else if (GameMenuCommands.TALK.matches(input)) {
+                response = getTalkResponse(input);
+            } else if (GameMenuCommands.TALK_HISTORY.matches(input)) {
+                response = getTalkHistoryResponse(input);
+            } else if (GameMenuCommands.GIFT.matches(input)) {
+                response = getGiftResponse(input);
+            } else if (GameMenuCommands.GIFT_LIST.matches(input)) {
+                response = getGiftListResponse(input);
+            } else if (GameMenuCommands.GIFT_HISTORY.matches(input)) {
+                response = getGiftHistoryResponse(input);
+            } else if (GameMenuCommands.GIFT_RATE.matches(input)) {
+                response = getGiftRateResponse(input);
+            } else if (GameMenuCommands.HUG.matches(input)) {
+                response = getHugResponse(input);
+            } else if (GameMenuCommands.FLOWER.matches(input)) {
+                response = getFlowerResponse(input);
+            } else if (GameMenuCommands.ASK_MARRIAGE.matches(input)) {
+                response = getAskMarriageResponse(input);
+            } else if (GameMenuCommands.RESPOND_MARRIAGE_ACCEPT.matches(input)) {
+                response = getRespondMarriageAcceptResponse(input);
+            } else if (GameMenuCommands.RESPOND_MARRIAGE_REJECT.matches(input)) {
+                response = getRespondMarriageRejectResponse(input);
+            } else if (GameMenuCommands.START_TRADE.matches(input)) {
+                response = getStartTradeResponse(input);
+            } else if (GameMenuCommands.MEET_NPC.matches(input)) {
+                response = getMeetNPCResponse(input);
+            } else if (GameMenuCommands.TALK_NPC.matches(input)) {
+                response = getTalkNpcResponse(input);
+            } else if (GameMenuCommands.GIFT_NPC.matches(input)) {
+                response = getGiftNPCResponse(input);
+            } else if (GameMenuCommands.FRIENDSHIP_NPC_LIST.matches(input)) {
+                response = getFriendshipNPCListResponse(input);
+            } else if (GameMenuCommands.QUESTS_LIST.matches(input)) {
+                response = getQuestListResponse(input);
+            } else if (GameMenuCommands.QUESTS_FINISH.matches(input)) {
+                response = getQuestFinishResponse(input);
+            } else if (GameMenuCommands.SHOW_MENU.matches(input)) {
+                response = getShowMenuResponse(input);
+            } else if (GameMenuCommands.GO_TO_STORE.matches(input)) {
+                response = goToStore(input);
+            } else if (GameMenuCommands.GO_TO_VILLAGE.matches(input)) {
+                response = goToVillage(input);
+            } else if (GameMenuCommands.WALK_HOME.matches(input)) {
+                response = walkHome(input);
+            } else if (GameMenuCommands.GO_TO_PARTNER_FARM.matches(input)) {
+                response = goToPartnerFarm(input);
+            } else if (GameMenuCommands.CHEAT_ADD_SKILL_XP.matches(input)) {
+                response = cheatAddSkillXp(input);
+            } else if (GameMenuCommands.CHEAT_EMPTY_RECTANGLE.matches(input)) {
+                response = cheatEmptyRectangle(input);
+            } else if (GameMenuCommands.SHOW_MONEY.matches(input)) {
+                response = showMoney(input);
+            } else if (GameMenuCommands.WALK_ADD_COORDS.matches(input)) {
+                response = getWalkAddCoordsResponse(input);
+            } else {
+                response = getInvalidCommand();
+            }
+        }
+
+        printResponse(response);
     }
 
 }

@@ -11,14 +11,6 @@ public class Seed extends Item {
     public Seed() {
     }
 
-    public CropSeedsType getCropType() {
-        return cropSeedsType;
-    }
-
-    public void setCropType(CropSeedsType cropSeedsType) {
-        this.cropSeedsType = cropSeedsType;
-    }
-
     public Seed(CropSeedsType cropSeedsType) {
         this.cropSeedsType = cropSeedsType;
         this.name = cropSeedsType.source;
@@ -26,6 +18,14 @@ public class Seed extends Item {
         this.maxStackSize = Integer.MAX_VALUE;
         this.value = cropSeedsType.baseSellPrice;
         this.energyCost = 0;
+    }
+
+    public CropSeedsType getCropType() {
+        return cropSeedsType;
+    }
+
+    public void setCropType(CropSeedsType cropSeedsType) {
+        this.cropSeedsType = cropSeedsType;
     }
 
     @Override

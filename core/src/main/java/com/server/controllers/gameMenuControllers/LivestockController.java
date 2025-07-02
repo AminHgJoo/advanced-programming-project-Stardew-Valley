@@ -1,9 +1,6 @@
 package com.server.controllers.gameMenuControllers;
 
 import com.common.models.*;
-import com.common.repositories.GameRepository;
-import com.server.controllers.Controller;
-import com.example.models.*;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.buildings.Barn;
@@ -19,6 +16,8 @@ import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.AnimalBlock;
 import com.common.models.mapObjects.BuildingBlock;
 import com.common.models.mapObjects.EmptyCell;
+import com.common.repositories.GameRepository;
+import com.server.controllers.Controller;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -72,11 +71,11 @@ public class LivestockController extends Controller {
         StringBuilder animalString = new StringBuilder();
         for (Animal animal : animals) {
             animalString.append("name: ").
-                    append(animal.getName()).append("\n").
-                    append("friendship level: ").append(animal.getXp()).append("\n").
-                    append("has Been Pet Today: ").append(animal.hasBeenPetToDay).append("\n").
-                    append("has Been Fed Today: ").append(animal.hasBeenFedByHay || animal.hasBeenFedByGrass).append("\n").
-                    append("friendship xp: ").append(animal.getXp()).append("\n\n");
+                append(animal.getName()).append("\n").
+                append("friendship level: ").append(animal.getXp()).append("\n").
+                append("has Been Pet Today: ").append(animal.hasBeenPetToDay).append("\n").
+                append("has Been Fed Today: ").append(animal.hasBeenFedByHay || animal.hasBeenFedByGrass).append("\n").
+                append("friendship xp: ").append(animal.getXp()).append("\n\n");
         }
         GameRepository.saveGame(gameData);
         return new Response(true, animalString.toString());
@@ -94,7 +93,7 @@ public class LivestockController extends Controller {
         Cell cell = farm.findCellByCoordinate(x, y);
         Cell animalBlock = farm.getAnimalBlock(animal);
 
-        if(!animal.isInside) {
+        if (!animal.isInside) {
             for (Building b : farm.getBuildings()) {
                 if (b instanceof Barn && b.buildingCells.contains(cell)) {
                     if (((Barn) b).barnType.equals("Barn") && animal.getType().equals(AnimalType.COW)) {
@@ -104,15 +103,15 @@ public class LivestockController extends Controller {
                         GameRepository.saveGame(gameData);
                         return new Response(true, "you have shepherd " + animal.getName());
                     } else if (((Barn) b).barnType.equals("Big Barn") && (animal.getType().equals(AnimalType.COW) ||
-                            animal.getType().equals(AnimalType.GOAT))) {
+                        animal.getType().equals(AnimalType.GOAT))) {
                         cell.setObjectOnCell(new AnimalBlock(animal));
                         animalBlock.setObjectOnCell(new EmptyCell());
                         animal.isInside = true;
                         GameRepository.saveGame(gameData);
                         return new Response(true, "you have shepherd " + animal.getName());
                     } else if (((Barn) b).barnType.equals("Deluxe Barn") && (animal.getType().equals(AnimalType.COW) ||
-                            animal.getType().equals(AnimalType.GOAT) || animal.getType().equals(AnimalType.SHEEP) ||
-                            animal.getType().equals(AnimalType.PIG))) {
+                        animal.getType().equals(AnimalType.GOAT) || animal.getType().equals(AnimalType.SHEEP) ||
+                        animal.getType().equals(AnimalType.PIG))) {
                         cell.setObjectOnCell(new AnimalBlock(animal));
                         animalBlock.setObjectOnCell(new EmptyCell());
                         animal.isInside = true;
@@ -127,15 +126,15 @@ public class LivestockController extends Controller {
                         GameRepository.saveGame(gameData);
                         return new Response(true, "you have shepherd " + animal.getName());
                     } else if (((Coop) b).coopType.equals("Big Coop") && (animal.getType().equals(AnimalType.Chicken) ||
-                            animal.getType().equals(AnimalType.DUCK) || animal.getType().equals(AnimalType.DINOSAUR))) {
+                        animal.getType().equals(AnimalType.DUCK) || animal.getType().equals(AnimalType.DINOSAUR))) {
                         cell.setObjectOnCell(new AnimalBlock(animal));
                         animalBlock.setObjectOnCell(new EmptyCell());
                         animal.isInside = true;
                         GameRepository.saveGame(gameData);
                         return new Response(true, "you have shepherd " + animal.getName());
                     } else if (((Coop) b).coopType.equals("Deluxe Coop") && (animal.getType().equals(AnimalType.Chicken) ||
-                            animal.getType().equals(AnimalType.DUCK) || animal.getType().equals(AnimalType.RABBIT) ||
-                            animal.getType().equals(AnimalType.DINOSAUR))) {
+                        animal.getType().equals(AnimalType.DUCK) || animal.getType().equals(AnimalType.RABBIT) ||
+                        animal.getType().equals(AnimalType.DINOSAUR))) {
                         cell.setObjectOnCell(new AnimalBlock(animal));
                         animalBlock.setObjectOnCell(new EmptyCell());
                         animal.isInside = true;
@@ -150,7 +149,7 @@ public class LivestockController extends Controller {
             GameRepository.saveGame(gameData);
             return new Response(false, "cell not found or not empty or no animal found");
         }
-        if(!animal.isInside) {
+        if (!animal.isInside) {
             GameRepository.saveGame(gameData);
             return new Response(false, "animal is already outside");
         }
@@ -160,10 +159,10 @@ public class LivestockController extends Controller {
         }
 
         Building building = farm.getAnimalBuilding(animal);
-        if(building instanceof Coop)
-        animalBlock.setObjectOnCell(new BuildingBlock(true, ((Coop) building).coopType ));
-        else if( building instanceof Barn)
-            animalBlock.setObjectOnCell(new BuildingBlock(true, ((Barn) building).barnType ));
+        if (building instanceof Coop)
+            animalBlock.setObjectOnCell(new BuildingBlock(true, ((Coop) building).coopType));
+        else if (building instanceof Barn)
+            animalBlock.setObjectOnCell(new BuildingBlock(true, ((Barn) building).barnType));
         cell.setObjectOnCell(new AnimalBlock(animal));
         animal.hasBeenFedByGrass = true;
         animal.isInside = false;
@@ -218,8 +217,8 @@ public class LivestockController extends Controller {
         StringBuilder animalString = new StringBuilder();
         for (Animal animal : desiredAnimals) {
             animalString.append("name: ").append(animal.getName())
-                    .append(" product: ").append(animal.product.getName()).append(" ").
-                    append(animal.product.getQuality()).append("\n");
+                .append(" product: ").append(animal.product.getName()).append(" ").
+                append(animal.product.getQuality()).append("\n");
         }
         GameRepository.saveGame(gameData);
         return new Response(true, animalString.toString());

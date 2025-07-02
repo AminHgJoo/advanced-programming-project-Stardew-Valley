@@ -8,6 +8,15 @@ public class Message {
     private String recipient;
     private String message;
 
+    public Message() {
+    }
+
+    public Message(String sender, String recipient, String message) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.message = message;
+    }
+
     public String getSender() {
         return sender;
     }
@@ -18,15 +27,6 @@ public class Message {
 
     public String getRecipient() {
         return recipient;
-    }
-
-    public Message() {
-    }
-
-    public Message(String sender, String recipient, String message) {
-        this.sender = sender;
-        this.recipient = recipient;
-        this.message = message;
     }
 
     public String getMessage() {

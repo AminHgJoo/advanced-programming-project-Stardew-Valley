@@ -1,8 +1,5 @@
 package com.server.controllers.gameMenuControllers;
 
-import com.common.repositories.GameRepository;
-import com.common.repositories.UserRepository;
-import com.server.controllers.Controller;
 import com.common.models.App;
 import com.common.models.GameData;
 import com.common.models.IO.Request;
@@ -11,8 +8,11 @@ import com.common.models.Player;
 import com.common.models.User;
 import com.common.models.enums.types.MenuTypes;
 import com.common.models.mapModels.Farm;
+import com.common.repositories.GameRepository;
+import com.common.repositories.UserRepository;
 import com.common.views.AppView;
 import com.common.views.gameViews.GameThread;
+import com.server.controllers.Controller;
 
 import java.util.ArrayList;
 
@@ -45,7 +45,7 @@ public class LoadingSavingTurnHandling extends Controller {
         }
         isWaitingForChoosingMap = true;
         return new Response(true, "The game has been made successfully. Awaiting each user's map choice...\n" +
-                "Use 'game map <map_number>' to pick map 1 or 2.");
+            "Use 'game map <map_number>' to pick map 1 or 2.");
     }
 
     public static Response handleMapSelection(Request request) {
@@ -105,7 +105,7 @@ public class LoadingSavingTurnHandling extends Controller {
         GameRepository.saveGame(gameData);
 
         return new Response(true, "The game has been loaded successfully. Welcome "
-                + user.getUsername());
+            + user.getUsername());
     }
 
     public static Response handleExitGame(Request request) {
@@ -122,7 +122,7 @@ public class LoadingSavingTurnHandling extends Controller {
                 u.setMoneyHighScore(Math.max(m, p.getMoney(gameData)));
                 UserRepository.saveUser(u);
             }
-                App.setCurrMenuType(MenuTypes.GameMenu);
+            App.setCurrMenuType(MenuTypes.GameMenu);
             GameRepository.saveGame(gameData);
 
             return new Response(true, "Exiting and saving game. Redirecting to game menu...");
@@ -146,7 +146,7 @@ public class LoadingSavingTurnHandling extends Controller {
         boolean success = false;
         while (!success) {
             System.out.println("Awaiting confirmation (Y/n) from player "
-                    + gameData.getCurrentPlayer().getUser().getUsername());
+                + gameData.getCurrentPlayer().getUser().getUsername());
             String answer = AppView.scanner.nextLine();
             if (answer.compareToIgnoreCase("y") == 0) {
                 System.out.println("Confirmation received.");
@@ -184,7 +184,7 @@ public class LoadingSavingTurnHandling extends Controller {
             }
             if (gameData.getCurrentPlayer().isPlayerFainted()) {
                 responseString +=
-                        ("Player " + gameData.getCurrentPlayer().getUser().getUsername() + " was fainted and skipped.\n");
+                    ("Player " + gameData.getCurrentPlayer().getUser().getUsername() + " was fainted and skipped.\n");
             }
         } while (gameData.getCurrentPlayer().isPlayerFainted());
 

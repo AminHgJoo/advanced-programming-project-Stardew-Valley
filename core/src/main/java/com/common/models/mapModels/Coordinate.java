@@ -16,14 +16,6 @@ public class Coordinate {
         this.y = y;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
     /// Eureka Indeed!
     public static double calculateEuclideanDistance(Cell cell1, Cell cell2) {
         Coordinate a = cell1.getCoordinate(), b = cell2.getCoordinate();
@@ -33,5 +25,13 @@ public class Coordinate {
 
     public static double calculateEuclideanDistance(Coordinate a, Coordinate b) {
         return Math.sqrt(Math.pow(b.getX() - a.getX(), 2) + Math.pow(b.getY() - a.getY(), 2));
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

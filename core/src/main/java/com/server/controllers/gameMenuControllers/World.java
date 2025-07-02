@@ -1,26 +1,22 @@
 package com.server.controllers.gameMenuControllers;
 
 import com.common.models.*;
-import com.common.models.enums.types.itemTypes.*;
-import com.common.models.items.*;
-import com.common.models.mapObjects.*;
-import com.common.repositories.GameRepository;
-import com.server.controllers.Controller;
-import com.example.models.*;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.Quality;
 import com.common.models.enums.SkillLevel;
 import com.common.models.enums.types.AnimalType;
-import com.example.models.enums.types.itemTypes.*;
+import com.common.models.enums.types.itemTypes.*;
 import com.common.models.enums.types.mapObjectTypes.TreeType;
 import com.common.models.enums.worldEnums.Season;
 import com.common.models.enums.worldEnums.Weather;
-import com.example.models.items.*;
+import com.common.models.items.*;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Farm;
-import com.example.models.mapObjects.*;
+import com.common.models.mapObjects.*;
+import com.common.repositories.GameRepository;
 import com.common.utilities.DateUtility;
+import com.server.controllers.Controller;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -57,7 +53,7 @@ public class World extends Controller {
         Response response = new Response();
         response.setSuccess(true);
         response.setMessage(App.getLoggedInUser().getCurrentGame()
-                .getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm:ss")).toString());
+            .getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm:ss")).toString());
         return response;
     }
 
@@ -93,7 +89,7 @@ public class World extends Controller {
         nextDateTime = nextDateTime.plusHours(howManyHours);
         nextDateTime = nextDateTime.plusMonths(howManyMonths);
         boolean check = nextDateTime.getMonthValue() - currentDateTime.getMonthValue() > 0
-                || nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0;
+            || nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0;
         currentGameData.setDate(nextDateTime);
         currentGameData.checkSeasonChange();
         if (check) {
@@ -119,7 +115,7 @@ public class World extends Controller {
         nextDateTime = currentDateTime.plusDays(howManyDays);
         nextDateTime = nextDateTime.plusMonths(howManyMonths);
         boolean check = (nextDateTime.getMonthValue() - currentDateTime.getMonthValue() > 0)
-                || (nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0);
+            || (nextDateTime.getDayOfMonth() - currentDateTime.getDayOfMonth() > 0);
         currentGameData.setDate(nextDateTime);
         if (check) {
             currentGameData.newDayBackgroundChecks();
@@ -153,7 +149,7 @@ public class World extends Controller {
 
     public static Response handleWeatherForecastQuery(Request request) {
         return new Response(true, "Tomorrow's weather forecast is: "
-                + App.getLoggedInUser().getCurrentGame().getWeatherTomorrow().toString());
+            + App.getLoggedInUser().getCurrentGame().getWeatherTomorrow().toString());
     }
 
     public static Response handleSetWeatherCheat(Request request) {
@@ -243,38 +239,38 @@ public class World extends Controller {
 
         if (toolType == ToolTypes.HOE) {
             return handleHoeUse(request, equippedTool.getQuality()
-                    , player.getFarmingSkill().getLevel().energyCostDiscount);
+                , player.getFarmingSkill().getLevel().energyCostDiscount);
         } else if (toolType == ToolTypes.PICKAXE) {
             return handlePickaxeUse(request
-                    , player.getMiningSkill().getLevel()
-                    , equippedTool.getQuality()
-                    , player.getMiningSkill().getLevel().energyCostDiscount);
+                , player.getMiningSkill().getLevel()
+                , equippedTool.getQuality()
+                , player.getMiningSkill().getLevel().energyCostDiscount);
         } else if (toolType == ToolTypes.AXE) {
             return handleAxeUse(request, equippedTool.getQuality()
-                    , player.getForagingSkill().getLevel().energyCostDiscount);
+                , player.getForagingSkill().getLevel().energyCostDiscount);
         } else if (toolType == ToolTypes.WATERING_CAN_DEFAULT) {
             return handleWateringCanUse(request, toolType
-                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
-                    , equippedTool);
+                , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                , equippedTool);
         } else if (toolType == ToolTypes.WATERING_CAN_COPPER) {
             return handleWateringCanUse(request, toolType
-                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
-                    , equippedTool);
+                , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                , equippedTool);
         } else if (toolType == ToolTypes.WATERING_CAN_IRON) {
             return handleWateringCanUse(request, toolType
-                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
-                    , equippedTool);
+                , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                , equippedTool);
         } else if (toolType == ToolTypes.WATERING_CAN_GOLD) {
             return handleWateringCanUse(request, toolType
-                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
-                    , equippedTool);
+                , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                , equippedTool);
         } else if (toolType == ToolTypes.WATERING_CAN_IRIDIUM) {
             return handleWateringCanUse(request, toolType
-                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
-                    , equippedTool);
+                , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                , equippedTool);
         } else if (toolType == ToolTypes.FISHING_ROD) {
             return handleFishingRodUse(request, equippedTool.getQuality()
-                    , player.getFishingSkill().getLevel().energyCostDiscount);
+                , player.getFishingSkill().getLevel().energyCostDiscount);
         } else if (toolType == ToolTypes.SCYTHE) {
             return handleScytheUse(request);
         } else if (toolType == ToolTypes.MILK_PAIL) {
@@ -404,7 +400,7 @@ public class World extends Controller {
     }
 
     private static Response handlePickaxeUse(Request request, SkillLevel skillLevel
-            , Quality quality, int skillEnergyDiscount) {
+        , Quality quality, int skillEnergyDiscount) {
         String direction = request.body.get("direction");
         int[] dxAndDy = getXAndYIncrement(direction);
         int dx = dxAndDy[0];
@@ -425,7 +421,7 @@ public class World extends Controller {
 
         if (energyCost + currentEnergyUsed > 50) {
             return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
+                "You will exceed your energy usage limit.");
         }
 
         if (playerEnergy - energyCost < 0) {
@@ -476,7 +472,7 @@ public class World extends Controller {
             } else {
                 if (slot == null) {
                     backpack.getSlots().add(new
-                            Slot(new ForagingMineralItem(Quality.DEFAULT, type), count));
+                        Slot(new ForagingMineralItem(Quality.DEFAULT, type), count));
                 } else {
                     slot.setCount(Math.min(slot.getItem().getMaxStackSize(), slot.getCount() + count));
                 }
@@ -582,7 +578,7 @@ public class World extends Controller {
 
         if (energyCost + currentEnergyUsed > 50) {
             return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
+                "You will exceed your energy usage limit.");
         }
 
         if (playerEnergy - energyCost < 0) {
@@ -612,7 +608,7 @@ public class World extends Controller {
                 if (slot == null) {
                     GameRepository.saveGame(gameData);
                     return new Response(false,
-                            "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
+                        "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
                 slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
                 GameRepository.saveGame(gameData);
@@ -637,7 +633,7 @@ public class World extends Controller {
                 if (slot == null) {
                     GameRepository.saveGame(gameData);
                     return new Response(false,
-                            "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
+                        "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
                 slot.setCount(Math.min(slot.getCount() + amountOfWood, slot.getItem().getMaxStackSize()));
                 GameRepository.saveGame(gameData);
@@ -661,7 +657,7 @@ public class World extends Controller {
                 if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
                     GameRepository.saveGame(gameData);
                     return new Response(false,
-                            "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
+                        "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
 
                 Slot slotToAdd = tree.getTreeType().fruitItem.createAmountOfItem(1, Quality.DEFAULT);
@@ -683,7 +679,7 @@ public class World extends Controller {
                 if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
                     GameRepository.saveGame(gameData);
                     return new Response(false
-                            , "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
+                        , "Tree was chopped; however, your backpack was full. Wood wasn't added to your backpack.");
                 }
 
                 Slot slotToAdd = TreeSeedsType.findTreeTypeByName(tree.getTreeType().source).createAmountOfItem(2, Quality.DEFAULT);
@@ -700,7 +696,7 @@ public class World extends Controller {
     }
 
     private static Response handleWateringCanUse(Request request, ToolTypes wateringCanType
-            , int skillEnergyDiscount, Quality quality, Tool equippedTool) {
+        , int skillEnergyDiscount, Quality quality, Tool equippedTool) {
         String direction = request.body.get("direction");
         int[] dxAndDy = getXAndYIncrement(direction);
         int dx = dxAndDy[0];
@@ -721,7 +717,7 @@ public class World extends Controller {
 
         if (energyCost + currentEnergyUsed > 50) {
             return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
+                "You will exceed your energy usage limit.");
         }
 
         if (playerEnergy - energyCost < 0) {
@@ -818,7 +814,7 @@ public class World extends Controller {
 
         if (energyCost + currentEnergyUsed > 50) {
             return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
+                "You will exceed your energy usage limit.");
         }
 
         if (playerEnergy - energyCost < 0) {
@@ -837,7 +833,7 @@ public class World extends Controller {
             double weatherModifier = setWeatherModifierFishing(gameData);
             int playerLevel = player.getFishingSkill().getLevel().levelNumber;
             int numberOfFishes = (int) (((double) randomNumber)
-                    * weatherModifier * (double) (playerLevel + 2));
+                * weatherModifier * (double) (playerLevel + 2));
             if (numberOfFishes == 0) {
                 GameRepository.saveGame(gameData);
                 return new Response(false, "You could not catch fish");
@@ -957,7 +953,7 @@ public class World extends Controller {
 
         if (energyCost + currentEnergyUsed > 50) {
             return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
+                "You will exceed your energy usage limit.");
         }
 
         if (playerEnergy - energyCost < 0) {
@@ -1071,8 +1067,8 @@ public class World extends Controller {
                 }
 
                 if (tree.getTreeType() == TreeType.NORMAL_TREE
-                        || tree.getTreeType() == TreeType.TREE_BARK
-                        || tree.getTreeType() == TreeType.BURNT_TREE) {
+                    || tree.getTreeType() == TreeType.TREE_BARK
+                    || tree.getTreeType() == TreeType.BURNT_TREE) {
                     return new Response(false, "Tree isn't harvestable.");
                 } else {
                     tree.setHarvestDeadLine(DateUtility.getLocalDateTime(gameData.getDate(), tree.getTreeType().harvestCycleTime));
@@ -1088,8 +1084,8 @@ public class World extends Controller {
             }
 
             if (tree.getTreeType() == TreeType.NORMAL_TREE
-                    || tree.getTreeType() == TreeType.TREE_BARK
-                    || tree.getTreeType() == TreeType.BURNT_TREE) {
+                || tree.getTreeType() == TreeType.TREE_BARK
+                || tree.getTreeType() == TreeType.BURNT_TREE) {
                 return new Response(false, "Can't harvest a normal, burnt tree or bark.");
             } else {
                 tree.setHarvestDeadLine(DateUtility.getLocalDateTime(gameData.getDate(), tree.getTreeType().harvestCycleTime));
@@ -1144,7 +1140,7 @@ public class World extends Controller {
 
         if (energyCost + currentEnergyUsed > 50) {
             return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
+                "You will exceed your energy usage limit.");
         }
 
         if (playerEnergy - energyCost < 0) {
@@ -1193,7 +1189,7 @@ public class World extends Controller {
 
         if (energyCost + currentEnergyUsed > 50) {
             return new Response(false, "You can't perform this activity. " +
-                    "You will exceed your energy usage limit.");
+                "You will exceed your energy usage limit.");
         }
 
         if (playerEnergy - energyCost < 0) {

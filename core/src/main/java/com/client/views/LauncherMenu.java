@@ -14,10 +14,10 @@ import com.client.GameMain;
 import com.client.utils.AssetManager;
 
 public class LauncherMenu implements Screen {
-    private Stage stage;
     private final Skin skin;
     private final Texture background;
     private final GameMain gameMain;
+    private Stage stage;
 
     public LauncherMenu(GameMain gameMain) {
         this.background = AssetManager.getTextures().get("launcherBackground");

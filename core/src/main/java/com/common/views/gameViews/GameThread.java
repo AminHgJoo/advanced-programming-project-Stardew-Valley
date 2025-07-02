@@ -1,13 +1,13 @@
 package com.common.views.gameViews;
 
-import com.common.repositories.GameRepository;
 import com.common.models.GameData;
+import com.common.repositories.GameRepository;
 import dev.morphia.annotations.Transient;
 
 public class GameThread extends Thread {
+    public boolean keepRunning = false;
     @Transient
     private GameData gameData;
-    public boolean keepRunning = false;
 
     public GameThread(GameData gameData) {
         this.gameData = gameData;

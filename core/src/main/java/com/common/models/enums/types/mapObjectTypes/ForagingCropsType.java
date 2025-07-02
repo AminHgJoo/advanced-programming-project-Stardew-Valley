@@ -34,21 +34,11 @@ public enum ForagingCropsType {
     WINTER_ROOT(Season.WINTER, 70, 25, FoodTypes.WINTER_ROOT, "Winter Root"),
     ;
 
+    public final String name;
     private final Season[] seasons;
     private final int cost;
     private final int energy;
     private final ItemType harvestedItemType;
-    public final String name;
-
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append("Name: ").append(name).append("\n");
-        str.append("Value: ").append(cost).append("\n");
-        str.append("Energy: ").append(energy).append("\n");
-        str.append("Seasons: ").append(Arrays.toString(seasons)).append("\n");
-        return str.toString();
-    }
 
     ForagingCropsType(Season[] seasons, int cost, int energy, ItemType harvestedItemType, String name) {
         this.seasons = seasons;
@@ -64,6 +54,16 @@ public enum ForagingCropsType {
         this.energy = energy;
         this.harvestedItemType = harvestedItemType;
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append("Name: ").append(name).append("\n");
+        str.append("Value: ").append(cost).append("\n");
+        str.append("Energy: ").append(energy).append("\n");
+        str.append("Seasons: ").append(Arrays.toString(seasons)).append("\n");
+        return str.toString();
     }
 
     public Season[] getSeasons() {

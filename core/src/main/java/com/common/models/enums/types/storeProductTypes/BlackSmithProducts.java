@@ -23,11 +23,11 @@ public enum BlackSmithProducts implements StoreProductInterface {
     ;
 
     private final String name;
-    private String description = "";
     private final ItemType itemType;
     private final int price;
     private final double outOfSeasonPrice;
     private final double dailyLimit;
+    private String description = "";
     private ItemType ingredient = null;
     private Season[] seasons;
 
@@ -49,6 +49,35 @@ public enum BlackSmithProducts implements StoreProductInterface {
         this.dailyLimit = dailyLimit;
         this.seasons = seasons;
         this.itemType = null;
+    }
+
+    public static BlackSmithProducts findTrashCanUpgrade(String name) {
+        if (COPPER_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
+            return COPPER_TRASH_CAN;
+        } else if (STEEL_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
+            return STEEL_TRASH_CAN;
+        } else if (GOLD_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
+            return GOLD_TRASH_CAN;
+        } else if (IRIDIUM_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
+            return IRIDIUM_TRASH_CAN;
+        }
+        return null;
+    }
+
+    public static BlackSmithProducts findSteelToolUpgrade(String name) {
+        if (COPPER_TOOL.name.compareToIgnoreCase(name) == 0) {
+            return COPPER_TOOL;
+        }
+        if (STEEL_TOOL.name.compareToIgnoreCase(name) == 0) {
+            return STEEL_TOOL;
+        }
+        if (GOLD_TOOL.name.compareToIgnoreCase(name) == 0) {
+            return GOLD_TOOL;
+        }
+        if (IRIDIUM_TOOL.name.compareToIgnoreCase(name) == 0) {
+            return IRIDIUM_TOOL;
+        }
+        return null;
     }
 
     public String getDescription() {
@@ -85,35 +114,6 @@ public enum BlackSmithProducts implements StoreProductInterface {
 
     public void setIngredient(ItemType ingredient) {
         this.ingredient = ingredient;
-    }
-
-    public static BlackSmithProducts findTrashCanUpgrade(String name) {
-        if (COPPER_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
-            return COPPER_TRASH_CAN;
-        } else if (STEEL_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
-            return STEEL_TRASH_CAN;
-        } else if (GOLD_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
-            return GOLD_TRASH_CAN;
-        } else if (IRIDIUM_TRASH_CAN.name.compareToIgnoreCase(name) == 0) {
-            return IRIDIUM_TRASH_CAN;
-        }
-        return null;
-    }
-
-    public static BlackSmithProducts findSteelToolUpgrade(String name) {
-        if (COPPER_TOOL.name.compareToIgnoreCase(name) == 0) {
-            return COPPER_TOOL;
-        }
-        if (STEEL_TOOL.name.compareToIgnoreCase(name) == 0) {
-            return STEEL_TOOL;
-        }
-        if (GOLD_TOOL.name.compareToIgnoreCase(name) == 0) {
-            return GOLD_TOOL;
-        }
-        if (IRIDIUM_TOOL.name.compareToIgnoreCase(name) == 0) {
-            return IRIDIUM_TOOL;
-        }
-        return null;
     }
 
     public TrashcanType getTrashcan() {

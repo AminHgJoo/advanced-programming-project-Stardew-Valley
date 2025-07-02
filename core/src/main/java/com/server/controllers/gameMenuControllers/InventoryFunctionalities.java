@@ -1,10 +1,6 @@
 package com.server.controllers.gameMenuControllers;
 
 import com.common.models.*;
-import com.common.models.items.*;
-import com.common.repositories.GameRepository;
-import com.server.controllers.Controller;
-import com.example.models.*;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.Quality;
@@ -16,12 +12,14 @@ import com.common.models.enums.types.itemTypes.TreeSeedsType;
 import com.common.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.common.models.enums.types.mapObjectTypes.ForagingCropsType;
 import com.common.models.enums.types.mapObjectTypes.TreeType;
-import com.example.models.items.*;
+import com.common.models.items.*;
 import com.common.models.items.buffs.ActiveBuff;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapObjects.ArtisanBlock;
 import com.common.models.mapObjects.DroppedItem;
 import com.common.models.mapObjects.EmptyCell;
+import com.common.repositories.GameRepository;
+import com.server.controllers.Controller;
 import org.intellij.lang.annotations.Language;
 
 import java.util.HashMap;
@@ -82,7 +80,7 @@ public class InventoryFunctionalities extends Controller {
 
     private static Response removeItemHandle(int numberInt, Slot slot, Player player, GameData gameData) {
         int cashBack = (numberInt * slot.getItem().getValue() *
-                player.getTrashcanRefundPercentage()) / 100;
+            player.getTrashcanRefundPercentage()) / 100;
         player.setMoney(player.getMoney(gameData) + cashBack, gameData);
         GameRepository.saveGame(gameData);
         return new Response(true, numberInt + " of item(s) successfully trashed!");
@@ -90,7 +88,7 @@ public class InventoryFunctionalities extends Controller {
 
     private static Response removeSlotHandle(Slot slot, Player player, Backpack backpack, GameData gameData) {
         int cashBack = (slot.getCount() * slot.getItem().getValue() *
-                player.getTrashcanRefundPercentage()) / 100;
+            player.getTrashcanRefundPercentage()) / 100;
         player.setMoney(player.getMoney(gameData) + cashBack, gameData);
         backpack.removeSlot(slot);
         GameRepository.saveGame(gameData);
@@ -343,7 +341,7 @@ public class InventoryFunctionalities extends Controller {
 
         @Language("Regexp")
         String toolsRegex = "(?<quality>Default|Copper|Silver|Gold|Iridium|Training|Bamboo|Fiberglass) " +
-                "(?<toolName>Axe|Hoe|Pickaxe|Fishing Rod|Scythe)";
+            "(?<toolName>Axe|Hoe|Pickaxe|Fishing Rod|Scythe)";
         Pattern pattern = Pattern.compile(toolsRegex);
         Matcher matcher = pattern.matcher(itemName);
 

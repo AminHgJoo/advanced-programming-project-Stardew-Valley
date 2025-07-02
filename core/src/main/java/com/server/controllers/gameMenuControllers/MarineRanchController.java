@@ -1,9 +1,6 @@
 package com.server.controllers.gameMenuControllers;
 
 import com.common.models.*;
-import com.common.repositories.GameRepository;
-import com.server.controllers.Controller;
-import com.example.models.*;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.buildings.Barn;
@@ -14,6 +11,8 @@ import com.common.models.enums.types.MenuTypes;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.AnimalBlock;
+import com.common.repositories.GameRepository;
+import com.server.controllers.Controller;
 
 public class MarineRanchController extends Controller {
     public static Response leaveRanch(Request request) {
@@ -107,8 +106,8 @@ public class MarineRanchController extends Controller {
     }
 
     private static void addAnimalToBuilding(Animal animal, Building building) {
-        for(Cell cell : building.buildingCells){
-            if(!(cell.getObjectOnCell() instanceof AnimalBlock)){
+        for (Cell cell : building.buildingCells) {
+            if (!(cell.getObjectOnCell() instanceof AnimalBlock)) {
                 cell.setObjectOnCell(new AnimalBlock(animal));
                 break;
             }

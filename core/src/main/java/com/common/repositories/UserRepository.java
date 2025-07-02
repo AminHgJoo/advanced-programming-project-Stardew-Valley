@@ -57,10 +57,10 @@ public class UserRepository {
         }
         if (System.getenv("APP_MODE").equals("TEST")) {
             envFilePath += "/src/main/java/com/example/configs/env."
-                    + System.getenv("APP_MODE").toLowerCase();
+                + System.getenv("APP_MODE").toLowerCase();
         } else {
             envFilePath += "/src/main/java/com/example/configs/env."
-                    + System.getenv("APP_MODE").toLowerCase();
+                + System.getenv("APP_MODE").toLowerCase();
         }
         String variableToRemove = "USER_ID";
 
@@ -68,8 +68,8 @@ public class UserRepository {
             List<String> lines = Files.readAllLines(Paths.get(envFilePath));
 
             List<String> updatedLines = lines.stream()
-                    .filter(line -> !line.startsWith(variableToRemove + "="))
-                    .collect(Collectors.toList());
+                .filter(line -> !line.startsWith(variableToRemove + "="))
+                .collect(Collectors.toList());
 
             Files.write(Paths.get(envFilePath), updatedLines, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
 
@@ -80,7 +80,7 @@ public class UserRepository {
 
     public static void saveStayLoggedInUser(User user) {
         String envFilePath = System.getProperty("user.dir") + "/project/src/main/java/com/example/configs/env."
-                + System.getenv("APP_MODE").toLowerCase();
+            + System.getenv("APP_MODE").toLowerCase();
         String envVar = "\nUSER_ID=" + user.get_id().toString();
 
         try {

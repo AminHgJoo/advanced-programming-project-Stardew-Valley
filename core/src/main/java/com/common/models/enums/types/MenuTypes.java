@@ -1,12 +1,10 @@
 package com.common.models.enums.types;
 
 import com.common.views.*;
-import com.common.views.gameViews.shops.*;
-import com.example.views.*;
 import com.common.views.gameViews.GameMenu;
 import com.common.views.gameViews.PlayerHomeMenu;
 import com.common.views.gameViews.TradeMenuView;
-import com.example.views.gameViews.shops.*;
+import com.common.views.gameViews.shops.*;
 
 public enum MenuTypes {
     ExitMenu(new ExitMenu()),

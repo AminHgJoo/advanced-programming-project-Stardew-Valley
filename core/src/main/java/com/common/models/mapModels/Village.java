@@ -4,7 +4,6 @@ import com.common.models.NPCModels.NPC;
 import com.common.models.Store;
 import com.common.models.StoreProduct;
 import com.common.models.enums.types.storeProductTypes.*;
-import com.example.models.enums.types.storeProductTypes.*;
 import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;

@@ -8,8 +8,8 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class FindPath {
-    public static ArrayList<Tile> cells = new ArrayList<>();
     private static final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+    public static ArrayList<Tile> cells = new ArrayList<>();
 
     private static ArrayList<Tile> cellToTile(ArrayList<Cell> c) {
         ArrayList<Tile> arr = new ArrayList<>();
@@ -59,13 +59,6 @@ public class FindPath {
         return dest;
     }
 
-    public static class CellComparator implements Comparator<Tile> {
-        @Override
-        public int compare(Tile c1, Tile c2) {
-            return Double.compare(c1.energy, c2.energy); // Lower cost = higher priority
-        }
-    }
-
     public static Tile findCell(int x, int y) {
         for (Tile cell : cells) {
             if (cell.getCoordinate().getX() == x && cell.getCoordinate().getY() == y) {
@@ -73,5 +66,12 @@ public class FindPath {
             }
         }
         return null;
+    }
+
+    public static class CellComparator implements Comparator<Tile> {
+        @Override
+        public int compare(Tile c1, Tile c2) {
+            return Double.compare(c1.energy, c2.energy); // Lower cost = higher priority
+        }
     }
 }

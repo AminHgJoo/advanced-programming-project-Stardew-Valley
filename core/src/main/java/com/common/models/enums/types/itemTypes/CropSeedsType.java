@@ -99,17 +99,17 @@ public enum CropSeedsType implements ItemType {
         if (name.compareToIgnoreCase("Random Crop") == 0) {
             if (season == Season.SPRING) {
                 CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.CAULIFLOWER, CropSeedsType.PARSNIP, CropSeedsType.POTATO
-                        , CropSeedsType.BLUE_JAZZ, CropSeedsType.TULIP};
+                    , CropSeedsType.BLUE_JAZZ, CropSeedsType.TULIP};
                 int rand = (int) (Math.random() * 5);
                 return arr[rand];
             } else if (season == Season.SUMMER) {
                 CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.CORN, CropSeedsType.HOT_PEPPER, CropSeedsType.RADISH
-                        , CropSeedsType.WHEAT, CropSeedsType.POPPY, CropSeedsType.SUNFLOWER, CropSeedsType.SUMMER_SPANGLE};
+                    , CropSeedsType.WHEAT, CropSeedsType.POPPY, CropSeedsType.SUNFLOWER, CropSeedsType.SUMMER_SPANGLE};
                 int rand = (int) (Math.random() * 7);
                 return arr[rand];
             } else if (season == Season.FALL) {
                 CropSeedsType[] arr = new CropSeedsType[]{CropSeedsType.ARTICHOKE, CropSeedsType.CORN, CropSeedsType.EGGPLANT,
-                        CropSeedsType.PUMPKIN, CropSeedsType.SUNFLOWER, CropSeedsType.FAIRY_ROSE};
+                    CropSeedsType.PUMPKIN, CropSeedsType.SUNFLOWER, CropSeedsType.FAIRY_ROSE};
                 int rand = (int) (Math.random() * 6);
                 return arr[rand];
             } else if (season == Season.WINTER) {

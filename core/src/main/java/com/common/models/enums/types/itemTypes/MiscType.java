@@ -69,11 +69,6 @@ public enum MiscType implements ItemType {
         this.isPlacable = isPlacable;
     }
 
-
-    public String getName() {
-        return name;
-    }
-
     public static MiscType getMiscTypeByName(String name) {
         MiscType[] values = MiscType.values();
         for (MiscType value : values) {
@@ -82,6 +77,10 @@ public enum MiscType implements ItemType {
             }
         }
         return null;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

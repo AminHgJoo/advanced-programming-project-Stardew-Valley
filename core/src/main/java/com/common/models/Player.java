@@ -1,7 +1,5 @@
 package com.common.models;
 
-import com.common.models.skills.*;
-import com.common.repositories.UserRepository;
 import com.common.models.NPCModels.NPC;
 import com.common.models.NPCModels.NPCFriendship;
 import com.common.models.NPCModels.NPCReward;
@@ -19,7 +17,8 @@ import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.ArtisanBlock;
-import com.example.models.skills.*;
+import com.common.models.skills.*;
+import com.common.repositories.UserRepository;
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
@@ -31,9 +30,9 @@ import java.util.ArrayList;
 @Embedded
 public class Player {
     private static final Logger log = LoggerFactory.getLogger(Player.class);
-    private Coordinate coordinate;
     /// DO NOT USE THIS FIELD DIRECTLY
     public int money;
+    private Coordinate coordinate;
     private Backpack inventory;
     private Farm farm;
     private ArrayList<Skill> skills = new ArrayList<>();
@@ -62,23 +61,6 @@ public class Player {
     private ArrayList<Message> notifications = new ArrayList<>();
     private int moneyInNextDay = 0;
 
-    public Slot getRefrigeratorSlotByName(String slotName) {
-        for (Slot slot : refrigeratorSlots) {
-            if (slot.getItem().getName().compareToIgnoreCase(slotName) == 0) {
-                return slot;
-            }
-        }
-        return null;
-    }
-
-    public int getCurrentFarmNumber() {
-        return currentFarmNumber;
-    }
-
-    public void setCurrentFarmNumber(int currentFarmNumber) {
-        this.currentFarmNumber = currentFarmNumber;
-    }
-
     public Player() {
     }
 
@@ -99,6 +81,35 @@ public class Player {
         initializeInventory();
         initializeSkills();
         initializeRecipes();
+    }
+
+    /// Debug Only Constructor. Not Usable.
+    private Player(Coordinate coordinate, int money, Farm farm, User user, double energy) {
+        this.coordinate = coordinate;
+        this.trashcanType = TrashcanType.DEFAULT;
+        this.inventory = new Backpack(BackpackType.DEFAULT);
+        this.money = money;
+        this.farm = farm;
+        this.user = user;
+        this.user_id = user.get_id();
+        this.energy = energy;
+    }
+
+    public Slot getRefrigeratorSlotByName(String slotName) {
+        for (Slot slot : refrigeratorSlots) {
+            if (slot.getItem().getName().compareToIgnoreCase(slotName) == 0) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
+    public int getCurrentFarmNumber() {
+        return currentFarmNumber;
+    }
+
+    public void setCurrentFarmNumber(int currentFarmNumber) {
+        this.currentFarmNumber = currentFarmNumber;
     }
 
     public Animal getAnimalByName(String name) {
@@ -128,15 +139,15 @@ public class Player {
 
     private void initializeInventory() {
         this.inventory.getSlots().add(
-                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Hoe", ToolTypes.HOE, 0), 1));
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Hoe", ToolTypes.HOE, 0), 1));
         this.inventory.getSlots().add(
-                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Pickaxe", ToolTypes.PICKAXE, 0), 1));
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Pickaxe", ToolTypes.PICKAXE, 0), 1));
         this.inventory.getSlots().add(
-                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Axe", ToolTypes.AXE, 0), 1));
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Axe", ToolTypes.AXE, 0), 1));
         this.inventory.getSlots().add(
-                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Watering Can", ToolTypes.WATERING_CAN_DEFAULT, 40), 1));
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Watering Can", ToolTypes.WATERING_CAN_DEFAULT, 40), 1));
         this.inventory.getSlots().add(
-                new Slot(new Tool(Quality.DEFAULT, 0, 5, "Scythe", ToolTypes.SCYTHE, 0), 1));
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Scythe", ToolTypes.SCYTHE, 0), 1));
     }
 
     public Farming getFarmingSkill() {
@@ -274,22 +285,6 @@ public class Player {
         return null;
     }
 
-    /// Debug Only Constructor. Not Usable.
-    private Player(Coordinate coordinate, int money, Farm farm, User user, double energy) {
-        this.coordinate = coordinate;
-        this.trashcanType = TrashcanType.DEFAULT;
-        this.inventory = new Backpack(BackpackType.DEFAULT);
-        this.money = money;
-        this.farm = farm;
-        this.user = user;
-        this.user_id = user.get_id();
-        this.energy = energy;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public int getTrashcanRefundPercentage() {
         return trashcanType.refundPercentage;
     }
@@ -298,16 +293,21 @@ public class Player {
         return energy;
     }
 
+    public void setEnergy(double energy) {
+        this.energy = energy;
+    }
+
     public Farm getFarm() {
         return farm;
     }
 
-    public Farm getCurrentFarm(GameData gameData) {
-        return gameData.getFarmByNumber(currentFarmNumber);
+    public void setFarm(Farm farm) {
+        this.farm = farm;
+        this.currentFarmNumber = farm.getFarmNumber();
     }
 
-    public void setEnergy(double energy) {
-        this.energy = energy;
+    public Farm getCurrentFarm(GameData gameData) {
+        return gameData.getFarmByNumber(currentFarmNumber);
     }
 
     public Coordinate getCoordinate() {
@@ -337,11 +337,6 @@ public class Player {
 
     }
 
-    public void setFarm(Farm farm) {
-        this.farm = farm;
-        this.currentFarmNumber = farm.getFarmNumber();
-    }
-
     public Backpack getInventory() {
         return inventory;
     }
@@ -356,6 +351,10 @@ public class Player {
             user = UserRepository.findUserById(user_id.toString());
         }
         return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public ArrayList<NPCFriendship> getNpcs() {

@@ -24,17 +24,17 @@ public class AIChat {
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL))
-                .header("Authorization", "Bearer " + API_KEY)
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(payload.toString()))
-                .build();
+            .uri(URI.create(API_URL))
+            .header("Authorization", "Bearer " + API_KEY)
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(payload.toString()))
+            .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         JSONObject jsonResponse = new JSONObject(response.body());
         return jsonResponse.getJSONArray("choices")
-                .getJSONObject(0).getJSONObject("message").getString("content");
+            .getJSONObject(0).getJSONObject("message").getString("content");
     }
 
     public static String getNpcDialogue(String message) {

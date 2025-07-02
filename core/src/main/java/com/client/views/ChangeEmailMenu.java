@@ -15,9 +15,9 @@ import com.client.utils.AssetManager;
 
 public class ChangeEmailMenu implements Screen {
     private final GameMain gameMain;
-    private Stage stage;
     private final Skin skin;
     private final Texture background;
+    private Stage stage;
 
     public ChangeEmailMenu(GameMain gameMain) {
         this.gameMain = gameMain;

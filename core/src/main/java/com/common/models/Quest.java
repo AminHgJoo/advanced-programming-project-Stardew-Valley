@@ -1,7 +1,6 @@
 package com.common.models;
 
 import com.common.models.enums.types.itemTypes.*;
-import com.example.models.enums.types.itemTypes.*;
 import dev.morphia.annotations.Embedded;
 
 @Embedded

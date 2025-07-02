@@ -1,38 +1,14 @@
 package com.common.views.gameViews;
 
-import com.server.controllers.gameMenuControllers.TradingController;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.GameMenuCommands;
 import com.common.views.Menu;
+import com.server.controllers.gameMenuControllers.TradingController;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class TradeMenuView implements Menu {
-    public void handleMenu(String input) {
-        Response response = null;
-        if (GameMenuCommands.EXIT_MENU.matches(input)) {
-            response = leaveMenu(input);
-        } else if (GameMenuCommands.TRADE_MONEY.matches(input)) {
-            response = getTradeMoneyResponse(input);
-        } else if (GameMenuCommands.TRADE_ITEM.matches(input)) {
-            response = getTradeItemResponse(input);
-        } else if (GameMenuCommands.TRADE_ERROR.matches(input)) {
-            response = tradeError(input);
-        } else if (GameMenuCommands.TRADE_LIST.matches(input)) {
-            response = getTradeListResponse(input);
-        } else if (GameMenuCommands.TRADE_RESPOND_ACCEPT.matches(input)) {
-            response = getTradeRespondAcceptResponse(input);
-        } else if (GameMenuCommands.TRADE_RESPOND_REJECT.matches(input)) {
-            response = getTradeRespondRejectResponse(input);
-        } else if (GameMenuCommands.TRADE_HISTORY.matches(input)) {
-            response = getTradeHistoryResponse(input);
-        } else {
-            response = getInvalidCommand();
-        }
-        printResponse(response);
-    }
-
     private static Response getTradeRespondRejectResponse(String input) {
         Request request = new Request(input);
         request.body.put("id", GameMenuCommands.TRADE_RESPOND_REJECT.getGroup(input, "id"));
@@ -93,6 +69,30 @@ public class TradeMenuView implements Menu {
         request.body.put("targetAmount", GameMenuCommands.TRADE_ITEM.getGroup(input, "targetAmount"));
         Response response = TradingController.handleTradeItem(request);
         return response;
+    }
+
+    public void handleMenu(String input) {
+        Response response = null;
+        if (GameMenuCommands.EXIT_MENU.matches(input)) {
+            response = leaveMenu(input);
+        } else if (GameMenuCommands.TRADE_MONEY.matches(input)) {
+            response = getTradeMoneyResponse(input);
+        } else if (GameMenuCommands.TRADE_ITEM.matches(input)) {
+            response = getTradeItemResponse(input);
+        } else if (GameMenuCommands.TRADE_ERROR.matches(input)) {
+            response = tradeError(input);
+        } else if (GameMenuCommands.TRADE_LIST.matches(input)) {
+            response = getTradeListResponse(input);
+        } else if (GameMenuCommands.TRADE_RESPOND_ACCEPT.matches(input)) {
+            response = getTradeRespondAcceptResponse(input);
+        } else if (GameMenuCommands.TRADE_RESPOND_REJECT.matches(input)) {
+            response = getTradeRespondRejectResponse(input);
+        } else if (GameMenuCommands.TRADE_HISTORY.matches(input)) {
+            response = getTradeHistoryResponse(input);
+        } else {
+            response = getInvalidCommand();
+        }
+        printResponse(response);
     }
 
 }

@@ -15,9 +15,9 @@ import com.client.utils.AssetManager;
 
 public class ProfileMenu implements Screen {
     private final GameMain gameMain;
-    private Stage stage;
     private final Skin skin;
     private final Texture background;
+    private Stage stage;
 
     public ProfileMenu(GameMain gameMain) {
         this.gameMain = gameMain;
@@ -61,8 +61,8 @@ public class ProfileMenu implements Screen {
         nicknameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-               gameMain.setScreen(new ChangeNicknameMenu(gameMain));
-             dispose();
+                gameMain.setScreen(new ChangeNicknameMenu(gameMain));
+                dispose();
             }
         });
 
@@ -70,8 +70,8 @@ public class ProfileMenu implements Screen {
         emailButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-               gameMain.setScreen(new ChangeEmailMenu(gameMain));
-               dispose();
+                gameMain.setScreen(new ChangeEmailMenu(gameMain));
+                dispose();
             }
         });
 

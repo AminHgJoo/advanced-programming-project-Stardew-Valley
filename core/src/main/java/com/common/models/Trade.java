@@ -43,26 +43,26 @@ public class Trade {
             result = "rejected";
         if (tradeType.equals("offer"))
             return "Trade{" +
-                    "id: " + id +
-                    "from: " + firstPlayer +
-                    ", to: " + secondPlayer +
-                    ", tradeType: " + tradeType + '\'' +
-                    ", tradeItem: " + tradeItem +
-                    ", itemAmount: " + itemAmount +
-                    ", tradePrice: " + tradePrice +
-                    ", tradeResult: " + result +
-                    '}';
-
-        return "Trade{" +
                 "id: " + id +
                 "from: " + firstPlayer +
                 ", to: " + secondPlayer +
                 ", tradeType: " + tradeType + '\'' +
                 ", tradeItem: " + tradeItem +
                 ", itemAmount: " + itemAmount +
-                ", targetItem: " + targetItem +
-                ", targetAmount: " + targetAmount +
+                ", tradePrice: " + tradePrice +
                 ", tradeResult: " + result +
                 '}';
+
+        return "Trade{" +
+            "id: " + id +
+            "from: " + firstPlayer +
+            ", to: " + secondPlayer +
+            ", tradeType: " + tradeType + '\'' +
+            ", tradeItem: " + tradeItem +
+            ", itemAmount: " + itemAmount +
+            ", targetItem: " + targetItem +
+            ", targetAmount: " + targetAmount +
+            ", tradeResult: " + result +
+            '}';
     }
 }

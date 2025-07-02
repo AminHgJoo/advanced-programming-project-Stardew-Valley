@@ -1,7 +1,5 @@
 package com.server.controllers.gameMenuControllers;
 
-import com.common.repositories.GameRepository;
-import com.server.controllers.Controller;
 import com.common.models.App;
 import com.common.models.GameData;
 import com.common.models.IO.Request;
@@ -21,6 +19,8 @@ import com.common.models.mapModels.Coordinate;
 import com.common.models.mapObjects.Crop;
 import com.common.models.mapObjects.EmptyCell;
 import com.common.models.mapObjects.Tree;
+import com.common.repositories.GameRepository;
+import com.server.controllers.Controller;
 
 public class Farming extends Controller {
     public static Response handleSeedPlanting(Request request) {
@@ -38,7 +38,7 @@ public class Farming extends Controller {
         } catch (Exception e) {
             return new Response(false, "Invalid direction");
         }
-        if(direction == null){
+        if (direction == null) {
             return new Response(false, "Invalid direction");
         }
         Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
@@ -71,9 +71,9 @@ public class Farming extends Controller {
             }
         }
         boolean greenhouseCheck = cellCoordinate.getX() >= 22
-                && cellCoordinate.getX() <= 28
-                && cellCoordinate.getY() >= 3
-                && cellCoordinate.getY() <= 10;
+            && cellCoordinate.getX() <= 28
+            && cellCoordinate.getY() >= 3
+            && cellCoordinate.getY() <= 10;
 
         if (!check && !greenhouseCheck) {
             return new Response(false, "This crop can not be planted in this season");

@@ -8,22 +8,6 @@ import dev.morphia.annotations.Embedded;
 public class Misc extends Item {
     private MiscType miscType;
 
-    @Override
-    public void useItem() {
-
-    }
-
-    @Override
-    public void deleteItem() {
-
-    }
-
-    @Override
-    public void dropItem() {
-
-    }
-
-
     public Misc() {
         super();
     }
@@ -38,8 +22,24 @@ public class Misc extends Item {
         this.miscType = miscType;
     }
 
+
     public Misc(MiscType miscType) {
         this(miscType, Quality.DEFAULT);
+    }
+
+    @Override
+    public void useItem() {
+
+    }
+
+    @Override
+    public void deleteItem() {
+
+    }
+
+    @Override
+    public void dropItem() {
+
     }
 
     public MiscType getMiscType() {

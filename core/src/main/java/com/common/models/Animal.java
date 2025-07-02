@@ -6,10 +6,6 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Animal {
-    private String name;
-    private AnimalType type;
-    private int cost;
-    private int xp;
     public boolean hasBeenPetToDay;
     public boolean hasBeenFedByHay;
     public boolean hasBeenFedByGrass;
@@ -17,6 +13,10 @@ public class Animal {
     public boolean hasBeenHarvested;
     public Item product;
     public boolean isInside;
+    private String name;
+    private AnimalType type;
+    private int cost;
+    private int xp;
 
     public Animal() {
     }
@@ -61,9 +61,9 @@ public class Animal {
     }
 
     public void setXp(int xp) {
-        if(xp <0)
+        if (xp < 0)
             this.xp = 0;
-        else if(xp > 1000)
+        else if (xp > 1000)
             this.xp = 1000;
         else
             this.xp = xp;

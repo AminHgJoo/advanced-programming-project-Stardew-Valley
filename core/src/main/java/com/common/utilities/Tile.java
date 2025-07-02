@@ -5,15 +5,14 @@ import com.common.models.mapModels.Coordinate;
 import com.common.models.mapObjects.MapObject;
 
 public class Tile {
-    private MapObject objectOnCell;
-    private Coordinate coordinate;
-    private boolean isTilled;
-
     // for walking
     public int distance = 0;
     public double energy = 0;
     public int turns = 0;
     public Tile prev = null;
+    private MapObject objectOnCell;
+    private Coordinate coordinate;
+    private boolean isTilled;
 
     public Tile(Cell cell) {
         this.coordinate = cell.getCoordinate();

@@ -11,6 +11,11 @@ public class TreeSeed extends Item {
     public TreeSeed() {
     }
 
+    public TreeSeed(TreeSeedsType treeSeedsType) {
+        super(Quality.DEFAULT, Integer.MAX_VALUE, treeSeedsType.value, 0, treeSeedsType.name);
+        this.treeSeedsType = treeSeedsType;
+    }
+
     @Override
     public void useItem() {
 
@@ -24,11 +29,6 @@ public class TreeSeed extends Item {
     @Override
     public void dropItem() {
 
-    }
-
-    public TreeSeed(TreeSeedsType treeSeedsType) {
-        super(Quality.DEFAULT, Integer.MAX_VALUE, treeSeedsType.value, 0, treeSeedsType.name);
-        this.treeSeedsType = treeSeedsType;
     }
 
     public TreeSeedsType getTreeSeedsType() {

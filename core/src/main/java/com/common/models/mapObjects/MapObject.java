@@ -21,7 +21,7 @@ abstract public class MapObject {
 
     @Override
     public String toString() {
-        if(this instanceof AnimalBlock)
+        if (this instanceof AnimalBlock)
             return "L";
         return type.substring(0, 1).toUpperCase();
     }

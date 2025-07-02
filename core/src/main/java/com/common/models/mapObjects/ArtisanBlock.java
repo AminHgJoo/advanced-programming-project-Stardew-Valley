@@ -8,13 +8,15 @@ import java.time.LocalDateTime;
 
 @Embedded
 public class ArtisanBlock extends MapObject {
-    private ArtisanBlockType artisanType;
     public LocalDateTime prepTime;
     public Slot productSlot;
     public boolean beingUsed;
     public boolean canBeCollected;
+    private ArtisanBlockType artisanType;
 
-    public ArtisanBlock() {super();}
+    public ArtisanBlock() {
+        super();
+    }
 
     public ArtisanBlock(ArtisanBlockType artisanType) {
         super(false, "artisanBlock", "red");

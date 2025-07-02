@@ -6,7 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
  * A helper for onscreen pop-ups.
- * @author AminHg*/
+ *
+ * @author AminHg
+ */
 public class UIPopupHelper {
 
     private final Stage stage;

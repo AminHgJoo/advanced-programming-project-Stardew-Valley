@@ -1,11 +1,6 @@
 package com.server.controllers.gameMenuControllers;
 
 import com.common.models.*;
-import com.common.models.enums.types.itemTypes.*;
-import com.common.models.items.*;
-import com.common.repositories.GameRepository;
-import com.server.controllers.Controller;
-import com.example.models.*;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.Quality;
@@ -14,11 +9,13 @@ import com.common.models.enums.recipes.CraftingRecipes;
 import com.common.models.enums.types.MenuTypes;
 import com.common.models.enums.types.inventoryEnums.BackpackType;
 import com.common.models.enums.types.inventoryEnums.TrashcanType;
-import com.example.models.enums.types.itemTypes.*;
+import com.common.models.enums.types.itemTypes.*;
 import com.common.models.enums.types.storeProductTypes.BlackSmithProducts;
 import com.common.models.enums.types.storeProductTypes.FishProducts;
-import com.example.models.items.*;
+import com.common.models.items.*;
+import com.common.repositories.GameRepository;
 import com.common.utilities.MenuToStoreString;
+import com.server.controllers.Controller;
 
 // TODO backpack item overflow
 
@@ -86,14 +83,14 @@ public class DealingController extends Controller {
     public static Response handleShowAllProducts(Request request) {
         GameData gameData = App.getLoggedInUser().getCurrentGame();
         Store store = gameData.getMap().getVillage().getStore(MenuToStoreString
-                .convertToString(App.getCurrMenuType().getMenu()));
+            .convertToString(App.getCurrMenuType().getMenu()));
         return new Response(true, store.productsToString(gameData.getSeason()));
     }
 
     public static Response handleShowAvailableProducts(Request request) {
         GameData gameData = App.getLoggedInUser().getCurrentGame();
         Store store = gameData.getMap().getVillage().getStore(MenuToStoreString
-                .convertToString(App.getCurrMenuType().getMenu()));
+            .convertToString(App.getCurrMenuType().getMenu()));
         return new Response(true, store.availableProductsToString(gameData.getSeason()));
     }
 
@@ -101,7 +98,7 @@ public class DealingController extends Controller {
         User user = App.getLoggedInUser();
         GameData gameData = user.getCurrentGame();
         Store store = gameData.getMap().getVillage().getStore(MenuToStoreString
-                .convertToString(App.getCurrMenuType().getMenu()));
+            .convertToString(App.getCurrMenuType().getMenu()));
         Player player = gameData.getCurrentPlayer();
         String productName = request.body.get("productName");
         int n = 1;
@@ -278,7 +275,7 @@ public class DealingController extends Controller {
                 }
                 Slot s = player.getInventory().getSlotByItemName(t.getName());
                 t.setQuality(q);
-                ((Tool)s.getItem()).setQuality(q);
+                ((Tool) s.getItem()).setQuality(q);
                 return new Response(true, "Tool successfully updated");
             } else {
                 return new Response(false, "Your equipped item must be a tool");

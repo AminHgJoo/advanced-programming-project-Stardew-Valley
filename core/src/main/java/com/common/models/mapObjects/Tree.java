@@ -15,10 +15,6 @@ public class Tree extends MapObject {
     private LocalDateTime[] growthDeadLines = new LocalDateTime[5];
     private LocalDateTime harvestDeadLine = null;
 
-    public LocalDateTime[] getGrowthDeadLines() {
-        return growthDeadLines;
-    }
-
     public Tree() {
     }
 
@@ -33,6 +29,10 @@ public class Tree extends MapObject {
         if (growthDeadLines[0] == null) {
             growthDeadLines[0] = App.getLoggedInUser().getCurrentGame().getDate();
         }
+    }
+
+    public LocalDateTime[] getGrowthDeadLines() {
+        return growthDeadLines;
     }
 
     public void pushBackDeadlines(int numOfDays) {

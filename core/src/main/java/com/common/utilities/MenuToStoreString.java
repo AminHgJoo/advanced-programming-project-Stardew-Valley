@@ -2,7 +2,6 @@ package com.common.utilities;
 
 import com.common.views.Menu;
 import com.common.views.gameViews.shops.*;
-import com.example.views.gameViews.shops.*;
 
 public class MenuToStoreString {
     public static String convertToString(Menu menu) {

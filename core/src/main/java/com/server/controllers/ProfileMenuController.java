@@ -1,13 +1,12 @@
 package com.server.controllers;
 
 import com.common.models.*;
-import com.common.repositories.GameRepository;
-import com.common.repositories.UserRepository;
-import com.example.models.*;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.NPCModels.NPC;
 import com.common.models.NPCModels.NPCFriendship;
+import com.common.repositories.GameRepository;
+import com.common.repositories.UserRepository;
 import com.common.utilities.Validation;
 
 import java.util.ArrayList;
@@ -64,10 +63,10 @@ public class ProfileMenuController extends Controller {
         String moneyHighScore = String.valueOf(user.getMoneyHighScore());
         String numberOfGames = String.valueOf(user.getNumberOfGames());
         return new Response(true,
-                "Username: " + username + "\n" +
-                        "nickname: " + nickname + "\n" +
-                        "moneyHighScore: " + moneyHighScore + "\n" +
-                        "numberOfGames: " + numberOfGames);
+            "Username: " + username + "\n" +
+                "nickname: " + nickname + "\n" +
+                "moneyHighScore: " + moneyHighScore + "\n" +
+                "numberOfGames: " + numberOfGames);
 
     }
 
@@ -80,7 +79,7 @@ public class ProfileMenuController extends Controller {
         }
         if (!Validation.validatePasswordSecurity(newPassword).equals("Success")) {
             return new Response(false, "New password isn't secure! "
-                    + Validation.validatePasswordSecurity(newPassword));
+                + Validation.validatePasswordSecurity(newPassword));
         }
         if (!user.getHashedPassword().equals(Validation.hashPassword(oldPassword))) {
             return new Response(false, "Old password is wrong!");

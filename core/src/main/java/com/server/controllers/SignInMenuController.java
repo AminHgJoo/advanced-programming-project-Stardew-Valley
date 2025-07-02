@@ -1,20 +1,20 @@
 package com.server.controllers;
 
-import com.common.repositories.UserRepository;
 import com.common.models.App;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.User;
 import com.common.models.enums.SecurityQuestion;
 import com.common.models.enums.types.MenuTypes;
+import com.common.repositories.UserRepository;
 import com.common.utilities.Validation;
 
 public class SignInMenuController extends Controller {
 
-    private static User userOfForgetPassword = null;
-    private static String userPassword;
     public static boolean isProgramWaitingForQuestion = false;
     public static boolean isProgramWaitingForAnswer = false;
+    private static User userOfForgetPassword = null;
+    private static String userPassword;
     private static User userWaitingForQuestion = null;
 
     public static User getUserOfForgetPassword() {
@@ -40,7 +40,7 @@ public class SignInMenuController extends Controller {
             }
             if (!Validation.validatePasswordSecurity(newPass).equals("Success")) {
                 return new Response(false, "Password isn't secure! " +
-                        Validation.validatePasswordSecurity(newPass));
+                    Validation.validatePasswordSecurity(newPass));
             }
         }
         user.setHashedPassword(Validation.hashPassword(newPass));
@@ -73,7 +73,7 @@ public class SignInMenuController extends Controller {
             }
             if (!Validation.validatePasswordSecurity(password).equals("Success")) {
                 return new Response(false, "Password isn't secure! " +
-                        Validation.validatePasswordSecurity(password));
+                    Validation.validatePasswordSecurity(password));
             }
             if (!password.equals(passwordConfirm)) {
                 return new Response(false, "Passwords do not match!");
@@ -89,8 +89,8 @@ public class SignInMenuController extends Controller {
             userPassword = password;
         }
         String message = "User created! Password is: " + password + "\n" +
-                "Enter 'pick question -q <question number> -a <answer> -c <confirm answer>' to choose security question\n" +
-                "You can enter 'list questions' command to see possible security questions\n";
+            "Enter 'pick question -q <question number> -a <answer> -c <confirm answer>' to choose security question\n" +
+            "You can enter 'list questions' command to see possible security questions\n";
         return new Response(true, message);
     }
 
@@ -144,7 +144,7 @@ public class SignInMenuController extends Controller {
         userOfForgetPassword = user;
         isProgramWaitingForAnswer = true;
         return new Response(true, "User " + user.getUsername()
-                + ": Answer your security question next.");
+            + ": Answer your security question next.");
     }
 
     public static Response handleAnswer(Request request) {

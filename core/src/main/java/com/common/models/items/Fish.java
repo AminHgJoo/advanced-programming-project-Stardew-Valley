@@ -8,6 +8,14 @@ import dev.morphia.annotations.Embedded;
 public class Fish extends Item {
     private FishType fishType;
 
+    public Fish() {
+    }
+
+    public Fish(Quality quality, FishType fishType) {
+        super(quality, Integer.MAX_VALUE, fishType.price, 0, fishType.name);
+        this.fishType = fishType;
+    }
+
     @Override
     public void useItem() {
 
@@ -25,14 +33,6 @@ public class Fish extends Item {
 
     public FishType getFishType() {
         return fishType;
-    }
-
-    public Fish() {
-    }
-
-    public Fish(Quality quality, FishType fishType) {
-        super(quality, Integer.MAX_VALUE, fishType.price, 0, fishType.name);
-        this.fishType = fishType;
     }
 
     @Override

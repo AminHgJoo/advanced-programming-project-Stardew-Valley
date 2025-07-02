@@ -48,10 +48,10 @@ public class Tool extends Item {
     @Override
     public String toString() {
         if (type == ToolTypes.WATERING_CAN_DEFAULT ||
-                type == ToolTypes.WATERING_CAN_COPPER ||
-                type == ToolTypes.WATERING_CAN_IRON ||
-                type == ToolTypes.WATERING_CAN_GOLD ||
-                type == ToolTypes.WATERING_CAN_IRIDIUM) {
+            type == ToolTypes.WATERING_CAN_COPPER ||
+            type == ToolTypes.WATERING_CAN_IRON ||
+            type == ToolTypes.WATERING_CAN_GOLD ||
+            type == ToolTypes.WATERING_CAN_IRIDIUM) {
             return name;
         }
         if (type == ToolTypes.FISHING_ROD) {

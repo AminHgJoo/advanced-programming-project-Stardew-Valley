@@ -16,9 +16,9 @@ import com.common.models.enums.SecurityQuestion;
 
 public class SignUpMenu implements Screen {
     private final GameMain gameMain;
-    private Stage stage;
     private final Skin skin;
     private final Texture background;
+    private Stage stage;
 
     public SignUpMenu(GameMain gameMain) {
         this.gameMain = gameMain;

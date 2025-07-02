@@ -1,36 +1,11 @@
 package com.common.views;
 
-import com.server.controllers.ProfileMenuController;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.ProfileMenuCommands;
+import com.server.controllers.ProfileMenuController;
 
 public class ProfileMenu implements Menu {
-
-    public void handleMenu(String input) {
-        Response response = null;
-
-        if (ProfileMenuCommands.ENTER_MENU.matches(input)) {
-            response = getEnterMenuResponse(input);
-        } else if (ProfileMenuCommands.EXIT_MENU.matches(input)) {
-            response = getExitMenuResponse(input);
-        } else if (ProfileMenuCommands.SHOW_MENU.matches(input)) {
-            response = getShowMenuResponse(input);
-        } else if (ProfileMenuCommands.CHANGE_USERNAME.matches(input)) {
-            response = getChangeUsernameResponse(input);
-        } else if (ProfileMenuCommands.CHANGE_PASSWORD.matches(input)) {
-            response = getChangePasswordResponse(input);
-        } else if (ProfileMenuCommands.CHANGE_EMAIL.matches(input)) {
-            response = getChangeEmailResponse(input);
-        } else if (ProfileMenuCommands.CHANGE_NICKNAME.matches(input)) {
-            response = getChangeNicknameResponse(input);
-        } else if (ProfileMenuCommands.USER_INFO.matches(input)) {
-            response = getUserInfoResponse(input);
-        } else {
-            response = getInvalidCommand();
-        }
-        printResponse(response);
-    }
 
     private static Response getUserInfoResponse(String input) {
         Response response;
@@ -92,5 +67,30 @@ public class ProfileMenu implements Menu {
         request.body.put("menuName", ProfileMenuCommands.ENTER_MENU.getGroup(input, "menuName"));
         response = ProfileMenuController.handleEnterMenu(request);
         return response;
+    }
+
+    public void handleMenu(String input) {
+        Response response = null;
+
+        if (ProfileMenuCommands.ENTER_MENU.matches(input)) {
+            response = getEnterMenuResponse(input);
+        } else if (ProfileMenuCommands.EXIT_MENU.matches(input)) {
+            response = getExitMenuResponse(input);
+        } else if (ProfileMenuCommands.SHOW_MENU.matches(input)) {
+            response = getShowMenuResponse(input);
+        } else if (ProfileMenuCommands.CHANGE_USERNAME.matches(input)) {
+            response = getChangeUsernameResponse(input);
+        } else if (ProfileMenuCommands.CHANGE_PASSWORD.matches(input)) {
+            response = getChangePasswordResponse(input);
+        } else if (ProfileMenuCommands.CHANGE_EMAIL.matches(input)) {
+            response = getChangeEmailResponse(input);
+        } else if (ProfileMenuCommands.CHANGE_NICKNAME.matches(input)) {
+            response = getChangeNicknameResponse(input);
+        } else if (ProfileMenuCommands.USER_INFO.matches(input)) {
+            response = getUserInfoResponse(input);
+        } else {
+            response = getInvalidCommand();
+        }
+        printResponse(response);
     }
 }
