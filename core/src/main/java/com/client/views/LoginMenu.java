@@ -71,7 +71,7 @@ public class LoginMenu implements Screen {
 
                 var response = HTTPUtil.deserializeHttpResponse(postResponse);
 
-                if (response.getStatus() == 400) {
+                if (response.getStatus() == 400 || response.getStatus() == 404) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog(response.getMessage(), "Error");
                     return;
@@ -123,7 +123,7 @@ public class LoginMenu implements Screen {
 
                 var response = HTTPUtil.deserializeHttpResponse(postResponse);
 
-                if (response.getStatus() == 400) {
+                if (response.getStatus() == 400 || response.getStatus() == 404) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog(response.getMessage(), "Error");
                     return;

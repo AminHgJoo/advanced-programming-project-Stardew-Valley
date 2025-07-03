@@ -121,7 +121,7 @@ public class UserController {
             user.setHashedPassword(Validation.hashPassword(password));
             UserRepository.saveUser(user);
 
-            ctx.json(Response.OK.setMessage("Password has beenm successfully updated!"));
+            ctx.json(Response.OK.setMessage("Password has been successfully updated!"));
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage("Invalid request body format"));
