@@ -2,13 +2,11 @@ package com.server.controllers;
 
 import com.common.models.User;
 import com.common.models.enums.SecurityQuestion;
-import com.common.models.mapModels.Map;
 import com.server.repositories.UserRepository;
 import com.server.utilities.JwtUtil;
 import com.server.utilities.Response;
 import com.server.utilities.Validation;
 import io.javalin.http.Context;
-import org.eclipse.jetty.server.HttpInput;
 
 import java.util.HashMap;
 
@@ -18,17 +16,23 @@ public class UserController {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String username = (String) body.get("username");
             String password = (String) body.get("password");
+            String passwordConfirm = (String) body.get("passwordConfirm");
             String email = (String) body.get("email");
             String nickname = (String) body.get("nickname");
             String gender = (String) body.get("gender");
             String securityQuestion = (String) body.get("securityQuestion");
             String securityAnswer = (String) body.get("securityAnswer");
+            String securityAnswerConfirm = (String) body.get("securityAnswerConfirm");
             if (!Validation.validateUsername(username)) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Username is invalid!"));
                 return;
             }
             while (UserRepository.findUserByUsername(username) != null) {
                 username = username + (int) (Math.random() * 69420);
+            }
+            if (!password.equals(passwordConfirm)) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Passwords do not match!"));
+                return;
             }
             if (password.compareToIgnoreCase("random") == 0) {
                 password = Validation.createRandomPassword();
@@ -46,6 +50,10 @@ public class UserController {
                 ctx.json(Response.BAD_REQUEST.setMessage("Email format is invalid!"));
                 return;
             }
+            if (!securityAnswer.equals(securityAnswerConfirm)) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Security Answers don't match!"));
+                return;
+            }
             User user = new User(gender, email, nickname, Validation.hashPassword(password), username);
             user.setQuestion(SecurityQuestion.getSecurityQuestion(securityQuestion));
             user.setAnswer(securityAnswer);
@@ -53,17 +61,17 @@ public class UserController {
             UserRepository.saveUser(user);
             String token = JwtUtil.generateToken(user, "user");
 
-            ctx.header("Authorization", token).json(Response.OK.setMessage("User created!").setBody(user));
+            ctx.header("Authorization", token).json(Response.OK.setMessage("User created, password: "
+                + Validation.hashPassword(password)).setBody(user));
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage("Invalid request body format"));
             return;
         }
-
     }
 
     public void login(Context ctx) {
-
+        //TODO: Note: Should return 'User' object in the body of response if login was successful.
     }
 
     public void forgetPassword(Context ctx) {

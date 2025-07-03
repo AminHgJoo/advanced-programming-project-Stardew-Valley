@@ -12,11 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
+import com.client.utils.UIPopupHelper;
 import com.common.models.enums.SecurityQuestion;
 import com.google.gson.JsonObject;
-import kong.unirest.HttpResponse;
-import kong.unirest.JsonNode;
-import kong.unirest.Unirest;
 
 public class SignUpMenu implements Screen {
     private final GameMain gameMain;
@@ -78,22 +77,47 @@ public class SignUpMenu implements Screen {
         confirmButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO: Send server request.
-                JsonObject req = new JsonObject();
+
+                var req = new JsonObject();
                 req.addProperty("username", usernameField.getText());
                 req.addProperty("password", passwordField.getText());
+                req.addProperty("passwordConfirm", passwordConfirmButton.getText());
                 req.addProperty("nickname", nameField.getText());
                 req.addProperty("email", emailField.getText());
                 req.addProperty("gender", genderField.getText());
                 req.addProperty("securityQuestion", securityQuestionField.getSelected());
                 req.addProperty("securityAnswer", securityAnswerField.getText());
+                req.addProperty("securityAnswerConfirm", securityAnswerConfirmField.getText());
 
-                HttpResponse<JsonNode> postResponse = Unirest.post("http://localhost:8080/api/user/register")
-                    .header("Content-Type", "application/json")
-                    .body(req.toString())
-                    .asJson();
-                if (postResponse.getStatus() == 200) {
-                    System.out.println(postResponse.getBody().toString());
+                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/register", req);
+
+                if (postResponse == null) {
+                    UIPopupHelper popupHelper = new UIPopupHelper(stage, skin);
+                    popupHelper.showDialog("Connection to server failed.", "Error");
+                    return;
+                }
+
+                var response = HTTPUtil.deserializeHttpResponse(postResponse);
+
+                if (response.getStatus() == 400) {
+                    UIPopupHelper popupHelper = new UIPopupHelper(stage, skin);
+                    popupHelper.showDialog(response.getMessage(), "Error");
+                    return;
+                }
+
+                if (response.getStatus() == 200) {
+                    usernameField.setText("");
+                    passwordField.setText("");
+                    passwordConfirmButton.setText("");
+                    nameField.setText("");
+                    emailField.setText("");
+                    genderField.setText("");
+                    securityQuestionField.setSelectedIndex(0);
+                    securityAnswerField.setText("");
+                    securityAnswerConfirmField.setText("");
+
+                    UIPopupHelper popupHelper = new UIPopupHelper(stage, skin);
+                    popupHelper.showDialog(response.getMessage(), "Success");
                 }
             }
         });
