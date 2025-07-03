@@ -168,4 +168,8 @@ public class User {
     public void setCurrentGameId(ObjectId currentGameId) {
         this.currentGameId = currentGameId;
     }
+
+    public void set_id(ObjectId _id) {
+        this._id = _id;
+    }
 }

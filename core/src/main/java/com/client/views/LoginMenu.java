@@ -15,7 +15,10 @@ import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.UIPopupHelper;
+import com.common.models.User;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.internal.LinkedTreeMap;
 
 public class LoginMenu implements Screen {
     private final GameMain gameMain;
@@ -79,9 +82,14 @@ public class LoginMenu implements Screen {
 
                 if (response.getStatus() == 200) {
                     try {
-                        ClientApp.loggedInUser = (com.common.models.User) response.getBody();
+                        //TODO: FIX THIS PIECE OF SHIT.
+                        System.out.println(response.getBody());
+                        LinkedTreeMap map = (LinkedTreeMap) response.getBody();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(map);
+                        ClientApp.loggedInUser = gson.fromJson(json, User.class);
                         gameMain.setScreen(new MainMenu(gameMain));
-                    } catch (ClassCastException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                         uiPopupHelper.showDialog("A server error occurred.", "Error");
