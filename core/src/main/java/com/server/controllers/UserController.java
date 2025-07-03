@@ -170,7 +170,30 @@ public class UserController {
     }
 
     public void changeUsername(Context ctx) {
+        try{
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
 
+            String username = (String) body.get("newUsername");
+            String id = (String) ctx.attributeMap().get("id");
+            User user = UserRepository.findUserById(id);
+            if (user == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("User not found!"));
+                return;
+            }
+            if (!Validation.validateUsername(username)) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Username is invalid!"));
+                return;
+            }
+            while (UserRepository.findUserByUsername(username) != null) {
+                username = username + (int) (Math.random() * 69420);
+            }
+            user.setUsername(username);
+            UserRepository.saveUser(user);
+            ctx.json(Response.OK.setMessage("Username has been successfully updated!"));
+        }
+        catch(Exception e){
+            ctx.json(Response.BAD_REQUEST.setMessage("Invalid request body format"));
+        }
     }
 
     public void changeEmail(Context ctx) {
