@@ -12,6 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
+import com.client.utils.UIPopupHelper;
+import com.google.gson.JsonObject;
 
 public class ChangeNicknameMenu implements Screen {
     private final GameMain gameMain;
@@ -47,7 +50,30 @@ public class ChangeNicknameMenu implements Screen {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO implement change nickname
+                var req = new JsonObject();
+                req.addProperty("nickname", nicknameField.getText());
+                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/changeNickname", req);
+                if (postResponse == null) {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog("Connection to server failed.", "Error");
+                    return;
+                }
+                var response = HTTPUtil.deserializeHttpResponse(postResponse);
+                if (response.getStatus() == 400 || response.getStatus() == 404) {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog(response.getMessage(), "Error");
+                    return;
+                }
+
+                if (response.getStatus() == 200) {
+                    try {
+
+                    } catch (ClassCastException e) {
+                        e.printStackTrace();
+                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                        uiPopupHelper.showDialog("A server error occurred.", "Error");
+                    }
+                }
             }
         });
 
