@@ -1,6 +1,5 @@
 package com.server.controllers;
 
-import com.common.models.App;
 import com.common.models.User;
 import com.common.models.enums.SecurityQuestion;
 import com.server.repositories.UserRepository;
@@ -69,7 +68,6 @@ public class UserController {
             ctx.json(Response.BAD_REQUEST.setMessage("Invalid request body format"));
             return;
         }
-
     }
 
     public void login(Context ctx) {
@@ -101,11 +99,16 @@ public class UserController {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String username = (String) body.get("username");
-            String password = (String) body.get("password");
+            String password = (String) body.get("newPassword");
+            String securityAnswer = (String) body.get("securityAnswer");
 
             User user = UserRepository.findUserByUsername(username);
             if (user == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("User not found!"));
+                return;
+            }
+            if (!user.getAnswer().equals(securityAnswer)) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Security Answer doesn't match!"));
                 return;
             }
             if (!Validation.validatePasswordFormat(password)) {
@@ -231,7 +234,7 @@ public class UserController {
             String nickname = (String) body.get("nickname");
             String id = (String) ctx.attributeMap().get("id");
             User user = UserRepository.findUserById(id);
-            if(user == null){
+            if (user == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("User not found!"));
                 return;
             }
