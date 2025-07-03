@@ -12,6 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
+import com.client.utils.UIPopupHelper;
+import com.google.gson.JsonObject;
 
 public class ChangePasswordMenu implements Screen {
     private final GameMain gameMain;
@@ -38,8 +41,11 @@ public class ChangePasswordMenu implements Screen {
         label.setColor(Color.RED);
         label.setFontScale(2f);
 
-        TextField nicknameField = new TextField("", skin);
-        nicknameField.setMessageText("New Password");
+        TextField passwordField = new TextField("", skin);
+        passwordField.setMessageText("New Password");
+
+        TextField oldPasswordField = new TextField("", skin);
+        oldPasswordField.setMessageText("Old Password");
 
 
         TextButton confirmButton = new TextButton("Confirm", skin);
@@ -47,7 +53,31 @@ public class ChangePasswordMenu implements Screen {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO implement change password
+                var req = new JsonObject();
+                req.addProperty("newPassword", passwordField.getText());
+                req.addProperty("oldPassword", oldPasswordField.getText());
+                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/changePassword", req);
+                if (postResponse == null) {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog("Connection to server failed.", "Error");
+                    return;
+                }
+                var response = HTTPUtil.deserializeHttpResponse(postResponse);
+                if (response.getStatus() == 400 || response.getStatus() == 404) {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog(response.getMessage(), "Error");
+                    return;
+                }
+
+                if (response.getStatus() == 200) {
+                    try {
+
+                    } catch (ClassCastException e) {
+                        e.printStackTrace();
+                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                        uiPopupHelper.showDialog("A server error occurred.", "Error");
+                    }
+                }
             }
         });
 
@@ -66,7 +96,8 @@ public class ChangePasswordMenu implements Screen {
         table.center();
         table.padTop(50);
         table.add(label).pad(10).row();
-        table.add(nicknameField).width(500).height(60).pad(10).row();
+        table.add(oldPasswordField).width(500).height(60).pad(10).row();
+        table.add(passwordField).width(500).height(60).pad(10).row();
         table.add(confirmButton).width(500).height(60).pad(10).row();
         table.add(backButton);
         Gdx.input.setInputProcessor(stage);

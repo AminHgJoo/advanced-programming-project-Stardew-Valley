@@ -10,8 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
+import com.client.utils.UIPopupHelper;
+import com.google.gson.JsonObject;
+import com.server.controllers.UserController;
 
 public class ChangeEmailMenu implements Screen {
     private final GameMain gameMain;
@@ -47,7 +52,31 @@ public class ChangeEmailMenu implements Screen {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO implement change email
+                var req = new JsonObject();
+                req.addProperty("email", emailField.getText());
+                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/changeEmail", req);
+                if (postResponse == null) {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog("Connection to server failed.", "Error");
+                    return;
+                }
+                var response = HTTPUtil.deserializeHttpResponse(postResponse);
+                if (response.getStatus() == 400 || response.getStatus() == 404) {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog(response.getMessage(), "Error");
+                    return;
+                }
+
+                if (response.getStatus() == 200) {
+                    try {
+
+                    } catch (ClassCastException e) {
+                        e.printStackTrace();
+                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                        uiPopupHelper.showDialog("A server error occurred.", "Error");
+                    }
+                }
+
             }
         });
 
