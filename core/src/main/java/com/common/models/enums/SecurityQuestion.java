@@ -21,6 +21,14 @@ public enum SecurityQuestion {
         }
         return questions;
     }
+    public static SecurityQuestion getSecurityQuestion(String question) {
+        for (SecurityQuestion q : SecurityQuestion.values()) {
+            if (q.question.equals(question)) {
+                return q;
+            }
+        }
+        return null;
+    }
 
     public String getQuestion() {
         return question;

@@ -47,7 +47,7 @@ public class UserController {
                 return;
             }
             User user = new User(gender, email, nickname, Validation.hashPassword(password), username);
-            user.setQuestion(SecurityQuestion.valueOf(securityQuestion));
+            user.setQuestion(SecurityQuestion.getSecurityQuestion(securityQuestion));
             user.setAnswer(securityAnswer);
 
             UserRepository.saveUser(user);
@@ -55,6 +55,7 @@ public class UserController {
 
             ctx.header("Authorization", token).json(Response.OK.setMessage("User created!").setBody(user));
         } catch (Exception e) {
+            e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage("Invalid request body format"));
             return;
         }

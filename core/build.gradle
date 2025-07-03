@@ -18,7 +18,9 @@ dependencies {
   implementation 'com.auth0:java-jwt:4.4.0'
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
   implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
-
+  implementation 'com.konghq:unirest-java:3.14.5'
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+  implementation 'org.json:json:20231013'
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"

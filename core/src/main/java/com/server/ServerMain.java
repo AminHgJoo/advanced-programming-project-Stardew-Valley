@@ -19,6 +19,7 @@ public class ServerMain {
         app.get("/", ctx -> {
             ctx.result("Hello World!");
         });
+
         System.out.println("Server is listening http://localhost:8080 ...");
 
         // User routes

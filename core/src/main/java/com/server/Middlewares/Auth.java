@@ -13,6 +13,7 @@ public class Auth {
         }
         if(JwtUtil.verifyToken(token) == null){
             ctx.json(Response.UN_AUTHORIZED);
+            return;
         }
         ctx.attribute("id", JwtUtil.getUserIdFromToken(token));
     };
