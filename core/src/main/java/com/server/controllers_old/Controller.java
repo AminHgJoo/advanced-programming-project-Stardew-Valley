@@ -56,8 +56,6 @@ public class Controller {
         } else {
             return new Response(false, "Invalid Operation.");
         }
-
-        //TODO : Later on the avatar menu becomes operational.
     }
 
     public static Response handleShowMenu(Request request) {
