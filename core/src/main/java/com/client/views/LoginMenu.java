@@ -83,13 +83,11 @@ public class LoginMenu implements Screen {
                     ClientApp.token = token;
 
                     if (stayLoggedInCheckBox.isChecked()) {
-                        //TODO: Check!
                         System.out.println(System.getProperty("user.dir"));
                         FileUtil.write("../core/src/main/java/com/client/env/env.prod", "TOKEN=" + ClientApp.token);
                     }
 
                     try {
-//                        //TODO: FIX THIS PIECE OF SHIT.
                         System.out.println(response.getBody());
                         LinkedTreeMap map = (LinkedTreeMap) response.getBody();
                         Gson gson = new Gson();
