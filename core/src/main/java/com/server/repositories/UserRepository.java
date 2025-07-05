@@ -21,7 +21,7 @@ public class UserRepository {
     private static final Datastore db = Connection.getDatabase();
 
     public static User findUserById(String id) {
-        User user = db.find(User.class).filter(Filters.eq("_id", new ObjectId(id))).first();
+        User user = db.find(User.class).filter(Filters.eq("_id", id)).first();
         return user;
     }
 

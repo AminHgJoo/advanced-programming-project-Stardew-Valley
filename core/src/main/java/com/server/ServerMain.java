@@ -27,5 +27,8 @@ public class ServerMain {
 
         // Game routes
         new GameRouter(app).initializeRoutes();
+
+        app.exception(Exception.class, (e, ctx) -> {
+        });
     }
 }

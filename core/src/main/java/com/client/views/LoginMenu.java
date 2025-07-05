@@ -12,10 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
-import com.client.utils.AssetManager;
-import com.client.utils.FileUtil;
-import com.client.utils.HTTPUtil;
-import com.client.utils.UIPopupHelper;
+import com.client.utils.*;
 import com.common.models.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -93,12 +90,12 @@ public class LoginMenu implements Screen {
 
                     try {
 //                        //TODO: FIX THIS PIECE OF SHIT.
-//                        System.out.println(response.getBody());
-//                        LinkedTreeMap map = (LinkedTreeMap) response.getBody();
-//                        Gson gson = new Gson();
-//                        String json = gson.toJson(map);
-//                        System.out.println(json);
-//                        ClientApp.loggedInUser = gson.fromJson(json, User.class);
+                        System.out.println(response.getBody());
+                        LinkedTreeMap map = (LinkedTreeMap) response.getBody();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(map);
+                        System.out.println(json);
+                        ClientApp.loggedInUser = UserDecoder.decode(json);
                         gameMain.setScreen(new MainMenu(gameMain));
                     } catch (Exception e) {
                         e.printStackTrace();

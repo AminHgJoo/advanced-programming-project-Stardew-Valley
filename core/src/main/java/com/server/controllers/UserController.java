@@ -16,23 +16,17 @@ public class UserController {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String username = (String) body.get("username");
             String password = (String) body.get("password");
-            String passwordConfirm = (String) body.get("passwordConfirm");
             String email = (String) body.get("email");
             String nickname = (String) body.get("nickname");
             String gender = (String) body.get("gender");
             String securityQuestion = (String) body.get("securityQuestion");
             String securityAnswer = (String) body.get("securityAnswer");
-            String securityAnswerConfirm = (String) body.get("securityAnswerConfirm");
             if (!Validation.validateUsername(username)) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Username is invalid!"));
                 return;
             }
             while (UserRepository.findUserByUsername(username) != null) {
                 username = username + (int) (Math.random() * 69420);
-            }
-            if (!password.equals(passwordConfirm)) {
-                ctx.json(Response.BAD_REQUEST.setMessage("Passwords do not match!"));
-                return;
             }
             if (password.compareToIgnoreCase("random") == 0) {
                 password = Validation.createRandomPassword();
@@ -48,10 +42,6 @@ public class UserController {
             }
             if (!Validation.validateEmail(email)) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Email format is invalid!"));
-                return;
-            }
-            if (!securityAnswer.equals(securityAnswerConfirm)) {
-                ctx.json(Response.BAD_REQUEST.setMessage("Security Answers don't match!"));
                 return;
             }
             User user = new User(gender, email, nickname, Validation.hashPassword(password), username);
@@ -246,6 +236,23 @@ public class UserController {
             UserRepository.saveUser(user);
 
             ctx.json(Response.BAD_REQUEST.setMessage("Nickname has been successfully updated!"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage("Invalid request body format"));
+        }
+    }
+
+    public void whoAmI(Context ctx){
+        try{
+            String id  = (String) ctx.attributeMap().get("id");
+            System.out.println("id is " + id);
+            User user = UserRepository.findUserById(id);
+            if(user == null){
+                ctx.json(Response.NOT_FOUND.setMessage("User not found!"));
+                return;
+            }
+            System.out.println("hello");
+            ctx.json(Response.OK.setMessage("Who am I!").setBody(user));
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage("Invalid request body format"));

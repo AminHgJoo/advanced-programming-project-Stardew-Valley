@@ -13,6 +13,8 @@ public class UserRouter {
     }
 
     public void initializeRoutes() {
+        app.before(Auth.validate).get("/api/user/whoAmI" , controller::whoAmI);
+
         app.post("/api/user/register", controller::register);
 
         app.post("/api/user/login", controller::login);
