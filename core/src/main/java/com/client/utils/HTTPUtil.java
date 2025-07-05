@@ -26,6 +26,17 @@ public class HTTPUtil {
         }
     }
 
+    public static HttpResponse<JsonNode> get(String url) {
+        try {
+            return Unirest.get(url)
+                .header("Content-Type", "application/json")
+                .header("Authorization", ClientApp.token)
+                .asJson();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public static Response deserializeHttpResponse(HttpResponse<JsonNode> response) {
         Gson gson = new Gson();
         String jsonStr = response.getBody().toString();

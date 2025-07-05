@@ -41,7 +41,7 @@ public class Player {
     private ArrayList<CraftingRecipes> unlockedCraftingRecipes = new ArrayList<>();
     private ArrayList<ActiveBuff> activeBuffs = new ArrayList<>();
     private ArrayList<Slot> refrigeratorSlots = new ArrayList<>();
-    private ObjectId user_id;
+    private String user_id;
     private String partnerName;
     private int currentFarmNumber;
     private boolean isInVillage;
@@ -411,7 +411,7 @@ public class Player {
         isPlayerFainted = playerFainted;
     }
 
-    public ObjectId getUser_id() {
+    public String getUser_id() {
         return user_id;
     }
 

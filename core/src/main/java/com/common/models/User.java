@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 @Entity("users")
 public class User {
-    private final ArrayList<ObjectId> games = new ArrayList<>();
+    private final ArrayList<String> games = new ArrayList<String>();
     @Id
-    private ObjectId _id;
+    private String _id;
     private String username;
     private String hashedPassword;
     private String nickname;
@@ -23,7 +23,7 @@ public class User {
     private String answer;
     private int moneyHighScore;
     private int numberOfGames;
-    private ObjectId currentGameId;
+    private String currentGameId;
     @Transient
     private GameData currentGameData;
 
@@ -132,7 +132,7 @@ public class User {
 
     public GameData getCurrentGame() {
         if (currentGameData == null && currentGameId != null) {
-            currentGameData = GameRepository.findGameById(currentGameId.toString(), true);
+            currentGameData = GameRepository.findGameById(currentGameId, true);
         }
         return currentGameData;
     }
@@ -141,11 +141,11 @@ public class User {
         this.currentGameData = currentGameData;
     }
 
-    public ArrayList<ObjectId> getGames() {
+    public ArrayList<String> getGames() {
         return games;
     }
 
-    public ObjectId get_id() {
+    public String get_id() {
         return _id;
     }
 
@@ -161,15 +161,15 @@ public class User {
         return username.equals(user.username);
     }
 
-    public ObjectId getCurrentGameId() {
+    public String getCurrentGameId() {
         return currentGameId;
     }
 
-    public void setCurrentGameId(ObjectId currentGameId) {
+    public void setCurrentGameId(String currentGameId) {
         this.currentGameId = currentGameId;
     }
 
-    public void set_id(ObjectId _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 }

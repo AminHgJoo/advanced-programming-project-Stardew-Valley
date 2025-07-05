@@ -9,12 +9,13 @@ public class Auth {
         String token = ctx.header("Authorization");
         if (token == null) {
             ctx.json(Response.UN_AUTHORIZED);
-            return;
+            throw new Exception();
         }
         if(JwtUtil.verifyToken(token) == null){
             ctx.json(Response.UN_AUTHORIZED);
-            return;
+            throw new Exception();
         }
+        System.out.println(JwtUtil.getUserIdFromToken(token));
         ctx.attribute("id", JwtUtil.getUserIdFromToken(token));
     };
 }

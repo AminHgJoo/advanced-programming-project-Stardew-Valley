@@ -34,7 +34,7 @@ public class GameData {
     public ArrayList<Trade> tradingHistory = new ArrayList<>();
     public boolean hasTurnCycleFinished;
     @Id
-    private ObjectId _id;
+    private String _id;
     private ArrayList<Player> players;
     private Map map;
     private boolean isGameOngoing;
@@ -675,7 +675,7 @@ public class GameData {
         this.weatherTomorrow = weatherTomorrow;
     }
 
-    public ObjectId get_id() {
+    public String get_id() {
         return _id;
     }
 

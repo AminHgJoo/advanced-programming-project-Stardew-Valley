@@ -1,5 +1,7 @@
 package com.server.utilities;
 
+import com.common.models.User;
+
 public class Response<T> {
     private int status;
     private String message;
