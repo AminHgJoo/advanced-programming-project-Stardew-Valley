@@ -70,13 +70,8 @@ public class ChangePasswordMenu implements Screen {
                 }
 
                 if (response.getStatus() == 200) {
-                    try {
-
-                    } catch (ClassCastException e) {
-                        e.printStackTrace();
-                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-                        uiPopupHelper.showDialog("A server error occurred.", "Error");
-                    }
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog(response.getMessage(), "Success");
                 }
             }
         });

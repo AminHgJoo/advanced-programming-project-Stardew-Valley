@@ -13,8 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.FileUtil;
 
 public class MainMenu implements Screen {
     private final GameMain gameMain;
@@ -75,7 +77,9 @@ public class MainMenu implements Screen {
         logoutButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // TODO logout
+                ClientApp.token = "";
+                ClientApp.loggedInUser = null;
+                FileUtil.write("../env/env.prod", "");
                 gameMain.setScreen(new LauncherMenu(gameMain));
                 dispose();
             }

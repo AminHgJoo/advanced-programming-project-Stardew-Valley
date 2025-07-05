@@ -173,7 +173,8 @@ public class UserController {
     }
 
     public void changeUsername(Context ctx) {
-        try{
+        try {
+            //TODO: ?
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
 
             String username = (String) body.get("newUsername");
@@ -193,8 +194,7 @@ public class UserController {
             user.setUsername(username);
             UserRepository.saveUser(user);
             ctx.json(Response.OK.setMessage("Username has been successfully updated!"));
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             ctx.json(Response.BAD_REQUEST.setMessage("Invalid request body format"));
         }
     }

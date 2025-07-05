@@ -9,7 +9,7 @@ import io.javalin.Javalin;
 public class ServerMain {
     public static void main(String[] args) {
         Dotenv.configure()
-            .directory(System.getProperty("user.dir") + "/core/src/main/java/com/server/ENV")
+            .directory(System.getProperty("user.dir") + (System.getProperty("user.dir").contains("core") ? "" : "/core") + "/src/main/java/com/server/ENV")
             .filename("env.prod")
             .systemProperties()
             .load();

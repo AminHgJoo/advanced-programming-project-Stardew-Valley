@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.FileUtil;
 import com.client.utils.HTTPUtil;
 import com.client.utils.UIPopupHelper;
 import com.common.models.User;
@@ -81,13 +82,23 @@ public class LoginMenu implements Screen {
                 }
 
                 if (response.getStatus() == 200) {
+                    var token = postResponse.getHeaders().get("Authorization").get(0);
+                    ClientApp.token = token;
+
+                    if (stayLoggedInCheckBox.isChecked()) {
+                        //TODO: Check!
+                        System.out.println(System.getProperty("user.dir"));
+                        FileUtil.write("../core/src/main/java/com/client/env/env.prod", "TOKEN=" + ClientApp.token);
+                    }
+
                     try {
-                        //TODO: FIX THIS PIECE OF SHIT.
-                        System.out.println(response.getBody());
-                        LinkedTreeMap map = (LinkedTreeMap) response.getBody();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(map);
-                        ClientApp.loggedInUser = gson.fromJson(json, User.class);
+//                        //TODO: FIX THIS PIECE OF SHIT.
+//                        System.out.println(response.getBody());
+//                        LinkedTreeMap map = (LinkedTreeMap) response.getBody();
+//                        Gson gson = new Gson();
+//                        String json = gson.toJson(map);
+//                        System.out.println(json);
+//                        ClientApp.loggedInUser = gson.fromJson(json, User.class);
                         gameMain.setScreen(new MainMenu(gameMain));
                     } catch (Exception e) {
                         e.printStackTrace();

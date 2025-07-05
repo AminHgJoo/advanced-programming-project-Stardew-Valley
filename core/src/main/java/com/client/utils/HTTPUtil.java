@@ -1,5 +1,6 @@
 package com.client.utils;
 
+import com.client.ClientApp;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.server.utilities.Response;
@@ -17,6 +18,7 @@ public class HTTPUtil {
         try {
             return Unirest.post(url)
                 .header("Content-Type", "application/json")
+                .header("Authorization", ClientApp.token)
                 .body(req.toString())
                 .asJson();
         } catch (Exception e) {
