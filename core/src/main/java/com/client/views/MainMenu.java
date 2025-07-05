@@ -72,14 +72,13 @@ public class MainMenu implements Screen {
         style.font = skin.getFont("font");
         style.fontColor = Color.WHITE;
 
-
         TextButton logoutButton = new TextButton("Logout", style);
         logoutButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 ClientApp.token = "";
                 ClientApp.loggedInUser = null;
-                FileUtil.write("../env/env.prod", "");
+                FileUtil.write("../core/src/main/java/com/client/env/env.prod", "");
                 gameMain.setScreen(new LauncherMenu(gameMain));
                 dispose();
             }

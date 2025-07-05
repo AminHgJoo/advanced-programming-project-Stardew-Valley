@@ -62,7 +62,7 @@ public class UserController {
             String token = JwtUtil.generateToken(user, "user");
 
             ctx.header("Authorization", token).json(Response.OK.setMessage("User created, password: "
-                + Validation.hashPassword(password)).setBody(user));
+                + password).setBody(user));
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage("Invalid request body format"));
