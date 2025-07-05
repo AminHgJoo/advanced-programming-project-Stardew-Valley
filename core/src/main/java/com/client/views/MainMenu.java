@@ -53,11 +53,11 @@ public class MainMenu implements Screen {
             }
         });
 
-        TextButton createGameButton = new TextButton("Create new game", skin);
+        TextButton createGameButton = new TextButton("Lobby Menu", skin);
         createGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // TODO redirect to game menu
+                gameMain.setScreen(new GameLobbyMenu(gameMain));
                 dispose();
             }
         });
