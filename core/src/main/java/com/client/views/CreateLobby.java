@@ -57,7 +57,7 @@ public class CreateLobby implements Screen {
         isPrivateLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                isPrivateLobby.setChecked(!isPrivateLobby.isChecked());
+                isPrivateLobby.setChecked(isPrivateLobby.isChecked());
                 isPrivate = !isPrivate;
             }
         });
@@ -68,7 +68,7 @@ public class CreateLobby implements Screen {
         isVisibleLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                isVisibleLobby.setChecked(!isVisibleLobby.isChecked());
+                isVisibleLobby.setChecked(isVisibleLobby.isChecked());
                 isVisible = !isVisible;
             }
         });
