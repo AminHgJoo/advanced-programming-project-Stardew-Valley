@@ -43,7 +43,7 @@ public class GameLobbyMenu implements Screen {
     private final ArrayList<Lobby> visibleLobbies = new ArrayList<>();
     private Label currentLobbyName;
 
-    public GameLobbyMenu(GameMain gameMain, Lobby currLobby) {
+    public GameLobbyMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
         this.skin2 = AssetManager.getSkin2();
@@ -51,7 +51,6 @@ public class GameLobbyMenu implements Screen {
 //        currLobby = new Lobby(true, true, "asghar", ClientApp.loggedInUser.getUsername());
 //        this.visibleLobbies.add(new Lobby(true, true, "asghar", "mamad"));
 //        this.visibleLobbies.add(new Lobby(true, false, "hosein", "ali"));
-        this.currLobby = currLobby;
         initializeStage();
         refresh();
     }
@@ -244,26 +243,6 @@ public class GameLobbyMenu implements Screen {
         createLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                var req = new JsonObject();
-
-                var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/", req);
-                if (postResponse == null) {
-                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-                    uiPopupHelper.showDialog("Connection to server failed.", "Error");
-                    return;
-                }
-                var response = HTTPUtil.deserializeHttpResponse(postResponse);
-                if (response.getStatus() == 400 || response.getStatus() == 404) {
-                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-                    uiPopupHelper.showDialog(response.getMessage(), "Error");
-                    return;
-                }
-
-//                if (response.getStatus() == 200) {
-//                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-//                    uiPopupHelper.showDialog(response.getMessage(), "Success");
-//                    ClientApp.loggedInUser.setEmail(emailField.getText());
-//                }
             }
         });
         slidingMenu.add(createLobby).pad(10).row();
