@@ -17,13 +17,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
-import com.client.utils.HTTPUtil;
-import com.client.utils.ModelDecoder;
 import com.client.utils.UIPopupHelper;
 import com.common.models.networking.Lobby;
-import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
-import com.server.utilities.Response;
 
 import java.util.ArrayList;
 
@@ -41,30 +36,13 @@ public class GameLobbyMenu implements Screen {
     //TODO: Add server notifs here!!!
     private final ArrayList<String> messagesFromServer = new ArrayList<>();
     //TODO: get this from the server.
-    private ArrayList<Lobby> visibleLobbies = new ArrayList<>();
+    private final ArrayList<Lobby> visibleLobbies = new ArrayList<>();
 
     public GameLobbyMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
         this.background = AssetManager.getTextures().get("mainMenuBackground");
         currLobby = new Lobby(true, true, "asghar", ClientApp.loggedInUser.getUsername());
-        var getResponse = HTTPUtil.get("http://localhost:8080/api/lobby/all");
-        System.out.println(getResponse.getBody()
-        );
-        Response res = HTTPUtil.deserializeHttpResponse(getResponse);
-        System.out.println(res.getBody());
-        if (res.getStatus() == 200) {
-            visibleLobbies = new ArrayList<>();
-            ((ArrayList) res.getBody()).forEach(x -> {
-                Gson gson = new Gson();
-                String json = gson.toJson(x);
-                Lobby lobby = ModelDecoder.decodeLobby(json);
-                visibleLobbies.add(lobby);
-            });
-        } else {
-//            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-//            uiPopupHelper.showDialog("Error while loading lobbies", "Error");
-        }
         initializeStage();
     }
 
@@ -199,11 +177,11 @@ public class GameLobbyMenu implements Screen {
 
     private void initializeSlidingMenu() {
         Table slidingMenu = new Table(skin);
-        if (currLobby != null) {
+        if(currLobby != null) {
             Label asghar = new Label("Players in lobby:", skin);
             asghar.setColor(Color.DARK_GRAY);
             slidingMenu.add(asghar).pad(10).row();
-            for (String use : currLobby.getUsers()) {
+            for(String use : currLobby.getUsers()){
                 Label label = new Label(use, skin);
                 label.setColor(Color.DARK_GRAY);
                 slidingMenu.add(label).pad(10).row();
@@ -263,7 +241,7 @@ public class GameLobbyMenu implements Screen {
         isInvisibleLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
+               //TODO:
             }
         });
         isInvisibleLobby.setChecked(false);
