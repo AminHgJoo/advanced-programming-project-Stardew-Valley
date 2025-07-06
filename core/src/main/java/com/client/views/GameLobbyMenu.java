@@ -27,6 +27,7 @@ public class GameLobbyMenu implements Screen {
     private final Skin skin;
     private final Texture background;
     private Stage stage;
+    private Skin skin2;
 
     /// Dev note: labels, every type of text label if changed needs updating, set this flag to true if that need happens.
     private boolean doesUINeedRefresh = false;
@@ -38,11 +39,12 @@ public class GameLobbyMenu implements Screen {
     //TODO: get this from the server.
     private final ArrayList<Lobby> visibleLobbies = new ArrayList<>();
 
-    public GameLobbyMenu(GameMain gameMain) {
+    public GameLobbyMenu(GameMain gameMain, Lobby currLobby) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
         this.background = AssetManager.getTextures().get("mainMenuBackground");
-        currLobby = new Lobby(true, true, "asghar", ClientApp.loggedInUser.getUsername());
+        this.currLobby = currLobby;
+        skin2 = AssetManager.getSkin2();
         initializeStage();
     }
 
@@ -74,14 +76,25 @@ public class GameLobbyMenu implements Screen {
         currentLobbyId.setFontScale(2f);
         table.add(currentLobbyId).colspan(2).pad(10).row();
 
-        TextButton startGameButton = new TextButton("Start Game (Host)", skin);
-        startGameButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
-            }
-        });
-        table.add(startGameButton).colspan(2).pad(10).row();
+        if(currLobby != null && currLobby.getOwnerUsername().equals(ClientApp.loggedInUser.getUsername())) {
+            TextButton startGameButton = new TextButton("Start Game (Host)", skin);
+            startGameButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    //TODO:
+                }
+            });
+            table.add(startGameButton).colspan(2).pad(10).row();
+        }
+        else{
+            TextButton startGameButton = new TextButton("Start Game (Host)", skin2);
+            table.add(startGameButton)
+                .colspan(2)
+                .pad(10)
+                .width(150)
+                .height(50)
+                .row();
+        }
 
         Label farmChoiceLabel = new Label("Farm Choice", skin);
         farmChoiceLabel.setColor(Color.CYAN);
@@ -93,14 +106,25 @@ public class GameLobbyMenu implements Screen {
         farmSelectBox.setSelectedIndex(0);
         table.add(farmSelectBox).colspan(2).pad(10).row();
 
-        TextButton readyUp = new TextButton("Confirm & Ready Up", skin);
-        readyUp.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
-            }
-        });
-        table.add(readyUp).colspan(2).pad(10).row();
+        if(currLobby != null) {
+            TextButton readyUp = new TextButton("Confirm & Ready Up", skin);
+            readyUp.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    //TODO:
+                }
+            });
+            table.add(readyUp).colspan(2).pad(10).row();
+        }
+        else{
+            TextButton readyUp = new TextButton("Confirm & Ready Up", skin2);
+            table.add(readyUp)
+                .colspan(2)
+                .pad(10)
+                .width(300)
+                .height(60)
+                .row();
+        }
 
         Label invisibleLobbyName = new Label("Search invisible lobbies", skin);
         invisibleLobbyName.setColor(Color.CYAN);
@@ -154,12 +178,22 @@ public class GameLobbyMenu implements Screen {
                 }
             });
 
-            TextField passwordField = new TextField("", skin);
-            passwordField.setMessageText("Password");
+            if(lobby.isPublic()) {
+                TextField passwordField = new TextField("", skin2);
+                passwordField.setMessageText("Password");
 
-            listTable.add(label).pad(4).colspan(2).left().row();
+                listTable.add(label).pad(4).colspan(2).left().row();
 
-            listTable.add(passwordField).width(100).pad(4);
+                listTable.add(passwordField).width(100).pad(4);
+            }
+            else{
+                TextField passwordField = new TextField("", skin);
+                passwordField.setMessageText("Password");
+
+                listTable.add(label).pad(4).colspan(2).left().row();
+
+                listTable.add(passwordField).width(100).pad(4);
+            }
             listTable.add(btn).width(100).pad(4).row();
         }
 
@@ -193,23 +227,34 @@ public class GameLobbyMenu implements Screen {
         label.setColor(Color.DARK_GRAY);
         slidingMenu.add(label).pad(10).row();
 
+
         TextButton createLobby = new TextButton("Create Lobby", skin);
         createLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
+                gameMain.setScreen(new CreateLobby(gameMain));
             }
         });
         slidingMenu.add(createLobby).pad(10).row();
-
-        TextButton leaveLobby = new TextButton("Leave Lobby", skin);
-        leaveLobby.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
-            }
-        });
-        slidingMenu.add(leaveLobby).pad(10).row();
+        if(currLobby != null) {
+            TextButton leaveLobby = new TextButton("Leave Lobby", skin);
+            leaveLobby.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    //TODO:
+                }
+            });
+            slidingMenu.add(leaveLobby).pad(10).row();
+        }
+        else{
+            TextButton leaveLobby = new TextButton("Leave Lobby", skin2);
+            slidingMenu.add(leaveLobby)
+                .colspan(2)
+                .pad(10)
+                .width(150)
+                .height(50)
+                .row();
+        }
 
         TextButton mainMenuButton = new TextButton("Main Menu", skin);
         mainMenuButton.addListener(new ChangeListener() {
@@ -221,31 +266,33 @@ public class GameLobbyMenu implements Screen {
         });
         slidingMenu.add(mainMenuButton).pad(10).row();
 
-        Label hostOptions = new Label("Host Options", skin);
-        hostOptions.setColor(Color.DARK_GRAY);
-        slidingMenu.add(hostOptions).pad(10).row();
+        if(currLobby != null && currLobby.getOwnerUsername().equals(ClientApp.loggedInUser.getUsername())) {
+            Label hostOptions = new Label("Host Options", skin);
+            hostOptions.setColor(Color.DARK_GRAY);
+            slidingMenu.add(hostOptions).pad(10).row();
 
-        CheckBox isPrivateLobby = new CheckBox("Private Lobby", skin);
-        isPrivateLobby.getLabel().setColor(Color.DARK_GRAY);
-        isPrivateLobby.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
-            }
-        });
-        isPrivateLobby.setChecked(false);
-        slidingMenu.add(isPrivateLobby).pad(10).row();
+            CheckBox isPrivateLobby = new CheckBox("Private Lobby", skin);
+            isPrivateLobby.getLabel().setColor(Color.DARK_GRAY);
+            isPrivateLobby.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    //TODO:
+                }
+            });
+            isPrivateLobby.setChecked(false);
+            slidingMenu.add(isPrivateLobby).pad(10).row();
 
-        CheckBox isInvisibleLobby = new CheckBox("Invisible Lobby", skin);
-        isInvisibleLobby.getLabel().setColor(Color.DARK_GRAY);
-        isInvisibleLobby.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-               //TODO:
-            }
-        });
-        isInvisibleLobby.setChecked(false);
-        slidingMenu.add(isInvisibleLobby).pad(10).row();
+            CheckBox isInvisibleLobby = new CheckBox("Invisible Lobby", skin);
+            isInvisibleLobby.getLabel().setColor(Color.DARK_GRAY);
+            isInvisibleLobby.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    //TODO:
+                }
+            });
+            isInvisibleLobby.setChecked(false);
+            slidingMenu.add(isInvisibleLobby).pad(10).row();
+        }
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.CYAN);

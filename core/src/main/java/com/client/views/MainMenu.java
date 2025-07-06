@@ -56,7 +56,7 @@ public class MainMenu implements Screen {
         createGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                gameMain.setScreen(new GameLobbyMenu(gameMain));
+                gameMain.setScreen(new GameLobbyMenu(gameMain, null));
                 dispose();
             }
         });
@@ -77,7 +77,7 @@ public class MainMenu implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 ClientApp.token = "";
                 ClientApp.loggedInUser = null;
-                FileUtil.write("../core/src/main/java/com/client/env/env.prod", "");
+                FileUtil.write("./core/src/main/java/com/client/env/env.prod", "");
                 gameMain.setScreen(new LauncherMenu(gameMain));
                 dispose();
             }

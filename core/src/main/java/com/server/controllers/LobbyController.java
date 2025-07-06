@@ -37,6 +37,7 @@ public class LobbyController {
         }
     }
 
+
     public void getLobbyById(Context ctx) {
         try{
             String id = ctx.pathParam("id");

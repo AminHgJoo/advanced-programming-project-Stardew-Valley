@@ -14,9 +14,12 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
+import com.client.utils.ModelDecoder;
 import com.client.utils.UIPopupHelper;
 import com.common.models.networking.Lobby;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.internal.LinkedTreeMap;
 import com.server.utilities.Validation;
 
 public class CreateLobby implements Screen {
@@ -97,6 +100,11 @@ public class CreateLobby implements Screen {
                 if (response.getStatus() == 200) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog(response.getMessage(), "Success");
+                    LinkedTreeMap map = (LinkedTreeMap) response.getBody();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(map);
+                    Lobby lobby = ModelDecoder.decodeLobby(json);
+                    gameMain.setScreen(new GameLobbyMenu(gameMain, lobby));
 
                 }
             }
@@ -106,7 +114,7 @@ public class CreateLobby implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                gameMain.setScreen(new ProfileMenu(gameMain));
+                gameMain.setScreen(new GameLobbyMenu(gameMain, null));
                 dispose();
             }
         });
