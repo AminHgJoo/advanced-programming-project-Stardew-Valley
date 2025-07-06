@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.*;
-import com.common.models.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
@@ -93,7 +92,7 @@ public class LoginMenu implements Screen {
                         Gson gson = new Gson();
                         String json = gson.toJson(map);
                         System.out.println(json);
-                        ClientApp.loggedInUser = UserDecoder.decode(json);
+                        ClientApp.loggedInUser = ModelDecoder.decodeUser(json);
                         gameMain.setScreen(new MainMenu(gameMain));
                     } catch (Exception e) {
                         e.printStackTrace();

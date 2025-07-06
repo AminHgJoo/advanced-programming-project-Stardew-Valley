@@ -28,7 +28,9 @@ public class LobbyController {
             Lobby newLobby = new Lobby(isVisible, isPublic, name, user.getUsername());
             newLobby.getUsers().add(user.getUsername());
 
-            ctx.json(Response.OK.setBody(newLobby));
+            LobbyRepository.save(newLobby);
+
+            ctx.json(Response.OK.setMessage("Lobby has been created successfully").setBody(newLobby));
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));

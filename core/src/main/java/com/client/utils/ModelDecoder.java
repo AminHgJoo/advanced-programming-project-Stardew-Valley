@@ -2,11 +2,13 @@ package com.client.utils;
 
 import com.common.models.User;
 import com.common.models.enums.SecurityQuestion;
+import com.common.models.networking.Lobby;
 import org.bson.types.ObjectId;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class UserDecoder {
-    public static User decode(String json) {
+public class ModelDecoder {
+    public static User decodeUser(String json) {
         User user = new User();
         JSONObject obj = new JSONObject(json);
         user.setUsername(obj.getString("username"));
@@ -29,5 +31,22 @@ public class UserDecoder {
         } catch (Exception e) {
         }
         return user;
+    }
+
+    public static Lobby decodeLobby(String json) {
+        Lobby lobby = new Lobby();
+        JSONObject obj = new JSONObject(json);
+        lobby.setName(obj.getString("name"));
+        lobby.setVisible(obj.getBoolean("visible"));
+        lobby.setPublic(obj.getBoolean("public"));
+        lobby.setOwnerUsername(obj.getString("ownerUsername"));
+        ObjectId id = new ObjectId(obj.getString("_id"));
+        lobby.set_id(id.toString());
+        JSONArray users = obj.getJSONArray("users");
+        for (int i = 0; i < users.length(); i++) {
+            String userString = users.getString(i);
+            lobby.getUsers().add(userString);
+        }
+        return lobby;
     }
 }

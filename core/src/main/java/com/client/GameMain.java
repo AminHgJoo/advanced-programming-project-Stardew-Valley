@@ -5,13 +5,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
-import com.client.utils.UserDecoder;
+import com.client.utils.ModelDecoder;
 import com.client.views.LauncherMenu;
 import com.client.views.MainMenu;
-import com.common.models.User;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
-import com.server.utilities.Response;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class GameMain extends Game {
@@ -52,7 +50,7 @@ public class GameMain extends Game {
                     LinkedTreeMap map = (LinkedTreeMap) res.getBody();
                     Gson gson = new Gson();
                     String json = gson.toJson(map);
-                    ClientApp.loggedInUser = UserDecoder.decode(json);
+                    ClientApp.loggedInUser = ModelDecoder.decodeUser(json);
                 }
             }
 

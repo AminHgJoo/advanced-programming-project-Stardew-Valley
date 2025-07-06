@@ -15,8 +15,8 @@ public class LobbyRouter {
         app.before("/api/lobby/*" , Auth.validate);
 
         // GET requests
-        app.get("/api/lobby/{id}", controller::getLobbyById);
         app.get("/api/lobby/all" , controller::getAllLobbies);
+        app.get("/api/lobby/findByID/{id}", controller::getLobbyById);
         app.get("/api/lobby/getLobbiesByOwnerUsername/{ownerUsername}" , controller::getLobbiesByOwnerUsername);
         app.get("/api/lobby/getLobbyByName/{name}" , controller::getLobbyByName);
 

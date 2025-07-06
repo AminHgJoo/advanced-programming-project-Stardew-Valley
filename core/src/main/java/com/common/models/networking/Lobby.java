@@ -1,13 +1,15 @@
 package com.common.models.networking;
 
 import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
 
 import java.util.ArrayList;
 
 @Entity
 public class Lobby {
-    private String name;
+    @Id
     private String _id;
+    private String name;
     private boolean isPublic;
     private boolean isVisible;
     private String ownerUsername;

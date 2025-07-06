@@ -137,7 +137,7 @@ public class SignUpMenu implements Screen {
                         Gson gson = new Gson();
                         String json = gson.toJson(map);
                         System.out.println(json);
-                        ClientApp.loggedInUser = UserDecoder.decode(json);
+                        ClientApp.loggedInUser = ModelDecoder.decodeUser(json);
                         gameMain.setScreen(new MainMenu(gameMain));
                     } catch (Exception e) {
                         e.printStackTrace();
