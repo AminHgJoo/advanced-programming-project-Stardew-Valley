@@ -53,6 +53,7 @@ public class UserController {
 
             ctx.header("Authorization", token).json(Response.OK.setMessage("User created, password: "
                 + password).setBody(user));
+            return;
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage("Invalid request body format"));

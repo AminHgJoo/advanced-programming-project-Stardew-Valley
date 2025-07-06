@@ -23,6 +23,7 @@ public class GameMain extends Game {
         loadEnv();
         AssetManager.loadAssets();
         if (ClientApp.loggedInUser != null) {
+            ClientApp.init();
             this.setScreen(new MainMenu(this));
         } else
             this.setScreen(new LauncherMenu(this));

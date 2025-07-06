@@ -28,7 +28,6 @@ public class MainMenu implements Screen {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
         this.background = AssetManager.getTextures().get("mainMenuBackground");
-        ClientApp.init();
         initializeStage();
     }
 

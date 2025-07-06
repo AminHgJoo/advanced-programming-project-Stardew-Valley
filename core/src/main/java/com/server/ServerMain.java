@@ -21,7 +21,7 @@ public class ServerMain {
             ctx.result("Hello World!");
         });
 
-        new AppWebSocket(app).start();
+//        new AppWebSocket(app).start();
 
         System.out.println("Server is listening http://localhost:8080 ...");
 

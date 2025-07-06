@@ -104,6 +104,7 @@ public class SignUpMenu implements Screen {
                     popupHelper.showDialog("Connection to server failed.", "Error");
                     return;
                 }
+                System.out.println(postResponse.getBody().toString());
 
                 var response = HTTPUtil.deserializeHttpResponse(postResponse);
 
