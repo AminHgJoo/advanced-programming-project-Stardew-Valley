@@ -59,10 +59,6 @@ public class AppWebSocket {
                         handleInvite(message, ctx);
                     } else if (command.equals("ACCEPT")) {
                         handleAccept(message, ctx);
-                    } else if (command.equals("CHOOSE_FARM")) {
-                        chooseFarm(user, message, ctx);
-                    } else if (command.equals("JOIN_LOBBY")) {
-                        joinLobby(user, message, ctx);
                     }
                 }
             });

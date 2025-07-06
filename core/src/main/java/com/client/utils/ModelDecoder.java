@@ -26,21 +26,24 @@ public class ModelDecoder {
             ObjectId id = new ObjectId(obj.getString("_id"));
             user.set_id(id.toString());
             try {
-                if (obj.getJSONObject("currentGameId") != null) {
+                if (obj.getString("currentGameId") != null) {
                     ObjectId gameId = new ObjectId(obj.getString("currentGameId"));
                     user.setCurrentGameId(gameId.toString());
                 }
             } catch (Exception e) {
+                e.printStackTrace();
             }
             try {
-                if (obj.getJSONObject("currentLobbyId") != null) {
+                if (obj.getString("currentLobbyId") != null) {
                     ObjectId gameId = new ObjectId(obj.getString("currentLobbyId"));
-                    user.setCurrentGameId(gameId.toString());
+                    user.setCurrentLobbyId(gameId.toString());
                 }
             } catch (Exception e) {
+                e.printStackTrace();
             }
             return user;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -73,6 +76,7 @@ public class ModelDecoder {
             }
             return lobby;
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
     }

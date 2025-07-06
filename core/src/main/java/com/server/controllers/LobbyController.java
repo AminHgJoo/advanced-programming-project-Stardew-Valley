@@ -2,6 +2,8 @@ package com.server.controllers;
 
 import com.common.models.User;
 import com.common.models.networking.Lobby;
+import com.google.gson.Gson;
+import com.server.GameServers.AppWebSocket;
 import com.server.repositories.LobbyRepository;
 import com.server.repositories.UserRepository;
 import com.server.utilities.Response;
@@ -11,6 +13,78 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LobbyController {
+    public void joinLobby(Context ctx) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String id = ctx.attribute("id");
+            String lobbyId = ctx.pathParam("id");
+            String password = (String) body.get("passwrod");
+
+            User user = UserRepository.findUserById(id);
+            if (user == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("User not found"));
+                return;
+            }
+            Lobby lobby = LobbyRepository.findById(lobbyId);
+            if (lobby == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("Lobby not found"));
+                return;
+            }
+            if (lobby.getUsers().size() >= 4) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Too many users"));
+                return;
+            }
+            if (!lobby.isPublic()) {
+                if (!lobby.getPassword().equals(password)) {
+                    ctx.json(Response.BAD_REQUEST.setMessage("Wrong password"));
+                    return;
+                }
+            }
+            user.setCurrentLobbyId(lobbyId);
+            lobby.getUsers().add(user.getUsername());
+            UserRepository.saveUser(user);
+            LobbyRepository.save(lobby);
+
+            ctx.json(Response.OK.setMessage("Lobby successfully joined"));
+
+            HashMap<String, String> response = new HashMap<>();
+            response.put("type", "LOBBY_JOINED");
+            response.put("message", "User " + user.getUsername() + " joined lobby");
+            response.put("lobby", new Gson().toJson(lobby));
+            AppWebSocket.sendMessageToLobby(lobby, user, new Gson().toJson(response));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void chooseFarm(Context ctx) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String id = ctx.attribute("id");
+            int farm = (Integer) body.get("farm");
+
+            User user = UserRepository.findUserById(id);
+            if (user == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("User not found"));
+                return;
+            }
+
+            Lobby lobby = LobbyRepository.findById(user.getCurrentLobbyId());
+            lobby.getUsersFarm().put(user.getUsername(), farm);
+
+            ctx.json(Response.OK.setMessage("Farm successfully chosen"));
+            HashMap<String, String> response = new HashMap<>();
+            response.put("type", "FARM_CHOSEN");
+            response.put("message", "User " + user.getUsername() + " choosed farm");
+            response.put("lobby", new Gson().toJson(lobby));
+            AppWebSocket.sendMessageToLobby(lobby, user, new Gson().toJson(response));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
     public void createLobby(Context ctx) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
@@ -27,8 +101,8 @@ public class LobbyController {
                 return;
             }
             Lobby newLobby = new Lobby(isVisible, isPublic, name, user.getUsername());
-            if(!newLobby.isPublic()){
-                if(password == null){
+            if (!newLobby.isPublic()) {
+                if (password == null) {
                     ctx.json(Response.BAD_REQUEST.setMessage("Password cannot be null"));
                     return;
                 }
@@ -47,24 +121,24 @@ public class LobbyController {
 
 
     public void getLobbyById(Context ctx) {
-        try{
+        try {
             String id = ctx.pathParam("id");
             Lobby lobby = LobbyRepository.findById(id);
 
-            if(lobby == null) {
+            if (lobby == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("Lobby with id " + id + " not found"));
                 return;
             }
 
             ctx.json(Response.OK.setBody(lobby));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }
     }
 
     public void getAllLobbies(Context ctx) {
-        try{
+        try {
             ArrayList<Lobby> lobbies = LobbyRepository.findAll(false);
             ctx.json(Response.OK.setBody(lobbies));
         } catch (Exception e) {
@@ -74,7 +148,7 @@ public class LobbyController {
     }
 
     public void getLobbiesByOwnerUsername(Context ctx) {
-        try{
+        try {
             ArrayList<Lobby> lobbies = LobbyRepository.findByOwnerUsername(ctx.pathParam("ownerUsername"));
             ctx.json(Response.OK.setBody(lobbies));
         } catch (Exception e) {
@@ -84,21 +158,21 @@ public class LobbyController {
     }
 
     public void getLobbyByName(Context ctx) {
-        try{
+        try {
             String name = ctx.queryParam("name");
             Lobby lobby = LobbyRepository.findByName(name);
 
-            if(lobby == null) {
+            if (lobby == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("Lobby with name " + name + " not found"));
                 return;
             }
 
-            if(!lobby.isVisible()){
+            if (!lobby.isVisible()) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Lobby with name " + name + " is not visible"));
                 return;
             }
 
-            if(!lobby.isPublic()){
+            if (!lobby.isPublic()) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Lobby with name " + name + " is not public"));
                 return;
             }
@@ -110,17 +184,17 @@ public class LobbyController {
         }
     }
 
-    public void getMyCurrentLobby(Context ctx){
-        try{
-            String id = ctx.pathParam("id");
+    public void getMyCurrentLobby(Context ctx) {
+        try {
+            String id = ctx.attribute("id");
             User user = UserRepository.findUserById(id);
-            if(user == null) {
+            if (user == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("User with id " + id + " not found"));
                 return;
             }
             Lobby lobby = LobbyRepository.findById(user.getCurrentLobbyId());
             ctx.json(Response.OK.setBody(lobby));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }

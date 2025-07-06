@@ -24,5 +24,7 @@ public class LobbyRouter {
 
         // POST requests
         app.post("/api/lobby/" , controller::createLobby);
+        app.post("/api/lobby/join/{id}" , controller::joinLobby);
+        app.post("/api/lobby/chooseFarm" , controller::chooseFarm);
     }
 }

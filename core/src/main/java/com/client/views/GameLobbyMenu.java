@@ -12,15 +12,19 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.*;
 import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.internal.LinkedTreeMap;
 import com.server.utilities.Response;
 import com.client.utils.SimpleWebSocketClient;
 import net.bytebuddy.description.method.MethodDescription;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -59,7 +63,6 @@ public class GameLobbyMenu implements MyScreen {
     public void loadLobbies() {
         var getResponse = HTTPUtil.get("http://localhost:8080/api/lobby/all");
         Response res = HTTPUtil.deserializeHttpResponse(getResponse);
-        System.out.println(res.getBody());
         if (res.getStatus() == 200) {
             this.visibleLobbies = new ArrayList<>();
             ((ArrayList) res.getBody()).forEach(x -> {
@@ -75,17 +78,18 @@ public class GameLobbyMenu implements MyScreen {
         }
     }
 
-    public void loadCurrentLobby(){
-        if(ClientApp.loggedInUser.getCurrentLobbyId() != null){
-            var getResponse = HTTPUtil.get("htt://localhost:8080/api/lobby/getCurrentLobby");
+    public void loadCurrentLobby() {
+        if (ClientApp.loggedInUser.getCurrentLobbyId() != null) {
+            var getResponse = HTTPUtil.get("http://localhost:8080/api/lobby/getCurrentLobby");
             Response res = HTTPUtil.deserializeHttpResponse(getResponse);
-            if(res.getStatus() == 200){
-                LinkedHashMap body = (LinkedHashMap) res.getBody();
+            System.out.println(res.getBody());
+            if (res.getStatus() == 200) {
+                LinkedTreeMap body = (LinkedTreeMap) res.getBody();
                 Gson gson = new Gson();
                 String json = gson.toJson(body);
                 currLobby = ModelDecoder.decodeLobby(json);
             }
-            if(currLobby != null){
+            if (currLobby != null) {
                 doesUINeedRefresh = true;
             }
         }
@@ -167,85 +171,98 @@ public class GameLobbyMenu implements MyScreen {
                 .row();
         }
 
-        Label invisibleLobbyName = new Label("Search invisible lobbies", skin);
-        invisibleLobbyName.setColor(Color.CYAN);
-        invisibleLobbyName.setFontScale(2f);
-        table.add(invisibleLobbyName).colspan(2).pad(10).row();
+        if (currLobby == null) {
+            Label invisibleLobbyName = new Label("Search invisible lobbies", skin);
+            invisibleLobbyName.setColor(Color.CYAN);
+            invisibleLobbyName.setFontScale(2f);
+            table.add(invisibleLobbyName).colspan(2).pad(10).row();
 
-        TextField searchInvisibleLobby = new TextField("", skin);
-        searchInvisibleLobby.setMessageText("Enter Lobby ID");
-        table.add(searchInvisibleLobby).pad(10);
+            TextField searchInvisibleLobby = new TextField("", skin);
+            searchInvisibleLobby.setMessageText("Enter Lobby ID");
+            table.add(searchInvisibleLobby).pad(10);
 
-        TextField passwordInvisibleLobby = new TextField("", skin);
-        passwordInvisibleLobby.setMessageText("Enter Password");
-        table.add(passwordInvisibleLobby).pad(10).row();
+            TextField passwordInvisibleLobby = new TextField("", skin);
+            passwordInvisibleLobby.setMessageText("Enter Password");
+            table.add(passwordInvisibleLobby).pad(10).row();
 
-        TextButton searchButton = new TextButton("Search", skin);
-        searchButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //TODO: Search for invisible lobby.
-            }
-        });
-        table.add(searchButton).colspan(2).pad(10).row();
-
-        TextButton refreshButton = new TextButton("Refresh", skin);
-        refreshButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                loadLobbies();
-            }
-        });
-        table.add(refreshButton).colspan(2).pad(10).row();
-
-
-        Table root = new Table();
-        root.setFillParent(true);
-        root.setColor(Color.CYAN);
-        root.top().right();
-        stage.addActor(root);
-
-        Table listTable = new Table(skin);
-        listTable.align(Align.top);
-
-        for (Lobby lobby : visibleLobbies) {
-            Label label = new Label(lobby.toString(), skin);
-            label.setColor(Color.CYAN);
-            TextButton btn = new TextButton("Join", skin);
-
-            TextField passwordField;
-            if (lobby.isPublic()) {
-                passwordField = new TextField("", skin2);
-
-            } else {
-                passwordField = new TextField("", skin);
-
-            }
-            passwordField.setMessageText("Password");
-            listTable.add(label).pad(4).colspan(2).left().row();
-            listTable.add(passwordField).width(100).pad(4);
-            listTable.add(btn).width(100).pad(4).row();
-            btn.addListener(new ChangeListener() {
+            TextButton searchButton = new TextButton("Search", skin);
+            searchButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    HashMap<String, String> request = new HashMap<>();
-                    request.put("lobbyId", lobby.get_id());
-                    request.put("password", passwordField.getText());
-                    request.put("command", "JOIN_LOBBY");
-                    client.send(new Gson().toJson(request));
+                    //TODO: Search for invisible lobby.
                 }
             });
+            table.add(searchButton).colspan(2).pad(10).row();
+
+            TextButton refreshButton = new TextButton("Refresh", skin);
+            refreshButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    loadLobbies();
+                }
+            });
+            table.add(refreshButton).colspan(2).pad(10).row();
+
+
+            Table root = new Table();
+            root.setFillParent(true);
+            root.setColor(Color.CYAN);
+            root.top().right();
+            stage.addActor(root);
+
+            Table listTable = new Table(skin);
+            listTable.align(Align.top);
+
+            for (Lobby lobby : visibleLobbies) {
+                Label label = new Label(lobby.toString(), skin);
+                label.setColor(Color.CYAN);
+                TextButton btn = new TextButton("Join", skin);
+
+                TextField passwordField;
+                if (lobby.isPublic()) {
+                    passwordField = new TextField("", skin2);
+
+                } else {
+                    passwordField = new TextField("", skin);
+
+                }
+                passwordField.setMessageText("Password");
+                listTable.add(label).pad(4).colspan(2).left().row();
+                listTable.add(passwordField).width(100).pad(4);
+                listTable.add(btn).width(100).pad(4).row();
+                btn.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        JsonObject req = new JsonObject();
+                        req.addProperty("password", passwordField.getText());
+
+                        var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/join/" + lobby.get_id(), req);
+
+                        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                        if (res.getStatus() == 200) {
+                            currLobby = lobby;
+                            doesUINeedRefresh = true;
+                            ClientApp.loggedInUser.setCurrentLobbyId(currLobby.get_id());
+                            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                            uiPopupHelper.showDialog("Successfully joined the lobby", "Success");
+                        } else {
+                            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                            uiPopupHelper.showDialog(res.getMessage(), "Error");
+                        }
+                    }
+                });
+            }
+
+            ScrollPane scrollPane = new ScrollPane(listTable, skin);
+            scrollPane.setScrollingDisabled(true, false);
+            scrollPane.setFadeScrollBars(false);
+
+            root.add(scrollPane)
+                .width(500)
+                .height(stage.getViewport().getWorldHeight())
+                .pad(16);
+
         }
-
-        ScrollPane scrollPane = new ScrollPane(listTable, skin);
-        scrollPane.setScrollingDisabled(true, false);
-        scrollPane.setFadeScrollBars(false);
-
-        root.add(scrollPane)
-            .width(500)
-            .height(stage.getViewport().getWorldHeight())
-            .pad(16);
-
         stage.addActor(table);
     }
 
