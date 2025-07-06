@@ -27,7 +27,6 @@ public class LobbyController {
                 return;
             }
             Lobby newLobby = new Lobby(isVisible, isPublic, name, user.getUsername());
-            newLobby.getUsers().add(user.getUsername());
             if(!newLobby.isPublic()){
                 if(password == null){
                     ctx.json(Response.BAD_REQUEST.setMessage("Password cannot be null"));
@@ -106,6 +105,22 @@ public class LobbyController {
 
             ctx.json(Response.OK.setBody(lobby));
         } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void getMyCurrentLobby(Context ctx){
+        try{
+            String id = ctx.pathParam("id");
+            User user = UserRepository.findUserById(id);
+            if(user == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("User with id " + id + " not found"));
+                return;
+            }
+            Lobby lobby = LobbyRepository.findById(user.getCurrentLobbyId());
+            ctx.json(Response.OK.setBody(lobby));
+        }catch (Exception e){
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }

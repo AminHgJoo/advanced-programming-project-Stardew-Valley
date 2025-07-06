@@ -113,9 +113,11 @@ public class AppWebSocket {
             user.setCurrentLobbyId(lobby.get_id().toString());
             lobby.getUsers().add(user.getUsername());
             LobbyRepository.save(lobby);
+            UserRepository.saveUser(user);
             response.put("type", "RESPONSE");
             response.put("success", "true");
             response.put("message", "User" + user.getUsername() + " joined lobby");
+            response.put("lobby", new Gson().toJson(lobby));
             ctx.send(new Gson().toJson(response));
             response.remove("success");
             response.put("type", "LOBBY_JOINED");

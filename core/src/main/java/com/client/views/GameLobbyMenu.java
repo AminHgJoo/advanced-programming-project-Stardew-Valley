@@ -25,6 +25,7 @@ import net.bytebuddy.description.method.MethodDescription;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class GameLobbyMenu implements MyScreen {
     private final GameMain gameMain;
@@ -52,6 +53,7 @@ public class GameLobbyMenu implements MyScreen {
         skin2 = AssetManager.getSkin2();
         initializeStage();
         loadLobbies();
+        loadCurrentLobby();
     }
 
     public void loadLobbies() {
@@ -70,6 +72,22 @@ public class GameLobbyMenu implements MyScreen {
         } else {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog("Error while loading lobbies", "Error");
+        }
+    }
+
+    public void loadCurrentLobby(){
+        if(ClientApp.loggedInUser.getCurrentLobbyId() != null){
+            var getResponse = HTTPUtil.get("htt://localhost:8080/api/lobby/getCurrentLobby");
+            Response res = HTTPUtil.deserializeHttpResponse(getResponse);
+            if(res.getStatus() == 200){
+                LinkedHashMap body = (LinkedHashMap) res.getBody();
+                Gson gson = new Gson();
+                String json = gson.toJson(body);
+                currLobby = ModelDecoder.decodeLobby(json);
+            }
+            if(currLobby != null){
+                doesUINeedRefresh = true;
+            }
         }
     }
 
@@ -422,14 +440,6 @@ public class GameLobbyMenu implements MyScreen {
     public void socketMessage(String message) {
         Gson gson = new Gson();
         HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
-        String lobby = res.get("lobby");
-        try {
-            Lobby newLobby = ModelDecoder.decodeLobby(lobby);
-            currLobby = newLobby;
-            doesUINeedRefresh = true;
-        } catch (Exception e) {
-
-        }
         if (res.get("type").equals("RESPONSE")) {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             if (res.get("success").equals("true")) {
@@ -444,5 +454,14 @@ public class GameLobbyMenu implements MyScreen {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog(res.get("message"), "Success");
         }
+        String lobby = res.get("lobby");
+        try {
+            Lobby newLobby = ModelDecoder.decodeLobby(lobby);
+            currLobby = newLobby;
+//            doesUINeedRefresh = true;
+        } catch (Exception e) {
+
+        }
+
     }
 }

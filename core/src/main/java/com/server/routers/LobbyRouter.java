@@ -19,6 +19,8 @@ public class LobbyRouter {
         app.get("/api/lobby/findByID/{id}", controller::getLobbyById);
         app.get("/api/lobby/getLobbiesByOwnerUsername/{ownerUsername}" , controller::getLobbiesByOwnerUsername);
         app.get("/api/lobby/getLobbyByName/{name}" , controller::getLobbyByName);
+        app.get("/api/lobby/getCurrentLobby" , controller::getMyCurrentLobby);
+
 
         // POST requests
         app.post("/api/lobby/" , controller::createLobby);
