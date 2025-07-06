@@ -1,18 +1,24 @@
 package com.common.models.networking;
 
+import dev.morphia.annotations.Entity;
+
+import java.util.ArrayList;
+
+@Entity
 public class Lobby {
     private String name;
-    private String id;
+    private String _id;
     private boolean isPublic;
     private boolean isVisible;
-    private String ownerNickname;
+    private String ownerUsername;
+    private ArrayList<String> users = new ArrayList<>();
 
-    public Lobby(String id, boolean isVisible, boolean isPublic, String name, String ownerNickname) {
-        this.id = id;
+    public Lobby() {}
+    public Lobby(boolean isVisible, boolean isPublic, String name, String ownerNickname) {
         this.isVisible = isVisible;
         this.isPublic = isPublic;
         this.name = name;
-        this.ownerNickname = ownerNickname;
+        this.ownerUsername = ownerNickname;
     }
 
     public boolean isPublic() {
@@ -31,20 +37,20 @@ public class Lobby {
         isVisible = visible;
     }
 
-    public String getOwnerNickname() {
-        return ownerNickname;
+    public String getOwnerUsername() {
+        return ownerUsername;
     }
 
-    public void setOwnerNickname(String ownerNickname) {
-        this.ownerNickname = ownerNickname;
+    public void setOwnerUsername(String ownerUsername) {
+        this.ownerUsername = ownerUsername;
     }
 
-    public String getId() {
-        return id;
+    public String get_id() {
+        return _id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getName() {
@@ -57,6 +63,14 @@ public class Lobby {
 
     @Override
     public String toString() {
-        return "Name: " + name + " | ID: " + id + " | Public: " + isPublic + " | Owner: " + ownerNickname;
+        return "Name: " + name + " | ID: " + _id + " | Public: " + isPublic + " | Owner: " + ownerUsername;
+    }
+
+    public ArrayList<String> getUsers() {
+        return users;
+    }
+
+    public void setUsers(ArrayList<String> users) {
+        this.users = users;
     }
 }

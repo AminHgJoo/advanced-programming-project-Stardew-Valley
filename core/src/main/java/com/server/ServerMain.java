@@ -2,6 +2,7 @@ package com.server;
 
 import com.server.GameServers.AppWebSocket;
 import com.server.routers.GameRouter;
+import com.server.routers.LobbyRouter;
 import com.server.routers.UserRouter;
 import com.server.utilities.Connection;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -30,6 +31,9 @@ public class ServerMain {
 
         // Game routes
         new GameRouter(app).initializeRoutes();
+
+        // Lobby routes
+        new LobbyRouter(app).initializeRoutes();
 
         app.exception(Exception.class, (e, ctx) -> {
         });

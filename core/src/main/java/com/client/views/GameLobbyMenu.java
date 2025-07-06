@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
@@ -42,9 +41,6 @@ public class GameLobbyMenu implements Screen {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
         this.background = AssetManager.getTextures().get("mainMenuBackground");
-
-        visibleLobbies.add(new Lobby("AA35F3", true, true, "My Farm", "AminHg"));
-        visibleLobbies.add(new Lobby("AA35F3", true, true, "My Farm", "AminHg"));
 
         initializeStage();
     }
@@ -340,6 +336,6 @@ public class GameLobbyMenu implements Screen {
         if (currLobby == null) {
             return "Not in lobby";
         }
-        return currLobby.getId();
+        return currLobby.get_id();
     }
 }

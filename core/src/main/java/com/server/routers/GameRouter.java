@@ -9,6 +9,8 @@ public class GameRouter {
     }
 
     public void initializeRoutes(){
+        // GET requests
 
+        // POST requests
     }
 }
