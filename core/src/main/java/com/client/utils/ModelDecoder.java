@@ -49,12 +49,17 @@ public class ModelDecoder {
     }
 
     public static Lobby decodeLobby(String json) {
-        try{
+        try {
             Lobby lobby = new Lobby();
             JSONObject obj = new JSONObject(json);
             lobby.setName(obj.getString("name"));
-            lobby.setVisible(obj.getBoolean("visible"));
-            lobby.setPublic(obj.getBoolean("public"));
+            try {
+                lobby.setVisible(obj.getBoolean("visible"));
+                lobby.setPublic(obj.getBoolean("public"));
+            }catch (Exception e){
+                lobby.setVisible(obj.getBoolean("isVisible"));
+                lobby.setPublic(obj.getBoolean("isPublic"));
+            }
             lobby.setOwnerUsername(obj.getString("ownerUsername"));
             ObjectId id = new ObjectId(obj.getString("_id"));
             lobby.set_id(id.toString());
@@ -75,7 +80,7 @@ public class ModelDecoder {
 
             }
             return lobby;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

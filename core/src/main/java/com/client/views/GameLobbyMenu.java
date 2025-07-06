@@ -240,6 +240,7 @@ public class GameLobbyMenu implements MyScreen {
 
                         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                         if (res.getStatus() == 200) {
+                            lobby.getUsers().add(ClientApp.loggedInUser.getUsername());
                             currLobby = lobby;
                             doesUINeedRefresh = true;
                             ClientApp.loggedInUser.setCurrentLobbyId(currLobby.get_id());
@@ -465,6 +466,7 @@ public class GameLobbyMenu implements MyScreen {
                 uiPopupHelper.showDialog(res.get("message"), "Error");
             }
         } else if (res.get("type").equals("LOBBY_JOINED")) {
+            System.out.println("Joinedddd");
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog(res.get("message"), "Success");
         } else if (res.get("type").equals("FARM_CHOSEN")) {
@@ -472,10 +474,12 @@ public class GameLobbyMenu implements MyScreen {
             uiPopupHelper.showDialog(res.get("message"), "Success");
         }
         String lobby = res.get("lobby");
+        System.out.println(lobby);
         try {
             Lobby newLobby = ModelDecoder.decodeLobby(lobby);
+            System.out.println(newLobby);
             currLobby = newLobby;
-//            doesUINeedRefresh = true;
+            doesUINeedRefresh = true;
         } catch (Exception e) {
 
         }
