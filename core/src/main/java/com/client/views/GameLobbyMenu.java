@@ -12,19 +12,23 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
 import com.client.utils.UIPopupHelper;
 import com.common.models.networking.Lobby;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
 public class GameLobbyMenu implements Screen {
     private final GameMain gameMain;
     private final Skin skin;
+    private final Skin skin2;
     private final Texture background;
     private Stage stage;
 
@@ -37,13 +41,27 @@ public class GameLobbyMenu implements Screen {
     private final ArrayList<String> messagesFromServer = new ArrayList<>();
     //TODO: get this from the server.
     private final ArrayList<Lobby> visibleLobbies = new ArrayList<>();
+    private Label currentLobbyName;
 
-    public GameLobbyMenu(GameMain gameMain) {
+    public GameLobbyMenu(GameMain gameMain, Lobby currLobby) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
+        this.skin2 = AssetManager.getSkin2();
         this.background = AssetManager.getTextures().get("mainMenuBackground");
-        currLobby = new Lobby(true, true, "asghar", ClientApp.loggedInUser.getUsername());
+//        currLobby = new Lobby(true, true, "asghar", ClientApp.loggedInUser.getUsername());
+//        this.visibleLobbies.add(new Lobby(true, true, "asghar", "mamad"));
+//        this.visibleLobbies.add(new Lobby(true, false, "hosein", "ali"));
+        this.currLobby = currLobby;
         initializeStage();
+        refresh();
+    }
+
+    public void refresh() {
+        if(currLobby != null) {
+            //TODO get lobby from the server
+        }
+        //TODO fetch visible lobbies
+        doesUINeedRefresh = true;
     }
 
     private void initializeStage() {
@@ -74,14 +92,26 @@ public class GameLobbyMenu implements Screen {
         currentLobbyId.setFontScale(2f);
         table.add(currentLobbyId).colspan(2).pad(10).row();
 
-        TextButton startGameButton = new TextButton("Start Game (Host)", skin);
-        startGameButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
-            }
-        });
-        table.add(startGameButton).colspan(2).pad(10).row();
+        if(currLobby != null && currLobby.getOwnerUsername().equals(ClientApp.loggedInUser.getUsername())) {
+            TextButton startGameButton = new TextButton("Start Game (Host)", skin);
+            startGameButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    //TODO:
+                }
+            });
+            table.add(startGameButton).colspan(2).pad(10).row();
+        }
+        else {
+            TextButton startGameButton = new TextButton("Start Game (Host)", skin2);
+            startGameButton.getLabel().setFontScale(1);
+            table.add(startGameButton)
+                .colspan(2)
+                .pad(10)
+                .width(150)
+                .height(60)
+                .row();
+        }
 
         Label farmChoiceLabel = new Label("Farm Choice", skin);
         farmChoiceLabel.setColor(Color.CYAN);
@@ -93,14 +123,26 @@ public class GameLobbyMenu implements Screen {
         farmSelectBox.setSelectedIndex(0);
         table.add(farmSelectBox).colspan(2).pad(10).row();
 
-        TextButton readyUp = new TextButton("Confirm & Ready Up", skin);
-        readyUp.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
-            }
-        });
-        table.add(readyUp).colspan(2).pad(10).row();
+        if(currLobby != null) {
+            TextButton readyUp = new TextButton("Confirm & Ready Up", skin);
+            readyUp.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    //TODO:
+                }
+            });
+            table.add(readyUp).colspan(2).pad(10).row();
+        }
+        else{
+            TextButton readyUp = new TextButton("Confirm & Ready Up", skin2);
+            readyUp.getLabel().setFontScale(1);
+            table.add(readyUp)
+                .colspan(2)
+                .pad(10)
+                .width(300)
+                .height(60)
+                .row();
+        }
 
         Label invisibleLobbyName = new Label("Search invisible lobbies", skin);
         invisibleLobbyName.setColor(Color.CYAN);
@@ -119,7 +161,7 @@ public class GameLobbyMenu implements Screen {
         searchButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO: Search for invisible lobby.
+
             }
         });
         table.add(searchButton).colspan(2).pad(10).row();
@@ -128,7 +170,7 @@ public class GameLobbyMenu implements Screen {
         refreshButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
+                refresh();
             }
         });
         table.add(refreshButton).colspan(2).pad(10).row();
@@ -150,16 +192,21 @@ public class GameLobbyMenu implements Screen {
             btn.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    //TODO: Try to join this lobby.
+
                 }
             });
 
-            TextField passwordField = new TextField("", skin);
-            passwordField.setMessageText("Password");
-
+          if(!lobby.isPublic()) {
+                TextField passwordField = new TextField("", skin);
+                passwordField.setMessageText("Password");
+                listTable.add(passwordField).width(100).pad(4);
+           }
+          else{
+              TextField passwordField = new TextField("", skin2);
+              passwordField.setMessageText("Password");
+              listTable.add(passwordField).width(100).pad(4);
+          }
             listTable.add(label).pad(4).colspan(2).left().row();
-
-            listTable.add(passwordField).width(100).pad(4);
             listTable.add(btn).width(100).pad(4).row();
         }
 
@@ -197,19 +244,49 @@ public class GameLobbyMenu implements Screen {
         createLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
+                var req = new JsonObject();
+
+                var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/", req);
+                if (postResponse == null) {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog("Connection to server failed.", "Error");
+                    return;
+                }
+                var response = HTTPUtil.deserializeHttpResponse(postResponse);
+                if (response.getStatus() == 400 || response.getStatus() == 404) {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog(response.getMessage(), "Error");
+                    return;
+                }
+
+//                if (response.getStatus() == 200) {
+//                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+//                    uiPopupHelper.showDialog(response.getMessage(), "Success");
+//                    ClientApp.loggedInUser.setEmail(emailField.getText());
+//                }
             }
         });
         slidingMenu.add(createLobby).pad(10).row();
 
-        TextButton leaveLobby = new TextButton("Leave Lobby", skin);
-        leaveLobby.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
-            }
-        });
-        slidingMenu.add(leaveLobby).pad(10).row();
+        if(currLobby != null) {
+            TextButton leaveLobby = new TextButton("Leave Lobby", skin);
+            leaveLobby.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    //TODO:
+                }
+            });
+            slidingMenu.add(leaveLobby).pad(10).row();
+        }
+        else{
+            TextButton leaveLobby = new TextButton("Leave Lobby", skin2);
+            slidingMenu.add(leaveLobby)
+                .colspan(2)
+                .pad(10)
+                .width(150)
+                .height(60)
+                .row();
+        }
 
         TextButton mainMenuButton = new TextButton("Main Menu", skin);
         mainMenuButton.addListener(new ChangeListener() {
@@ -221,31 +298,33 @@ public class GameLobbyMenu implements Screen {
         });
         slidingMenu.add(mainMenuButton).pad(10).row();
 
-        Label hostOptions = new Label("Host Options", skin);
-        hostOptions.setColor(Color.DARK_GRAY);
-        slidingMenu.add(hostOptions).pad(10).row();
+        if(currLobby != null && currLobby.getOwnerUsername().equals(ClientApp.loggedInUser.getUsername())) {
+            Label hostOptions = new Label("Host Options", skin);
+            hostOptions.setColor(Color.DARK_GRAY);
+            slidingMenu.add(hostOptions).pad(10).row();
 
-        CheckBox isPrivateLobby = new CheckBox("Private Lobby", skin);
-        isPrivateLobby.getLabel().setColor(Color.DARK_GRAY);
-        isPrivateLobby.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
-            }
-        });
-        isPrivateLobby.setChecked(false);
-        slidingMenu.add(isPrivateLobby).pad(10).row();
+            CheckBox isPrivateLobby = new CheckBox("Private Lobby", skin);
+            isPrivateLobby.getLabel().setColor(Color.DARK_GRAY);
+            isPrivateLobby.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
 
-        CheckBox isInvisibleLobby = new CheckBox("Invisible Lobby", skin);
-        isInvisibleLobby.getLabel().setColor(Color.DARK_GRAY);
-        isInvisibleLobby.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-               //TODO:
-            }
-        });
-        isInvisibleLobby.setChecked(false);
-        slidingMenu.add(isInvisibleLobby).pad(10).row();
+                }
+            });
+            isPrivateLobby.setChecked(false);
+            slidingMenu.add(isPrivateLobby).pad(10).row();
+
+            CheckBox isInvisibleLobby = new CheckBox("Invisible Lobby", skin);
+            isInvisibleLobby.getLabel().setColor(Color.DARK_GRAY);
+            isInvisibleLobby.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    //TODO:
+                }
+            });
+            isInvisibleLobby.setChecked(false);
+            slidingMenu.add(isInvisibleLobby).pad(10).row();
+        }
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.CYAN);
