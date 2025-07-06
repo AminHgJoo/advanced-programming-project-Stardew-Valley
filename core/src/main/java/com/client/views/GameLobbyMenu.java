@@ -1,7 +1,6 @@
 package com.client.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -16,13 +15,18 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
-import com.client.utils.AssetManager;
-import com.client.utils.UIPopupHelper;
+import com.client.utils.*;
 import com.common.models.networking.Lobby;
+import com.google.gson.Gson;
+import com.server.utilities.Response;
+import com.client.utils.SimpleWebSocketClient;
+import net.bytebuddy.description.method.MethodDescription;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class GameLobbyMenu implements Screen {
+public class GameLobbyMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
@@ -33,11 +37,12 @@ public class GameLobbyMenu implements Screen {
     private boolean doesUINeedRefresh = false;
 
     private Lobby currLobby = null;
+    private SimpleWebSocketClient client = ClientApp.client;
 
     //TODO: Add server notifs here!!!
     private final ArrayList<String> messagesFromServer = new ArrayList<>();
     //TODO: get this from the server.
-    private final ArrayList<Lobby> visibleLobbies = new ArrayList<>();
+    private ArrayList<Lobby> visibleLobbies = new ArrayList<>();
 
     public GameLobbyMenu(GameMain gameMain, Lobby currLobby) {
         this.gameMain = gameMain;
@@ -46,6 +51,26 @@ public class GameLobbyMenu implements Screen {
         this.currLobby = currLobby;
         skin2 = AssetManager.getSkin2();
         initializeStage();
+        loadLobbies();
+    }
+
+    public void loadLobbies() {
+        var getResponse = HTTPUtil.get("http://localhost:8080/api/lobby/all");
+        Response res = HTTPUtil.deserializeHttpResponse(getResponse);
+        System.out.println(res.getBody());
+        if (res.getStatus() == 200) {
+            this.visibleLobbies = new ArrayList<>();
+            ((ArrayList) res.getBody()).forEach(x -> {
+                Gson gson = new Gson();
+                String json = gson.toJson(x);
+                Lobby lobby = ModelDecoder.decodeLobby(json);
+                this.visibleLobbies.add(lobby);
+            });
+            doesUINeedRefresh = true;
+        } else {
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+            uiPopupHelper.showDialog("Error while loading lobbies", "Error");
+        }
     }
 
     private void initializeStage() {
@@ -76,7 +101,7 @@ public class GameLobbyMenu implements Screen {
         currentLobbyId.setFontScale(2f);
         table.add(currentLobbyId).colspan(2).pad(10).row();
 
-        if(currLobby != null && currLobby.getOwnerUsername().equals(ClientApp.loggedInUser.getUsername())) {
+        if (currLobby != null && currLobby.getOwnerUsername().equals(ClientApp.loggedInUser.getUsername())) {
             TextButton startGameButton = new TextButton("Start Game (Host)", skin);
             startGameButton.addListener(new ChangeListener() {
                 @Override
@@ -85,8 +110,7 @@ public class GameLobbyMenu implements Screen {
                 }
             });
             table.add(startGameButton).colspan(2).pad(10).row();
-        }
-        else{
+        } else {
             TextButton startGameButton = new TextButton("Start Game (Host)", skin2);
             table.add(startGameButton)
                 .colspan(2)
@@ -106,7 +130,7 @@ public class GameLobbyMenu implements Screen {
         farmSelectBox.setSelectedIndex(0);
         table.add(farmSelectBox).colspan(2).pad(10).row();
 
-        if(currLobby != null) {
+        if (currLobby != null) {
             TextButton readyUp = new TextButton("Confirm & Ready Up", skin);
             readyUp.addListener(new ChangeListener() {
                 @Override
@@ -115,8 +139,7 @@ public class GameLobbyMenu implements Screen {
                 }
             });
             table.add(readyUp).colspan(2).pad(10).row();
-        }
-        else{
+        } else {
             TextButton readyUp = new TextButton("Confirm & Ready Up", skin2);
             table.add(readyUp)
                 .colspan(2)
@@ -152,7 +175,7 @@ public class GameLobbyMenu implements Screen {
         refreshButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO:
+                loadLobbies();
             }
         });
         table.add(refreshButton).colspan(2).pad(10).row();
@@ -171,30 +194,29 @@ public class GameLobbyMenu implements Screen {
             Label label = new Label(lobby.toString(), skin);
             label.setColor(Color.CYAN);
             TextButton btn = new TextButton("Join", skin);
+
+            TextField passwordField;
+            if (lobby.isPublic()) {
+                passwordField = new TextField("", skin2);
+
+            } else {
+                passwordField = new TextField("", skin);
+
+            }
+            passwordField.setMessageText("Password");
+            listTable.add(label).pad(4).colspan(2).left().row();
+            listTable.add(passwordField).width(100).pad(4);
+            listTable.add(btn).width(100).pad(4).row();
             btn.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    //TODO: Try to join this lobby.
+                    HashMap<String, String> request = new HashMap<>();
+                    request.put("lobbyId", lobby.get_id());
+                    request.put("password", passwordField.getText());
+                    request.put("command", "JOIN_LOBBY");
+                    client.send(new Gson().toJson(request));
                 }
             });
-
-            if(lobby.isPublic()) {
-                TextField passwordField = new TextField("", skin2);
-                passwordField.setMessageText("Password");
-
-                listTable.add(label).pad(4).colspan(2).left().row();
-
-                listTable.add(passwordField).width(100).pad(4);
-            }
-            else{
-                TextField passwordField = new TextField("", skin);
-                passwordField.setMessageText("Password");
-
-                listTable.add(label).pad(4).colspan(2).left().row();
-
-                listTable.add(passwordField).width(100).pad(4);
-            }
-            listTable.add(btn).width(100).pad(4).row();
         }
 
         ScrollPane scrollPane = new ScrollPane(listTable, skin);
@@ -211,11 +233,11 @@ public class GameLobbyMenu implements Screen {
 
     private void initializeSlidingMenu() {
         Table slidingMenu = new Table(skin);
-        if(currLobby != null) {
+        if (currLobby != null) {
             Label asghar = new Label("Players in lobby:", skin);
             asghar.setColor(Color.DARK_GRAY);
             slidingMenu.add(asghar).pad(10).row();
-            for(String use : currLobby.getUsers()){
+            for (String use : currLobby.getUsers()) {
                 Label label = new Label(use, skin);
                 label.setColor(Color.DARK_GRAY);
                 slidingMenu.add(label).pad(10).row();
@@ -236,7 +258,7 @@ public class GameLobbyMenu implements Screen {
             }
         });
         slidingMenu.add(createLobby).pad(10).row();
-        if(currLobby != null) {
+        if (currLobby != null) {
             TextButton leaveLobby = new TextButton("Leave Lobby", skin);
             leaveLobby.addListener(new ChangeListener() {
                 @Override
@@ -245,8 +267,7 @@ public class GameLobbyMenu implements Screen {
                 }
             });
             slidingMenu.add(leaveLobby).pad(10).row();
-        }
-        else{
+        } else {
             TextButton leaveLobby = new TextButton("Leave Lobby", skin2);
             slidingMenu.add(leaveLobby)
                 .colspan(2)
@@ -266,7 +287,7 @@ public class GameLobbyMenu implements Screen {
         });
         slidingMenu.add(mainMenuButton).pad(10).row();
 
-        if(currLobby != null && currLobby.getOwnerUsername().equals(ClientApp.loggedInUser.getUsername())) {
+        if (currLobby != null && currLobby.getOwnerUsername().equals(ClientApp.loggedInUser.getUsername())) {
             Label hostOptions = new Label("Host Options", skin);
             hostOptions.setColor(Color.DARK_GRAY);
             slidingMenu.add(hostOptions).pad(10).row();
@@ -395,5 +416,33 @@ public class GameLobbyMenu implements Screen {
             return "Not in lobby";
         }
         return currLobby.get_id();
+    }
+
+    @Override
+    public void socketMessage(String message) {
+        Gson gson = new Gson();
+        HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
+        String lobby = res.get("lobby");
+        try {
+            Lobby newLobby = ModelDecoder.decodeLobby(lobby);
+            currLobby = newLobby;
+            doesUINeedRefresh = true;
+        } catch (Exception e) {
+
+        }
+        if (res.get("type").equals("RESPONSE")) {
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+            if (res.get("success").equals("true")) {
+                uiPopupHelper.showDialog(res.get("message"), "Success");
+            } else {
+                uiPopupHelper.showDialog(res.get("message"), "Error");
+            }
+        } else if (res.get("type").equals("LOBBY_JOINED")) {
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+            uiPopupHelper.showDialog(res.get("message"), "Success");
+        } else if (res.get("type").equals("FARM_CHOSEN")) {
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+            uiPopupHelper.showDialog(res.get("message"), "Success");
+        }
     }
 }

@@ -4,16 +4,19 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Entity
 public class Lobby {
     @Id
     private String _id;
     private String name;
+    private String password;
     private boolean isPublic;
     private boolean isVisible;
     private String ownerUsername;
     private ArrayList<String> users = new ArrayList<>();
+    private HashMap<String , Integer> usersFarm = new HashMap<>();
 
     public Lobby() {}
     public Lobby(boolean isVisible, boolean isPublic, String name, String ownerUsername) {
@@ -66,7 +69,7 @@ public class Lobby {
 
     @Override
     public String toString() {
-        return "Name: " + name + " | ID: " + _id + " | Public: " + isPublic + " | Owner: " + ownerUsername;
+        return "Name: " + name + " | Public: " + isPublic + " | Owner: " + ownerUsername;
     }
 
     public ArrayList<String> getUsers() {
@@ -75,5 +78,21 @@ public class Lobby {
 
     public void setUsers(ArrayList<String> users) {
         this.users = users;
+    }
+
+    public HashMap<String, Integer> getUsersFarm() {
+        return usersFarm;
+    }
+
+    public void setUsersFarm(HashMap<String, Integer> usersFarm) {
+        this.usersFarm = usersFarm;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

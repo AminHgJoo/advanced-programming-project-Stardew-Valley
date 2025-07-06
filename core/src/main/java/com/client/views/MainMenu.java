@@ -17,8 +17,9 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.FileUtil;
+import com.client.utils.MyScreen;
 
-public class MainMenu implements Screen {
+public class MainMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
@@ -132,5 +133,10 @@ public class MainMenu implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    @Override
+    public void socketMessage(String message) {
+
     }
 }

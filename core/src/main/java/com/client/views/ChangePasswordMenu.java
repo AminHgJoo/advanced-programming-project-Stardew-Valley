@@ -14,11 +14,12 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
+import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
 import com.google.gson.JsonObject;
 import com.server.utilities.Validation;
 
-public class ChangePasswordMenu implements Screen {
+public class ChangePasswordMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
@@ -135,5 +136,10 @@ public class ChangePasswordMenu implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    @Override
+    public void socketMessage(String message) {
+
     }
 }

@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 
-public class SignUpMenu implements Screen {
+public class SignUpMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
@@ -229,5 +229,10 @@ public class SignUpMenu implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    @Override
+    public void socketMessage(String message) {
+
     }
 }

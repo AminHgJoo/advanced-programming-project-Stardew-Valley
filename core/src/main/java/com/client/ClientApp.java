@@ -1,10 +1,12 @@
 package com.client;
 
+import com.client.utils.MyScreen;
 import com.common.models.User;
-import com.server.utilities.SimpleWebSocketClient;
+import com.client.utils.SimpleWebSocketClient;
 
 public class ClientApp {
     public static User loggedInUser;
+    public static MyScreen currentScreen;
     public static String token = "";
     public static SimpleWebSocketClient client = null;
 

@@ -24,6 +24,7 @@ public class User {
     private int moneyHighScore;
     private int numberOfGames;
     private String currentGameId;
+    private String currentLobbyId;
     @Transient
     private GameData currentGameData;
 
@@ -171,5 +172,13 @@ public class User {
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public String getCurrentLobbyId() {
+        return currentLobbyId;
+    }
+
+    public void setCurrentLobbyId(String currentLobbyId) {
+        this.currentLobbyId = currentLobbyId;
     }
 }

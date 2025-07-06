@@ -81,8 +81,8 @@ public class CreateLobby implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 var req = new JsonObject();
                 req.addProperty("name", nameField.getText() );
-                req.addProperty("isVisible" , isVisible);
-                req.addProperty("isPrivate", isPrivate);
+                req.addProperty("isVisible" , isVisibleLobby.isChecked());
+                req.addProperty("isPublic", !isPrivateLobby.isChecked());
 
                 var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/", req);
                 if (postResponse == null) {

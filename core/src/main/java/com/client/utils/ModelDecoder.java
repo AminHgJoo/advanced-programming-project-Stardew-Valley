@@ -7,6 +7,8 @@ import org.bson.types.ObjectId;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class ModelDecoder {
     public static User decodeUser(String json) {
         User user = new User();
@@ -46,6 +48,17 @@ public class ModelDecoder {
         for (int i = 0; i < users.length(); i++) {
             String userString = users.getString(i);
             lobby.getUsers().add(userString);
+        }
+        JSONObject farm = obj.getJSONObject("usersFarm");
+        if (farm != null) {
+            HashMap<String , Integer> farmFarm = new HashMap<>();
+            for (Object key : farm.keySet()) {
+                farmFarm.put(key.toString(), farm.getInt(key.toString()));
+            }
+            lobby.setUsersFarm(farmFarm);
+        }else {
+            lobby.setUsersFarm(new HashMap<>());
+
         }
         return lobby;
     }

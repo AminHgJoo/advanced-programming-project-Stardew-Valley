@@ -2,14 +2,19 @@ package com.server.GameServers;
 
 import com.common.models.GameData;
 import com.common.models.User;
+import com.common.models.networking.Lobby;
+import com.google.gson.Gson;
 import com.server.repositories.GameRepository;
+import com.server.repositories.LobbyRepository;
 import com.server.repositories.UserRepository;
 import io.javalin.Javalin;
 import io.javalin.websocket.WsContext;
+import io.javalin.websocket.WsMessageContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -23,38 +28,99 @@ public class AppWebSocket {
         this.app = app;
     }
 
+    public static void sendMessageToLobby(Lobby lobby, User user, String message) {
+        for (String username : lobby.getUsers()) {
+            if (!username.equals(user.getUsername())) {
+                PlayerConnection connection = connectedPlayers.get(username);
+                if (connection != null) {
+                    connection.send(message);
+                }
+            }
+        }
+    }
+
     public void start() {
         app.ws("/game", ws -> {
             ws.onConnect(ctx -> {
                 ctx.enableAutomaticPings(5, TimeUnit.SECONDS);
                 System.out.println("Someone connected");
-                String playerId = ctx.queryParam("playerId");
-                connectedPlayers.put(playerId, new PlayerConnection(playerId, ctx));
-                ctx.send("Connected as " + playerId);
+                String username = ctx.queryParam("playerUsername");
+                connectedPlayers.put(username, new PlayerConnection(username, ctx));
+                ctx.send("Connected as " + username);
             });
 
             ws.onMessage(ctx -> {
-                String playerId = ctx.queryParam("playerId");
-                User user = UserRepository.findUserById(playerId);
+                String username = ctx.queryParam("playerUsername");
+                User user = UserRepository.findUserByUsername(username);
                 if (user != null) {
                     JSONObject message = new JSONObject(ctx.message());
-                    // TODO find the player by the id
                     String command = message.getString("command");
                     if (command.equals("INVITE")) {
                         handleInvite(message, ctx);
                     } else if (command.equals("ACCEPT")) {
                         handleAccept(message, ctx);
+                    } else if (command.equals("CHOOSE_FARM")) {
+                        chooseFarm(user, message, ctx);
+                    } else if (command.equals("JOIN_LOBBY")) {
+                        joinLobby(user, message, ctx);
                     }
                 }
             });
 
             ws.onClose(ctx -> {
                 System.out.println("Disconnected");
-                String playerId = ctx.queryParam("playerId");
-                connectedPlayers.remove(playerId);
+                String username = ctx.queryParam("playerUsername");
+                connectedPlayers.remove(username);
             });
 
         });
+    }
+
+    public static void chooseFarm(User user, JSONObject obj, WsMessageContext ctx) {
+        Lobby lobby = LobbyRepository.findById(user.getCurrentLobbyId());
+        if (lobby != null) {
+            lobby.getUsersFarm().put(user.getUsername(), obj.getInt("farm"));
+            LobbyRepository.save(lobby);
+            HashMap<String, String> response = new HashMap<>();
+            response.put("type", "FARM_CHOSEN");
+            response.put("message", "User" + user.getUsername() + " chose farm" + obj.getInt("farm"));
+            response.put("lobby", new Gson().toJson(lobby));
+            sendMessageToLobby(lobby, user, new Gson().toJson(response));
+        }
+    }
+
+    public static void joinLobby(User user, JSONObject obj, WsMessageContext ctx) {
+        Lobby lobby = LobbyRepository.findById(obj.getString("lobbyId"));
+        HashMap<String, String> response = new HashMap<>();
+        if (lobby != null) {
+            if (lobby.getUsers().size() >= 4) {
+                response.put("type", "RESPONSE");
+                response.put("success", "false");
+                response.put("message", "Lobby is full");
+                ctx.send(new Gson().toJson(response));
+                return;
+            }
+            if (!lobby.isPublic()) {
+                String password = obj.getString("password");
+                if (password == null || !lobby.getPassword().equals(password)) {
+                    response.put("type", "RESPONSE");
+                    response.put("success", "false");
+                    response.put("message", "Lobby password does not match");
+                    ctx.send(new Gson().toJson(response));
+                    return;
+                }
+            }
+            user.setCurrentLobbyId(lobby.get_id().toString());
+            lobby.getUsers().add(user.getUsername());
+            LobbyRepository.save(lobby);
+            response.put("type", "RESPONSE");
+            response.put("success", "true");
+            response.put("message", "User" + user.getUsername() + " joined lobby");
+            ctx.send(new Gson().toJson(response));
+            response.remove("success");
+            response.put("type", "LOBBY_JOINED");
+            sendMessageToLobby(lobby, user, new Gson().toJson(response));
+        }
     }
 
     public static void handleInvite(JSONObject body, WsContext ctx) {

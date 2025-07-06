@@ -13,9 +13,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.MyScreen;
 import com.common.models.User;
 
-public class ProfileMenu implements Screen {
+public class ProfileMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
@@ -172,4 +173,8 @@ public class ProfileMenu implements Screen {
         stage.dispose();
     }
 
+    @Override
+    public void socketMessage(String message) {
+
+    }
 }

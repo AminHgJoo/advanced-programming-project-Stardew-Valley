@@ -12,8 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.MyScreen;
 
-public class LauncherMenu implements Screen {
+public class LauncherMenu implements MyScreen {
     private final Skin skin;
     private final Texture background;
     private final GameMain gameMain;
@@ -106,5 +107,10 @@ public class LauncherMenu implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    @Override
+    public void socketMessage(String message) {
+
     }
 }

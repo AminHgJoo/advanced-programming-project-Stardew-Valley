@@ -14,10 +14,11 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
+import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
 import com.google.gson.JsonObject;
 
-public class ChangeUsernameMenu implements Screen {
+public class ChangeUsernameMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
@@ -129,5 +130,10 @@ public class ChangeUsernameMenu implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    @Override
+    public void socketMessage(String message) {
+
     }
 }

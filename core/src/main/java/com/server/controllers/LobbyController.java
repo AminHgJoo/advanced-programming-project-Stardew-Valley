@@ -17,6 +17,7 @@ public class LobbyController {
             String name = (String) body.get("name");
             Boolean isVisible = (Boolean) body.get("isVisible");
             Boolean isPublic = (Boolean) body.get("isPublic");
+            String password = (String) body.get("password");
 
             String id = (String) ctx.attributeMap().get("id");
 
@@ -27,9 +28,17 @@ public class LobbyController {
             }
             Lobby newLobby = new Lobby(isVisible, isPublic, name, user.getUsername());
             newLobby.getUsers().add(user.getUsername());
+            if(!newLobby.isPublic()){
+                if(password == null){
+                    ctx.json(Response.BAD_REQUEST.setMessage("Password cannot be null"));
+                    return;
+                }
+                newLobby.setPassword(password);
+            }
 
             LobbyRepository.save(newLobby);
-
+            user.setCurrentLobbyId(newLobby.get_id().toString());
+            UserRepository.saveUser(user);
             ctx.json(Response.OK.setMessage("Lobby has been created successfully").setBody(newLobby));
         } catch (Exception e) {
             e.printStackTrace();

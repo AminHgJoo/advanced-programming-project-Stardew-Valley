@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.ModelDecoder;
+import com.client.utils.MyScreen;
 import com.client.views.LauncherMenu;
 import com.client.views.MainMenu;
 import com.google.gson.Gson;
@@ -29,7 +30,7 @@ public class GameMain extends Game {
 
     public void loadEnv() {
         Dotenv.configure()
-            .directory("./core/src/main/java/com/client/env")
+            .directory("../core/src/main/java/com/client/env")
             .filename("env.prod")
             .systemProperties()
             .load();
@@ -82,6 +83,7 @@ public class GameMain extends Game {
     @Override
     public void setScreen(Screen screen) {
         super.setScreen(screen);
+        ClientApp.currentScreen = (MyScreen) screen;
         //TODO: Set the static field "currMenu" in app, if needed.
     }
 }

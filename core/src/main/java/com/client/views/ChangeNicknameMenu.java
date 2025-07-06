@@ -14,10 +14,11 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
+import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
 import com.google.gson.JsonObject;
 
-public class ChangeNicknameMenu implements Screen {
+public class ChangeNicknameMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
@@ -131,4 +132,8 @@ public class ChangeNicknameMenu implements Screen {
         stage.dispose();
     }
 
+    @Override
+    public void socketMessage(String message) {
+
+    }
 }

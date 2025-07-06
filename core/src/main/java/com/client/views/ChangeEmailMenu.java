@@ -14,11 +14,12 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
+import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
 import com.google.gson.JsonObject;
 import com.server.controllers.UserController;
 
-public class ChangeEmailMenu implements Screen {
+public class ChangeEmailMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
@@ -133,4 +134,8 @@ public class ChangeEmailMenu implements Screen {
         stage.dispose();
     }
 
+    @Override
+    public void socketMessage(String message) {
+
+    }
 }
