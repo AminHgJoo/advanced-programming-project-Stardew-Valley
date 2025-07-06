@@ -14,11 +14,12 @@ public class Lobby {
     private ArrayList<String> users = new ArrayList<>();
 
     public Lobby() {}
-    public Lobby(boolean isVisible, boolean isPublic, String name, String ownerNickname) {
+    public Lobby(boolean isVisible, boolean isPublic, String name, String ownerUsername) {
         this.isVisible = isVisible;
         this.isPublic = isPublic;
         this.name = name;
-        this.ownerUsername = ownerNickname;
+        this.ownerUsername = ownerUsername;
+        users.add(ownerUsername);
     }
 
     public boolean isPublic() {

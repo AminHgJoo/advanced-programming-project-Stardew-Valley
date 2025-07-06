@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.UIPopupHelper;
@@ -41,7 +42,7 @@ public class GameLobbyMenu implements Screen {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
         this.background = AssetManager.getTextures().get("mainMenuBackground");
-
+        currLobby = new Lobby(true, true, "asghar", ClientApp.loggedInUser.getUsername());
         initializeStage();
     }
 
@@ -176,6 +177,16 @@ public class GameLobbyMenu implements Screen {
 
     private void initializeSlidingMenu() {
         Table slidingMenu = new Table(skin);
+        if(currLobby != null) {
+            Label asghar = new Label("Players in lobby:", skin);
+            asghar.setColor(Color.DARK_GRAY);
+            slidingMenu.add(asghar).pad(10).row();
+            for(String use : currLobby.getUsers()){
+                Label label = new Label(use, skin);
+                label.setColor(Color.DARK_GRAY);
+                slidingMenu.add(label).pad(10).row();
+            }
+        }
         slidingMenu.pad(10);
 
         Label label = new Label("Lobby Options", skin);
