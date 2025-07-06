@@ -38,7 +38,7 @@ public class MainMenu implements Screen {
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
 
-        Label label = new Label("Main Menu", skin, "title");
+        Label label = new Label("Main Menu",  skin, "title");
         label.setColor(Color.RED);
         label.setFontScale(2f);
 

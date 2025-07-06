@@ -1,7 +1,10 @@
 package com.client.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.HashMap;
@@ -9,7 +12,7 @@ import java.util.HashMap;
 public class AssetManager {
     private static final HashMap<String, Texture> textures = new HashMap<>();
     private static Skin skin = null;
-
+    private static BitmapFont font;
     public static void loadAssets() {
         //TODO:
         loadSkin();
@@ -20,6 +23,8 @@ public class AssetManager {
 
     private static void loadSkin() {
         skin = new Skin(Gdx.files.internal("skin/freezing/skin/freezing-ui.json"));
+        loadFont();
+        skin.add("myFont" , font);
     }
 
     public static Skin getSkin() {
@@ -40,5 +45,19 @@ public class AssetManager {
         if (skin != null) {
             skin.dispose();
         }
+    }
+
+    public static BitmapFont getFont() {
+        return font;
+    }
+
+    public static void loadFont() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
+            Gdx.files.internal("skin/freezing/skin/Racingoftendemo-9M3nL.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 32;
+        BitmapFont customFont = generator.generateFont(parameter);
+        generator.dispose();
+        font = customFont;
     }
 }
