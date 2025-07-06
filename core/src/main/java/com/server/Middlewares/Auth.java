@@ -15,7 +15,6 @@ public class Auth {
             ctx.json(Response.UN_AUTHORIZED);
             throw new Exception();
         }
-        System.out.println(JwtUtil.getUserIdFromToken(token));
         ctx.attribute("id", JwtUtil.getUserIdFromToken(token));
     };
 }

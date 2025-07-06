@@ -31,6 +31,7 @@ import java.util.ArrayList;
 
 @Entity("games")
 public class GameData {
+    private int capacity = 0;
     public ArrayList<Trade> tradingHistory = new ArrayList<>();
     public boolean hasTurnCycleFinished;
     @Id
@@ -731,5 +732,13 @@ public class GameData {
             }
         }
         return null;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }

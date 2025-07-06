@@ -1,5 +1,6 @@
 package com.server;
 
+import com.server.GameServers.AppWebSocket;
 import com.server.routers.GameRouter;
 import com.server.routers.UserRouter;
 import com.server.utilities.Connection;
@@ -19,6 +20,8 @@ public class ServerMain {
         app.get("/", ctx -> {
             ctx.result("Hello World!");
         });
+
+        new AppWebSocket(app).start();
 
         System.out.println("Server is listening http://localhost:8080 ...");
 

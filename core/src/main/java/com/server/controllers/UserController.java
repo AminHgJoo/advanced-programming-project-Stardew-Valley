@@ -245,13 +245,11 @@ public class UserController {
     public void whoAmI(Context ctx){
         try{
             String id  = (String) ctx.attributeMap().get("id");
-            System.out.println("id is " + id);
             User user = UserRepository.findUserById(id);
             if(user == null){
                 ctx.json(Response.NOT_FOUND.setMessage("User not found!"));
                 return;
             }
-            System.out.println("hello");
             ctx.json(Response.OK.setMessage("Who am I!").setBody(user));
         } catch (Exception e) {
             e.printStackTrace();
