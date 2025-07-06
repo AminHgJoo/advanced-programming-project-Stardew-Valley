@@ -53,7 +53,7 @@ public class CreateLobby implements Screen {
         TextField nameField = new TextField("", skin);
         nameField.setMessageText("name");
         CheckBox isPrivateLobby = new CheckBox("Private Lobby", skin);
-        isPrivateLobby.getLabel().setColor(Color.DARK_GRAY);
+        isPrivateLobby.getLabel().setColor(Color.CYAN);
         isPrivateLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -64,7 +64,7 @@ public class CreateLobby implements Screen {
         isPrivateLobby.setChecked(false);
 
         CheckBox isVisibleLobby = new CheckBox("Visible Lobby", skin);
-        isVisibleLobby.getLabel().setColor(Color.DARK_GRAY);
+        isVisibleLobby.getLabel().setColor(Color.CYAN);
         isVisibleLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
