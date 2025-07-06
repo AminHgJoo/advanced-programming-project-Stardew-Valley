@@ -236,7 +236,7 @@ public class UserController {
             user.setNickname(nickname);
             UserRepository.saveUser(user);
 
-            ctx.json(Response.BAD_REQUEST.setMessage("Nickname has been successfully updated!"));
+            ctx.json(Response.OK.setMessage("Nickname has been successfully updated!"));
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage("Invalid request body format"));

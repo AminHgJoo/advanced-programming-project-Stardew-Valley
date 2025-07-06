@@ -67,9 +67,9 @@ public class ChangeNicknameMenu implements Screen {
                 }
 
                 if (response.getStatus() == 200) {
+                    ClientApp.loggedInUser.setNickname(nicknameField.getText());
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog(response.getMessage(), "Success");
-                    ClientApp.loggedInUser.setNickname(nicknameField.getText());
                 }
             }
         });
