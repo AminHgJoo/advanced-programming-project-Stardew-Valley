@@ -10,11 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.UIPopupHelper;
 import com.google.gson.JsonObject;
+import com.server.utilities.Validation;
 
 public class ChangePasswordMenu implements Screen {
     private final GameMain gameMain;
@@ -72,6 +74,7 @@ public class ChangePasswordMenu implements Screen {
                 if (response.getStatus() == 200) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog(response.getMessage(), "Success");
+                    ClientApp.loggedInUser.setHashedPassword(Validation.hashPassword(passwordField.getText()));
                 }
             }
         });

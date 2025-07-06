@@ -70,6 +70,7 @@ public class ChangeEmailMenu implements Screen {
                 if (response.getStatus() == 200) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog(response.getMessage(), "Success");
+                    ClientApp.loggedInUser.setEmail(emailField.getText());
                 }
 
             }
