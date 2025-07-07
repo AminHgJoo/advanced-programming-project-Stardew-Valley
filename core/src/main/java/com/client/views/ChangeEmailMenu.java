@@ -1,7 +1,6 @@
 package com.client.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,7 +16,6 @@ import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
 import com.google.gson.JsonObject;
-import com.server.controllers.UserController;
 
 public class ChangeEmailMenu implements MyScreen {
     private final GameMain gameMain;

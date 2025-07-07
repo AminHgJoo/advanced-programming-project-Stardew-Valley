@@ -1,7 +1,6 @@
 package com.client.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -39,7 +38,7 @@ public class MainMenu implements MyScreen {
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
 
-        Label label = new Label("Main Menu",  skin, "title");
+        Label label = new Label("Main Menu", skin, "title");
         label.setColor(Color.RED);
         label.setFontScale(2f);
 

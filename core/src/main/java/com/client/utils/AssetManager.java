@@ -1,7 +1,6 @@
 package com.client.utils;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -14,6 +13,7 @@ public class AssetManager {
     private static Skin skin = null;
     private static BitmapFont font;
     private static Skin skin2;
+
     public static void loadAssets() {
         //TODO:
         loadSkin();
@@ -25,9 +25,9 @@ public class AssetManager {
     private static void loadSkin() {
         skin = new Skin(Gdx.files.internal("skin/freezing/skin/freezing-ui.json"));
         loadFont();
-        skin.add("myFont" , font);
+        skin.add("myFont", font);
         skin2 = new Skin(Gdx.files.internal("skin.clean-crispy/skin/clean-crispy-ui.json"));
-        skin2.add("myFont" , font);
+        skin2.add("myFont", font);
     }
 
     public static Skin getSkin() {

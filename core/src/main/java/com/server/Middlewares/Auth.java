@@ -11,7 +11,7 @@ public class Auth {
             ctx.json(Response.UN_AUTHORIZED);
             throw new Exception();
         }
-        if(JwtUtil.verifyToken(token) == null){
+        if (JwtUtil.verifyToken(token) == null) {
             ctx.json(Response.UN_AUTHORIZED);
             throw new Exception();
         }

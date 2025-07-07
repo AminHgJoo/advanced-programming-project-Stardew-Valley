@@ -56,7 +56,7 @@ public class ModelDecoder {
             try {
                 lobby.setVisible(obj.getBoolean("visible"));
                 lobby.setPublic(obj.getBoolean("public"));
-            }catch (Exception e){
+            } catch (Exception e) {
                 lobby.setVisible(obj.getBoolean("isVisible"));
                 lobby.setPublic(obj.getBoolean("isPublic"));
             }

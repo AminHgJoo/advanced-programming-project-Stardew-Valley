@@ -23,7 +23,6 @@ import com.server.views.gameViews.GameThread;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
-import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,9 +30,9 @@ import java.util.ArrayList;
 
 @Entity("games")
 public class GameData {
-    private int capacity = 0;
     public ArrayList<Trade> tradingHistory = new ArrayList<>();
     public boolean hasTurnCycleFinished;
+    private int capacity = 0;
     @Id
     private String _id;
     private ArrayList<Player> players;

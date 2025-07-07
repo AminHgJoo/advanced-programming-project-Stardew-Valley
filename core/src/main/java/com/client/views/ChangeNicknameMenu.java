@@ -1,7 +1,6 @@
 package com.client.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -61,6 +60,7 @@ public class ChangeNicknameMenu implements MyScreen {
                     return;
                 }
                 var response = HTTPUtil.deserializeHttpResponse(postResponse);
+
                 if (response.getStatus() == 400 || response.getStatus() == 404) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog(response.getMessage(), "Error");

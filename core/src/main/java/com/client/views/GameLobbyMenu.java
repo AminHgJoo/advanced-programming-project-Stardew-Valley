@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
@@ -22,14 +21,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.server.utilities.Response;
-import com.client.utils.SimpleWebSocketClient;
-import net.bytebuddy.description.method.MethodDescription;
-import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 public class GameLobbyMenu implements MyScreen {
     private final GameMain gameMain;
@@ -37,10 +31,8 @@ public class GameLobbyMenu implements MyScreen {
     private final Texture background;
     private Stage stage;
     private Skin skin2;
-
     /// Dev note: labels, every type of text label if changed needs updating, set this flag to true if that need happens.
     private boolean doesUINeedRefresh = false;
-
     private Lobby currLobby = null;
     private SimpleWebSocketClient client = ClientApp.client;
 
@@ -494,6 +486,5 @@ public class GameLobbyMenu implements MyScreen {
         } catch (Exception e) {
 
         }
-
     }
 }
