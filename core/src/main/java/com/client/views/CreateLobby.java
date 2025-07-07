@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.*;
 import com.common.models.networking.Lobby;
@@ -103,6 +104,7 @@ public class CreateLobby implements MyScreen {
                     Gson gson = new Gson();
                     String json = gson.toJson(map);
                     Lobby lobby = ModelDecoder.decodeLobby(json);
+                    ClientApp.loggedInUser.setCurrentLobbyId(lobby.get_id());
                     gameMain.setScreen(new GameLobbyMenu(gameMain, lobby));
                 }
             }

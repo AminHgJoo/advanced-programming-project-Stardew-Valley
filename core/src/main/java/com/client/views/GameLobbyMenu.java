@@ -20,6 +20,7 @@ import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
+import com.server.repositories.LobbyRepository;
 import com.server.utilities.Response;
 
 import java.util.ArrayList;
@@ -181,7 +182,26 @@ public class GameLobbyMenu implements MyScreen {
             searchButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    //TODO: Search for invisible lobby.
+                    JsonObject req = new JsonObject();
+                    req.addProperty("password", passwordInvisibleLobby.getText());
+
+                    var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/join/" + searchInvisibleLobby, req);
+
+                    Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                    if (res.getStatus() == 200) {
+                        LinkedTreeMap map = (LinkedTreeMap) res.getBody();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(map);
+                        Lobby lobby = ModelDecoder.decodeLobby(json);
+                        ClientApp.loggedInUser.setCurrentLobbyId(currLobby.get_id());
+                        currLobby = lobby;
+                        doesUINeedRefresh = true;
+                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                        uiPopupHelper.showDialog("Successfully joined the lobby", "Success");
+                    } else {
+                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                        uiPopupHelper.showDialog(res.getMessage(), "Error");
+                    }
                 }
             });
             table.add(searchButton).colspan(2).pad(10).row();
@@ -277,7 +297,7 @@ public class GameLobbyMenu implements MyScreen {
         label.setColor(Color.DARK_GRAY);
         slidingMenu.add(label).pad(10).row();
 
-        if(currLobby == null) {
+        if (currLobby == null) {
             TextButton createLobby = new TextButton("Create Lobby", skin);
             createLobby.addListener(new ChangeListener() {
                 @Override
@@ -286,8 +306,7 @@ public class GameLobbyMenu implements MyScreen {
                 }
             });
             slidingMenu.add(createLobby).pad(10).row();
-        }
-        else{
+        } else {
             TextButton createLobby = new TextButton("Create Lobby", skin2);
             slidingMenu.add(createLobby)
                 .colspan(2)
@@ -302,7 +321,18 @@ public class GameLobbyMenu implements MyScreen {
             leaveLobby.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    //TODO:
+                    var getResponse = HTTPUtil.get("http://localhost:8080/api/lobby/leaveLobby");
+                    Response res = HTTPUtil.deserializeHttpResponse(getResponse);
+                    if (res.getStatus() == 200) {
+                        ClientApp.loggedInUser.setCurrentLobbyId(null);
+                        currLobby = null;
+                        LinkedTreeMap map = (LinkedTreeMap) res.getBody();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(map);
+                        Lobby lobby = ModelDecoder.decodeLobby(json);
+                        updateLobby(lobby);
+                        doesUINeedRefresh = true;
+                    }
                 }
             });
             slidingMenu.add(leaveLobby).pad(10).row();
@@ -364,6 +394,14 @@ public class GameLobbyMenu implements MyScreen {
                 isOpen[0] = !isOpen[0];
             }
         });
+    }
+
+    public void updateLobby(Lobby lobby){
+        for (int i = 0; i < visibleLobbies.size(); i++) {
+            if(visibleLobbies.get(i).get_id().toString().equals(lobby.get_id().toString())){
+                visibleLobbies.set(i , lobby);
+            }
+        }
     }
 
     @Override

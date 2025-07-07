@@ -25,6 +25,10 @@ public class LobbyController {
                 ctx.json(Response.NOT_FOUND.setMessage("User not found"));
                 return;
             }
+            if(user.getCurrentLobbyId() != null){
+                ctx.json(Response.NOT_FOUND.setMessage("You are already in a lobby"));
+                return;
+            }
             Lobby lobby = LobbyRepository.findById(lobbyId);
             if (lobby == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("Lobby not found"));
@@ -32,6 +36,10 @@ public class LobbyController {
             }
             if (lobby.getUsers().size() >= 4) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Too many users"));
+                return;
+            }
+            if(lobby.getUsers().contains(user.getUsername())){
+                ctx.json(Response.BAD_REQUEST.setMessage("You are already in a lobby"));
                 return;
             }
             if (!lobby.isPublic()) {
@@ -45,7 +53,7 @@ public class LobbyController {
             UserRepository.saveUser(user);
             LobbyRepository.save(lobby);
 
-            ctx.json(Response.OK.setMessage("Lobby successfully joined"));
+            ctx.json(Response.OK.setMessage("Lobby successfully joined").setBody(lobby));
 
             HashMap<String, String> response = new HashMap<>();
             response.put("type", "LOBBY_JOINED");
@@ -193,6 +201,32 @@ public class LobbyController {
                 return;
             }
             Lobby lobby = LobbyRepository.findById(user.getCurrentLobbyId());
+            ctx.json(Response.OK.setBody(lobby));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void leave(Context ctx) {
+        try{
+            String id = ctx.attribute("id");
+
+            User user = UserRepository.findUserById(id);
+            if (user == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("User with id " + id + " not found"));
+                return;
+            }
+            Lobby lobby = LobbyRepository.findById(user.getCurrentLobbyId());
+            if (lobby == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("You are not in a lobby"));
+                return;
+            }
+            user.setCurrentLobbyId(null);
+            lobby.getUsers().remove(user.getUsername());
+            UserRepository.saveUser(user);
+            LobbyRepository.save(lobby);
+
             ctx.json(Response.OK.setBody(lobby));
         } catch (Exception e) {
             e.printStackTrace();
