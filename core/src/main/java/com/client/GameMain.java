@@ -30,7 +30,7 @@ public class GameMain extends Game {
 
     public void loadEnv() {
         Dotenv.configure()
-            .directory("../core/src/main/java/com/client/env")
+            .directory(System.getenv("address"))
             .filename("env.prod")
             .systemProperties()
             .load();
