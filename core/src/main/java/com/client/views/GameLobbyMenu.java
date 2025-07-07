@@ -285,15 +285,26 @@ public class GameLobbyMenu implements MyScreen {
         label.setColor(Color.DARK_GRAY);
         slidingMenu.add(label).pad(10).row();
 
+        if(currLobby == null) {
+            TextButton createLobby = new TextButton("Create Lobby", skin);
+            createLobby.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    gameMain.setScreen(new CreateLobby(gameMain));
+                }
+            });
+            slidingMenu.add(createLobby).pad(10).row();
+        }
+        else{
+            TextButton createLobby = new TextButton("Create Lobby", skin2);
+            slidingMenu.add(createLobby)
+                .colspan(2)
+                .pad(10)
+                .width(150)
+                .height(50)
+                .row();
+        }
 
-        TextButton createLobby = new TextButton("Create Lobby", skin);
-        createLobby.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                gameMain.setScreen(new CreateLobby(gameMain));
-            }
-        });
-        slidingMenu.add(createLobby).pad(10).row();
         if (currLobby != null) {
             TextButton leaveLobby = new TextButton("Leave Lobby", skin);
             leaveLobby.addListener(new ChangeListener() {
