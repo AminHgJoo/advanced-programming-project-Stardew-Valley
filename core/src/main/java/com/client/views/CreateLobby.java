@@ -12,17 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
-import com.client.utils.AssetManager;
-import com.client.utils.HTTPUtil;
-import com.client.utils.ModelDecoder;
-import com.client.utils.UIPopupHelper;
+import com.client.utils.*;
 import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.server.utilities.Validation;
 
-public class CreateLobby implements Screen {
+public class CreateLobby implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
@@ -173,5 +170,10 @@ public class CreateLobby implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    @Override
+    public void socketMessage(String message) {
+
     }
 }
