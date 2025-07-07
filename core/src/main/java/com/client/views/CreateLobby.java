@@ -58,6 +58,9 @@ public class CreateLobby implements MyScreen {
         });
         isPrivateLobby.setChecked(false);
 
+        TextField passwordField = new TextField("", skin);
+        passwordField.setMessageText("password");
+
         CheckBox isVisibleLobby = new CheckBox("Visible Lobby", skin);
         isVisibleLobby.getLabel().setColor(Color.CYAN);
         isVisibleLobby.addListener(new ChangeListener() {
@@ -78,6 +81,7 @@ public class CreateLobby implements MyScreen {
                 req.addProperty("name", nameField.getText());
                 req.addProperty("isVisible", isVisibleLobby.isChecked());
                 req.addProperty("isPublic", !isPrivateLobby.isChecked());
+                req.addProperty("password", passwordField.getText());
 
                 var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/", req);
                 if (postResponse == null) {
@@ -118,13 +122,12 @@ public class CreateLobby implements MyScreen {
         stage.addActor(table);
         table.center();
         table.padTop(50);
-//        table.add(label).pad(10).row(); table.add(oldPasswordField).width(500).height(60).pad(10).row();
-//        table.add(passwordField).width(500).height(60).pad(10).row();
+
         table.add(label).pad(10).row();
         table.add(nameField).width(500).height(60).padLeft(10).row();
+        table.add(passwordField).width(500).height(60).pad(10).row();
         table.add(isPrivateLobby).pad(10).row();
         table.add(isVisibleLobby).pad(10).row();
-//
         table.add(confirmButton).width(500).height(60).pad(10).row();
         table.add(backButton);
         Gdx.input.setInputProcessor(stage);
