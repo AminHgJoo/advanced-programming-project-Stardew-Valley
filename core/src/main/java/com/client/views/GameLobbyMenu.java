@@ -150,7 +150,20 @@ public class GameLobbyMenu implements MyScreen {
             readyUp.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    //TODO:
+                    var req = new JsonObject();
+                    req.addProperty("farm" , farmSelectBox.getSelected());
+
+                    var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/chooseFarm" , req);
+                    Response res = HTTPUtil.deserializeHttpResponse( postResponse );
+                    if (res.getStatus() == 200) {
+                        LinkedTreeMap map = (LinkedTreeMap) res.getBody();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(map);
+                        Lobby lobby = ModelDecoder.decodeLobby(json);
+                        currLobby = lobby;
+                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                        uiPopupHelper.showDialog(res.getMessage(), "Success");
+                    }
                 }
             });
             table.add(readyUp).colspan(2).pad(10).row();

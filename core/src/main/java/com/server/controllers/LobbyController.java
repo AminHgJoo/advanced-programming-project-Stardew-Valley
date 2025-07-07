@@ -25,7 +25,7 @@ public class LobbyController {
                 ctx.json(Response.NOT_FOUND.setMessage("User not found"));
                 return;
             }
-            if(user.getCurrentLobbyId() != null){
+            if (user.getCurrentLobbyId() != null) {
                 ctx.json(Response.NOT_FOUND.setMessage("You are already in a lobby"));
                 return;
             }
@@ -38,7 +38,7 @@ public class LobbyController {
                 ctx.json(Response.BAD_REQUEST.setMessage("Too many users"));
                 return;
             }
-            if(lobby.getUsers().contains(user.getUsername())){
+            if (lobby.getUsers().contains(user.getUsername())) {
                 ctx.json(Response.BAD_REQUEST.setMessage("You are already in a lobby"));
                 return;
             }
@@ -70,7 +70,8 @@ public class LobbyController {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String id = ctx.attribute("id");
-            int farm = (Integer) body.get("farm");
+            String farmName = ((String) body.get("farm"));
+            int farm = farmName.equals("Farm 1") ? 1 : 2;
 
             User user = UserRepository.findUserById(id);
             if (user == null) {
@@ -81,7 +82,7 @@ public class LobbyController {
             Lobby lobby = LobbyRepository.findById(user.getCurrentLobbyId());
             lobby.getUsersFarm().put(user.getUsername(), farm);
 
-            ctx.json(Response.OK.setMessage("Farm successfully chosen"));
+            ctx.json(Response.OK.setMessage("Farm successfully chosen").setBody(lobby));
             HashMap<String, String> response = new HashMap<>();
             response.put("type", "FARM_CHOSEN");
             response.put("message", "User " + user.getUsername() + " choosed farm");
@@ -209,7 +210,7 @@ public class LobbyController {
     }
 
     public void leave(Context ctx) {
-        try{
+        try {
             String id = ctx.attribute("id");
 
             User user = UserRepository.findUserById(id);
