@@ -1,7 +1,6 @@
 package com.client.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -78,12 +77,12 @@ public class SignUpMenu implements MyScreen {
         confirmButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(!passwordConfirmButton.getText().equals(passwordField.getText())) {
+                if (!passwordConfirmButton.getText().equals(passwordField.getText())) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog("Passwords does not match!", "Error");
                     return;
                 }
-                if(!securityAnswerField.getText().equals(securityAnswerConfirmField.getText())) {
+                if (!securityAnswerField.getText().equals(securityAnswerConfirmField.getText())) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog("Security answers does not match!", "Error");
                     return;
@@ -107,6 +106,8 @@ public class SignUpMenu implements MyScreen {
                 System.out.println(postResponse.getBody().toString());
 
                 var response = HTTPUtil.deserializeHttpResponse(postResponse);
+                System.out.println(response.getBody());
+                System.out.println(response.getStatus());
 
                 if (response.getStatus() == 400) {
                     UIPopupHelper popupHelper = new UIPopupHelper(stage, skin);
@@ -124,13 +125,9 @@ public class SignUpMenu implements MyScreen {
                     securityQuestionField.setSelectedIndex(0);
                     securityAnswerField.setText("");
                     securityAnswerConfirmField.setText("");
+
                     var token = postResponse.getHeaders().get("Authorization").get(0);
                     ClientApp.token = token;
-//
-//                    if (stayLoggedInCheckBox.isChecked()) {
-//                        System.out.println(System.getProperty("user.dir"));
-//                        FileUtil.write("../core/src/main/java/com/client/env/env.prod", "TOKEN=" + ClientApp.token);
-//                    }
 
                     try {
                         LinkedTreeMap map = (LinkedTreeMap) response.getBody();
@@ -144,8 +141,6 @@ public class SignUpMenu implements MyScreen {
                         UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                         uiPopupHelper.showDialog("A server error occurred.", "Error");
                     }
-                    UIPopupHelper popupHelper = new UIPopupHelper(stage, skin);
-                    popupHelper.showDialog(response.getMessage(), "Success");
                 }
             }
         });

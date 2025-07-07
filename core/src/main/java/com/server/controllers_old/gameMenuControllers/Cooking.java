@@ -7,8 +7,8 @@ import com.common.models.enums.Quality;
 import com.common.models.enums.recipes.CookingRecipes;
 import com.common.models.enums.types.MenuTypes;
 import com.common.models.items.Food;
-import com.server.repositories.GameRepository;
 import com.server.controllers_old.Controller;
+import com.server.repositories.GameRepository;
 
 public class Cooking extends Controller {
 

@@ -244,11 +244,11 @@ public class UserController {
         }
     }
 
-    public void whoAmI(Context ctx){
-        try{
-            String id  = (String) ctx.attributeMap().get("id");
+    public void whoAmI(Context ctx) {
+        try {
+            String id = (String) ctx.attributeMap().get("id");
             User user = UserRepository.findUserById(id);
-            if(user == null){
+            if (user == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("User not found!"));
                 return;
             }
@@ -259,26 +259,11 @@ public class UserController {
         }
     }
 
-    public void getUserById(Context ctx){
-        try{
+    public void getUserById(Context ctx) {
+        try {
             String id = ctx.pathParamMap().get("id");
             User user = UserRepository.findUserById(id);
-            if(user == null){
-                ctx.json(Response.NOT_FOUND.setMessage("User not found!"));
-                return;
-            }
-            ctx.json(Response.OK.setBody(user));
-        }catch (Exception e){
-            e.printStackTrace();
-            ctx.json(Response.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public void getUserByUsername(Context ctx){
-        try{
-            String username = ctx.pathParamMap().get("username");
-            User user = UserRepository.findUserByUsername(username);
-            if(user == null){
+            if (user == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("User not found!"));
                 return;
             }
@@ -289,11 +274,26 @@ public class UserController {
         }
     }
 
-    public void getAllUsers(Context ctx){
-        try{
+    public void getUserByUsername(Context ctx) {
+        try {
+            String username = ctx.pathParamMap().get("username");
+            User user = UserRepository.findUserByUsername(username);
+            if (user == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("User not found!"));
+                return;
+            }
+            ctx.json(Response.OK.setBody(user));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public void getAllUsers(Context ctx) {
+        try {
             ArrayList<User> users = UserRepository.findAllUsers();
             ctx.json(Response.OK.setBody(users));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.INTERNAL_SERVER_ERROR);
         }

@@ -5,7 +5,6 @@ import com.server.repositories.GameRepository;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
-import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 
@@ -150,6 +149,10 @@ public class User {
         return _id;
     }
 
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
     public void populateGame() {
         currentGameData = GameRepository.findGameById(currentGameData.get_id().toString(), true);
     }
@@ -168,10 +171,6 @@ public class User {
 
     public void setCurrentGameId(String currentGameId) {
         this.currentGameId = currentGameId;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
     }
 
     public String getCurrentLobbyId() {

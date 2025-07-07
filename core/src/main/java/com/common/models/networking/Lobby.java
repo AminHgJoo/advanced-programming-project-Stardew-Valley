@@ -16,9 +16,11 @@ public class Lobby {
     private boolean isVisible;
     private String ownerUsername;
     private ArrayList<String> users = new ArrayList<>();
-    private HashMap<String , Integer> usersFarm = new HashMap<>();
+    private HashMap<String, Integer> usersFarm = new HashMap<>();
 
-    public Lobby() {}
+    public Lobby() {
+    }
+
     public Lobby(boolean isVisible, boolean isPublic, String name, String ownerUsername) {
         this.isVisible = isVisible;
         this.isPublic = isPublic;

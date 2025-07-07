@@ -3,11 +3,11 @@ package com.server.views.gameViews.shops;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.enums.commands.GameMenuCommands;
-import com.server.views.Menu;
-import com.server.views.gameViews.GameMenu;
 import com.server.controllers_old.gameMenuControllers.DealingController;
 import com.server.controllers_old.gameMenuControllers.LivestockController;
 import com.server.controllers_old.gameMenuControllers.MarineRanchController;
+import com.server.views.Menu;
+import com.server.views.gameViews.GameMenu;
 
 public class MarnieRanchMenu implements Menu {
 

@@ -1,6 +1,5 @@
 package com.server.repositories;
 
-import com.common.models.User;
 import com.common.models.networking.Lobby;
 import com.server.utilities.Connection;
 import dev.morphia.Datastore;

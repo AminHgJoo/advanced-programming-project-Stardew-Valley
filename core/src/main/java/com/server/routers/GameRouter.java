@@ -4,11 +4,12 @@ import io.javalin.Javalin;
 
 public class GameRouter {
     private final Javalin app;
-    public GameRouter(Javalin app){
+
+    public GameRouter(Javalin app) {
         this.app = app;
     }
 
-    public void initializeRoutes(){
+    public void initializeRoutes() {
         // GET requests
 
         // POST requests

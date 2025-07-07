@@ -1,8 +1,8 @@
 package com.client;
 
 import com.client.utils.MyScreen;
-import com.common.models.User;
 import com.client.utils.SimpleWebSocketClient;
+import com.common.models.User;
 
 public class ClientApp {
     public static User loggedInUser;

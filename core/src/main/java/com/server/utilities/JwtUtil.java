@@ -19,14 +19,14 @@ public class JwtUtil {
     public static String generateToken(User user, String roles) {
         try {
             return JWT.create()
-                    .withIssuer(ISSUER)
-                    .withSubject(user.get_id().toString())
-                    .withClaim("username", user.getUsername())
-                    .withClaim("role", roles)
-                    .withClaim("id", user.get_id().toString())
-                    .withIssuedAt(new Date())
-                    .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                    .sign(ALGORITHM);
+                .withIssuer(ISSUER)
+                .withSubject(user.get_id().toString())
+                .withClaim("username", user.getUsername())
+                .withClaim("role", roles)
+                .withClaim("id", user.get_id().toString())
+                .withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .sign(ALGORITHM);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error while generating token", exception);
         }
@@ -35,8 +35,8 @@ public class JwtUtil {
     public static DecodedJWT verifyToken(String token) {
         try {
             JWTVerifier verifier = JWT.require(ALGORITHM)
-                    .withIssuer(ISSUER)
-                    .build();
+                .withIssuer(ISSUER)
+                .build();
             return verifier.verify(token);
         } catch (JWTVerificationException exception) {
             return null;

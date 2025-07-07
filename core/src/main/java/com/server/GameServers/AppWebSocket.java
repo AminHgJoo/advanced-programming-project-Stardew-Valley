@@ -20,9 +20,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class AppWebSocket {
-    private final Javalin app;
     private static ConcurrentHashMap<String, PlayerConnection> connectedPlayers = new ConcurrentHashMap<>();
     private static CopyOnWriteArrayList<GameServer> activeGames = new CopyOnWriteArrayList<>();
+    private final Javalin app;
 
     public AppWebSocket(Javalin app) {
         this.app = app;
@@ -37,39 +37,6 @@ public class AppWebSocket {
                 }
             }
         }
-    }
-
-    public void start() {
-        app.ws("/game", ws -> {
-            ws.onConnect(ctx -> {
-                ctx.enableAutomaticPings(5, TimeUnit.SECONDS);
-                System.out.println("Someone connected");
-                String username = ctx.queryParam("playerUsername");
-                connectedPlayers.put(username, new PlayerConnection(username, ctx));
-                ctx.send("Connected as " + username);
-            });
-
-            ws.onMessage(ctx -> {
-                String username = ctx.queryParam("playerUsername");
-                User user = UserRepository.findUserByUsername(username);
-                if (user != null) {
-                    JSONObject message = new JSONObject(ctx.message());
-                    String command = message.getString("command");
-                    if (command.equals("INVITE")) {
-                        handleInvite(message, ctx);
-                    } else if (command.equals("ACCEPT")) {
-                        handleAccept(message, ctx);
-                    }
-                }
-            });
-
-            ws.onClose(ctx -> {
-                System.out.println("Disconnected");
-                String username = ctx.queryParam("playerUsername");
-                connectedPlayers.remove(username);
-            });
-
-        });
     }
 
     public static void chooseFarm(User user, JSONObject obj, WsMessageContext ctx) {
@@ -154,5 +121,38 @@ public class AppWebSocket {
                 new GameServer(players, game).start();
             }
         }
+    }
+
+    public void start() {
+        app.ws("/game", ws -> {
+            ws.onConnect(ctx -> {
+                ctx.enableAutomaticPings(5, TimeUnit.SECONDS);
+                System.out.println("Someone connected");
+                String username = ctx.queryParam("playerUsername");
+                connectedPlayers.put(username, new PlayerConnection(username, ctx));
+                ctx.send("Connected as " + username);
+            });
+
+            ws.onMessage(ctx -> {
+                String username = ctx.queryParam("playerUsername");
+                User user = UserRepository.findUserByUsername(username);
+                if (user != null) {
+                    JSONObject message = new JSONObject(ctx.message());
+                    String command = message.getString("command");
+                    if (command.equals("INVITE")) {
+                        handleInvite(message, ctx);
+                    } else if (command.equals("ACCEPT")) {
+                        handleAccept(message, ctx);
+                    }
+                }
+            });
+
+            ws.onClose(ctx -> {
+                System.out.println("Disconnected");
+                String username = ctx.queryParam("playerUsername");
+                connectedPlayers.remove(username);
+            });
+
+        });
     }
 }

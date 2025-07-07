@@ -10,14 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.*;
 import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
-import com.server.utilities.Validation;
 
 public class CreateLobby implements MyScreen {
     private final GameMain gameMain;
@@ -80,8 +78,8 @@ public class CreateLobby implements MyScreen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 var req = new JsonObject();
-                req.addProperty("name", nameField.getText() );
-                req.addProperty("isVisible" , isVisibleLobby.isChecked());
+                req.addProperty("name", nameField.getText());
+                req.addProperty("isVisible", isVisibleLobby.isChecked());
                 req.addProperty("isPublic", !isPrivateLobby.isChecked());
                 req.addProperty("password", passwordField.getText());
 
@@ -106,7 +104,6 @@ public class CreateLobby implements MyScreen {
                     String json = gson.toJson(map);
                     Lobby lobby = ModelDecoder.decodeLobby(json);
                     gameMain.setScreen(new GameLobbyMenu(gameMain, lobby));
-
                 }
             }
         });
