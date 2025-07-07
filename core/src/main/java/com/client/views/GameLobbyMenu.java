@@ -339,27 +339,6 @@ public class GameLobbyMenu implements MyScreen {
             hostOptions.setColor(Color.DARK_GRAY);
             slidingMenu.add(hostOptions).pad(10).row();
 
-            CheckBox isPrivateLobby = new CheckBox("Private Lobby", skin);
-            isPrivateLobby.getLabel().setColor(Color.DARK_GRAY);
-            isPrivateLobby.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    //TODO:
-                }
-            });
-            isPrivateLobby.setChecked(false);
-            slidingMenu.add(isPrivateLobby).pad(10).row();
-
-            CheckBox isInvisibleLobby = new CheckBox("Invisible Lobby", skin);
-            isInvisibleLobby.getLabel().setColor(Color.DARK_GRAY);
-            isInvisibleLobby.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    //TODO:
-                }
-            });
-            isInvisibleLobby.setChecked(false);
-            slidingMenu.add(isInvisibleLobby).pad(10).row();
         }
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
