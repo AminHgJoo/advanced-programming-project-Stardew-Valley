@@ -334,12 +334,6 @@ public class GameLobbyMenu implements MyScreen {
         });
         slidingMenu.add(mainMenuButton).pad(10).row();
 
-        if (currLobby != null && currLobby.getOwnerUsername().equals(ClientApp.loggedInUser.getUsername())) {
-            Label hostOptions = new Label("Host Options", skin);
-            hostOptions.setColor(Color.DARK_GRAY);
-            slidingMenu.add(hostOptions).pad(10).row();
-
-        }
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.CYAN);

@@ -127,7 +127,7 @@ public class CreateLobby implements MyScreen {
         table.padTop(50);
 
         table.add(label).pad(10).row();
-        table.add(nameField).width(500).height(60).padLeft(10).row();
+        table.add(nameField).width(500).height(60).row();
         table.add(passwordField).width(500).height(60).pad(10).row();
         table.add(isPrivateLobby).pad(10).row();
         table.add(isVisibleLobby).pad(10).row();
