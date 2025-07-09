@@ -66,6 +66,7 @@ public enum CropSeedsType implements ItemType {
     public final double energy;
     public final Season[] season;
     public final boolean canBeGiant;
+    public final String textureName;
 
 
     CropSeedsType(String name, String source, int stageZeroDaysToNextStage, int stageOneDaysToNextStage, int stageTwoDaysToNextStage, int stageThreeDaysToNextStage, int stageFourDaysToNextStage, int totalHarvestTime, boolean oneTime, int regrowthTime, int baseSellPrice, boolean isEdible, double energy, Season[] season, boolean canBeGiant) {
@@ -84,6 +85,7 @@ public enum CropSeedsType implements ItemType {
         this.energy = energy;
         this.season = season;
         this.canBeGiant = canBeGiant;
+        this.textureName = String.join("_", name.split(" "));
     }
 
     public static CropSeedsType findCropBySeed(String seed) {
