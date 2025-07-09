@@ -31,8 +31,8 @@ public class AssetManager {
                 String extension = file.extension().toLowerCase();
                 if (extension.equals("png") || extension.equals("jpg") || extension.equals("jpeg")) {
                     String key = generateKeyFromFileName(file.nameWithoutExtension());
-                    textures.put(key, new Texture(file));
-                    Gdx.app.log("AssetManager", "Loaded: " + file.path() + " as " + key);
+                    if (!textures.containsKey(key))
+                        textures.put(key, new Texture(file));
                 }
             }
         }

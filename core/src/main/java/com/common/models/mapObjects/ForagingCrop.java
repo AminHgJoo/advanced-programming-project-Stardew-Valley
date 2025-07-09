@@ -1,5 +1,7 @@
 package com.common.models.mapObjects;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.client.utils.AssetManager;
 import com.common.models.enums.types.mapObjectTypes.ForagingCropsType;
 import dev.morphia.annotations.Embedded;
 
@@ -7,6 +9,8 @@ import dev.morphia.annotations.Embedded;
 public class ForagingCrop extends MapObject {
     private ForagingCropsType foragingCropsType;
     private boolean canBeHarvested;
+    //TODO texture loading
+    private Texture texture;
 
     public ForagingCrop() {
         super();
@@ -16,6 +20,7 @@ public class ForagingCrop extends MapObject {
         super(true, "foragingCrop", "green");
         this.foragingCropsType = type;
         this.canBeHarvested = canBeHarvested;
+        texture = AssetManager.getTextures().get(type.getTextureName());
     }
 
     public boolean isCanBeHarvested() {
@@ -32,5 +37,13 @@ public class ForagingCrop extends MapObject {
 
     public void setForagingCropsType(ForagingCropsType foragingCropsType) {
         this.foragingCropsType = foragingCropsType;
+    }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
     }
 }
