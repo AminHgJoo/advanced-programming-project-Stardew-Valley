@@ -70,7 +70,7 @@ public class GameMain extends Game {
         if (music != null) {
             music.dispose();
         }
-        //TODO: Dispose stuff and screen, this is a prototype currently.
+
         if (screen != null) {
             screen.dispose();
         }
@@ -84,6 +84,5 @@ public class GameMain extends Game {
     public void setScreen(Screen screen) {
         super.setScreen(screen);
         ClientApp.currentScreen = (MyScreen) screen;
-        //TODO: Set the static field "currMenu" in app, if needed.
     }
 }

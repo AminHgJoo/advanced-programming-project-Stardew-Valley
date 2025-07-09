@@ -47,7 +47,6 @@ public class LoginMenu implements MyScreen {
         TextField passwordField = new TextField("", skin);
         passwordField.setMessageText("Password");
 
-        //TODO: Handle this.
         CheckBox stayLoggedInCheckBox = new CheckBox("Stay Logged in", skin);
         stayLoggedInCheckBox.setChecked(true);
 
