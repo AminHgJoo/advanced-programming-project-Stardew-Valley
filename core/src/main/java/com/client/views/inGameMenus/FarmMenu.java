@@ -114,7 +114,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public void socketMessage(String message) {
-
+        //TODO: ?
     }
 
     @Override
@@ -192,8 +192,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public void dispose() {
         batch.dispose();
         defaultTile.dispose();
+        playerTexture.dispose();
     }
 
+    //TODO: Useful later.
     public int convertYCoordinate(int yCoordinate) {
         return 50 - yCoordinate;
     }
