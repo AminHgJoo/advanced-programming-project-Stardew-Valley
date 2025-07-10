@@ -7,6 +7,7 @@ import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.ModelDecoder;
 import com.client.utils.MyScreen;
+import com.client.views.inGameMenus.FarmMenu;
 import com.client.views.preGameMenus.LauncherMenu;
 import com.client.views.preGameMenus.MainMenu;
 import com.google.gson.Gson;
@@ -19,13 +20,16 @@ public class GameMain extends Game {
     @Override
     public void create() {
         //TODO: load/play music.
-        loadEnv();
+//        loadEnv();
         AssetManager.loadAssets();
-        if (ClientApp.loggedInUser != null) {
-            ClientApp.init();
-            this.setScreen(new MainMenu(this));
-        } else
-            this.setScreen(new LauncherMenu(this));
+        //TODO: TESTING CODE FOR MAP :::::
+        this.setScreen(new FarmMenu(this));
+//
+//        if (ClientApp.loggedInUser != null) {
+//            ClientApp.init();
+//            this.setScreen(new MainMenu(this));
+//        } else
+//            this.setScreen(new LauncherMenu(this));
     }
 
     public void loadEnv() {
