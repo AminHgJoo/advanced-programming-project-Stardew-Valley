@@ -13,7 +13,8 @@ public class DroppedItem extends MapObject {
     }
 
     public DroppedItem(int quantity, Item item) {
-        super(true, "droppedItem", "red");
+        //TODO texture
+        super(true, "droppedItem", "red", null);
         this.quantity = quantity;
         this.item = item;
     }

@@ -1,5 +1,6 @@
 package com.common.models.mapObjects;
 
+import com.badlogic.gdx.graphics.Texture;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
@@ -7,16 +8,18 @@ abstract public class MapObject {
     public String type;
     public boolean isWalkable;
     public String color;
+    public Texture texture;
     //TODO: texture
 
     public MapObject() {
 
     }
 
-    public MapObject(boolean isWalkable, String type, String color) {
+    public MapObject(boolean isWalkable, String type, String color, Texture texture) {
         this.isWalkable = isWalkable;
         this.type = type;
         this.color = color;
+        this.texture = texture;
     }
 
     @Override

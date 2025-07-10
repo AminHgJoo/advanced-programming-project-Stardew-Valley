@@ -1,20 +1,20 @@
 package com.common.models.enums.types.mapObjectTypes;
 
 public enum ArtisanBlockType {
-    SHIPPING_BIN("Shipping Bin" , "Shipping_Bin"),
-    CHARCOAL_KLIN("Charcoal Klin" , "Charcoal_Klin"),
+    SHIPPING_BIN("Shipping Bin" , "shippingBin"),
+    CHARCOAL_KLIN("Charcoal Klin" , "charcoalKlin"),
     FURNACE("Furnace" , "Furnace"),
-    SCARE_CROW("Scare Crow" , "Scarecrow"),
-    DELUXE_SCARE_CROW("Deluxe Scarecrow" , "Deluxe_Scarecrow"),
-    BEE_HOUSE("Bee House" , "Bee_House"),
-    CHEESE_PRESS("Cheese Press" , "Cheese_Press"),
-    KEG("Keg" , "Keg"),
-    LOOM("Loom" , "Loom"),
-    MAYONNAISE_MACHINE("Mayonnaise Machine" , "Mayonnaise_Machine"),
-    OIL_MAKER("Oil Maker" , "Oil_Maker"),
-    PRESERVES_JAR("Preserves Jar" , "Preserves_Jar"),
-    DEHYDRATOR("Dehydrator" , "Dehydrator"),
-    FISH_SMOKER("Fish Smoker" , "Fish_Smoker"),;
+    SCARE_CROW("Scare Crow" , "scarecrow"),
+    DELUXE_SCARE_CROW("Deluxe Scarecrow" , "deluxeScarecrow"),
+    BEE_HOUSE("Bee House" , "beeHouse"),
+    CHEESE_PRESS("Cheese Press" , "cheesePress"),
+    KEG("Keg" , "keg"),
+    LOOM("Loom" , "loom"),
+    MAYONNAISE_MACHINE("Mayonnaise Machine" , "mayonnaiseMachine"),
+    OIL_MAKER("Oil Maker" , "oilMaker"),
+    PRESERVES_JAR("Preserves Jar" , "preservesJar"),
+    DEHYDRATOR("Dehydrator" , "dehydrator"),
+    FISH_SMOKER("Fish Smoker" , "fishSmoker"),;
 
     public final String name;
     private final String textureName;
@@ -32,5 +32,9 @@ public enum ArtisanBlockType {
             }
         }
         return null;
+    }
+
+    public String getTextureName() {
+        return textureName;
     }
 }

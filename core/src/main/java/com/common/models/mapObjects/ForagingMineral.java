@@ -9,21 +9,19 @@ import dev.morphia.annotations.Embedded;
 public class ForagingMineral extends MapObject {
     private ForagingMineralsType fMType;
     //TODO loading texture
-    private Texture texture;
+
 
     public ForagingMineral() {
     }
 
     public ForagingMineral(ForagingMineralsType type, String color, String name) {
-        super(false, "foragingMineral", color);
+        super(false, "foragingMineral", color, AssetManager.getTextures().get(type.getTextureName()));
         this.fMType = type;
-        this.texture = AssetManager.getTextures().get(type.getTextureName());
     }
 
     public ForagingMineral(ForagingMineralsType type) {
-        super(false, "foragingMineral", "black");
+        super(false, "foragingMineral", "black", AssetManager.getTextures().get(type.getTextureName()));
         this.fMType = type;
-        this.texture = AssetManager.getTextures().get(type.getTextureName());
     }
 
     @Override

@@ -3,14 +3,14 @@ package com.common.models.enums.types.mapObjectTypes;
 import com.common.models.enums.types.AnimalType;
 
 public enum AnimalMapObjectType {
-    CHICKEN(AnimalType.Chicken, "White_Chicken"),
-    DUCK(AnimalType.DUCK, "Duck"),
-    RABBIT(AnimalType.RABBIT, "Rabbit"),
-    DINOSAUR(AnimalType.DINOSAUR, "Dinosaur"),
-    COW(AnimalType.COW, "White_Cow"),
-    GOAT(AnimalType.GOAT, "Goat"),
-    SHEEP(AnimalType.SHEEP, "Sheep"),
-    PIG(AnimalType.PIG, "Pig");
+    CHICKEN(AnimalType.Chicken, "whiteChicken"),
+    DUCK(AnimalType.DUCK, "duck"),
+    RABBIT(AnimalType.RABBIT, "rabbit"),
+    DINOSAUR(AnimalType.DINOSAUR, "dinosaur"),
+    COW(AnimalType.COW, "whiteCow"),
+    GOAT(AnimalType.GOAT, "goat"),
+    SHEEP(AnimalType.SHEEP, "sheep"),
+    PIG(AnimalType.PIG, "pig");
 
     private final AnimalType animalType;
     private final String textureName;

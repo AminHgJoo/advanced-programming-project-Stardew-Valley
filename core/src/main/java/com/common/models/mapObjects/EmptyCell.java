@@ -9,8 +9,7 @@ public class EmptyCell extends MapObject {
     //TODO loading texture
     private Texture texture;
     public EmptyCell() {
-        super(true, "empty", "yellow");
-        this.texture = AssetManager.getTextures().get("grass");
+        super(true, "empty", "yellow", AssetManager.getTextures().get("grass"));
     }
 
     public Texture getTexture() {

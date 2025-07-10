@@ -10,23 +10,31 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.client.GameMain;
+import com.client.utils.AssetManager;
 import com.client.utils.Keybinds;
 import com.client.utils.MyScreen;
+import com.common.models.mapModels.Cell;
+import com.common.models.mapModels.Coordinate;
+import com.common.models.mapModels.Farm;
+import com.common.models.mapObjects.BuildingBlock;
+import com.common.models.mapObjects.EmptyCell;
+import com.common.models.mapObjects.Tree;
+import com.common.models.mapObjects.Water;
 
 public class FarmMenu implements MyScreen, InputProcessor {
     public static final float SCREEN_WIDTH = 450;
     public static final float SCREEN_HEIGHT = 300;
     public static final float BASE_SPEED_FACTOR = 20;
-
     public static final float TILE_PIX_SIZE = 32;
     public static final float FARM_X_SPAN = 75; //32 * 75 == 2400
-    public static final float FARM_Y_SPAN = 50; //32 * 50 == 1600
+    public static final float FARM_Y_SPAN = 50;//32 * 50 == 1600
 
     private final GameMain gameMain;
 
     private SpriteBatch batch;
     private final OrthographicCamera camera;
     private final StretchViewport viewport;
+    private Farm farm;
 
     private final Texture defaultTile;
     //TODO: TEST AND PROTOTYPE
@@ -136,7 +144,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         playerPosition.x = MathUtils.clamp(playerPosition.x, (float) playerTexture.getWidth() / 2, FARM_X_SPAN * TILE_PIX_SIZE - (float) playerTexture.getWidth() / 2);
 
         playerPosition.y += playerVelocity.y * delta * BASE_SPEED_FACTOR;
-        playerPosition.y = MathUtils.clamp(playerPosition.y, (float) playerTexture.getHeight() /2, FARM_Y_SPAN * TILE_PIX_SIZE - (float) playerTexture.getHeight() / 2);
+        playerPosition.y = MathUtils.clamp(playerPosition.y, (float) playerTexture.getHeight() / 2, FARM_Y_SPAN * TILE_PIX_SIZE - (float) playerTexture.getHeight() / 2);
     }
 
     private void clearAndResetScreen() {
@@ -151,7 +159,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         camera.position.set(playerPosition.x, playerPosition.y, 0);
 
         camera.position.x = MathUtils.clamp(playerPosition.x, SCREEN_WIDTH / 2, TILE_PIX_SIZE * FARM_X_SPAN - SCREEN_WIDTH / 2);
-        camera.position.y = MathUtils.clamp(playerPosition.y, SCREEN_HEIGHT /2,  TILE_PIX_SIZE * FARM_Y_SPAN - SCREEN_HEIGHT/ 2);
+        camera.position.y = MathUtils.clamp(playerPosition.y, SCREEN_HEIGHT / 2, TILE_PIX_SIZE * FARM_Y_SPAN - SCREEN_HEIGHT / 2);
 
         camera.update();
     }
@@ -159,13 +167,37 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private void renderGraphics(float delta, SpriteBatch batch, Texture defaultTile) {
         //TODO:
         batch.begin();
+        Texture texture = AssetManager.getTextures().get("grass");
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < 75; j++) {
-                batch.draw(defaultTile, j * TILE_PIX_SIZE, i * TILE_PIX_SIZE);
+                modifiedDraw(batch, texture, i, j);
+
             }
         }
         batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getWidth() / 2, playerPosition.y - (float) playerTexture.getHeight() / 2);
         batch.end();
+    }
+
+
+    public void showFarm() {
+        batch.begin();
+        for (Cell cell : farm.getCells()) {
+            Coordinate coordinate = cell.getCoordinate();
+
+            int xOfCell = coordinate.getX();
+            int yOfCell = coordinate.getY();
+            Texture texture = AssetManager.getTextures().get("grass");
+            if(!(cell.getObjectOnCell() instanceof BuildingBlock)){
+                texture = cell.getObjectOnCell().texture;
+            }
+             modifiedDraw(batch, texture, xOfCell, yOfCell);
+
+        }
+    }
+
+
+    public void modifiedDraw(SpriteBatch batch, Texture texture, float x, float y) {
+        batch.draw(texture, x * TILE_PIX_SIZE, y * TILE_PIX_SIZE);
     }
 
     @Override

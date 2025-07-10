@@ -20,7 +20,7 @@ public class AssetManager {
         textures.put("launcherBackground", new Texture("images/launcher_background.png"));
         textures.put("profileBackground", new Texture("images/profile_background.png"));
         textures.put("mainMenuBackground", new Texture("images/mainMenu_background.jpg"));
-        loadTexturesRecursively(Gdx.files.internal("images"));
+        loadTexturesRecursively(Gdx.files.internal("assets"));
     }
 
     private static void loadTexturesRecursively(FileHandle directory) {
@@ -31,6 +31,7 @@ public class AssetManager {
                 String extension = file.extension().toLowerCase();
                 if (extension.equals("png") || extension.equals("jpg") || extension.equals("jpeg")) {
                     String key = generateKeyFromFileName(file.nameWithoutExtension());
+
                     if (!textures.containsKey(key))
                         textures.put(key, new Texture(file));
                 }

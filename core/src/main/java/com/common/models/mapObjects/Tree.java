@@ -17,13 +17,12 @@ public class Tree extends MapObject {
     private LocalDateTime[] growthDeadLines = new LocalDateTime[5];
     private LocalDateTime harvestDeadLine = null;
     //TODO loading texture ( note that trees have stages )
-    private Texture texture;
 
     public Tree() {
     }
 
     public Tree(TreeType treeType, LocalDateTime source) {
-        super(false, "tree", "green");
+        super(false, "tree", "green", null);
         this.treeType = treeType;
         growthDeadLines[0] = DateUtility.getLocalDateTime(source, treeType.stageOneTime);
         growthDeadLines[1] = DateUtility.getLocalDateTime(growthDeadLines[0], treeType.stageOneTime);
@@ -34,6 +33,7 @@ public class Tree extends MapObject {
             growthDeadLines[0] = App.getLoggedInUser().getCurrentGame().getDate();
         }
         this.texture = AssetManager.getTextures().get(treeType.textureNames[stageNumber]);
+
     }
 
     public LocalDateTime[] getGrowthDeadLines() {
@@ -74,5 +74,13 @@ public class Tree extends MapObject {
 
     public void setHarvestDeadLine(LocalDateTime harvestDeadLine) {
         this.harvestDeadLine = harvestDeadLine;
+    }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
     }
 }

@@ -1,5 +1,6 @@
 package com.common.models.mapObjects;
 
+import com.client.utils.AssetManager;
 import com.common.models.Slot;
 import com.common.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import dev.morphia.annotations.Embedded;
@@ -19,10 +20,11 @@ public class ArtisanBlock extends MapObject {
     }
 
     public ArtisanBlock(ArtisanBlockType artisanType) {
-        super(false, "artisanBlock", "red");
+        super(false, "artisanBlock", "red", null);
         this.artisanType = artisanType;
         this.beingUsed = false;
         this.canBeCollected = false;
+        this.texture = AssetManager.getTextures().get(artisanType.getTextureName());
     }
 
     public ArtisanBlockType getArtisanType() {

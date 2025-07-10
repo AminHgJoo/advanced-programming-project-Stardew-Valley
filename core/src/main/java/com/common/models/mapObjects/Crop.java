@@ -23,7 +23,8 @@ public class Crop extends MapObject {
     }
 
     public Crop(CropSeedsType plantType, LocalDateTime source) {
-        super(true, "plant", "green");
+        //TODO texture
+        super(true, "plant", "green", null);
         this.cropSeedsType = plantType;
         this.lastWateringDate = source;
         stageNumber = 0;

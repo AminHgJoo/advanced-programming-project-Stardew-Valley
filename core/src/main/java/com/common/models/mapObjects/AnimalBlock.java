@@ -1,5 +1,6 @@
 package com.common.models.mapObjects;
 
+import com.client.utils.AssetManager;
 import com.common.models.Animal;
 import com.common.models.enums.types.mapObjectTypes.AnimalMapObjectType;
 import dev.morphia.annotations.Embedded;
@@ -14,9 +15,10 @@ public class AnimalBlock extends MapObject {
     }
 
     public AnimalBlock(Animal animal) {
-        super(false, "animal", "purple");
+        super(false, "animal", "purple", null);
         this.animal = animal;
         this.mapObjectType = AnimalMapObjectType.getAnimalMapObjectType(animal.getType());
+        this.texture = AssetManager.getTextures().get(mapObjectType.getTextureName());
     }
 
 }
