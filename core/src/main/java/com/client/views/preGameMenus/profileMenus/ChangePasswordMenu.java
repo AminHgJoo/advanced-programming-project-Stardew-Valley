@@ -1,4 +1,4 @@
-package com.client.views;
+package com.client.views.preGameMenus.profileMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -16,14 +16,15 @@ import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
 import com.google.gson.JsonObject;
+import com.server.utilities.Validation;
 
-public class ChangeEmailMenu implements MyScreen {
+public class ChangePasswordMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
     private Stage stage;
 
-    public ChangeEmailMenu(GameMain gameMain) {
+    public ChangePasswordMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
         this.background = AssetManager.getTextures().get("profileBackground");
@@ -38,12 +39,15 @@ public class ChangeEmailMenu implements MyScreen {
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
 
-        Label label = new Label("Change Email", skin);
+        Label label = new Label("Change Password", skin);
         label.setColor(Color.RED);
         label.setFontScale(2f);
 
-        TextField emailField = new TextField("", skin);
-        emailField.setMessageText("New Email");
+        TextField passwordField = new TextField("", skin);
+        passwordField.setMessageText("New Password");
+
+        TextField oldPasswordField = new TextField("", skin);
+        oldPasswordField.setMessageText("Old Password");
 
 
         TextButton confirmButton = new TextButton("Confirm", skin);
@@ -52,8 +56,9 @@ public class ChangeEmailMenu implements MyScreen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 var req = new JsonObject();
-                req.addProperty("email", emailField.getText());
-                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/changeEmail", req);
+                req.addProperty("newPassword", passwordField.getText());
+                req.addProperty("oldPassword", oldPasswordField.getText());
+                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/changePassword", req);
                 if (postResponse == null) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog("Connection to server failed.", "Error");
@@ -69,9 +74,8 @@ public class ChangeEmailMenu implements MyScreen {
                 if (response.getStatus() == 200) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog(response.getMessage(), "Success");
-                    ClientApp.loggedInUser.setEmail(emailField.getText());
+                    ClientApp.loggedInUser.setHashedPassword(Validation.hashPassword(passwordField.getText()));
                 }
-
             }
         });
 
@@ -90,7 +94,8 @@ public class ChangeEmailMenu implements MyScreen {
         table.center();
         table.padTop(50);
         table.add(label).pad(10).row();
-        table.add(emailField).width(500).height(60).pad(10).row();
+        table.add(oldPasswordField).width(500).height(60).pad(10).row();
+        table.add(passwordField).width(500).height(60).pad(10).row();
         table.add(confirmButton).width(500).height(60).pad(10).row();
         table.add(backButton);
         Gdx.input.setInputProcessor(stage);

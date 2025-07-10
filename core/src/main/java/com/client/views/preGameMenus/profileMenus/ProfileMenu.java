@@ -1,4 +1,4 @@
-package com.client.views;
+package com.client.views.preGameMenus.profileMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -13,6 +13,7 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
+import com.client.views.preGameMenus.MainMenu;
 import com.common.models.User;
 
 public class ProfileMenu implements MyScreen {

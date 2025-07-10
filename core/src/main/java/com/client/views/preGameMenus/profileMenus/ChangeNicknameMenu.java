@@ -1,4 +1,4 @@
-package com.client.views;
+package com.client.views.preGameMenus.profileMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

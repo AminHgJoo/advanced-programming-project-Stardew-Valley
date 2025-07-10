@@ -1,4 +1,4 @@
-package com.client.views;
+package com.client.views.preGameMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -20,7 +20,6 @@ import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
-import com.server.repositories.LobbyRepository;
 import com.server.utilities.Response;
 
 import java.util.ArrayList;

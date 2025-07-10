@@ -1,33 +1,34 @@
-package com.client.views;
+package com.client.views.preGameMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
-import com.client.utils.HTTPUtil;
+import com.client.utils.FileUtil;
 import com.client.utils.MyScreen;
-import com.client.utils.UIPopupHelper;
-import com.google.gson.JsonObject;
+import com.client.views.preGameMenus.profileMenus.ProfileMenu;
 
-public class ChangeUsernameMenu implements MyScreen {
+public class MainMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
     private Stage stage;
 
-    public ChangeUsernameMenu(GameMain gameMain) {
+    public MainMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
-        this.background = AssetManager.getTextures().get("profileBackground");
-
+        this.background = AssetManager.getTextures().get("mainMenuBackground");
         initializeStage();
     }
 
@@ -38,44 +39,13 @@ public class ChangeUsernameMenu implements MyScreen {
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
 
-        Label label = new Label("Change Username", skin);
+        Label label = new Label("Main Menu", skin, "title");
         label.setColor(Color.RED);
         label.setFontScale(2f);
 
-        TextField usernameField = new TextField("", skin);
-        usernameField.setMessageText("New Username");
+        TextButton profileMenuButtonButton = new TextButton("Profile", skin);
+        profileMenuButtonButton.addListener(new ChangeListener() {
 
-
-        TextButton confirmButton = new TextButton("Confirm", skin);
-        confirmButton.addListener(new ChangeListener() {
-
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                var req = new JsonObject();
-                req.addProperty("newUsername", usernameField.getText());
-                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/changeUsername", req);
-                if (postResponse == null) {
-                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-                    uiPopupHelper.showDialog("Connection to server failed.", "Error");
-                    return;
-                }
-                var response = HTTPUtil.deserializeHttpResponse(postResponse);
-                if (response.getStatus() == 400 || response.getStatus() == 404) {
-                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-                    uiPopupHelper.showDialog(response.getMessage(), "Error");
-                    return;
-                }
-
-                if (response.getStatus() == 200) {
-                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-                    uiPopupHelper.showDialog(response.getMessage(), "Success");
-                    ClientApp.loggedInUser.setUsername(usernameField.getText());
-                }
-            }
-        });
-
-        TextButton backButton = new TextButton("Back", skin);
-        backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 gameMain.setScreen(new ProfileMenu(gameMain));
@@ -83,20 +53,53 @@ public class ChangeUsernameMenu implements MyScreen {
             }
         });
 
+        TextButton createGameButton = new TextButton("Lobby Menu", skin);
+        createGameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                gameMain.setScreen(new GameLobbyMenu(gameMain, null));
+                dispose();
+            }
+        });
+
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.RED);
+        pixmap.fill();
+
+        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+        style.up = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        style.down = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        style.font = skin.getFont("font");
+        style.fontColor = Color.WHITE;
+
+        TextButton logoutButton = new TextButton("Logout", style);
+        logoutButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ClientApp.token = "";
+                ClientApp.loggedInUser = null;
+                FileUtil.write(System.getenv("address"), "");
+                gameMain.setScreen(new LauncherMenu(gameMain));
+                dispose();
+            }
+        });
+
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
+
         table.center();
         table.padTop(50);
         table.add(label).pad(10).row();
-        table.add(usernameField).width(500).height(60).pad(10).row();
-        table.add(confirmButton).width(500).height(60).pad(10).row();
-        table.add(backButton);
+        table.add(profileMenuButtonButton).width(500).height(60).pad(10).row();
+        table.add(createGameButton).width(500).height(60).pad(10).row();
+        table.add(logoutButton).width(500).height(60).pad(10).row();
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void show() {
+
     }
 
     @Override
@@ -110,6 +113,7 @@ public class ChangeUsernameMenu implements MyScreen {
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
+
 
     @Override
     public void pause() {

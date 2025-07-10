@@ -1,4 +1,4 @@
-package com.client.views;
+package com.client.views.preGameMenus.profileMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -16,15 +16,14 @@ import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
 import com.google.gson.JsonObject;
-import com.server.utilities.Validation;
 
-public class ChangePasswordMenu implements MyScreen {
+public class ChangeUsernameMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
     private Stage stage;
 
-    public ChangePasswordMenu(GameMain gameMain) {
+    public ChangeUsernameMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
         this.background = AssetManager.getTextures().get("profileBackground");
@@ -39,15 +38,12 @@ public class ChangePasswordMenu implements MyScreen {
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
 
-        Label label = new Label("Change Password", skin);
+        Label label = new Label("Change Username", skin);
         label.setColor(Color.RED);
         label.setFontScale(2f);
 
-        TextField passwordField = new TextField("", skin);
-        passwordField.setMessageText("New Password");
-
-        TextField oldPasswordField = new TextField("", skin);
-        oldPasswordField.setMessageText("Old Password");
+        TextField usernameField = new TextField("", skin);
+        usernameField.setMessageText("New Username");
 
 
         TextButton confirmButton = new TextButton("Confirm", skin);
@@ -56,9 +52,8 @@ public class ChangePasswordMenu implements MyScreen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 var req = new JsonObject();
-                req.addProperty("newPassword", passwordField.getText());
-                req.addProperty("oldPassword", oldPasswordField.getText());
-                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/changePassword", req);
+                req.addProperty("newUsername", usernameField.getText());
+                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/changeUsername", req);
                 if (postResponse == null) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog("Connection to server failed.", "Error");
@@ -74,7 +69,7 @@ public class ChangePasswordMenu implements MyScreen {
                 if (response.getStatus() == 200) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog(response.getMessage(), "Success");
-                    ClientApp.loggedInUser.setHashedPassword(Validation.hashPassword(passwordField.getText()));
+                    ClientApp.loggedInUser.setUsername(usernameField.getText());
                 }
             }
         });
@@ -94,8 +89,7 @@ public class ChangePasswordMenu implements MyScreen {
         table.center();
         table.padTop(50);
         table.add(label).pad(10).row();
-        table.add(oldPasswordField).width(500).height(60).pad(10).row();
-        table.add(passwordField).width(500).height(60).pad(10).row();
+        table.add(usernameField).width(500).height(60).pad(10).row();
         table.add(confirmButton).width(500).height(60).pad(10).row();
         table.add(backButton);
         Gdx.input.setInputProcessor(stage);
