@@ -5,6 +5,7 @@ import com.common.models.Player;
 import com.common.models.User;
 import com.common.models.networking.Lobby;
 import com.server.GameServers.AppWebSocket;
+import com.server.GameServers.GameServer;
 import com.server.repositories.GameRepository;
 import com.server.repositories.LobbyRepository;
 import com.server.repositories.UserRepository;
@@ -40,23 +41,50 @@ public class GameController {
             }
 
             ArrayList<Player> players = new ArrayList<>();
+            ArrayList<User> users = new ArrayList<>();
             for (String username : lobby.getUsers()) {
                 User u = UserRepository.findUserByUsername(username);
                 if (u == null) {
                     ctx.json(Response.NOT_FOUND.setMessage("User " + username + " not found"));
                     return;
                 }
+                users.add(u);
                 Player p = new Player(u);
                 players.add(p);
             }
             GameData game = new GameData(players);
 
             GameRepository.saveGame(game);
-            AppWebSocket.startGame(game, lobby);
+            boolean check = AppWebSocket.startGame(game, lobby);
+            if (check) {
+                for (User u : users) {
+                    u.setCurrentGameId(game.get_id().toString());
+                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }
+    }
+
+    public void handleGetRequests(Context ctx) {
+        String gameId = ctx.pathParam("gameId");
+        GameServer gs = AppWebSocket.getActiveGameById(gameId);
+        if (gs == null) {
+            ctx.json(Response.NOT_FOUND.setMessage("Game not found"));
+            return;
+        }
+        gs.handleRequests(ctx);
+    }
+
+    public void handlePostRequests(Context ctx) {
+        String gameId = ctx.pathParam("gameId");
+        GameServer gs = AppWebSocket.getActiveGameById(gameId);
+        if (gs == null) {
+            ctx.json(Response.NOT_FOUND.setMessage("Game not found"));
+            return;
+        }
+        gs.handleRequests(ctx);
     }
 }

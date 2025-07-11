@@ -1,21 +1,13 @@
 package com.server.GameServers;
 
 import com.common.models.GameData;
-import com.common.models.Player;
 import com.common.models.User;
 import com.common.models.networking.Lobby;
-import com.google.gson.Gson;
-import com.server.repositories.GameRepository;
-import com.server.repositories.LobbyRepository;
 import com.server.repositories.UserRepository;
 import io.javalin.Javalin;
-import io.javalin.websocket.WsContext;
-import io.javalin.websocket.WsMessageContext;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -40,15 +32,29 @@ public class AppWebSocket {
         }
     }
 
-    public static void startGame(GameData game , Lobby lobby) {
+    public static boolean startGame(GameData game, Lobby lobby) {
         ArrayList<PlayerConnection> arr = new ArrayList<>();
-        for(String p: lobby.getUsers()){
+        for (String p : lobby.getUsers()) {
             PlayerConnection connection = connectedPlayers.get(p);
             if (connection != null) {
                 arr.add(connection);
+            } else {
+                return false;
             }
         }
-        new GameServer(arr, game).start();
+        GameServer gs = new GameServer(arr, game);
+        activeGames.add(gs);
+        gs.start();
+        return true;
+    }
+
+    public static GameServer getActiveGameById(String gameId) {
+        for (GameServer gs : activeGames) {
+            if (gs.getGame().get_id().toString().equals(gameId)) {
+                return gs;
+            }
+        }
+        return null;
     }
 
     public void start() {

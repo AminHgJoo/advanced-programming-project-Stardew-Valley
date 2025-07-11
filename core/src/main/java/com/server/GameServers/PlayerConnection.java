@@ -14,4 +14,8 @@ public class PlayerConnection {
     public void send(String message) {
         wsContext.send(message);
     }
+
+    public String getUsername() {
+        return username;
+    }
 }

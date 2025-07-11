@@ -28,4 +28,16 @@ public class StringUtils {
 
         return result.toString();
     }
+
+    public static String removeFirstCamelCaseWord(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        for (int i = 1; i < input.length(); i++) {
+            if (Character.isUpperCase(input.charAt(i))) {
+                return Character.toLowerCase(input.charAt(i)) + input.substring(i + 1);
+            }
+        }
+        return "";
+    }
 }
