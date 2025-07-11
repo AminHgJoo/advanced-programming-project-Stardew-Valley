@@ -1,5 +1,6 @@
 package com.common.models;
 
+import com.client.ClientApp;
 import com.common.models.enums.types.MenuTypes;
 import com.common.models.enums.types.itemTypes.*;
 import com.server.repositories.UserRepository;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 public class App {
     final private static ArrayList<User> users = new ArrayList<>();
     private static final HashMap<String, ItemType> allItemTypes = new HashMap<>();
-    private static User loggedInUser = UserRepository.getStayLoggedInUser();
+    private static User loggedInUser;
     private static MenuTypes currMenuType = MenuTypes.SignInMenu;
 
     static {
@@ -46,7 +47,7 @@ public class App {
     }
 
     public static User getLoggedInUser() {
-        return loggedInUser;
+        return ClientApp.loggedInUser;
     }
 
     public static void setLoggedInUser(User loggedInUser) {

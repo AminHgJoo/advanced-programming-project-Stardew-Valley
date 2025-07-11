@@ -17,17 +17,14 @@ import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.BuildingBlock;
-import com.common.models.mapObjects.EmptyCell;
-import com.common.models.mapObjects.Tree;
-import com.common.models.mapObjects.Water;
 
 public class FarmMenu implements MyScreen, InputProcessor {
-    public static final float SCREEN_WIDTH = 450;
-    public static final float SCREEN_HEIGHT = 300;
+    public static final float SCREEN_WIDTH = 450 * 1.5f;
+    public static final float SCREEN_HEIGHT = 300 * 1.5f;
     public static final float BASE_SPEED_FACTOR = 20;
     public static final float TILE_PIX_SIZE = 32;
     public static final float FARM_X_SPAN = 75; //32 * 75 == 2400
-    public static final float FARM_Y_SPAN = 50;//32 * 50 == 1600
+    public static final float FARM_Y_SPAN = 50; //32 * 50 == 1600
 
     private final GameMain gameMain;
 
@@ -53,6 +50,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
         this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
+
+        this.farm = Farm.makeFarm(1);
 
         this.defaultTile = new Texture("images/grass.png");
     }
@@ -136,7 +135,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         updatePlayerPos(delta);
 
-        renderGraphics(delta, batch, defaultTile);
+        showFarm();
     }
 
     private void updatePlayerPos(float delta) {
@@ -170,8 +169,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         Texture texture = AssetManager.getTextures().get("grass");
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < 75; j++) {
-                modifiedDraw(batch, texture, i, j);
-
+                modifiedDraw(batch, texture, j, i);
             }
         }
         batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getWidth() / 2, playerPosition.y - (float) playerTexture.getHeight() / 2);
@@ -181,23 +179,29 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     public void showFarm() {
         batch.begin();
+        Texture texture = AssetManager.getTextures().get("grass");
+        for (int i = 0; i < 50; i++) {
+            for (int j = 0; j < 75; j++) {
+                modifiedDraw(batch, texture, j, i);
+            }
+        }
         for (Cell cell : farm.getCells()) {
             Coordinate coordinate = cell.getCoordinate();
 
             int xOfCell = coordinate.getX();
             int yOfCell = coordinate.getY();
-            Texture texture = AssetManager.getTextures().get("grass");
-            if(!(cell.getObjectOnCell() instanceof BuildingBlock)){
-                texture = cell.getObjectOnCell().texture;
+            Texture texture1 = AssetManager.getTextures().get("grass");
+            if (!(cell.getObjectOnCell() instanceof BuildingBlock)) {
+                texture1 = cell.getObjectOnCell().texture;
             }
-             modifiedDraw(batch, texture, xOfCell, yOfCell);
-
+            modifiedDraw(batch, texture1, xOfCell, yOfCell);
+            batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getWidth() / 2, playerPosition.y - (float) playerTexture.getHeight() / 2);
         }
+        batch.end();
     }
 
-
-    public void modifiedDraw(SpriteBatch batch, Texture texture, float x, float y) {
-        batch.draw(texture, x * TILE_PIX_SIZE, y * TILE_PIX_SIZE);
+    public void modifiedDraw(SpriteBatch batch, Texture texture, int x, int y) {
+        batch.draw(texture, x * TILE_PIX_SIZE, convertYCoordinate(y) * TILE_PIX_SIZE);
     }
 
     @Override
@@ -227,7 +231,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         playerTexture.dispose();
     }
 
-    //TODO: Useful later.
     public int convertYCoordinate(int yCoordinate) {
         return 50 - yCoordinate;
     }
