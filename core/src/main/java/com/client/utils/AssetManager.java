@@ -20,7 +20,8 @@ public class AssetManager {
         textures.put("launcherBackground", new Texture("images/launcher_background.png"));
         textures.put("profileBackground", new Texture("images/profile_background.png"));
         textures.put("mainMenuBackground", new Texture("images/mainMenu_background.jpg"));
-        loadTexturesRecursively(Gdx.files.internal("images"));
+        //TODO value of source is image
+        loadTexturesRecursively(Gdx.files.internal(System.getenv("source")));
     }
 
     private static void loadTexturesRecursively(FileHandle directory) {
