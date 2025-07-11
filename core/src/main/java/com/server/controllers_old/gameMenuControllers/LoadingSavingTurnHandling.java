@@ -99,9 +99,6 @@ public class LoadingSavingTurnHandling extends Controller {
         players.set(0, loader);
         players.set(loaderIndex, firstPlayer);
 
-        gameData.setGameThread(new GameThread(gameData));
-        gameData.getGameThread().keepRunning = true;
-        gameData.getGameThread().start();
         GameRepository.saveGame(gameData);
 
         return new Response(true, "The game has been loaded successfully. Welcome "
@@ -114,7 +111,6 @@ public class LoadingSavingTurnHandling extends Controller {
         if (gameData.getCurrentPlayer().getUser().equals(App.getLoggedInUser())) {
 
             gameData.setGameOngoing(false);
-            gameData.getGameThread().keepRunning = false;
             gameData.hasTurnCycleFinished = false;
             for (Player p : gameData.getPlayers()) {
                 User u = p.getUser();
@@ -156,7 +152,6 @@ public class LoadingSavingTurnHandling extends Controller {
                 return new Response(true, "Confirmation not received. Aborting...");
             }
         }
-        gameData.getGameThread().keepRunning = false;
         gameData.setGameOngoing(false);
         loggedInUser.setCurrentGame(null);
         loggedInUser.getGames().remove(gameData.get_id());

@@ -35,10 +35,10 @@ public class GameController {
                 return;
             }
 
-            if (lobby.getUsers().size() <= 2) {
-                ctx.json(Response.BAD_REQUEST.setMessage("Not enough players"));
-                return;
-            }
+//            if (lobby.getUsers().size() <= 2) {
+//                ctx.json(Response.BAD_REQUEST.setMessage("Not enough players"));
+//                return;
+//            }
 
             ArrayList<Player> players = new ArrayList<>();
             ArrayList<User> users = new ArrayList<>();

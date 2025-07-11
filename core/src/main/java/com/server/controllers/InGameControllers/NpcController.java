@@ -1,4 +1,4 @@
 package com.server.controllers.InGameControllers;
 
-public class NpcController {
+public class NpcController extends Controller{
 }

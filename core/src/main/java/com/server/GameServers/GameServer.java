@@ -2,11 +2,16 @@ package com.server.GameServers;
 
 import com.common.models.GameData;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.server.controllers.InGameControllers.GameServerController;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 
-import java.lang.reflect.Method;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,6 +20,20 @@ public class GameServer extends Thread {
     private GameData game;
     private boolean isRunning = true;
     private final GameServerController controller = new GameServerController();
+    private final Gson gson = new GsonBuilder()
+        .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+            @Override
+            public void write(JsonWriter out, LocalDateTime value) throws IOException {
+                out.value(value.toString());
+            }
+
+            @Override
+            public LocalDateTime read(JsonReader in) throws IOException {
+                return LocalDateTime.parse(in.nextString());
+            }
+        })
+        .serializeSpecialFloatingPointValues()
+        .create();
 
     public GameServer(ArrayList<PlayerConnection> players, GameData game) {
         this.playerConnections = players;
@@ -22,7 +41,7 @@ public class GameServer extends Thread {
         HashMap<String, String> res = new HashMap<>();
         res.put("type", "GAME_START");
         res.put("message", "game has been started successfully");
-        res.put("game", new Gson().toJson(game));
+        res.put("game", this.gson.toJson(game));
         for (PlayerConnection playerConnection : players) {
             playerConnection.send(new Gson().toJson(res));
         }
@@ -48,6 +67,9 @@ public class GameServer extends Thread {
            /* TODO sending game updates
            broadcast(state...);
            * */
+            HashMap<String, String> message = new HashMap<>();
+            message.put("type", "TEST");
+            broadcast(message);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

@@ -1,4 +1,4 @@
 package com.server.controllers.InGameControllers;
 
-public class WorldController {
+public class WorldController extends Controller{
 }

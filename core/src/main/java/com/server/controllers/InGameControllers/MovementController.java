@@ -1,4 +1,4 @@
 package com.server.controllers.InGameControllers;
 
-public class MovementController {
+public class MovementController extends Controller{
 }

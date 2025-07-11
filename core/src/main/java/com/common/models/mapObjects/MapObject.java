@@ -2,12 +2,14 @@ package com.common.models.mapObjects;
 
 import com.badlogic.gdx.graphics.Texture;
 import dev.morphia.annotations.Embedded;
+import dev.morphia.annotations.Transient;
 
 @Embedded
 abstract public class MapObject {
     public String type;
     public boolean isWalkable;
     public String color;
+    @Transient
     public Texture texture;
     //TODO: texture
 
@@ -21,6 +23,7 @@ abstract public class MapObject {
         this.color = color;
         this.texture = texture;
     }
+
 
     @Override
     public String toString() {

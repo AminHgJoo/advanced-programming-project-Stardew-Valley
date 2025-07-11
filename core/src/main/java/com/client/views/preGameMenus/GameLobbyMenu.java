@@ -513,14 +513,15 @@ public class GameLobbyMenu implements MyScreen {
             // TODO redirect to the main page of the game
         }
         String lobby = res.get("lobby");
-        System.out.println(lobby);
-        try {
-            Lobby newLobby = ModelDecoder.decodeLobby(lobby);
-            System.out.println(newLobby);
-            currLobby = newLobby;
-            doesUINeedRefresh = true;
-        } catch (Exception e) {
+        if (lobby != null) {
+            try {
+                Lobby newLobby = ModelDecoder.decodeLobby(lobby);
+                System.out.println(newLobby);
+                currLobby = newLobby;
+                doesUINeedRefresh = true;
+            } catch (Exception e) {
 
+            }
         }
     }
 }

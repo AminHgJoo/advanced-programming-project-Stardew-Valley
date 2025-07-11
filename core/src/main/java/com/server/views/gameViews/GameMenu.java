@@ -686,11 +686,6 @@ public class GameMenu implements Menu {
             }
         } else {
             GameData gameData = App.getLoggedInUser().getCurrentGame();
-            if (gameData.getGameThread() == null) {
-                gameData.setGameThread(new GameThread(gameData));
-                gameData.getGameThread().keepRunning = true;
-                gameData.getGameThread().start();
-            }
             if (GameMenuCommands.SHOW_FARM.matches(input)) {
                 response = getShowFullFarmResponse(input);
             } else if (GameMenuCommands.SHOW_COORDS.matches(input)) {

@@ -43,9 +43,6 @@ public class GameRepository {
     }
 
     public static void saveGame(GameData gameData) {
-        if (gameData.getGameThread() != null) {
-            gameData.getGameThread().setGame(gameData);
-        }
         db.save(gameData);
 
 //        new Thread(() -> {

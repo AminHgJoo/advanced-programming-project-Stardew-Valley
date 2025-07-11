@@ -1,4 +1,4 @@
 package com.server.controllers.InGameControllers;
 
-public class TradingController {
+public class TradingController extends Controller{
 }

@@ -1,4 +1,4 @@
 package com.server.controllers.InGameControllers;
 
-public class LiveStockController {
+public class LiveStockController extends Controller{
 }

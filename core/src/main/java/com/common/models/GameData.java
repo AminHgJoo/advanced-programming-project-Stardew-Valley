@@ -43,8 +43,6 @@ public class GameData {
     private Weather weatherToday;
     private Weather weatherTomorrow;
     private Season season;
-    @Transient
-    private GameThread gameThread;
     private ArrayList<Message> messages = new ArrayList<>();
     private ArrayList<Gift> gifts = new ArrayList<>();
 
@@ -690,13 +688,7 @@ public class GameData {
         this.season = season;
     }
 
-    public GameThread getGameThread() {
-        return gameThread;
-    }
 
-    public void setGameThread(GameThread gameThread) {
-        this.gameThread = gameThread;
-    }
 
     public Weather getWeatherTomorrow() {
         return weatherTomorrow;
