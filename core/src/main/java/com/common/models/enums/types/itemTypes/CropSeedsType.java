@@ -1,5 +1,6 @@
 package com.common.models.enums.types.itemTypes;
 
+import com.client.utils.StringUtils;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
 import com.common.models.enums.worldEnums.Season;
@@ -85,7 +86,7 @@ public enum CropSeedsType implements ItemType {
         this.energy = energy;
         this.season = season;
         this.canBeGiant = canBeGiant;
-        this.textureName = String.join("_", name.split(" "));
+        this.textureName = StringUtils.convertToCamelCase(name);
     }
 
     public static CropSeedsType findCropBySeed(String seed) {
