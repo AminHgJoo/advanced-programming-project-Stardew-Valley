@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 @Embedded
 public class Farm {
+    //TODO: When greenhouse gets built no map tiles should get overridden!
     private static int lastFarmNumber;
 
     static {
@@ -132,16 +133,16 @@ public class Farm {
         ArrayList<Cell> playerHomeCells = new ArrayList<>();
         ArrayList<Cell> greenHouseCells = new ArrayList<>();
         ArrayList<Cell> mineCells = new ArrayList<>();
-        for (int i = 61; i < 65; i++) {
-            for (int j = 4; j < 8; j++) {
+        for (int i = 61; i <= 65; i++) { // house is 5 by 5
+            for (int j = 4; j <= 8; j++) {
                 Cell cell = getCellByCoordinate(i, j, farmCells);
                 cell.setObjectOnCell(new BuildingBlock(false, "Home"));
                 playerHomeCells.add(cell);
             }
         }
-        //Greenhouse runs from x : [22, 28] & y : [3, 10]
-        for (int i = 22; i < 29; i++) {
-            for (int j = 3; j < 11; j++) {
+        // Greenhouse runs from x : [22, 25] & y : [3, 6] (4 by 4)
+        for (int i = 22; i <= 25; i++) {
+            for (int j = 3; j <= 6; j++) {
                 Cell cell = getCellByCoordinate(i, j, farmCells);
 
                 if (i != 22 && i != 28 && j != 3 && j != 10) {

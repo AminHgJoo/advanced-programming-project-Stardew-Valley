@@ -19,6 +19,7 @@ import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.BuildingBlock;
 
 public class FarmMenu implements MyScreen, InputProcessor {
+    //TODO: Draw destroyed/renovated greenhouse based on it being fixed or not.
     public static final float SCREEN_WIDTH = 450 * 1.5f;
     public static final float SCREEN_HEIGHT = 300 * 1.5f;
     public static final float BASE_SPEED_FACTOR = 20;
@@ -33,7 +34,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private final StretchViewport viewport;
     private Farm farm;
 
-    private final Texture defaultTile;
     //TODO: TEST AND PROTOTYPE
     private final Texture playerTexture = new Texture("images/T_BatgunProjectile.png");
 
@@ -52,8 +52,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
 
         this.farm = Farm.makeFarm(1);
-
-        this.defaultTile = new Texture("images/grass.png");
     }
 
     @Override
@@ -191,17 +189,33 @@ public class FarmMenu implements MyScreen, InputProcessor {
             int xOfCell = coordinate.getX();
             int yOfCell = coordinate.getY();
             Texture texture1 = AssetManager.getTextures().get("grass");
-            if (!(cell.getObjectOnCell() instanceof BuildingBlock)) {
+
+            if (!(cell.getObjectOnCell() instanceof BuildingBlock buildingBlock)) {
                 texture1 = cell.getObjectOnCell().texture;
+            } else if (buildingBlock.buildingType.equals("Mine")) {
+                texture1 = AssetManager.getTextures().get("mineCell");
             }
+
+            if (texture1 == texture) {
+                continue;
+            }
+
             modifiedDraw(batch, texture1, xOfCell, yOfCell);
-            batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getWidth() / 2, playerPosition.y - (float) playerTexture.getHeight() / 2);
         }
+
+        //Draw buildings
+        Texture house = AssetManager.getTextures().get("playerHouse");
+        Texture greenhouseDestroyed = AssetManager.getTextures().get("greenhouseDestroyed");
+
+        modifiedDraw(batch, house, 61, 8);
+        modifiedDraw(batch, greenhouseDestroyed, 22, 6);
+
+        batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getWidth() / 2, playerPosition.y - (float) playerTexture.getHeight() / 2);
         batch.end();
     }
 
     public void modifiedDraw(SpriteBatch batch, Texture texture, int x, int y) {
-        batch.draw(texture, x * TILE_PIX_SIZE, convertYCoordinate(y) * TILE_PIX_SIZE);
+        batch.draw(texture, x * TILE_PIX_SIZE, (convertYCoordinate(y) - 1) * TILE_PIX_SIZE);
     }
 
     @Override
@@ -227,8 +241,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
     @Override
     public void dispose() {
         batch.dispose();
-        defaultTile.dispose();
-        playerTexture.dispose();
     }
 
     public int convertYCoordinate(int yCoordinate) {
