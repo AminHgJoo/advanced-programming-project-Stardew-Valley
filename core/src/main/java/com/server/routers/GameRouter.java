@@ -16,8 +16,8 @@ public class GameRouter {
         app.before("/api/game/*" , Auth.validate);
 
         // GET requests
+        app.get("/api/game/startGame/{lobbyId}" , controller::startGame);
 
         // POST requests
-        app.post("/api/game/startGame/{lobbyId}" , controller::startGame);
     }
 }

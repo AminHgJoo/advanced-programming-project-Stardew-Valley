@@ -120,7 +120,15 @@ public class GameLobbyMenu implements MyScreen {
             startGameButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    //TODO:
+                    var postResponse = HTTPUtil.get("http://localhost:8080/api/game/startGame/"
+                        + currLobby.get_id().toString());
+                    Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                    if (res.getStatus() == 200) {
+                        // TODO set a loading
+                    } else {
+                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                        uiPopupHelper.showDialog(res.getMessage(), "Error");
+                    }
                 }
             });
             table.add(startGameButton).colspan(2).pad(10).row();
@@ -150,10 +158,10 @@ public class GameLobbyMenu implements MyScreen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     var req = new JsonObject();
-                    req.addProperty("farm" , farmSelectBox.getSelected());
+                    req.addProperty("farm", farmSelectBox.getSelected());
 
-                    var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/chooseFarm" , req);
-                    Response res = HTTPUtil.deserializeHttpResponse( postResponse );
+                    var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/chooseFarm", req);
+                    Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                     if (res.getStatus() == 200) {
                         LinkedTreeMap map = (LinkedTreeMap) res.getBody();
                         Gson gson = new Gson();
@@ -408,10 +416,10 @@ public class GameLobbyMenu implements MyScreen {
         });
     }
 
-    public void updateLobby(Lobby lobby){
+    public void updateLobby(Lobby lobby) {
         for (int i = 0; i < visibleLobbies.size(); i++) {
-            if(visibleLobbies.get(i).get_id().toString().equals(lobby.get_id().toString())){
-                visibleLobbies.set(i , lobby);
+            if (visibleLobbies.get(i).get_id().toString().equals(lobby.get_id().toString())) {
+                visibleLobbies.set(i, lobby);
             }
         }
     }
@@ -484,20 +492,25 @@ public class GameLobbyMenu implements MyScreen {
     public void socketMessage(String message) {
         Gson gson = new Gson();
         HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
-        if (res.get("type").equals("RESPONSE")) {
+        String type = res.get("type");
+        if (type.equals("RESPONSE")) {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             if (res.get("success").equals("true")) {
                 uiPopupHelper.showDialog(res.get("message"), "Success");
             } else {
                 uiPopupHelper.showDialog(res.get("message"), "Error");
             }
-        } else if (res.get("type").equals("LOBBY_JOINED")) {
+        } else if (type.equals("LOBBY_JOINED")) {
             System.out.println("Joinedddd");
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog(res.get("message"), "Success");
-        } else if (res.get("type").equals("FARM_CHOSEN")) {
+        } else if (type.equals("FARM_CHOSEN")) {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog(res.get("message"), "Success");
+        } else if (type.equals("GAME_START")) {
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+            uiPopupHelper.showDialog(res.get("message"), "Success");
+            // TODO redirect to the main page of the game
         }
         String lobby = res.get("lobby");
         System.out.println(lobby);
