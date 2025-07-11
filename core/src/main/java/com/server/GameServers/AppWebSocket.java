@@ -1,6 +1,7 @@
 package com.server.GameServers;
 
 import com.common.models.GameData;
+import com.common.models.Player;
 import com.common.models.User;
 import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
@@ -39,88 +40,15 @@ public class AppWebSocket {
         }
     }
 
-    public static void chooseFarm(User user, JSONObject obj, WsMessageContext ctx) {
-        Lobby lobby = LobbyRepository.findById(user.getCurrentLobbyId());
-        if (lobby != null) {
-            lobby.getUsersFarm().put(user.getUsername(), obj.getInt("farm"));
-            LobbyRepository.save(lobby);
-            HashMap<String, String> response = new HashMap<>();
-            response.put("type", "FARM_CHOSEN");
-            response.put("message", "User" + user.getUsername() + " chose farm" + obj.getInt("farm"));
-            response.put("lobby", new Gson().toJson(lobby));
-            sendMessageToLobby(lobby, user, new Gson().toJson(response));
-        }
-    }
-
-    public static void joinLobby(User user, JSONObject obj, WsMessageContext ctx) {
-        Lobby lobby = LobbyRepository.findById(obj.getString("lobbyId"));
-        HashMap<String, String> response = new HashMap<>();
-        if (lobby != null) {
-            if (lobby.getUsers().size() >= 4) {
-                response.put("type", "RESPONSE");
-                response.put("success", "false");
-                response.put("message", "Lobby is full");
-                ctx.send(new Gson().toJson(response));
-                return;
-            }
-            if (!lobby.isPublic()) {
-                String password = obj.getString("password");
-                if (password == null || !lobby.getPassword().equals(password)) {
-                    response.put("type", "RESPONSE");
-                    response.put("success", "false");
-                    response.put("message", "Lobby password does not match");
-                    ctx.send(new Gson().toJson(response));
-                    return;
-                }
-            }
-            user.setCurrentLobbyId(lobby.get_id().toString());
-            lobby.getUsers().add(user.getUsername());
-            LobbyRepository.save(lobby);
-            UserRepository.saveUser(user);
-            response.put("type", "RESPONSE");
-            response.put("success", "true");
-            response.put("message", "User" + user.getUsername() + " joined lobby");
-            response.put("lobby", new Gson().toJson(lobby));
-            ctx.send(new Gson().toJson(response));
-            response.remove("success");
-            response.put("type", "LOBBY_JOINED");
-            sendMessageToLobby(lobby, user, new Gson().toJson(response));
-        }
-    }
-
-    public static void handleInvite(JSONObject body, WsContext ctx) {
-        // TODO find the game and players by the id
-        // TODO update response messages
-        JSONArray players = body.getJSONArray("players");
-        for (int i = 0; i < players.length(); i++) {
-            String playerId = players.getString(i);
-            PlayerConnection connection = connectedPlayers.get(playerId);
+    public static void startGame(GameData game , Lobby lobby) {
+        ArrayList<PlayerConnection> arr = new ArrayList<>();
+        for(String p: lobby.getUsers()){
+            PlayerConnection connection = connectedPlayers.get(p);
             if (connection != null) {
-                connection.send("Player " + body.getString("id") + " has invited you to game "
-                    + body.getString("gameId"));
-            } else {
-                ctx.send("Player " + playerId + " is not online now !");
+                arr.add(connection);
             }
         }
-    }
-
-    public static void handleAccept(JSONObject body, WsContext ctx) {
-        String gameId = body.getString("gameId");
-        GameData game = GameRepository.findGameById(gameId, false);
-        if (game != null) {
-            if (game.getPlayers().size() == game.getCapacity()) {
-                ArrayList<PlayerConnection> players = new ArrayList<>();
-                game.getPlayers().forEach(player -> {
-                    String user = player.getUser_id();
-                    PlayerConnection connection = connectedPlayers.get(user);
-                    if (connection != null) {
-                        players.add(connection);
-                    }
-                });
-                game.setGameOngoing(true);
-                new GameServer(players, game).start();
-            }
-        }
+        new GameServer(arr, game).start();
     }
 
     public void start() {
@@ -139,11 +67,7 @@ public class AppWebSocket {
                 if (user != null) {
                     JSONObject message = new JSONObject(ctx.message());
                     String command = message.getString("command");
-                    if (command.equals("INVITE")) {
-                        handleInvite(message, ctx);
-                    } else if (command.equals("ACCEPT")) {
-                        handleAccept(message, ctx);
-                    }
+
                 }
             });
 

@@ -3,11 +3,11 @@ package com.server.GameServers;
 import io.javalin.websocket.WsContext;
 
 public class PlayerConnection {
-    private String playerId;
+    private String username;
     private WsContext wsContext;
 
-    public PlayerConnection(String playerId, WsContext wsContext) {
-        this.playerId = playerId;
+    public PlayerConnection(String username, WsContext wsContext) {
+        this.username = username;
         this.wsContext = wsContext;
     }
 

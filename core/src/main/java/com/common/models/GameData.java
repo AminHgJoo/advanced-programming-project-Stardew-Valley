@@ -80,6 +80,37 @@ public class GameData {
         }
     }
 
+    public GameData(ArrayList<Player> players){
+        this.hasTurnCycleFinished = false;
+        this.players = players;
+        this.map = Map.makeMap();
+        this.isGameOngoing = true;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.date = LocalDateTime.parse("2025-01-01 09:00:00", dateTimeFormatter);
+        this.weatherToday = Weather.SUNNY;
+        this.weatherTomorrow = Weather.SUNNY;
+        this.season = Season.SPRING;
+        this.isGameOngoing = false;
+        for (Player player : players) {
+            for (Player otherPlayer : players) {
+                if (!otherPlayer.getUser().equals(player.getUser())) {
+                    Friendship friendship = new Friendship(otherPlayer.getUser().getUsername());
+                    friendship.setLevel(0);
+                    friendship.setXp(0);
+                    player.getFriendships().add(friendship);
+                }
+            }
+        }
+        createNpcs();
+        for (Player player : players) {
+            for (NPC npc : map.getVillage().getNpcs()) {
+                NPCFriendship friendship = new NPCFriendship(player.getUser().getUsername(), npc.getName());
+                player.getNpcs().add(friendship);
+                npc.getFriendships().add(friendship);
+            }
+        }
+    }
+
     public GameData() {
 
     }
