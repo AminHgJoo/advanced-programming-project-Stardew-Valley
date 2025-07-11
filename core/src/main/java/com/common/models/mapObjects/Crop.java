@@ -1,5 +1,6 @@
 package com.common.models.mapObjects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.common.models.App;
 import com.common.models.enums.types.itemTypes.CropSeedsType;
 import com.server.utilities.DateUtility;
@@ -97,6 +98,12 @@ public class Crop extends MapObject {
         builder.append("has been fertilized : ").append(hasBeenDeluxeFertilized).append("\n");
         return builder.toString();
     }
+
+
+    public Texture getTexture() {
+        return texture;
+    }
+
 
     public boolean isHasBeenDeluxeFertilized() {
         return hasBeenDeluxeFertilized;

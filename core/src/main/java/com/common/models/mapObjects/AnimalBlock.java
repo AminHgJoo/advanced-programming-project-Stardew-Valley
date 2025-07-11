@@ -1,5 +1,6 @@
 package com.common.models.mapObjects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.client.utils.AssetManager;
 import com.common.models.Animal;
 import com.common.models.enums.types.mapObjectTypes.AnimalMapObjectType;
@@ -19,6 +20,10 @@ public class AnimalBlock extends MapObject {
         this.animal = animal;
         this.mapObjectType = AnimalMapObjectType.getAnimalMapObjectType(animal.getType());
         this.texture = AssetManager.getTextures().get(mapObjectType.getTextureName());
+    }
+
+    public Texture getTexture(){
+        return texture;
     }
 
 }

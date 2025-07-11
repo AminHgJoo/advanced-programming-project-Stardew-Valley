@@ -1,5 +1,6 @@
 package com.common.models.mapObjects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.client.utils.AssetManager;
 import com.common.models.Slot;
 import com.common.models.enums.types.mapObjectTypes.ArtisanBlockType;
@@ -30,4 +31,10 @@ public class ArtisanBlock extends MapObject {
     public ArtisanBlockType getArtisanType() {
         return artisanType;
     }
+
+
+    public Texture getTexture(){
+        return texture;
+    }
+
 }
