@@ -1,5 +1,6 @@
 package com.common.models.enums.types.itemTypes;
 
+import com.client.utils.AssetManager;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
 import com.common.models.items.Tool;
@@ -34,5 +35,10 @@ public enum ToolTypes implements ItemType {
     @Override
     public Slot createAmountOfItem(int amount, Quality quality) {
         return new Slot(new Tool(quality, 0, 0, this.name, this, this.waterCapacity), 1);
+    }
+    @Override
+    public String getTextureName() {
+        String name = getName();
+        return AssetManager.generateKeyFromFileName(name);
     }
 }

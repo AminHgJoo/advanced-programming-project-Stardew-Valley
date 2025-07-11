@@ -1,5 +1,6 @@
 package com.common.models.enums.types.itemTypes;
 
+import com.client.utils.AssetManager;
 import com.client.utils.StringUtils;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
@@ -167,5 +168,11 @@ public enum CropSeedsType implements ItemType {
         builder.append("Seasons :").append(Arrays.toString(season)).append("\n");
         builder.append("Can be Giant :").append(canBeGiant).append("\n");
         return builder.toString();
+    }
+
+    @Override
+    public String getTextureName() {
+        String name = getName();
+        return AssetManager.generateKeyFromFileName(name);
     }
 }

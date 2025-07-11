@@ -1,5 +1,6 @@
 package com.common.models.enums.types.itemTypes;
 
+import com.client.utils.AssetManager;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
 import com.common.models.enums.worldEnums.Season;
@@ -64,4 +65,10 @@ public enum FishType implements ItemType {
     public Slot createAmountOfItem(int amount, Quality quality) {
         return new Slot(new Fish(Quality.DEFAULT, this), amount);
     }
+    @Override
+    public String getTextureName() {
+        String name = getName();
+        return AssetManager.generateKeyFromFileName(name);
+    }
+
 }

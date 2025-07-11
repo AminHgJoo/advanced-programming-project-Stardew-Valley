@@ -11,4 +11,6 @@ public interface ItemType {
     String getName();
 
     String name();
+
+    String getTextureName();
 }

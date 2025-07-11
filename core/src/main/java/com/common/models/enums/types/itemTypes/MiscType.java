@@ -1,5 +1,6 @@
 package com.common.models.enums.types.itemTypes;
 
+import com.client.utils.AssetManager;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
 import com.common.models.items.Misc;
@@ -81,6 +82,12 @@ public enum MiscType implements ItemType {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getTextureName() {
+        String name = getName();
+        return AssetManager.generateKeyFromFileName(name);
     }
 
     @Override
