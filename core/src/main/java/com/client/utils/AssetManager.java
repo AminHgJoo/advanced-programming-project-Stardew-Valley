@@ -41,7 +41,10 @@ public class AssetManager {
     }
 
     public static String generateKeyFromFileName(String fileName) {
-        String[] parts = fileName.split("_");
+        String[] parts = fileName.split(" ");
+        if (fileName.contains("_"))
+             parts = fileName.split("_");
+
         StringBuilder sb = new StringBuilder(parts[0].toLowerCase());
 
         for (int i = 1; i < parts.length; i++) {

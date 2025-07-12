@@ -32,17 +32,20 @@ public enum FoodTypes implements ItemType {
     MAKI_ROLL("Maki Roll", 100, new FoodBuff("", 0, 0), 100),
     TRIPLE_SHOT_ESPRESSO("Triple Shot Espresso", 200, new FoodBuff("maxEnergy", 100, 5), 450),
     COOKIE("Cookie", 90, new FoodBuff("", 0, 0), 140),
-    HASH_BROWNS("Hash Browns", 90, new FoodBuff("farming", 1, 5), 120),
+    HASH_BROWNS("Hashbrowns", 90, new FoodBuff("farming", 1, 5), 120),
     PANCAKES("Pancakes", 90, new FoodBuff("foraging", 1, 11), 80),
     FRUIT_SALAD("Fruit Salad", 263, new FoodBuff("", 0, 0), 450),
     RED_PLATE("Red Plate", 240, new FoodBuff("maxEnergy", 50, 3), 400),
     BREAD("Bread", 50, new FoodBuff("", 0, 0), 60),
     SALMON_DINNER("Salmon Dinner", 125, new FoodBuff("", 0, 0), 300),
     VEGETABLE_MEDLEY("Vegetable Medley", 165, new FoodBuff("", 0, 0), 120),
+    //TODO farmers lunch image
     FARMERS_LUNCH("Farmer's Lunch", 200, new FoodBuff("farming", 1, 5), 150),
     SURVIVAL_BURGER("Survival Burger", 125, new FoodBuff("foraging", 1, 5), 180),
+    //TODO dish of the sea image
     DISH_OF_THE_SEA("Dish O' The Sea", 150, new FoodBuff("fishing", 1, 5), 220),
     SEAFORM_PUDDING("Seaform Pudding", 175, new FoodBuff("fishing", 1, 10), 300),
+    //TODO miners image
     MINERS_TREAT("Miner's Treat", 125, new FoodBuff("mining", 1, 5), 200),
     BLUE_JAZZ("Blue Jazz", 45, new FoodBuff("", 0, 0), 50),
     CARROT("Carrot", 75, new FoodBuff("", 0, 0), 35),

@@ -11,6 +11,7 @@ import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
 import com.common.models.Backpack;
 import com.common.models.Slot;
+import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.FoodTypes;
 import com.common.models.enums.types.itemTypes.MiscType;
 import com.common.models.items.Food;
@@ -24,22 +25,28 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private final GameMain gameMain;
     private Backpack backpack;
     private Texture backgroundTexture;
-    private final int ITEMS_PER_PAGE = 36;
+    private Texture inventoryTexture;
+    private final int ITEMS_PER_PAGE = 27;
     private int scrollIndex = 0;
-    private final int ITEM_SIZE = 64;
-    private final int PADDING = 10;
-    private final int COLUMNS = 6;
     private MyScreen farmScreen;
+    private int GRID_SIZE = 9;
 
     public InventoryMenu(GameMain gameMain, MyScreen farmScreen) {
         this.gameMain = gameMain;
         this.batch = new SpriteBatch();
-        backgroundTexture = AssetManager.getTextures().get("mainMenuBackground");
+        backgroundTexture = AssetManager.getTextures().get("profileBackground");
+        inventoryTexture = AssetManager.getTextures().get("inventory");
         this.farmScreen = farmScreen;
         //TODO get current player's backpack
         backpack = new Backpack();
-        backpack.addSlot(new Slot(new Misc(MiscType.EGG), 1));
-        backpack.addSlot(new Slot(new Food(FoodTypes.LEEK), 1));
+        int i =0;
+        for(FoodTypes foodType : FoodTypes.values()) {
+            if(i == 43)
+                break;
+            if(!foodType.equals(FoodTypes.FARMERS_LUNCH) && !foodType.equals(FoodTypes.DISH_OF_THE_SEA) && !foodType.equals(FoodTypes.MINERS_TREAT))
+            backpack.addSlot(new Slot(new Food(Quality.DEFAULT,foodType, 10, 10), 1));
+            i++;
+        }
 
     }
 
@@ -52,6 +59,8 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         }
         return false;
     }
+
+
 
     @Override
     public boolean keyUp(int i) {
@@ -91,11 +100,10 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         int totalSlots = backpack.getSlots().size();
-        int maxScroll = Math.max(0, totalSlots - ITEMS_PER_PAGE);
 
-        scrollIndex += (int) amountY * COLUMNS;
-        scrollIndex = Math.max(0, Math.min(scrollIndex, maxScroll));
-
+        int maxRows = Math.max(0, (totalSlots - ITEMS_PER_PAGE + GRID_SIZE - 1) / GRID_SIZE);
+        scrollIndex += (int) amountY;
+        scrollIndex = Math.max(0, Math.min(scrollIndex, maxRows));
         return true;
     }
 
@@ -106,7 +114,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(this);
     }
 
 
@@ -116,31 +124,37 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
+        batch.draw(backgroundTexture, 0, 0,
+            Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(inventoryTexture,
+            Gdx.graphics.getWidth()/2 - inventoryTexture.getWidth()/2,
+            Gdx.graphics.getHeight()/2 - inventoryTexture.getHeight()/2,
+            inventoryTexture.getWidth(), inventoryTexture.getHeight());
 
-        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        int GRID_ITEM_SIZE = 95;
+        int GRID_PADDING = 8;
 
-
-        int startX = (Gdx.graphics.getWidth() - (COLUMNS * (ITEM_SIZE + PADDING))) / 2;
-        int startY = (Gdx.graphics.getHeight() - (COLUMNS * (ITEM_SIZE + PADDING))) / 2;
+        int startX = (Gdx.graphics.getWidth()/2 - inventoryTexture.getWidth()/2)
+            + GRID_PADDING + 45;
+        int startY = Gdx.graphics.getHeight()/2 + inventoryTexture.getHeight()/2
+            + GRID_PADDING - 160;
 
         List<Slot> slots = backpack.getSlots();
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-            int actualIndex = scrollIndex + i;
+            int actualIndex = scrollIndex * GRID_SIZE + i;
             if (actualIndex >= slots.size()) break;
 
-            int col = i % COLUMNS;
-            int row = i / COLUMNS;
+            int col = i % GRID_SIZE;
+            int row = i / GRID_SIZE;
 
-            int x = startX + col * (ITEM_SIZE + PADDING);
-            int y = startY + row * (ITEM_SIZE + PADDING);
+            int x = startX + col * (GRID_ITEM_SIZE + GRID_PADDING);
+            int y = startY - row * (GRID_ITEM_SIZE + GRID_PADDING);
 
             Texture itemTexture = slots.get(actualIndex).getItem().getTexture();
-            batch.draw(itemTexture, x, y, ITEM_SIZE, ITEM_SIZE);
+            batch.draw(itemTexture, x, y, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
         }
-
         batch.end();
     }
-
     @Override
     public void resize(int i, int i1) {
 

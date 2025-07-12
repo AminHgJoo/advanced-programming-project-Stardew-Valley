@@ -24,37 +24,37 @@ public class DroppedItem extends MapObject {
 
     public ItemType getItemType(String name) {
         for (CropSeedsType type : CropSeedsType.values()) {
-            if (type.name().equals(name)) {
+            if (type.getName().equals(name)) {
                 return type;
             }
         }
         for (FishType type : FishType.values()) {
-            if (type.name().equals(name)) {
+            if (type.getName().equals(name)) {
                 return type;
             }
         }
         for (FoodTypes type : FoodTypes.values()) {
-            if (type.name().equals(name)) {
+            if (type.getName().equals(name)) {
                 return type;
             }
         }
         for (ForagingMineralsType type : ForagingMineralsType.values()) {
-            if (type.name().equals(name)) {
+            if (type.getName().equals(name)) {
                 return type;
             }
         }
         for (MiscType type : MiscType.values()) {
-            if (type.name().equals(name)) {
+            if (type.getName().equals(name)) {
                 return type;
             }
         }
         for (ToolTypes type : ToolTypes.values()) {
-            if (type.name().equals(name)) {
+            if (type.getName().equals(name)) {
                 return type;
             }
         }
         for (TreeSeedsType type : TreeSeedsType.values()) {
-            if (type.name().equals(name)) {
+            if (type.getName().equals(name)) {
                 return type;
             }
         }
