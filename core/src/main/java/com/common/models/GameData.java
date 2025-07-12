@@ -1,5 +1,6 @@
 package com.common.models;
 
+import com.client.ClientApp;
 import com.common.models.NPCModels.NPC;
 import com.common.models.NPCModels.NPCFriendship;
 import com.common.models.enums.Quality;
@@ -31,13 +32,14 @@ import java.util.ArrayList;
 @Entity("games")
 public class GameData {
     public ArrayList<Trade> tradingHistory = new ArrayList<>();
-    public boolean hasTurnCycleFinished;
+
     private int capacity = 0;
     @Id
     private String _id;
     private ArrayList<Player> players;
     private Map map;
     private boolean isGameOngoing;
+    @Transient
     private Player currentPlayer;
     private LocalDateTime date;
     private Weather weatherToday;
@@ -47,7 +49,6 @@ public class GameData {
     private ArrayList<Gift> gifts = new ArrayList<>();
 
     public GameData(ArrayList<Player> players, Player currentPlayer) {
-        this.hasTurnCycleFinished = false;
         this.players = players;
         this.map = Map.makeMap();
         this.isGameOngoing = true;
@@ -79,7 +80,6 @@ public class GameData {
     }
 
     public GameData(ArrayList<Player> players){
-        this.hasTurnCycleFinished = false;
         this.players = players;
         this.map = Map.makeMap();
         this.isGameOngoing = true;
@@ -288,9 +288,9 @@ public class GameData {
         }
     }
 
+    //TODO: Change this.
     public void advanceTime() {
         date = date.plusHours(1);
-        hasTurnCycleFinished = false;
 
         if (date.getHour() == 23) {
             //New Day Operations.
@@ -322,7 +322,6 @@ public class GameData {
             } else {
                 player.setEnergy(player.getMaxEnergy());
             }
-            player.setUsedEnergyInTurn(0);
         }
 
         handleRefreshForaging();
@@ -657,7 +656,7 @@ public class GameData {
     }
 
     public Player getCurrentPlayer() {
-        return currentPlayer;
+        return ClientApp.currentPlayer;
     }
 
     public void setCurrentPlayer(Player currentPlayer) {
@@ -688,8 +687,6 @@ public class GameData {
         this.season = season;
     }
 
-
-
     public Weather getWeatherTomorrow() {
         return weatherTomorrow;
     }
@@ -709,18 +706,6 @@ public class GameData {
             }
         }
         return null;
-    }
-
-    /// Cycles to next player in turn, returns true if end was reached.
-    public boolean cycleToNextPlayer() {
-        int index = players.indexOf(currentPlayer);
-        if (index == players.size() - 1) {
-            currentPlayer = players.get(0);
-            return true;
-        } else {
-            currentPlayer = players.get(index + 1);
-            return false;
-        }
     }
 
     public ArrayList<Message> getMessages() {

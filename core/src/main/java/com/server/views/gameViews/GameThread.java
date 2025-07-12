@@ -24,10 +24,7 @@ public class GameThread extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (gameData.hasTurnCycleFinished) {
-                gameData.advanceTime();
-                GameRepository.saveGame(gameData);
-            }
+            //TODO: manage time.
             boolean check = gameData.checkSeasonChange();
 
             if (check) {

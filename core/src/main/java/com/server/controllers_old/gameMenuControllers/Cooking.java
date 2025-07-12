@@ -98,16 +98,11 @@ public class Cooking extends Controller {
             return new Response(false, "Your inventory is full.");
         }
 
-        if (player.getUsedEnergyInTurn() + 3 > 50) {
-            return new Response(false, "You will exceed your max energy usage limit!");
-        }
-
         if (player.getEnergy() - 3 < 0) {
             return new Response(false, "You don't have enough energy to craft an item.");
         }
 
         player.setEnergy(player.getEnergy() - 3);
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + 3);
 
         for (Slot ingredient : targetRecipe.ingredients) {
             Slot backpackSlot = backpack.getSlotByItemName(ingredient.getItem().getName());

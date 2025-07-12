@@ -20,16 +20,17 @@ public class GameMain extends Game {
     @Override
     public void create() {
         //TODO: load/play music.
-        loadEnv();
+//        loadEnv();
         AssetManager.loadAssets();
         //TODO: TESTING CODE FOR MAP :::::
-//        this.setScreen(new FarmMenu(this));
+        this.setScreen(new FarmMenu(this));
+
 //
-        if (ClientApp.loggedInUser != null) {
-            ClientApp.init();
-            this.setScreen(new MainMenu(this));
-        } else
-            this.setScreen(new LauncherMenu(this));
+//        if (ClientApp.loggedInUser != null) {
+//            ClientApp.init();
+//            this.setScreen(new MainMenu(this));
+//        } else
+//            this.setScreen(new LauncherMenu(this));
     }
 
     public void loadEnv() {

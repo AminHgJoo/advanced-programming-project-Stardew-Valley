@@ -13,10 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class GameMenu implements Menu {
 
     private static Response getWalkAddCoordsResponse(String input) {
-        Request request = new Request(input);
-        request.body.put("x", GameMenuCommands.WALK_ADD_COORDS.getGroup(input, "x"));
-        request.body.put("y", GameMenuCommands.WALK_ADD_COORDS.getGroup(input, "y"));
-        return MovementAndMap.handleAddCoords(request);
+        return null;
     }
 
     private static Response getShowCoordsResponse(String input) {
@@ -282,12 +279,7 @@ public class GameMenu implements Menu {
     }
 
     private static Response getWalkResponse(String input) {
-        Response response;
-        Request request = new Request(input);
-        request.body.put("x", GameMenuCommands.WALK.getGroup(input, "x"));
-        request.body.put("y", GameMenuCommands.WALK.getGroup(input, "y"));
-        response = MovementAndMap.handleWalking(request);
-        return response;
+        return null;
     }
 
     private static Response getGreenhouseBuildResponse(String input) {
@@ -380,10 +372,7 @@ public class GameMenu implements Menu {
     }
 
     private static Response getNextTurnResponse(String input) {
-        Response response;
-        Request request = new Request(input);
-        response = LoadingSavingTurnHandling.handleNextTurn(request);
-        return response;
+        return null;
     }
 
     private static Response getExitGameResponse(String input) {
