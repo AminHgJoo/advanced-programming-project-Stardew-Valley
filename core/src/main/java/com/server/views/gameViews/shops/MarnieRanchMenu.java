@@ -5,7 +5,7 @@ import com.common.models.IO.Response;
 import com.common.models.enums.commands.GameMenuCommands;
 import com.server.controllers_old.gameMenuControllers.DealingController;
 import com.server.controllers_old.gameMenuControllers.LivestockController;
-import com.server.controllers_old.gameMenuControllers.MarineRanchController;
+import com.server.controllers_old.gameMenuControllers.MarnieRanchController;
 import com.server.views.Menu;
 import com.server.views.gameViews.GameMenu;
 
@@ -20,7 +20,7 @@ public class MarnieRanchMenu implements Menu {
 
     private static Response leaveRanch(String input) {
         Request request = new Request(input);
-        return MarineRanchController.leaveRanch(request);
+        return MarnieRanchController.leaveRanch(request);
     }
 
     public static Response getShowAllProductsResponse(String input) {

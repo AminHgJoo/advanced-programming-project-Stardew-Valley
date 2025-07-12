@@ -14,7 +14,7 @@ import com.common.models.mapObjects.AnimalBlock;
 import com.server.controllers_old.Controller;
 import com.server.repositories.GameRepository;
 
-public class MarineRanchController extends Controller {
+public class MarnieRanchController extends Controller {
     public static Response leaveRanch(Request request) {
         App.setCurrMenuType(MenuTypes.GameMenu);
         return new Response(true, "leaving Marine Ranch");

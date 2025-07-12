@@ -57,7 +57,7 @@ public class Farm {
 
     private static void addRandomItems(ArrayList<Cell> farmCells) {
         for (Cell cell : farmCells) {
-            int randomNumber = (int) (Math.random() * 5);
+            int randomNumber = (int) (Math.random() * 50);
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 //TODO: Plz kill me.

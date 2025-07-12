@@ -134,74 +134,6 @@ public class MovementAndMap extends Controller {
         return new Response(true, "you are in home");
     }
 
-    public static Response handleAddCoords(Request request) {
-        Request newReq = new Request(request.command);
-        Coordinate c = App.getLoggedInUser().getCurrentGame().getCurrentPlayer().getCoordinate();
-        newReq.body.put("x", String.valueOf(c.getX() + Integer.parseInt(request.body.get("x"))));
-        newReq.body.put("y", String.valueOf(c.getY() + Integer.parseInt(request.body.get("y"))));
-        return MovementAndMap.handleWalking(newReq);
-    }
-
-    public static Response handleWalking(Request request) {
-        int x = Integer.parseInt(request.body.get("x"));
-        int y = Integer.parseInt(request.body.get("y"));
-        GameData gameData = App.getLoggedInUser().getCurrentGame();
-        Player player = gameData.getCurrentPlayer();
-        if (player.isInVillage()) {
-            GameRepository.saveGame(gameData);
-            return new Response(false, "can't walk in village");
-        }
-        Tile src = new Tile(player.getCurrentFarm(gameData).findCellByCoordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
-        if (player.getCurrentFarm(gameData).findCellByCoordinate(x, y) == null) {
-            return new Response(false, "destination is not valid");
-        }
-        Tile dest = new Tile(player.getCurrentFarm(gameData).findCellByCoordinate(x, y).clone());
-        if (dest == null || !dest.getObjectOnCell().isWalkable) {
-            return new Response(false, "destination is not valid");
-        }
-        dest = FindPath.pathBFS(src, dest, player.getCurrentFarm(gameData).getCells());
-        double energy = dest.energy / (double) 20;
-        String message = "Your current energy is: " + player.getEnergy() + "\n" +
-            "The path energy cost is : " + energy + "\n" +
-            "Do you want to move the path? (Y/N): ";
-        System.out.println(message);
-        String answer = AppView.scanner.nextLine();
-        if (answer.compareToIgnoreCase("Y") == 0) {
-            ArrayList<Tile> path = new ArrayList<Tile>();
-            while (dest != null) {
-                if (dest.prev != null) {
-                    dest.energy -= dest.prev.energy;
-                }
-                dest.energy /= 20
-                ;
-                path.add(dest);
-                dest = dest.prev;
-            }
-            List<Tile> arr = path.reversed();
-            for (Tile c : arr) {
-                if (c.energy > player.getEnergy()) {
-                    player.setPlayerFainted(true);
-                    player.setEnergy(player.getEnergy() - c.energy);
-                    LoadingSavingTurnHandling.handleNextTurn(null);
-                    GameRepository.saveGame(gameData);
-                    return new Response(false, "You have fainted");
-                }
-                if (c.energy + player.getUsedEnergyInTurn() > 50) {
-                    GameRepository.saveGame(gameData);
-                    return new Response(false, "You can not use this much energy");
-                }
-                player.setCoordinate(c.getCoordinate());
-                player.setEnergy(player.getEnergy() - c.energy);
-                player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + c.energy);
-            }
-            GameRepository.saveGame(gameData);
-            return new Response(true, "You successfully moved to the destination");
-        } else {
-            player.getCurrentFarm(gameData).initialCells();
-            return new Response(false, "Movement process aborted");
-        }
-    }
-
     public static Response showFarm(Request request) {
         User user = App.getLoggedInUser();
         GameData gameData = user.getCurrentGame();
@@ -259,7 +191,6 @@ public class MovementAndMap extends Controller {
         User user = App.getLoggedInUser();
         GameData gameData = user.getCurrentGame();
         gameData.getCurrentPlayer().setEnergy(Double.POSITIVE_INFINITY);
-        gameData.getCurrentPlayer().setUsedEnergyInTurn(Double.NEGATIVE_INFINITY);
         GameRepository.saveGame(gameData);
         return new Response(true, "energy successfully set to infinity");
     }

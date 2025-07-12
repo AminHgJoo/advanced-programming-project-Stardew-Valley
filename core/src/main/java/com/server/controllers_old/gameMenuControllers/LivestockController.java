@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class LivestockController extends Controller {
     public static Response handleBuyAnimal(Request request) {
-        return MarineRanchController.buyAnimal(request);
+        return MarnieRanchController.buyAnimal(request);
     }
 
     public static Response handlePet(Request request) {

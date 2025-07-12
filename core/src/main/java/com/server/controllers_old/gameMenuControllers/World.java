@@ -337,12 +337,7 @@ public class World extends Controller {
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
         double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
-        double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
-
-        if (energyCost + currentEnergyUsed > 50) {
-            return new Response(false, "You can't perform this activity. You will exceed your energy usage limit.");
-        }
 
         if (playerEnergy - energyCost < 0) {
             return new Response(false, "You don't have enough energy.");
@@ -353,7 +348,6 @@ public class World extends Controller {
         }
 
         player.setEnergy(player.getEnergy() - energyCost);
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
         if (!(targetCell.getObjectOnCell() instanceof EmptyCell)) {
             GameRepository.saveGame(gameData);
@@ -416,13 +410,7 @@ public class World extends Controller {
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
         double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
-        double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
-
-        if (energyCost + currentEnergyUsed > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                "You will exceed your energy usage limit.");
-        }
 
         if (playerEnergy - energyCost < 0) {
             return new Response(false, "You don't have enough energy.");
@@ -433,7 +421,6 @@ public class World extends Controller {
         }
 
         player.setEnergy(player.getEnergy() - energyCost);
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
         //Mine Cells : x : [0, 9] y : [0, 11]
         if (targetCell.getObjectOnCell() instanceof ForagingMineral) {
@@ -573,13 +560,7 @@ public class World extends Controller {
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
         double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
-        double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
-
-        if (energyCost + currentEnergyUsed > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                "You will exceed your energy usage limit.");
-        }
 
         if (playerEnergy - energyCost < 0) {
             return new Response(false, "You don't have enough energy.");
@@ -590,7 +571,6 @@ public class World extends Controller {
         }
 
         player.setEnergy(player.getEnergy() - energyCost);
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
         if (!(targetCell.getObjectOnCell() instanceof Tree tree)) {
             GameRepository.saveGame(gameData);
@@ -712,13 +692,7 @@ public class World extends Controller {
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
         double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
-        double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
-
-        if (energyCost + currentEnergyUsed > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                "You will exceed your energy usage limit.");
-        }
 
         if (playerEnergy - energyCost < 0) {
             return new Response(false, "You don't have enough energy.");
@@ -729,7 +703,6 @@ public class World extends Controller {
         }
 
         player.setEnergy(player.getEnergy() - energyCost);
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
         if (targetCell.getObjectOnCell() instanceof Water) {
             equippedTool.setWaterReserve(wateringCanType.waterCapacity);
@@ -809,13 +782,7 @@ public class World extends Controller {
 
 
         double energyCost = calculateFishingEnergyCost(skillEnergyDiscount, quality);
-        double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
-
-        if (energyCost + currentEnergyUsed > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                "You will exceed your energy usage limit.");
-        }
 
         if (playerEnergy - energyCost < 0) {
             return new Response(false, "You don't have enough energy.");
@@ -826,7 +793,6 @@ public class World extends Controller {
         }
 
         player.setEnergy(player.getEnergy() - energyCost);
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
         if (targetCell.getObjectOnCell() instanceof Water) {
             int randomNumber = (int) (Math.random() * 2);
@@ -948,13 +914,7 @@ public class World extends Controller {
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
         double energyCost = getScytheEnergyCost();
-        double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
-
-        if (energyCost + currentEnergyUsed > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                "You will exceed your energy usage limit.");
-        }
 
         if (playerEnergy - energyCost < 0) {
             return new Response(false, "You don't have enough energy.");
@@ -965,7 +925,6 @@ public class World extends Controller {
         }
 
         player.setEnergy(player.getEnergy() - energyCost);
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + energyCost);
 
         if (targetCell.getObjectOnCell() instanceof ForagingCrop crop) {
 
@@ -1135,13 +1094,7 @@ public class World extends Controller {
         int playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
         double energyCost = 4;
-        double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
-
-        if (energyCost + currentEnergyUsed > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                "You will exceed your energy usage limit.");
-        }
 
         if (playerEnergy - energyCost < 0) {
             return new Response(false, "You don't have enough energy.");
@@ -1184,13 +1137,7 @@ public class World extends Controller {
         int playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
         double energyCost = 4;
-        double currentEnergyUsed = player.getUsedEnergyInTurn();
         double playerEnergy = player.getEnergy();
-
-        if (energyCost + currentEnergyUsed > 50) {
-            return new Response(false, "You can't perform this activity. " +
-                "You will exceed your energy usage limit.");
-        }
 
         if (playerEnergy - energyCost < 0) {
             return new Response(false, "You don't have enough energy.");

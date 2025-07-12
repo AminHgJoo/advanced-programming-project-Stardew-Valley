@@ -55,7 +55,6 @@ public class Player {
     private boolean isPlayerFainted;
     private TrashcanType trashcanType;
     private Item equippedItem;
-    private double usedEnergyInTurn;
     @Transient
     private ArrayList<Message> notifications = new ArrayList<>();
     private int moneyInNextDay = 0;
@@ -69,7 +68,6 @@ public class Player {
         this.user_id = user.get_id();
         this.inventory = new Backpack(BackpackType.DEFAULT);
         this.trashcanType = TrashcanType.DEFAULT;
-        this.usedEnergyInTurn = 0;
         this.energy = 200;
         this.maxEnergy = 200;
         this.money = 0;
@@ -378,14 +376,6 @@ public class Player {
 
     public void setEquippedItem(Item equippedItem) {
         this.equippedItem = equippedItem;
-    }
-
-    public double getUsedEnergyInTurn() {
-        return usedEnergyInTurn;
-    }
-
-    public void setUsedEnergyInTurn(double usedEnergyInTurn) {
-        this.usedEnergyInTurn = usedEnergyInTurn;
     }
 
     public double getMaxEnergy() {

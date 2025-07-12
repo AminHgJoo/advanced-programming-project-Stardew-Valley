@@ -194,16 +194,11 @@ public class InventoryFunctionalities extends Controller {
             return new Response(false, "Your backpack is full, you cannot craft any items!");
         }
 
-        if (player.getUsedEnergyInTurn() + 2 > 50) {
-            return new Response(false, "You will exceed your max energy usage limit!");
-        }
-
         if (player.getEnergy() - 2 < 0) {
             return new Response(false, "You don't have enough energy to craft an item.");
         }
 
         player.setEnergy(player.getEnergy() - 2);
-        player.setUsedEnergyInTurn(player.getUsedEnergyInTurn() + 2);
 
         //checks the player's inventory to see if it has enough materials.
         for (Slot ingredient : targetRecipe.ingredients) {

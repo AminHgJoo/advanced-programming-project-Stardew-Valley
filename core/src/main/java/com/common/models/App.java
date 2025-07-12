@@ -50,6 +50,8 @@ public class App {
         return ClientApp.loggedInUser;
     }
 
+    /**
+     * @deprecated */
     public static void setLoggedInUser(User loggedInUser) {
         App.loggedInUser = loggedInUser;
     }
