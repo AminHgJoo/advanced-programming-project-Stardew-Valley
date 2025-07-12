@@ -1,6 +1,7 @@
 package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -64,6 +65,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
             playerVelocity.x = -BASE_SPEED_FACTOR;
         } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
             playerVelocity.x = BASE_SPEED_FACTOR;
+        }
+        else if (keycode == Input.Keys.ESCAPE){
+            gameMain.setScreen(new InventoryMenu(gameMain, this));
         }
         return false;
     }

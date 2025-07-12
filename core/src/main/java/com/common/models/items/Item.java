@@ -1,6 +1,9 @@
 package com.common.models.items;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.client.utils.AssetManager;
 import com.common.models.enums.Quality;
+import com.common.models.enums.types.itemTypes.*;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
@@ -10,6 +13,7 @@ abstract public class Item {
     protected int value;
     protected double energyCost;
     protected String name;
+    protected Texture texture;
 
     public Item() {
     }
@@ -20,7 +24,50 @@ abstract public class Item {
         this.value = value;
         this.energyCost = energyCost;
         this.name = name;
+        ItemType itemType = getItemType(name);
+        this.texture = AssetManager.getTextures().get(itemType.getTextureName());
     }
+
+
+    public ItemType getItemType(String name) {
+        for (CropSeedsType type : CropSeedsType.values()) {
+            if (type.name().equals(name)) {
+                return type;
+            }
+        }
+        for (FishType type : FishType.values()) {
+            if (type.name().equals(name)) {
+                return type;
+            }
+        }
+        for (FoodTypes type : FoodTypes.values()) {
+            if (type.name().equals(name)) {
+                return type;
+            }
+        }
+        for (ForagingMineralsType type : ForagingMineralsType.values()) {
+            if (type.name().equals(name)) {
+                return type;
+            }
+        }
+        for (MiscType type : MiscType.values()) {
+            if (type.name().equals(name)) {
+                return type;
+            }
+        }
+        for (ToolTypes type : ToolTypes.values()) {
+            if (type.name().equals(name)) {
+                return type;
+            }
+        }
+        for (TreeSeedsType type : TreeSeedsType.values()) {
+            if (type.name().equals(name)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
 
     abstract public void useItem();
 
@@ -46,6 +93,10 @@ abstract public class Item {
 
     public int getMaxStackSize() {
         return maxStackSize;
+    }
+
+    public Texture getTexture() {
+        return texture;
     }
 
 }
