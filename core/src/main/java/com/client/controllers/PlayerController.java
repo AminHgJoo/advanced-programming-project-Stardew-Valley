@@ -58,7 +58,6 @@ public class PlayerController {
     }
 
     public void handleKeyUp(float x, float y) {
-        setState(PlayerState.WALKING);
         playerVelocity.x = x;
         playerVelocity.y = y;
         if (x != 0) {

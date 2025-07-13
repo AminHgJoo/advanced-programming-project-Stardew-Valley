@@ -62,36 +62,56 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (Keybinds.DOWN.keycodes.contains(keycode)) {
-            playerController.handleKeyUp(0, -BASE_SPEED_FACTOR);
-        } else if (Keybinds.UP.keycodes.contains(keycode)) {
-            playerController.handleKeyUp(0, BASE_SPEED_FACTOR);
-        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
-            playerController.handleKeyUp(-BASE_SPEED_FACTOR, 0);
-        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
-            playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
-        } else if (keycode == Input.Keys.ESCAPE) {
-            gameMain.setScreen(new InventoryMenu(gameMain, this));
-        }
+//        if (Keybinds.DOWN.keycodes.contains(keycode)) {
+//            playerController.handleKeyUp(0, -BASE_SPEED_FACTOR);
+//        } else if (Keybinds.UP.keycodes.contains(keycode)) {
+//            playerController.handleKeyUp(0, BASE_SPEED_FACTOR);
+//        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
+//            playerController.handleKeyUp(-BASE_SPEED_FACTOR, 0);
+//        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
+//            playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
+//        } else if (keycode == Input.Keys.ESCAPE) {
+//            gameMain.setScreen(new InventoryMenu(gameMain, this));
+//        }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        if (Keybinds.DOWN.keycodes.contains(keycode)) {
-            playerVelocity.y = 0;
-            playerController.setState(PlayerState.IDLE);
-        } else if (Keybinds.UP.keycodes.contains(keycode)) {
-            playerVelocity.y = 0;
-            playerController.setState(PlayerState.IDLE);
-        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
-            playerVelocity.x = 0;
-            playerController.setState(PlayerState.IDLE);
-        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
-            playerVelocity.x = 0;
-            playerController.setState(PlayerState.IDLE);
-        }
+//        if (Keybinds.DOWN.keycodes.contains(keycode)) {
+//            playerVelocity.y = 0;
+//            playerController.setState(PlayerState.IDLE);
+//        } else if (Keybinds.UP.keycodes.contains(keycode)) {
+//            playerVelocity.y = 0;
+//            playerController.setState(PlayerState.IDLE);
+//        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
+//            playerVelocity.x = 0;
+//            playerController.setState(PlayerState.IDLE);
+//        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
+//            playerVelocity.x = 0;
+//            playerController.setState(PlayerState.IDLE);
+//        }
         return false;
+    }
+
+    public void handleEvents() {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            playerController.setState(PlayerState.WALKING);
+            playerController.handleKeyUp(0, BASE_SPEED_FACTOR);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            playerController.setState(PlayerState.WALKING);
+            playerController.handleKeyUp(0, -BASE_SPEED_FACTOR);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            playerController.setState(PlayerState.WALKING);
+            playerController.handleKeyUp(-BASE_SPEED_FACTOR, 0);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            playerController.setState(PlayerState.WALKING);
+            playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
+        } else {
+            playerController.setState(PlayerState.IDLE);
+            playerVelocity.x = 0;
+            playerVelocity.y = 0;
+        }
     }
 
     @Override
@@ -146,7 +166,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         updatePlayerPos(delta);
         playerController.update(delta);
 //        playerController.handlePlayerMove();
-
+        handleEvents();
         showFarm();
     }
 
