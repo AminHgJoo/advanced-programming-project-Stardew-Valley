@@ -17,10 +17,6 @@ import com.client.GameMain;
 import com.client.controllers.PlayerController;
 import com.client.utils.*;
 import com.common.models.enums.worldEnums.Weather;
-import com.client.utils.AssetManager;
-import com.client.utils.Keybinds;
-import com.client.utils.MyScreen;
-import com.client.utils.PlayerState;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
@@ -267,10 +263,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         updateTime(delta);
         updatePlayerPos(delta);
         playerController.update(delta);
-//        playerController.handlePlayerMove();
         handleEvents();
-        showFarm();
-        playerController.handlePlayerMove();
 
         renderMap(dayNightShader, nightFactor);
 
@@ -368,7 +361,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         modifiedDraw(batch, house, 61, 8);
         modifiedDraw(batch, greenhouseDestroyed, 22, 6);
 
-//        batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getWidth() / 2, playerPosition.y - (float) playerTexture.getHeight() / 2);
         playerController.render(batch);
         batch.end();
     }
