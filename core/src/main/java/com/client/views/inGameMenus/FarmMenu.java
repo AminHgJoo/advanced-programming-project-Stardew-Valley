@@ -1,6 +1,7 @@
 package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
@@ -40,6 +42,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private final StretchViewport viewport;
     private Farm farm;
     private Texture grassTexture;
+    private boolean isToolSwinging = false;
 
     //TODO: TEST AND PROTOTYPE
     private final Texture playerTexture = new Texture("images/T_BatgunProjectile.png");
@@ -157,10 +160,22 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Gdx.input.isKeyPressed(Keybinds.OPEN_INVENTORY.keycodes.get(0))
             || Gdx.input.isKeyPressed(Keybinds.OPEN_INVENTORY.keycodes.get(1))) {
             gameMain.setScreen(new InventoryMenu(gameMain, this));
+        } else if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+            playerController.setState(PlayerState.TOOL_SWINGING);
+            isToolSwinging = true;
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    isToolSwinging = false;
+                    this.cancel();
+                }
+            }, .6f, 2);
         } else {
-            playerController.setState(PlayerState.IDLE);
-            playerVelocity.x = 0;
-            playerVelocity.y = 0;
+            if (!isToolSwinging) {
+                playerController.setState(PlayerState.IDLE);
+                playerVelocity.x = 0;
+                playerVelocity.y = 0;
+            }
         }
     }
 
