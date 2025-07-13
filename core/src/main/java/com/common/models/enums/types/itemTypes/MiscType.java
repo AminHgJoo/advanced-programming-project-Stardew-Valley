@@ -6,8 +6,6 @@ import com.common.models.enums.Quality;
 import com.common.models.items.Misc;
 
 public enum MiscType implements ItemType {
-
-    //TODO image: HAY, deluxe retaining soil
     WOOD("Wood", 2, false, false),
     FIBER("Fiber", 1, false, false),
     GRASS_STARTER("Grass Starter", 50, false, false),
@@ -89,10 +87,6 @@ public enum MiscType implements ItemType {
     @Override
     public String getTextureName() {
         String name = getName();
-        if(name.equals("Grass Starter"))
-            return "grass";
-        if(name.equals("Speed Gro"))
-            return "deluxespeedgro";
         return AssetManager.generateKeyFromFileName(name);
     }
 

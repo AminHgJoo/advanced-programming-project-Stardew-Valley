@@ -7,7 +7,6 @@ import com.common.models.items.Food;
 import com.common.models.items.buffs.FoodBuff;
 
 public enum FoodTypes implements ItemType {
-    //TODO images : dish of the sea , MINERS_TREAT, joja cola,
     APRICOT("Apricot", 38, new FoodBuff("", 0, 0), 59),
     CHERRY("Cherry", 38, new FoodBuff("", 0, 0), 80),
     BANANA("Banana", 75, new FoodBuff("", 0, 0), 150),
@@ -186,16 +185,6 @@ public enum FoodTypes implements ItemType {
     @Override
     public String getTextureName() {
         String name = getName();
-        if(name.equals("Juice"))
-            return "brownjuice";
-        if(name.equals("Dried Mushrooms"))
-            return "driedcommonmushrooms";
-        if(name.equals("Dried Fruit"))
-            return "bluedriedfruit";
-        if(name.equals("Pickles"))
-            return "brownpickles";
-        if(name.equals("Jelly"))
-            return "bluejelly";
         return AssetManager.generateKeyFromFileName(name);
     }
 }
