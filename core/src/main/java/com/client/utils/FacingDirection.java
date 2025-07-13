@@ -2,9 +2,9 @@ package com.client.utils;
 
 public enum FacingDirection {
     DOWN(0),
-    LEFT(1),
-    RIGHT(2),
-    UP(3);
+    RIGHT(1),
+    UP(2),
+    LEFT(3);
 
     private final int animationRow;
 

@@ -17,6 +17,10 @@ import com.client.GameMain;
 import com.client.controllers.PlayerController;
 import com.client.utils.*;
 import com.common.models.enums.worldEnums.Weather;
+import com.client.utils.AssetManager;
+import com.client.utils.Keybinds;
+import com.client.utils.MyScreen;
+import com.client.utils.PlayerState;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
@@ -28,7 +32,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     //TODO: Draw destroyed/renovated greenhouse based on it being fixed or not.
     public static final float SCREEN_WIDTH = 450 * 1.5f;
     public static final float SCREEN_HEIGHT = 300 * 1.5f;
-    public static final float BASE_SPEED_FACTOR = 20;
+    public static final float BASE_SPEED_FACTOR = 16;
     public static final float TILE_PIX_SIZE = 32;
     public static final float FARM_X_SPAN = 75; //32 * 75 == 2400
     public static final float FARM_Y_SPAN = 50; //32 * 50 == 1600
@@ -109,17 +113,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (Keybinds.DOWN.keycodes.contains(keycode)) {
-            playerVelocity.y = -BASE_SPEED_FACTOR;
-        } else if (Keybinds.UP.keycodes.contains(keycode)) {
-            playerVelocity.y = BASE_SPEED_FACTOR;
-        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
-            playerVelocity.x = -BASE_SPEED_FACTOR;
-        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
-            playerVelocity.x = BASE_SPEED_FACTOR;
-        } else if (Keybinds.OPEN_INVENTORY.keycodes.contains(keycode)) {
-            gameMain.setScreen(new InventoryMenu(gameMain, this));
-        }
+//        if (Keybinds.DOWN.keycodes.contains(keycode)) {
+//            playerController.handleKeyUp(0, -BASE_SPEED_FACTOR);
+//        } else if (Keybinds.UP.keycodes.contains(keycode)) {
+//            playerController.handleKeyUp(0, BASE_SPEED_FACTOR);
+//        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
+//            playerController.handleKeyUp(-BASE_SPEED_FACTOR, 0);
+//        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
+//            playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
+//        } else if (keycode == Input.Keys.ESCAPE) {
+//            gameMain.setScreen(new InventoryMenu(gameMain, this));
+//        }
         return false;
     }
 
@@ -127,14 +131,41 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public boolean keyUp(int keycode) {
 //        if (Keybinds.DOWN.keycodes.contains(keycode)) {
 //            playerVelocity.y = 0;
+//            playerController.setState(PlayerState.IDLE);
 //        } else if (Keybinds.UP.keycodes.contains(keycode)) {
 //            playerVelocity.y = 0;
+//            playerController.setState(PlayerState.IDLE);
 //        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
 //            playerVelocity.x = 0;
+//            playerController.setState(PlayerState.IDLE);
 //        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
 //            playerVelocity.x = 0;
+//            playerController.setState(PlayerState.IDLE);
 //        }
         return false;
+    }
+
+    public void handleEvents() {
+        if (Gdx.input.isKeyPressed(Keybinds.UP.keycodes.get(0))) {
+            playerController.setState(PlayerState.WALKING);
+            playerController.handleKeyUp(0, BASE_SPEED_FACTOR);
+        } else if (Gdx.input.isKeyPressed(Keybinds.DOWN.keycodes.get(0))) {
+            playerController.setState(PlayerState.WALKING);
+            playerController.handleKeyUp(0, -BASE_SPEED_FACTOR);
+        } else if (Gdx.input.isKeyPressed(Keybinds.LEFT.keycodes.get(0))) {
+            playerController.setState(PlayerState.WALKING);
+            playerController.handleKeyUp(-BASE_SPEED_FACTOR, 0);
+        } else if (Gdx.input.isKeyPressed(Keybinds.RIGHT.keycodes.get(0))) {
+            playerController.setState(PlayerState.WALKING);
+            playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
+        } else if (Gdx.input.isKeyPressed(Keybinds.OPEN_INVENTORY.keycodes.get(0))
+            || Gdx.input.isKeyPressed(Keybinds.OPEN_INVENTORY.keycodes.get(1))) {
+            gameMain.setScreen(new InventoryMenu(gameMain, this));
+        } else {
+            playerController.setState(PlayerState.IDLE);
+            playerVelocity.x = 0;
+            playerVelocity.y = 0;
+        }
     }
 
     @Override
@@ -236,6 +267,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         updateTime(delta);
         updatePlayerPos(delta);
         playerController.update(delta);
+//        playerController.handlePlayerMove();
+        handleEvents();
+        showFarm();
         playerController.handlePlayerMove();
 
         renderMap(dayNightShader, nightFactor);
