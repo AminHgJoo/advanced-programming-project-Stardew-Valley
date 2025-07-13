@@ -6,7 +6,6 @@ import com.common.models.enums.Quality;
 import com.common.models.items.Tool;
 
 public enum ToolTypes implements ItemType {
-    //TODO fishing rod image
     HOE(0, "Hoe"),
     PICKAXE(0, "Pickaxe"),
     AXE(0, "Axe"),
@@ -48,7 +47,7 @@ public enum ToolTypes implements ItemType {
             return "goldwateringcan";
         if(name.equals("Watering Can Iridium"))
             return "iridiumwateringcan";
-        if(name.equals("shear"))
+        if(name.equals("Shear"))
             return "shears";
         return AssetManager.generateKeyFromFileName(name);
     }

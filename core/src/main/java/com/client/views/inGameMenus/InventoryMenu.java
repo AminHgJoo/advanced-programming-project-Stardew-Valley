@@ -12,8 +12,14 @@ import com.client.utils.MyScreen;
 import com.common.models.Backpack;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
-import com.common.models.enums.types.itemTypes.FoodTypes;
-import com.common.models.items.Food;
+import com.common.models.enums.types.itemTypes.ForagingMineralsType;
+import com.common.models.enums.types.itemTypes.MiscType;
+import com.common.models.enums.types.itemTypes.ToolTypes;
+import com.common.models.enums.types.itemTypes.TreeSeedsType;
+import com.common.models.items.ForagingMineralItem;
+import com.common.models.items.Misc;
+import com.common.models.items.Tool;
+import com.common.models.items.TreeSeed;
 
 import java.util.List;
 
@@ -36,17 +42,17 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         this.farmScreen = farmScreen;
         //TODO get current player's backpack
         backpack = new Backpack();
-        for (FoodTypes type : FoodTypes.values()) {
-            backpack.addSlot(new Slot(new Food(Quality.DEFAULT, type, 1, 1), 10));
+        for(TreeSeedsType type : TreeSeedsType.values()) {
+            backpack.addSlot(new Slot(new TreeSeed( type), 10));
         }
     }
 
     @Override
     public boolean keyDown(int i) {
         if (i == Input.Keys.ESCAPE) {
-            dispose();
+            //TODO debug
             gameMain.setScreen(farmScreen);
-
+            this.dispose();
         }
         return false;
     }

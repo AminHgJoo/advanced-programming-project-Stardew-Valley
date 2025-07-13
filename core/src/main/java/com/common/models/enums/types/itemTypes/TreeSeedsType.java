@@ -66,11 +66,13 @@ public enum TreeSeedsType implements ItemType {
         if(name.equals("Acorns"))
             return "acorn";
         if(name.equals("Pine Cones"))
-            return "pinecones";
+            return "pinecone";
         if(name.equals("Mahogany Seeds"))
             return "mahoganyseed";
         if(name.equals("Mushroom Tree Seeds"))
             return "mushroomtreeseed";
+        if(name.equals("Maple Seeds"))
+            return "mapleseed";
         return AssetManager.generateKeyFromFileName(name);
     }
 }
