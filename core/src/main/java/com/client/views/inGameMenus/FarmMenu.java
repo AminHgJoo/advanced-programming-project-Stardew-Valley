@@ -61,17 +61,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-//        if (Keybinds.DOWN.keycodes.contains(keycode)) {
-//            playerVelocity.y = -BASE_SPEED_FACTOR;
-//        } else if (Keybinds.UP.keycodes.contains(keycode)) {
-//            playerVelocity.y = BASE_SPEED_FACTOR;
-//        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
-//            playerVelocity.x = -BASE_SPEED_FACTOR;
-//        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
-//            playerVelocity.x = BASE_SPEED_FACTOR;
-//        } else if (keycode == Input.Keys.ESCAPE) {
-//            gameMain.setScreen(new InventoryMenu(gameMain, this));
-//        }
+        if (Keybinds.DOWN.keycodes.contains(keycode)) {
+            playerVelocity.y = -BASE_SPEED_FACTOR;
+        } else if (Keybinds.UP.keycodes.contains(keycode)) {
+            playerVelocity.y = BASE_SPEED_FACTOR;
+        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
+            playerVelocity.x = -BASE_SPEED_FACTOR;
+        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
+            playerVelocity.x = BASE_SPEED_FACTOR;
+        } else if (keycode == Input.Keys.ESCAPE) {
+            gameMain.setScreen(new InventoryMenu(gameMain, this));
+        }
         return false;
     }
 

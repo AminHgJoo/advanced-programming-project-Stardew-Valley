@@ -7,6 +7,7 @@ import com.common.models.enums.worldEnums.Season;
 import com.common.models.items.TreeSeed;
 
 public enum TreeSeedsType implements ItemType {
+    //TODO maple seeds,
     ACORNS(Season.values(), "Acorns", 0),
     MAPLE_SEEDS(Season.values(), "Maple Seeds", 0),
     PINE_CONES(Season.values(), "Pine Cones", 0),
@@ -62,6 +63,14 @@ public enum TreeSeedsType implements ItemType {
     @Override
     public String getTextureName() {
         String name = getName();
+        if(name.equals("Acorns"))
+            return "acorn";
+        if(name.equals("Pine Cones"))
+            return "pinecones";
+        if(name.equals("Mahogany Seeds"))
+            return "mahoganyseed";
+        if(name.equals("Mushroom Tree Seeds"))
+            return "mushroomtreeseed";
         return AssetManager.generateKeyFromFileName(name);
     }
 }

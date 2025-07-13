@@ -1,5 +1,6 @@
 package com.common.models.enums.types.storeProductTypes;
 
+import com.client.utils.AssetManager;
 import com.common.models.enums.types.itemTypes.FoodTypes;
 import com.common.models.enums.types.itemTypes.ItemType;
 import com.common.models.enums.types.itemTypes.ToolTypes;
@@ -62,5 +63,10 @@ public enum FishProducts implements StoreProductInterface {
 
     public Integer getFishingSkill() {
         return fishingSkill;
+    }
+
+    public String getTextureName() {
+        String name = getName();
+        return AssetManager.generateKeyFromFileName(name);
     }
 }

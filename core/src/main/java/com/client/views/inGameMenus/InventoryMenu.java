@@ -13,10 +13,7 @@ import com.common.models.Backpack;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.FoodTypes;
-import com.common.models.enums.types.itemTypes.MiscType;
 import com.common.models.items.Food;
-import com.common.models.items.Misc;
-import org.apache.tools.ant.taskdefs.Sync;
 
 import java.util.List;
 
@@ -39,25 +36,20 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         this.farmScreen = farmScreen;
         //TODO get current player's backpack
         backpack = new Backpack();
-        int i =0;
-        for(FoodTypes foodType : FoodTypes.values()) {
-            if(!foodType.equals(FoodTypes.FARMERS_LUNCH) && !foodType.equals(FoodTypes.DISH_OF_THE_SEA) && !foodType.equals(FoodTypes.MINERS_TREAT))
-            backpack.addSlot(new Slot(new Food(Quality.DEFAULT,foodType, 10, 10), 1));
-
+        for (FoodTypes type : FoodTypes.values()) {
+            backpack.addSlot(new Slot(new Food(Quality.DEFAULT, type, 1, 1), 10));
         }
-
     }
 
     @Override
     public boolean keyDown(int i) {
-        if (i == Input.Keys.ESCAPE){
+        if (i == Input.Keys.ESCAPE) {
             dispose();
             gameMain.setScreen(farmScreen);
 
         }
         return false;
     }
-
 
 
     @Override
@@ -125,16 +117,16 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         batch.draw(backgroundTexture, 0, 0,
             Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(inventoryTexture,
-            Gdx.graphics.getWidth()/2 - inventoryTexture.getWidth()/2,
-            Gdx.graphics.getHeight()/2 - inventoryTexture.getHeight()/2,
+            Gdx.graphics.getWidth() / 2 - inventoryTexture.getWidth() / 2,
+            Gdx.graphics.getHeight() / 2 - inventoryTexture.getHeight() / 2,
             inventoryTexture.getWidth(), inventoryTexture.getHeight());
 
         int GRID_ITEM_SIZE = 95;
         int GRID_PADDING = 8;
 
-        int startX = (Gdx.graphics.getWidth()/2 - inventoryTexture.getWidth()/2)
+        int startX = (Gdx.graphics.getWidth() / 2 - inventoryTexture.getWidth() / 2)
             + GRID_PADDING + 45;
-        int startY = Gdx.graphics.getHeight()/2 + inventoryTexture.getHeight()/2
+        int startY = Gdx.graphics.getHeight() / 2 + inventoryTexture.getHeight() / 2
             + GRID_PADDING - 160;
 
         List<Slot> slots = backpack.getSlots();
@@ -149,13 +141,11 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             int y = startY - row * (GRID_ITEM_SIZE + GRID_PADDING);
 
             Texture itemTexture = slots.get(actualIndex).getItem().getTexture();
-            if(itemTexture == null){
-                System.out.println("itemTexture is null");
-            }
             batch.draw(itemTexture, x, y, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
         }
         batch.end();
     }
+
     @Override
     public void resize(int i, int i1) {
 

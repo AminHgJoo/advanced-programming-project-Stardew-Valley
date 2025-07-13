@@ -7,6 +7,7 @@ import com.common.models.items.Food;
 import com.common.models.items.buffs.FoodBuff;
 
 public enum FoodTypes implements ItemType {
+    //TODO images : dish of the sea , MINERS_TREAT, joja cola,
     APRICOT("Apricot", 38, new FoodBuff("", 0, 0), 59),
     CHERRY("Cherry", 38, new FoodBuff("", 0, 0), 80),
     BANANA("Banana", 75, new FoodBuff("", 0, 0), 150),
@@ -39,13 +40,10 @@ public enum FoodTypes implements ItemType {
     BREAD("Bread", 50, new FoodBuff("", 0, 0), 60),
     SALMON_DINNER("Salmon Dinner", 125, new FoodBuff("", 0, 0), 300),
     VEGETABLE_MEDLEY("Vegetable Medley", 165, new FoodBuff("", 0, 0), 120),
-    //TODO farmers lunch image
     FARMERS_LUNCH("Farmer's Lunch", 200, new FoodBuff("farming", 1, 5), 150),
     SURVIVAL_BURGER("Survival Burger", 125, new FoodBuff("foraging", 1, 5), 180),
-    //TODO dish of the sea image
     DISH_OF_THE_SEA("Dish O' The Sea", 150, new FoodBuff("fishing", 1, 5), 220),
     SEAFORM_PUDDING("Seaform Pudding", 175, new FoodBuff("fishing", 1, 10), 300),
-    //TODO miners image
     MINERS_TREAT("Miner's Treat", 125, new FoodBuff("mining", 1, 5), 200),
     BLUE_JAZZ("Blue Jazz", 45, new FoodBuff("", 0, 0), 50),
     CARROT("Carrot", 75, new FoodBuff("", 0, 0), 35),
@@ -188,6 +186,16 @@ public enum FoodTypes implements ItemType {
     @Override
     public String getTextureName() {
         String name = getName();
+        if(name.equals("Juice"))
+            return "brownjuice";
+        if(name.equals("Dried Mushrooms"))
+            return "driedcommonmushrooms";
+        if(name.equals("Dried Fruit"))
+            return "bluedriedfruit";
+        if(name.equals("Pickles"))
+            return "brownpickles";
+        if(name.equals("Jelly"))
+            return "bluejelly";
         return AssetManager.generateKeyFromFileName(name);
     }
 }

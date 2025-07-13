@@ -49,7 +49,6 @@ public class AssetManager {
 
         for (int i = 0; i < parts.length; i++) {
                 sb.append(parts[i].toLowerCase());
-
         }
         return sb.toString();
     }

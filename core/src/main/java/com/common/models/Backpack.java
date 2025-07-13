@@ -1,5 +1,7 @@
 package com.common.models;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.client.utils.AssetManager;
 import com.common.models.enums.types.inventoryEnums.BackpackType;
 import com.common.models.items.Fish;
 import com.common.models.items.Seed;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
 public class Backpack {
     private ArrayList<Slot> slots = new ArrayList<>();
     private BackpackType type;
+    //TODO load
+    private Texture texture;
 
     public Backpack() {
 
@@ -20,6 +24,7 @@ public class Backpack {
 
     public Backpack(BackpackType type) {
         this.type = type;
+        this.texture = AssetManager.getImage("backpack");
     }
 
     public ArrayList<Slot> getSlots() {

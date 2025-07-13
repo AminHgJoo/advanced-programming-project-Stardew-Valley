@@ -1,5 +1,6 @@
 package com.common.models.enums.types.storeProductTypes;
 
+import com.client.utils.AssetManager;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.inventoryEnums.TrashcanType;
 import com.common.models.enums.types.itemTypes.ForagingMineralsType;
@@ -140,5 +141,10 @@ public enum BlackSmithProducts implements StoreProductInterface {
             return Quality.IRIDIUM;
         }
         return null;
+    }
+
+    public String getTextureName() {
+        String name = getName();
+        return AssetManager.generateKeyFromFileName(name);
     }
 }

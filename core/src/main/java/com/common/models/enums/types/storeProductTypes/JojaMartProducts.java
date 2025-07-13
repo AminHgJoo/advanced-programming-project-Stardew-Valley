@@ -1,5 +1,6 @@
 package com.common.models.enums.types.storeProductTypes;
 
+import com.client.utils.AssetManager;
 import com.common.models.enums.types.itemTypes.CropSeedsType;
 import com.common.models.enums.types.itemTypes.FoodTypes;
 import com.common.models.enums.types.itemTypes.ItemType;
@@ -92,5 +93,10 @@ public enum JojaMartProducts implements StoreProductInterface {
 
     public ItemType getItemType() {
         return itemType;
+    }
+
+    public String getTextureName() {
+        String name = getName();
+        return AssetManager.generateKeyFromFileName(name);
     }
 }

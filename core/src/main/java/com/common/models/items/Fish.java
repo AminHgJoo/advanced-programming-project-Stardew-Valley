@@ -1,5 +1,6 @@
 package com.common.models.items;
 
+import com.client.utils.AssetManager;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.FishType;
 import dev.morphia.annotations.Embedded;
@@ -14,6 +15,7 @@ public class Fish extends Item {
     public Fish(Quality quality, FishType fishType) {
         super(quality, Integer.MAX_VALUE, fishType.price, 0, fishType.name);
         this.fishType = fishType;
+        this.texture = AssetManager.getImage(fishType.getTextureName());
     }
 
     @Override

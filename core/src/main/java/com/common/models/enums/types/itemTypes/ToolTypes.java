@@ -6,6 +6,7 @@ import com.common.models.enums.Quality;
 import com.common.models.items.Tool;
 
 public enum ToolTypes implements ItemType {
+    //TODO fishing rod image
     HOE(0, "Hoe"),
     PICKAXE(0, "Pickaxe"),
     AXE(0, "Axe"),
@@ -39,6 +40,16 @@ public enum ToolTypes implements ItemType {
     @Override
     public String getTextureName() {
         String name = getName();
+        if(name.equals("Watering Can Default") || name.equals("Watering Can Copper"))
+            return "copperwateringcan";
+        if(name.equals("Watering Can Iron"))
+            return "steelwateringcan";
+        if(name.equals("Watering Can Gold"))
+            return "goldwateringcan";
+        if(name.equals("Watering Can Iridium"))
+            return "iridiumwateringcan";
+        if(name.equals("shear"))
+            return "shears";
         return AssetManager.generateKeyFromFileName(name);
     }
 }

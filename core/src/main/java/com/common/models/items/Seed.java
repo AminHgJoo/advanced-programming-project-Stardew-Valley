@@ -1,5 +1,6 @@
 package com.common.models.items;
 
+import com.client.utils.AssetManager;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.CropSeedsType;
 import dev.morphia.annotations.Embedded;
@@ -18,6 +19,7 @@ public class Seed extends Item {
         this.maxStackSize = Integer.MAX_VALUE;
         this.value = cropSeedsType.baseSellPrice;
         this.energyCost = 0;
+        this.texture = AssetManager.getImage(cropSeedsType.textureName);
     }
 
     public CropSeedsType getCropType() {

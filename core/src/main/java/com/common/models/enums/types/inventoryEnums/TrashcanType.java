@@ -12,4 +12,17 @@ public enum TrashcanType {
     TrashcanType(int refundPercentage) {
         this.refundPercentage = refundPercentage;
     }
+
+    public String getTextureName() {
+        if (this == TrashcanType.IRIDIUM) {
+            return "trashcaniridium";
+        }
+        if (this == TrashcanType.GOLD) {
+            return "trashcangold";
+        }
+        if (this == TrashcanType.IRON) {
+            return "trashcansteel";
+        }
+        return "trashcancopper";
+    }
 }
