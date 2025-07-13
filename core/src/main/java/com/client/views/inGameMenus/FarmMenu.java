@@ -88,7 +88,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         // Snow
         snowEffect = new ParticleEffect();
         snowEffect.load(
-            Gdx.files.internal("particles/rain.p"),
+            Gdx.files.internal("particles/snow.p"),
             Gdx.files.internal("particles")
         );
         snowEffect.getEmitters().first().setContinuous(true);
@@ -247,19 +247,27 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void handleWeatherFX(float delta) {
-        float halfW = camera.viewportWidth  * 0.5f * camera.zoom;
-        float halfH = camera.viewportHeight * 0.5f * camera.zoom;
-        float left   = camera.position.x - halfW;
-        float top    = camera.position.y + halfH;
+        float x = camera.position.x - SCREEN_WIDTH / 2;
+        float y = camera.position.y + SCREEN_HEIGHT / 2;
 
-        rainEffect.setPosition(left + halfW, top);
-        rainEffect.update(delta);
-        batch.begin();
-        rainEffect.draw(batch);
-        batch.end();
-//        snowEffect.setPosition(left + halfW, top);
-//        snowEffect.update(delta);
-//        snowEffect.draw(batch);
+        if (ClientApp.currentGameData == null) return;
+
+        if (ClientApp.currentGameData.getWeatherToday() == Weather.STORM
+            || ClientApp.currentGameData.getWeatherToday() == Weather.RAIN) {
+            rainEffect.setPosition(x, y);
+            rainEffect.update(delta);
+            batch.begin();
+            rainEffect.draw(batch);
+            batch.end();
+        }
+
+        if (ClientApp.currentGameData.getWeatherToday() == Weather.SNOW) {
+            snowEffect.setPosition(x, y);
+            snowEffect.update(delta);
+            batch.begin();
+            snowEffect.draw(batch);
+            batch.end();
+        }
     }
 
     private void updatePlayerPos(float delta) {
