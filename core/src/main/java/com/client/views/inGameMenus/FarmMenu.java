@@ -95,18 +95,21 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     public void handleEvents() {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyPressed(Keybinds.UP.keycodes.get(0))) {
             playerController.setState(PlayerState.WALKING);
             playerController.handleKeyUp(0, BASE_SPEED_FACTOR);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        } else if (Gdx.input.isKeyPressed(Keybinds.DOWN.keycodes.get(0))) {
             playerController.setState(PlayerState.WALKING);
             playerController.handleKeyUp(0, -BASE_SPEED_FACTOR);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        } else if (Gdx.input.isKeyPressed(Keybinds.LEFT.keycodes.get(0))) {
             playerController.setState(PlayerState.WALKING);
             playerController.handleKeyUp(-BASE_SPEED_FACTOR, 0);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if (Gdx.input.isKeyPressed(Keybinds.RIGHT.keycodes.get(0))) {
             playerController.setState(PlayerState.WALKING);
             playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
+        } else if (Gdx.input.isKeyPressed(Keybinds.OPEN_INVENTORY.keycodes.get(0))
+            || Gdx.input.isKeyPressed(Keybinds.OPEN_INVENTORY.keycodes.get(1))) {
+            gameMain.setScreen(new InventoryMenu(gameMain, this));
         } else {
             playerController.setState(PlayerState.IDLE);
             playerVelocity.x = 0;
