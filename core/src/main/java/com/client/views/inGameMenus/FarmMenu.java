@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.client.GameMain;
+import com.client.controllers.PlayerController;
 import com.client.utils.AssetManager;
 import com.client.utils.Keybinds;
 import com.client.utils.MyScreen;
@@ -42,6 +43,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
 
+    private final PlayerController playerController;
+
     public FarmMenu(GameMain gameMain) {
         this.gameMain = gameMain;
 
@@ -53,36 +56,36 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
 
         this.farm = Farm.makeFarm(1);
+        playerController = new PlayerController(playerPosition, playerVelocity);
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        if (Keybinds.DOWN.keycodes.contains(keycode)) {
-            playerVelocity.y = -BASE_SPEED_FACTOR;
-        } else if (Keybinds.UP.keycodes.contains(keycode)) {
-            playerVelocity.y = BASE_SPEED_FACTOR;
-        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
-            playerVelocity.x = -BASE_SPEED_FACTOR;
-        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
-            playerVelocity.x = BASE_SPEED_FACTOR;
-        }
-        else if (keycode == Input.Keys.ESCAPE){
-            gameMain.setScreen(new InventoryMenu(gameMain, this));
-        }
+//        if (Keybinds.DOWN.keycodes.contains(keycode)) {
+//            playerVelocity.y = -BASE_SPEED_FACTOR;
+//        } else if (Keybinds.UP.keycodes.contains(keycode)) {
+//            playerVelocity.y = BASE_SPEED_FACTOR;
+//        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
+//            playerVelocity.x = -BASE_SPEED_FACTOR;
+//        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
+//            playerVelocity.x = BASE_SPEED_FACTOR;
+//        } else if (keycode == Input.Keys.ESCAPE) {
+//            gameMain.setScreen(new InventoryMenu(gameMain, this));
+//        }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        if (Keybinds.DOWN.keycodes.contains(keycode)) {
-            playerVelocity.y = 0;
-        } else if (Keybinds.UP.keycodes.contains(keycode)) {
-            playerVelocity.y = 0;
-        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
-            playerVelocity.x = 0;
-        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
-            playerVelocity.x = 0;
-        }
+//        if (Keybinds.DOWN.keycodes.contains(keycode)) {
+//            playerVelocity.y = 0;
+//        } else if (Keybinds.UP.keycodes.contains(keycode)) {
+//            playerVelocity.y = 0;
+//        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
+//            playerVelocity.x = 0;
+//        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
+//            playerVelocity.x = 0;
+//        }
         return false;
     }
 
@@ -136,6 +139,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
         clearAndResetScreen();
 
         updatePlayerPos(delta);
+        playerController.update(delta);
+        playerController.handlePlayerMove();
 
         showFarm();
     }
@@ -214,7 +219,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
         modifiedDraw(batch, house, 61, 8);
         modifiedDraw(batch, greenhouseDestroyed, 22, 6);
 
-        batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getWidth() / 2, playerPosition.y - (float) playerTexture.getHeight() / 2);
+//        batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getWidth() / 2, playerPosition.y - (float) playerTexture.getHeight() / 2);
+        playerController.render(batch);
         batch.end();
     }
 
