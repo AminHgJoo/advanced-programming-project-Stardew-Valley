@@ -1,5 +1,6 @@
 package com.client.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,24 +12,24 @@ public class PlayerAnimationController {
     private ArrayMap<PlayerState, Animation<TextureRegion>[]> animations;
     private FacingDirection facingDirection;
 
-    public PlayerAnimationController() {
+    public PlayerAnimationController(PlayerState currentState , FacingDirection facingDirection) {
         stateTime = 0;
         animations = new ArrayMap<>();
-        facingDirection = FacingDirection.DOWN;
-        currentState = PlayerState.WALKING;
+        this.facingDirection = facingDirection;
+        this.currentState = currentState;
         initializeAnimations();
     }
 
     private void initializeAnimations() {
-        animations.put(PlayerState.WALKING, loadAnimation(3));
+        animations.put(PlayerState.WALKING, loadAnimation(2));
     }
 
     private Animation<TextureRegion>[] loadAnimation(int frameCount) {
         Animation<TextureRegion>[] res = new Animation[4];
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 4; i++) {
             TextureRegion[] regions = new TextureRegion[frameCount];
             for (int frame = 0; frame < frameCount; frame++) {
-                TextureRegion region = new TextureRegion(new Texture("images/player/down/0"+(frame + 1)+".png"));
+                TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("images/player/" + i + "-" + (frame + 2) + ".png")));
                 regions[frame] = region;
             }
             Animation<TextureRegion> anim = new Animation<TextureRegion>(.2f, regions);
@@ -37,7 +38,7 @@ public class PlayerAnimationController {
         return res;
     }
 
-    public void update(float delta, FacingDirection direction , PlayerState state) {
+    public void update(float delta, FacingDirection direction, PlayerState state) {
         stateTime += delta;
         currentState = state;
         facingDirection = direction;
@@ -52,6 +53,10 @@ public class PlayerAnimationController {
     }
 
     public TextureRegion getCurrentFrame() {
+        if (currentState == PlayerState.IDLE) {
+            Texture t = new Texture("images/player/" + facingDirection.getAnimationRow() + "-1.png");
+            return new TextureRegion(t);
+        }
         Animation<TextureRegion> anim = animations.get(currentState)[facingDirection.getAnimationRow()];
         return anim.getKeyFrame(stateTime, true);
     }

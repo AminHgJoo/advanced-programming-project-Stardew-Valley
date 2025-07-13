@@ -15,6 +15,7 @@ import com.client.controllers.PlayerController;
 import com.client.utils.AssetManager;
 import com.client.utils.Keybinds;
 import com.client.utils.MyScreen;
+import com.client.utils.PlayerState;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
@@ -24,7 +25,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     //TODO: Draw destroyed/renovated greenhouse based on it being fixed or not.
     public static final float SCREEN_WIDTH = 450 * 1.5f;
     public static final float SCREEN_HEIGHT = 300 * 1.5f;
-    public static final float BASE_SPEED_FACTOR = 20;
+    public static final float BASE_SPEED_FACTOR = 16;
     public static final float TILE_PIX_SIZE = 32;
     public static final float FARM_X_SPAN = 75; //32 * 75 == 2400
     public static final float FARM_Y_SPAN = 50; //32 * 50 == 1600
@@ -62,13 +63,13 @@ public class FarmMenu implements MyScreen, InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (Keybinds.DOWN.keycodes.contains(keycode)) {
-            playerVelocity.y = -BASE_SPEED_FACTOR;
+            playerController.handleKeyUp(0, -BASE_SPEED_FACTOR);
         } else if (Keybinds.UP.keycodes.contains(keycode)) {
-            playerVelocity.y = BASE_SPEED_FACTOR;
+            playerController.handleKeyUp(0, BASE_SPEED_FACTOR);
         } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
-            playerVelocity.x = -BASE_SPEED_FACTOR;
+            playerController.handleKeyUp(-BASE_SPEED_FACTOR, 0);
         } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
-            playerVelocity.x = BASE_SPEED_FACTOR;
+            playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
         } else if (keycode == Input.Keys.ESCAPE) {
             gameMain.setScreen(new InventoryMenu(gameMain, this));
         }
@@ -77,15 +78,19 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-//        if (Keybinds.DOWN.keycodes.contains(keycode)) {
-//            playerVelocity.y = 0;
-//        } else if (Keybinds.UP.keycodes.contains(keycode)) {
-//            playerVelocity.y = 0;
-//        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
-//            playerVelocity.x = 0;
-//        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
-//            playerVelocity.x = 0;
-//        }
+        if (Keybinds.DOWN.keycodes.contains(keycode)) {
+            playerVelocity.y = 0;
+            playerController.setState(PlayerState.IDLE);
+        } else if (Keybinds.UP.keycodes.contains(keycode)) {
+            playerVelocity.y = 0;
+            playerController.setState(PlayerState.IDLE);
+        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
+            playerVelocity.x = 0;
+            playerController.setState(PlayerState.IDLE);
+        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
+            playerVelocity.x = 0;
+            playerController.setState(PlayerState.IDLE);
+        }
         return false;
     }
 
@@ -140,7 +145,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         updatePlayerPos(delta);
         playerController.update(delta);
-        playerController.handlePlayerMove();
+//        playerController.handlePlayerMove();
 
         showFarm();
     }
