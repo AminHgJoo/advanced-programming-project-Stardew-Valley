@@ -19,7 +19,7 @@ public class DroppedItem extends MapObject {
         this.quantity = quantity;
         this.item = item;
         ItemType itemType = getItemType(item.getName());
-        this.texture = AssetManager.getTextures().get(itemType.getTextureName());
+        this.texture = AssetManager.getImage(itemType.getTextureName());
     }
 
     public ItemType getItemType(String name) {

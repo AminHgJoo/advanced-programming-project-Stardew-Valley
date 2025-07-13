@@ -25,7 +25,7 @@ abstract public class Item {
         this.energyCost = energyCost;
         this.name = name;
         ItemType itemType = getItemType(name);
-        this.texture = AssetManager.getTextures().get(itemType.getTextureName());
+        this.texture = AssetManager.getImage(itemType.getTextureName());
     }
 
 

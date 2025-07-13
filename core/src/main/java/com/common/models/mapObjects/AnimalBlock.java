@@ -19,7 +19,7 @@ public class AnimalBlock extends MapObject {
         super(false, "animal", "purple", null);
         this.animal = animal;
         this.mapObjectType = AnimalMapObjectType.getAnimalMapObjectType(animal.getType());
-        this.texture = AssetManager.getTextures().get(mapObjectType.getTextureName());
+        this.texture = AssetManager.getImage(mapObjectType.getTextureName());
     }
 
     public Texture getTexture(){

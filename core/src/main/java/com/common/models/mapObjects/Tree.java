@@ -32,7 +32,7 @@ public class Tree extends MapObject {
         if (growthDeadLines[0] == null) {
             growthDeadLines[0] = App.getLoggedInUser().getCurrentGame().getDate();
         }
-        this.texture = AssetManager.getTextures().get(treeType.textureNames[stageNumber]);
+        this.texture = AssetManager.getImage(treeType.textureNames[stageNumber]);
 
     }
 

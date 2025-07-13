@@ -45,13 +45,11 @@ public class AssetManager {
         if (fileName.contains("_"))
              parts = fileName.split("_");
 
-        StringBuilder sb = new StringBuilder(parts[0].toLowerCase());
+        StringBuilder sb = new StringBuilder();
 
-        for (int i = 1; i < parts.length; i++) {
-            sb.append(parts[i].substring(0, 1).toUpperCase());
-            if (parts[i].length() > 1) {
-                sb.append(parts[i].substring(1).toLowerCase());
-            }
+        for (int i = 0; i < parts.length; i++) {
+                sb.append(parts[i].toLowerCase());
+
         }
         return sb.toString();
     }
@@ -74,6 +72,10 @@ public class AssetManager {
 
     public static HashMap<String, Texture> getTextures() {
         return textures;
+    }
+
+    public static Texture getImage(String name) {
+        return textures.get(name.toLowerCase());
     }
 
     public static void disposeAssets() {

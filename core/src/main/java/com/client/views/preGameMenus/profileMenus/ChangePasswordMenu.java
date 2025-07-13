@@ -27,7 +27,7 @@ public class ChangePasswordMenu implements MyScreen {
     public ChangePasswordMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
-        this.background = AssetManager.getTextures().get("profileBackground");
+        this.background = AssetManager.getImage("profileBackground");
 
         initializeStage();
     }

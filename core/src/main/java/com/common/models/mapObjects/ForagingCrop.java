@@ -19,7 +19,7 @@ public class ForagingCrop extends MapObject {
         super(true, "foragingCrop", "green", null);
         this.foragingCropsType = type;
         this.canBeHarvested = canBeHarvested;
-        this.texture = AssetManager.getTextures().get(type.getTextureName());
+        this.texture = AssetManager.getImage(type.getTextureName());
     }
 
     public boolean isCanBeHarvested() {

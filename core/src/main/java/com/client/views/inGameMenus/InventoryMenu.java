@@ -34,18 +34,16 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     public InventoryMenu(GameMain gameMain, MyScreen farmScreen) {
         this.gameMain = gameMain;
         this.batch = new SpriteBatch();
-        backgroundTexture = AssetManager.getTextures().get("profileBackground");
-        inventoryTexture = AssetManager.getTextures().get("inventory");
+        backgroundTexture = AssetManager.getImage("profileBackground");
+        inventoryTexture = AssetManager.getImage("inventory");
         this.farmScreen = farmScreen;
         //TODO get current player's backpack
         backpack = new Backpack();
         int i =0;
         for(FoodTypes foodType : FoodTypes.values()) {
-            if(i == 43)
-                break;
             if(!foodType.equals(FoodTypes.FARMERS_LUNCH) && !foodType.equals(FoodTypes.DISH_OF_THE_SEA) && !foodType.equals(FoodTypes.MINERS_TREAT))
             backpack.addSlot(new Slot(new Food(Quality.DEFAULT,foodType, 10, 10), 1));
-            i++;
+
         }
 
     }
@@ -151,6 +149,9 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             int y = startY - row * (GRID_ITEM_SIZE + GRID_PADDING);
 
             Texture itemTexture = slots.get(actualIndex).getItem().getTexture();
+            if(itemTexture == null){
+                System.out.println("itemTexture is null");
+            }
             batch.draw(itemTexture, x, y, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
         }
         batch.end();

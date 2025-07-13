@@ -32,7 +32,7 @@ public class ProfileMenu implements MyScreen {
     public ProfileMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
-        this.background = AssetManager.getTextures().get("profileBackground");
+        this.background = AssetManager.getImage("profileBackground");
         user = ClientApp.loggedInUser;
         nickname = user.getNickname();
         username = user.getUsername();

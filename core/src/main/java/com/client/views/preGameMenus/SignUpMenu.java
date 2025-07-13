@@ -26,7 +26,7 @@ public class SignUpMenu implements MyScreen {
     public SignUpMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
-        this.background = AssetManager.getTextures().get("launcherBackground");
+        this.background = AssetManager.getImage("launcherBackground");
 
         initializeStage();
     }

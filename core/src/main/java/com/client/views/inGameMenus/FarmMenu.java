@@ -168,7 +168,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private void renderGraphics(float delta, SpriteBatch batch, Texture defaultTile) {
         //TODO:
         batch.begin();
-        Texture texture = AssetManager.getTextures().get("grass");
+        Texture texture = AssetManager.getImage("grass");
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < 75; j++) {
                 modifiedDraw(batch, texture, j, i);
@@ -181,7 +181,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     public void showFarm() {
         batch.begin();
-        Texture texture = AssetManager.getTextures().get("grass");
+        Texture texture = AssetManager.getImage("grass");
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < 75; j++) {
                 modifiedDraw(batch, texture, j, i);
@@ -192,12 +192,12 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
             int xOfCell = coordinate.getX();
             int yOfCell = coordinate.getY();
-            Texture texture1 = AssetManager.getTextures().get("grass");
+            Texture texture1 = AssetManager.getImage("grass");
 
             if (!(cell.getObjectOnCell() instanceof BuildingBlock buildingBlock)) {
                 texture1 = cell.getObjectOnCell().texture;
             } else if (buildingBlock.buildingType.equals("Mine")) {
-                texture1 = AssetManager.getTextures().get("mineCell");
+                texture1 = AssetManager.getImage("mineCell");
             }
 
             if (texture1 == texture) {
@@ -208,8 +208,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
         }
 
         //Draw buildings
-        Texture house = AssetManager.getTextures().get("playerHouse");
-        Texture greenhouseDestroyed = AssetManager.getTextures().get("greenhouseDestroyed");
+        Texture house = AssetManager.getImage("playerhouse");
+        Texture greenhouseDestroyed = AssetManager.getImage("greenhousedestroyed");
 
         modifiedDraw(batch, house, 61, 8);
         modifiedDraw(batch, greenhouseDestroyed, 22, 6);

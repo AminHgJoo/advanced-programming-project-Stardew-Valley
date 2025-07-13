@@ -25,7 +25,7 @@ public class LoginMenu implements MyScreen {
     public LoginMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
-        this.background = AssetManager.getTextures().get("launcherBackground");
+        this.background = AssetManager.getImage("launcherBackground");
 
         initializeStage();
     }

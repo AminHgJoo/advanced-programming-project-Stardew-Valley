@@ -21,7 +21,7 @@ public class LauncherMenu implements MyScreen {
     private Stage stage;
 
     public LauncherMenu(GameMain gameMain) {
-        this.background = AssetManager.getTextures().get("launcherBackground");
+        this.background = AssetManager.getImage("launcherBackground");
         this.skin = AssetManager.getSkin();
         this.gameMain = gameMain;
 

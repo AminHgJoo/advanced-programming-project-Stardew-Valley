@@ -25,7 +25,7 @@ public class ArtisanBlock extends MapObject {
         this.artisanType = artisanType;
         this.beingUsed = false;
         this.canBeCollected = false;
-        this.texture = AssetManager.getTextures().get(artisanType.getTextureName());
+        this.texture = AssetManager.getImage(artisanType.getTextureName());
     }
 
     public ArtisanBlockType getArtisanType() {

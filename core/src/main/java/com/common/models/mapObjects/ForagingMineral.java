@@ -15,12 +15,12 @@ public class ForagingMineral extends MapObject {
     }
 
     public ForagingMineral(ForagingMineralsType type, String color, String name) {
-        super(false, "foragingMineral", color, AssetManager.getTextures().get(type.getTextureName()));
+        super(false, "foragingMineral", color, AssetManager.getImage(type.getTextureName()));
         this.fMType = type;
     }
 
     public ForagingMineral(ForagingMineralsType type) {
-        super(false, "foragingMineral", "black", AssetManager.getTextures().get(type.getTextureName()));
+        super(false, "foragingMineral", "black", AssetManager.getImage(type.getTextureName()));
         this.fMType = type;
     }
 

@@ -9,7 +9,7 @@ public class Water extends MapObject {
     private Texture texture;
     //TODO loading texture
     public Water() {
-        super(false, "water", "blue", AssetManager.getTextures().get("water"));
+        super(false, "water", "blue", AssetManager.getImage("water"));
     }
 
     public Texture getTexture() {

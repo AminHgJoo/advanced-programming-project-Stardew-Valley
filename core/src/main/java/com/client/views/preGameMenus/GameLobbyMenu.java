@@ -44,7 +44,7 @@ public class GameLobbyMenu implements MyScreen {
     public GameLobbyMenu(GameMain gameMain, Lobby currLobby) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
-        this.background = AssetManager.getTextures().get("mainMenuBackground");
+        this.background = AssetManager.getImage("mainMenuBackground");
         this.currLobby = currLobby;
         skin2 = AssetManager.getSkin2();
         initializeStage();

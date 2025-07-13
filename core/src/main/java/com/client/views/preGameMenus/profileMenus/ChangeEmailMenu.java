@@ -26,7 +26,7 @@ public class ChangeEmailMenu implements MyScreen {
     public ChangeEmailMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
-        this.background = AssetManager.getTextures().get("profileBackground");
+        this.background = AssetManager.getImage("profileBackground");
 
         initializeStage();
     }
