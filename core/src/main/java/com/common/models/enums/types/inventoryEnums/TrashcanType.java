@@ -1,5 +1,8 @@
 package com.common.models.enums.types.inventoryEnums;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.client.utils.AssetManager;
+
 public enum TrashcanType {
     DEFAULT(0),
     COPPER(15),
@@ -13,16 +16,16 @@ public enum TrashcanType {
         this.refundPercentage = refundPercentage;
     }
 
-    public String getTextureName() {
+    public Texture getTexture() {
         if (this == TrashcanType.IRIDIUM) {
-            return "trashcaniridium";
+            return AssetManager.getImage("trashcaniridium");
         }
         if (this == TrashcanType.GOLD) {
-            return "trashcangold";
+            return AssetManager.getImage("trashcangold");
         }
         if (this == TrashcanType.IRON) {
-            return "trashcansteel";
+            return AssetManager.getImage("trashcansteel");
         }
-        return "trashcancopper";
+        return AssetManager.getImage("trashcancopper");
     }
 }

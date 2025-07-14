@@ -12,6 +12,7 @@ import com.client.utils.MyScreen;
 import com.common.models.Backpack;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
+import com.common.models.enums.types.inventoryEnums.TrashcanType;
 import com.common.models.enums.types.itemTypes.FoodTypes;
 import com.common.models.items.Food;
 
@@ -21,6 +22,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private SpriteBatch batch;
     private final GameMain gameMain;
     private Backpack backpack;
+    private TrashcanType trashcanType;
     private Texture backgroundTexture;
     private Texture inventoryTexture;
     private final int ITEMS_PER_PAGE = 27;
@@ -44,6 +46,8 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         for (FoodTypes type : FoodTypes.values()) {
             backpack.addSlot(new Slot(new Food(Quality.DEFAULT, type, 1, 1), 10));
         }
+        //TODO trashcan logic and load
+        trashcanType = TrashcanType.DEFAULT;
     }
 
     @Override
@@ -88,12 +92,27 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             if (screenX >= x && screenX <= x + GRID_ITEM_SIZE &&
                 screenY >= y && screenY <= y + GRID_ITEM_SIZE) {
 
-                if (selectedIndex >=0 && selectedIndex == actualIndex) {
+                if (selectedIndex >= 0 && selectedIndex == actualIndex) {
                     selectedIndex = -1;
                 } else {
                     selectedIndex = actualIndex;
                 }
                 break;
+            }
+            int trashWidth = trashcanType.getTexture().getWidth();
+            int trashHeight = trashcanType.getTexture().getHeight();
+            int trashX = Gdx.graphics.getWidth() - 50;
+            int trashY = Gdx.graphics.getHeight() / 2;
+
+            if (screenX >= trashX && screenX <= trashX + trashWidth &&
+                screenY >= trashY && screenY <= trashY + trashHeight) {
+                if(selectedSave >=0){
+                    backpack.removeSlot(backpack.getSlots().get(selectedSave));
+                    selectedIndex = -1;
+                    selectedSave = -1;
+                    selected = false;
+                }
+                return true;
             }
         }
 
@@ -154,6 +173,8 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             Gdx.graphics.getHeight() / 2 - inventoryTexture.getHeight() / 2,
             inventoryTexture.getWidth(), inventoryTexture.getHeight());
 
+        Texture trashcanTexture = trashcanType.getTexture();
+        batch.draw(trashcanTexture, Gdx.graphics.getWidth() - 50, Gdx.graphics.getHeight() / 2);
         int GRID_ITEM_SIZE = 95;
         int GRID_PADDING = 8;
 
@@ -162,15 +183,15 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         int startY = Gdx.graphics.getHeight() / 2 + inventoryTexture.getHeight() / 2
             + GRID_PADDING - 160;
 
-        if(selectedIndex >=0 && selected == false){
+        if (selectedIndex >= 0 && selected == false) {
             selected = true;
             selectedSave = selectedIndex;
             selectedIndex = -1;
         }
 
-        for(int i=0; i< ITEMS_PER_PAGE; i++) {
+        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
             int actualIndex = scrollIndex * GRID_SIZE + i;
-            if (selectedIndex >=0 && selected) {
+            if (selectedIndex >= 0 && selected) {
                 Slot temp = backpack.getSlots().get(selectedIndex);
                 backpack.getSlots().set(selectedIndex, backpack.getSlots().get(selectedSave));
                 backpack.getSlots().set(selectedSave, temp);
