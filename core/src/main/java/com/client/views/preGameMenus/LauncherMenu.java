@@ -47,7 +47,7 @@ public class LauncherMenu implements MyScreen {
         loginButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                gameMain.setScreen(new FarmMenu(gameMain));
+                gameMain.setScreen(new LoginMenu(gameMain));
                 dispose();
             }
         });

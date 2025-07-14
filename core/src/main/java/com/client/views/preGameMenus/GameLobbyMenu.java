@@ -16,12 +16,21 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.*;
+import com.client.views.inGameMenus.FarmMenu;
+import com.common.models.GameData;
+import com.common.models.Player;
 import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.TypeAdapter;
 import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.server.utilities.Response;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,6 +44,7 @@ public class GameLobbyMenu implements MyScreen {
     private boolean doesUINeedRefresh = false;
     private Lobby currLobby = null;
     private SimpleWebSocketClient client = ClientApp.client;
+    private boolean GAME_START = false;
 
     //TODO: Add server notifs here!!!
     private final ArrayList<String> messagesFromServer = new ArrayList<>();
@@ -126,8 +136,8 @@ public class GameLobbyMenu implements MyScreen {
                     if (res.getStatus() == 200) {
                         // TODO set a loading
                     } else {
-                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-                        uiPopupHelper.showDialog(res.getMessage(), "Error");
+//                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+//                        uiPopupHelper.showDialog(res.getMessage(), "Error");
                     }
                 }
             });
@@ -431,6 +441,10 @@ public class GameLobbyMenu implements MyScreen {
 
     @Override
     public void render(float delta) {
+        if(GAME_START){
+            this.gameMain.setScreen(new FarmMenu(gameMain));
+            this.dispose();
+        }
         if (doesUINeedRefresh) {
             stage.dispose();
             initializeStage();
@@ -490,7 +504,20 @@ public class GameLobbyMenu implements MyScreen {
 
     @Override
     public void socketMessage(String message) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+                @Override
+                public void write(JsonWriter out, LocalDateTime value) throws IOException {
+                    out.value(value.toString());
+                }
+
+                @Override
+                public LocalDateTime read(JsonReader in) throws IOException {
+                    return LocalDateTime.parse(in.nextString());
+                }
+            })
+            .serializeSpecialFloatingPointValues()
+            .create();
         HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
         String type = res.get("type");
         if (type.equals("RESPONSE")) {
@@ -510,7 +537,20 @@ public class GameLobbyMenu implements MyScreen {
         } else if (type.equals("GAME_START")) {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog(res.get("message"), "Success");
+            String gameJson = res.get("game");
+            GameData game = gson.fromJson(gameJson, GameData.class);
+            System.out.println("Game start");
+            System.out.println(game.toString());
+            ClientApp.currentGameData = game;
+            for (Player p : game.getPlayers()){
+                if(p.getUser_id().equals(ClientApp.loggedInUser.get_id())){
+                    ClientApp.currentPlayer = p;
+                }
+            }
+            GAME_START = true;
             // TODO redirect to the main page of the game
+//            this.gameMain.setScreen(new FarmMenu(gameMain));
+//            this.dispose();
         }
         String lobby = res.get("lobby");
         if (lobby != null) {

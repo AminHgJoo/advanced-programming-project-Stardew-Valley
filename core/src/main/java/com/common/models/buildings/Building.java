@@ -6,7 +6,7 @@ import dev.morphia.annotations.Embedded;
 import java.util.ArrayList;
 
 @Embedded
-public abstract class Building {
+public class Building {
     public ArrayList<Cell> buildingCells;
 
     public Building() {

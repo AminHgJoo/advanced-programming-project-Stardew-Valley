@@ -1,13 +1,22 @@
 package com.server.GameServers;
 
 import com.common.models.GameData;
+import com.common.models.Player;
 import com.common.models.User;
 import com.common.models.networking.Lobby;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.server.repositories.UserRepository;
 import io.javalin.Javalin;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +25,20 @@ public class AppWebSocket {
     private static ConcurrentHashMap<String, PlayerConnection> connectedPlayers = new ConcurrentHashMap<>();
     private static CopyOnWriteArrayList<GameServer> activeGames = new CopyOnWriteArrayList<>();
     private final Javalin app;
+    private final static Gson gson = new GsonBuilder()
+        .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+            @Override
+            public void write(JsonWriter out, LocalDateTime value) throws IOException {
+                out.value(value.toString());
+            }
+
+            @Override
+            public LocalDateTime read(JsonReader in) throws IOException {
+                return LocalDateTime.parse(in.nextString());
+            }
+        })
+        .serializeSpecialFloatingPointValues()
+        .create();
 
     public AppWebSocket(Javalin app) {
         this.app = app;
@@ -29,6 +52,22 @@ public class AppWebSocket {
                     connection.send(message);
                 }
             }
+        }
+    }
+
+    public static void broadcast(GameData game, HashMap<String, String> msg) {
+        for (Player p : game.getPlayers()) {
+            PlayerConnection pc = connectedPlayers.get(p.getUser().getUsername());
+            if (pc != null) {
+                pc.send(gson.toJson(msg));
+            }
+        }
+    }
+
+    public static void narrowcast(String username, HashMap<String, String> msg) {
+        PlayerConnection pc = connectedPlayers.get(username);
+        if (pc != null) {
+            pc.send(gson.toJson(msg));
         }
     }
 
