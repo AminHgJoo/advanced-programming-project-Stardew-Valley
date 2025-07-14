@@ -20,17 +20,17 @@ public class GameMain extends Game {
     @Override
     public void create() {
         //TODO: load/play music.
-//        loadEnv();
+        loadEnv();
         AssetManager.loadAssets();
         //TODO: TESTING CODE FOR MAP :::::
-        this.setScreen(new FarmMenu(this));
+//        this.setScreen(new FarmMenu(this));
 
 //
-//        if (ClientApp.loggedInUser != null) {
-//            ClientApp.init();
-//            this.setScreen(new MainMenu(this));
-//        } else
-//            this.setScreen(new LauncherMenu(this));
+        if (ClientApp.loggedInUser != null) {
+            ClientApp.init();
+            this.setScreen(new MainMenu(this));
+        } else
+            this.setScreen(new LauncherMenu(this));
     }
 
     public void loadEnv() {
@@ -51,7 +51,6 @@ public class GameMain extends Game {
             var getResponse = HTTPUtil.get("http://localhost:8080/api/user/whoAmI");
             if (getResponse != null) {
                 var res = HTTPUtil.deserializeHttpResponse(getResponse);
-                System.out.println(res.getBody().toString());
                 if (res.getStatus() == 200) {
                     LinkedTreeMap map = (LinkedTreeMap) res.getBody();
                     Gson gson = new Gson();

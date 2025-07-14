@@ -5,14 +5,16 @@ import com.client.utils.AssetManager;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.*;
 import dev.morphia.annotations.Embedded;
+import dev.morphia.annotations.Transient;
 
 @Embedded
-abstract public class Item {
+public class Item {
     protected Quality quality;
     protected int maxStackSize;
     protected int value;
     protected double energyCost;
     protected String name;
+    @Transient
     protected Texture texture;
 
     public Item() {
@@ -69,11 +71,20 @@ abstract public class Item {
     }
 
 
-    abstract public void useItem();
+    public void useItem() {
+    }
 
-    abstract public void deleteItem();
+    ;
 
-    abstract public void dropItem();
+    public void deleteItem() {
+    }
+
+    ;
+
+    public void dropItem() {
+    }
+
+    ;
 
     public int getValue() {
         return value;

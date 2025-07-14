@@ -4,7 +4,7 @@ import com.common.models.enums.SkillLevel;
 import dev.morphia.annotations.Embedded;
 
 @Embedded
-abstract public class Skill {
+public class Skill {
     protected SkillLevel level;
     protected int xp;
 
@@ -18,7 +18,7 @@ abstract public class Skill {
         this.xp = xp;
     }
 
-    abstract public void learn();
+    public void learn(){};
 
     public int getXp() {
         return this.xp;

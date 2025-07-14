@@ -5,7 +5,7 @@ import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 
 @Embedded
-abstract public class MapObject {
+public class MapObject {
     public String type;
     public boolean isWalkable;
     public String color;

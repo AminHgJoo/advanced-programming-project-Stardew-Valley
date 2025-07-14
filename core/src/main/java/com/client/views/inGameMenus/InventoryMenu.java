@@ -12,14 +12,9 @@ import com.client.utils.MyScreen;
 import com.common.models.Backpack;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
-import com.common.models.enums.types.itemTypes.ForagingMineralsType;
-import com.common.models.enums.types.itemTypes.MiscType;
-import com.common.models.enums.types.itemTypes.ToolTypes;
-import com.common.models.enums.types.itemTypes.TreeSeedsType;
-import com.common.models.items.ForagingMineralItem;
-import com.common.models.items.Misc;
-import com.common.models.items.Tool;
-import com.common.models.items.TreeSeed;
+import com.common.models.enums.types.inventoryEnums.TrashcanType;
+import com.common.models.enums.types.itemTypes.FoodTypes;
+import com.common.models.items.Food;
 
 import java.util.List;
 
@@ -27,12 +22,18 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private SpriteBatch batch;
     private final GameMain gameMain;
     private Backpack backpack;
+    private TrashcanType trashcanType;
     private Texture backgroundTexture;
     private Texture inventoryTexture;
     private final int ITEMS_PER_PAGE = 27;
     private int scrollIndex = 0;
     private MyScreen farmScreen;
     private int GRID_SIZE = 9;
+    private int GRID_PADDING = 8;
+    private int selectedIndex = -1;
+    private int GRID_ITEM_SIZE = 95;
+    private boolean selected = false;
+    private int selectedSave = -1;
 
     public InventoryMenu(GameMain gameMain, MyScreen farmScreen) {
         this.gameMain = gameMain;
@@ -42,9 +43,11 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         this.farmScreen = farmScreen;
         //TODO get current player's backpack
         backpack = new Backpack();
-        for(TreeSeedsType type : TreeSeedsType.values()) {
-            backpack.addSlot(new Slot(new TreeSeed( type), 10));
+        for (FoodTypes type : FoodTypes.values()) {
+            backpack.addSlot(new Slot(new Food(Quality.DEFAULT, type, 1, 1), 10));
         }
+        //TODO trashcan logic and load
+        trashcanType = TrashcanType.DEFAULT;
     }
 
     @Override
@@ -68,8 +71,52 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     }
 
     @Override
-    public boolean touchDown(int i, int i1, int i2, int i3) {
-        return false;
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        int startX = (Gdx.graphics.getWidth() / 2 - inventoryTexture.getWidth() / 2)
+            + GRID_PADDING + 45;
+        int startY = Gdx.graphics.getHeight() / 2 + inventoryTexture.getHeight() / 2
+            + GRID_PADDING - 160;
+
+
+        screenY = Gdx.graphics.getHeight() - screenY;
+
+        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
+            int actualIndex = scrollIndex * GRID_SIZE + i;
+            if (actualIndex >= backpack.getSlots().size()) break;
+
+            int col = i % GRID_SIZE;
+            int row = i / GRID_SIZE;
+            int x = startX + col * (GRID_ITEM_SIZE + GRID_PADDING);
+            int y = startY - row * (GRID_ITEM_SIZE + GRID_PADDING);
+
+            if (screenX >= x && screenX <= x + GRID_ITEM_SIZE &&
+                screenY >= y && screenY <= y + GRID_ITEM_SIZE) {
+
+                if (selectedIndex >= 0 && selectedIndex == actualIndex) {
+                    selectedIndex = -1;
+                } else {
+                    selectedIndex = actualIndex;
+                }
+                break;
+            }
+            int trashWidth = trashcanType.getTexture().getWidth();
+            int trashHeight = trashcanType.getTexture().getHeight();
+            int trashX = Gdx.graphics.getWidth() - 50;
+            int trashY = Gdx.graphics.getHeight() / 2;
+
+            if (screenX >= trashX && screenX <= trashX + trashWidth &&
+                screenY >= trashY && screenY <= trashY + trashHeight) {
+                if(selectedSave >=0){
+                    backpack.removeSlot(backpack.getSlots().get(selectedSave));
+                    selectedIndex = -1;
+                    selectedSave = -1;
+                    selected = false;
+                }
+                return true;
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -126,6 +173,8 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             Gdx.graphics.getHeight() / 2 - inventoryTexture.getHeight() / 2,
             inventoryTexture.getWidth(), inventoryTexture.getHeight());
 
+        Texture trashcanTexture = trashcanType.getTexture();
+        batch.draw(trashcanTexture, Gdx.graphics.getWidth() - 50, Gdx.graphics.getHeight() / 2);
         int GRID_ITEM_SIZE = 95;
         int GRID_PADDING = 8;
 
@@ -134,6 +183,23 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         int startY = Gdx.graphics.getHeight() / 2 + inventoryTexture.getHeight() / 2
             + GRID_PADDING - 160;
 
+        if (selectedIndex >= 0 && selected == false) {
+            selected = true;
+            selectedSave = selectedIndex;
+            selectedIndex = -1;
+        }
+
+        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
+            int actualIndex = scrollIndex * GRID_SIZE + i;
+            if (selectedIndex >= 0 && selected) {
+                Slot temp = backpack.getSlots().get(selectedIndex);
+                backpack.getSlots().set(selectedIndex, backpack.getSlots().get(selectedSave));
+                backpack.getSlots().set(selectedSave, temp);
+                selectedIndex = -1;
+                selected = false;
+                selectedSave = -1;
+            }
+        }
         List<Slot> slots = backpack.getSlots();
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
             int actualIndex = scrollIndex * GRID_SIZE + i;
@@ -144,6 +210,14 @@ public class InventoryMenu implements MyScreen, InputProcessor {
 
             int x = startX + col * (GRID_ITEM_SIZE + GRID_PADDING);
             int y = startY - row * (GRID_ITEM_SIZE + GRID_PADDING);
+
+
+            if (actualIndex == selectedSave) {
+                batch.setColor(1, 1, 0, 1);
+                batch.draw(AssetManager.getImage("red"), x, y, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
+                batch.setColor(1, 1, 1, 1);
+            }
+
 
             Texture itemTexture = slots.get(actualIndex).getItem().getTexture();
             batch.draw(itemTexture, x, y, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
