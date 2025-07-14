@@ -360,10 +360,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         clearAndResetScreen();
         updateSeasonGrassTexture();
 
-        updateTime(delta);
-        updatePlayerPos(delta);
-        playerController.update(delta);
-        handleEvents();
+            updateTime(delta);
+            playerController.updatePlayerPos(delta);
+            playerController.update(delta);
+            handleEvents();
 
         renderMap(dayNightShader, nightFactor);
 
@@ -404,21 +404,13 @@ public class FarmMenu implements MyScreen, InputProcessor {
         }
     }
 
-    private void updatePlayerPos(float delta) {
-        playerPosition.x += playerVelocity.x * delta * BASE_SPEED_FACTOR;
-        playerPosition.x = MathUtils.clamp(playerPosition.x, (float) playerTexture.getWidth() / 2, FARM_X_SPAN * TILE_PIX_SIZE - (float) playerTexture.getWidth() / 2);
-
-        playerPosition.y += playerVelocity.y * delta * BASE_SPEED_FACTOR;
-        playerPosition.y = MathUtils.clamp(playerPosition.y, (float) playerTexture.getHeight() / 2, FARM_Y_SPAN * TILE_PIX_SIZE - (float) playerTexture.getHeight() / 2);
-    }
-
-    private void clearAndResetScreen() {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        handleCamera();
-        viewport.apply();
-        batch.setProjectionMatrix(camera.combined);
-    }
+        private void clearAndResetScreen () {
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            handleCamera();
+            viewport.apply();
+            batch.setProjectionMatrix(camera.combined);
+        }
 
     private void handleCamera() {
         camera.position.set(playerPosition.x, playerPosition.y, 0);
@@ -441,9 +433,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         for (Cell cell : farm.getCells()) {
             Coordinate coordinate = cell.getCoordinate();
 
-            int xOfCell = coordinate.getX();
-            int yOfCell = coordinate.getY();
-            Texture texture1 = grassTexture;
+                float xOfCell = coordinate.getX();
+                float yOfCell = coordinate.getY();
+                Texture texture1 = grassTexture;
 
             if (!(cell.getObjectOnCell() instanceof BuildingBlock buildingBlock)) {
                 texture1 = cell.getObjectOnCell().texture;
@@ -472,7 +464,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         batch.end();
     }
 
-    public void modifiedDraw(SpriteBatch batch, Texture texture, int x, int y) {
+    public void modifiedDraw(SpriteBatch batch, Texture texture, float x, float y) {
         batch.draw(texture, x * TILE_PIX_SIZE, (convertYCoordinate(y) - 1) * TILE_PIX_SIZE);
     }
 
@@ -506,7 +498,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         stage.dispose();
     }
 
-    public int convertYCoordinate(int yCoordinate) {
-        return 50 - yCoordinate;
+        public float convertYCoordinate (float yCoordinate){
+            return 50 - yCoordinate;
+        }
     }
-}

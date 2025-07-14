@@ -419,8 +419,8 @@ public class Player {
     public boolean isNearShippingBin() {
         int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
         for (int[] dir : DIRECTIONS) {
-            int x = coordinate.getX() + dir[0];
-            int y = coordinate.getY() + dir[1];
+            float x = coordinate.getX() + dir[0];
+            float y = coordinate.getY() + dir[1];
             Cell c = getFarm().findCellByCoordinate(x, y);
             if (c != null) {
                 if (c.getObjectOnCell() instanceof ArtisanBlock ab) {

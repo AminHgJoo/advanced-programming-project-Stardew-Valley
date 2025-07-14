@@ -74,7 +74,7 @@ public class GameServer extends Thread {
 
     public void handleRequests(Context ctx) {
         if (ctx.method() == HandlerType.POST) {
-            controller.routingTheRequests(ctx);
+            controller.routingTheRequests(ctx , this);
         } else if (ctx.method() == HandlerType.GET) {
 
         }
