@@ -17,9 +17,9 @@ public class GameRouter {
 
         // GET requests
         app.get("/api/game/startGame/{lobbyId}" , controller::startGame);
-        app.get("/api/game/{gameId}/*" , controller::handleGetRequests);
+        app.get("/api/game/{gameId}" , controller::handleGetRequests);
 
         // POST requests
-        app.post("/api/game/{gameId}/{controllerName}/*" , controller::handlePostRequests);
+        app.post("/api/game/{gameId}/{controllerName}" , controller::handlePostRequests);
     }
 }

@@ -343,13 +343,19 @@ public class Farm {
 
     public Cell findCellByCoordinate(float x, float y) {
         for (Cell cell : cells) {
-            if (cell.getCoordinate().getX() == x && cell.getCoordinate().getY() == y) {
+            if (isXInRange(cell , x) && isYInRange(cell , y)) {
                 return cell;
             }
         }
         return null;
     }
 
+    public boolean isXInRange(Cell c , float x){
+        return  (x >= (c.getCoordinate().getX())) && (x <= (c.getCoordinate().getX() + 32));
+    }
+    public boolean isYInRange(Cell c , float y){
+        return  (y >= (c.getCoordinate().getY())) && (y <= (c.getCoordinate().getY() + 32));
+    }
     /// For pathfinding only.
     public void initialCells() {
         for (Cell cell : cells) {

@@ -7,14 +7,16 @@ import dev.morphia.annotations.Transient;
 
 @Embedded
 public class Water extends MapObject {
-    @Transient
-    private Texture texture;
     //TODO loading texture
     public Water() {
         super(false, "water", "blue", AssetManager.getImage("water"));
     }
 
+    @Override
     public Texture getTexture() {
+        if (texture == null) {
+            texture = AssetManager.getImage("water");
+        }
         return texture;
     }
 

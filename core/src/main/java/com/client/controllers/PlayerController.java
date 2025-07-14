@@ -18,6 +18,8 @@ import com.common.models.mapModels.Coordinate;
 import com.google.gson.JsonObject;
 import com.server.utilities.Response;
 
+import java.util.HashMap;
+
 public class PlayerController {
     private PlayerAnimationController playerAnimationController;
     private FacingDirection facingDirection;
@@ -145,30 +147,38 @@ public class PlayerController {
     }
 
     public void updatePlayerPos(float delta) {
+        float prev_x = playerPosition.x;
+        float prev_y = playerPosition.y;
         playerPosition.x += playerVelocity.x * delta * FarmMenu.BASE_SPEED_FACTOR;
         playerPosition.x = MathUtils.clamp(playerPosition.x, width / 2, FarmMenu.FARM_X_SPAN * FarmMenu.TILE_PIX_SIZE - width / 2);
 
         playerPosition.y += playerVelocity.y * delta * FarmMenu.BASE_SPEED_FACTOR;
         playerPosition.y = MathUtils.clamp(playerPosition.y, height / 2, FarmMenu.FARM_Y_SPAN * FarmMenu.TILE_PIX_SIZE - height / 2);
 
-        updatePlayerCoordinate();
+        if (prev_x != playerPosition.x || prev_y != playerPosition.y)
+            updatePlayerCoordinate();
     }
 
-    public void updatePlayerCoordinate(){
+    public void updatePlayerCoordinate() {
         JsonObject req = new JsonObject();
-        req.addProperty("x" , playerPosition.x);
-        req.addProperty("y" , playerPosition.y);
-        var postResponse = HTTPUtil.post("http://localhost:8080/api/game/"+game.get_id()+"/movementWalk" , req);
+        req.addProperty("x", playerPosition.x);
+        req.addProperty("y", playerPosition.y);
+        System.out.println("http://localhost:8080/api/game/" + game.get_id() + "/movementWalk");
+        var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/movementWalk", req);
 
         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-        if(res.getStatus() == 200){
-            player.setCoordinate(new Coordinate(playerPosition.x , playerPosition.y));
-        }else {
+        System.out.println(res.getMessage());
+        if (res.getStatus() == 200) {
+            player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
+        } else {
             playerPosition.x = player.getCoordinate().getX();
             playerPosition.y = player.getCoordinate().getY();
         }
     }
 
+    public Player getPlayer() {
+        return player;
+    }
 
     public float getWidth() {
         return width;
@@ -176,5 +186,15 @@ public class PlayerController {
 
     public float getHeight() {
         return height;
+    }
+
+    public void handleServerPlayerMove(HashMap<String, String> res) {
+        String playerId = res.get("player_user_id");
+        if (playerId.equals(player.getUser_id())) return;
+        Player p = game.findPlayerByUserId(playerId);
+        if (p == null) return;
+        float x = Float.parseFloat(res.get("x"));
+        float y = Float.parseFloat(res.get("y"));
+        p.setCoordinate(new Coordinate(x, y));
     }
 }

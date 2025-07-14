@@ -37,7 +37,11 @@ public class ForagingMineral extends MapObject {
         this.fMType = type;
     }
 
+    @Override
     public Texture getTexture() {
+        if (texture == null) {
+            texture = AssetManager.getImage(fMType.getTextureName());
+        }
         return texture;
     }
 
