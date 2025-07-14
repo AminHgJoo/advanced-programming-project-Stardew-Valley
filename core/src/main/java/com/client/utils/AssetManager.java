@@ -6,14 +6,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.common.models.enums.worldEnums.Season;
+import com.common.models.enums.worldEnums.Weather;
 
 import java.util.HashMap;
 
 public class AssetManager {
     private static final HashMap<String, Texture> textures = new HashMap<>();
     private static Skin skin = null;
-    private static BitmapFont font;
+    private static BitmapFont grayFont;
     private static Skin skin2;
+    private static BitmapFont stardewFont;
 
     public static void loadAssets() {
         loadSkin();
@@ -43,12 +46,12 @@ public class AssetManager {
     public static String generateKeyFromFileName(String fileName) {
         String[] parts = fileName.split(" ");
         if (fileName.contains("_"))
-             parts = fileName.split("_");
+            parts = fileName.split("_");
 
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < parts.length; i++) {
-                sb.append(parts[i].toLowerCase());
+            sb.append(parts[i].toLowerCase());
         }
         return sb.toString();
     }
@@ -56,9 +59,10 @@ public class AssetManager {
     private static void loadSkin() {
         skin = new Skin(Gdx.files.internal("skin/freezing/skin/freezing-ui.json"));
         loadFont();
-        skin.add("myFont", font);
+        loadStardewFont();
+        skin.add("myFont", grayFont);
         skin2 = new Skin(Gdx.files.internal("skin.clean-crispy/skin/clean-crispy-ui.json"));
-        skin2.add("myFont", font);
+        skin2.add("myFont", grayFont);
     }
 
     public static Skin getSkin() {
@@ -87,10 +91,22 @@ public class AssetManager {
         if (skin != null) {
             skin.dispose();
         }
+
+        if (skin2 != null) {
+            skin2.dispose();
+        }
+
+        if (stardewFont != null) {
+            stardewFont.dispose();
+        }
+
+        if (grayFont != null) {
+            grayFont.dispose();
+        }
     }
 
-    public static BitmapFont getFont() {
-        return font;
+    public static BitmapFont getGrayFont() {
+        return grayFont;
     }
 
     private static void loadFont() {
@@ -98,7 +114,43 @@ public class AssetManager {
             Gdx.files.internal("skin/freezing/skin/Racingoftendemo-9M3nL.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 32;
-        font = generator.generateFont(parameter);
+        grayFont = generator.generateFont(parameter);
         generator.dispose();
+    }
+
+    private static void loadStardewFont() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/stardew-valley.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 32;
+        stardewFont = generator.generateFont(parameter);
+        generator.dispose();
+    }
+
+    public static BitmapFont getStardewFont() {
+        return stardewFont;
+    }
+
+    public static Texture giveSeasonIcon(Season season) {
+        if (season == Season.SPRING) {
+            return AssetManager.getImage("springicon");
+        } else if (season == Season.SUMMER) {
+            return AssetManager.getImage("summericon");
+        } else if (season == Season.FALL) {
+            return AssetManager.getImage("fallicon");
+        } else {
+            return AssetManager.getImage("wintericon");
+        }
+    }
+
+    public static Texture giveWeatherIcon(Weather weather) {
+        if (weather == Weather.RAIN) {
+            return AssetManager.getImage("rainicon");
+        }  else if (weather == Weather.SNOW) {
+            return AssetManager.getImage("snowicon");
+        } else if (weather == Weather.STORM) {
+            return  AssetManager.getImage("stormicon");
+        } else {
+            return AssetManager.getImage("sunnyicon");
+        }
     }
 }
