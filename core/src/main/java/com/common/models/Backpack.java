@@ -8,6 +8,7 @@ import com.common.models.items.Seed;
 import com.common.models.items.Tool;
 import com.common.models.items.TreeSeed;
 import dev.morphia.annotations.Embedded;
+import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ public class Backpack {
     private ArrayList<Slot> slots = new ArrayList<>();
     private BackpackType type;
     //TODO load
+    @Transient
     private Texture texture;
 
     public Backpack() {

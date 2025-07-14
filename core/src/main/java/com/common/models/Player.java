@@ -142,7 +142,7 @@ public class Player {
         this.inventory.getSlots().add(
             new Slot(new Tool(Quality.DEFAULT, 0, 5, "Axe", ToolTypes.AXE, 0), 1));
         this.inventory.getSlots().add(
-            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Watering Can", ToolTypes.WATERING_CAN_DEFAULT, 40), 1));
+            new Slot(new Tool(Quality.DEFAULT, 0, 5, "Watering Can Default", ToolTypes.WATERING_CAN_DEFAULT, 40), 1));
         this.inventory.getSlots().add(
             new Slot(new Tool(Quality.DEFAULT, 0, 5, "Scythe", ToolTypes.SCYTHE, 0), 1));
     }

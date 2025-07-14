@@ -12,7 +12,11 @@ public class PlayerConnection {
     }
 
     public void send(String message) {
-        wsContext.send(message);
+        try {
+            wsContext.send(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUsername() {

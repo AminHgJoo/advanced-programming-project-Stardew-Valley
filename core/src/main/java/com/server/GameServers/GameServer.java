@@ -48,17 +48,11 @@ public class GameServer extends Thread {
     }
 
     public void broadcast(HashMap<String, String> message) {
-        for (PlayerConnection playerConnection : playerConnections) {
-            playerConnection.send(new Gson().toJson(message));
-        }
+        AppWebSocket.broadcast(game, message);
     }
 
     public void narrowCast(String username, HashMap<String, String> message) {
-        for (PlayerConnection playerConnection : playerConnections) {
-            if (playerConnection.getUsername().equals(username)) {
-                playerConnection.send(new Gson().toJson(message));
-            }
-        }
+        AppWebSocket.narrowcast(username, message);
     }
 
     @Override
