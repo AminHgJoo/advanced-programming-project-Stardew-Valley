@@ -12,7 +12,7 @@ public class PlayerAnimationController {
     private ArrayMap<PlayerState, Animation<TextureRegion>[]> animations;
     private FacingDirection facingDirection;
 
-    public PlayerAnimationController(PlayerState currentState , FacingDirection facingDirection) {
+    public PlayerAnimationController(PlayerState currentState, FacingDirection facingDirection) {
         stateTime = 0;
         animations = new ArrayMap<>();
         this.facingDirection = facingDirection;
@@ -21,18 +21,25 @@ public class PlayerAnimationController {
     }
 
     private void initializeAnimations() {
-        animations.put(PlayerState.WALKING, loadAnimation(2));
+        animations.put(PlayerState.WALKING, loadAnimation(2, .2f, "walking"));
+        animations.put(PlayerState.TOOL_SWINGING, loadAnimation(6, .1f, "tool"));
     }
 
-    private Animation<TextureRegion>[] loadAnimation(int frameCount) {
+    private Animation<TextureRegion>[] loadAnimation(int frameCount, float duration, String path) {
         Animation<TextureRegion>[] res = new Animation[4];
         for (int i = 0; i < 4; i++) {
             TextureRegion[] regions = new TextureRegion[frameCount];
             for (int frame = 0; frame < frameCount; frame++) {
-                TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("images/player/" + i + "-" + (frame + 2) + ".png")));
-                regions[frame] = region;
+                try {
+                    Texture t = new Texture(Gdx.files
+                        .internal("images/player/" + path + "/" + i + "-" + (frame + 1) + ".png"));
+                    TextureRegion region = new TextureRegion(t);
+                    regions[frame] = region;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            Animation<TextureRegion> anim = new Animation<TextureRegion>(.2f, regions);
+            Animation<TextureRegion> anim = new Animation<TextureRegion>(duration, regions);
             res[i] = anim;
         }
         return res;
@@ -54,11 +61,20 @@ public class PlayerAnimationController {
 
     public TextureRegion getCurrentFrame() {
         if (currentState == PlayerState.IDLE) {
-            Texture t = new Texture("images/player/" + facingDirection.getAnimationRow() + "-1.png");
+            Texture t = new Texture("images/player/idle/" + facingDirection.getAnimationRow() + "-1.png");
             return new TextureRegion(t);
         }
         Animation<TextureRegion> anim = animations.get(currentState)[facingDirection.getAnimationRow()];
         return anim.getKeyFrame(stateTime, true);
+    }
+
+    public int getCurrentFrameIndex() {
+        if (currentState == PlayerState.IDLE) {
+            return 0;
+        } else {
+            Animation<TextureRegion> anim = animations.get(currentState)[facingDirection.getAnimationRow()];
+            return anim.getKeyFrameIndex(stateTime);
+        }
     }
 
 }

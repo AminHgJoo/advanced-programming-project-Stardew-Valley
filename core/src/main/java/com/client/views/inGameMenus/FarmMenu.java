@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
@@ -41,6 +42,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private final StretchViewport viewport;
     private Farm farm;
     private Texture grassTexture;
+    private boolean isToolSwinging = false;
 
     //TODO: TEST AND PROTOTYPE
     private final Texture playerTexture = new Texture("images/T_BatgunProjectile.png");
@@ -155,248 +157,260 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Gdx.input.isKeyPressed(Keybinds.RIGHT.keycodes.get(0))) {
             playerController.setState(PlayerState.WALKING);
             playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
-        } else {
-            playerController.setState(PlayerState.IDLE);
-            playerVelocity.x = 0;
-            playerVelocity.y = 0;
-        }
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
-        return false;
-    }
-
-    @Override
-    public void socketMessage(String message) {
-        //TODO: ?
-    }
-
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(this);
-    }
-
-    private void updateSeasonGrassTexture() {
-        //TODO: NullPtr Failsafe.
-        if (ClientApp.currentGameData == null) return;
-
-        grassTexture = SeasonTextures.giveSeasonTexture(ClientApp.currentGameData.getSeason());
-    }
-
-    private void handleLightning(OrthographicCamera camera, float delta) {
-        //TODO: Failsafe to not throw exception.
-        if (ClientApp.currentGameData == null) {
-            return;
-        }
-
-        if (ClientApp.currentGameData.getWeatherToday() == Weather.STORM) {
-            float rand = MathUtils.random(0f, 1f);
-
-            if (rand < 0.0001f && !lightningHelper.flashing) {
-                lightningHelper.trigger();
+        } else if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+            playerController.setState(PlayerState.TOOL_SWINGING);
+            isToolSwinging = true;
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    isToolSwinging = false;
+                    this.cancel();
+                }
+            }, .6f, 2);
+            }else{
+                if (!isToolSwinging) {
+                    playerController.setState(PlayerState.IDLE);
+                    playerVelocity.x = 0;
+                    playerVelocity.y = 0;
+                }
             }
-        } else {
-            return;
         }
 
-        lightningHelper.render(camera, delta);
-    }
-
-    //TODO: Advance time on server-side.
-    private void updateTime(float delta) {
-        //TODO: NullPtr Failsafe.
-        if (ClientApp.currentGameData == null) {
-            return;
+        @Override
+        public boolean keyTyped ( char character){
+            return false;
         }
-        LocalDateTime time = ClientApp.currentGameData.getDate();
-        float timeOfDay = (time.getHour() * 3600 + time.getMinute() * 60 + time.getSecond()) / 3600f;
 
-        if (timeOfDay >= 18f) {
-            nightFactor = (timeOfDay - 18f) / 12f;
-        } else if (timeOfDay <= 6f) {
-            nightFactor = (timeOfDay + 6f) / 12f;
-        } else {
-            nightFactor = 0f;
+        @Override
+        public boolean touchDown ( int screenX, int screenY, int pointer, int button){
+            return false;
         }
-        nightFactor = MathUtils.clamp(nightFactor, 0f, 0.8f);
-    }
 
-    @Override
-    public void render(float delta) {
-        batch.setShader(dayNightShader);
-        clearAndResetScreen();
-        updateSeasonGrassTexture();
+        @Override
+        public boolean touchUp ( int screenX, int screenY, int pointer, int button){
+            return false;
+        }
 
-        updateTime(delta);
-        updatePlayerPos(delta);
-        playerController.update(delta);
-        handleEvents();
+        @Override
+        public boolean touchCancelled ( int screenX, int screenY, int pointer, int button){
+            return false;
+        }
 
-        renderMap(dayNightShader, nightFactor);
+        @Override
+        public boolean touchDragged ( int screenX, int screenY, int pointer){
+            return false;
+        }
 
-        handleLightning(camera, delta);
-        batch.setShader(null);
+        @Override
+        public boolean mouseMoved ( int screenX, int screenY){
+            return false;
+        }
 
-        handleWeatherFX(delta);
-    }
+        @Override
+        public boolean scrolled ( float amountX, float amountY){
+            return false;
+        }
 
-    private void handleWeatherFX(float delta) {
-        float x = camera.position.x - SCREEN_WIDTH / 2;
-        float y = camera.position.y + SCREEN_HEIGHT / 2;
+        @Override
+        public void socketMessage (String message){
+            //TODO: ?
+        }
 
-        if (ClientApp.currentGameData == null) return;
+        @Override
+        public void show () {
+            Gdx.input.setInputProcessor(this);
+        }
 
-        if (ClientApp.currentGameData.getWeatherToday() == Weather.STORM
-            || ClientApp.currentGameData.getWeatherToday() == Weather.RAIN) {
-            rainEffect.setPosition(x, y);
-            rainEffect.update(delta);
+        private void updateSeasonGrassTexture () {
+            //TODO: NullPtr Failsafe.
+            if (ClientApp.currentGameData == null) return;
+
+            grassTexture = SeasonTextures.giveSeasonTexture(ClientApp.currentGameData.getSeason());
+        }
+
+        private void handleLightning (OrthographicCamera camera,float delta){
+            //TODO: Failsafe to not throw exception.
+            if (ClientApp.currentGameData == null) {
+                return;
+            }
+
+            if (ClientApp.currentGameData.getWeatherToday() == Weather.STORM) {
+                float rand = MathUtils.random(0f, 1f);
+
+                if (rand < 0.0001f && !lightningHelper.flashing) {
+                    lightningHelper.trigger();
+                }
+            } else {
+                return;
+            }
+
+            lightningHelper.render(camera, delta);
+        }
+
+        //TODO: Advance time on server-side.
+        private void updateTime ( float delta){
+            //TODO: NullPtr Failsafe.
+            if (ClientApp.currentGameData == null) {
+                return;
+            }
+            LocalDateTime time = ClientApp.currentGameData.getDate();
+            float timeOfDay = (time.getHour() * 3600 + time.getMinute() * 60 + time.getSecond()) / 3600f;
+
+            if (timeOfDay >= 18f) {
+                nightFactor = (timeOfDay - 18f) / 12f;
+            } else if (timeOfDay <= 6f) {
+                nightFactor = (timeOfDay + 6f) / 12f;
+            } else {
+                nightFactor = 0f;
+            }
+            nightFactor = MathUtils.clamp(nightFactor, 0f, 0.8f);
+        }
+
+        @Override
+        public void render ( float delta){
+            batch.setShader(dayNightShader);
+            clearAndResetScreen();
+            updateSeasonGrassTexture();
+
+            updateTime(delta);
+            updatePlayerPos(delta);
+            playerController.update(delta);
+            handleEvents();
+
+            renderMap(dayNightShader, nightFactor);
+
+            handleLightning(camera, delta);
+            batch.setShader(null);
+
+            handleWeatherFX(delta);
+        }
+
+        private void handleWeatherFX ( float delta){
+            float x = camera.position.x - SCREEN_WIDTH / 2;
+            float y = camera.position.y + SCREEN_HEIGHT / 2;
+
+            if (ClientApp.currentGameData == null) return;
+
+            if (ClientApp.currentGameData.getWeatherToday() == Weather.STORM
+                || ClientApp.currentGameData.getWeatherToday() == Weather.RAIN) {
+                rainEffect.setPosition(x, y);
+                rainEffect.update(delta);
+                batch.begin();
+                rainEffect.draw(batch);
+                batch.end();
+            }
+
+            if (ClientApp.currentGameData.getWeatherToday() == Weather.SNOW) {
+                snowEffect.setPosition(x, y);
+                snowEffect.update(delta);
+                batch.begin();
+                snowEffect.draw(batch);
+                batch.end();
+            }
+        }
+
+        private void updatePlayerPos ( float delta){
+            playerPosition.x += playerVelocity.x * delta * BASE_SPEED_FACTOR;
+            playerPosition.x = MathUtils.clamp(playerPosition.x, (float) playerTexture.getWidth() / 2, FARM_X_SPAN * TILE_PIX_SIZE - (float) playerTexture.getWidth() / 2);
+
+            playerPosition.y += playerVelocity.y * delta * BASE_SPEED_FACTOR;
+            playerPosition.y = MathUtils.clamp(playerPosition.y, (float) playerTexture.getHeight() / 2, FARM_Y_SPAN * TILE_PIX_SIZE - (float) playerTexture.getHeight() / 2);
+        }
+
+        private void clearAndResetScreen () {
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            handleCamera();
+            viewport.apply();
+            batch.setProjectionMatrix(camera.combined);
+        }
+
+        private void handleCamera () {
+            camera.position.set(playerPosition.x, playerPosition.y, 0);
+
+            camera.position.x = MathUtils.clamp(playerPosition.x, SCREEN_WIDTH / 2, TILE_PIX_SIZE * FARM_X_SPAN - SCREEN_WIDTH / 2);
+            camera.position.y = MathUtils.clamp(playerPosition.y, SCREEN_HEIGHT / 2, TILE_PIX_SIZE * FARM_Y_SPAN - SCREEN_HEIGHT / 2);
+
+            camera.update();
+        }
+
+        public void renderMap (ShaderProgram dayNightShader,float nightFactor){
             batch.begin();
-            rainEffect.draw(batch);
+            dayNightShader.setUniformf("u_nightFactor", nightFactor);
+            Texture texture = grassTexture;
+            for (int i = 0; i < 50; i++) {
+                for (int j = 0; j < 75; j++) {
+                    modifiedDraw(batch, texture, j, i);
+                }
+            }
+            for (Cell cell : farm.getCells()) {
+                Coordinate coordinate = cell.getCoordinate();
+
+                int xOfCell = coordinate.getX();
+                int yOfCell = coordinate.getY();
+                Texture texture1 = grassTexture;
+
+                if (!(cell.getObjectOnCell() instanceof BuildingBlock buildingBlock)) {
+                    texture1 = cell.getObjectOnCell().texture;
+                } else if (buildingBlock.buildingType.equals("Mine")) {
+                    texture1 = AssetManager.getImage("mineCell");
+                }
+
+                if (texture1 == SeasonTextures.SPRING.texture ||
+                    texture1 == SeasonTextures.SUMMER.texture ||
+                    texture1 == SeasonTextures.FALL.texture ||
+                    texture1 == SeasonTextures.WINTER.texture) {
+                    continue;
+                }
+
+                modifiedDraw(batch, texture1, xOfCell, yOfCell);
+            }
+
+            //Draw buildings
+            Texture house = AssetManager.getImage("playerhouse");
+            Texture greenhouseDestroyed = AssetManager.getImage("greenhousedestroyed");
+
+            modifiedDraw(batch, house, 61, 8);
+            modifiedDraw(batch, greenhouseDestroyed, 22, 6);
+
+            playerController.render(batch);
             batch.end();
         }
 
-        if (ClientApp.currentGameData.getWeatherToday() == Weather.SNOW) {
-            snowEffect.setPosition(x, y);
-            snowEffect.update(delta);
-            batch.begin();
-            snowEffect.draw(batch);
-            batch.end();
-        }
-    }
-
-    private void updatePlayerPos(float delta) {
-        playerPosition.x += playerVelocity.x * delta * BASE_SPEED_FACTOR;
-        playerPosition.x = MathUtils.clamp(playerPosition.x, (float) playerTexture.getWidth() / 2, FARM_X_SPAN * TILE_PIX_SIZE - (float) playerTexture.getWidth() / 2);
-
-        playerPosition.y += playerVelocity.y * delta * BASE_SPEED_FACTOR;
-        playerPosition.y = MathUtils.clamp(playerPosition.y, (float) playerTexture.getHeight() / 2, FARM_Y_SPAN * TILE_PIX_SIZE - (float) playerTexture.getHeight() / 2);
-    }
-
-    private void clearAndResetScreen() {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        handleCamera();
-        viewport.apply();
-        batch.setProjectionMatrix(camera.combined);
-    }
-
-    private void handleCamera() {
-        camera.position.set(playerPosition.x, playerPosition.y, 0);
-
-        camera.position.x = MathUtils.clamp(playerPosition.x, SCREEN_WIDTH / 2, TILE_PIX_SIZE * FARM_X_SPAN - SCREEN_WIDTH / 2);
-        camera.position.y = MathUtils.clamp(playerPosition.y, SCREEN_HEIGHT / 2, TILE_PIX_SIZE * FARM_Y_SPAN - SCREEN_HEIGHT / 2);
-
-        camera.update();
-    }
-
-    public void renderMap(ShaderProgram dayNightShader, float nightFactor) {
-        batch.begin();
-        dayNightShader.setUniformf("u_nightFactor", nightFactor);
-        Texture texture = grassTexture;
-        for (int i = 0; i < 50; i++) {
-            for (int j = 0; j < 75; j++) {
-                modifiedDraw(batch, texture, j, i);
-            }
-        }
-        for (Cell cell : farm.getCells()) {
-            Coordinate coordinate = cell.getCoordinate();
-
-            int xOfCell = coordinate.getX();
-            int yOfCell = coordinate.getY();
-            Texture texture1 = grassTexture;
-
-            if (!(cell.getObjectOnCell() instanceof BuildingBlock buildingBlock)) {
-                texture1 = cell.getObjectOnCell().texture;
-            } else if (buildingBlock.buildingType.equals("Mine")) {
-                texture1 = AssetManager.getImage("mineCell");
-            }
-
-            if (texture1 == SeasonTextures.SPRING.texture ||
-                texture1 == SeasonTextures.SUMMER.texture ||
-                texture1 == SeasonTextures.FALL.texture ||
-                texture1 == SeasonTextures.WINTER.texture) {
-                continue;
-            }
-
-            modifiedDraw(batch, texture1, xOfCell, yOfCell);
+        public void modifiedDraw (SpriteBatch batch, Texture texture,int x, int y){
+            batch.draw(texture, x * TILE_PIX_SIZE, (convertYCoordinate(y) - 1) * TILE_PIX_SIZE);
         }
 
-        //Draw buildings
-        Texture house = AssetManager.getImage("playerhouse");
-        Texture greenhouseDestroyed = AssetManager.getImage("greenhousedestroyed");
+        @Override
+        public void resize ( int width, int height){
+            viewport.update(width, height, true);
+        }
 
-        modifiedDraw(batch, house, 61, 8);
-        modifiedDraw(batch, greenhouseDestroyed, 22, 6);
+        @Override
+        public void pause () {
 
-        playerController.render(batch);
-        batch.end();
+        }
+
+        @Override
+        public void resume () {
+
+        }
+
+        @Override
+        public void hide () {
+
+        }
+
+        @Override
+        public void dispose () {
+            batch.dispose();
+            rainEffect.dispose();
+            snowEffect.dispose();
+            dayNightShader.dispose();
+            lightningHelper.dispose();
+        }
+
+        public int convertYCoordinate ( int yCoordinate){
+            return 50 - yCoordinate;
+        }
     }
-
-    public void modifiedDraw(SpriteBatch batch, Texture texture, int x, int y) {
-        batch.draw(texture, x * TILE_PIX_SIZE, (convertYCoordinate(y) - 1) * TILE_PIX_SIZE);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        batch.dispose();
-        rainEffect.dispose();
-        snowEffect.dispose();
-        dayNightShader.dispose();
-        lightningHelper.dispose();
-    }
-
-    public int convertYCoordinate(int yCoordinate) {
-        return 50 - yCoordinate;
-    }
-}
