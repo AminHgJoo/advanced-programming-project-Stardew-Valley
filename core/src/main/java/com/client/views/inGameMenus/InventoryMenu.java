@@ -50,7 +50,6 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     @Override
     public boolean keyDown(int i) {
         if (i == Input.Keys.ESCAPE) {
-            //TODO debug
             gameMain.setScreen(farmScreen);
             this.dispose();
         }

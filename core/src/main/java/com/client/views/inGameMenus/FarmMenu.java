@@ -1,6 +1,7 @@
 package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -117,9 +118,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
 //            playerController.handleKeyUp(-BASE_SPEED_FACTOR, 0);
 //        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
 //            playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
-//        } else if (keycode == Input.Keys.ESCAPE) {
-//            gameMain.setScreen(new InventoryMenu(gameMain, this));
-//        }
+        if (keycode == Input.Keys.ESCAPE) {
+            gameMain.setScreen(new InventoryMenu(gameMain, this));
+        }
         return false;
     }
 
@@ -154,9 +155,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Gdx.input.isKeyPressed(Keybinds.RIGHT.keycodes.get(0))) {
             playerController.setState(PlayerState.WALKING);
             playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
-        } else if (Gdx.input.isKeyPressed(Keybinds.OPEN_INVENTORY.keycodes.get(0))
-            || Gdx.input.isKeyPressed(Keybinds.OPEN_INVENTORY.keycodes.get(1))) {
-            gameMain.setScreen(new InventoryMenu(gameMain, this));
         } else {
             playerController.setState(PlayerState.IDLE);
             playerVelocity.x = 0;
