@@ -3,6 +3,7 @@ package com.server.controllers;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.User;
+import com.common.models.mapModels.Farm;
 import com.common.models.networking.Lobby;
 import com.server.GameServers.AppWebSocket;
 import com.server.GameServers.GameServer;
@@ -35,6 +36,7 @@ public class GameController {
                 return;
             }
 
+            // TODO fix in profuction
 //            if (lobby.getUsers().size() <= 2) {
 //                ctx.json(Response.BAD_REQUEST.setMessage("Not enough players"));
 //                return;
@@ -50,10 +52,16 @@ public class GameController {
                 }
                 users.add(u);
                 Player p = new Player(u);
+                // TODO hard coded
+                Farm f = Farm.makeFarm(1);
+                p.setFarm(f);
+
                 players.add(p);
             }
             GameData game = new GameData(players);
-
+            for (Player p : players) {
+                game.getMap().getFarms().add(p.getFarm());
+            }
             GameRepository.saveGame(game);
             boolean check = AppWebSocket.startGame(game, lobby);
             if (check) {

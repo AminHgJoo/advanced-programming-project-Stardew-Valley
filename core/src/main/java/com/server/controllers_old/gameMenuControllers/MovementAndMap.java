@@ -15,12 +15,8 @@ import com.common.models.mapObjects.EmptyCell;
 import com.common.models.mapObjects.Water;
 import com.server.controllers_old.Controller;
 import com.server.repositories.GameRepository;
-import com.server.utilities.FindPath;
-import com.server.utilities.Tile;
-import com.server.views.AppView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class MovementAndMap extends Controller {

@@ -332,8 +332,8 @@ public class World extends Controller {
         Player player = gameData.getCurrentPlayer();
         Farm farm = player.getCurrentFarm(gameData);
 
-        int playerX = player.getCoordinate().getX();
-        int playerY = player.getCoordinate().getY();
+        float playerX = player.getCoordinate().getX();
+        float playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
         double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
@@ -405,8 +405,8 @@ public class World extends Controller {
         Player player = gameData.getCurrentPlayer();
         Farm farm = player.getCurrentFarm(gameData);
 
-        int playerX = player.getCoordinate().getX();
-        int playerY = player.getCoordinate().getY();
+        float playerX = player.getCoordinate().getX();
+        float playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
         double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
@@ -437,8 +437,8 @@ public class World extends Controller {
 
             player.getUnbuffedMiningSkill().setXp(player.getUnbuffedMiningSkill().getXp() + 10);
 
-            int cellX = targetCell.getCoordinate().getX();
-            int cellY = targetCell.getCoordinate().getY();
+            float cellX = targetCell.getCoordinate().getX();
+            float cellY = targetCell.getCoordinate().getY();
 
             boolean check = cellX <= 9 && cellY <= 11;
 
@@ -555,8 +555,8 @@ public class World extends Controller {
         Player player = gameData.getCurrentPlayer();
         Farm farm = player.getCurrentFarm(gameData);
 
-        int playerX = player.getCoordinate().getX();
-        int playerY = player.getCoordinate().getY();
+        float playerX = player.getCoordinate().getX();
+        float playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
         double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
@@ -687,8 +687,8 @@ public class World extends Controller {
         Player player = gameData.getCurrentPlayer();
         Farm farm = player.getCurrentFarm(gameData);
 
-        int playerX = player.getCoordinate().getX();
-        int playerY = player.getCoordinate().getY();
+        float playerX = player.getCoordinate().getX();
+        float playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
         double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality);
@@ -776,8 +776,8 @@ public class World extends Controller {
         Player player = gameData.getCurrentPlayer();
         Farm farm = player.getCurrentFarm(gameData);
 
-        int playerX = player.getCoordinate().getX();
-        int playerY = player.getCoordinate().getY();
+        float playerX = player.getCoordinate().getX();
+        float playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
 
@@ -906,8 +906,8 @@ public class World extends Controller {
         Player player = gameData.getCurrentPlayer();
         Farm farm = player.getCurrentFarm(gameData);
 
-        int playerX = player.getCoordinate().getX();
-        int playerY = player.getCoordinate().getY();
+        float playerX = player.getCoordinate().getX();
+        float playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
         double energyCost = getScytheEnergyCost();
@@ -1087,8 +1087,8 @@ public class World extends Controller {
         Backpack backpack = player.getInventory();
         Slot productSlot = null;
 
-        int playerX = player.getCoordinate().getX();
-        int playerY = player.getCoordinate().getY();
+        float playerX = player.getCoordinate().getX();
+        float playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
         double energyCost = 4;
         double playerEnergy = player.getEnergy();
@@ -1130,8 +1130,8 @@ public class World extends Controller {
         Backpack backpack = player.getInventory();
         Slot productSlot = null;
 
-        int playerX = player.getCoordinate().getX();
-        int playerY = player.getCoordinate().getY();
+        float playerX = player.getCoordinate().getX();
+        float playerY = player.getCoordinate().getY();
         Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
         double energyCost = 4;
         double playerEnergy = player.getEnergy();

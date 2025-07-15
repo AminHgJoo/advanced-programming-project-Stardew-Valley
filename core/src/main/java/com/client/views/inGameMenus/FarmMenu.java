@@ -30,9 +30,16 @@ import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.BuildingBlock;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 public class FarmMenu implements MyScreen, InputProcessor {
     //TODO: Draw destroyed/renovated greenhouse based on it being fixed or not.
@@ -44,7 +51,20 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public static final float FARM_Y_SPAN = 50; //32 * 50 == 1600
 
     private final GameMain gameMain;
+    private final Gson gson = new GsonBuilder()
+        .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+            @Override
+            public void write(JsonWriter out, LocalDateTime value) throws IOException {
+                out.value(value.toString());
+            }
 
+            @Override
+            public LocalDateTime read(JsonReader in) throws IOException {
+                return LocalDateTime.parse(in.nextString());
+            }
+        })
+        .serializeSpecialFloatingPointValues()
+        .create();
     private SpriteBatch batch;
     private final OrthographicCamera camera;
     private final StretchViewport viewport;
@@ -86,9 +106,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.camera = new OrthographicCamera();
         this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
 
-        this.farm = Farm.makeFarm(1);
         this.grassTexture = AssetManager.getImage("grassfall");
         playerController = new PlayerController(playerPosition, playerVelocity);
+        this.farm = playerController.getPlayer().getFarm();
 
         initializeShader();
         initializeParticles();
@@ -301,7 +321,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public void socketMessage(String message) {
-        //TODO: ?
+        HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
+        String type = res.get("type");
+        if(type.equals("PLAYER_MOVED")){
+            playerController.handleServerPlayerMove(res);
+        }
     }
 
     @Override
@@ -361,7 +385,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         updateSeasonGrassTexture();
 
         updateTime(delta);
-        updatePlayerPos(delta);
+        playerController.updatePlayerPos(delta);
         playerController.update(delta);
         handleEvents();
 
@@ -404,14 +428,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         }
     }
 
-    private void updatePlayerPos(float delta) {
-        playerPosition.x += playerVelocity.x * delta * BASE_SPEED_FACTOR;
-        playerPosition.x = MathUtils.clamp(playerPosition.x, (float) playerTexture.getWidth() / 2, FARM_X_SPAN * TILE_PIX_SIZE - (float) playerTexture.getWidth() / 2);
-
-        playerPosition.y += playerVelocity.y * delta * BASE_SPEED_FACTOR;
-        playerPosition.y = MathUtils.clamp(playerPosition.y, (float) playerTexture.getHeight() / 2, FARM_Y_SPAN * TILE_PIX_SIZE - (float) playerTexture.getHeight() / 2);
-    }
-
     private void clearAndResetScreen() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -441,12 +457,12 @@ public class FarmMenu implements MyScreen, InputProcessor {
         for (Cell cell : farm.getCells()) {
             Coordinate coordinate = cell.getCoordinate();
 
-            int xOfCell = coordinate.getX();
-            int yOfCell = coordinate.getY();
+            float xOfCell = coordinate.getX();
+            float yOfCell = coordinate.getY();
             Texture texture1 = grassTexture;
 
             if (!(cell.getObjectOnCell() instanceof BuildingBlock buildingBlock)) {
-                texture1 = cell.getObjectOnCell().texture;
+                texture1 = cell.getObjectOnCell().getTexture();
             } else if (buildingBlock.buildingType.equals("Mine")) {
                 texture1 = AssetManager.getImage("mineCell");
             }
@@ -472,7 +488,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         batch.end();
     }
 
-    public void modifiedDraw(SpriteBatch batch, Texture texture, int x, int y) {
+    public void modifiedDraw(SpriteBatch batch, Texture texture, float x, float y) {
         batch.draw(texture, x * TILE_PIX_SIZE, (convertYCoordinate(y) - 1) * TILE_PIX_SIZE);
     }
 
@@ -507,7 +523,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         stage.dispose();
     }
 
-    public int convertYCoordinate(int yCoordinate) {
+    public float convertYCoordinate(float yCoordinate) {
         return 50 - yCoordinate;
     }
 }

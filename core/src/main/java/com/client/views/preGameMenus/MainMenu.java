@@ -78,7 +78,7 @@ public class MainMenu implements MyScreen {
             public void changed(ChangeEvent event, Actor actor) {
                 ClientApp.token = "";
                 ClientApp.loggedInUser = null;
-                FileUtil.write(System.getenv("address"), "");
+                FileUtil.write(System.getenv("address")+ "/env.prod", "");
                 gameMain.setScreen(new LauncherMenu(gameMain));
                 dispose();
             }

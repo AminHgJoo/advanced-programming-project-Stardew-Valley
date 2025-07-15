@@ -26,11 +26,11 @@ public class Tile {
         this.isTilled = false;
     }
 
-    public int diffXPrev() {
+    public float diffXPrev() {
         return this.coordinate.getX() - this.prev.coordinate.getX();
     }
 
-    public int diffYPrev() {
+    public float diffYPrev() {
         return this.coordinate.getY() - this.prev.coordinate.getY();
     }
 

@@ -31,9 +31,11 @@ public class ArtisanBlock extends MapObject {
     public ArtisanBlockType getArtisanType() {
         return artisanType;
     }
-
-
+    @Override
     public Texture getTexture(){
+        if(texture == null){
+            this.texture = AssetManager.getImage(artisanType.getTextureName());
+        }
         return texture;
     }
 

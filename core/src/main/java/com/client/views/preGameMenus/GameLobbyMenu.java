@@ -17,6 +17,7 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.*;
 import com.client.views.inGameMenus.FarmMenu;
+import com.common.GameGSON;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.networking.Lobby;
@@ -441,7 +442,7 @@ public class GameLobbyMenu implements MyScreen {
 
     @Override
     public void render(float delta) {
-        if(GAME_START){
+        if (GAME_START) {
             this.gameMain.setScreen(new FarmMenu(gameMain));
             this.dispose();
         }
@@ -504,20 +505,7 @@ public class GameLobbyMenu implements MyScreen {
 
     @Override
     public void socketMessage(String message) {
-        Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
-                @Override
-                public void write(JsonWriter out, LocalDateTime value) throws IOException {
-                    out.value(value.toString());
-                }
-
-                @Override
-                public LocalDateTime read(JsonReader in) throws IOException {
-                    return LocalDateTime.parse(in.nextString());
-                }
-            })
-            .serializeSpecialFloatingPointValues()
-            .create();
+        Gson gson = GameGSON.gson;
         HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
         String type = res.get("type");
         if (type.equals("RESPONSE")) {
@@ -542,8 +530,8 @@ public class GameLobbyMenu implements MyScreen {
             System.out.println("Game start");
             System.out.println(game.toString());
             ClientApp.currentGameData = game;
-            for (Player p : game.getPlayers()){
-                if(p.getUser_id().equals(ClientApp.loggedInUser.get_id())){
+            for (Player p : game.getPlayers()) {
+                if (p.getUser_id().equals(ClientApp.loggedInUser.get_id())) {
                     ClientApp.currentPlayer = p;
                 }
             }

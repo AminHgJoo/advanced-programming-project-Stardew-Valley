@@ -1,6 +1,7 @@
 package com.common.models.mapObjects;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.client.utils.AssetManager;
 import com.common.models.App;
 import com.common.models.enums.types.itemTypes.CropSeedsType;
 import com.server.utilities.DateUtility;
@@ -36,8 +37,16 @@ public class Crop extends MapObject {
         growthDeadLines[4] = DateUtility.getLocalDateTime(growthDeadLines[3], cropSeedsType.stageFourDaysToNextStage);
         this.hasBeenWateredToday = false;
         harvestDeadLine = null;
-    }
+        this.texture = AssetManager.getImage(cropSeedsType.getTextureName());
 
+    }
+    @Override
+    public Texture getTexture(){
+        if(texture == null){
+            this.texture = AssetManager.getImage(cropSeedsType.getTextureName());
+        }
+        return texture;
+    }
     public void pushBackDeadlines(int numOfDays) {
         for (int i = stageNumber; i < growthDeadLines.length; i++) {
             if (growthDeadLines[i] != null) {
@@ -97,11 +106,6 @@ public class Crop extends MapObject {
         builder.append("has been watered today : ").append(hasBeenWateredToday).append("\n");
         builder.append("has been fertilized : ").append(hasBeenDeluxeFertilized).append("\n");
         return builder.toString();
-    }
-
-
-    public Texture getTexture() {
-        return texture;
     }
 
 

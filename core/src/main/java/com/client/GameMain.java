@@ -3,10 +3,7 @@ package com.client;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.client.utils.AssetManager;
-import com.client.utils.HTTPUtil;
-import com.client.utils.ModelDecoder;
-import com.client.utils.MyScreen;
+import com.client.utils.*;
 import com.client.views.inGameMenus.FarmMenu;
 import com.client.views.inGameMenus.FishingMiniGame;
 import com.client.views.preGameMenus.LauncherMenu;
@@ -85,6 +82,7 @@ public class GameMain extends Game {
             AssetManager.getSkin().dispose();
         }
         AssetManager.disposeAssets();
+        ClientApp.client.close();
     }
 
     @Override

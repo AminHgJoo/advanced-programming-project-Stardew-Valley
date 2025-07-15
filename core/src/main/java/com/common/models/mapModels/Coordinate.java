@@ -4,14 +4,14 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Coordinate {
-    private int x;
-    private int y;
+    private float x;
+    private float y;
 
     public Coordinate() {
 
     }
 
-    public Coordinate(int x, int y) {
+    public Coordinate(float x, float y) {
         this.x = x;
         this.y = y;
     }
@@ -27,11 +27,11 @@ public class Coordinate {
         return Math.sqrt(Math.pow(b.getX() - a.getX(), 2) + Math.pow(b.getY() - a.getY(), 2));
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 }

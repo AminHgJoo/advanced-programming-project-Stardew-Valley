@@ -81,7 +81,7 @@ public class LoginMenu implements MyScreen {
 
                     if (stayLoggedInCheckBox.isChecked()) {
                         System.out.println(System.getProperty("user.dir"));
-                        FileUtil.write(System.getenv("address"), "TOKEN=" + ClientApp.token);
+                        FileUtil.write(System.getenv("address") + "/env.prod", "TOKEN=" + ClientApp.token);
                     }
 
                     try {

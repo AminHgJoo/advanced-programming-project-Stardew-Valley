@@ -3,9 +3,13 @@ package com.client.views.inGameMenus;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
@@ -34,6 +38,10 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private int GRID_ITEM_SIZE = 95;
     private boolean selected = false;
     private int selectedSave = -1;
+    private BitmapFont titleFont;
+    private GlyphLayout layout;
+    private final Skin skin;
+
 
     public InventoryMenu(GameMain gameMain, MyScreen farmScreen) {
         this.gameMain = gameMain;
@@ -48,6 +56,11 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         }
         //TODO trashcan logic and load
         trashcanType = TrashcanType.DEFAULT;
+        this.skin = AssetManager.getSkin();
+        titleFont = AssetManager.getStardewFont();
+        titleFont.getData().setScale(3f);
+        titleFont.setColor(Color.WHITE);
+        this.layout = new GlyphLayout();
     }
 
     @Override
@@ -55,6 +68,9 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         if (i == Input.Keys.ESCAPE) {
             gameMain.setScreen(farmScreen);
             this.dispose();
+        }
+        else if(i == Input.Keys.RIGHT) {
+            gameMain.setScreen(new SkillMenu(gameMain, farmScreen));
         }
         return false;
     }
@@ -164,14 +180,19 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         batch.begin();
-        batch.draw(backgroundTexture, 0, 0,
-            Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(backgroundTexture, 0, 0);
         batch.draw(inventoryTexture,
             Gdx.graphics.getWidth() / 2 - inventoryTexture.getWidth() / 2,
             Gdx.graphics.getHeight() / 2 - inventoryTexture.getHeight() / 2,
             inventoryTexture.getWidth(), inventoryTexture.getHeight());
+
+        String title = "Inventory";
+        layout.setText(titleFont, title);
+
+        float xAsghar = Gdx.graphics.getWidth() / 2f - layout.width / 2f;
+        float yAsghar = Gdx.graphics.getHeight() - 50f;
+        titleFont.draw(batch, layout, xAsghar, yAsghar);
 
         Texture trashcanTexture = trashcanType.getTexture();
         batch.draw(trashcanTexture, Gdx.graphics.getWidth() - 50, Gdx.graphics.getHeight() / 2);

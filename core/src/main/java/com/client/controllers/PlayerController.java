@@ -4,19 +4,34 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.client.ClientApp;
 import com.client.utils.FacingDirection;
+import com.client.utils.HTTPUtil;
 import com.client.utils.PlayerAnimationController;
 import com.client.utils.PlayerState;
+import com.client.views.inGameMenus.FarmMenu;
+import com.common.models.GameData;
+import com.common.models.Player;
+import com.common.models.mapModels.Coordinate;
+import com.google.gson.JsonObject;
+import com.server.utilities.Response;
+
+import java.util.HashMap;
 
 public class PlayerController {
     private PlayerAnimationController playerAnimationController;
     private FacingDirection facingDirection;
     private PlayerState currState;
     private boolean isMoving = false;
+    private Player player = ClientApp.currentPlayer;
+    private GameData game = ClientApp.currentGameData;
 
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
+    private float width;
+    private float height;
 
     public PlayerController(Vector2 x, Vector2 y) {
         facingDirection = FacingDirection.DOWN;
@@ -24,6 +39,8 @@ public class PlayerController {
         playerAnimationController = new PlayerAnimationController(currState, facingDirection);
         this.playerPosition = x;
         this.playerVelocity = y;
+        this.width = playerAnimationController.getCurrentFrame().getTexture().getWidth();
+        this.height = playerAnimationController.getCurrentFrame().getTexture().getHeight();
     }
 
     public void update(float delta) {
@@ -129,5 +146,54 @@ public class PlayerController {
         playerVelocity.y = 0;
     }
 
+    public void updatePlayerPos(float delta) {
+        float prev_x = playerPosition.x;
+        float prev_y = playerPosition.y;
+        playerPosition.x += playerVelocity.x * delta * FarmMenu.BASE_SPEED_FACTOR;
+        playerPosition.x = MathUtils.clamp(playerPosition.x, width / 2, FarmMenu.FARM_X_SPAN * FarmMenu.TILE_PIX_SIZE - width / 2);
 
+        playerPosition.y += playerVelocity.y * delta * FarmMenu.BASE_SPEED_FACTOR;
+        playerPosition.y = MathUtils.clamp(playerPosition.y, height / 2, FarmMenu.FARM_Y_SPAN * FarmMenu.TILE_PIX_SIZE - height / 2);
+
+        if (prev_x != playerPosition.x || prev_y != playerPosition.y)
+            updatePlayerCoordinate();
+    }
+
+    public void updatePlayerCoordinate() {
+        JsonObject req = new JsonObject();
+        req.addProperty("x", playerPosition.x);
+        req.addProperty("y", playerPosition.y);
+        var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/movementWalk", req);
+
+        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+        System.out.println(res.getMessage());
+        if (res.getStatus() == 200) {
+            player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
+        } else {
+            playerPosition.x = player.getCoordinate().getX();
+            playerPosition.y = player.getCoordinate().getY();
+        }
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void handleServerPlayerMove(HashMap<String, String> res) {
+        String playerId = res.get("player_user_id");
+        if (playerId.equals(player.getUser_id())) return;
+        Player p = game.findPlayerByUserId(playerId);
+        if (p == null) return;
+        float x = Float.parseFloat(res.get("x"));
+        float y = Float.parseFloat(res.get("y"));
+        p.setCoordinate(new Coordinate(x, y));
+    }
 }

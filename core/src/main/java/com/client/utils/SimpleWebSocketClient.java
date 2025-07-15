@@ -18,7 +18,6 @@ public class SimpleWebSocketClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        System.out.println("Received: " + message);
         if (ClientApp.currentScreen != null)
             ClientApp.currentScreen.socketMessage(message);
     }

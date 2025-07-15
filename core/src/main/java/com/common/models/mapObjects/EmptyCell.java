@@ -7,18 +7,17 @@ import dev.morphia.annotations.Transient;
 
 @Embedded
 public class EmptyCell extends MapObject {
-    //TODO loading texture
-    @Transient
-    private Texture texture;
+
     public EmptyCell() {
         super(true, "empty", "yellow", AssetManager.getImage("grass"));
     }
 
-    public Texture getTexture() {
+    @Override
+    public Texture getTexture(){
+        if(texture == null){
+            this.texture = AssetManager.getImage("grass");
+        }
         return texture;
     }
 
-    public void setTexture(Texture texture) {
-        this.texture = texture;
-    }
 }

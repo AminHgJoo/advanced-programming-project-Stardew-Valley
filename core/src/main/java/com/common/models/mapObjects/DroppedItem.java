@@ -1,5 +1,6 @@
 package com.common.models.mapObjects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.client.utils.AssetManager;
 import com.common.models.enums.types.itemTypes.*;
 import com.common.models.items.Item;
@@ -20,6 +21,14 @@ public class DroppedItem extends MapObject {
         this.item = item;
         ItemType itemType = getItemType(item.getName());
         this.texture = AssetManager.getImage(itemType.getTextureName());
+    }
+    @Override
+    public Texture getTexture(){
+        if(texture == null){
+            ItemType itemType = getItemType(item.getName());
+            this.texture = AssetManager.getImage(itemType.getTextureName());
+        }
+        return texture;
     }
 
     public ItemType getItemType(String name) {
