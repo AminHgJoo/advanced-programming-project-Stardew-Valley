@@ -13,10 +13,11 @@ import java.util.HashMap;
 
 public class AssetManager {
     private static final HashMap<String, Texture> textures = new HashMap<>();
-    private static Skin skin = null;
     private static BitmapFont grayFont;
-    private static Skin skin2;
     private static BitmapFont stardewFont;
+    private static Skin skin;
+    private static Skin skin2;
+    private static Skin pixthulhu;
 
     public static void loadAssets() {
         loadSkin();
@@ -63,6 +64,7 @@ public class AssetManager {
         skin.add("myFont", grayFont);
         skin2 = new Skin(Gdx.files.internal("skin.clean-crispy/skin/clean-crispy-ui.json"));
         skin2.add("myFont", grayFont);
+        pixthulhu = new Skin(Gdx.files.internal("skin/pixthulhu/skin/pixthulhu-ui.json"));
     }
 
     public static Skin getSkin() {
@@ -152,5 +154,9 @@ public class AssetManager {
         } else {
             return AssetManager.getImage("sunnyicon");
         }
+    }
+
+    public static Skin getPixthulhu() {
+        return pixthulhu;
     }
 }

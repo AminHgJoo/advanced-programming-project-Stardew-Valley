@@ -479,6 +479,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
