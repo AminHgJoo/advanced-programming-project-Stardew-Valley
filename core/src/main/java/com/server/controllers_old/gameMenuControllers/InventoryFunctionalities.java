@@ -280,8 +280,8 @@ public class InventoryFunctionalities extends Controller {
 
         int dx = xAndY[0];
         int dy = xAndY[1];
-        int playerX = player.getCoordinate().getX();
-        int playerY = player.getCoordinate().getY();
+        float playerX = player.getCoordinate().getX();
+        float playerY = player.getCoordinate().getY();
 
         Slot slotToPlace = backpack.getSlotByItemName(itemName);
 

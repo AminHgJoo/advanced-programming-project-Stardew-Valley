@@ -87,8 +87,8 @@ public class Farming extends Controller {
             if (arr != null) {
                 int s = 0;
                 for (int i = 0; i < arr.length; i++) {
-                    int x = arr[i][0] + cellCoordinate.getX();
-                    int y = arr[i][1] + cellCoordinate.getY();
+                    float x = arr[i][0] + cellCoordinate.getX();
+                    float y = arr[i][1] + cellCoordinate.getY();
                     Cell c = player.getCurrentFarm(gameData).findCellByCoordinate(x, y);
                     s = Math.max(s, ((Crop) c.getObjectOnCell()).getStageNumber());
                     c.setObjectOnCell(new EmptyCell());

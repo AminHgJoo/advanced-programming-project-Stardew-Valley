@@ -36,6 +36,14 @@ public class Tree extends MapObject {
 
     }
 
+    @Override
+    public Texture getTexture() {
+        if(texture == null){
+            texture = AssetManager.getImage(treeType.textureNames[stageNumber]);
+        }
+        return texture;
+    }
+
     public LocalDateTime[] getGrowthDeadLines() {
         return growthDeadLines;
     }
@@ -76,9 +84,6 @@ public class Tree extends MapObject {
         this.harvestDeadLine = harvestDeadLine;
     }
 
-    public Texture getTexture() {
-        return texture;
-    }
 
     public void setTexture(Texture texture) {
         this.texture = texture;

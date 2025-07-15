@@ -178,10 +178,10 @@ public class Farm {
     public void showFarm(int x, int y, int size, GameData gameData) {
         Player owner = gameData.getCurrentPlayer();
         Player partner = gameData.getPartner(owner);
-        int ownerX = -1;
-        int ownerY = -1;
-        int partnerX = -1;
-        int partnerY = -1;
+        float ownerX = -1;
+        float ownerY = -1;
+        float partnerX = -1;
+        float partnerY = -1;
         if (owner.getCurrentFarm(gameData) == this && !owner.isInVillage()) {
             ownerX = owner.getCoordinate().getX();
             ownerY = owner.getCoordinate().getY();
@@ -194,8 +194,8 @@ public class Farm {
         for (Cell cell : cells) {
             Coordinate coordinate = cell.getCoordinate();
 
-            int xOfCell = coordinate.getX();
-            int yOfCell = coordinate.getY();
+            float xOfCell = coordinate.getX();
+            float yOfCell = coordinate.getY();
 
             if (Math.abs(x - xOfCell) <= size / 2 && Math.abs(y - yOfCell) <= size / 2) {
                 if (xOfCell == ownerX && yOfCell == ownerY)
@@ -252,10 +252,10 @@ public class Farm {
     public void showEntireFarm(GameData gameData) {
         Player owner = gameData.getCurrentPlayer();
         Player partner = gameData.getPartner(owner);
-        int ownerX = -1;
-        int ownerY = -1;
-        int partnerX = -1;
-        int partnerY = -1;
+        float ownerX = -1;
+        float ownerY = -1;
+        float partnerX = -1;
+        float partnerY = -1;
         if (owner.getCurrentFarm(gameData) == this && !owner.isInVillage()) {
             ownerX = owner.getCoordinate().getX();
             ownerY = owner.getCoordinate().getY();
@@ -341,15 +341,21 @@ public class Farm {
         }
     }
 
-    public Cell findCellByCoordinate(int x, int y) {
+    public Cell findCellByCoordinate(float x, float y) {
         for (Cell cell : cells) {
-            if (cell.getCoordinate().getX() == x && cell.getCoordinate().getY() == y) {
+            if (isXInRange(cell , x) && isYInRange(cell , y)) {
                 return cell;
             }
         }
         return null;
     }
 
+    public boolean isXInRange(Cell c , float x){
+        return  (x >= (c.getCoordinate().getX())) && (x <= (c.getCoordinate().getX() + 32));
+    }
+    public boolean isYInRange(Cell c , float y){
+        return  (y >= (c.getCoordinate().getY())) && (y <= (c.getCoordinate().getY() + 32));
+    }
     /// For pathfinding only.
     public void initialCells() {
         for (Cell cell : cells) {
@@ -475,8 +481,8 @@ public class Farm {
             int arr[][] = dir[i];
             boolean check = true;
             for (int j = 0; j < 3; j++) {
-                int x = arr[j][0] + targetCell.getCoordinate().getX();
-                int y = arr[j][1] + targetCell.getCoordinate().getY();
+                float x = arr[j][0] + targetCell.getCoordinate().getX();
+                float y = arr[j][1] + targetCell.getCoordinate().getY();
                 Cell c = findCellByCoordinate(x, y);
                 if (c != null) {
                     if (c.getObjectOnCell() instanceof Crop crop) {

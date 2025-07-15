@@ -1,6 +1,7 @@
 package com.common.models.mapObjects;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.client.utils.AssetManager;
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 
@@ -30,5 +31,9 @@ public class MapObject {
         if (this instanceof AnimalBlock)
             return "L";
         return type.substring(0, 1).toUpperCase();
+    }
+
+    public Texture getTexture() {
+        return texture;
     }
 }

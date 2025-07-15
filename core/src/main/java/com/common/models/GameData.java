@@ -20,7 +20,6 @@ import com.common.models.skills.Skill;
 import com.server.repositories.GameRepository;
 import com.server.utilities.DateUtility;
 import com.server.utilities.RNG;
-import com.server.views.gameViews.GameThread;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
@@ -184,8 +183,8 @@ public class GameData {
     private void waterAllCrops() {
         for (Farm farm : getMap().getFarms()) {
             for (Cell cell : farm.getCells()) {
-                int targetX = cell.getCoordinate().getX();
-                int targetY = cell.getCoordinate().getY();
+                float targetX = cell.getCoordinate().getX();
+                float targetY = cell.getCoordinate().getY();
 
                 //Greenhouse tiles.
                 if (targetX >= 22 && targetX <= 28 && targetY >= 3 && targetY <= 10) {
@@ -250,8 +249,8 @@ public class GameData {
                     int randomInt = RNG.randomInt(0, cropCells.size() - 1);
                     Cell cell = cropCells.get(randomInt);
 
-                    int targetX = cell.getCoordinate().getX();
-                    int targetY = cell.getCoordinate().getY();
+                    float targetX = cell.getCoordinate().getX();
+                    float targetY = cell.getCoordinate().getY();
 
                     //Greenhouse tile
                     if (targetX >= 22 && targetX <= 28 && targetY >= 3 && targetY <= 10) {
@@ -747,5 +746,14 @@ public class GameData {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public Player findPlayerByUserId(String id){
+        for (Player player : players) {
+            if(player.getUser_id().equals(id)){
+                return player;
+            }
+        }
+        return null;
     }
 }
