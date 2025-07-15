@@ -17,6 +17,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
+import com.common.models.Player;
+import com.common.models.skills.*;
+
+import java.util.ArrayList;
 
 public class SkillMenu implements MyScreen, InputProcessor {
     private GameMain gameMain;
@@ -27,8 +31,13 @@ public class SkillMenu implements MyScreen, InputProcessor {
     private final Skin skin;
     private BitmapFont titleFont;
     private GlyphLayout layout;
-
-
+    private ArrayList<Skill> skills;
+    private Texture skillTexture;
+    private Texture levelTexture;
+    private int farmingLevel;
+    private int miningLevel;
+    private int foragingLevel;
+    private int fishingLevel;
 
     public SkillMenu(GameMain gameMain, MyScreen farmScreen) {
         this.gameMain = gameMain;
@@ -50,7 +59,18 @@ public class SkillMenu implements MyScreen, InputProcessor {
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
-
+        this.skillTexture = AssetManager.getImage("skill");
+        this.levelTexture = AssetManager.getImage("green");
+        //TODO load skills
+        this.skills = new ArrayList<>();
+        this.skills.add(new Farming());
+        this.skills.add(new Mining());
+        this.skills.add(new Foraging());
+        this.skills.add(new Fishing());
+        this.farmingLevel = skills.get(0).getLevel().levelNumber + 1;
+        this.miningLevel = skills.get(1).getLevel().levelNumber + 1;
+        this.foragingLevel = skills.get(2).getLevel().levelNumber + 1;
+        this.fishingLevel = skills.get(3).getLevel().levelNumber + 1;
     }
 
     @Override
@@ -125,13 +145,30 @@ public class SkillMenu implements MyScreen, InputProcessor {
 
         batch.begin();
         batch.draw(backgroundTexture, 0, 0);
-
+        batch.draw(skillTexture, Gdx.graphics.getWidth()/2 - skillTexture.getWidth()/2, Gdx.graphics.getHeight()/2- skillTexture.getHeight()/2);
         String title = "Skills";
         layout.setText(titleFont, title);
-
         float xAsghar = Gdx.graphics.getWidth() / 2f - layout.width / 2f;
-        float yAsghar = Gdx.graphics.getHeight() - 50f;
+        float yAsghar = Gdx.graphics.getHeight() - 70f;
         titleFont.draw(batch, layout, xAsghar, yAsghar);
+        float levelWidth = levelTexture.getWidth();
+        float levelHeight = levelTexture.getHeight();
+        float gapX = levelWidth / 2f + 71;
+        float gapY = levelHeight / 2f + 121;
+        float startX = Gdx.graphics.getWidth() / 2f +16;
+        float startY = 120;
+        for(int i=0; i<fishingLevel; i++) {
+            batch.draw(levelTexture, startX + i * gapX, startY);
+        }
+        for(int i=0; i<5; i++) {
+            batch.draw(levelTexture, startX + i * gapX, startY +  gapY);
+        }
+        for(int i=0; i<miningLevel; i++) {
+            batch.draw(levelTexture, startX + i * gapX, startY + gapY *2);
+        }
+        for(int i=0; i<farmingLevel; i++) {
+            batch.draw(levelTexture, startX + i * gapX, startY + gapY * 3);
+        }
         batch.end();
     }
 
