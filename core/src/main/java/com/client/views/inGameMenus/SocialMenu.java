@@ -44,7 +44,7 @@ public class SocialMenu implements MyScreen, InputProcessor {
         label.setColor(Color.RED);
         label.setFontScale(4f);
         stage.addActor(label);
-        titleFont = AssetManager.getFont();
+        titleFont = AssetManager.getStardewFont();
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
