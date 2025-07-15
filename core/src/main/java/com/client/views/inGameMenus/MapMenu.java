@@ -34,7 +34,7 @@ public class MapMenu implements MyScreen, InputProcessor {
         this.batch = new SpriteBatch();
         backgroundTexture = AssetManager.getImage("profileBackground");
         this.skin = AssetManager.getSkin();
-        titleFont = AssetManager.getFont();
+        titleFont = AssetManager.getStardewFont();
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();

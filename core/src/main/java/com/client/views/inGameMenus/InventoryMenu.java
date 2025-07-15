@@ -57,7 +57,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         //TODO trashcan logic and load
         trashcanType = TrashcanType.DEFAULT;
         this.skin = AssetManager.getSkin();
-        titleFont = AssetManager.getFont();
+        titleFont = AssetManager.getStardewFont();
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
