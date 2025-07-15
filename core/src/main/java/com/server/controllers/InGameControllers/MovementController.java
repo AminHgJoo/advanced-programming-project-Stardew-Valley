@@ -20,7 +20,6 @@ public class MovementController extends Controller {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             double x = (Double) body.get("x");
             double y = (Double) body.get("y");
-            System.out.println("x: " + x + " y: " + y);
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             Farm farm = player.getCurrentFarm(game);

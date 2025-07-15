@@ -163,11 +163,9 @@ public class PlayerController {
         JsonObject req = new JsonObject();
         req.addProperty("x", playerPosition.x);
         req.addProperty("y", playerPosition.y);
-        System.out.println("http://localhost:8080/api/game/" + game.get_id() + "/movementWalk");
         var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/movementWalk", req);
 
         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-        System.out.println(res.getMessage());
         if (res.getStatus() == 200) {
             player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
         } else {

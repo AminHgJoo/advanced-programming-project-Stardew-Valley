@@ -39,7 +39,6 @@ public class GameServerController {
                 Method m = NpcController.class.getDeclaredMethod(methodName, Context.class, GameServer.class);
                 m.invoke(npcController, ctx, gs);
             } else if (controllerName.contains("movement")) {
-                System.out.println(methodName);
                 Method m = MovementController.class.getDeclaredMethod(methodName, Context.class, GameServer.class);
                 m.invoke(movementController, ctx, gs);
             } else if (controllerName.contains("loadSave")) {

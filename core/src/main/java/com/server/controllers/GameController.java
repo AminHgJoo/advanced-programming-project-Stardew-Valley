@@ -36,6 +36,7 @@ public class GameController {
                 return;
             }
 
+            // TODO fix in profuction
 //            if (lobby.getUsers().size() <= 2) {
 //                ctx.json(Response.BAD_REQUEST.setMessage("Not enough players"));
 //                return;

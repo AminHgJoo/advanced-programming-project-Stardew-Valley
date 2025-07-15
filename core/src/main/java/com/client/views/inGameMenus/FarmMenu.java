@@ -461,12 +461,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
             float yOfCell = coordinate.getY();
             Texture texture1 = grassTexture;
 
-            if (!(cell.getObjectOnCell().type.equals("buildingBlock"))) {
+            if (!(cell.getObjectOnCell() instanceof BuildingBlock buildingBlock)) {
                 texture1 = cell.getObjectOnCell().getTexture();
+            } else if (buildingBlock.buildingType.equals("Mine")) {
+                texture1 = AssetManager.getImage("mineCell");
             }
-//            } else if (((BuildingBlock) cell.getObjectOnCell()).buildingType.equals("Mine")) {
-//                texture1 = AssetManager.getImage("mineCell");
-//            }
 
             if (texture1 == SeasonTextures.SPRING.texture ||
                 texture1 == SeasonTextures.SUMMER.texture ||
