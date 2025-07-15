@@ -351,10 +351,10 @@ public class Farm {
     }
 
     public boolean isXInRange(Cell c , float x){
-        return  (x >= (c.getCoordinate().getX())) && (x <= (c.getCoordinate().getX() + 32));
+        return  (x >= (c.getCoordinate().getX())) && (x <= (c.getCoordinate().getX() + 1));
     }
     public boolean isYInRange(Cell c , float y){
-        return  (y >= (c.getCoordinate().getY())) && (y <= (c.getCoordinate().getY() + 32));
+        return  (y >= (c.getCoordinate().getY())) && (y <= (c.getCoordinate().getY() + 1));
     }
     /// For pathfinding only.
     public void initialCells() {

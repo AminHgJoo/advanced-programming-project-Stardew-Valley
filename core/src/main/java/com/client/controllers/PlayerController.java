@@ -14,6 +14,7 @@ import com.client.utils.PlayerState;
 import com.client.views.inGameMenus.FarmMenu;
 import com.common.models.GameData;
 import com.common.models.Player;
+import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.google.gson.JsonObject;
 import com.server.utilities.Response;
@@ -166,6 +167,10 @@ public class PlayerController {
         var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/movementWalk", req);
 
         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+        float x = playerPosition.x / 32;
+        float y = 49 - playerPosition.y / 32;
+        Cell c = player.getFarm().findCellByCoordinate(x, y);
+        System.out.println("x : " + x + " y : " + y + " -> " + c.getObjectOnCell().type);
         System.out.println(res.getMessage());
         if (res.getStatus() == 200) {
             player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
