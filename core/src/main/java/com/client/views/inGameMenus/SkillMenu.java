@@ -38,6 +38,7 @@ public class SkillMenu implements MyScreen, InputProcessor {
     private int miningLevel;
     private int foragingLevel;
     private int fishingLevel;
+    private Label tooltipLabel;
 
     public SkillMenu(GameMain gameMain, MyScreen farmScreen) {
         this.gameMain = gameMain;
@@ -50,16 +51,23 @@ public class SkillMenu implements MyScreen, InputProcessor {
         Image backgroundImage = new Image(backgroundTexture);
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
+        this.skillTexture = AssetManager.getImage("skill");
+        Image skillImage = new Image(skillTexture);
+        float centerX = (Gdx.graphics.getWidth() - skillTexture.getWidth()) / 2f;
+        float centerY = (Gdx.graphics.getHeight() - skillTexture.getHeight()) / 2f;
+        skillImage.setPosition(centerX, centerY);
+            stage.addActor(skillImage);
 
-        Label label = new Label("Inventory", skin);
-        label.setColor(Color.RED);
-        label.setFontScale(4f);
-        stage.addActor(label);
+        tooltipLabel = new Label("", skin);
+        tooltipLabel.setColor(Color.YELLOW);
+        tooltipLabel.setFontScale(2f);
+        tooltipLabel.setVisible(false);
+        stage.addActor(tooltipLabel);
+
         titleFont = AssetManager.getStardewFont();
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
-        this.skillTexture = AssetManager.getImage("skill");
         this.levelTexture = AssetManager.getImage("green");
         //TODO load skills
         this.skills = new ArrayList<>();
@@ -119,9 +127,46 @@ public class SkillMenu implements MyScreen, InputProcessor {
     }
 
     @Override
-    public boolean mouseMoved(int i, int i1) {
+    public boolean mouseMoved(int screenX, int screenY) {
+        float invertedY = Gdx.graphics.getHeight() - screenY;
+        float levelHeight = levelTexture.getHeight();
+        float gapY = levelHeight / 2f + 121;
+        float farmingX = 545;
+        float farmingY = 140 + gapY * 3;
+        float farmingWidth = 400;
+        float farmingHeight = 150;
+
+        if (screenX >= farmingX && screenX <= farmingX + farmingWidth &&
+            invertedY >= farmingY && invertedY <= farmingY + farmingHeight) {
+            tooltipLabel.setText("Farming is the skill associated with planting, growing, and harvesting crops on the farm.");
+            tooltipLabel.setPosition(farmingX - 500, farmingY - 50);
+            tooltipLabel.setVisible(true);
+        }
+        else if(screenX >= farmingX && screenX <= farmingX + farmingWidth &&
+            invertedY >= farmingY - gapY && invertedY <= farmingY + farmingHeight - gapY){
+            tooltipLabel.setText("Mining Skill is increased by breaking rocks, panning, or by reading Mining Monthly.");
+            tooltipLabel.setPosition(farmingX - 500, farmingY - gapY - 50);
+            tooltipLabel.setVisible(true);
+        }
+        else if(screenX >= farmingX && screenX <= farmingX + farmingWidth &&
+            invertedY >= farmingY - gapY*2 && invertedY <= farmingY + farmingHeight - gapY*2){
+            tooltipLabel.setText("Foraging is the skill associated with gathering wild resources found on the ground throughout Stardew Valley.");
+            tooltipLabel.setPosition(farmingX - 500, farmingY - gapY*2 - 50);
+            tooltipLabel.setVisible(true);
+        }
+        else if(screenX >= farmingX && screenX <= farmingX + farmingWidth &&
+            invertedY >= farmingY - gapY*3 && invertedY <= farmingY + farmingHeight - gapY*3){
+            tooltipLabel.setText("Fishing is a skill associated with catching fish with a fishing rod or by collecting items from crab pots.");
+            tooltipLabel.setPosition(farmingX - 500, farmingY - gapY*3 - 50);
+            tooltipLabel.setVisible(true);
+        }
+        else {
+            tooltipLabel.setVisible(false);
+        }
+
         return false;
     }
+
 
     @Override
     public boolean scrolled(float v, float v1) {
@@ -142,10 +187,9 @@ public class SkillMenu implements MyScreen, InputProcessor {
     public void render(float v) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         batch.begin();
-        batch.draw(backgroundTexture, 0, 0);
-        batch.draw(skillTexture, Gdx.graphics.getWidth()/2 - skillTexture.getWidth()/2, Gdx.graphics.getHeight()/2- skillTexture.getHeight()/2);
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
         String title = "Skills";
         layout.setText(titleFont, title);
         float xAsghar = Gdx.graphics.getWidth() / 2f - layout.width / 2f;
@@ -157,6 +201,7 @@ public class SkillMenu implements MyScreen, InputProcessor {
         float gapY = levelHeight / 2f + 121;
         float startX = Gdx.graphics.getWidth() / 2f +16;
         float startY = 120;
+
         for(int i=0; i<fishingLevel; i++) {
             batch.draw(levelTexture, startX + i * gapX, startY);
         }
