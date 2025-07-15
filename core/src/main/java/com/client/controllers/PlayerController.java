@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.client.ClientApp;
+import com.client.services.PlayerService;
 import com.client.utils.FacingDirection;
 import com.client.utils.HTTPUtil;
 import com.client.utils.PlayerAnimationController;
@@ -20,6 +21,8 @@ import com.google.gson.JsonObject;
 import com.server.utilities.Response;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class PlayerController {
     private PlayerAnimationController playerAnimationController;
@@ -28,6 +31,8 @@ public class PlayerController {
     private boolean isMoving = false;
     private Player player = ClientApp.currentPlayer;
     private GameData game = ClientApp.currentGameData;
+    private PlayerService playerService = new PlayerService(player, game);
+    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(2);
 
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
@@ -161,19 +166,25 @@ public class PlayerController {
     }
 
     public void updatePlayerCoordinate() {
-        JsonObject req = new JsonObject();
-        req.addProperty("x", playerPosition.x);
-        req.addProperty("y", playerPosition.y);
-        var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/movementWalk", req);
+        boolean checkWalk = playerService.walk(playerPosition.x, playerPosition.y);
+        if (checkWalk) {
+            networkThreadPool.execute(() -> {
+                JsonObject req = new JsonObject();
+                req.addProperty("x", playerPosition.x);
+                req.addProperty("y", playerPosition.y);
+                var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/movementWalk", req);
 
-        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-        float x = playerPosition.x / 32;
-        float y = 49 - playerPosition.y / 32;
-        Cell c = player.getFarm().findCellByCoordinate(x, y);
-        System.out.println("x : " + x + " y : " + y + " -> " + c.getObjectOnCell().type);
-        System.out.println(res.getMessage());
-        if (res.getStatus() == 200) {
-            player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
+                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                Gdx.app.postRunnable(() -> {
+                    if (res.getStatus() == 200) {
+
+                        player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
+                    } else {
+                        playerPosition.x = player.getCoordinate().getX();
+                        playerPosition.y = player.getCoordinate().getY();
+                    }
+                });
+            });
         } else {
             playerPosition.x = player.getCoordinate().getX();
             playerPosition.y = player.getCoordinate().getY();
