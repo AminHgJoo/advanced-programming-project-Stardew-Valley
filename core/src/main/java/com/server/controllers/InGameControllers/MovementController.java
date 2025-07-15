@@ -23,15 +23,15 @@ public class MovementController extends Controller {
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             Farm farm = player.getCurrentFarm(game);
-            x = x/32d;
-            y = 49 - y/32d;
-            Cell cell = farm.findCellByCoordinate((float) x,  (float) y);
+            x = x / 32d;
+            y = y / 32d;
+            Cell cell = farm.findCellByCoordinate((float) x, (float) y);
             if (cell == null) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Cell not found"));
                 return;
             }
             if (!cell.getObjectOnCell().isWalkable) {
-                ctx.json(Response.BAD_REQUEST.setMessage("Cell is not walkable"));
+                ctx.json(Response.BAD_REQUEST.setMessage("Cell is not walkable " + cell.getObjectOnCell().type));
                 return;
             }
             ctx.json(Response.OK.setMessage("Ok"));

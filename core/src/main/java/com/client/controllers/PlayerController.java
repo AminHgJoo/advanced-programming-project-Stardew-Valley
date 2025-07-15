@@ -166,6 +166,7 @@ public class PlayerController {
         var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/movementWalk", req);
 
         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+        System.out.println(res.getMessage());
         if (res.getStatus() == 200) {
             player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
         } else {
