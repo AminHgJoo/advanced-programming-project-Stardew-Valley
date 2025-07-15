@@ -199,7 +199,7 @@ public class World extends Controller {
 
         player.setMoney(player.getMoney(gameData) - 1000, gameData);
 
-
+        //TODO: MODIFY THIS!
         //Greenhouse runs from x : [22, 28] & y : [3, 10]
         for (int i = 23; i < 28; i++) {
             for (int j = 4; j < 10; j++) {
@@ -799,11 +799,8 @@ public class World extends Controller {
             double weatherModifier = setWeatherModifierFishing(gameData);
             int playerLevel = player.getFishingSkill().getLevel().levelNumber;
             int numberOfFishes = (int) (((double) randomNumber)
-                * weatherModifier * (double) (playerLevel + 2));
-            if (numberOfFishes == 0) {
-                GameRepository.saveGame(gameData);
-                return new Response(false, "You could not catch fish");
-            }
+                * weatherModifier * (double) (playerLevel + 2)) + 1;
+
             ArrayList<FishType> values = getValidFishTypes(gameData.getSeason(), playerLevel);
             int randomFishNumber = (int) (Math.random() * values.size());
             FishType fishType = values.get(randomFishNumber);
