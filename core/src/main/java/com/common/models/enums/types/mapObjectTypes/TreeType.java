@@ -10,9 +10,9 @@ import java.util.Arrays;
 
 public enum TreeType {
     //TODO textures not found
-    TREE_BARK("Tree Bark", "alaki", -1, MiscType.WOOD, -1, -1, false, -1, (Season[]) null, new String[]{}),
-    BURNT_TREE("Burnt Tree", "alaki", -1, ForagingMineralsType.COAL, -1, -1, false, -1, (Season[]) null, new String[]{}),
-    NORMAL_TREE("Normal Tree", "alaki", -1, MiscType.WOOD, -1, -1, false, -1, (Season[]) null, new String[]{}),
+    TREE_BARK("Tree Bark", "alaki", -1, MiscType.WOOD, -1, -1, false, -1, (Season[]) null, new String[]{"barkTreeAlaki"}),
+    BURNT_TREE("Burnt Tree", "alaki", -1, ForagingMineralsType.COAL, -1, -1, false, -1, (Season[]) null, new String[]{"barkTreeAlaki"}),
+    NORMAL_TREE("Normal Tree", "alaki", -1, MiscType.WOOD, -1, -1, false, -1, (Season[]) null, new String[]{"barkTreeAlaki"}),
     // source
     APRICOT_TREE("Apricot Tree", "Apricot Sapling", 7, FoodTypes.APRICOT, 1, 59, true, 38, Season.SPRING, new String[]{"apricotStage1", "apricotStage2", "apricotStage3", "apricotStage4", "apricotStage5"}),
     CHERRY_TREE("Cherry Tree", "Cherry Sapling", 7, FoodTypes.CHERRY, 1, 80, true, 38, Season.SPRING,new String[]{"cherryStage1", "cherryStage2", "cherryStage3", "cherryStage4", "cherryStage5"} ),

@@ -52,14 +52,15 @@ public class GameController {
                 }
                 users.add(u);
                 Player p = new Player(u);
-                // TODO hard coded
-                Farm f = Farm.makeFarm(1);
-                p.setFarm(f);
 
                 players.add(p);
             }
             GameData game = new GameData(players);
             for (Player p : players) {
+                // TODO hard coded
+                Farm f = Farm.makeFarm(1 , game);
+                p.setFarm(f);
+
                 game.getMap().getFarms().add(p.getFarm());
             }
             GameRepository.saveGame(game);

@@ -3,6 +3,7 @@ package com.common.models.mapObjects;
 import com.badlogic.gdx.graphics.Texture;
 import com.client.utils.AssetManager;
 import com.common.models.App;
+import com.common.models.GameData;
 import com.common.models.enums.types.mapObjectTypes.TreeType;
 import com.server.utilities.DateUtility;
 import dev.morphia.annotations.Embedded;
@@ -21,7 +22,7 @@ public class Tree extends MapObject {
     public Tree() {
     }
 
-    public Tree(TreeType treeType, LocalDateTime source) {
+    public Tree(TreeType treeType, LocalDateTime source , GameData gameData) {
         super(false, "tree", "green", null);
         this.treeType = treeType;
         growthDeadLines[0] = DateUtility.getLocalDateTime(source, treeType.stageOneTime);
@@ -30,7 +31,7 @@ public class Tree extends MapObject {
         growthDeadLines[3] = DateUtility.getLocalDateTime(growthDeadLines[2], treeType.stageThreeTime);
         growthDeadLines[4] = DateUtility.getLocalDateTime(growthDeadLines[3], treeType.stageFourTime);
         if (growthDeadLines[0] == null) {
-            growthDeadLines[0] = App.getLoggedInUser().getCurrentGame().getDate();
+            growthDeadLines[0] = gameData.getDate();
         }
         this.texture = AssetManager.getImage(treeType.textureNames[stageNumber]);
 

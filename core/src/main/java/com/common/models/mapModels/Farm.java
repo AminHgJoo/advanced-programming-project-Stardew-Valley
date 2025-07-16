@@ -1,5 +1,6 @@
 package com.common.models.mapModels;
 
+import com.badlogic.gdx.Game;
 import com.common.models.Animal;
 import com.common.models.App;
 import com.common.models.GameData;
@@ -41,7 +42,7 @@ public class Farm {
         lastFarmNumber++;
     }
 
-    public static Farm makeFarm(int lakeModifier) {
+    public static Farm makeFarm(int lakeModifier, GameData gameData) {
         ArrayList<Cell> farmCells = new ArrayList<>();
         ArrayList<Building> farmBuildings = new ArrayList<>();
         makeEmptyCells(farmCells);
@@ -51,33 +52,33 @@ public class Farm {
         else
             addTwoLakes(farmCells);
 
-        addRandomItems(farmCells);
+        addRandomItems(farmCells, gameData);
         return new Farm(farmCells, farmBuildings);
     }
 
-    private static void addRandomItems(ArrayList<Cell> farmCells) {
+    private static void addRandomItems(ArrayList<Cell> farmCells, GameData gameData) {
         for (Cell cell : farmCells) {
             int randomNumber = (int) (Math.random() * 50);
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 //TODO: Plz kill me.
-                cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE, LocalDateTime.parse("2025-01-01 09:00:00", dateTimeFormatter)));
+                cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE, LocalDateTime.parse("2025-01-01 09:00:00", dateTimeFormatter), gameData));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
                 cell.setObjectOnCell(new ForagingMineral(ForagingMineralsType.STONE, "gray", "Stone"));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
-                cell.setObjectOnCell(randomForagingCrop());
+                cell.setObjectOnCell(randomForagingCrop(gameData));
             } else if (cell.getObjectOnCell().type.equals("Mine") && (randomNumber == 4 || randomNumber == 3) && isMineCell(cell)) {
                 cell.setObjectOnCell(randomForagingMineral());
             }
         }
     }
 
-    private static ForagingCrop randomForagingCrop() {
+    private static ForagingCrop randomForagingCrop(GameData gameData) {
         ForagingCropsType[] allValues = ForagingCropsType.values();
         ArrayList<ForagingCropsType> validValues = new ArrayList<>();
 
         for (int i = 0; i < allValues.length; i++) {
-            if (allValues[i].getSeasons().length > 1 || allValues[i].getSeasons()[0] == App.getLoggedInUser().getCurrentGame().getSeason()) {
+            if (allValues[i].getSeasons().length > 1 || allValues[i].getSeasons()[0] == gameData.getSeason()) {
                 validValues.add(allValues[i]);
             }
         }
@@ -311,7 +312,7 @@ public class Farm {
         return buildings;
     }
 
-    public void foragingRefresh() {
+    public void foragingRefresh(GameData gameData) {
         // makes sure the map doesn't get crowded.
         int count = 0;
         for (Cell cell : cells) {
@@ -326,12 +327,11 @@ public class Farm {
         for (Cell cell : cells) {
             int randomNumber = (int) (Math.random() * 150);
             if (cell.getObjectOnCell().type.equals("empty") && cell.isTilled() && randomNumber == 3) {
-                GameData gameData = App.getLoggedInUser().getCurrentGame();
                 CropSeedsType cropSeedsType = CropSeedsType.values()[(int) (Math.random() * (CropSeedsType.values().length - 1))];
                 Crop crop = new Crop(cropSeedsType, gameData.getDate());
                 cell.setObjectOnCell(crop);
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
-                cell.setObjectOnCell(randomForagingCrop());
+                cell.setObjectOnCell(randomForagingCrop(gameData));
             }
             int randomNumber2 = (int) (Math.random() * 15);
 
@@ -343,19 +343,21 @@ public class Farm {
 
     public Cell findCellByCoordinate(float x, float y) {
         for (Cell cell : cells) {
-            if (isXInRange(cell , x) && isYInRange(cell , y)) {
+            if (isXInRange(cell, x) && isYInRange(cell, y)) {
                 return cell;
             }
         }
         return null;
     }
 
-    public boolean isXInRange(Cell c , float x){
-        return  (x >= (c.getCoordinate().getX())) && (x <= (c.getCoordinate().getX() + 1));
+    public boolean isXInRange(Cell c, float x) {
+        return (x >= (c.getCoordinate().getX())) && (x <= (c.getCoordinate().getX() + 1));
     }
-    public boolean isYInRange(Cell c , float y){
-        return  (y >= (c.getCoordinate().getY())) && (y <= (c.getCoordinate().getY() + 1));
+
+    public boolean isYInRange(Cell c, float y) {
+        return (y >= (c.getCoordinate().getY())) && (y <= (c.getCoordinate().getY() + 1));
     }
+
     /// For pathfinding only.
     public void initialCells() {
         for (Cell cell : cells) {
@@ -441,7 +443,7 @@ public class Farm {
     }
 
 
-    public void strikeLightning(int targetX, int targetY, LocalDateTime source) {
+    public void strikeLightning(int targetX, int targetY, LocalDateTime source, GameData gameData) {
         //Greenhouse Tile
         if (targetX >= 22 && targetX <= 28 && targetY >= 3 && targetY <= 10) {
             return;
@@ -450,7 +452,7 @@ public class Farm {
         Cell targetCell = findCellByCoordinate(targetX, targetY);
         if (targetCell != null) {
             if (targetCell.getObjectOnCell() instanceof Tree) {
-                targetCell.setObjectOnCell(new Tree(TreeType.BURNT_TREE, source));
+                targetCell.setObjectOnCell(new Tree(TreeType.BURNT_TREE, source, gameData));
             }
             if (targetCell.getObjectOnCell() instanceof Crop) {
                 targetCell.setObjectOnCell(new EmptyCell());

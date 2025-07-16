@@ -138,7 +138,7 @@ public class World extends Controller {
         }
 
         GameData currentGameData = App.getLoggedInUser().getCurrentGame();
-        currentGameData.getCurrentPlayer().getCurrentFarm(currentGameData).strikeLightning(targetX, targetY, currentGameData.getDate());
+//        currentGameData.getCurrentPlayer().getCurrentFarm(currentGameData).strikeLightning(targetX, targetY, currentGameData.getDate());
         GameRepository.saveGame(currentGameData);
         return new Response(true, "Lightning summoned at target coordinates.");
     }
@@ -579,7 +579,7 @@ public class World extends Controller {
 
         if (tree.getTreeType() == TreeType.NORMAL_TREE) {
             int amountOfWood = (int) (Math.random() * 4 + 2);
-            targetCell.setObjectOnCell(new Tree(TreeType.TREE_BARK, gameData.getDate()));
+            targetCell.setObjectOnCell(new Tree());
 
             Backpack backpack = player.getInventory();
             Slot slot = backpack.getSlotByItemName("Wood");

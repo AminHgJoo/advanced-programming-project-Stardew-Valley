@@ -78,7 +78,7 @@ public class GameData {
         }
     }
 
-    public GameData(ArrayList<Player> players){
+    public GameData(ArrayList<Player> players) {
         this.players = players;
         this.map = Map.makeMap();
         this.isGameOngoing = true;
@@ -280,10 +280,10 @@ public class GameData {
         }
     }
 
-    public void handleRefreshForaging() {
+    public void handleRefreshForaging(GameData gameData) {
         ArrayList<Farm> allFarms = getMap().getFarms();
         for (Farm farm : allFarms) {
-            farm.foragingRefresh();
+            farm.foragingRefresh(gameData);
         }
     }
 
@@ -323,7 +323,7 @@ public class GameData {
             }
         }
 
-        handleRefreshForaging();
+        handleRefreshForaging(this);
 
         weatherToday = weatherTomorrow;
 
@@ -392,7 +392,7 @@ public class GameData {
             for (int i = 0; i < 3; i++) {
                 int targetX = (int) (Math.random() * 75);
                 int targetY = (int) (Math.random() * 50);
-                player.getFarm().strikeLightning(targetX, targetY, gameData.getDate());
+                player.getFarm().strikeLightning(targetX, targetY, gameData.getDate(), this);
             }
         }
     }
@@ -402,7 +402,7 @@ public class GameData {
         do {
             randomNumber = (int) (Math.random() * 4);
         } while (!Weather.values()[randomNumber]
-            .isWeatherPossibleInThisSeason(App.getLoggedInUser().getCurrentGame().getSeason()));
+            .isWeatherPossibleInThisSeason(this.getSeason()));
         weatherTomorrow = Weather.values()[randomNumber];
     }
 
@@ -748,9 +748,9 @@ public class GameData {
         this.capacity = capacity;
     }
 
-    public Player findPlayerByUserId(String id){
+    public Player findPlayerByUserId(String id) {
         for (Player player : players) {
-            if(player.getUser_id().equals(id)){
+            if (player.getUser_id().equals(id)) {
                 return player;
             }
         }
