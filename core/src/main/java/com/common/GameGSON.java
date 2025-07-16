@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 
@@ -29,11 +30,18 @@ public class GameGSON {
         .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
             @Override
             public void write(JsonWriter out, LocalDateTime value) throws IOException {
-                out.value(value.toString());
+                if (value == null) {
+                    out.nullValue();
+                } else
+                    out.value(value.toString());
             }
 
             @Override
             public LocalDateTime read(JsonReader in) throws IOException {
+                if (in.peek() == JsonToken.NULL) {
+                    in.nextNull();
+                    return null;
+                }
                 return LocalDateTime.parse(in.nextString());
             }
         })
