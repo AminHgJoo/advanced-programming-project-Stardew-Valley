@@ -177,7 +177,6 @@ public class PlayerController {
                 Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                 Gdx.app.postRunnable(() -> {
                     if (res.getStatus() == 200) {
-
                         player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
                     } else {
                         playerPosition.x = player.getCoordinate().getX();
