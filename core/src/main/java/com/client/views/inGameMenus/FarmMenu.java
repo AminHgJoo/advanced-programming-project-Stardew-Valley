@@ -228,7 +228,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 //            playerController.handleKeyUp(-BASE_SPEED_FACTOR, 0);
 //        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
 //            playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
-        if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.E) {
+        if (keycode == Input.Keys.ESCAPE ) {
             gameMain.setScreen(new InventoryMenu(gameMain, this));
         }
         return false;

@@ -60,9 +60,9 @@ public class Farm {
         for (Cell cell : farmCells) {
             int randomNumber = (int) (Math.random() * 50);
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+              //  DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 //TODO: Plz kill me.
-                cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE, LocalDateTime.parse("2025-01-01 09:00:00", dateTimeFormatter), gameData));
+                //cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE, LocalDateTime.parse("2025-01-01 09:00:00", dateTimeFormatter), gameData));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
                 cell.setObjectOnCell(new ForagingMineral(ForagingMineralsType.STONE, "gray", "Stone"));
             } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
