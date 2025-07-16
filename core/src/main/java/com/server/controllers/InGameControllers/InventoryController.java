@@ -154,13 +154,13 @@ public class InventoryController extends Controller {
             }
             player.getActiveBuffs().add(new ActiveBuff(food.foodBuff));
             player.setEnergy(Math.min(player.getEnergy() - food.getEnergyCost(), player.getMaxEnergy()));
-
-            ctx.json(Response.OK.setBody(player));
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setBody(playerJson));
             HashMap<String, String> msg = new HashMap<>();
             msg.put("type", "FOOD_EAT");
             msg.put("player_user_id", id);
             msg.put("food", foodName);
-            msg.put("player", GameGSON.gson.toJson(player));
+            msg.put("player", playerJson);
 
             gs.broadcast(msg);
         } catch (Exception e) {
