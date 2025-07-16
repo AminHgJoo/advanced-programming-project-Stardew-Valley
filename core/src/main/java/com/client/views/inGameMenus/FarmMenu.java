@@ -275,7 +275,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     this.cancel();
                 }
             }, .6f, 2);
-        } else {
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.B)){
+            playerController.dropItem(ClientApp.currentPlayer, farm);
+        }
+        else {
             if (!isToolSwinging) {
                 playerController.setState(PlayerState.IDLE);
                 playerVelocity.x = 0;

@@ -15,11 +15,16 @@ import com.client.utils.PlayerState;
 import com.client.views.inGameMenus.FarmMenu;
 import com.common.models.GameData;
 import com.common.models.Player;
+import com.common.models.items.Item;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
+import com.common.models.mapModels.Farm;
+import com.common.models.mapObjects.DroppedItem;
+import com.common.models.mapObjects.EmptyCell;
 import com.google.gson.JsonObject;
 import com.server.utilities.Response;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -114,6 +119,27 @@ public class PlayerController {
         } else if (currState == PlayerState.WALKING) {
             setState(PlayerState.IDLE);
         }
+    }
+
+    public void dropItem(Player player, Farm farm) {
+        Item item = player.getEquippedItem();
+        if(item != null ) {
+            Cell cell = findCell(player.getCoordinate(), farm.getCells());
+            if(cell != null && cell.getObjectOnCell() instanceof EmptyCell) {
+                //TODO server
+                player.setEquippedItem(null);
+                cell.setObjectOnCell(new DroppedItem(1,item));
+            }
+        }
+    }
+
+    private Cell findCell(Coordinate coordinate, ArrayList<Cell> cells) {
+        for(Cell cell : cells) {
+            if(cell.getCoordinate().equals(coordinate)) {
+                return cell;
+            }
+        }
+        return null;
     }
 
     public void setState(PlayerState state) {
