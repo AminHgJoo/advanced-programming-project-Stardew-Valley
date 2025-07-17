@@ -1,5 +1,6 @@
 package com.common.models.items;
 
+import com.client.utils.AssetManager;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.ToolTypes;
 import dev.morphia.annotations.Embedded;
@@ -17,12 +18,14 @@ public class Tool extends Item {
         super(quality, 1, value, energyCost, name);
         this.type = type;
         this.waterReserve = waterReserve;
+        this.texture = AssetManager.getImage(type.getTextureName());
     }
 
     public Tool(Quality quality, ToolTypes type, int price) {
         super(quality, 1, 0, 5, type.name);
         this.type = type;
         this.waterReserve = type.waterCapacity;
+        this.texture = AssetManager.getImage(type.getTextureName());
     }
 
     /// Only in blacksmith shop.

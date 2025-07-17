@@ -52,11 +52,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         backgroundTexture = AssetManager.getImage("profileBackground");
         inventoryTexture = AssetManager.getImage("inventory");
         this.farmScreen = farmScreen;
-        //TODO get current player's backpack
         backpack = ClientApp.currentPlayer.getInventory();
-        for (FoodTypes type : FoodTypes.values()) {
-            backpack.addSlot(new Slot(new Food(Quality.DEFAULT, type, 1, 1), 10));
-        }
         //TODO trashcan logic and load
         trashcanType = TrashcanType.DEFAULT;
         this.skin = AssetManager.getSkin();
@@ -213,7 +209,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             selectedIndex = -1;
         }
 
-        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
+        for (int i = 0; i < ITEMS_PER_PAGE && i<backpack.getSlots().size(); i++) {
             int actualIndex = scrollIndex * GRID_SIZE + i;
             if (selectedIndex >= 0 && selected) {
                 Slot temp = backpack.getSlots().get(selectedIndex);
@@ -225,7 +221,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             }
         }
         List<Slot> slots = backpack.getSlots();
-        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
+        for (int i = 0; i < ITEMS_PER_PAGE &&i<backpack.getSlots().size(); i++) {
             int actualIndex = scrollIndex * GRID_SIZE + i;
             if (actualIndex >= slots.size()) break;
 

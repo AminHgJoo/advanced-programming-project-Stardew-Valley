@@ -24,12 +24,15 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.controllers.PlayerController;
 import com.client.utils.*;
+import com.common.models.Backpack;
 import com.common.models.GameData;
+import com.common.models.Slot;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.BuildingBlock;
+import com.common.models.mapObjects.DroppedItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -40,6 +43,7 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 
 public class FarmMenu implements MyScreen, InputProcessor {
     //TODO: Draw destroyed/renovated greenhouse based on it being fixed or not.
@@ -71,6 +75,15 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Farm farm;
     private Texture grassTexture;
     private boolean isToolSwinging = false;
+    private Texture inventory;
+    private int scrollIndex = 0;
+    private MyScreen farmScreen;
+    private int GRID_SIZE = 9;
+    private int GRID_PADDING = 8;
+    private int selectedIndex = -1;
+    private int GRID_ITEM_SIZE = 95;
+    private boolean selected = false;
+    private int selectedSave = -1;
 
     //TODO: TEST AND PROTOTYPE
     private final Texture playerTexture = new Texture("images/T_BatgunProjectile.png");
@@ -98,7 +111,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     public FarmMenu(GameMain gameMain) {
         this.gameMain = gameMain;
-
         this.playerPosition = new Vector2(TILE_PIX_SIZE * FARM_X_SPAN / 2, TILE_PIX_SIZE * FARM_Y_SPAN / 2);
         this.playerVelocity = new Vector2();
 
@@ -109,7 +121,12 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.grassTexture = AssetManager.getImage("grassfall");
         playerController = new PlayerController(playerPosition, playerVelocity);
         this.farm = playerController.getPlayer().getFarm();
+        this.inventory = AssetManager.getImage("aks");
+        //TODO tuf zadam
+        for (Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {
+            slot.getItem().setTexture(AssetManager.getImage(slot.getItem().getItemType(slot.getItem().getName()).getTextureName()));
 
+        }
         initializeShader();
         initializeParticles();
         initializeStage();
@@ -146,6 +163,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         timeLabel = new Label("6:50 am", labelStyle);
         stage.addActor(timeLabel);
         timeLabel.setPosition(stage.getWidth() - 43 * scaleFactor, stage.getHeight() - 36 * scaleFactor);
+
+        Image inventoryImage = new Image(inventory);
+        stage.addActor(inventoryImage);
+        inventoryImage.setPosition(stage.getWidth() / 2 - inventoryImage.getWidth() / 2, 0);
 
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
         labelStyle2.font = font;
@@ -186,6 +207,58 @@ public class FarmMenu implements MyScreen, InputProcessor {
         timeLabel.setText((currentHour > 12 ? (currentHour - 12) : currentHour) + ":" + currentDateTime.getMinute() + " " + (currentHour > 12 ? "PM" : "AM"));
 
         moneyLabel.setText(gameData.getCurrentPlayer().getMoney(gameData));
+
+        int GRID_ITEM_SIZE = 95;
+        int GRID_PADDING = 8;
+        Backpack backpack = ClientApp.currentPlayer.getInventory();
+        int startX = (int) (stage.getWidth() / 2 - inventory.getWidth() / 2 + 50);
+        int startY = 10;
+        if (selectedIndex >= 0 && selected == false) {
+            selected = true;
+            selectedSave = selectedIndex;
+            ClientApp.currentPlayer.setEquippedItem(backpack.getSlots().get(selectedSave).getItem());
+            selectedIndex = -1;
+        }
+
+        for (int j = 0; j < 9; j++) {
+            int actualIndex = scrollIndex * GRID_SIZE + j;
+            if (selectedIndex >= 0 && selected) {
+                Slot temp = backpack.getSlots().get(selectedIndex);
+                backpack.getSlots().set(selectedIndex, backpack.getSlots().get(selectedSave));
+                backpack.getSlots().set(selectedSave, temp);
+                selectedIndex = -1;
+                selected = false;
+                selectedSave = -1;
+            }
+        }
+        List<Slot> slots = backpack.getSlots();
+        for (int i = 0; i < 9; i++) {
+            int actualIndex = scrollIndex * GRID_SIZE + i;
+            if (actualIndex >= slots.size()) break;
+
+            int col = i % GRID_SIZE;
+            int row = i / GRID_SIZE;
+
+            int x = startX + col * (GRID_ITEM_SIZE + GRID_PADDING);
+            int y = startY - row * (GRID_ITEM_SIZE + GRID_PADDING);
+
+
+            if (actualIndex == selectedSave) {
+                Image red = new Image(AssetManager.getImage("red"));
+                stage.addActor(red);
+                red.setPosition(x, y);
+                red.setSize(GRID_ITEM_SIZE, GRID_ITEM_SIZE);
+            }
+
+
+            Texture itemTexture = slots.get(actualIndex).getItem().getTexture();
+            Image itemImage = new Image(itemTexture);
+            stage.addActor(itemImage);
+            itemImage.setPosition(x, y);
+            itemImage.setSize(GRID_ITEM_SIZE, GRID_ITEM_SIZE);
+
+        }
+
     }
 
     private void initializeParticles() {
@@ -276,7 +349,12 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 }
             }, .6f, 2);
         } else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-            playerController.dropItem(ClientApp.currentPlayer, farm);
+           boolean success =  playerController.dropItem(ClientApp.currentPlayer, farm);
+           if(success) {
+               selectedIndex = -1;
+               selectedSave = -1;
+               selected = false;
+           }
         } else {
             if (!isToolSwinging) {
                 playerController.setState(PlayerState.IDLE);
@@ -293,7 +371,37 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+        int startX = (int) (stage.getWidth() / 2 - inventory.getWidth() / 2 + 50);
+        int startY = 10;
+
+        screenY = Gdx.graphics.getHeight() - screenY;
+
+        for (int i = 0; i < 9; i++) {
+            Backpack backpack = ClientApp.currentPlayer.getInventory();
+            int actualIndex = scrollIndex * GRID_SIZE + i;
+            if (actualIndex >= backpack.getSlots().size()) break;
+
+            int col = i % GRID_SIZE;
+            int row = i / GRID_SIZE;
+            int x = startX + col * (GRID_ITEM_SIZE + GRID_PADDING);
+            int y = startY - row * (GRID_ITEM_SIZE + GRID_PADDING);
+
+            if (screenX >= x && screenX <= x + GRID_ITEM_SIZE &&
+                screenY >= y && screenY <= y + GRID_ITEM_SIZE) {
+
+                if (selectedIndex >= 0 && selectedIndex == actualIndex) {
+                    selectedIndex = -1;
+                    ClientApp.currentPlayer.setEquippedItem(null);
+                } else {
+                    selectedIndex = actualIndex;
+                    ClientApp.currentPlayer.setEquippedItem(null);
+                }
+                break;
+            }
+
+        }
+
+        return true;
     }
 
     @Override
@@ -476,7 +584,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 continue;
             }
 
-            modifiedDraw(batch, texture1, xOfCell, yOfCell);
+//            if (cell.getObjectOnCell() instanceof DroppedItem)
+//                modifiedDraw(batch, texture1, xOfCell, yOfCell, 200, 200);
+//            else
+                modifiedDraw(batch, texture1, xOfCell, yOfCell);
         }
 
         playerController.render(batch);
@@ -487,11 +598,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
         modifiedDraw(batch, house, 61, 8);
         modifiedDraw(batch, greenhouseDestroyed, 22, 6);
 
+        stage.dispose();
+        initializeStage();
         batch.end();
     }
 
     public void modifiedDraw(SpriteBatch batch, Texture texture, float x, float y) {
         batch.draw(texture, x * TILE_PIX_SIZE, (convertYCoordinate(y) - 1) * TILE_PIX_SIZE);
+    }
+
+    public void modifiedDraw(SpriteBatch batch, Texture texture, float x, float y, float width, float height) {
+        batch.draw(texture, x * TILE_PIX_SIZE, convertYCoordinate(y) - 1, width, height);
     }
 
     @Override

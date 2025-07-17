@@ -15,6 +15,7 @@ import com.client.utils.PlayerState;
 import com.client.views.inGameMenus.FarmMenu;
 import com.common.models.GameData;
 import com.common.models.Player;
+import com.common.models.Slot;
 import com.common.models.items.Item;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
@@ -121,21 +122,31 @@ public class PlayerController {
         }
     }
 
-    public void dropItem(Player player, Farm farm) {
+    public boolean dropItem(Player player, Farm farm) {
         Item item = player.getEquippedItem();
         if(item != null ) {
-            Cell cell = findCell(player.getCoordinate(), farm.getCells());
+            Cell cell = farm.findCellByCoordinate(player.getCoordinate().getX()/32,49 - player.getCoordinate().getY()/32);
             if(cell != null && cell.getObjectOnCell() instanceof EmptyCell) {
                 //TODO server
                 player.setEquippedItem(null);
+                for(Slot slot : player.getInventory().getSlots()) {
+                    if(slot.getItem().getName().equals(item.getName())) {
+                        player.getInventory().removeSlot(slot);
+                        break;
+                    }
+                }
                 cell.setObjectOnCell(new DroppedItem(1,item));
+                return true;
             }
         }
+        return false;
     }
 
     private Cell findCell(Coordinate coordinate, ArrayList<Cell> cells) {
+        int x =(int) coordinate.getX();
+        int y =(int) coordinate.getY();
         for(Cell cell : cells) {
-            if(cell.getCoordinate().equals(coordinate)) {
+            if(x == cell.getCoordinate().getX() && y == cell.getCoordinate().getY()) {
                 return cell;
             }
         }
