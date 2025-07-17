@@ -394,7 +394,6 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
     @Override
     public void dispose() {
         stage.dispose();
-        backgroundTexture.dispose();
     }
 
     public float getFishAcceleration() {

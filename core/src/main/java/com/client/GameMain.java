@@ -3,12 +3,13 @@ package com.client;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.client.utils.*;
-import com.client.views.inGameMenus.FarmMenu;
-import com.client.views.inGameMenus.FishingMiniGame;
+import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
+import com.client.utils.ModelDecoder;
+import com.client.utils.MyScreen;
+import com.client.views.inGameMenus.StoreInterface;
 import com.client.views.preGameMenus.LauncherMenu;
 import com.client.views.preGameMenus.MainMenu;
-import com.common.models.enums.Quality;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -24,7 +25,7 @@ public class GameMain extends Game {
         //TODO: TESTING CODE FOR MAP :::::
 //        this.setScreen(new FarmMenu(this));
 //        this.setScreen(new FishingMiniGame(this, null, true, Quality.IRIDIUM));
-
+//        this.setScreen(new StoreInterface(this, "Pierre's General Store", null));
 
         if (ClientApp.loggedInUser != null) {
             ClientApp.init();
@@ -78,11 +79,19 @@ public class GameMain extends Game {
         if (screen != null) {
             screen.dispose();
         }
+
         if (AssetManager.getSkin() != null) {
             AssetManager.getSkin().dispose();
         }
+
         AssetManager.disposeAssets();
-        ClientApp.client.close();
+
+        try {
+            ClientApp.client.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
     }
 
     @Override

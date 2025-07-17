@@ -203,7 +203,7 @@ public class SkillMenu implements MyScreen, InputProcessor {
         for(int i=0; i<fishingLevel; i++) {
             batch.draw(levelTexture, startX + i * gapX, startY);
         }
-        for(int i=0; i<5; i++) {
+        for(int i=0; i<foragingLevel; i++) {
             batch.draw(levelTexture, startX + i * gapX, startY +  gapY);
         }
         for(int i=0; i<miningLevel; i++) {
@@ -237,6 +237,7 @@ public class SkillMenu implements MyScreen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
+        batch.dispose();
     }
 }

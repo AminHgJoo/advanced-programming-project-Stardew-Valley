@@ -25,7 +25,6 @@ public class MapMenu implements MyScreen, InputProcessor {
     private Texture backgroundTexture;
     private BitmapFont titleFont;
     private GlyphLayout layout;
-    private Stage stage;
     private final Skin skin;
 
     public MapMenu(GameMain gameMain, MyScreen farmScreen) {
@@ -141,6 +140,6 @@ public class MapMenu implements MyScreen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        batch.dispose();
     }
 }
