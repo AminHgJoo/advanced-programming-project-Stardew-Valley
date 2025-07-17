@@ -118,6 +118,10 @@ public class Player {
         return null;
     }
 
+    public ArrayList<Skill> getSkills() {
+        return skills;
+    }
+
     private void initializeRecipes() {
         this.unlockedCraftingRecipes.add(CraftingRecipes.FURNACE);
         this.unlockedCraftingRecipes.add(CraftingRecipes.SCARE_CROW);
