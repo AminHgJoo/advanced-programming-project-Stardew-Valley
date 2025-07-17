@@ -228,7 +228,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 //            playerController.handleKeyUp(-BASE_SPEED_FACTOR, 0);
 //        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
 //            playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
-        if (keycode == Input.Keys.ESCAPE ) {
+        if (keycode == Input.Keys.ESCAPE) {
             gameMain.setScreen(new InventoryMenu(gameMain, this));
         }
         return false;
@@ -275,11 +275,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     this.cancel();
                 }
             }, .6f, 2);
-        }
-        else if(Gdx.input.isKeyPressed(Input.Keys.B)){
+        } else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
             playerController.dropItem(ClientApp.currentPlayer, farm);
-        }
-        else {
+        } else {
             if (!isToolSwinging) {
                 playerController.setState(PlayerState.IDLE);
                 playerVelocity.x = 0;
@@ -327,7 +325,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public void socketMessage(String message) {
         HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
         String type = res.get("type");
-        if(type.equals("PLAYER_MOVED")){
+        if (type.equals("PLAYER_MOVED")) {
             playerController.handleServerPlayerMove(res);
         }
     }
@@ -481,6 +479,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
             modifiedDraw(batch, texture1, xOfCell, yOfCell);
         }
 
+        playerController.render(batch);
         //Draw buildings
         Texture house = AssetManager.getImage("playerhouse");
         Texture greenhouseDestroyed = AssetManager.getImage("greenhousedestroyed");
@@ -488,7 +487,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         modifiedDraw(batch, house, 61, 8);
         modifiedDraw(batch, greenhouseDestroyed, 22, 6);
 
-        playerController.render(batch);
         batch.end();
     }
 

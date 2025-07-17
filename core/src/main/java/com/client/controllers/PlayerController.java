@@ -60,10 +60,10 @@ public class PlayerController {
 
     public void render(Batch batch) {
         TextureRegion playerTexture = playerAnimationController.getCurrentFrame();
-        float x = 3f;
-        batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * x),
-            playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * x), playerTexture.getRegionWidth() / x
-            , playerTexture.getRegionHeight() / x);
+        float scale = 3f;
+        batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale),
+            playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale), playerTexture.getRegionWidth() / scale
+            , playerTexture.getRegionHeight() / scale);
         if (currState == PlayerState.TOOL_SWINGING) {
             if (facingDirection == FacingDirection.DOWN) {
                 int index = playerAnimationController.getCurrentFrameIndex();
@@ -73,9 +73,9 @@ public class PlayerController {
                 } else {
                     t = new Texture(Gdx.files.internal("images/player/tool/hoe/hoe-2.png"));
                 }
-                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * x) + (float) t.getWidth() / (2 * x) - 3f,
-                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * x) + (float) t.getHeight() / (2 * x) - 3f,
-                    (float) t.getWidth() / x, (float) t.getHeight() / x);
+                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale) - 3f,
+                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale) - 3f,
+                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
             } else if (facingDirection == FacingDirection.UP) {
                 int index = playerAnimationController.getCurrentFrameIndex();
                 Texture t;
@@ -84,9 +84,9 @@ public class PlayerController {
                 } else {
                     t = new Texture(Gdx.files.internal("images/player/tool/hoe/hoe-5.png"));
                 }
-                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * x) + (float) t.getWidth() / (2 * x) - 3f,
-                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * x) + (float) t.getHeight() / (2 * x) + 15f,
-                    (float) t.getWidth() / x, (float) t.getHeight() / x);
+                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale) - 3f,
+                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale) + 15f,
+                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
             } else if (facingDirection == FacingDirection.LEFT) {
                 int index = playerAnimationController.getCurrentFrameIndex();
                 Texture t;
@@ -95,9 +95,9 @@ public class PlayerController {
                 } else {
                     t = new Texture(Gdx.files.internal("images/player/tool/hoe/hoe-8.png"));
                 }
-                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * x) + (float) t.getWidth() / (2 * x) - 15f,
-                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * x) + (float) t.getHeight() / (2 * x) - 3f,
-                    (float) t.getWidth() / x, (float) t.getHeight() / x);
+                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale) - 15f,
+                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale) - 3f,
+                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
             } else if (facingDirection == FacingDirection.RIGHT) {
                 int index = playerAnimationController.getCurrentFrameIndex();
                 Texture t;
@@ -106,9 +106,9 @@ public class PlayerController {
                 } else {
                     t = new Texture(Gdx.files.internal("images/player/tool/hoe/hoe-6.png"));
                 }
-                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * x) + (float) t.getWidth() / (2 * x) - 3f,
-                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * x) + (float) t.getHeight() / (2 * x) - 3f,
-                    (float) t.getWidth() / x, (float) t.getHeight() / x);
+                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale) - 3f,
+                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale) - 3f,
+                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
             }
         }
     }

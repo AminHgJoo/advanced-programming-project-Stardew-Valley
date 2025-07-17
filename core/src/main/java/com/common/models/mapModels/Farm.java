@@ -1,8 +1,6 @@
 package com.common.models.mapModels;
 
-import com.badlogic.gdx.Game;
 import com.common.models.Animal;
-import com.common.models.App;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.buildings.*;
@@ -349,13 +347,16 @@ public class Farm {
         }
         return null;
     }
+    // x/32 > floor
 
     public boolean isXInRange(Cell c, float x) {
-        return (x >= (c.getCoordinate().getX())) && (x <= (c.getCoordinate().getX() + 1));
+        //return (x >= (c.getCoordinate().getX() - 0.5f)) && (x <= (c.getCoordinate().getX() + 0.5f));
+        return Math.floor(x) == c.getCoordinate().getX();
     }
 
     public boolean isYInRange(Cell c, float y) {
-        return (y >= (c.getCoordinate().getY())) && (y <= (c.getCoordinate().getY() + 1));
+        //return (y >= (c.getCoordinate().getY() - 0.5f)) && (y <= (c.getCoordinate().getY() + 0.5f));
+        return Math.floor(y + 1) == c.getCoordinate().getY();
     }
 
     /// For pathfinding only.
