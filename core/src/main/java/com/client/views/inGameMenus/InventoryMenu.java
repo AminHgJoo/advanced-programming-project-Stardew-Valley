@@ -10,10 +10,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
 import com.common.models.Backpack;
+import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.inventoryEnums.TrashcanType;
@@ -26,6 +28,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private SpriteBatch batch;
     private final GameMain gameMain;
     private Backpack backpack;
+    private Player player;
     private TrashcanType trashcanType;
     private Texture backgroundTexture;
     private Texture inventoryTexture;
@@ -50,7 +53,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         inventoryTexture = AssetManager.getImage("inventory");
         this.farmScreen = farmScreen;
         //TODO get current player's backpack
-        backpack = new Backpack();
+        backpack = ClientApp.currentPlayer.getInventory();
         for (FoodTypes type : FoodTypes.values()) {
             backpack.addSlot(new Slot(new Food(Quality.DEFAULT, type, 1, 1), 10));
         }

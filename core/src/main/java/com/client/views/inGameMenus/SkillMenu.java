@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
@@ -28,6 +29,7 @@ public class SkillMenu implements MyScreen, InputProcessor {
     private SpriteBatch batch;
     private Texture backgroundTexture;
     private Stage stage;
+    private Player player;
     private final Skin skin;
     private BitmapFont titleFont;
     private GlyphLayout layout;
@@ -47,7 +49,7 @@ public class SkillMenu implements MyScreen, InputProcessor {
         backgroundTexture = AssetManager.getImage("profileBackground");
         this.skin = AssetManager.getSkin();
         stage = new Stage(new ScreenViewport());
-
+        this.player = ClientApp.currentPlayer;
         Image backgroundImage = new Image(backgroundTexture);
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
@@ -70,11 +72,7 @@ public class SkillMenu implements MyScreen, InputProcessor {
         this.layout = new GlyphLayout();
         this.levelTexture = AssetManager.getImage("green");
         //TODO load skills
-        this.skills = new ArrayList<>();
-        this.skills.add(new Farming());
-        this.skills.add(new Mining());
-        this.skills.add(new Foraging());
-        this.skills.add(new Fishing());
+        this.skills = player.getSkills();
         this.farmingLevel = skills.get(0).getLevel().levelNumber + 1;
         this.miningLevel = skills.get(1).getLevel().levelNumber + 1;
         this.foragingLevel = skills.get(2).getLevel().levelNumber + 1;
