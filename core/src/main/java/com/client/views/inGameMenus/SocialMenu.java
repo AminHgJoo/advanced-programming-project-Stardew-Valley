@@ -153,6 +153,7 @@ public class SocialMenu implements MyScreen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        batch.dispose();
+        stage.dispose();
     }
 }

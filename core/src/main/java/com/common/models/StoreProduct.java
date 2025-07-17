@@ -57,4 +57,8 @@ public class StoreProduct {
     public void setStoreName(String storeName) {
         this.storeName = storeName;
     }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 }
