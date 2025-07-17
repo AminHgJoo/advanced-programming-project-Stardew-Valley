@@ -6,12 +6,17 @@ import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.enums.Directions;
 import com.common.models.enums.types.itemTypes.CropSeedsType;
+import com.common.models.enums.types.itemTypes.MiscType;
+import com.common.models.enums.types.itemTypes.TreeSeedsType;
+import com.common.models.enums.types.mapObjectTypes.TreeType;
 import com.common.models.enums.worldEnums.Season;
+import com.common.models.items.TreeSeed;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.Crop;
 import com.common.models.mapObjects.EmptyCell;
+import com.common.models.mapObjects.Tree;
 import com.server.GameServers.GameServer;
 import com.server.utilities.Response;
 import io.javalin.http.Context;
@@ -101,13 +106,139 @@ public class FarmingController extends Controller {
                     plant.setStageNumber(s);
                 }
             }
-            String farmJson = GameGSON.gson.toJson(player.getCurrentFarm(game));
-            ctx.json(Response.OK.setMessage("Planted crop").setBody(farmJson));
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setMessage("Planted crop").setBody(playerJson));
 
-            HashMap<String ,String> msg = new HashMap<>();
-            msg.put("type" , "SEED_PLANTED");
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "SEED_PLANTED");
             msg.put("player_user_id", id);
-            msg.put("farm" , farmJson);
+            msg.put("player", playerJson);
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void treePlanting(Context ctx, GameServer gs) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String seed = (String) body.get("seed");
+            String dir = (String) body.get("direction");
+            String id = ctx.pathParam("id");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+            TreeSeedsType treeSeedsType = TreeSeedsType.findTreeTypeByName(seed);
+            Directions direction;
+            try {
+                direction = Directions.getDir(dir);
+            } catch (Exception e) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Invalid direction"));
+                return;
+            }
+            if (direction == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Invalid direction"));
+                return;
+            }
+            Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
+            Cell cell = player.getCurrentFarm(game).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+            if (cell == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Cell not found"));
+                return;
+            }
+            if (!cell.isTilled()) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Cell is not tilled"));
+                return;
+            }
+            if (!cell.getObjectOnCell().type.equals("empty")) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Cell is not empty"));
+                return;
+            }
+            Slot playerSeedSlot = player.getInventory().findTreeSeedByItemName(seed);
+            playerSeedSlot.setCount(playerSeedSlot.getCount() - 1);
+            if (playerSeedSlot.getCount() <= 0) {
+                player.getInventory().getSlots().remove(playerSeedSlot);
+            }
+            TreeSeed treeSeed = (TreeSeed) playerSeedSlot.getItem();
+            boolean check = false;
+            for (Season season : treeSeed.getTreeSeedsType().growthSeasons) {
+                if (season == game.getSeason()) {
+                    check = true;
+                    break;
+                }
+            }
+            if (!check) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Season not found"));
+                return;
+            }
+            TreeType treeType = TreeType.findTreeTypeByName(seed);
+            Tree tree = new Tree(treeType, game.getDate(), game);
+            cell.setObjectOnCell(tree);
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setMessage("Tree planted").setBody(playerJson));
+
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "TREE_PLANTED");
+            msg.put("player_user_id", id);
+            msg.put("player", playerJson);
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void fertilization(Context ctx, GameServer gs) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String dir = (String) body.get("direction");
+            String fertilizer = (String) body.get("fertilizer");
+            String id = ctx.pathParam("id");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+            Directions direction;
+            try {
+                direction = Directions.getDir(dir);
+            } catch (Exception e) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Invalid direction"));
+                return;
+            }
+            if (direction == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Invalid direction"));
+                return;
+            }
+            Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
+            Cell cell = player.getCurrentFarm(game).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+            if (cell == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Cell not found"));
+                return;
+            }
+            if (!cell.getObjectOnCell().type.equals("plant")) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Cell is not plant"));
+                return;
+            }
+            Slot miscSlot = player.getInventory().getSlotByItemName(fertilizer);
+            if (miscSlot == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Fertilizer not found"));
+                return;
+            }
+            miscSlot.setCount(miscSlot.getCount() - 1);
+            if (miscSlot.getCount() <= 0) {
+                player.getInventory().getSlots().remove(miscSlot);
+            }
+            Crop crop = (Crop) cell.getObjectOnCell();
+            if (fertilizer.compareToIgnoreCase(MiscType.BASIC_FERTILIZER.name) == 0) {
+                crop.pushBackDeadlines(-1);
+            } else if (fertilizer.compareToIgnoreCase(MiscType.QUALITY_FERTILIZER.name) == 0) {
+                crop.setHasBeenDeluxeFertilized(true);
+            }
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setMessage("Tree planted").setBody(playerJson));
+
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "FERTILIZATION");
+            msg.put("player_user_id", id);
+            msg.put("player", playerJson);
             gs.broadcast(msg);
         } catch (Exception e) {
             e.printStackTrace();
