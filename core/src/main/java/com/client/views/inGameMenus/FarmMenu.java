@@ -584,9 +584,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 continue;
             }
 
-//            if (cell.getObjectOnCell() instanceof DroppedItem)
-//                modifiedDraw(batch, texture1, xOfCell, yOfCell, 200, 200);
-//            else
+            if (cell.getObjectOnCell() instanceof DroppedItem)
+                modifiedDraw(batch, texture1, xOfCell, yOfCell, 30, 30);
+            else
                 modifiedDraw(batch, texture1, xOfCell, yOfCell);
         }
 
@@ -608,7 +608,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     public void modifiedDraw(SpriteBatch batch, Texture texture, float x, float y, float width, float height) {
-        batch.draw(texture, x * TILE_PIX_SIZE, convertYCoordinate(y) - 1, width, height);
+        batch.draw(texture, x * TILE_PIX_SIZE , (convertYCoordinate(y) - 1) * TILE_PIX_SIZE , width, height);
     }
 
     @Override
