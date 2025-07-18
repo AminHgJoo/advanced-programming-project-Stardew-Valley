@@ -108,13 +108,12 @@ public class InventoryController extends Controller {
                 backpack.getSlots().remove(slotToPlace);
             }
 
-            ctx.json(Response.OK.setMessage("Placed " + itemName + " successfully!"));
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setMessage("Placed " + itemName + " successfully!").setBody(playerJson));
             HashMap<String, String> msg = new HashMap<>();
-            msg.put("type", "TOOL_PLACE");
+            msg.put("type", "PLAYER_UPDATED");
             msg.put("player_user_id", id);
-            msg.put("tool", itemName);
-            msg.put("x", String.format("%f", playerX));
-            msg.put("y", String.format("%f", playerY));
+            msg.put("player", playerJson);
             gs.broadcast(msg);
 
         } catch (Exception e) {
@@ -156,7 +155,6 @@ public class InventoryController extends Controller {
             HashMap<String, String> msg = new HashMap<>();
             msg.put("type", "FOOD_EAT");
             msg.put("player_user_id", id);
-            msg.put("food", foodName);
             msg.put("player", playerJson);
 
             gs.broadcast(msg);

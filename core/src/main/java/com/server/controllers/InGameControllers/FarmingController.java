@@ -110,7 +110,7 @@ public class FarmingController extends Controller {
             ctx.json(Response.OK.setMessage("Planted crop").setBody(playerJson));
 
             HashMap<String, String> msg = new HashMap<>();
-            msg.put("type", "SEED_PLANTED");
+            msg.put("type", "PLAYER_UPDATED");
             msg.put("player_user_id", id);
             msg.put("player", playerJson);
             gs.broadcast(msg);
@@ -178,7 +178,7 @@ public class FarmingController extends Controller {
             ctx.json(Response.OK.setMessage("Tree planted").setBody(playerJson));
 
             HashMap<String, String> msg = new HashMap<>();
-            msg.put("type", "TREE_PLANTED");
+            msg.put("type", "PLAYER_UPDATED");
             msg.put("player_user_id", id);
             msg.put("player", playerJson);
             gs.broadcast(msg);
@@ -236,7 +236,7 @@ public class FarmingController extends Controller {
             ctx.json(Response.OK.setMessage("Tree planted").setBody(playerJson));
 
             HashMap<String, String> msg = new HashMap<>();
-            msg.put("type", "FERTILIZATION");
+            msg.put("type", "PLAYER_UPDATED");
             msg.put("player_user_id", id);
             msg.put("player", playerJson);
             gs.broadcast(msg);
