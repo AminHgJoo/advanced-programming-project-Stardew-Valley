@@ -17,10 +17,7 @@ import com.client.utils.MyScreen;
 import com.common.models.Backpack;
 import com.common.models.Player;
 import com.common.models.Slot;
-import com.common.models.enums.Quality;
 import com.common.models.enums.types.inventoryEnums.TrashcanType;
-import com.common.models.enums.types.itemTypes.FoodTypes;
-import com.common.models.items.Food;
 
 import java.util.List;
 
@@ -44,6 +41,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private BitmapFont titleFont;
     private GlyphLayout layout;
     private final Skin skin;
+    private final int trashScale = 4;
 
 
     public InventoryMenu(GameMain gameMain, MyScreen farmScreen) {
@@ -67,8 +65,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         if (i == Input.Keys.ESCAPE) {
             gameMain.setScreen(farmScreen);
             this.dispose();
-        }
-        else if(i == Input.Keys.RIGHT) {
+        } else if (i == Input.Keys.RIGHT) {
             gameMain.setScreen(new SkillMenu(gameMain, farmScreen));
         }
         return false;
@@ -114,14 +111,14 @@ public class InventoryMenu implements MyScreen, InputProcessor {
                 }
                 break;
             }
-            int trashWidth = trashcanType.getTexture().getWidth();
-            int trashHeight = trashcanType.getTexture().getHeight();
-            int trashX = Gdx.graphics.getWidth() - 50;
-            int trashY = Gdx.graphics.getHeight() / 2;
+            int trashWidth = trashcanType.getTexture().getWidth() * trashScale;
+            int trashHeight = trashcanType.getTexture().getHeight() * trashScale;
+            int trashX = Gdx.graphics.getWidth() -  trashWidth;
+            int trashY = Gdx.graphics.getHeight() / 2 - trashHeight/2;
 
             if (screenX >= trashX && screenX <= trashX + trashWidth &&
                 screenY >= trashY && screenY <= trashY + trashHeight) {
-                if(selectedSave >=0){
+                if (selectedSave >= 0) {
                     backpack.removeSlot(backpack.getSlots().get(selectedSave));
                     selectedIndex = -1;
                     selectedSave = -1;
@@ -194,7 +191,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         titleFont.draw(batch, layout, xAsghar, yAsghar);
 
         Texture trashcanTexture = trashcanType.getTexture();
-        batch.draw(trashcanTexture, Gdx.graphics.getWidth() - 50, Gdx.graphics.getHeight() / 2);
+        batch.draw(trashcanTexture, Gdx.graphics.getWidth() - trashcanTexture.getWidth() * trashScale, Gdx.graphics.getHeight() / 2 - trashcanTexture.getHeight() * trashScale/ 2, trashcanTexture.getWidth() * trashScale, trashcanTexture.getHeight() * trashScale);
         int GRID_ITEM_SIZE = 95;
         int GRID_PADDING = 8;
 
@@ -209,7 +206,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             selectedIndex = -1;
         }
 
-        for (int i = 0; i < ITEMS_PER_PAGE && i<backpack.getSlots().size(); i++) {
+        for (int i = 0; i < ITEMS_PER_PAGE && i < backpack.getSlots().size(); i++) {
             int actualIndex = scrollIndex * GRID_SIZE + i;
             if (selectedIndex >= 0 && selected) {
                 Slot temp = backpack.getSlots().get(selectedIndex);
@@ -221,7 +218,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             }
         }
         List<Slot> slots = backpack.getSlots();
-        for (int i = 0; i < ITEMS_PER_PAGE &&i<backpack.getSlots().size(); i++) {
+        for (int i = 0; i < ITEMS_PER_PAGE && i < backpack.getSlots().size(); i++) {
             int actualIndex = scrollIndex * GRID_SIZE + i;
             if (actualIndex >= slots.size()) break;
 
