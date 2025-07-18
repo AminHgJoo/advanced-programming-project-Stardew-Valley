@@ -126,7 +126,6 @@ public class PlayerController {
 
     public boolean dropItem(Player player, Farm farm) {
         Item item = player.getEquippedItem();
-        Backpack backpack = player.getInventory();
         Cell cell = farm.findCellByCoordinate(player.getCoordinate().getX() / 32
             , 49 - player.getCoordinate().getY() / 32);
         boolean check = playerService.dropItem(player, farm, item, cell);
@@ -141,7 +140,7 @@ public class PlayerController {
                 Gdx.app.postRunnable(() -> {
                     if (res.getStatus() != 200) {
                         player.setEquippedItem(item);
-                        player.setInventory(backpack);
+                        player.getInventory().addSlot(new Slot(item, 1));
                         cell.setObjectOnCell(new EmptyCell());
                     }
                 });
