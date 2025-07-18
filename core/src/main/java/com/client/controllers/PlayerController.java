@@ -18,6 +18,7 @@ import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.items.Item;
+import com.common.models.items.Tool;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
@@ -132,7 +133,7 @@ public class PlayerController {
         if (check) {
             networkThreadPool.execute(() -> {
                 JsonObject req = new JsonObject();
-                req.addProperty("itemName", item.getName());
+                req.addProperty("itemName", ((Tool) item).getName());
                 var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/inventoryPlaceItem", req);
 
                 Response res = HTTPUtil.deserializeHttpResponse(postResponse);
