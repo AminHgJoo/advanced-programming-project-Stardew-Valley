@@ -14,9 +14,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
+import com.common.models.Friendship;
+import com.common.models.NPCModels.NPCFriendship;
+import com.common.models.Player;
+
+import java.util.ArrayList;
 
 public class SocialMenu implements MyScreen, InputProcessor {
     private GameMain gameMain;
@@ -27,6 +33,9 @@ public class SocialMenu implements MyScreen, InputProcessor {
     private final Skin skin;
     private BitmapFont titleFont;
     private GlyphLayout layout;
+    private Player player;
+    private ArrayList<Friendship> friendships;
+    private ArrayList<NPCFriendship> npcs;
 
     public SocialMenu(GameMain gameMain, MyScreen farmScreen) {
         this.gameMain = gameMain;
@@ -35,12 +44,10 @@ public class SocialMenu implements MyScreen, InputProcessor {
         backgroundTexture = AssetManager.getImage("profileBackground");
         this.skin = AssetManager.getSkin();
         stage = new Stage(new ScreenViewport());
-
         Image backgroundImage = new Image(backgroundTexture);
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
-
-        Label label = new Label("Inventory", skin);
+        Label label = new Label("Social", skin);
         label.setColor(Color.RED);
         label.setFontScale(4f);
         stage.addActor(label);
@@ -48,6 +55,9 @@ public class SocialMenu implements MyScreen, InputProcessor {
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
+        this.player = ClientApp.currentPlayer;
+        npcs = player.getNpcs();
+        friendships = player.getFriendships();
     }
 
     @Override
@@ -122,14 +132,39 @@ public class SocialMenu implements MyScreen, InputProcessor {
 
         batch.begin();
         batch.draw(backgroundTexture, 0, 0);
+
         String title = "Social";
         layout.setText(titleFont, title);
+        float xTitle = Gdx.graphics.getWidth() / 2f - layout.width / 2f;
+        float yTitle = Gdx.graphics.getHeight() - 50f;
+        titleFont.draw(batch, layout, xTitle, yTitle);
 
-        float xAsghar = Gdx.graphics.getWidth() / 2f - layout.width / 2f;
-        float yAsghar = Gdx.graphics.getHeight() - 50f;
-        titleFont.draw(batch, layout, xAsghar, yAsghar);
+        float xInfo = 100f;
+        float yInfo = Gdx.graphics.getHeight() - 150f;
+        BitmapFont font = AssetManager.getStardewFont();
+        font.getData().setScale(1);
+        font.setColor(Color.WHITE);
+
+        font.draw(batch, "Player Friendships:", xInfo, yInfo);
+        yInfo -= 40;
+
+        for (Friendship f : friendships) {
+            font.draw(batch, "Name: " + f.getPlayer() + " | Level: " + f.getLevel() + " | XP: " + f.getXp(), xInfo, yInfo);
+            yInfo -= 30;
+        }
+
+        yInfo -= 40;
+        font.draw(batch, "NPC Friendships:", xInfo, yInfo);
+        yInfo -= 40;
+
+        for (NPCFriendship npc : npcs) {
+            font.draw(batch, "Name: " + npc.getNpc() + " | Level: " + npc.getLevel() + " | XP: " + npc.getXp(), xInfo, yInfo);
+            yInfo -= 30;
+        }
+
         batch.end();
     }
+
 
     @Override
     public void resize(int i, int i1) {
