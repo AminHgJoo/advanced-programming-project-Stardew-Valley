@@ -25,7 +25,7 @@ public class InventoryController extends Controller {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String toolName = (String) body.get("toolName");
-            String id = ctx.pathParam("id");
+            String id = ctx.attribute("id");
             GameData game = gs.getGame();
 
             Player player = game.findPlayerByUserId(id);
@@ -61,25 +61,22 @@ public class InventoryController extends Controller {
     public void placeItem(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
-            String direction = (String) body.get("direction");
             String itemName = (String) body.get("itemName");
-            String id = ctx.pathParam("id");
+            System.out.println(itemName);
+            String id = ctx.attribute("id");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
-            int[] xAndY = getXAndYIncrement(direction);
 
             Backpack backpack = player.getInventory();
-            int dx = xAndY[0];
-            int dy = xAndY[1];
-            float playerX = player.getCoordinate().getX();
-            float playerY = player.getCoordinate().getY();
+            float playerX = player.getCoordinate().getX() / 32;
+            float playerY = 49 - player.getCoordinate().getY() / 32;
 
             Slot slotToPlace = backpack.getSlotByItemName(itemName);
             if (slotToPlace == null) {
                 ctx.json(Response.BAD_REQUEST.setMessage("item(s) does not exist!"));
                 return;
             }
-            Cell targetCell = player.getCurrentFarm(game).findCellByCoordinate(playerX + dx, playerY + dy);
+            Cell targetCell = player.getCurrentFarm(game).findCellByCoordinate(playerX, playerY);
             if (targetCell == null) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Cell does not exist!"));
                 return;
@@ -116,8 +113,8 @@ public class InventoryController extends Controller {
             msg.put("type", "TOOL_PLACE");
             msg.put("player_user_id", id);
             msg.put("tool", itemName);
-            msg.put("x", String.format("%f", playerX + dx));
-            msg.put("y", String.format("%f", playerY + dy));
+            msg.put("x", String.format("%f", playerX));
+            msg.put("y", String.format("%f", playerY));
             gs.broadcast(msg);
 
         } catch (Exception e) {
@@ -131,7 +128,7 @@ public class InventoryController extends Controller {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String foodName = (String) body.get("foodName");
 
-            String id = ctx.pathParam("id");
+            String id = ctx.attribute("id");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             Backpack backpack = player.getInventory();

@@ -92,6 +92,10 @@ public class Player {
         this.energy = energy;
     }
 
+    public void setInventory(Backpack b){
+        this.inventory = b;
+    }
+
     public Slot getRefrigeratorSlotByName(String slotName) {
         for (Slot slot : refrigeratorSlots) {
             if (slot.getItem().getName().compareToIgnoreCase(slotName) == 0) {

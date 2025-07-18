@@ -20,7 +20,7 @@ import java.util.HashMap;
 public class WorldController extends Controller {
     public void buildGreenhouse(Context ctx, GameServer gs) {
         try {
-            String id = ctx.pathParam("id");
+            String id = ctx.attribute("id");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             Farm farm = player.getFarm();

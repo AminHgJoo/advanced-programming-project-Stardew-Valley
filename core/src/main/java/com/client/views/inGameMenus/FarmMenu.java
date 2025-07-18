@@ -207,7 +207,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         timeLabel.setText((currentHour > 12 ? (currentHour - 12) : currentHour) + ":" + currentDateTime.getMinute() + " " + (currentHour > 12 ? "PM" : "AM"));
 
         moneyLabel.setText(gameData.getCurrentPlayer().getMoney(gameData));
+        showTools();
+    }
 
+    private void showTools() {
         int GRID_ITEM_SIZE = 95;
         int GRID_PADDING = 8;
         Backpack backpack = ClientApp.currentPlayer.getInventory();
@@ -258,7 +261,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
             itemImage.setSize(GRID_ITEM_SIZE, GRID_ITEM_SIZE);
 
         }
-
     }
 
     private void initializeParticles() {
@@ -338,7 +340,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Gdx.input.isKeyPressed(Keybinds.RIGHT.keycodes.get(0))) {
             playerController.setState(PlayerState.WALKING);
             playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
             playerController.setState(PlayerState.TOOL_SWINGING);
             isToolSwinging = true;
             Timer.schedule(new Timer.Task() {
@@ -348,13 +350,13 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     this.cancel();
                 }
             }, .6f, 2);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-           boolean success =  playerController.dropItem(ClientApp.currentPlayer, farm);
-           if(success) {
-               selectedIndex = -1;
-               selectedSave = -1;
-               selected = false;
-           }
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+            boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
+            if (success) {
+                selectedIndex = -1;
+                selectedSave = -1;
+                selected = false;
+            }
         } else {
             if (!isToolSwinging) {
                 playerController.setState(PlayerState.IDLE);
@@ -608,7 +610,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     public void modifiedDraw(SpriteBatch batch, Texture texture, float x, float y, float width, float height) {
-        batch.draw(texture, x * TILE_PIX_SIZE , (convertYCoordinate(y) - 1) * TILE_PIX_SIZE , width, height);
+        batch.draw(texture, x * TILE_PIX_SIZE, (convertYCoordinate(y) - 1) * TILE_PIX_SIZE, width, height);
     }
 
     @Override

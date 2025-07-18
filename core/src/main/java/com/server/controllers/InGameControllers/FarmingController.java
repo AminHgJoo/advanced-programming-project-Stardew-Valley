@@ -29,7 +29,7 @@ public class FarmingController extends Controller {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String seed = (String) body.get("seed");
             String dir = (String) body.get("direction");
-            String id = ctx.pathParam("id");
+            String id = ctx.attribute("id");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             CropSeedsType cropSeedsType = CropSeedsType.findCropBySeed(seed);
@@ -125,7 +125,7 @@ public class FarmingController extends Controller {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String seed = (String) body.get("seed");
             String dir = (String) body.get("direction");
-            String id = ctx.pathParam("id");
+            String id = ctx.attribute("id");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             TreeSeedsType treeSeedsType = TreeSeedsType.findTreeTypeByName(seed);
@@ -193,7 +193,7 @@ public class FarmingController extends Controller {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String dir = (String) body.get("direction");
             String fertilizer = (String) body.get("fertilizer");
-            String id = ctx.pathParam("id");
+            String id = ctx.attribute("id");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             Directions direction;
