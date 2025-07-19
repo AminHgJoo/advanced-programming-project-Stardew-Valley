@@ -93,7 +93,6 @@ public class WorldController extends Controller {
 
     public void toolUse(Context ctx, GameServer gs) {
         try {
-            System.out.println("hello");
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String direction = (String) body.get("direction");
             String toolName = (String) body.get("toolName");
@@ -117,7 +116,6 @@ public class WorldController extends Controller {
             }
             Tool equippedTool = (Tool) player.getEquippedItem();
             ToolTypes toolType = equippedTool.getType();
-            System.out.println(toolType);
             if (toolType == ToolTypes.HOE) {
                 handleHoeUse(ctx, game, player, direction, equippedTool.getQuality()
                     , player.getFarmingSkill().getLevel().energyCostDiscount);
@@ -174,6 +172,52 @@ public class WorldController extends Controller {
         }
     }
 
+    public void fishing(Context ctx, GameServer gs) {
+        try {
+            HashMap<String , Object> body = ctx.bodyAsClass(HashMap.class);
+            String id = ctx.attribute("id");
+            int xpGained = (Integer) body.get("xpGained");
+            int count = (Integer) body.get("count");
+            String fishType = (String) body.get("fishType");
+            String quality = (String) body.get("quality");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+
+            Quality fishQuality = Quality.getQualityByName(quality);
+            FishType type = FishType.getFishType(fishType);
+            Fish fish = new Fish(fishQuality , type);
+            Backpack backpack = player.getInventory();
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                ctx.json(Response.BAD_REQUEST.setMessage("You cannot have more than " + backpack.getSlots().size() + " slots"));
+                return;
+            }
+            addFishes(fish, backpack, count);
+            // TODO handle xp
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setBody(playerJson));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player_user_id", id);
+            msg.put("player", playerJson);
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    private static void addFishes(Fish fish, Backpack backpack, int numberOfFishes) {
+        for (Slot slot : backpack.getSlots()) {
+            if (slot.getItem().getName().compareToIgnoreCase(fish.getName()) == 0) {
+                slot.setCount(slot.getCount() + numberOfFishes);
+                return;
+            }
+        }
+        Slot newSlot = new Slot(fish, numberOfFishes);
+        backpack.addSlot(newSlot);
+    }
+
+
     private static void handleHoeUse(Context ctx, GameData game, Player player, String direction, Quality quality, int skillEnergyDiscount) {
         int[] dxAndDy = getXAndYIncrement(direction);
         int dx = dxAndDy[0];
@@ -181,9 +225,11 @@ public class WorldController extends Controller {
 
         Farm farm = player.getCurrentFarm(game);
 
-        float playerX = player.getCoordinate().getX()/32;        float playerY = 49 - player.getCoordinate().getY()/32;        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+        float playerX = player.getCoordinate().getX() / 32;
+        float playerY = 49 - player.getCoordinate().getY() / 32;
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
-        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality , game);
+        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality, game);
         double playerEnergy = player.getEnergy();
 
         if (playerEnergy - energyCost < 0) {
@@ -214,9 +260,11 @@ public class WorldController extends Controller {
 
         Farm farm = player.getCurrentFarm(game);
 
-        float playerX = player.getCoordinate().getX()/32;        float playerY = 49 - player.getCoordinate().getY()/32;        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+        float playerX = player.getCoordinate().getX() / 32;
+        float playerY = 49 - player.getCoordinate().getY() / 32;
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
-        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality , game);
+        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality, game);
         double playerEnergy = player.getEnergy();
 
         if (playerEnergy - energyCost < 0) {
@@ -335,9 +383,11 @@ public class WorldController extends Controller {
 
         Farm farm = player.getCurrentFarm(game);
 
-        float playerX = player.getCoordinate().getX()/32;        float playerY = 49 - player.getCoordinate().getY()/32;        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+        float playerX = player.getCoordinate().getX() / 32;
+        float playerY = 49 - player.getCoordinate().getY() / 32;
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
-        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality , game);
+        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality, game);
         double playerEnergy = player.getEnergy();
 
         if (playerEnergy - energyCost < 0) {
@@ -443,9 +493,11 @@ public class WorldController extends Controller {
 
         Farm farm = player.getCurrentFarm(game);
 
-        float playerX = player.getCoordinate().getX()/32;        float playerY = 49 - player.getCoordinate().getY()/32;        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+        float playerX = player.getCoordinate().getX() / 32;
+        float playerY = 49 - player.getCoordinate().getY() / 32;
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
-        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality , game);
+        double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality, game);
         double playerEnergy = player.getEnergy();
 
         if (playerEnergy - energyCost < 0) {
@@ -488,7 +540,9 @@ public class WorldController extends Controller {
 
         Farm farm = player.getCurrentFarm(game);
 
-        float playerX = player.getCoordinate().getX()/32;        float playerY = 49 - player.getCoordinate().getY()/32;        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+        float playerX = player.getCoordinate().getX() / 32;
+        float playerY = 49 - player.getCoordinate().getY() / 32;
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
 
         double energyCost = getScytheEnergyCost(game);
         double playerEnergy = player.getEnergy();
@@ -655,7 +709,9 @@ public class WorldController extends Controller {
         Backpack backpack = player.getInventory();
         Slot productSlot = null;
 
-        float playerX = player.getCoordinate().getX()/32;        float playerY = 49 - player.getCoordinate().getY()/32;        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+        float playerX = player.getCoordinate().getX() / 32;
+        float playerY = 49 - player.getCoordinate().getY() / 32;
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
         double energyCost = 4;
         double playerEnergy = player.getEnergy();
 
@@ -694,7 +750,9 @@ public class WorldController extends Controller {
         Backpack backpack = player.getInventory();
         Slot productSlot = null;
 
-        float playerX = player.getCoordinate().getX()/32;        float playerY = 49 - player.getCoordinate().getY()/32;        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+        float playerX = player.getCoordinate().getX() / 32;
+        float playerY = 49 - player.getCoordinate().getY() / 32;
+        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
         double energyCost = 4;
         double playerEnergy = player.getEnergy();
 
@@ -757,7 +815,7 @@ public class WorldController extends Controller {
         return true;
     }
 
-    private static double calculateEnergyCostForHoeAxePickaxeWaterCan(int discount, Quality quality , GameData gameData) {
+    private static double calculateEnergyCostForHoeAxePickaxeWaterCan(int discount, Quality quality, GameData gameData) {
         double answer = 5 - quality.getQualityLevel() - discount;
         if (answer < 0) {
             answer = 0;

@@ -17,9 +17,12 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.controllers.FishingGameController;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.FishType;
+import com.google.gson.JsonObject;
+import com.server.utilities.Response;
 
 public class FishingMiniGame implements MyScreen, InputProcessor {
     private final float BASE_SPEED_FACTOR = 3;
@@ -314,7 +317,21 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
     //TODO:
     private void notifyServerOfVictory(int xpGained, FishType caughtFishType
         , Quality caughtFishQuality, int caughtFishQuantity) {
+        JsonObject req = new JsonObject();
+        req.addProperty("xpGained", xpGained);
+        req.addProperty("fishType", caughtFishType.name());
+        req.addProperty("count", caughtFishQuantity);
+        req.addProperty("quality", caughtFishQuality.toString());
+        var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + ClientApp.currentGameData.get_id()
+            + "/worldToolUse", req);
 
+        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+        if (res.getStatus() == 200) {
+            String playerJson = res.getBody().toString();
+            farmMenu.getPlayerController().updatePlayerObject(playerJson);
+        } else {
+            // TODO shoe error
+        }
     }
 
     private void incrementProgress(float delta) {

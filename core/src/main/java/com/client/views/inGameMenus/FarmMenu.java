@@ -132,6 +132,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         initializeStage();
     }
 
+    public PlayerController getPlayerController() {
+        return playerController;
+    }
+
     //TODO: Update clock UI when needed. Dispose stage and call this function.
     private void initializeStage() {
         stage = new Stage(new ScreenViewport());

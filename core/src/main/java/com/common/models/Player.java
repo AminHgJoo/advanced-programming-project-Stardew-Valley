@@ -136,7 +136,7 @@ public class Player {
     }
 
     private void initializeSkills() {
-        this.skills.add(new Farming());
+//        this.skills.add(new Farming());
         this.skills.add(new Fishing());
         this.skills.add(new Foraging());
         this.skills.add(new Mining());
