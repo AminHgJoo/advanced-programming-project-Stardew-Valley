@@ -14,9 +14,7 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
-import com.common.models.Backpack;
-import com.common.models.Player;
-import com.common.models.StoreProduct;
+import com.common.models.*;
 import com.common.models.enums.types.storeProductTypes.AllProducts;
 
 import java.util.ArrayList;
@@ -49,27 +47,30 @@ public class StoreInterface implements MyScreen {
         initializeStage();
     }
 
-    //TODO: Server side implementation.
     private void fetchStoreProducts(String storeName) {
+        GameData game = ClientApp.currentGameData;
+        Store store = game.getMap().getVillage().getStore(storeName);
+        if(store == null) return;
         //Test Only!
         storeProducts.clear();
-        StoreProduct product = new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store");
-        product.setPrice(200);
-        product.setAvailableCount(0);
-        storeProducts.add(product);
-        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
-
-        storeProducts.add(new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store"));
-        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
-
-        storeProducts.add(new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store"));
-        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
-
-        storeProducts.add(new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store"));
-        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
-
-        storeProducts.add(new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store"));
-        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
+//        StoreProduct product = new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store");
+//        product.setPrice(200);
+//        product.setAvailableCount(0);
+//        storeProducts.add(product);
+//        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
+//
+//        storeProducts.add(new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store"));
+//        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
+//
+//        storeProducts.add(new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store"));
+//        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
+//
+//        storeProducts.add(new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store"));
+//        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
+//
+//        storeProducts.add(new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store"));
+//        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
+        storeProducts.addAll(store.getAvailableProducts());
     }
 
     private void initializeStage() {

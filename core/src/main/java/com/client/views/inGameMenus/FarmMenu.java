@@ -366,7 +366,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 selectedSave = -1;
                 selected = false;
             }
-        } else {
+        }  else {
             if (!isToolSwinging) {
                 playerController.setState(PlayerState.IDLE);
                 playerVelocity.x = 0;
