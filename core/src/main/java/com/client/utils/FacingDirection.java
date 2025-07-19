@@ -15,4 +15,18 @@ public enum FacingDirection {
     public int getAnimationRow() {
         return animationRow;
     }
+
+    public String getDirection() {
+        String direction = null;
+        if (this == FacingDirection.UP) {
+            direction = "up";
+        } else if (this == FacingDirection.DOWN) {
+            direction = "down";
+        } else if (this == FacingDirection.LEFT) {
+            direction = "left";
+        } else if (this == FacingDirection.RIGHT) {
+            direction = "right";
+        }
+        return direction;
+    }
 }

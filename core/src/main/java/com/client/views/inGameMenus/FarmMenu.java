@@ -124,7 +124,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.inventory = AssetManager.getImage("aks");
         //TODO tuf zadam
         for (Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {
-            slot.getItem().setTexture(AssetManager.getImage(slot.getItem().getItemType(slot.getItem().getName()).getTextureName()));
+            slot.getItem().setTexture(slot.getItem().getTexture());
 
         }
         initializeShader();
@@ -341,6 +341,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
             playerController.setState(PlayerState.WALKING);
             playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+            System.out.println(playerController.getPlayer().getEquippedItem());
+            if (playerController.getPlayer().getEquippedItem() == null) {
+                return;
+            }
             playerController.setState(PlayerState.TOOL_SWINGING);
             isToolSwinging = true;
             Timer.schedule(new Timer.Task() {
@@ -350,6 +354,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     this.cancel();
                 }
             }, .6f, 2);
+            playerController.toolUse();
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
             if (success) {
@@ -492,6 +497,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public void render(float delta) {
+        this.farm = playerController.getPlayer().getFarm();
         batch.setShader(dayNightShader);
         clearAndResetScreen();
         updateSeasonGrassTexture();

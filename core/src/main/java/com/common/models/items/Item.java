@@ -107,11 +107,18 @@ public class Item {
     }
 
     public Texture getTexture() {
+        if(texture == null){
+            texture = AssetManager.getImage(this.getItemType(getActualName()).getTextureName());
+        }
         return texture;
     }
 
     public void setTexture(Texture texture) {
         this.texture = texture;
+    }
+
+    public String getActualName(){
+        return this.name;
     }
 
 }

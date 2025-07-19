@@ -47,4 +47,8 @@ public class PlayerService {
         return false;
     }
 
+    public boolean toolUse(){
+        return true;
+    }
+
 }

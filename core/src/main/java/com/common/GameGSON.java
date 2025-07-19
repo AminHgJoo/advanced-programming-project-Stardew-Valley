@@ -1,5 +1,6 @@
 package com.common;
 
+import com.common.models.items.*;
 import com.common.models.mapObjects.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,6 +26,15 @@ public class GameGSON {
         .registerSubtype(EmptyCell.class, "empty")
         .registerSubtype(ForagingCrop.class, "foragingCrop")
         .registerSubtype(ForagingMineral.class, "foragingMineral");
+    public static final RuntimeTypeAdapterFactory<Item> itemAdaptor = RuntimeTypeAdapterFactory
+        .of(Item.class, "_type")
+        .registerSubtype(Fish.class, "fish")
+        .registerSubtype(Food.class, "food")
+        .registerSubtype(ForagingMineralItem.class, "foragingMineral")
+        .registerSubtype(Misc.class, "misc")
+        .registerSubtype(Seed.class, "seed")
+        .registerSubtype(Tool.class, "tool")
+        .registerSubtype(TreeSeed.class, "treeSeed");
 
     public static final Gson gson = new GsonBuilder()
         .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
@@ -47,5 +57,6 @@ public class GameGSON {
         })
         .serializeSpecialFloatingPointValues()
         .registerTypeAdapterFactory(mapObjectAdaptor)
+        .registerTypeAdapterFactory(itemAdaptor)
         .create();
 }

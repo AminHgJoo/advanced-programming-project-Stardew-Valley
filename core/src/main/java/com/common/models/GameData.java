@@ -406,6 +406,14 @@ public class GameData {
         weatherTomorrow = Weather.values()[randomNumber];
     }
 
+    public void setPlayerById(String id , Player p){
+        for (Player player : players){
+            if (player.getUser_id().equals(id)){
+                player = p;
+            }
+        }
+    }
+
     public boolean checkSeasonChange() {
         if (date.getMonthValue() <= 3) {
             season = Season.SPRING;

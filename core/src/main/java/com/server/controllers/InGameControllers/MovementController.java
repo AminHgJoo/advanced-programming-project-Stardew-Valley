@@ -26,6 +26,8 @@ public class MovementController extends Controller {
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             Farm farm = player.getCurrentFarm(game);
+            float p_x = (float) x;
+            float p_y = (float) y;
             x = x / 32d;
             y = 49 - y / 32d;
             Cell cell = farm.findCellByCoordinate((float) x, (float) y);
@@ -37,6 +39,7 @@ public class MovementController extends Controller {
                 ctx.json(Response.BAD_REQUEST.setMessage("Cell is not walkable " + cell.getObjectOnCell().type));
                 return;
             }
+            player.setCoordinate(new Coordinate(p_x, p_y));
             ctx.json(Response.OK.setMessage("Ok"));
             // broadcast
             HashMap<String, String> msg = new HashMap<>();

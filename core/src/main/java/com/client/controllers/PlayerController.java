@@ -13,6 +13,7 @@ import com.client.utils.HTTPUtil;
 import com.client.utils.PlayerAnimationController;
 import com.client.utils.PlayerState;
 import com.client.views.inGameMenus.FarmMenu;
+import com.common.GameGSON;
 import com.common.models.Backpack;
 import com.common.models.GameData;
 import com.common.models.Player;
@@ -113,6 +114,38 @@ public class PlayerController {
                     playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale) - 3f,
                     (float) t.getWidth() / scale, (float) t.getHeight() / scale);
             }
+        }
+    }
+
+    public void toolUse() {
+        try {
+            Tool tool = (Tool) player.getEquippedItem();
+            boolean check = playerService.toolUse();
+            if (check) {
+                networkThreadPool.execute(() -> {
+                    JsonObject req = new JsonObject();
+                    String dir = facingDirection.getDirection();
+                    req.addProperty("direction", dir);
+                    req.addProperty("toolName", tool.getName());
+                    var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/worldToolUse", req);
+
+                    Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                    Gdx.app.postRunnable(() -> {
+                        if (res.getStatus() == 200) {
+                            System.out.println(res.getMessage());
+                            String playerJson = res.getBody().toString();
+                            updatePlayerObject(playerJson);
+                        } else {
+                            System.out.println(res.getMessage());
+                        }
+                    });
+                });
+            } else {
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -254,5 +287,12 @@ public class PlayerController {
         float x = Float.parseFloat(res.get("x"));
         float y = Float.parseFloat(res.get("y"));
         p.setCoordinate(new Coordinate(x, y));
+    }
+
+    public void updatePlayerObject(String json) {
+        Player p = GameGSON.gson.fromJson(json, Player.class);
+        this.player = p;
+        ClientApp.currentPlayer = player;
+        game.setPlayerById(p.getUser_id(), p);
     }
 }
