@@ -52,7 +52,7 @@ public class ArtisanController extends Controller {
         } else if (artisanName.equals("Charcoal Klin")) {
             return charCoalKiln(item1Name, player, gameData, backpack, block);
         } else if (artisanName.equals("Loom")) {
-            loom(item1Name, player, gameData, backpack, block);
+            return loom(item1Name, player, gameData, backpack, block);
         } else if (artisanName.equals("Mayonnaise Machine")) {
             return mayonnaiseMachine(item1Name, player, gameData, backpack, block);
         } else if (artisanName.equals("Oil Maker")) {
@@ -79,7 +79,7 @@ public class ArtisanController extends Controller {
         return wrongItem(gameData);
     }
 
-    private static boolean isFurnace(String item1Name) {
+    public static boolean isFurnace(String item1Name) {
         if (item1Name.equals(ForagingMineralsType.COPPER_ORE.name)) {
             return true;
         } else if (item1Name.equals(ForagingMineralsType.GOLD_ORE.name)) {
@@ -102,7 +102,7 @@ public class ArtisanController extends Controller {
         return null;
     }
 
-    private static boolean isFish(String item1Name) {
+    public static boolean isFish(String item1Name) {
         if (FishType.isFish(item1Name))
             return true;
         return false;
@@ -118,7 +118,7 @@ public class ArtisanController extends Controller {
         }
     }
 
-    private static boolean isPreservesJar(String item1Name) {
+    public static boolean isPreservesJar(String item1Name) {
         if(isVegetable(item1Name))
             return true;
         else if(isFruit(item1Name))
@@ -145,7 +145,7 @@ public class ArtisanController extends Controller {
         }
     }
 
-    private static boolean isOilMaker(String item1Name) {
+    public static boolean isOilMaker(String item1Name) {
         if (item1Name.equals("Truffle")) {
             return true;
         } else if (item1Name.equals("Corn")) {
@@ -172,7 +172,7 @@ public class ArtisanController extends Controller {
         }
     }
 
-    private static boolean isMayonnaiseMachine(String item1Name) {
+    public static boolean isMayonnaiseMachine(String item1Name) {
         if (item1Name.equals("Egg")) {
             return true;
         }
@@ -188,15 +188,16 @@ public class ArtisanController extends Controller {
         return false;
     }
 
-    private static void loom(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
+    private static Response loom(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
         if (item1Name.equals("Wool")) {
-            artisanMiscHandle(player, gameData, backpack, item1Name, block, 0, 4, MiscType.CLOTH, 1, 1, 470);
+            return artisanMiscHandle(player, gameData, backpack, item1Name, block, 0, 4, MiscType.CLOTH, 1, 1, 470);
         } else {
             GameRepository.saveGame(gameData);
         }
+        return new Response(false, "Wrong item selected");
     }
 
-    private static boolean isLoom(String item1Name) {
+    public static boolean isLoom(String item1Name) {
         if (item1Name.equals("Wool")) {
             return true;
         }
@@ -238,7 +239,7 @@ public class ArtisanController extends Controller {
         }
     }
 
-    private static boolean isCharCoalKiln(String item1Name) {
+    public static boolean isCharCoalKiln(String item1Name) {
         if (item1Name.equals("Wood")) {
             return true;
         }
@@ -258,7 +259,7 @@ public class ArtisanController extends Controller {
         }
     }
 
-    private static boolean isDehydrator(String item1Name) {
+    public static boolean isDehydrator(String item1Name) {
         if (item1Name.equals("Grapes")) {
             return true;
         }
@@ -299,7 +300,7 @@ public class ArtisanController extends Controller {
         }
     }
 
-    private static boolean isKeg(String item1Name) {
+    public static boolean isKeg(String item1Name) {
         if(item1Name.equals("Wheat"))
             return true;
         if(item1Name.equals("Rice"))
@@ -478,7 +479,7 @@ public class ArtisanController extends Controller {
         }
     }
 
-    private static boolean isCheesePress(String item1Name){
+    public static boolean isCheesePress(String item1Name){
         if (item1Name.equals("Milk") || item1Name.equals("Big Milk"))
             return true;
         else if (item1Name.equals("Goat Milk") || item1Name.equals("Big Goat Milk"))
