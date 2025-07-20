@@ -8,10 +8,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
+import com.common.models.Backpack;
+import com.common.models.GameData;
 import com.common.models.Player;
+import com.common.models.Slot;
 import com.common.models.enums.recipes.CraftingRecipes;
 
 public class CraftingMenu implements MyScreen {
@@ -52,9 +57,7 @@ public class CraftingMenu implements MyScreen {
         Table leftTable = new Table();
         leftTable.pad(20);
 
-        //TODO: Replace with ClientApp.currentPlayer
-        Player player = new Player();
-        player.getUnlockedCraftingRecipes().add(CraftingRecipes.FURNACE);
+        Player player = ClientApp.currentPlayer;
 
         CraftingRecipes[] allRecipes = CraftingRecipes.values();
         CraftingRecipes[][] descriptions = new CraftingRecipes[4][5];
@@ -105,7 +108,20 @@ public class CraftingMenu implements MyScreen {
         craftButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO
+                if (selectedRecipe == null) {
+                    return;
+                }
+
+                String result = localController(selectedRecipe);
+                if ("OK".equals(result)) {
+                    notifyServerOfSuccessfulCrafting(selectedRecipe);
+
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog("Crafting Successful!", "Success");
+                } else {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog(result, "Failed");
+                }
             }
         });
 
@@ -118,6 +134,36 @@ public class CraftingMenu implements MyScreen {
         root.add(rightTable).expandX().fillX();
 
         Gdx.input.setInputProcessor(stage);
+    }
+
+    //TODO: Send request to server.
+    private void notifyServerOfSuccessfulCrafting(CraftingRecipes recipe) {
+
+    }
+
+    private String localController(CraftingRecipes targetRecipe) {
+
+        GameData gameData = ClientApp.currentGameData;
+        Player player = gameData.getCurrentPlayer();
+
+        Backpack backpack = player.getInventory();
+
+        if (backpack.getSlots().size() == backpack.getType().getMaxCapacity()) {
+            return "Your backpack is full, you cannot craft any items!";
+        }
+
+        for (Slot ingredient : targetRecipe.ingredients) {
+            Slot playerSlot = backpack.getSlotByItemName(ingredient.getItem().getName());
+
+            if (playerSlot == null) {
+                return "You don't have the required materials to craft this item!";
+            }
+
+            if (playerSlot.getCount() < ingredient.getCount()) {
+                return "You don't have the required materials to craft this item!";
+            }
+        }
+        return "OK";
     }
 
     @Override
