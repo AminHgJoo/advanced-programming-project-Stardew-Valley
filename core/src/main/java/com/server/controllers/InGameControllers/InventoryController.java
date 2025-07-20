@@ -1,10 +1,9 @@
 package com.server.controllers.InGameControllers;
 
 import com.common.GameGSON;
-import com.common.models.Backpack;
-import com.common.models.GameData;
-import com.common.models.Player;
-import com.common.models.Slot;
+import com.common.models.*;
+import com.common.models.enums.Quality;
+import com.common.models.enums.types.itemTypes.ItemType;
 import com.common.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.common.models.items.Food;
 import com.common.models.items.Misc;
@@ -15,6 +14,7 @@ import com.common.models.mapObjects.ArtisanBlock;
 import com.common.models.mapObjects.DroppedItem;
 import com.common.models.mapObjects.EmptyCell;
 import com.server.GameServers.GameServer;
+import com.server.repositories.GameRepository;
 import com.server.utilities.Response;
 import io.javalin.http.Context;
 
@@ -159,6 +159,86 @@ public class InventoryController extends Controller {
 
             gs.broadcast(msg);
         } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void addItem(Context ctx , GameServer gs) {
+        try{
+            String id = ctx.attribute("id");
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String itemName = (String) body.get("itemName");
+            String quality = (String) body.get("quality");
+            int count = (Integer) body.get("count");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+            Backpack backpack = player.getInventory();
+            HashMap<String, ItemType> allItemsList = App.getAllItemTypes();
+
+            if (!allItemsList.containsKey(itemName)) {
+                ctx.json(Response.BAD_REQUEST.setMessage("item(s) does not exist!"));
+                return;
+            }
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                ctx.json(Response.BAD_REQUEST.setMessage("item(s) isn't edible backpack!"));
+                return;
+            }
+
+            Slot slot = backpack.getSlotByItemName(itemName);
+
+            Quality q = Quality.getQualityByName(quality);
+
+            if (slot == null) {
+                Slot toBeAddedSlot = allItemsList.get(itemName).createAmountOfItem(count, q);
+                backpack.getSlots().add(toBeAddedSlot);
+            } else {
+                slot.setCount(Math.min(slot.getCount() + count, slot.getItem().getMaxStackSize()));
+            }
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setBody(playerJson));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player_user_id", id);
+            msg.put("player", playerJson);
+            gs.broadcast(msg);
+        }catch (Exception e){
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void removeItem(Context ctx, GameServer gs) {
+        try {
+            String id = ctx.attribute("id");
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String itemName = (String) body.get("itemName");
+            int count = (Integer) body.get("count");
+
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+            Backpack backpack = player.getInventory();
+
+            Slot slot = backpack.getSlotByItemName(itemName);
+            if (slot == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("item(s) does not exist!"));
+                return;
+            }
+            slot.setCount(slot.getCount() - count);
+            if(slot.getCount() == 0){
+                backpack.removeSlot(slot);
+            }
+
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setBody(playerJson));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player_user_id", id);
+            msg.put("player", playerJson);
+            gs.broadcast(msg);
+
+        }
+        catch (Exception e){
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }
