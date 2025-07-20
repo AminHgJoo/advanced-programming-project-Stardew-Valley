@@ -7,6 +7,7 @@ import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.ModelDecoder;
 import com.client.utils.MyScreen;
+import com.client.views.inGameMenus.CraftingMenu;
 import com.client.views.inGameMenus.StoreInterface;
 import com.client.views.preGameMenus.LauncherMenu;
 import com.client.views.preGameMenus.MainMenu;
@@ -20,18 +21,19 @@ public class GameMain extends Game {
     @Override
     public void create() {
         //TODO: load/play music.
-        loadEnv();
+//        loadEnv();
         AssetManager.loadAssets();
         //TODO: TESTING CODE FOR MAP :::::
 //        this.setScreen(new FarmMenu(this));
 //        this.setScreen(new FishingMiniGame(this, null, true, Quality.IRIDIUM));
 //        this.setScreen(new StoreInterface(this, "Pierre's General Store", null));
-
-        if (ClientApp.loggedInUser != null) {
-            ClientApp.init();
-            this.setScreen(new MainMenu(this));
-        } else
-            this.setScreen(new LauncherMenu(this));
+        this.setScreen(new CraftingMenu(this, null));
+//
+//        if (ClientApp.loggedInUser != null) {
+//            ClientApp.init();
+//            this.setScreen(new MainMenu(this));
+//        } else
+//            this.setScreen(new LauncherMenu(this));
     }
 
     public void loadEnv() {
