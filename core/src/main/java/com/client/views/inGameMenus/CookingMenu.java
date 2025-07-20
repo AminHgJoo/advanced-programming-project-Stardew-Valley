@@ -57,8 +57,7 @@ public class CookingMenu implements MyScreen {
         Table leftTable = new Table();
         leftTable.pad(20);
 
-        Player player = //ClientApp.currentPlayer;
-            new Player();
+        Player player = ClientApp.currentPlayer;
 
         CookingRecipes[] allRecipes = CookingRecipes.values();
         CookingRecipes[][] descriptions = new CookingRecipes[5][5];

@@ -22,19 +22,19 @@ public class GameMain extends Game {
     @Override
     public void create() {
         //TODO: load/play music.
-//        loadEnv();
+        loadEnv();
         AssetManager.loadAssets();
         //TODO: TESTING CODE FOR MAP :::::
 //        this.setScreen(new FarmMenu(this));
 //        this.setScreen(new FishingMiniGame(this, null, true, Quality.IRIDIUM));
 //        this.setScreen(new StoreInterface(this, "Pierre's General Store", null));
-        this.setScreen(new CookingMenu(this, null));
-//
-//        if (ClientApp.loggedInUser != null) {
-//            ClientApp.init();
-//            this.setScreen(new MainMenu(this));
-//        } else
-//            this.setScreen(new LauncherMenu(this));
+//        this.setScreen(new CookingMenu(this, null));
+
+        if (ClientApp.loggedInUser != null) {
+            ClientApp.init();
+            this.setScreen(new MainMenu(this));
+        } else
+            this.setScreen(new LauncherMenu(this));
     }
 
     public void loadEnv() {
