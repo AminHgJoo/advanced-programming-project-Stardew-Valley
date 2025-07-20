@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -27,10 +28,12 @@ import com.client.utils.*;
 import com.common.models.Backpack;
 import com.common.models.GameData;
 import com.common.models.Slot;
+import com.common.models.enums.types.itemTypes.FoodTypes;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
+import com.common.models.mapObjects.ArtisanBlock;
 import com.common.models.mapObjects.BuildingBlock;
 import com.common.models.mapObjects.DroppedItem;
 import com.google.gson.Gson;
@@ -130,6 +133,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         initializeShader();
         initializeParticles();
         initializeStage();
+        ClientApp.currentPlayer.getInventory().addSlot(new Slot(FoodTypes.HONEY, 10));
     }
 
     public PlayerController getPlayerController() {
@@ -395,6 +399,20 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         }
 
+        Vector3 worldCoords = camera.unproject(new Vector3(screenX, screenY, 0));
+        float cellX =  (worldCoords.x / 32);
+        float cellY =  (49 - worldCoords.y / 32);
+
+        Cell clickedCell = farm.findCellByCoordinate(cellX, cellY);
+        if (clickedCell != null) {
+            if (clickedCell.getObjectOnCell() instanceof ArtisanBlock) {
+                ArtisanBlock artisanBlock = (ArtisanBlock) clickedCell.getObjectOnCell();
+                if (!artisanBlock.beingUsed) {
+                    gameMain.setScreen(new ArtisanMenu(gameMain, this, artisanBlock.getArtisanType().name));
+                }
+            }
+        }
+
         return true;
     }
 
@@ -572,6 +590,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 texture1 = AssetManager.getImage("mineCell");
             }
 
+
             if (texture1 == SeasonTextures.SPRING.texture ||
                 texture1 == SeasonTextures.SUMMER.texture ||
                 texture1 == SeasonTextures.FALL.texture ||
@@ -579,7 +598,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 continue;
             }
 
-            if (cell.getObjectOnCell() instanceof DroppedItem)
+            if (cell.getObjectOnCell() instanceof DroppedItem || cell.getObjectOnCell() instanceof ArtisanBlock)
                 modifiedDraw(batch, texture1, xOfCell, yOfCell, 30, 30);
             else
                 modifiedDraw(batch, texture1, xOfCell, yOfCell);

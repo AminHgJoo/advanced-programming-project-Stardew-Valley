@@ -2,6 +2,7 @@ package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,16 +10,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
 import com.common.models.Backpack;
-import com.common.models.IO.Request;
-import com.common.models.Player;
 import com.common.models.Slot;
-import com.common.models.enums.types.inventoryEnums.TrashcanType;
 import com.server.controllers_old.gameMenuControllers.ArtisanController;
 
 import java.util.ArrayList;
@@ -47,7 +49,9 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
     private float startBtnY;
     private float startBtnWidth;
     private float startBtnHeight;
-
+    private Stage stage;
+    private Skin skin;
+    private TextButton startButton;
 
 
     public ArtisanMenu(GameMain gameMain, MyScreen farmScreen, String artisanName) {
@@ -67,65 +71,65 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
 
     private void findSlots(String artisanName) {
         if (artisanName.equals("Bee House")) {
-            for(Slot slot : backpack.getSlots()) {
-                if(slot.getItem().getName().equals("Honey")) {
+            for (Slot slot : backpack.getSlots()) {
+                if (slot.getItem().getName().equals("Honey")) {
                     targetSlots.add(slot);
                 }
             }
         } else if (artisanName.equals("Cheese Press")) {
-            for(Slot slot : backpack.getSlots()) {
-                if(ArtisanController.isCheesePress(slot.getItem().getName())) {
+            for (Slot slot : backpack.getSlots()) {
+                if (ArtisanController.isCheesePress(slot.getItem().getName())) {
                     targetSlots.add(slot);
                 }
             }
         } else if (artisanName.equals("Keg")) {
-            for(Slot slot : backpack.getSlots()) {
-                if(ArtisanController.isKeg(slot.getItem().getName())) {
+            for (Slot slot : backpack.getSlots()) {
+                if (ArtisanController.isKeg(slot.getItem().getName())) {
                     targetSlots.add(slot);
                 }
             }
         } else if (artisanName.equals("Dehydrator")) {
-            for(Slot slot : backpack.getSlots()) {
-                if(ArtisanController.isDehydrator(slot.getItem().getName())) {
+            for (Slot slot : backpack.getSlots()) {
+                if (ArtisanController.isDehydrator(slot.getItem().getName())) {
                     targetSlots.add(slot);
                 }
             }
         } else if (artisanName.equals("Charcoal Klin")) {
-           for(Slot slot : backpack.getSlots()) {
-               if(ArtisanController.isCharCoalKiln(slot.getItem().getName())) {
-                   targetSlots.add(slot);
-               }
-           }
+            for (Slot slot : backpack.getSlots()) {
+                if (ArtisanController.isCharCoalKiln(slot.getItem().getName())) {
+                    targetSlots.add(slot);
+                }
+            }
         } else if (artisanName.equals("Loom")) {
-            for(Slot slot : backpack.getSlots()) {
-                if(ArtisanController.isLoom(slot.getItem().getName())) {
+            for (Slot slot : backpack.getSlots()) {
+                if (ArtisanController.isLoom(slot.getItem().getName())) {
                     targetSlots.add(slot);
                 }
             }
         } else if (artisanName.equals("Mayonnaise Machine")) {
             for (Slot slot : backpack.getSlots()) {
-                if(ArtisanController.isMayonnaiseMachine(slot.getItem().getName())) {
+                if (ArtisanController.isMayonnaiseMachine(slot.getItem().getName())) {
                     targetSlots.add(slot);
                 }
             }
         } else if (artisanName.equals("Oil Maker")) {
             for (Slot slot : backpack.getSlots()) {
-                if(ArtisanController.isOilMaker(slot.getItem().getName())) {
+                if (ArtisanController.isOilMaker(slot.getItem().getName())) {
                     targetSlots.add(slot);
                 }
             }
         } else if (artisanName.equals("Preserves Jar")) {
-            for(Slot slot : backpack.getSlots()) {
-                if(ArtisanController.isPreservesJar(slot.getItem().getName())) {
+            for (Slot slot : backpack.getSlots()) {
+                if (ArtisanController.isPreservesJar(slot.getItem().getName())) {
                     targetSlots.add(slot);
                 }
             }
         } else if (artisanName.equals("Fish Smoker")) {
-           for(Slot slot : backpack.getSlots()) {
-               if(ArtisanController.isFish(slot.getItem().getName())) {
-                   targetSlots.add(slot);
-               }
-           }
+            for (Slot slot : backpack.getSlots()) {
+                if (ArtisanController.isFish(slot.getItem().getName())) {
+                    targetSlots.add(slot);
+                }
+            }
         }
     }
 
@@ -163,7 +167,7 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
 
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
             int actualIndex = scrollIndex * GRID_SIZE + i;
-            if (actualIndex >= targetSlots.size()) break;
+            if (actualIndex >= backpack.getSlots().size()) break;
 
             int col = i % GRID_SIZE;
             int row = i / GRID_SIZE;
@@ -180,16 +184,6 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
                 }
                 break;
             }
-        }
-
-        int flippedY = Gdx.graphics.getHeight() - screenY;
-
-        if (screenX >= startBtnX && screenX <= startBtnX + startBtnWidth &&
-            flippedY >= startBtnY - startBtnHeight && flippedY <= startBtnY && selectedSave >= 0) {
-            //TODO sooroosh komak
-            Request request = new Request("asghar");
-            request.body.put("itemName", targetSlots.get(selectedSave).getItem().getName());
-            request.body.put("artisanName", artisanName);
         }
 
         return true;
@@ -232,7 +226,32 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(this);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+
+
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
+
+        skin = AssetManager.getSkin();
+
+        startButton = new TextButton("Start", skin);
+        startButton.setSize(200, 60);
+        startButton.setPosition(Gdx.graphics.getWidth() / 2f - 100, 50);
+
+        startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //TODO sooroosh komak
+//            Request request = new Request("asghar");
+//            request.body.put("itemName", targetSlots.get(selectedSave).getItem().getName());
+//            request.body.put("artisanName", artisanName);
+            }
+        });
+
+        stage.addActor(startButton);
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(this);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
 
@@ -267,6 +286,17 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
             selectedSave = selectedIndex;
             selectedIndex = -1;
         }
+        for (int i = 0; i < ITEMS_PER_PAGE && i < backpack.getSlots().size(); i++) {
+            int actualIndex = scrollIndex * GRID_SIZE + i;
+            if (selectedIndex >= 0 && selected) {
+                Slot temp = backpack.getSlots().get(selectedIndex);
+                backpack.getSlots().set(selectedIndex, backpack.getSlots().get(selectedSave));
+                backpack.getSlots().set(selectedSave, temp);
+                selectedIndex = -1;
+                selected = false;
+                selectedSave = -1;
+            }
+        }
 
         List<Slot> slots = targetSlots;
         for (int i = 0; i < ITEMS_PER_PAGE && i < targetSlots.size(); i++) {
@@ -291,19 +321,9 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
             batch.draw(itemTexture, x, y, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
         }
 
-        String startText = "Start";
-        layout.setText(titleFont, startText);
-
-        startBtnWidth = layout.width;
-        startBtnHeight = layout.height;
-
-        startBtnX = Gdx.graphics.getWidth() / 2f - startBtnWidth / 2f;
-        startBtnY = Gdx.graphics.getHeight() / 3f - startBtnHeight / 2f;
-
-        titleFont.draw(batch, layout, startBtnX, startBtnY);
-
-
         batch.end();
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
@@ -329,5 +349,6 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
     @Override
     public void dispose() {
         batch.dispose();
+        stage.dispose();
     }
 }
