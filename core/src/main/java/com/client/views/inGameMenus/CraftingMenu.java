@@ -44,13 +44,9 @@ public class CraftingMenu implements MyScreen {
         root.setFillParent(true);
         stage.addActor(root);
 
-        Table rightTable = new Table(skin);
-
-
-
+        Table rightTable = new Table();
         Table leftTable = new Table();
         leftTable.pad(20);
-        stage.addActor(leftTable);
 
         //TODO: Replace with ClientApp.currentPlayer
         Player player = new Player();
@@ -69,16 +65,18 @@ public class CraftingMenu implements MyScreen {
 
                 Image img = new Image(AssetManager.getImage(AssetManager.generateKeyFromFileName(recipes.name)));
                 img.addListener(new TextTooltip(recipes.name + "\n" + recipes.description + "\n" + recipes.listIngredients(), skin));
-                img.addListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-
-                    }
-                });
 
                 if (!player.getUnlockedCraftingRecipes().contains(recipes)) {
                     img.setColor(0.6f, 0.6f, 0.6f, 0.6f);
+                } else {
+                    img.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+
+                        }
+                    });
                 }
+
                 leftTable.add(img).pad(10);
             }
             leftTable.row();
