@@ -36,7 +36,7 @@ public enum CookingRecipes {
         new Slot(new Food(FoodTypes.COFFEE), 3)),
     COOKIE("Cookie", Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, FoodTypes.COOKIE,
         new Slot[]{new Slot(new Food(FoodTypes.WHEAT_FLOUR), 1), new Slot(new Misc(MiscType.EGG), 1), new Slot(new Food(FoodTypes.SUGAR), 1)}),
-    HASH_BROWNS("Hash Browns", Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, FoodTypes.HASH_BROWNS,
+    HASH_BROWNS("Hash browns", Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, FoodTypes.HASH_BROWNS,
         new Slot[]{new Slot(new Food(FoodTypes.POTATO), 1), new Slot(new Food(FoodTypes.OIL), 1)}),
     PANCAKES("Pancakes", Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, FoodTypes.PANCAKES,
         new Slot[]{new Slot(new Food(FoodTypes.WHEAT_FLOUR), 1), new Slot(new Misc(MiscType.EGG), 1)}),
@@ -54,7 +54,7 @@ public enum CookingRecipes {
         new Slot[]{new Slot(new Food(FoodTypes.OMELETTE), 1), new Slot(new Food(FoodTypes.PARSNIP), 1)}),
     SURVIVAL_BURGER("Survival Burger", 0, 0, 3, 0, FoodTypes.SURVIVAL_BURGER,
         new Slot[]{new Slot(new Food(FoodTypes.BREAD), 1), new Slot(new Food(FoodTypes.CARROT), 1), new Slot(new Food(FoodTypes.EGGPLANT), 1)}),
-    DISH_OF_THE_SEA("Dish 'O The Sea", 0, 0, 0, 2, FoodTypes.DISH_OF_THE_SEA,
+    DISH_OF_THE_SEA("Dish O' The Sea", 0, 0, 0, 2, FoodTypes.DISH_OF_THE_SEA,
         new Slot[]{new Slot(new Fish(Quality.DEFAULT, FishType.SARDINE), 2), new Slot(new Food(FoodTypes.HASH_BROWNS), 1)}),
     SEAFORM_PUDDING("Seaform Pudding", 0, 0, 0, 3, FoodTypes.SEAFORM_PUDDING,
         new Slot[]{new Slot(new Fish(Quality.DEFAULT, FishType.FLOUNDER), 1), new Slot(new Fish(Quality.DEFAULT, FishType.MIDNIGHT_CARP), 1)}),
@@ -91,6 +91,13 @@ public enum CookingRecipes {
         this.fishingLevel = fishingLevel;
         this.craftingResultType = craftingResultType;
         this.ingredients = new Slot[]{ingredient};
+    }
+    public String listIngredients() {
+        StringBuilder sb = new StringBuilder();
+        for (Slot slot : ingredients) {
+            sb.append(slot.getItem().getName()).append(" x(").append(slot.getCount()).append(")").append("\n");
+        }
+        return sb.toString();
     }
 
     public static CookingRecipes findByName(String name) {

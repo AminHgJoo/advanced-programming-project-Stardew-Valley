@@ -7,6 +7,7 @@ import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.ModelDecoder;
 import com.client.utils.MyScreen;
+import com.client.views.inGameMenus.CookingMenu;
 import com.client.views.inGameMenus.CraftingMenu;
 import com.client.views.inGameMenus.StoreInterface;
 import com.client.views.preGameMenus.LauncherMenu;
@@ -27,7 +28,7 @@ public class GameMain extends Game {
 //        this.setScreen(new FarmMenu(this));
 //        this.setScreen(new FishingMiniGame(this, null, true, Quality.IRIDIUM));
 //        this.setScreen(new StoreInterface(this, "Pierre's General Store", null));
-        this.setScreen(new CraftingMenu(this, null));
+        this.setScreen(new CookingMenu(this, null));
 //
 //        if (ClientApp.loggedInUser != null) {
 //            ClientApp.init();
