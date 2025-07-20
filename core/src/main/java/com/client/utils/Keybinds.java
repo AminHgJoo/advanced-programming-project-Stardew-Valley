@@ -19,7 +19,9 @@ public enum Keybinds {
     OPEN_CHAT(Input.Keys.T),
     HOTBAR_SLOTS(Input.Keys.NUM_1, Input.Keys.NUM_2, Input.Keys.NUM_3, Input.Keys.NUM_4, Input.Keys.NUM_5, Input.Keys.NUM_6
         , Input.Keys.NUM_7, Input.Keys.NUM_8, Input.Keys.NUM_9, Input.Keys.NUM_0, Input.Keys.MINUS, Input.Keys.EQUALS),
-    SCREENSHOT_MODE(Input.Keys.F4);
+    SCREENSHOT_MODE(Input.Keys.F4),
+    OPEN_CRAFTING(Input.Keys.B),
+    OPEN_COOKING(Input.Keys.K);
 
     public final ArrayList<Integer> keycodes;
 

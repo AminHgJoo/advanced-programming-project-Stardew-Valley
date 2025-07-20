@@ -299,35 +299,18 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-//        if (Keybinds.DOWN.keycodes.contains(keycode)) {
-//            playerController.handleKeyUp(0, -BASE_SPEED_FACTOR);
-//        } else if (Keybinds.UP.keycodes.contains(keycode)) {
-//            playerController.handleKeyUp(0, BASE_SPEED_FACTOR);
-//        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
-//            playerController.handleKeyUp(-BASE_SPEED_FACTOR, 0);
-//        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
-//            playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
-        if (keycode == Input.Keys.ESCAPE) {
+        if (Keybinds.OPEN_INVENTORY.keycodes.contains(keycode)) {
             gameMain.setScreen(new InventoryMenu(gameMain, this));
+        } else if (Keybinds.OPEN_CRAFTING.keycodes.contains(keycode)) {
+            gameMain.setScreen(new CraftingMenu(gameMain, this));
+        } else if (Keybinds.OPEN_COOKING.keycodes.contains(keycode)) {
+            gameMain.setScreen(new CookingMenu(gameMain, this));
         }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-//        if (Keybinds.DOWN.keycodes.contains(keycode)) {
-//            playerVelocity.y = 0;
-//            playerController.setState(PlayerState.IDLE);
-//        } else if (Keybinds.UP.keycodes.contains(keycode)) {
-//            playerVelocity.y = 0;
-//            playerController.setState(PlayerState.IDLE);
-//        } else if (Keybinds.LEFT.keycodes.contains(keycode)) {
-//            playerVelocity.x = 0;
-//            playerController.setState(PlayerState.IDLE);
-//        } else if (Keybinds.RIGHT.keycodes.contains(keycode)) {
-//            playerVelocity.x = 0;
-//            playerController.setState(PlayerState.IDLE);
-//        }
         return false;
     }
 
@@ -366,7 +349,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 selectedSave = -1;
                 selected = false;
             }
-        }  else {
+        } else {
             if (!isToolSwinging) {
                 playerController.setState(PlayerState.IDLE);
                 playerVelocity.x = 0;
