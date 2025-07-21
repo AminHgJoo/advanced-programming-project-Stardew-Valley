@@ -58,7 +58,7 @@ public class Farm {
         for (Cell cell : farmCells) {
             int randomNumber = (int) (Math.random() * 50);
             //TODO artisan test
-            if(cell.getCoordinate().getX() == 2&&cell.getCoordinate().getY() == 20){
+            if(cell.getCoordinate().getX() == 2 &&cell.getCoordinate().getY() == 20){
                 cell.setObjectOnCell(new ArtisanBlock(ArtisanBlockType.KEG));
             }
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {

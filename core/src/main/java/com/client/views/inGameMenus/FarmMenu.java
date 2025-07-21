@@ -2,6 +2,7 @@ package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,9 +15,11 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -111,6 +114,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Label dateLabel;
     private Label timeLabel;
     private Label moneyLabel;
+    private Stage popupStage;
 
     public FarmMenu(GameMain gameMain) {
         this.gameMain = gameMain;
@@ -119,8 +123,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
-        this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
+        camera.setToOrtho(false, camera.viewportWidth, camera.viewportHeight);
 
+        this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
+        popupStage = new Stage(new ScreenViewport());
         this.grassTexture = AssetManager.getImage("grassfall");
         playerController = new PlayerController(playerPosition, playerVelocity);
         this.farm = playerController.getPlayer().getFarm();
@@ -398,17 +404,66 @@ public class FarmMenu implements MyScreen, InputProcessor {
             }
 
         }
-
-        Vector3 worldCoords = camera.unproject(new Vector3(screenX, screenY, 0));
+        camera.update();
+        Vector3 worldCoords = new Vector3(screenX, screenY, 0);
+        viewport.unproject(worldCoords);
         float cellX =  (worldCoords.x / 32);
-        float cellY =  (49 - worldCoords.y / 32);
+        //TODO in y esh kirie
+        float cellY =  (43- (worldCoords.y / 32));
 
         Cell clickedCell = farm.findCellByCoordinate(cellX, cellY);
         if (clickedCell != null) {
             if (clickedCell.getObjectOnCell() instanceof ArtisanBlock) {
                 ArtisanBlock artisanBlock = (ArtisanBlock) clickedCell.getObjectOnCell();
-                if (!artisanBlock.beingUsed) {
+                if (artisanBlock.beingUsed) {
                     gameMain.setScreen(new ArtisanMenu(gameMain, this, artisanBlock.getArtisanType().name));
+                }
+                else{
+                    Gdx.input.setInputProcessor(popupStage);
+                    Vector2 stageCoords = popupStage.screenToStageCoordinates(new Vector2(screenX, screenY));
+                    Skin skin = AssetManager.getSkin();
+
+                    Window popup = new Window(artisanBlock.getArtisanType().name, skin);
+                    popup.setSize(300, 500);
+                    popup.setPosition(stageCoords.x, stageCoords.y, Align.topLeft);
+
+                    //TODO information
+                    Label label = new Label("information", skin);
+                    label.setWrap(true);
+                    label.setAlignment(Align.center);
+
+                    TextButton cheatBtn   = new TextButton("Cheat",   skin);
+                    TextButton collectBtn = new TextButton("Collect", skin);
+                    TextButton cancelBtn  = new TextButton("Cancel",  skin);
+
+
+                    cheatBtn.addListener(new ChangeListener() {
+                        @Override public void changed(ChangeEvent event, Actor actor) {
+                            Gdx.input.setInputProcessor(FarmMenu.this);
+                            popup.remove();
+                        }
+                    });
+                    collectBtn.addListener(new ChangeListener() {
+                        @Override public void changed(ChangeEvent event, Actor actor) {
+                            Gdx.input.setInputProcessor(FarmMenu.this);
+                            popup.remove();
+                        }
+                    });
+                    cancelBtn.addListener(new ChangeListener() {
+                        @Override public void changed(ChangeEvent event, Actor actor) {
+                            Gdx.input.setInputProcessor(FarmMenu.this);
+                            popup.remove();
+                        }
+                    });
+
+                    popup.pad(10);
+                    label.setWrap(false);
+                    popup.add(label).row();
+                    popup.add(cheatBtn).row();
+                    popup.add(collectBtn).row();
+                    popup.add(cancelBtn);
+
+                    popupStage.addActor(popup);
                 }
             }
         }
@@ -512,7 +567,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         playerController.update(delta);
         handleEvents();
 
-        renderMap(dayNightShader, nightFactor);
+        renderMap(dayNightShader, nightFactor, delta);
 
         handleLightning(camera, delta);
         batch.setShader(null);
@@ -568,7 +623,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         camera.update();
     }
 
-    public void renderMap(ShaderProgram dayNightShader, float nightFactor) {
+    public void renderMap(ShaderProgram dayNightShader, float nightFactor, float delta) {
         batch.begin();
         dayNightShader.setUniformf("u_nightFactor", nightFactor);
         Texture texture = grassTexture;
@@ -611,7 +666,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         modifiedDraw(batch, house, 61, 8);
         modifiedDraw(batch, greenhouseDestroyed, 22, 6);
-
+        popupStage.act(delta);
+        popupStage.draw();
         stage.dispose();
         initializeStage();
         batch.end();
