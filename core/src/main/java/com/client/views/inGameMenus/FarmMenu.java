@@ -30,7 +30,10 @@ import com.client.controllers.PlayerController;
 import com.client.utils.*;
 import com.common.models.Backpack;
 import com.common.models.GameData;
+import com.common.models.IO.Request;
+import com.common.models.IO.Response;
 import com.common.models.Slot;
+import com.common.models.enums.commands.GameMenuCommands;
 import com.common.models.enums.types.itemTypes.FoodTypes;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.mapModels.Cell;
@@ -44,6 +47,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.server.controllers_old.gameMenuControllers.ArtisanController;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -435,21 +439,39 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     TextButton cheatBtn   = new TextButton("Cheat",   skin);
                     TextButton collectBtn = new TextButton("Collect", skin);
                     TextButton cancelBtn  = new TextButton("Cancel",  skin);
-
+                    TextButton exitBtn = new TextButton("Exit", skin);
 
                     cheatBtn.addListener(new ChangeListener() {
                         @Override public void changed(ChangeEvent event, Actor actor) {
-                            Gdx.input.setInputProcessor(FarmMenu.this);
-                            popup.remove();
+                            if(!artisanBlock.canBeCollected)
+                                artisanBlock.canBeCollected = true;
                         }
                     });
                     collectBtn.addListener(new ChangeListener() {
                         @Override public void changed(ChangeEvent event, Actor actor) {
+                            if(artisanBlock.canBeCollected) {
+                                //TODO server
+                                Request request = new Request("Collect");
+                                request.body.put("artisanName", artisanBlock.getArtisanType().name);
+                                Response response = ArtisanController.handleArtisanGet(request);
+                                if(response.isSuccess()) {
+                                    Gdx.input.setInputProcessor(FarmMenu.this);
+                                    popup.remove();
+                                }
+                            }
+                        }
+                    });
+                    cancelBtn.addListener(new ChangeListener() {
+                        @Override public void changed(ChangeEvent event, Actor actor) {
+                            //TODO server
+                            artisanBlock.beingUsed = false;
+                            artisanBlock.canBeCollected = false;
+                            artisanBlock.productSlot = null;
                             Gdx.input.setInputProcessor(FarmMenu.this);
                             popup.remove();
                         }
                     });
-                    cancelBtn.addListener(new ChangeListener() {
+                    exitBtn.addListener(new ChangeListener() {
                         @Override public void changed(ChangeEvent event, Actor actor) {
                             Gdx.input.setInputProcessor(FarmMenu.this);
                             popup.remove();
@@ -462,6 +484,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     popup.add(cheatBtn).row();
                     popup.add(collectBtn).row();
                     popup.add(cancelBtn);
+                    popup.add(exitBtn);
 
                     popupStage.addActor(popup);
                 }
