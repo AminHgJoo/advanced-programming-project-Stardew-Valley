@@ -61,4 +61,9 @@ public class Gift {
     public void setRate(int rate) {
         this.rate = rate;
     }
+
+    @Override
+    public String toString() {
+        return item.getName() + " from " + from + " to " + to + " in amount of " + amount;
+    }
 }
