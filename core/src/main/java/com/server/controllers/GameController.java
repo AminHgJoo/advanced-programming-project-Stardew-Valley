@@ -70,6 +70,7 @@ public class GameController {
                     u.setCurrentGameId(game.get_id().toString());
                 }
             }
+            LobbyRepository.delete(lobby);
 
         } catch (Exception e) {
             e.printStackTrace();

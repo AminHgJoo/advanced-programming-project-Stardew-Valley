@@ -1,5 +1,6 @@
 package com.server.controllers;
 
+import com.badlogic.gdx.utils.Timer;
 import com.common.models.User;
 import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
@@ -11,6 +12,7 @@ import io.javalin.http.Context;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TimerTask;
 
 public class LobbyController {
     public void joinLobby(Context ctx) {
@@ -122,6 +124,18 @@ public class LobbyController {
             user.setCurrentLobbyId(newLobby.get_id().toString());
             UserRepository.saveUser(user);
             ctx.json(Response.OK.setMessage("Lobby has been created successfully").setBody(newLobby));
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    if (newLobby.getUsers().size() == 1) {
+                        User user = UserRepository.findUserByUsername(newLobby.getUsers().get(0));
+                        user.setCurrentLobbyId(null);
+                        LobbyRepository.delete(newLobby);
+                        UserRepository.saveUser(user);
+                    }
+                    this.cancel();
+                }
+            }, 5 * 60, 2);
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
