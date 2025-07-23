@@ -534,6 +534,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 String player = res.get("player");
                 playerController.updateAnotherPlayerObject(player);
             }
+        } else if (type.equals("GAME_UPDATED")) {
+            String game = res.get("game");
+            playerController.updateGame(game);
         }
     }
 

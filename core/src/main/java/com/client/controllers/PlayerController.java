@@ -335,4 +335,12 @@ public class PlayerController {
         Player p = GameGSON.gson.fromJson(json, Player.class);
         game.setPlayerById(p.getUser_id(), p);
     }
+
+    public void updateGame(String json){
+        GameData gameData = GameGSON.gson.fromJson(json, GameData.class);
+        this.game = gameData;
+        ClientApp.currentGameData = gameData;
+        this.player = gameData.findPlayerByUserId(player.getUser_id());
+        ClientApp.currentPlayer = this.player;
+    }
 }
