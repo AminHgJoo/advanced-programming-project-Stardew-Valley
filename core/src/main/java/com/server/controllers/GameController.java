@@ -78,6 +78,28 @@ public class GameController {
         }
     }
 
+    public void loadGame(Context ctx) {
+        try{
+            String id = ctx.attribute("id");
+            String gameId = ctx.pathParam("gameId");
+            User user = UserRepository.findUserById(id);
+            if (user == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("User not found"));
+                return;
+            }
+            GameData game = GameRepository.findGameById(gameId , false);
+            if (game == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("Game not found"));
+                return;
+            }
+            AppWebSocket.loadGame(game, user);
+            ctx.json(Response.OK.setMessage("Game loaded , waiting for players to come"));
+        }catch (Exception e){
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
     public void handleGetRequests(Context ctx) {
         String gameId = ctx.pathParam("gameId");
         GameServer gs = AppWebSocket.getActiveGameById(gameId);
