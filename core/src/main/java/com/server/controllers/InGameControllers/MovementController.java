@@ -29,7 +29,7 @@ public class MovementController extends Controller {
             float p_x = (float) x;
             float p_y = (float) y;
             x = x / 32d;
-            y = 49 - y / 32d;
+            y = 50 - y / 32d;
             Cell cell = farm.findCellByCoordinate((float) x, (float) y);
             if (cell == null) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Cell not found"));

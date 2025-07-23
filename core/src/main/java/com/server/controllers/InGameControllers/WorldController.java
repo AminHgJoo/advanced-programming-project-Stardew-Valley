@@ -2,30 +2,22 @@ package com.server.controllers.InGameControllers;
 
 import com.common.GameGSON;
 import com.common.models.*;
-import com.common.models.IO.Request;
 import com.common.models.enums.Quality;
 import com.common.models.enums.SkillLevel;
 import com.common.models.enums.types.AnimalType;
 import com.common.models.enums.types.itemTypes.*;
 import com.common.models.enums.types.mapObjectTypes.TreeType;
-import com.common.models.enums.worldEnums.Season;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.items.*;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.*;
 import com.server.GameServers.GameServer;
-import com.server.repositories.GameRepository;
 import com.server.utilities.DateUtility;
 import com.server.utilities.Response;
-import groovyjarjarasm.asm.Handle;
 import io.javalin.http.Context;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import static com.server.controllers_old.gameMenuControllers.LivestockController.handleCollectProducts;
-import static com.server.controllers_old.gameMenuControllers.LivestockController.noProductFoundHandle;
 
 public class WorldController extends Controller {
     public void buildGreenhouse(Context ctx, GameServer gs) {
@@ -174,7 +166,7 @@ public class WorldController extends Controller {
 
     public void fishing(Context ctx, GameServer gs) {
         try {
-            HashMap<String , Object> body = ctx.bodyAsClass(HashMap.class);
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String id = ctx.attribute("id");
             int xpGained = (Integer) body.get("xpGained");
             int count = (Integer) body.get("count");
@@ -185,7 +177,7 @@ public class WorldController extends Controller {
 
             Quality fishQuality = Quality.getQualityByName(quality);
             FishType type = FishType.getFishType(fishType);
-            Fish fish = new Fish(fishQuality , type);
+            Fish fish = new Fish(fishQuality, type);
             Backpack backpack = player.getInventory();
             if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
                 ctx.json(Response.BAD_REQUEST.setMessage("You cannot have more than " + backpack.getSlots().size() + " slots"));
@@ -219,9 +211,9 @@ public class WorldController extends Controller {
 
 
     private static void handleHoeUse(Context ctx, GameData game, Player player, String direction, Quality quality, int skillEnergyDiscount) {
-        int[] dxAndDy = getXAndYIncrement(direction);
-        int dx = dxAndDy[0];
-        int dy = dxAndDy[1];
+        float[] dxAndDy = getXAndYIncrement(direction);
+        float dx = dxAndDy[0];
+        float dy = dxAndDy[1];
 
         Farm farm = player.getCurrentFarm(game);
 
@@ -254,15 +246,15 @@ public class WorldController extends Controller {
 
     private static void handlePickaxeUse(Context ctx, GameData game, Player player, String direction, SkillLevel skillLevel
         , Quality quality, int skillEnergyDiscount) {
-        int[] dxAndDy = getXAndYIncrement(direction);
-        int dx = dxAndDy[0];
-        int dy = dxAndDy[1];
+        float[] dxAndDy = getXAndYIncrement(direction);
+        float dx = dxAndDy[0]/60;
+        float dy = dxAndDy[1]/60;
 
         Farm farm = player.getCurrentFarm(game);
 
-        float playerX = player.getCoordinate().getX() / 32;
-        float playerY = 49 - player.getCoordinate().getY() / 32;
-        Cell targetCell = farm.findCellByCoordinate(dx + playerX, dy + playerY);
+        float playerX = (player.getCoordinate().getX() + dx) / 32;
+        float playerY = 50 - (player.getCoordinate().getY() + dy) / 32;
+        Cell targetCell = farm.findCellByCoordinate(playerX, playerY);
 
         double energyCost = calculateEnergyCostForHoeAxePickaxeWaterCan(skillEnergyDiscount, quality, game);
         double playerEnergy = player.getEnergy();
@@ -377,9 +369,9 @@ public class WorldController extends Controller {
     }
 
     private static void handleAxeUse(Context ctx, GameData game, Player player, String direction, Quality quality, int skillEnergyDiscount) {
-        int[] dxAndDy = getXAndYIncrement(direction);
-        int dx = dxAndDy[0];
-        int dy = dxAndDy[1];
+        float[] dxAndDy = getXAndYIncrement(direction);
+        float dx = dxAndDy[0];
+        float dy = dxAndDy[1];
 
         Farm farm = player.getCurrentFarm(game);
 
@@ -487,9 +479,9 @@ public class WorldController extends Controller {
 
     private static void handleWateringCanUse(Context ctx, GameData game, Player player, String direction, ToolTypes wateringCanType
         , int skillEnergyDiscount, Quality quality, Tool equippedTool) {
-        int[] dxAndDy = getXAndYIncrement(direction);
-        int dx = dxAndDy[0];
-        int dy = dxAndDy[1];
+        float[] dxAndDy = getXAndYIncrement(direction);
+        float dx = dxAndDy[0];
+        float dy = dxAndDy[1];
 
         Farm farm = player.getCurrentFarm(game);
 
@@ -534,9 +526,9 @@ public class WorldController extends Controller {
     }
 
     private static void handleScytheUse(Context ctx, GameData game, Player player, String direction) {
-        int[] dxAndDy = getXAndYIncrement(direction);
-        int dx = dxAndDy[0];
-        int dy = dxAndDy[1];
+        float[] dxAndDy = getXAndYIncrement(direction);
+        float dx = dxAndDy[0];
+        float dy = dxAndDy[1];
 
         Farm farm = player.getCurrentFarm(game);
 
@@ -700,9 +692,9 @@ public class WorldController extends Controller {
     }
 
     private static void handleMilkPailUse(Context ctx, GameData game, Player player, String direction) {
-        int[] dxAndDy = getXAndYIncrement(direction);
-        int dx = dxAndDy[0];
-        int dy = dxAndDy[1];
+        float[] dxAndDy = getXAndYIncrement(direction);
+        float dx = dxAndDy[0];
+        float dy = dxAndDy[1];
 
         Farm farm = player.getCurrentFarm(game);
         Item equippedItem = player.getEquippedItem();
@@ -741,9 +733,9 @@ public class WorldController extends Controller {
     }
 
     private static void handleShearUse(Context ctx, GameData game, Player player, String direction) {
-        int[] dxAndDy = getXAndYIncrement(direction);
-        int dx = dxAndDy[0];
-        int dy = dxAndDy[1];
+        float[] dxAndDy = getXAndYIncrement(direction);
+        float dx = dxAndDy[0];
+        float dy = dxAndDy[1];
 
         Farm farm = player.getCurrentFarm(game);
         Item equippedItem = player.getEquippedItem();
@@ -831,23 +823,23 @@ public class WorldController extends Controller {
     }
 
 
-    private static int[] getXAndYIncrement(String direction) {
+    private static float[] getXAndYIncrement(String direction) {
         if (direction.compareToIgnoreCase("down") == 0) {
-            return new int[]{0, -1};
+            return new float[]{0, -16*16};
         } else if (direction.compareToIgnoreCase("up") == 0) {
-            return new int[]{0, 1};
+            return new float[]{0, 16*16};
         } else if (direction.compareToIgnoreCase("right") == 0) {
-            return new int[]{1, 0};
+            return new float[]{16*16, 0};
         } else if (direction.compareToIgnoreCase("left") == 0) {
-            return new int[]{-1, 0};
+            return new float[]{-16*16, 0};
         } else if (direction.compareToIgnoreCase("down_right") == 0) {
-            return new int[]{1, -1};
+            return new float[]{1, -1};
         } else if (direction.compareToIgnoreCase("down_left") == 0) {
-            return new int[]{-1, -1};
+            return new float[]{-1, -1};
         } else if (direction.compareToIgnoreCase("up_right") == 0) {
-            return new int[]{1, 1};
+            return new float[]{1, 1};
         } else if (direction.compareToIgnoreCase("up_left") == 0) {
-            return new int[]{-1, 1};
+            return new float[]{-1, 1};
         } else {
             return null;
         }

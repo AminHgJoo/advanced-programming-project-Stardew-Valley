@@ -58,7 +58,7 @@ public class Farm {
         for (Cell cell : farmCells) {
             int randomNumber = (int) (Math.random() * 50);
             //TODO artisan test
-            if(cell.getCoordinate().getX() == 2 &&cell.getCoordinate().getY() == 20){
+            if (cell.getCoordinate().getX() == 2 && cell.getCoordinate().getY() == 20) {
                 cell.setObjectOnCell(new ArtisanBlock(ArtisanBlockType.KEG));
             }
             if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
@@ -355,13 +355,14 @@ public class Farm {
     // x/32 > floor
 
     public boolean isXInRange(Cell c, float x) {
-        //return (x >= (c.getCoordinate().getX() - 0.5f)) && (x <= (c.getCoordinate().getX() + 0.5f));
+//        return (x >= (c.getCoordinate().getX())) && (x <= (c.getCoordinate().getX() + 1));
         return Math.floor(x) == c.getCoordinate().getX();
     }
 
     public boolean isYInRange(Cell c, float y) {
-        //return (y >= (c.getCoordinate().getY() - 0.5f)) && (y <= (c.getCoordinate().getY() + 0.5f));
-        return Math.floor(y + 1) == c.getCoordinate().getY();
+//        y++;
+//        return (y >= (c.getCoordinate().getY() )) && (y <= (c.getCoordinate().getY() + 1));
+        return Math.floor(y) == c.getCoordinate().getY();
     }
 
     /// For pathfinding only.

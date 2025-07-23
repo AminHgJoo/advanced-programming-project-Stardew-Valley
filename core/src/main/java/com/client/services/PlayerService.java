@@ -20,7 +20,7 @@ public class PlayerService {
 
     public boolean walk(float x, float y) {
         x = x / 32;
-        y = 49 - y / 32;
+        y = 50 - y / 32;
         Cell c = player.getFarm().findCellByCoordinate(x, y);
         if (c == null) {
             return false;
