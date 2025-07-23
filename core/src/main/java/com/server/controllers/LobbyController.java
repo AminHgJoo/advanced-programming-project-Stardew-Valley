@@ -132,6 +132,10 @@ public class LobbyController {
                         user.setCurrentLobbyId(null);
                         LobbyRepository.delete(newLobby);
                         UserRepository.saveUser(user);
+                        HashMap<String, String> response = new HashMap<>();
+                        response.put("type", "LOBBY_REMOVED");
+                        AppWebSocket.sendMessageToLobby(newLobby, user, new Gson().toJson(response));
+
                     }
                     this.cancel();
                 }
