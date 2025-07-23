@@ -330,4 +330,9 @@ public class PlayerController {
         ClientApp.currentPlayer = player;
         game.setPlayerById(p.getUser_id(), p);
     }
+
+    public void updateAnotherPlayerObject(String json) {
+        Player p = GameGSON.gson.fromJson(json, Player.class);
+        game.setPlayerById(p.getUser_id(), p);
+    }
 }

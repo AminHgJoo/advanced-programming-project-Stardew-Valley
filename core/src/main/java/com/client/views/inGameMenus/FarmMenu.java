@@ -528,6 +528,12 @@ public class FarmMenu implements MyScreen, InputProcessor {
         String type = res.get("type");
         if (type.equals("PLAYER_MOVED")) {
             playerController.handleServerPlayerMove(res);
+        } else if (type.equals("PLAYER_UPDATED")) {
+            String id = res.get("player_user_id");
+            if (id != playerController.getPlayer().getUser_id()) {
+                String player = res.get("player");
+                playerController.updateAnotherPlayerObject(player);
+            }
         }
     }
 
@@ -713,15 +719,15 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     //TODO gameData
                     GameData gameData = ClientApp.currentPlayer.getUser().getCurrentGame();
                     LocalDateTime start = artisanBlock.startTime;
-                    LocalDateTime end   = artisanBlock.prepTime;
-                    LocalDateTime now   = ClientApp.currentPlayer
+                    LocalDateTime end = artisanBlock.prepTime;
+                    LocalDateTime now = ClientApp.currentPlayer
                         .getUser()
                         .getCurrentGame()
                         .getDate();
                     float totalSec = Duration.between(start, end).toMillis();
-                    float elapsed  = Duration.between(start, now).toMillis();
+                    float elapsed = Duration.between(start, now).toMillis();
                     float progress = MathUtils.clamp(elapsed / totalSec, 0f, 1f);
-                    float barWidth  = artisanWidth;
+                    float barWidth = artisanWidth;
                     float barHeight = 5f;
                     float barX = cell.getCoordinate().getX();
                     float barY = cell.getCoordinate().getY() + artisanHeight + 2;
