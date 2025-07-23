@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -49,7 +50,9 @@ import com.server.controllers_old.gameMenuControllers.ArtisanController;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -101,7 +104,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private LightningHelper lightningHelper = new LightningHelper();
     private ShaderProgram dayNightShader;
     private float nightFactor;
-
+    private ShapeRenderer shapeRenderer;
     private ParticleEffect rainEffect;
     private ParticleEffect snowEffect;
 
@@ -138,6 +141,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         initializeParticles();
         initializeStage();
         ClientApp.currentPlayer.getInventory().addSlot(new Slot(FoodTypes.HONEY, 10));
+        shapeRenderer = new ShapeRenderer();
     }
 
     public PlayerController getPlayerController() {
@@ -408,14 +412,14 @@ public class FarmMenu implements MyScreen, InputProcessor {
         Vector3 worldCoords = new Vector3(screenX, prev_screen_y, 0);
         viewport.unproject(worldCoords);
         float cellX = (worldCoords.x / 32);
-        //TODO in y esh kirie
+
         float cellY = (50 - (worldCoords.y / 32));
 
         Cell clickedCell = farm.findCellByCoordinate(cellX, cellY);
         if (clickedCell != null) {
             if (clickedCell.getObjectOnCell() instanceof ArtisanBlock) {
                 ArtisanBlock artisanBlock = (ArtisanBlock) clickedCell.getObjectOnCell();
-                if (artisanBlock.beingUsed) {
+                if (!artisanBlock.beingUsed) {
                     gameMain.setScreen(new ArtisanMenu(gameMain, this, artisanBlock.getArtisanType().name));
                 } else {
                     Gdx.input.setInputProcessor(popupStage);
@@ -690,9 +694,46 @@ public class FarmMenu implements MyScreen, InputProcessor {
         modifiedDraw(batch, greenhouseDestroyed, 22, 6);
         popupStage.act(delta);
         popupStage.draw();
+
+        artisanTimeBar();
+
         stage.dispose();
         initializeStage();
         batch.end();
+    }
+
+    //TODO server
+    private void artisanTimeBar() {
+        for (Cell cell : farm.getCells()) {
+            if (cell.getObjectOnCell() instanceof ArtisanBlock) {
+                ArtisanBlock artisanBlock = (ArtisanBlock) cell.getObjectOnCell();
+                if (artisanBlock.beingUsed) {
+                    float artisanHeight = 30.0f;
+                    float artisanWidth = 30.0f;
+                    //TODO gameData
+                    GameData gameData = ClientApp.currentPlayer.getUser().getCurrentGame();
+                    LocalDateTime start = artisanBlock.startTime;
+                    LocalDateTime end   = artisanBlock.prepTime;
+                    LocalDateTime now   = ClientApp.currentPlayer
+                        .getUser()
+                        .getCurrentGame()
+                        .getDate();
+                    float totalSec = Duration.between(start, end).toMillis();
+                    float elapsed  = Duration.between(start, now).toMillis();
+                    float progress = MathUtils.clamp(elapsed / totalSec, 0f, 1f);
+                    float barWidth  = artisanWidth;
+                    float barHeight = 5f;
+                    float barX = cell.getCoordinate().getX();
+                    float barY = cell.getCoordinate().getY() + artisanHeight + 2;
+                    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                    shapeRenderer.setColor(Color.DARK_GRAY);
+                    shapeRenderer.rect(barX, barY, barWidth, barHeight);
+                    shapeRenderer.setColor(Color.LIME);
+                    shapeRenderer.rect(barX, barY, barWidth * progress, barHeight);
+                    shapeRenderer.end();
+                }
+            }
+        }
     }
 
     public void modifiedDraw(SpriteBatch batch, Texture texture, float x, float y) {
@@ -732,6 +773,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
         dayNightShader.dispose();
         lightningHelper.dispose();
         stage.dispose();
+        shapeRenderer.dispose();
+        popupStage.dispose();
     }
 
     public float convertYCoordinate(float yCoordinate) {

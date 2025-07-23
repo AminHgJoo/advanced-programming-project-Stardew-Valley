@@ -15,6 +15,7 @@ public class ArtisanBlock extends MapObject {
     public boolean beingUsed;
     public boolean canBeCollected;
     private ArtisanBlockType artisanType;
+    public LocalDateTime startTime;
 
     public ArtisanBlock() {
         super();

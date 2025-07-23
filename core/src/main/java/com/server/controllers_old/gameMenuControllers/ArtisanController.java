@@ -218,7 +218,7 @@ public class ArtisanController extends Controller {
         }
         block.beingUsed = true;
         block.prepTime = gameData.getDate().plusHours(hours);
-
+        block.startTime = gameData.getDate();
         if (block.prepTime.getDayOfMonth() >= 29) {
             block.prepTime = block.prepTime.minusDays(28);
             block.prepTime = block.prepTime.plusMonths(1);
@@ -361,7 +361,7 @@ public class ArtisanController extends Controller {
         }
         block.beingUsed = true;
         block.prepTime = gameData.getDate().plusHours(hours);
-
+        block.startTime = gameData.getDate();
         if (block.prepTime.getDayOfMonth() >= 29) {
             block.prepTime = block.prepTime.minusDays(28);
             block.prepTime = block.prepTime.plusMonths(1);
@@ -386,7 +386,7 @@ public class ArtisanController extends Controller {
         }
         block.beingUsed = true;
         block.prepTime = gameData.getDate().plusHours(hours);
-
+        block.startTime = gameData.getDate();
         if (block.prepTime.getDayOfMonth() >= 29) {
             block.prepTime = block.prepTime.minusDays(28);
             block.prepTime = block.prepTime.plusMonths(1);
@@ -421,7 +421,7 @@ public class ArtisanController extends Controller {
 
         block.beingUsed = true;
         block.prepTime = gameData.getDate().plusHours(hours);
-
+        block.startTime = gameData.getDate();
         if (block.prepTime.getDayOfMonth() >= 29) {
             block.prepTime = block.prepTime.minusDays(28);
             block.prepTime = block.prepTime.plusMonths(1);
@@ -456,7 +456,7 @@ public class ArtisanController extends Controller {
 
         block.beingUsed = true;
         block.prepTime = gameData.getDate().plusHours(hours);
-
+        block.startTime = gameData.getDate();
         if (block.prepTime.getDayOfMonth() >= 29) {
             block.prepTime = block.prepTime.minusDays(28);
             block.prepTime = block.prepTime.plusMonths(1);
@@ -500,7 +500,7 @@ public class ArtisanController extends Controller {
             }
             block.beingUsed = true;
             block.prepTime = gameData.getDate().plusHours(3);
-
+            block.startTime = gameData.getDate();
             if (block.prepTime.getDayOfMonth() >= 29) {
                 block.prepTime = block.prepTime.minusDays(28);
                 block.prepTime = block.prepTime.plusMonths(1);
@@ -522,7 +522,7 @@ public class ArtisanController extends Controller {
             }
             block.beingUsed = true;
             block.prepTime = gameData.getDate().plusHours(3);
-
+            block.startTime = gameData.getDate();
             if (block.prepTime.getDayOfMonth() >= 29) {
                 block.prepTime = block.prepTime.minusDays(28);
                 block.prepTime = block.prepTime.plusMonths(1);
@@ -546,6 +546,7 @@ public class ArtisanController extends Controller {
             block.prepTime = block.prepTime.minusDays(28);
             block.prepTime = block.prepTime.plusMonths(1);
         }
+        block.startTime = gameData.getDate();
 
         block.canBeCollected = false;
         block.productSlot = new Slot(new Food(Quality.DEFAULT, FoodTypes.HONEY), 1);
@@ -566,7 +567,7 @@ public class ArtisanController extends Controller {
             }
             block.beingUsed = true;
             block.prepTime = gameData.getDate().plusHours(3);
-
+            block.startTime = gameData.getDate();
             if (block.prepTime.getDayOfMonth() >= 29) {
                 block.prepTime = block.prepTime.minusDays(28);
                 block.prepTime = block.prepTime.plusMonths(1);
@@ -588,7 +589,7 @@ public class ArtisanController extends Controller {
             }
             block.beingUsed = true;
             block.prepTime = gameData.getDate().plusHours(3);
-
+            block.startTime = gameData.getDate();
             if (block.prepTime.getDayOfMonth() >= 29) {
                 block.prepTime = block.prepTime.minusDays(28);
                 block.prepTime = block.prepTime.plusMonths(1);
@@ -636,6 +637,7 @@ public class ArtisanController extends Controller {
             block.beingUsed = false;
             block.canBeCollected = false;
             block.productSlot = null;
+            block.startTime = null;
             GameRepository.saveGame(gameData);
             return new Response(true, "you have collected " + slotToAdd.getCount() + " of " + slotToAdd.getItem().getName());
         }
@@ -645,6 +647,7 @@ public class ArtisanController extends Controller {
         block.beingUsed = false;
         block.canBeCollected = false;
         block.productSlot = null;
+        block.startTime = null;
         GameRepository.saveGame(gameData);
         return new Response(true, "you have collected " + count + " of " + itemName);
     }
