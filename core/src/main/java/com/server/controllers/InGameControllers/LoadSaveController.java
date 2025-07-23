@@ -1,4 +1,4 @@
 package com.server.controllers.InGameControllers;
 
-public class LoadSaveController extends Controller{
+public class LoadSaveController extends Controller {
 }

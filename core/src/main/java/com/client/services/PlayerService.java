@@ -30,24 +30,25 @@ public class PlayerService {
         }
         return true;
     }
-    public boolean dropItem(Player player, Farm farm , Item item , Cell cell) {
-        if(item != null ) {
-            if(cell != null && cell.getObjectOnCell() instanceof EmptyCell) {
+
+    public boolean dropItem(Player player, Farm farm, Item item, Cell cell) {
+        if (item != null) {
+            if (cell != null && cell.getObjectOnCell() instanceof EmptyCell) {
                 player.setEquippedItem(null);
-                for(Slot slot : player.getInventory().getSlots()) {
-                    if(slot.getItem().getName().equals(item.getName())) {
+                for (Slot slot : player.getInventory().getSlots()) {
+                    if (slot.getItem().getName().equals(item.getName())) {
                         player.getInventory().removeSlot(slot);
                         break;
                     }
                 }
-                cell.setObjectOnCell(new DroppedItem(1,item));
+                cell.setObjectOnCell(new DroppedItem(1, item));
                 return true;
             }
         }
         return false;
     }
 
-    public boolean toolUse(){
+    public boolean toolUse() {
         return true;
     }
 

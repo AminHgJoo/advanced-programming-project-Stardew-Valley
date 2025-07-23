@@ -65,6 +65,7 @@ public enum FishType implements ItemType {
     public Slot createAmountOfItem(int amount, Quality quality) {
         return new Slot(new Fish(Quality.DEFAULT, this), amount);
     }
+
     @Override
     public String getTextureName() {
         String name = getName();

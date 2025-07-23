@@ -173,7 +173,7 @@ public enum CropSeedsType implements ItemType {
     @Override
     public String getTextureName() {
         String name = getName();
-        if(name.equals("Random Crop"))
+        if (name.equals("Random Crop"))
             return "bluejazz";
         return AssetManager.generateKeyFromFileName(name);
     }

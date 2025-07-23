@@ -185,7 +185,7 @@ public enum FoodTypes implements ItemType {
     @Override
     public String getTextureName() {
         String name = getName();
-        if(name.equals("Wine")){
+        if (name.equals("Wine")) {
             return "redwine";
         }
         return AssetManager.generateKeyFromFileName(name);

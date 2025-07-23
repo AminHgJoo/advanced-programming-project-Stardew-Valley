@@ -21,7 +21,8 @@ public enum Keybinds {
         , Input.Keys.NUM_7, Input.Keys.NUM_8, Input.Keys.NUM_9, Input.Keys.NUM_0, Input.Keys.MINUS, Input.Keys.EQUALS),
     SCREENSHOT_MODE(Input.Keys.F4),
     OPEN_CRAFTING(Input.Keys.B),
-    OPEN_COOKING(Input.Keys.K);
+    OPEN_COOKING(Input.Keys.K),
+    OPEN_RADIO(Input.Keys.R);
 
     public final ArrayList<Integer> keycodes;
 

@@ -22,14 +22,16 @@ import com.common.models.enums.types.inventoryEnums.TrashcanType;
 import java.util.List;
 
 public class InventoryMenu implements MyScreen, InputProcessor {
-    private SpriteBatch batch;
     private final GameMain gameMain;
+    private final int ITEMS_PER_PAGE = 27;
+    private final Skin skin;
+    private final int trashScale = 4;
+    private SpriteBatch batch;
     private Backpack backpack;
     private Player player;
     private TrashcanType trashcanType;
     private Texture backgroundTexture;
     private Texture inventoryTexture;
-    private final int ITEMS_PER_PAGE = 27;
     private int scrollIndex = 0;
     private MyScreen farmScreen;
     private int GRID_SIZE = 9;
@@ -40,8 +42,6 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private int selectedSave = -1;
     private BitmapFont titleFont;
     private GlyphLayout layout;
-    private final Skin skin;
-    private final int trashScale = 4;
 
 
     public InventoryMenu(GameMain gameMain, MyScreen farmScreen) {
@@ -113,8 +113,8 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             }
             int trashWidth = trashcanType.getTexture().getWidth() * trashScale;
             int trashHeight = trashcanType.getTexture().getHeight() * trashScale;
-            int trashX = Gdx.graphics.getWidth() -  trashWidth;
-            int trashY = Gdx.graphics.getHeight() / 2 - trashHeight/2;
+            int trashX = Gdx.graphics.getWidth() - trashWidth;
+            int trashY = Gdx.graphics.getHeight() / 2 - trashHeight / 2;
 
             if (screenX >= trashX && screenX <= trashX + trashWidth &&
                 screenY >= trashY && screenY <= trashY + trashHeight) {
@@ -191,7 +191,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         titleFont.draw(batch, layout, xAsghar, yAsghar);
 
         Texture trashcanTexture = trashcanType.getTexture();
-        batch.draw(trashcanTexture, Gdx.graphics.getWidth() - trashcanTexture.getWidth() * trashScale, Gdx.graphics.getHeight() / 2 - trashcanTexture.getHeight() * trashScale/ 2, trashcanTexture.getWidth() * trashScale, trashcanTexture.getHeight() * trashScale);
+        batch.draw(trashcanTexture, Gdx.graphics.getWidth() - trashcanTexture.getWidth() * trashScale, Gdx.graphics.getHeight() / 2 - trashcanTexture.getHeight() * trashScale / 2, trashcanTexture.getWidth() * trashScale, trashcanTexture.getHeight() * trashScale);
         int GRID_ITEM_SIZE = 95;
         int GRID_PADDING = 8;
 

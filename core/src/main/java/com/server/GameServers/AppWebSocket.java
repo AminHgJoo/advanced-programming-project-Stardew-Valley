@@ -22,9 +22,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class AppWebSocket {
-    private static ConcurrentHashMap<String, PlayerConnection> connectedPlayers = new ConcurrentHashMap<>();
-    private static CopyOnWriteArrayList<GameServer> activeGames = new CopyOnWriteArrayList<>();
-    private final Javalin app;
     private final static Gson gson = new GsonBuilder()
         .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
             @Override
@@ -39,6 +36,9 @@ public class AppWebSocket {
         })
         .serializeSpecialFloatingPointValues()
         .create();
+    private static ConcurrentHashMap<String, PlayerConnection> connectedPlayers = new ConcurrentHashMap<>();
+    private static CopyOnWriteArrayList<GameServer> activeGames = new CopyOnWriteArrayList<>();
+    private final Javalin app;
 
     public AppWebSocket(Javalin app) {
         this.app = app;

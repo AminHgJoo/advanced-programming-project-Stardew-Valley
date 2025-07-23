@@ -24,9 +24,8 @@ public class CookingMenu implements MyScreen {
     private final FarmMenu farmMenu;
 
     private final Skin skin;
-    private Stage stage;
     private final Texture background;
-
+    private Stage stage;
     private Label selectedRecipeLabel;
     private CookingRecipes selectedRecipe;
 

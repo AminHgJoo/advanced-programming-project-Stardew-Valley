@@ -1,7 +1,6 @@
 package com.common.models.mapObjects;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.client.utils.AssetManager;
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 

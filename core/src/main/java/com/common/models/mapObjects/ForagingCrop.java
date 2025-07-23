@@ -21,13 +21,19 @@ public class ForagingCrop extends MapObject {
         this.canBeHarvested = canBeHarvested;
         this.texture = AssetManager.getImage(type.getTextureName());
     }
+
     @Override
-    public Texture getTexture(){
-        if(texture == null){
+    public Texture getTexture() {
+        if (texture == null) {
             this.texture = AssetManager.getImage(foragingCropsType.getTextureName());
         }
         return texture;
     }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+
     public boolean isCanBeHarvested() {
         return canBeHarvested;
     }
@@ -42,10 +48,5 @@ public class ForagingCrop extends MapObject {
 
     public void setForagingCropsType(ForagingCropsType foragingCropsType) {
         this.foragingCropsType = foragingCropsType;
-    }
-
-
-    public void setTexture(Texture texture) {
-        this.texture = texture;
     }
 }

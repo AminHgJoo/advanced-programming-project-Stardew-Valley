@@ -36,18 +36,19 @@ public enum ToolTypes implements ItemType {
     public Slot createAmountOfItem(int amount, Quality quality) {
         return new Slot(new Tool(quality, 0, 0, this.name, this, this.waterCapacity), 1);
     }
+
     @Override
     public String getTextureName() {
         String name = getName();
-        if(name.equals("Watering Can Default") || name.equals("Watering Can Copper"))
+        if (name.equals("Watering Can Default") || name.equals("Watering Can Copper"))
             return "copperwateringcan";
-        if(name.equals("Watering Can Iron"))
+        if (name.equals("Watering Can Iron"))
             return "steelwateringcan";
-        if(name.equals("Watering Can Gold"))
+        if (name.equals("Watering Can Gold"))
             return "goldwateringcan";
-        if(name.equals("Watering Can Iridium"))
+        if (name.equals("Watering Can Iridium"))
             return "iridiumwateringcan";
-        if(name.equals("Shear"))
+        if (name.equals("Shear"))
             return "shears";
         return AssetManager.generateKeyFromFileName(name);
     }

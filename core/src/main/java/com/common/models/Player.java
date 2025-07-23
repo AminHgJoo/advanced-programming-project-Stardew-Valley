@@ -92,10 +92,6 @@ public class Player {
         this.energy = energy;
     }
 
-    public void setInventory(Backpack b){
-        this.inventory = b;
-    }
-
     public Slot getRefrigeratorSlotByName(String slotName) {
         for (Slot slot : refrigeratorSlots) {
             if (slot.getItem().getName().compareToIgnoreCase(slotName) == 0) {
@@ -137,7 +133,7 @@ public class Player {
 
     private void initializeSkills() {
         //TODO amin comment karde bood error midad
-       this.skills.add(new Farming());
+        this.skills.add(new Farming());
         this.skills.add(new Fishing());
         this.skills.add(new Foraging());
         this.skills.add(new Mining());
@@ -345,6 +341,10 @@ public class Player {
 
     public Backpack getInventory() {
         return inventory;
+    }
+
+    public void setInventory(Backpack b) {
+        this.inventory = b;
     }
 
     public ArrayList<Quest> getQuests() {

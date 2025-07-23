@@ -22,7 +22,8 @@ public enum ForagingMineralsType implements ItemType {
     IRON_ORE(10, "Iron Ore", "ironOre"),
     GOLD_ORE(25, "Gold Ore", "goldOre"),
     IRIDIUM_ORE(100, "Iridium Ore", "iridiumOre"),
-    COAL(15, "Coal", "coal"),;
+    COAL(15, "Coal", "coal"),
+    ;
 
     public final String name;
     private final int sellPrice;

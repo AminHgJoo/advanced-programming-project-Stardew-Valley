@@ -107,7 +107,7 @@ public class Item {
     }
 
     public Texture getTexture() {
-        if(texture == null){
+        if (texture == null) {
             texture = AssetManager.getImage(this.getItemType(getActualName()).getTextureName());
         }
         return texture;
@@ -117,7 +117,7 @@ public class Item {
         this.texture = texture;
     }
 
-    public String getActualName(){
+    public String getActualName() {
         return this.name;
     }
 

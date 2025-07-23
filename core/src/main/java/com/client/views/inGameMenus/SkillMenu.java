@@ -19,18 +19,18 @@ import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
 import com.common.models.Player;
-import com.common.models.skills.*;
+import com.common.models.skills.Skill;
 
 import java.util.ArrayList;
 
 public class SkillMenu implements MyScreen, InputProcessor {
+    private final Skin skin;
     private GameMain gameMain;
     private MyScreen farmScreen;
     private SpriteBatch batch;
     private Texture backgroundTexture;
     private Stage stage;
     private Player player;
-    private final Skin skin;
     private BitmapFont titleFont;
     private GlyphLayout layout;
     private ArrayList<Skill> skills;
@@ -58,7 +58,7 @@ public class SkillMenu implements MyScreen, InputProcessor {
         float centerX = (Gdx.graphics.getWidth() - skillTexture.getWidth()) / 2f;
         float centerY = (Gdx.graphics.getHeight() - skillTexture.getHeight()) / 2f;
         skillImage.setPosition(centerX, centerY);
-            stage.addActor(skillImage);
+        stage.addActor(skillImage);
 
         tooltipLabel = new Label("", skin);
         tooltipLabel.setColor(Color.YELLOW);
@@ -84,11 +84,9 @@ public class SkillMenu implements MyScreen, InputProcessor {
         if (i == Input.Keys.ESCAPE) {
             gameMain.setScreen(farmScreen);
             this.dispose();
-        }
-        else if(i == Input.Keys.RIGHT) {
+        } else if (i == Input.Keys.RIGHT) {
             gameMain.setScreen(new SocialMenu(gameMain, farmScreen));
-        }
-        else if(i == Input.Keys.LEFT) {
+        } else if (i == Input.Keys.LEFT) {
             gameMain.setScreen(new InventoryMenu(gameMain, farmScreen));
         }
         return false;
@@ -139,26 +137,22 @@ public class SkillMenu implements MyScreen, InputProcessor {
             tooltipLabel.setText("Farming is the skill associated with planting, growing, and harvesting crops on the farm.");
             tooltipLabel.setPosition(farmingX - 500, farmingY - 50);
             tooltipLabel.setVisible(true);
-        }
-        else if(screenX >= farmingX && screenX <= farmingX + farmingWidth &&
-            invertedY >= farmingY - gapY && invertedY <= farmingY + farmingHeight - gapY){
+        } else if (screenX >= farmingX && screenX <= farmingX + farmingWidth &&
+            invertedY >= farmingY - gapY && invertedY <= farmingY + farmingHeight - gapY) {
             tooltipLabel.setText("Mining Skill is increased by breaking rocks, panning, or by reading Mining Monthly.");
             tooltipLabel.setPosition(farmingX - 500, farmingY - gapY - 50);
             tooltipLabel.setVisible(true);
-        }
-        else if(screenX >= farmingX && screenX <= farmingX + farmingWidth &&
-            invertedY >= farmingY - gapY*2 && invertedY <= farmingY + farmingHeight - gapY*2){
+        } else if (screenX >= farmingX && screenX <= farmingX + farmingWidth &&
+            invertedY >= farmingY - gapY * 2 && invertedY <= farmingY + farmingHeight - gapY * 2) {
             tooltipLabel.setText("Foraging is the skill associated with gathering wild resources found on the ground throughout Stardew Valley.");
-            tooltipLabel.setPosition(farmingX - 500, farmingY - gapY*2 - 50);
+            tooltipLabel.setPosition(farmingX - 500, farmingY - gapY * 2 - 50);
             tooltipLabel.setVisible(true);
-        }
-        else if(screenX >= farmingX && screenX <= farmingX + farmingWidth &&
-            invertedY >= farmingY - gapY*3 && invertedY <= farmingY + farmingHeight - gapY*3){
+        } else if (screenX >= farmingX && screenX <= farmingX + farmingWidth &&
+            invertedY >= farmingY - gapY * 3 && invertedY <= farmingY + farmingHeight - gapY * 3) {
             tooltipLabel.setText("Fishing is a skill associated with catching fish with a fishing rod or by collecting items from crab pots.");
-            tooltipLabel.setPosition(farmingX - 500, farmingY - gapY*3 - 50);
+            tooltipLabel.setPosition(farmingX - 500, farmingY - gapY * 3 - 50);
             tooltipLabel.setVisible(true);
-        }
-        else {
+        } else {
             tooltipLabel.setVisible(false);
         }
 
@@ -197,19 +191,19 @@ public class SkillMenu implements MyScreen, InputProcessor {
         float levelHeight = levelTexture.getHeight();
         float gapX = levelWidth / 2f + 71;
         float gapY = levelHeight / 2f + 121;
-        float startX = Gdx.graphics.getWidth() / 2f +16;
+        float startX = Gdx.graphics.getWidth() / 2f + 16;
         float startY = 120;
 
-        for(int i=0; i<fishingLevel; i++) {
+        for (int i = 0; i < fishingLevel; i++) {
             batch.draw(levelTexture, startX + i * gapX, startY);
         }
-        for(int i=0; i<foragingLevel; i++) {
-            batch.draw(levelTexture, startX + i * gapX, startY +  gapY);
+        for (int i = 0; i < foragingLevel; i++) {
+            batch.draw(levelTexture, startX + i * gapX, startY + gapY);
         }
-        for(int i=0; i<miningLevel; i++) {
-            batch.draw(levelTexture, startX + i * gapX, startY + gapY *2);
+        for (int i = 0; i < miningLevel; i++) {
+            batch.draw(levelTexture, startX + i * gapX, startY + gapY * 2);
         }
-        for(int i=0; i<farmingLevel; i++) {
+        for (int i = 0; i < farmingLevel; i++) {
             batch.draw(levelTexture, startX + i * gapX, startY + gapY * 3);
         }
         batch.end();

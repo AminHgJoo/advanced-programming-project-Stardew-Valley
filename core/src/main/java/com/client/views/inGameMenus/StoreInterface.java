@@ -15,24 +15,20 @@ import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
 import com.common.models.*;
-import com.common.models.enums.types.storeProductTypes.AllProducts;
 
 import java.util.ArrayList;
 
 public class StoreInterface implements MyScreen {
 
     private final ArrayList<StoreProduct> storeProducts = new ArrayList<>();
-
-    private StoreProduct selectedItem = null;
-    private int selectedAmount = 1;
-
     private final String storeName;
-
     private final GameMain gameMain;
     private final FarmMenu farmMenu;
-    private Stage stage;
     private final Skin skin;
     private final Texture background;
+    private StoreProduct selectedItem = null;
+    private int selectedAmount = 1;
+    private Stage stage;
     private TextButton buyButton;
 
     public StoreInterface(GameMain gameMain, String storeName, FarmMenu farmMenu) {
@@ -50,7 +46,7 @@ public class StoreInterface implements MyScreen {
     private void fetchStoreProducts(String storeName) {
         GameData game = ClientApp.currentGameData;
         Store store = game.getMap().getVillage().getStore(storeName);
-        if(store == null) return;
+        if (store == null) return;
         //Test Only!
         storeProducts.clear();
 //        StoreProduct product = new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store");

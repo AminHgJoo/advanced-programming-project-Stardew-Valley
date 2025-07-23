@@ -147,10 +147,10 @@ public class AssetManager {
     public static Texture giveWeatherIcon(Weather weather) {
         if (weather == Weather.RAIN) {
             return AssetManager.getImage("rainicon");
-        }  else if (weather == Weather.SNOW) {
+        } else if (weather == Weather.SNOW) {
             return AssetManager.getImage("snowicon");
         } else if (weather == Weather.STORM) {
-            return  AssetManager.getImage("stormicon");
+            return AssetManager.getImage("stormicon");
         } else {
             return AssetManager.getImage("sunnyicon");
         }

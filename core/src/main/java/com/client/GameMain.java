@@ -7,28 +7,22 @@ import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.ModelDecoder;
 import com.client.utils.MyScreen;
-import com.client.views.inGameMenus.CookingMenu;
-import com.client.views.inGameMenus.CraftingMenu;
-import com.client.views.inGameMenus.StoreInterface;
 import com.client.views.preGameMenus.LauncherMenu;
 import com.client.views.preGameMenus.MainMenu;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import io.github.cdimascio.dotenv.Dotenv;
 
+import java.io.FileOutputStream;
+
 public class GameMain extends Game {
     public Music music = null;
 
     @Override
     public void create() {
-        //TODO: load/play music.
+
         loadEnv();
         AssetManager.loadAssets();
-        //TODO: TESTING CODE FOR MAP :::::
-//        this.setScreen(new FarmMenu(this));
-//        this.setScreen(new FishingMiniGame(this, null, true, Quality.IRIDIUM));
-//        this.setScreen(new StoreInterface(this, "Pierre's General Store", null));
-//        this.setScreen(new CookingMenu(this, null));
 
         if (ClientApp.loggedInUser != null) {
             ClientApp.init();
@@ -94,6 +88,12 @@ public class GameMain extends Game {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try (FileOutputStream fos = new FileOutputStream(System.getenv("address") + "/music.txt")) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         System.exit(0);
     }
 

@@ -3,26 +3,19 @@ package com.server.GameServers;
 import com.common.GameGSON;
 import com.common.models.GameData;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import com.server.controllers.InGameControllers.GameServerController;
-import com.server.utilities.Connection;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameServer extends Thread {
+    private final GameServerController controller = new GameServerController();
+    private final Gson gson = GameGSON.gson;
     private ArrayList<PlayerConnection> playerConnections;
     private GameData game;
     private boolean isRunning = true;
-    private final GameServerController controller = new GameServerController();
-    private final Gson gson = GameGSON.gson;
 
     public GameServer(ArrayList<PlayerConnection> players, GameData game) {
         this.playerConnections = players;
@@ -63,7 +56,7 @@ public class GameServer extends Thread {
 
     public void handleRequests(Context ctx) {
         if (ctx.method() == HandlerType.POST) {
-            controller.routingTheRequests(ctx , this);
+            controller.routingTheRequests(ctx, this);
         } else if (ctx.method() == HandlerType.GET) {
 
         }

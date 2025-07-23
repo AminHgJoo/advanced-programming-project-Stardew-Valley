@@ -7,7 +7,6 @@ import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
 import com.server.GameServers.GameServer;
-import com.server.repositories.GameRepository;
 import com.server.utilities.Response;
 import io.javalin.http.Context;
 
@@ -16,6 +15,19 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class MovementController extends Controller {
+    private static Coordinate getEmptyCoordinate(Player player, Player partner, ArrayList<Cell> cells) {
+        for (int i = 60; i >= 0; i--) {
+            for (int j = 8; j <= 40; j++) {
+                if (Objects.requireNonNull(Farm.getCellByCoordinate(i, j, cells)).getObjectOnCell().isWalkable) {
+                    if (partner == null || (partner != null && !(partner.getCoordinate().getX() == i && partner.getCoordinate().getY() == j))) {
+                        return new Coordinate(i, j);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public void walk(Context ctx, GameServer gs) {
         try {
             String id = ctx.attribute("id");
@@ -144,18 +156,5 @@ public class MovementController extends Controller {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }
-    }
-
-    private static Coordinate getEmptyCoordinate(Player player, Player partner, ArrayList<Cell> cells) {
-        for (int i = 60; i >= 0; i--) {
-            for (int j = 8; j <= 40; j++) {
-                if (Objects.requireNonNull(Farm.getCellByCoordinate(i, j, cells)).getObjectOnCell().isWalkable) {
-                    if (partner == null || (partner != null && !(partner.getCoordinate().getX() == i && partner.getCoordinate().getY() == j))) {
-                        return new Coordinate(i, j);
-                    }
-                }
-            }
-        }
-        return null;
     }
 }

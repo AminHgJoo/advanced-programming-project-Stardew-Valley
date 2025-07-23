@@ -10,7 +10,7 @@ import java.util.Arrays;
 public enum ForagingCropsType {
     GRASS(Season.values(), 0, 0, MiscType.FIBER, "Grass", "grass"),
     COMMON_MUSHROOM(Season.values(), 40, 38, FoodTypes.COMMON_MUSHROOM, "Common Mushroom", "commonMushroom"),
-    DAFFODIL(Season.SPRING, 30, 0, FoodTypes.DAFFODIL, "Daffodil","daffodil"),
+    DAFFODIL(Season.SPRING, 30, 0, FoodTypes.DAFFODIL, "Daffodil", "daffodil"),
     DANDELION(Season.SPRING, 40, 25, FoodTypes.DANDELION, "Dandelion", "dandelion"),
     LEEK(Season.SPRING, 60, 40, FoodTypes.LEEK, "Leek", "leek"),
     MOREL(Season.SPRING, 150, 20, FoodTypes.MOREL, "Morel", "morel"),

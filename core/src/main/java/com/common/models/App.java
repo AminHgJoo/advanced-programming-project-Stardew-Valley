@@ -3,7 +3,6 @@ package com.common.models;
 import com.client.ClientApp;
 import com.common.models.enums.types.MenuTypes;
 import com.common.models.enums.types.itemTypes.*;
-import com.server.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +50,8 @@ public class App {
     }
 
     /**
-     * @deprecated */
+     * @deprecated
+     */
     public static void setLoggedInUser(User loggedInUser) {
         App.loggedInUser = loggedInUser;
     }

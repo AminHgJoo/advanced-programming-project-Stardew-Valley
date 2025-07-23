@@ -40,13 +40,15 @@ public class Crop extends MapObject {
         this.texture = AssetManager.getImage(cropSeedsType.getTextureName());
 
     }
+
     @Override
-    public Texture getTexture(){
-        if(texture == null){
+    public Texture getTexture() {
+        if (texture == null) {
             this.texture = AssetManager.getImage(cropSeedsType.getTextureName());
         }
         return texture;
     }
+
     public void pushBackDeadlines(int numOfDays) {
         for (int i = stageNumber; i < growthDeadLines.length; i++) {
             if (growthDeadLines[i] != null) {

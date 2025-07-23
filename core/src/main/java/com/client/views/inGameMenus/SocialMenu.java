@@ -25,12 +25,12 @@ import com.common.models.Player;
 import java.util.ArrayList;
 
 public class SocialMenu implements MyScreen, InputProcessor {
+    private final Skin skin;
     private GameMain gameMain;
     private MyScreen farmScreen;
     private SpriteBatch batch;
     private Texture backgroundTexture;
     private Stage stage;
-    private final Skin skin;
     private BitmapFont titleFont;
     private GlyphLayout layout;
     private Player player;
@@ -65,11 +65,9 @@ public class SocialMenu implements MyScreen, InputProcessor {
         if (i == Input.Keys.ESCAPE) {
             gameMain.setScreen(farmScreen);
             this.dispose();
-        }
-        else if(i == Input.Keys.RIGHT) {
+        } else if (i == Input.Keys.RIGHT) {
             gameMain.setScreen(new MapMenu(gameMain, farmScreen));
-        }
-        else if(i == Input.Keys.LEFT) {
+        } else if (i == Input.Keys.LEFT) {
             gameMain.setScreen(new SkillMenu(gameMain, farmScreen));
         }
         return false;

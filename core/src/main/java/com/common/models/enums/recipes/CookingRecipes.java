@@ -92,13 +92,6 @@ public enum CookingRecipes {
         this.craftingResultType = craftingResultType;
         this.ingredients = new Slot[]{ingredient};
     }
-    public String listIngredients() {
-        StringBuilder sb = new StringBuilder();
-        for (Slot slot : ingredients) {
-            sb.append(slot.getItem().getName()).append(" x(").append(slot.getCount()).append(")").append("\n");
-        }
-        return sb.toString();
-    }
 
     public static CookingRecipes findByName(String name) {
         for (CookingRecipes cr : CookingRecipes.values()) {
@@ -107,6 +100,14 @@ public enum CookingRecipes {
             }
         }
         return null;
+    }
+
+    public String listIngredients() {
+        StringBuilder sb = new StringBuilder();
+        for (Slot slot : ingredients) {
+            sb.append(slot.getItem().getName()).append(" x(").append(slot.getCount()).append(")").append("\n");
+        }
+        return sb.toString();
     }
 
     @Override

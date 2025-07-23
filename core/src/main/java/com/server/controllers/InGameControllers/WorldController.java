@@ -20,184 +20,6 @@ import io.javalin.http.Context;
 import java.util.HashMap;
 
 public class WorldController extends Controller {
-    public void buildGreenhouse(Context ctx, GameServer gs) {
-        try {
-            String id = ctx.attribute("id");
-            GameData game = gs.getGame();
-            Player player = game.findPlayerByUserId(id);
-            Farm farm = player.getFarm();
-            Backpack backpack = player.getInventory();
-            Cell testCell = Farm.getCellByCoordinate(25, 4, farm.getCells());
-            if (testCell.getObjectOnCell() instanceof Water) {
-                ctx.json(Response.BAD_REQUEST.setMessage("You are already built."));
-                return;
-            }
-            Slot slot = backpack.getSlotByItemName(MiscType.WOOD.name);
-
-            if (slot == null) {
-                ctx.json(Response.BAD_REQUEST.setMessage("You don't have any wood."));
-                return;
-            }
-
-            if (slot.getCount() < 500) {
-                ctx.json(Response.BAD_REQUEST.setMessage("You don't have any wood."));
-                return;
-            }
-
-            if (player.getMoney(game) < 1000) {
-                ctx.json(Response.BAD_REQUEST.setMessage("You don't have enough money."));
-                return;
-            }
-
-            slot.setCount(slot.getCount() - 500);
-
-            if (slot.getCount() == 0) {
-                backpack.getSlots().remove(slot);
-            }
-
-            player.setMoney(player.getMoney(game) - 1000, game);
-
-            for (int i = 23; i < 28; i++) {
-                for (int j = 4; j < 10; j++) {
-                    Cell cell = Farm.getCellByCoordinate(i, j, farm.getCells());
-                    cell.setObjectOnCell(new EmptyCell());
-                }
-            }
-
-            Cell cell = Farm.getCellByCoordinate(25, 10, farm.getCells());
-            cell.setObjectOnCell(new EmptyCell());
-
-            Cell cell1 = Farm.getCellByCoordinate(25, 4, farm.getCells());
-            cell1.setObjectOnCell(new Water());
-
-            String playerJson = GameGSON.gson.toJson(player);
-            ctx.json(Response.OK.setBody(playerJson));
-            HashMap<String, String> msg = new HashMap<>();
-            msg.put("type", "PLAYER_UPDATED");
-            msg.put("player_user_id", id);
-            msg.put("player", playerJson);
-            gs.broadcast(msg);
-        } catch (Exception e) {
-            e.printStackTrace();
-            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
-        }
-    }
-
-    public void toolUse(Context ctx, GameServer gs) {
-        try {
-            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
-            String direction = (String) body.get("direction");
-            String toolName = (String) body.get("toolName");
-            String id = ctx.attribute("id");
-            GameData game = gs.getGame();
-            Player player = game.findPlayerByUserId(id);
-            Item item = player.getInventory().getSlotByItemName(toolName).getItem();
-            player.setEquippedItem(item);
-
-            if (player.getEquippedItem() == null) {
-                ctx.json(Response.BAD_REQUEST.setMessage("You don't have any equipped item."));
-                return;
-            }
-            if (!(player.getEquippedItem() instanceof Tool)) {
-                ctx.json(Response.BAD_REQUEST.setMessage("You don't have any equipped tool."));
-                return;
-            }
-            if (getXAndYIncrement(direction) == null) {
-                ctx.json(Response.BAD_REQUEST.setMessage("Invalid direction."));
-                return;
-            }
-            Tool equippedTool = (Tool) player.getEquippedItem();
-            ToolTypes toolType = equippedTool.getType();
-            if (toolType == ToolTypes.HOE) {
-                handleHoeUse(ctx, game, player, direction, equippedTool.getQuality()
-                    , player.getFarmingSkill().getLevel().energyCostDiscount);
-            } else if (toolType == ToolTypes.PICKAXE) {
-                handlePickaxeUse(ctx, game, player, direction
-                    , player.getMiningSkill().getLevel()
-                    , equippedTool.getQuality()
-                    , player.getMiningSkill().getLevel().energyCostDiscount);
-            } else if (toolType == ToolTypes.AXE) {
-                handleAxeUse(ctx, game, player, direction, equippedTool.getQuality()
-                    , player.getForagingSkill().getLevel().energyCostDiscount);
-            } else if (toolType == ToolTypes.WATERING_CAN_DEFAULT) {
-                handleWateringCanUse(ctx, game, player, direction, toolType
-                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
-                    , equippedTool);
-            } else if (toolType == ToolTypes.WATERING_CAN_COPPER) {
-                handleWateringCanUse(ctx, game, player, direction, toolType
-                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
-                    , equippedTool);
-            } else if (toolType == ToolTypes.WATERING_CAN_IRON) {
-                handleWateringCanUse(ctx, game, player, direction, toolType
-                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
-                    , equippedTool);
-            } else if (toolType == ToolTypes.WATERING_CAN_GOLD) {
-                handleWateringCanUse(ctx, game, player, direction, toolType
-                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
-                    , equippedTool);
-            } else if (toolType == ToolTypes.WATERING_CAN_IRIDIUM) {
-                handleWateringCanUse(ctx, game, player, direction, toolType
-                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
-                    , equippedTool);
-            } else if (toolType == ToolTypes.SCYTHE) {
-                handleScytheUse(ctx, game, player, direction);
-            } else if (toolType == ToolTypes.MILK_PAIL) {
-                // TODO fix the function
-                handleMilkPailUse(ctx, game, player, direction);
-            } else if (toolType == ToolTypes.SHEAR) {
-                // TODO fix the function
-                handleShearUse(ctx, game, player, direction);
-            } else {
-                ctx.json(Response.BAD_REQUEST.setMessage("Unknown tool type: " + toolType));
-                return;
-            }
-            String playerJson = GameGSON.gson.toJson(player);
-            ctx.json(Response.OK.setBody(playerJson));
-            HashMap<String, String> msg = new HashMap<>();
-            msg.put("type", "PLAYER_UPDATED");
-            msg.put("player_user_id", id);
-            msg.put("player", playerJson);
-            gs.broadcast(msg);
-        } catch (Exception e) {
-            e.printStackTrace();
-            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
-        }
-    }
-
-    public void fishing(Context ctx, GameServer gs) {
-        try {
-            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
-            String id = ctx.attribute("id");
-            int xpGained = (Integer) body.get("xpGained");
-            int count = (Integer) body.get("count");
-            String fishType = (String) body.get("fishType");
-            String quality = (String) body.get("quality");
-            GameData game = gs.getGame();
-            Player player = game.findPlayerByUserId(id);
-
-            Quality fishQuality = Quality.getQualityByName(quality);
-            FishType type = FishType.getFishType(fishType);
-            Fish fish = new Fish(fishQuality, type);
-            Backpack backpack = player.getInventory();
-            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
-                ctx.json(Response.BAD_REQUEST.setMessage("You cannot have more than " + backpack.getSlots().size() + " slots"));
-                return;
-            }
-            addFishes(fish, backpack, count);
-            // TODO handle xp
-            String playerJson = GameGSON.gson.toJson(player);
-            ctx.json(Response.OK.setBody(playerJson));
-            HashMap<String, String> msg = new HashMap<>();
-            msg.put("type", "PLAYER_UPDATED");
-            msg.put("player_user_id", id);
-            msg.put("player", playerJson);
-            gs.broadcast(msg);
-        } catch (Exception e) {
-            e.printStackTrace();
-            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
-        }
-    }
-
     private static void addFishes(Fish fish, Backpack backpack, int numberOfFishes) {
         for (Slot slot : backpack.getSlots()) {
             if (slot.getItem().getName().compareToIgnoreCase(fish.getName()) == 0) {
@@ -208,7 +30,6 @@ public class WorldController extends Controller {
         Slot newSlot = new Slot(fish, numberOfFishes);
         backpack.addSlot(newSlot);
     }
-
 
     private static void handleHoeUse(Context ctx, GameData game, Player player, String direction, Quality quality, int skillEnergyDiscount) {
         float[] dxAndDy = getXAndYIncrement(direction);
@@ -247,8 +68,8 @@ public class WorldController extends Controller {
     private static void handlePickaxeUse(Context ctx, GameData game, Player player, String direction, SkillLevel skillLevel
         , Quality quality, int skillEnergyDiscount) {
         float[] dxAndDy = getXAndYIncrement(direction);
-        float dx = dxAndDy[0]/60;
-        float dy = dxAndDy[1]/60;
+        float dx = dxAndDy[0] / 60;
+        float dy = dxAndDy[1] / 60;
 
         Farm farm = player.getCurrentFarm(game);
 
@@ -822,16 +643,15 @@ public class WorldController extends Controller {
         return answer;
     }
 
-
     private static float[] getXAndYIncrement(String direction) {
         if (direction.compareToIgnoreCase("down") == 0) {
-            return new float[]{0, -16*16};
+            return new float[]{0, -16 * 16};
         } else if (direction.compareToIgnoreCase("up") == 0) {
-            return new float[]{0, 16*16};
+            return new float[]{0, 16 * 16};
         } else if (direction.compareToIgnoreCase("right") == 0) {
-            return new float[]{16*16, 0};
+            return new float[]{16 * 16, 0};
         } else if (direction.compareToIgnoreCase("left") == 0) {
-            return new float[]{-16*16, 0};
+            return new float[]{-16 * 16, 0};
         } else if (direction.compareToIgnoreCase("down_right") == 0) {
             return new float[]{1, -1};
         } else if (direction.compareToIgnoreCase("down_left") == 0) {
@@ -842,6 +662,184 @@ public class WorldController extends Controller {
             return new float[]{-1, 1};
         } else {
             return null;
+        }
+    }
+
+    public void buildGreenhouse(Context ctx, GameServer gs) {
+        try {
+            String id = ctx.attribute("id");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+            Farm farm = player.getFarm();
+            Backpack backpack = player.getInventory();
+            Cell testCell = Farm.getCellByCoordinate(25, 4, farm.getCells());
+            if (testCell.getObjectOnCell() instanceof Water) {
+                ctx.json(Response.BAD_REQUEST.setMessage("You are already built."));
+                return;
+            }
+            Slot slot = backpack.getSlotByItemName(MiscType.WOOD.name);
+
+            if (slot == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("You don't have any wood."));
+                return;
+            }
+
+            if (slot.getCount() < 500) {
+                ctx.json(Response.BAD_REQUEST.setMessage("You don't have any wood."));
+                return;
+            }
+
+            if (player.getMoney(game) < 1000) {
+                ctx.json(Response.BAD_REQUEST.setMessage("You don't have enough money."));
+                return;
+            }
+
+            slot.setCount(slot.getCount() - 500);
+
+            if (slot.getCount() == 0) {
+                backpack.getSlots().remove(slot);
+            }
+
+            player.setMoney(player.getMoney(game) - 1000, game);
+
+            for (int i = 23; i < 28; i++) {
+                for (int j = 4; j < 10; j++) {
+                    Cell cell = Farm.getCellByCoordinate(i, j, farm.getCells());
+                    cell.setObjectOnCell(new EmptyCell());
+                }
+            }
+
+            Cell cell = Farm.getCellByCoordinate(25, 10, farm.getCells());
+            cell.setObjectOnCell(new EmptyCell());
+
+            Cell cell1 = Farm.getCellByCoordinate(25, 4, farm.getCells());
+            cell1.setObjectOnCell(new Water());
+
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setBody(playerJson));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player_user_id", id);
+            msg.put("player", playerJson);
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void toolUse(Context ctx, GameServer gs) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String direction = (String) body.get("direction");
+            String toolName = (String) body.get("toolName");
+            String id = ctx.attribute("id");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+            Item item = player.getInventory().getSlotByItemName(toolName).getItem();
+            player.setEquippedItem(item);
+
+            if (player.getEquippedItem() == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("You don't have any equipped item."));
+                return;
+            }
+            if (!(player.getEquippedItem() instanceof Tool)) {
+                ctx.json(Response.BAD_REQUEST.setMessage("You don't have any equipped tool."));
+                return;
+            }
+            if (getXAndYIncrement(direction) == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Invalid direction."));
+                return;
+            }
+            Tool equippedTool = (Tool) player.getEquippedItem();
+            ToolTypes toolType = equippedTool.getType();
+            if (toolType == ToolTypes.HOE) {
+                handleHoeUse(ctx, game, player, direction, equippedTool.getQuality()
+                    , player.getFarmingSkill().getLevel().energyCostDiscount);
+            } else if (toolType == ToolTypes.PICKAXE) {
+                handlePickaxeUse(ctx, game, player, direction
+                    , player.getMiningSkill().getLevel()
+                    , equippedTool.getQuality()
+                    , player.getMiningSkill().getLevel().energyCostDiscount);
+            } else if (toolType == ToolTypes.AXE) {
+                handleAxeUse(ctx, game, player, direction, equippedTool.getQuality()
+                    , player.getForagingSkill().getLevel().energyCostDiscount);
+            } else if (toolType == ToolTypes.WATERING_CAN_DEFAULT) {
+                handleWateringCanUse(ctx, game, player, direction, toolType
+                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                    , equippedTool);
+            } else if (toolType == ToolTypes.WATERING_CAN_COPPER) {
+                handleWateringCanUse(ctx, game, player, direction, toolType
+                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                    , equippedTool);
+            } else if (toolType == ToolTypes.WATERING_CAN_IRON) {
+                handleWateringCanUse(ctx, game, player, direction, toolType
+                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                    , equippedTool);
+            } else if (toolType == ToolTypes.WATERING_CAN_GOLD) {
+                handleWateringCanUse(ctx, game, player, direction, toolType
+                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                    , equippedTool);
+            } else if (toolType == ToolTypes.WATERING_CAN_IRIDIUM) {
+                handleWateringCanUse(ctx, game, player, direction, toolType
+                    , player.getFarmingSkill().getLevel().energyCostDiscount, equippedTool.getQuality()
+                    , equippedTool);
+            } else if (toolType == ToolTypes.SCYTHE) {
+                handleScytheUse(ctx, game, player, direction);
+            } else if (toolType == ToolTypes.MILK_PAIL) {
+                // TODO fix the function
+                handleMilkPailUse(ctx, game, player, direction);
+            } else if (toolType == ToolTypes.SHEAR) {
+                // TODO fix the function
+                handleShearUse(ctx, game, player, direction);
+            } else {
+                ctx.json(Response.BAD_REQUEST.setMessage("Unknown tool type: " + toolType));
+                return;
+            }
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setBody(playerJson));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player_user_id", id);
+            msg.put("player", playerJson);
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void fishing(Context ctx, GameServer gs) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String id = ctx.attribute("id");
+            int xpGained = (Integer) body.get("xpGained");
+            int count = (Integer) body.get("count");
+            String fishType = (String) body.get("fishType");
+            String quality = (String) body.get("quality");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+
+            Quality fishQuality = Quality.getQualityByName(quality);
+            FishType type = FishType.getFishType(fishType);
+            Fish fish = new Fish(fishQuality, type);
+            Backpack backpack = player.getInventory();
+            if (backpack.getType().getMaxCapacity() == backpack.getSlots().size()) {
+                ctx.json(Response.BAD_REQUEST.setMessage("You cannot have more than " + backpack.getSlots().size() + " slots"));
+                return;
+            }
+            addFishes(fish, backpack, count);
+            // TODO handle xp
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setBody(playerJson));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player_user_id", id);
+            msg.put("player", playerJson);
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }
     }
 }

@@ -11,7 +11,6 @@ import com.client.services.PlayerService;
 import com.client.utils.*;
 import com.client.views.inGameMenus.FarmMenu;
 import com.common.GameGSON;
-import com.common.models.Backpack;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.Slot;
@@ -20,7 +19,6 @@ import com.common.models.items.Tool;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
-import com.common.models.mapObjects.DroppedItem;
 import com.common.models.mapObjects.EmptyCell;
 import com.google.gson.JsonObject;
 import com.server.utilities.Response;
@@ -31,6 +29,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class PlayerController {
+    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(2);
+    private final Vector2 playerPosition;
+    private final Vector2 playerVelocity;
     private PlayerAnimationController playerAnimationController;
     private FacingDirection facingDirection;
     private PlayerState currState;
@@ -38,10 +39,6 @@ public class PlayerController {
     private Player player = ClientApp.currentPlayer;
     private GameData game = ClientApp.currentGameData;
     private PlayerService playerService = new PlayerService(player, game);
-    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(2);
-
-    private final Vector2 playerPosition;
-    private final Vector2 playerVelocity;
     private float width;
     private float height;
 

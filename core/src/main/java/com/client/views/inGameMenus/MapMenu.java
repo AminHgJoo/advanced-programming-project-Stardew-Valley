@@ -9,23 +9,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
 
 public class MapMenu implements MyScreen, InputProcessor {
+    private final Skin skin;
     private GameMain gameMain;
     private MyScreen farmScreen;
     private SpriteBatch batch;
     private Texture backgroundTexture;
     private BitmapFont titleFont;
     private GlyphLayout layout;
-    private final Skin skin;
 
     public MapMenu(GameMain gameMain, MyScreen farmScreen) {
         this.gameMain = gameMain;
@@ -44,8 +40,7 @@ public class MapMenu implements MyScreen, InputProcessor {
         if (i == Input.Keys.ESCAPE) {
             gameMain.setScreen(farmScreen);
             this.dispose();
-        }
-        else if(i == Input.Keys.LEFT) {
+        } else if (i == Input.Keys.LEFT) {
             gameMain.setScreen(new SocialMenu(gameMain, farmScreen));
         }
         return false;

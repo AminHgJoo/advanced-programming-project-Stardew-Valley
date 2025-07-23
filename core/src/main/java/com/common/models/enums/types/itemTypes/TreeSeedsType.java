@@ -63,15 +63,15 @@ public enum TreeSeedsType implements ItemType {
     @Override
     public String getTextureName() {
         String name = getName();
-        if(name.equals("Acorns"))
+        if (name.equals("Acorns"))
             return "acorn";
-        if(name.equals("Pine Cones"))
+        if (name.equals("Pine Cones"))
             return "pinecone";
-        if(name.equals("Mahogany Seeds"))
+        if (name.equals("Mahogany Seeds"))
             return "mahoganyseed";
-        if(name.equals("Mushroom Tree Seeds"))
+        if (name.equals("Mushroom Tree Seeds"))
             return "mushroomtreeseed";
-        if(name.equals("Maple Seeds"))
+        if (name.equals("Maple Seeds"))
             return "mapleseed";
         return AssetManager.generateKeyFromFileName(name);
     }

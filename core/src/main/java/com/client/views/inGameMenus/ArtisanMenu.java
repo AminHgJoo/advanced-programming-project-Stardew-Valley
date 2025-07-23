@@ -27,13 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArtisanMenu implements MyScreen, InputProcessor {
-    private SpriteBatch batch;
     private final GameMain gameMain;
+    private final int ITEMS_PER_PAGE = 27;
+    private SpriteBatch batch;
     private Backpack backpack;
     private ArrayList<Slot> targetSlots = new ArrayList<>();
     private Texture backgroundTexture;
     private Texture inventoryTexture;
-    private final int ITEMS_PER_PAGE = 27;
     private int scrollIndex = 0;
     private MyScreen farmScreen;
     private int GRID_SIZE = 9;

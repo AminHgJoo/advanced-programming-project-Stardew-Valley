@@ -1,8 +1,5 @@
 package com.common.models.enums.worldEnums;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.client.utils.AssetManager;
-
 public enum Weather {
     SUNNY(new Season[]{Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER}, "Sunny"),
     RAIN(new Season[]{Season.SPRING, Season.SUMMER, Season.FALL}, "Rain"),

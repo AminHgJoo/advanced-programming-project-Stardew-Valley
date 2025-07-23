@@ -119,9 +119,9 @@ public class ArtisanController extends Controller {
     }
 
     public static boolean isPreservesJar(String item1Name) {
-        if(isVegetable(item1Name))
+        if (isVegetable(item1Name))
             return true;
-        else if(isFruit(item1Name))
+        else if (isFruit(item1Name))
             return true;
         return false;
     }
@@ -263,10 +263,10 @@ public class ArtisanController extends Controller {
         if (item1Name.equals("Grapes")) {
             return true;
         }
-        if(isMushroom(item1Name)) {
+        if (isMushroom(item1Name)) {
             return true;
         }
-        if(isFruit(item1Name)) {
+        if (isFruit(item1Name)) {
             return true;
         }
         return false;
@@ -301,19 +301,19 @@ public class ArtisanController extends Controller {
     }
 
     public static boolean isKeg(String item1Name) {
-        if(item1Name.equals("Wheat"))
+        if (item1Name.equals("Wheat"))
             return true;
-        if(item1Name.equals("Rice"))
+        if (item1Name.equals("Rice"))
             return true;
-        if(item1Name.equals("Coffee Bean"))
+        if (item1Name.equals("Coffee Bean"))
             return true;
-        if(item1Name.equals("Honey"))
+        if (item1Name.equals("Honey"))
             return true;
-        if(item1Name.equals("Hops"))
+        if (item1Name.equals("Hops"))
             return true;
-        if(isFruit(item1Name))
+        if (isFruit(item1Name))
             return true;
-        if(isVegetable(item1Name))
+        if (isVegetable(item1Name))
             return true;
         return false;
     }
@@ -479,7 +479,7 @@ public class ArtisanController extends Controller {
         }
     }
 
-    public static boolean isCheesePress(String item1Name){
+    public static boolean isCheesePress(String item1Name) {
         if (item1Name.equals("Milk") || item1Name.equals("Big Milk"))
             return true;
         else if (item1Name.equals("Goat Milk") || item1Name.equals("Big Goat Milk"))

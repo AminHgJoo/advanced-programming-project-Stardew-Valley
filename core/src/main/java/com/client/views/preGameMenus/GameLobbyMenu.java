@@ -22,16 +22,10 @@ import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.TypeAdapter;
 import com.google.gson.internal.LinkedTreeMap;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import com.server.utilities.Response;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -39,6 +33,8 @@ public class GameLobbyMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
+    //TODO: Add server notifs here!!!
+    private final ArrayList<String> messagesFromServer = new ArrayList<>();
     private Stage stage;
     private Skin skin2;
     /// Dev note: labels, every type of text label if changed needs updating, set this flag to true if that need happens.
@@ -46,9 +42,6 @@ public class GameLobbyMenu implements MyScreen {
     private Lobby currLobby = null;
     private SimpleWebSocketClient client = ClientApp.client;
     private boolean GAME_START = false;
-
-    //TODO: Add server notifs here!!!
-    private final ArrayList<String> messagesFromServer = new ArrayList<>();
     //TODO: get this from the server.
     private ArrayList<Lobby> visibleLobbies = new ArrayList<>();
 

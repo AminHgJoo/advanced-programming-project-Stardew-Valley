@@ -13,26 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FishingGameController {
-    private enum FishMotionTypes {
-        MIXED(5),
-        SMOOTH(5),
-        SINKER(5),
-        FLOATER(5),
-        DART(9);
-
-        public final int speed;
-
-        FishMotionTypes(int speed) {
-            this.speed = speed;
-        }
-    }
-
-    private enum FishMoves {
-        UP,
-        DOWN,
-        STATIONARY
-    }
-
     private static final float SPEED_FACTOR = 15;
     private static final float WATER_LANE_HEIGHT = 427;
     private static final float BEHAVIOUR_RESET_TIME = 0.5f;
@@ -193,5 +173,25 @@ public class FishingGameController {
 
     private static boolean randomQuery(int successPercent) {
         return (int) (Math.random() * 100) < successPercent;
+    }
+
+    private enum FishMotionTypes {
+        MIXED(5),
+        SMOOTH(5),
+        SINKER(5),
+        FLOATER(5),
+        DART(9);
+
+        public final int speed;
+
+        FishMotionTypes(int speed) {
+            this.speed = speed;
+        }
+    }
+
+    private enum FishMoves {
+        UP,
+        DOWN,
+        STATIONARY
     }
 }

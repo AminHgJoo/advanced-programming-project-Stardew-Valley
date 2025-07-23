@@ -31,44 +31,34 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
     private final float MIN_PROGRESS = 0;
     private final float MAX_BOBBER_POS = 325;
     private final float MIN_BOBBER_POS = 0;
-
+    private final GameMain gameMain;
+    private final FarmMenu farmMenu;
+    private final Quality poleQuality;
+    public float BOBBER_BASE_Y;
     private boolean isGameOngoing = true;
     private boolean isVictorious;
     private Stage stage;
     private Texture backgroundTexture;
-
     private Image waterLane;
-
     private Rectangle fishHitbox;
     private Image fishImage;
-
     private float fishPosition = 0;
     private float fishVelocity = 0;
     private float fishAcceleration = 0;
-
     private Rectangle bobberHitbox;
     private Image bobberImage;
     private float bobberPosition = 0;
     private float bobberVelocity = 0;
     private float bobberAcceleration = 0;
-
     private float catchingProgress = 0.01f;
     private boolean isCatchPerfect = true;
     private ProgressBar catchingProgressBar;
-
-    private final GameMain gameMain;
-    private final FarmMenu farmMenu;
-
     private float BOBBER_BASE_X;
-    public float BOBBER_BASE_Y;
-
     //TODO: TEST ONLY.
     private FishType caughtFishType = FishType.GLACIER_FISH;
     private int caughtFishQuantity = 2;
     private Quality caughtFishQuality = Quality.COPPER;
     private int xpGained = 5;
-
-    private final Quality poleQuality;
 
     public FishingMiniGame(GameMain gameMain, FarmMenu farmMenu, boolean doesUserHaveSonar, Quality poleQuality) {
         this.gameMain = gameMain;

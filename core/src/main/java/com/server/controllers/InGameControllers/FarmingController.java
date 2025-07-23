@@ -13,7 +13,6 @@ import com.common.models.enums.worldEnums.Season;
 import com.common.models.items.TreeSeed;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
-import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.Crop;
 import com.common.models.mapObjects.EmptyCell;
 import com.common.models.mapObjects.Tree;

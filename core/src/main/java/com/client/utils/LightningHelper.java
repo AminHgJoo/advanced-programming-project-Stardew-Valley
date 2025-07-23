@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class LightningHelper {
+    public boolean flashing = false;
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private float alpha = 0f;
-    public boolean flashing = false;
 
     public void trigger() {
         alpha = 1f;

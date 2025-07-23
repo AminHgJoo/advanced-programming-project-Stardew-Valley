@@ -18,7 +18,10 @@ public class Skill {
         this.xp = xp;
     }
 
-    public void learn(){};
+    public void learn() {
+    }
+
+    ;
 
     public int getXp() {
         return this.xp;

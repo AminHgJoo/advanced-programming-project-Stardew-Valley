@@ -41,27 +41,27 @@ public class StringUtils {
         return "";
     }
 
-    public static String convertToolNameToAssetName(String name){
-        if(name == null){
+    public static String convertToolNameToAssetName(String name) {
+        if (name == null) {
             return null;
         }
-        if(name.equals("Hoe")){
+        if (name.equals("Hoe")) {
             return "hoe";
         }
-        if(name.equals("Pickaxe")){
+        if (name.equals("Pickaxe")) {
             return "pickaxe";
         }
-        if(name.equals("Axe")){
+        if (name.equals("Axe")) {
             return "axe";
         }
-        if(name.equals("Watering Can Default") ||name.equals("Watering Can Copper") || name.equals("Watering Can Iron")
-        || name.equals("Watering Can Gold") || name.equals("Watering Can Iridium")){
+        if (name.equals("Watering Can Default") || name.equals("Watering Can Copper") || name.equals("Watering Can Iron")
+            || name.equals("Watering Can Gold") || name.equals("Watering Can Iridium")) {
             return "can";
         }
-        if(name.equals("Fishing Rod")){
+        if (name.equals("Fishing Rod")) {
             return "rod";
         }
-        if (name.equals("Scythe")){
+        if (name.equals("Scythe")) {
             return "scythe";
         }
         return null;

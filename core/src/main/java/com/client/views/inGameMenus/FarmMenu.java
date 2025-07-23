@@ -2,7 +2,6 @@ package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -33,7 +32,6 @@ import com.common.models.GameData;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.Slot;
-import com.common.models.enums.commands.GameMenuCommands;
 import com.common.models.enums.types.itemTypes.FoodTypes;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.mapModels.Cell;
@@ -79,9 +77,15 @@ public class FarmMenu implements MyScreen, InputProcessor {
         })
         .serializeSpecialFloatingPointValues()
         .create();
-    private SpriteBatch batch;
     private final OrthographicCamera camera;
     private final StretchViewport viewport;
+    //TODO: TEST AND PROTOTYPE
+    private final Texture playerTexture = new Texture("images/T_BatgunProjectile.png");
+    //These are graphical coordinates, not the x and y coordinates in the game logic.
+    private final Vector2 playerPosition;
+    private final Vector2 playerVelocity;
+    private final PlayerController playerController;
+    private SpriteBatch batch;
     private Farm farm;
     private Texture grassTexture;
     private boolean isToolSwinging = false;
@@ -94,16 +98,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private int GRID_ITEM_SIZE = 95;
     private boolean selected = false;
     private int selectedSave = -1;
-
-    //TODO: TEST AND PROTOTYPE
-    private final Texture playerTexture = new Texture("images/T_BatgunProjectile.png");
-
-    //These are graphical coordinates, not the x and y coordinates in the game logic.
-    private final Vector2 playerPosition;
-    private final Vector2 playerVelocity;
-
-    private final PlayerController playerController;
-
     private LightningHelper lightningHelper = new LightningHelper();
     private ShaderProgram dayNightShader;
     private float nightFactor;
@@ -319,6 +313,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new CraftingMenu(gameMain, this));
         } else if (Keybinds.OPEN_COOKING.keycodes.contains(keycode)) {
             gameMain.setScreen(new CookingMenu(gameMain, this));
+        } else if (Keybinds.OPEN_RADIO.keycodes.contains(keycode)) {
+            gameMain.setScreen(new RadioStardrop(gameMain, this));
         }
         return false;
     }
@@ -411,9 +407,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         camera.update();
         Vector3 worldCoords = new Vector3(screenX, prev_screen_y, 0);
         viewport.unproject(worldCoords);
-        float cellX =  (worldCoords.x / 32);
+        float cellX = (worldCoords.x / 32);
         //TODO in y esh kirie
-        float cellY =  (50- (worldCoords.y / 32));
+        float cellY = (50 - (worldCoords.y / 32));
 
         Cell clickedCell = farm.findCellByCoordinate(cellX, cellY);
         if (clickedCell != null) {
@@ -421,8 +417,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 ArtisanBlock artisanBlock = (ArtisanBlock) clickedCell.getObjectOnCell();
                 if (artisanBlock.beingUsed) {
                     gameMain.setScreen(new ArtisanMenu(gameMain, this, artisanBlock.getArtisanType().name));
-                }
-                else{
+                } else {
                     Gdx.input.setInputProcessor(popupStage);
                     Vector2 stageCoords = popupStage.screenToStageCoordinates(new Vector2(screenX, screenY));
                     Skin skin = AssetManager.getSkin();
@@ -436,25 +431,27 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     label.setWrap(true);
                     label.setAlignment(Align.center);
 
-                    TextButton cheatBtn   = new TextButton("Cheat",   skin);
+                    TextButton cheatBtn = new TextButton("Cheat", skin);
                     TextButton collectBtn = new TextButton("Collect", skin);
-                    TextButton cancelBtn  = new TextButton("Cancel",  skin);
+                    TextButton cancelBtn = new TextButton("Cancel", skin);
                     TextButton exitBtn = new TextButton("Exit", skin);
 
                     cheatBtn.addListener(new ChangeListener() {
-                        @Override public void changed(ChangeEvent event, Actor actor) {
-                            if(!artisanBlock.canBeCollected)
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            if (!artisanBlock.canBeCollected)
                                 artisanBlock.canBeCollected = true;
                         }
                     });
                     collectBtn.addListener(new ChangeListener() {
-                        @Override public void changed(ChangeEvent event, Actor actor) {
-                            if(artisanBlock.canBeCollected) {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            if (artisanBlock.canBeCollected) {
                                 //TODO server
                                 Request request = new Request("Collect");
                                 request.body.put("artisanName", artisanBlock.getArtisanType().name);
                                 Response response = ArtisanController.handleArtisanGet(request);
-                                if(response.isSuccess()) {
+                                if (response.isSuccess()) {
                                     Gdx.input.setInputProcessor(FarmMenu.this);
                                     popup.remove();
                                 }
@@ -462,7 +459,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
                         }
                     });
                     cancelBtn.addListener(new ChangeListener() {
-                        @Override public void changed(ChangeEvent event, Actor actor) {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
                             //TODO server
                             artisanBlock.beingUsed = false;
                             artisanBlock.canBeCollected = false;
@@ -472,7 +470,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
                         }
                     });
                     exitBtn.addListener(new ChangeListener() {
-                        @Override public void changed(ChangeEvent event, Actor actor) {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
                             Gdx.input.setInputProcessor(FarmMenu.this);
                             popup.remove();
                         }

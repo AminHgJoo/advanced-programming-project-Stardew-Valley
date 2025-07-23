@@ -7,12 +7,9 @@ import com.common.models.IO.Response;
 import com.common.models.Player;
 import com.common.models.User;
 import com.common.models.enums.types.MenuTypes;
-import com.common.models.mapModels.Farm;
 import com.server.controllers_old.Controller;
 import com.server.repositories.GameRepository;
 import com.server.repositories.UserRepository;
-import com.server.views.AppView;
-import com.server.views.gameViews.GameThread;
 
 import java.util.ArrayList;
 
@@ -20,7 +17,8 @@ public class LoadingSavingTurnHandling extends Controller {
     public static boolean isWaitingForChoosingMap = false;
 
     /**
-     * @deprecated */
+     * @deprecated
+     */
     public static Response handleNewGame(Request request) {
         String[] usernames = request.body.get("users").split("\\s+");
 

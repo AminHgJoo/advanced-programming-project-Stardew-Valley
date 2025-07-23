@@ -14,13 +14,34 @@ import com.common.models.mapObjects.ArtisanBlock;
 import com.common.models.mapObjects.DroppedItem;
 import com.common.models.mapObjects.EmptyCell;
 import com.server.GameServers.GameServer;
-import com.server.repositories.GameRepository;
 import com.server.utilities.Response;
 import io.javalin.http.Context;
 
 import java.util.HashMap;
 
 public class InventoryController extends Controller {
+    private static int[] getXAndYIncrement(String direction) {
+        if (direction.compareToIgnoreCase("down") == 0) {
+            return new int[]{0, -1};
+        } else if (direction.compareToIgnoreCase("up") == 0) {
+            return new int[]{0, 1};
+        } else if (direction.compareToIgnoreCase("right") == 0) {
+            return new int[]{1, 0};
+        } else if (direction.compareToIgnoreCase("left") == 0) {
+            return new int[]{-1, 0};
+        } else if (direction.compareToIgnoreCase("down_right") == 0) {
+            return new int[]{1, -1};
+        } else if (direction.compareToIgnoreCase("down_left") == 0) {
+            return new int[]{-1, -1};
+        } else if (direction.compareToIgnoreCase("up_right") == 0) {
+            return new int[]{1, 1};
+        } else if (direction.compareToIgnoreCase("up_left") == 0) {
+            return new int[]{-1, 1};
+        } else {
+            return new int[]{10000, 10000};
+        }
+    }
+
     public void toolEquip(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
@@ -164,8 +185,8 @@ public class InventoryController extends Controller {
         }
     }
 
-    public void addItem(Context ctx , GameServer gs) {
-        try{
+    public void addItem(Context ctx, GameServer gs) {
+        try {
             String id = ctx.attribute("id");
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String itemName = (String) body.get("itemName");
@@ -202,7 +223,7 @@ public class InventoryController extends Controller {
             msg.put("player_user_id", id);
             msg.put("player", playerJson);
             gs.broadcast(msg);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }
@@ -225,7 +246,7 @@ public class InventoryController extends Controller {
                 return;
             }
             slot.setCount(slot.getCount() - count);
-            if(slot.getCount() == 0){
+            if (slot.getCount() == 0) {
                 backpack.removeSlot(slot);
             }
 
@@ -237,32 +258,9 @@ public class InventoryController extends Controller {
             msg.put("player", playerJson);
             gs.broadcast(msg);
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
-        }
-    }
-
-    private static int[] getXAndYIncrement(String direction) {
-        if (direction.compareToIgnoreCase("down") == 0) {
-            return new int[]{0, -1};
-        } else if (direction.compareToIgnoreCase("up") == 0) {
-            return new int[]{0, 1};
-        } else if (direction.compareToIgnoreCase("right") == 0) {
-            return new int[]{1, 0};
-        } else if (direction.compareToIgnoreCase("left") == 0) {
-            return new int[]{-1, 0};
-        } else if (direction.compareToIgnoreCase("down_right") == 0) {
-            return new int[]{1, -1};
-        } else if (direction.compareToIgnoreCase("down_left") == 0) {
-            return new int[]{-1, -1};
-        } else if (direction.compareToIgnoreCase("up_right") == 0) {
-            return new int[]{1, 1};
-        } else if (direction.compareToIgnoreCase("up_left") == 0) {
-            return new int[]{-1, 1};
-        } else {
-            return new int[]{10000, 10000};
         }
     }
 }

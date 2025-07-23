@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
-import com.client.views.inGameMenus.FarmMenu;
 
 public class LauncherMenu implements MyScreen {
     private final Skin skin;

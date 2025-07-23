@@ -21,9 +21,10 @@ public class AnimalBlock extends MapObject {
         this.mapObjectType = AnimalMapObjectType.getAnimalMapObjectType(animal.getType());
         this.texture = AssetManager.getImage(mapObjectType.getTextureName());
     }
+
     @Override
-    public Texture getTexture(){
-        if(texture == null){
+    public Texture getTexture() {
+        if (texture == null) {
             this.texture = AssetManager.getImage(mapObjectType.getTextureName());
         }
         return texture;

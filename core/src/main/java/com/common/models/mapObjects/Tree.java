@@ -2,7 +2,6 @@ package com.common.models.mapObjects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.client.utils.AssetManager;
-import com.common.models.App;
 import com.common.models.GameData;
 import com.common.models.enums.types.mapObjectTypes.TreeType;
 import com.server.utilities.DateUtility;
@@ -22,7 +21,7 @@ public class Tree extends MapObject {
     public Tree() {
     }
 
-    public Tree(TreeType treeType, LocalDateTime source , GameData gameData) {
+    public Tree(TreeType treeType, LocalDateTime source, GameData gameData) {
         super(false, "tree", "green", null);
         this.treeType = treeType;
         growthDeadLines[0] = DateUtility.getLocalDateTime(source, treeType.stageOneTime);
@@ -39,10 +38,14 @@ public class Tree extends MapObject {
 
     @Override
     public Texture getTexture() {
-        if(texture == null){
+        if (texture == null) {
             texture = AssetManager.getImage(treeType.textureNames[stageNumber]);
         }
         return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
     }
 
     public LocalDateTime[] getGrowthDeadLines() {
@@ -83,10 +86,5 @@ public class Tree extends MapObject {
 
     public void setHarvestDeadLine(LocalDateTime harvestDeadLine) {
         this.harvestDeadLine = harvestDeadLine;
-    }
-
-
-    public void setTexture(Texture texture) {
-        this.texture = texture;
     }
 }

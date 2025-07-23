@@ -22,9 +22,10 @@ public class DroppedItem extends MapObject {
         ItemType itemType = getItemType(item.getName());
         this.texture = AssetManager.getImage(itemType.getTextureName());
     }
+
     @Override
-    public Texture getTexture(){
-        if(texture == null){
+    public Texture getTexture() {
+        if (texture == null) {
             ItemType itemType = getItemType(item.getName());
             this.texture = AssetManager.getImage(itemType.getTextureName());
         }
