@@ -1,5 +1,6 @@
 package com.common.models.NPCModels;
 
+import com.common.models.GameData;
 import com.common.models.Quest;
 import com.common.models.enums.types.itemTypes.*;
 import com.common.models.items.*;
@@ -190,5 +191,10 @@ public class NPC {
             }
         }
         return null;
+    }
+
+    public String context(GameData game){
+        // TODO
+        return "";
     }
 }
