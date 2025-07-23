@@ -62,6 +62,37 @@ public class PlayerController {
         batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale),
             playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale), playerTexture.getRegionWidth() / scale
             , playerTexture.getRegionHeight() / scale);
+        if (currState != PlayerState.TOOL_SWINGING && player.getEquippedItem() != null) {
+            if (facingDirection == FacingDirection.DOWN) {
+                Texture t;
+                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
+                t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "1.png"));
+                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+            } else if (facingDirection == FacingDirection.UP) {
+                Texture t;
+                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
+                t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "3.png"));
+                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+            } else if (facingDirection == FacingDirection.RIGHT) {
+                Texture t;
+                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
+                t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "7.png"));
+                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+            } else if (facingDirection == FacingDirection.LEFT) {
+                Texture t;
+                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
+                t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "5.png"));
+                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+            }
+        }
         if (currState == PlayerState.TOOL_SWINGING) {
             if (player.getEquippedItem().getName().contains("Rod")) {
                 return;
