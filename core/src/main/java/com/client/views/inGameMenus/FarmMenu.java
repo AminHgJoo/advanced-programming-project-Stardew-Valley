@@ -381,7 +381,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         int startX = (int) (stage.getWidth() / 2 - inventory.getWidth() / 2 + 50);
         int startY = 10;
-
+        float prev_screen_y = screenY;
         screenY = Gdx.graphics.getHeight() - screenY;
 
         for (int i = 0; i < 9; i++) {
@@ -409,11 +409,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         }
         camera.update();
-        Vector3 worldCoords = new Vector3(screenX, screenY, 0);
+        Vector3 worldCoords = new Vector3(screenX, prev_screen_y, 0);
         viewport.unproject(worldCoords);
         float cellX =  (worldCoords.x / 32);
         //TODO in y esh kirie
-        float cellY =  (43- (worldCoords.y / 32));
+        float cellY =  (50- (worldCoords.y / 32));
 
         Cell clickedCell = farm.findCellByCoordinate(cellX, cellY);
         if (clickedCell != null) {
