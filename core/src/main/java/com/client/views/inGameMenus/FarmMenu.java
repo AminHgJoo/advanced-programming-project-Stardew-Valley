@@ -50,6 +50,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.server.controllers_old.gameMenuControllers.ArtisanController;
+import org.codehaus.groovy.ast.stmt.AssertStatement;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -346,6 +347,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new RadioStardrop(gameMain, this));
         } else if (Keybinds.SPAWN_CROW.keycodes.contains(keycode)) {
             crowFlag = true;
+        }
+        else if(keycode == Input.Keys.M){
+            gameMain.setScreen(new MapMenu(gameMain, this));
         }
         return false;
     }
@@ -739,6 +743,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 texture1 == SeasonTextures.FALL.texture ||
                 texture1 == SeasonTextures.WINTER.texture) {
                 continue;
+            }
+
+            if(texture1 == grassTexture && cell.isTilled()){
+                texture1 = AssetManager.getImage("tilled");
             }
 
             if (cell.getObjectOnCell() instanceof DroppedItem || cell.getObjectOnCell() instanceof ArtisanBlock) {

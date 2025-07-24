@@ -27,7 +27,7 @@ public class MapMenu implements MyScreen, InputProcessor {
         this.gameMain = gameMain;
         this.farmScreen = farmScreen;
         this.batch = new SpriteBatch();
-        backgroundTexture = AssetManager.getImage("profileBackground");
+        backgroundTexture = AssetManager.getImage("map");
         this.skin = AssetManager.getSkin();
         titleFont = AssetManager.getStardewFont();
         titleFont.getData().setScale(3f);
@@ -37,7 +37,7 @@ public class MapMenu implements MyScreen, InputProcessor {
 
     @Override
     public boolean keyDown(int i) {
-        if (i == Input.Keys.ESCAPE) {
+        if (i == Input.Keys.ESCAPE || i == Input.Keys.M) {
             gameMain.setScreen(farmScreen);
             this.dispose();
         } else if (i == Input.Keys.LEFT) {
