@@ -7,7 +7,7 @@ import com.common.models.Player;
 import com.common.models.User;
 
 public class ClientApp {
-    //TODO: Init current player & game.
+
     public static User loggedInUser;
     public static Player currentPlayer;
     public static GameData currentGameData;

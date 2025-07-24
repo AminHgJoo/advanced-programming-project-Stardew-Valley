@@ -37,6 +37,8 @@ import com.common.models.Slot;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.FoodTypes;
 import com.common.models.enums.worldEnums.Weather;
+import com.common.models.items.buffs.ActiveBuff;
+import com.common.models.items.buffs.FoodBuff;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
@@ -115,6 +117,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Label moneyLabel;
     private Stage popupStage;
 
+    private boolean crowFlag = false;
+
     public FarmMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.playerPosition = new Vector2(TILE_PIX_SIZE * FARM_X_SPAN / 2, TILE_PIX_SIZE * FARM_Y_SPAN / 2);
@@ -133,12 +137,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         //TODO tuf zadam
         for (Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {
             slot.getItem().setTexture(slot.getItem().getTexture());
-
         }
         initializeShader();
         initializeParticles();
         initializeStage();
-        ClientApp.currentPlayer.getInventory().addSlot(new Slot(FoodTypes.HONEY, 10));
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -149,12 +151,31 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private void initializeStage() {
         stage = new Stage(new ScreenViewport());
 
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.font = AssetManager.getStardewFont();
+        style.fontColor = Color.BLACK;
+
         Player player = ClientApp.currentPlayer;
+
         ProgressBar energyBar = new ProgressBar(0, (float) (player.getMaxEnergy()), 1, true, AssetManager.getPixthulhu());
         energyBar.setValue((float) player.getEnergy());
         energyBar.setSize(50, 200);
         stage.addActor(energyBar);
         energyBar.setPosition(stage.getWidth() - energyBar.getWidth(), 0);
+
+        Label buffs = new Label("Active Buffs:", style);
+        stage.addActor(buffs);
+        buffs.setPosition(0, stage.getHeight() - buffs.getHeight());
+
+        Table bufferTable = new Table();
+        for (ActiveBuff buff : player.getActiveBuffs()) {
+            bufferTable.add(new Label(buff.toString(), style)).row();
+        }
+        ScrollPane buffsScrollPane = new ScrollPane(bufferTable);
+        buffsScrollPane.setFadeScrollBars(false);
+        buffsScrollPane.setScrollingDisabled(false, false);
+        buffsScrollPane.setPosition(0, buffs.getY() - buffsScrollPane.getHeight());
+        stage.addActor(buffsScrollPane);
 
         clockBase = new Image(AssetManager.getImage("clockbase"));
         float scaleFactor = 5;
@@ -323,12 +344,21 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new CookingMenu(gameMain, this));
         } else if (Keybinds.OPEN_RADIO.keycodes.contains(keycode)) {
             gameMain.setScreen(new RadioStardrop(gameMain, this));
+        } else if (Keybinds.SPAWN_CROW.keycodes.contains(keycode)) {
+            crowFlag = true;
         }
         return false;
     }
 
+    private void crowCheat() {
+
+    }
+
     @Override
     public boolean keyUp(int keycode) {
+        if (Keybinds.SPAWN_CROW.keycodes.contains(keycode)) {
+            crowFlag = false;
+        }
         return false;
     }
 
@@ -719,6 +749,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 modifiedDraw(batch, texture1, xOfCell, yOfCell);
             }
         }
+
+        if (crowFlag) {
+            batch.draw(AssetManager.getImage("crow"), playerPosition.x - 64, playerPosition.y, 32, 32);
+        }
+
         playerController.render(batch);
         for (Cell cell : farm.getCells()) {
             if (cell.getObjectOnCell() instanceof Tree) {

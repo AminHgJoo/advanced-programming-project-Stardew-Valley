@@ -22,7 +22,8 @@ public enum Keybinds {
     SCREENSHOT_MODE(Input.Keys.F4),
     OPEN_CRAFTING(Input.Keys.B),
     OPEN_COOKING(Input.Keys.K),
-    OPEN_RADIO(Input.Keys.R);
+    OPEN_RADIO(Input.Keys.R),
+    SPAWN_CROW(Input.Keys.Z);
 
     public final ArrayList<Integer> keycodes;
 

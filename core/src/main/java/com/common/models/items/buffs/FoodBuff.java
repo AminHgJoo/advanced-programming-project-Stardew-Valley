@@ -28,4 +28,9 @@ public class FoodBuff {
     public int getDuration() {
         return duration;
     }
+
+    @Override
+    public String toString() {
+        return affectedField + "+" + increment;
+    }
 }
