@@ -371,18 +371,17 @@ public class GameData {
     }
 
     public void handleArtisanUse() {
-        User user = App.getLoggedInUser();
-        GameData gameData = user.getCurrentGame();
-        Farm farm = gameData.getCurrentPlayer().getCurrentFarm(gameData);
-        for (Cell cell : farm.getCells()) {
-            MapObject objectONCell = cell.getObjectOnCell();
-            if (objectONCell instanceof ArtisanBlock && ((ArtisanBlock) objectONCell).beingUsed) {
-                if (((ArtisanBlock) objectONCell).prepTime.isBefore(date) || ((ArtisanBlock) objectONCell).prepTime.isEqual(date)) {
-                    ((ArtisanBlock) objectONCell).canBeCollected = true;
+        GameData gameData = this;
+        for (Farm farm : getMap().getFarms()) {
+            for (Cell cell : farm.getCells()) {
+                MapObject objectONCell = cell.getObjectOnCell();
+                if (objectONCell instanceof ArtisanBlock && ((ArtisanBlock) objectONCell).beingUsed) {
+                    if (((ArtisanBlock) objectONCell).prepTime.isBefore(date) || ((ArtisanBlock) objectONCell).prepTime.isEqual(date)) {
+                        ((ArtisanBlock) objectONCell).canBeCollected = true;
+                    }
                 }
             }
         }
-        GameRepository.saveGame(gameData);
     }
 
     private void strikeLightningOnStormyDay() {
