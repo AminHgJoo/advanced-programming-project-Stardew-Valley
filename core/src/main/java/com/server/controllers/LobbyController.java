@@ -1,6 +1,5 @@
 package com.server.controllers;
 
-import com.badlogic.gdx.utils.Timer;
 import com.common.models.User;
 import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
@@ -12,6 +11,7 @@ import io.javalin.http.Context;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
 import java.util.TimerTask;
 
 public class LobbyController {
@@ -124,7 +124,7 @@ public class LobbyController {
             user.setCurrentLobbyId(newLobby.get_id().toString());
             UserRepository.saveUser(user);
             ctx.json(Response.OK.setMessage("Lobby has been created successfully").setBody(newLobby));
-            Timer.schedule(new Timer.Task() {
+            (new Timer()).schedule(new TimerTask() {
                 @Override
                 public void run() {
                     if (newLobby.getUsers().size() == 1) {
@@ -139,7 +139,7 @@ public class LobbyController {
                     }
                     this.cancel();
                 }
-            }, 5 * 60, 2);
+            }, 5 * 60 * 1000);
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
@@ -244,7 +244,10 @@ public class LobbyController {
             user.setCurrentLobbyId(null);
             lobby.getUsers().remove(user.getUsername());
             UserRepository.saveUser(user);
-            LobbyRepository.save(lobby);
+            if (lobby.getUsers().isEmpty()) {
+                LobbyRepository.delete(lobby);
+            } else
+                LobbyRepository.save(lobby);
 
             ctx.json(Response.OK.setBody(lobby));
         } catch (Exception e) {
