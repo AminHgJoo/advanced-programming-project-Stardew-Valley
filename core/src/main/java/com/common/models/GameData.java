@@ -289,7 +289,7 @@ public class GameData {
 
     //TODO: Change this.
     public void advanceTime() {
-        date = date.plusHours(1);
+        date = date.plusMinutes(10);
 
         if (date.getHour() == 23) {
             //New Day Operations.
