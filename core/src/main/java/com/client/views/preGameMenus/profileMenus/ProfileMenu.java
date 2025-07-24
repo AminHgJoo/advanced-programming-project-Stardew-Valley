@@ -27,6 +27,7 @@ public class ProfileMenu implements MyScreen {
     private String password;
     private String gender;
     private User user;
+    private Texture avatar;
 
 
     public ProfileMenu(GameMain gameMain) {
@@ -39,7 +40,9 @@ public class ProfileMenu implements MyScreen {
         email = user.getEmail();
         gender = user.getGender();
         password = user.getHashedPassword();
+        avatar = new Texture(ClientApp.avatarPath);
         initializeStage();
+
     }
 
     private void initializeStage() {
@@ -97,6 +100,15 @@ public class ProfileMenu implements MyScreen {
             }
         });
 
+        TextButton changeAvatarButton = new TextButton("Change Avatar", skin);
+        changeAvatarButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                gameMain.setScreen(new AvatarMenu(gameMain));
+                dispose();
+            }
+        });
+
         TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ChangeListener() {
             @Override
@@ -106,9 +118,11 @@ public class ProfileMenu implements MyScreen {
             }
         });
 
+        Image avatarImage = new Image(avatar);
 
         Table detailsTable = new Table(skin);
         detailsTable.top().left().pad(20);
+        detailsTable.add(avatarImage).size(90, 90).pad(10);
         detailsTable.add(new Label("Personal Info", skin, "title")).left().padBottom(20).row();
         detailsTable.add(usernameLabel).left().padBottom(10).row();
         detailsTable.add(passwordLabel).left().padBottom(10).row();
@@ -124,6 +138,7 @@ public class ProfileMenu implements MyScreen {
         menuTable.add(passwordButton).width(500).height(60).pad(10).row();
         menuTable.add(nicknameButton).width(500).height(60).pad(10).row();
         menuTable.add(emailButton).width(500).height(60).pad(10).row();
+        menuTable.add(changeAvatarButton).width(500).height(60).pad(10).row();
         menuTable.add(backButton).width(500).height(60).pad(10).row();
 
 
