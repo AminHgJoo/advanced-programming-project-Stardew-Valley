@@ -16,6 +16,7 @@ public class GameServer extends Thread {
     private ArrayList<PlayerConnection> playerConnections;
     private GameData game;
     private boolean isRunning = true;
+    private int count = 0;
 
     public GameServer(ArrayList<PlayerConnection> players, GameData game) {
         this.playerConnections = players;
@@ -43,14 +44,21 @@ public class GameServer extends Thread {
            /* TODO sending game updates
            broadcast(state...);
            * */
-            HashMap<String, String> message = new HashMap<>();
-            message.put("type", "TEST");
-            broadcast(message);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                break;
+                e.printStackTrace();
             }
+            count++;
+            if(count == 7){
+                count = 0;
+                game.advanceTime();
+            }
+            String gameJson = this.gson.toJson(game);
+            HashMap<String, String> message = new HashMap<>();
+            message.put("type", "GAME_UPDATED");
+            message.put("game" , gameJson);
+            broadcast(message);
         }
     }
 

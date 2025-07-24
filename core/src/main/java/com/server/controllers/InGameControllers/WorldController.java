@@ -643,7 +643,7 @@ public class WorldController extends Controller {
         return answer;
     }
 
-    private static float[] getXAndYIncrement(String direction) {
+    public static float[] getXAndYIncrement(String direction) {
         if (direction.compareToIgnoreCase("down") == 0) {
             return new float[]{0, -16 * 16/60};
         } else if (direction.compareToIgnoreCase("up") == 0) {
@@ -786,7 +786,11 @@ public class WorldController extends Controller {
                     , equippedTool);
             } else if (toolType == ToolTypes.SCYTHE) {
                 handleScytheUse(ctx, game, player, direction);
-            } else if (toolType == ToolTypes.MILK_PAIL) {
+            }else if(toolType == ToolTypes.FISHING_ROD){
+                fishingRod(ctx , game , player , direction);
+                return;
+            }
+            else if (toolType == ToolTypes.MILK_PAIL) {
                 // TODO fix the function
                 handleMilkPailUse(ctx, game, player, direction);
             } else if (toolType == ToolTypes.SHEAR) {
@@ -807,6 +811,28 @@ public class WorldController extends Controller {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }
+    }
+
+    public void fishingRod(Context ctx , GameData game , Player player , String direction){
+        float[] dxAndDy = getXAndYIncrement(direction);
+        float dx = dxAndDy[0];
+        float dy = dxAndDy[1];
+
+        Farm farm = player.getCurrentFarm(game);
+
+        float playerX = (player.getCoordinate().getX() + dx) / 32;
+        float playerY = 50 - (player.getCoordinate().getY() + dy) / 32;
+        Cell targetCell = farm.findCellByCoordinate(playerX, playerY);
+
+        if(targetCell == null){
+            ctx.json(Response.BAD_REQUEST.setMessage("Target cell not found."));
+            return;
+        }
+        if(!(targetCell.getObjectOnCell() instanceof Water)){
+            ctx.json(Response.BAD_REQUEST.setMessage("Target cell is not a water."));
+            return;
+        }
+        ctx.json(Response.OK.setBody(targetCell.getObjectOnCell()));
     }
 
     public void fishing(Context ctx, GameServer gs) {

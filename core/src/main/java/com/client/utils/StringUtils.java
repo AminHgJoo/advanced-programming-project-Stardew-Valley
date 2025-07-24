@@ -64,6 +64,9 @@ public class StringUtils {
         if (name.equals("Scythe")) {
             return "scythe";
         }
+        if(name.equals("Shear")) {
+            return "shear";
+        }
         return null;
     }
 }

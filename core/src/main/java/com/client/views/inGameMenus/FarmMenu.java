@@ -33,6 +33,7 @@ import com.common.models.GameData;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.Slot;
+import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.FoodTypes;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.mapModels.Cell;
@@ -354,7 +355,19 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     this.cancel();
                 }
             }, .6f, 2);
-            playerController.toolUse();
+            if (playerController.getPlayer().getEquippedItem().getName().contains("Rod")) {
+                boolean check = playerController.useFishingRod();
+                if(check){
+                    boolean flag = false;
+                    Slot slot = playerController.getPlayer().getInventory().getSlotByItemName("Sonar Bobber");
+                    if(slot != null){
+                        flag = true;
+                    }
+                    // TODO what is quality ?
+                    gameMain.setScreen(new FishingMiniGame(gameMain , this , flag , Quality.DEFAULT));
+                }
+            } else
+                playerController.toolUse();
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
             if (success) {
@@ -769,6 +782,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     public void modifiedDraw(SpriteBatch batch, Texture texture, float x, float y, float width, float height) {
         batch.draw(texture, x * TILE_PIX_SIZE, (convertYCoordinate(y) - 1) * TILE_PIX_SIZE, width, height);
+    }
+
+    public void goToFishingMenu(boolean flag) {
+        // TODO what is the quality ?
+        this.gameMain.setScreen(new FishingMiniGame(gameMain, this, flag, Quality.DEFAULT));
     }
 
     @Override

@@ -20,7 +20,9 @@ import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.EmptyCell;
+import com.common.models.mapObjects.Water;
 import com.google.gson.JsonObject;
+import com.server.controllers.InGameControllers.WorldController;
 import com.server.utilities.Response;
 
 import java.util.ArrayList;
@@ -184,6 +186,28 @@ public class PlayerController {
         }
     }
 
+    public boolean useFishingRod() {
+        Tool tool = (Tool) player.getEquippedItem();
+        String direction = facingDirection.getDirection();
+        float[] dxAndDy = WorldController.getXAndYIncrement(direction);
+        float dx = dxAndDy[0];
+        float dy = dxAndDy[1];
+
+        Farm farm = player.getCurrentFarm(game);
+
+        float playerX = (player.getCoordinate().getX() + dx) / 32;
+        float playerY = 50 - (player.getCoordinate().getY() + dy) / 32;
+        Cell targetCell = farm.findCellByCoordinate(playerX, playerY);
+
+        if (targetCell == null) {
+            return false;
+        }
+        if (!(targetCell.getObjectOnCell() instanceof Water)) {
+            return false;
+        }
+        return true;
+    }
+
     private void handleStateChanges() {
         if (isMoving) {
             setState(PlayerState.WALKING);
@@ -336,7 +360,7 @@ public class PlayerController {
         game.setPlayerById(p.getUser_id(), p);
     }
 
-    public void updateGame(String json){
+    public void updateGame(String json) {
         GameData gameData = GameGSON.gson.fromJson(json, GameData.class);
         this.game = gameData;
         ClientApp.currentGameData = gameData;
