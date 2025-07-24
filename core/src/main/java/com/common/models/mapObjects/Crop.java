@@ -46,6 +46,9 @@ public class Crop extends MapObject {
         if (texture == null) {
             this.texture = AssetManager.getImage(cropSeedsType.getTextureName());
         }
+        if (isGiant) {
+            this.texture = AssetManager.getImage("giant" + cropSeedsType.getTextureName());
+        }
         return texture;
     }
 

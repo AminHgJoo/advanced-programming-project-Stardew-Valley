@@ -347,8 +347,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new RadioStardrop(gameMain, this));
         } else if (Keybinds.SPAWN_CROW.keycodes.contains(keycode)) {
             crowFlag = true;
-        }
-        else if(keycode == Input.Keys.M){
+        } else if (keycode == Input.Keys.M) {
             gameMain.setScreen(new MapMenu(gameMain, this));
         }
         return false;
@@ -745,10 +744,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 continue;
             }
 
-            if(texture1 == grassTexture && cell.isTilled()){
+            if (texture1 == grassTexture && cell.isTilled()) {
                 texture1 = AssetManager.getImage("tilled");
             }
-
+            // TODO check for giant crop correct rendering
             if (cell.getObjectOnCell() instanceof DroppedItem || cell.getObjectOnCell() instanceof ArtisanBlock) {
                 modifiedDraw(batch, texture1, xOfCell, yOfCell, 30, 30);
             } else if (cell.getObjectOnCell() instanceof ForagingMineral) {
