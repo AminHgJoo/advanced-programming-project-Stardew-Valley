@@ -41,6 +41,8 @@ import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.ArtisanBlock;
 import com.common.models.mapObjects.BuildingBlock;
 import com.common.models.mapObjects.DroppedItem;
+import com.common.models.mapObjects.ForagingMineral;
+import com.common.models.mapObjects.Tree;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -52,7 +54,6 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -218,7 +219,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         dateLabel.setText(DayOfWeek.values()[(currentDateTime.getDayOfMonth() - 1) % 7].toString().toLowerCase().substring(0, 3)
             + ". " + currentDateTime.getDayOfMonth());
 
-        timeLabel.setText((currentHour > 12 ? (currentHour - 12) : currentHour) + ":" + currentDateTime.getMinute() + " " + (currentHour > 12 ? "PM" : "AM"));
+        timeLabel.setText((currentHour > 12 ? (currentHour - 12) : currentHour) + ":" + (currentDateTime.getMinute() < 10 ? "0" + currentDateTime.getMinute() : currentDateTime.getMinute()) + " " + (currentHour > 12 ? "PM" : "AM"));
 
         moneyLabel.setText(gameData.getCurrentPlayer().getMoney(gameData));
         showTools();
@@ -660,11 +661,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
         batch.begin();
         dayNightShader.setUniformf("u_nightFactor", nightFactor);
         Texture texture = grassTexture;
+        Texture mineTexture = AssetManager.getImage("mineCell");
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < 75; j++) {
                 modifiedDraw(batch, texture, j, i);
+
+                if (isMineCell(j, i)) {
+                    modifiedDraw(batch, mineTexture, j, i);
+                }
             }
         }
+
         for (Cell cell : farm.getCells()) {
             Coordinate coordinate = cell.getCoordinate();
 
@@ -672,12 +679,13 @@ public class FarmMenu implements MyScreen, InputProcessor {
             float yOfCell = coordinate.getY();
             Texture texture1 = grassTexture;
 
-            if (!(cell.getObjectOnCell() instanceof BuildingBlock buildingBlock)) {
-                texture1 = cell.getObjectOnCell().getTexture();
-            } else if (buildingBlock.buildingType.equals("Mine")) {
-                texture1 = AssetManager.getImage("mineCell");
+            if (cell.getObjectOnCell() instanceof Tree) {
+                continue;
             }
 
+            if (!(cell.getObjectOnCell() instanceof BuildingBlock)) {
+                texture1 = cell.getObjectOnCell().getTexture();
+            }
 
             if (texture1 == SeasonTextures.SPRING.texture ||
                 texture1 == SeasonTextures.SUMMER.texture ||
@@ -686,13 +694,21 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 continue;
             }
 
-            if (cell.getObjectOnCell() instanceof DroppedItem || cell.getObjectOnCell() instanceof ArtisanBlock)
+            if (cell.getObjectOnCell() instanceof DroppedItem || cell.getObjectOnCell() instanceof ArtisanBlock) {
                 modifiedDraw(batch, texture1, xOfCell, yOfCell, 30, 30);
-            else
+            } else if (cell.getObjectOnCell() instanceof ForagingMineral) {
+                modifiedDraw(batch, texture1, xOfCell, yOfCell, 30, 30);
+            } else {
                 modifiedDraw(batch, texture1, xOfCell, yOfCell);
+            }
         }
-
         playerController.render(batch);
+        for (Cell cell : farm.getCells()) {
+            if (cell.getObjectOnCell() instanceof Tree) {
+                Coordinate coordinate = cell.getCoordinate();
+                drawFuckingTreeProperly(batch, cell.getObjectOnCell().getTexture(), coordinate.getX(), coordinate.getY());
+            }
+        }
         //Draw buildings
         Texture house = AssetManager.getImage("playerhouse");
         Texture greenhouseDestroyed = AssetManager.getImage("greenhousedestroyed");
@@ -743,6 +759,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         }
     }
 
+    public void drawFuckingTreeProperly(SpriteBatch batch, Texture texture, float xOfCell, float yOfCell) {
+        modifiedDraw(batch, texture, xOfCell - 1, yOfCell);
+    }
+
     public void modifiedDraw(SpriteBatch batch, Texture texture, float x, float y) {
         batch.draw(texture, x * TILE_PIX_SIZE, (convertYCoordinate(y) - 1) * TILE_PIX_SIZE);
     }
@@ -786,5 +806,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     public float convertYCoordinate(float yCoordinate) {
         return 50 - yCoordinate;
+    }
+
+    private boolean isMineCell(int x, int y) {
+        return x <= 9 && y <= 11;
     }
 }
