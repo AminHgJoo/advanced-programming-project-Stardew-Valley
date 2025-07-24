@@ -32,6 +32,7 @@ import com.common.models.Backpack;
 import com.common.models.GameData;
 import com.common.models.IO.Request;
 import com.common.models.IO.Response;
+import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.FoodTypes;
@@ -39,10 +40,7 @@ import com.common.models.enums.worldEnums.Weather;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
-import com.common.models.mapObjects.ArtisanBlock;
-import com.common.models.mapObjects.BuildingBlock;
-import com.common.models.mapObjects.DroppedItem;
-import com.common.models.mapObjects.ForagingMineral;
+import com.common.models.mapObjects.*;
 import com.common.models.mapObjects.Tree;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -148,9 +146,15 @@ public class FarmMenu implements MyScreen, InputProcessor {
         return playerController;
     }
 
-    //TODO: Update clock UI when needed. Dispose stage and call this function.
     private void initializeStage() {
         stage = new Stage(new ScreenViewport());
+
+        Player player = ClientApp.currentPlayer;
+        ProgressBar energyBar = new ProgressBar(0, (float) (player.getMaxEnergy()), 1, true, AssetManager.getPixthulhu());
+        energyBar.setValue((float) player.getEnergy());
+        energyBar.setSize(50, 200);
+        stage.addActor(energyBar);
+        energyBar.setPosition(stage.getWidth() - energyBar.getWidth(), 0);
 
         clockBase = new Image(AssetManager.getImage("clockbase"));
         float scaleFactor = 5;
@@ -357,14 +361,14 @@ public class FarmMenu implements MyScreen, InputProcessor {
             }, .6f, 2);
             if (playerController.getPlayer().getEquippedItem().getName().contains("Rod")) {
                 boolean check = playerController.useFishingRod();
-                if(check){
+                if (check) {
                     boolean flag = false;
                     Slot slot = playerController.getPlayer().getInventory().getSlotByItemName("Sonar Bobber");
-                    if(slot != null){
+                    if (slot != null) {
                         flag = true;
                     }
                     // TODO what is quality ?
-                    gameMain.setScreen(new FishingMiniGame(gameMain , this , flag , Quality.DEFAULT));
+                    gameMain.setScreen(new FishingMiniGame(gameMain, this, flag, Quality.DEFAULT));
                 }
             } else
                 playerController.toolUse();
