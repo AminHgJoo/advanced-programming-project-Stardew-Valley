@@ -57,7 +57,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FarmMenu implements MyScreen, InputProcessor {
-    //TODO: Draw destroyed/renovated greenhouse based on it being fixed or not.
+
     public static final float SCREEN_WIDTH = 450 * 1.5f;
     public static final float SCREEN_HEIGHT = 300 * 1.5f;
     public static final float BASE_SPEED_FACTOR = 16;
@@ -82,8 +82,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         .create();
     private final OrthographicCamera camera;
     private final StretchViewport viewport;
-    //TODO: TEST AND PROTOTYPE
-    private final Texture playerTexture = new Texture("images/T_BatgunProjectile.png");
     //These are graphical coordinates, not the x and y coordinates in the game logic.
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
@@ -203,7 +201,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         final int currentHour = currentDateTime.getHour();
         float clockRotation = (float) (currentHour - morningHour) / (nightHour - morningHour) * 180f;
 
-        clockArrow.setRotation(clockRotation);
+        clockArrow.setRotation(180 - clockRotation);
 
         weather = new Image(AssetManager.giveWeatherIcon(gameData.getWeatherToday()));
         weather.scaleBy(scaleFactor - 1);
@@ -217,8 +215,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         season.setPosition(stage.getWidth() - scaleFactor * 19, stage.getHeight() - scaleFactor * 24);
 
-        dateLabel.setText(DayOfWeek.values()[(currentDateTime.getDayOfMonth() - 1) % 7].toString().toLowerCase()
-            + ". " + currentDateTime.getDayOfWeek());
+        dateLabel.setText(DayOfWeek.values()[(currentDateTime.getDayOfMonth() - 1) % 7].toString().toLowerCase().substring(0, 3)
+            + ". " + currentDateTime.getDayOfMonth());
 
         timeLabel.setText((currentHour > 12 ? (currentHour - 12) : currentHour) + ":" + currentDateTime.getMinute() + " " + (currentHour > 12 ? "PM" : "AM"));
 
@@ -546,14 +544,14 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void updateSeasonGrassTexture() {
-        //TODO: NullPtr Failsafe.
+
         if (ClientApp.currentGameData == null) return;
 
         grassTexture = SeasonTextures.giveSeasonTexture(ClientApp.currentGameData.getSeason());
     }
 
     private void handleLightning(OrthographicCamera camera, float delta) {
-        //TODO: Failsafe to not throw exception.
+
         if (ClientApp.currentGameData == null) {
             return;
         }
@@ -573,7 +571,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     //TODO: Advance time on server-side.
     private void updateTime(float delta) {
-        //TODO: NullPtr Failsafe.
+
         if (ClientApp.currentGameData == null) {
             return;
         }
