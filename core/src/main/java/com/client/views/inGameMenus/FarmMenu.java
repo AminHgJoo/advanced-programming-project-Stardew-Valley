@@ -67,7 +67,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public static final float TILE_PIX_SIZE = 32;
     public static final float FARM_X_SPAN = 75; //32 * 75 == 2400
     public static final float FARM_Y_SPAN = 50; //32 * 50 == 1600
-    private final PauseMenu pauseMenu;
+    //    private final PauseMenu pauseMenu;
     private final GameMain gameMain;
     private final Gson gson = new GsonBuilder()
         .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
@@ -142,7 +142,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         initializeShader();
         initializeParticles();
         initializeStage();
-        this.pauseMenu = new PauseMenu(AssetManager.getSkin(), stage, gameMain);
+//        this.pauseMenu = new PauseMenu(AssetManager.getSkin(), stage, gameMain);
 
         shapeRenderer = new ShapeRenderer();
     }
@@ -402,8 +402,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     if (slot != null) {
                         flag = true;
                     }
-                    // TODO what is quality ?
-                    gameMain.setScreen(new FishingMiniGame(gameMain, this, flag, Quality.DEFAULT));
+                    gameMain.setScreen(new FishingMiniGame(gameMain, this, flag, playerController.getPlayer().
+                        getEquippedItem().getQuality()));
                 }
             } else
                 playerController.toolUse();
@@ -415,7 +415,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 selected = false;
             }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            pauseMenu.toggle();
+//            pauseMenu.toggle();
         } else {
             if (!isToolSwinging) {
                 playerController.setState(PlayerState.IDLE);
@@ -650,11 +650,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
         clearAndResetScreen();
         updateSeasonGrassTexture();
 
-        if (!pauseMenu.isVisible()) {
-            updateTime(delta);
-            playerController.updatePlayerPos(delta);
-            playerController.update(delta);
-        }
+//        if (!pauseMenu.isVisible()) {
+        updateTime(delta);
+        playerController.updatePlayerPos(delta);
+        playerController.update(delta);
+//        }
         handleEvents();
 
         renderMap(dayNightShader, nightFactor, delta);
