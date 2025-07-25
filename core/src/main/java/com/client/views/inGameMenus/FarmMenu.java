@@ -67,8 +67,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public static final float TILE_PIX_SIZE = 32;
     public static final float FARM_X_SPAN = 75; //32 * 75 == 2400
     public static final float FARM_Y_SPAN = 50; //32 * 50 == 1600
-    //    private final PauseMenu pauseMenu;
     private final GameMain gameMain;
+    private final PauseMenu pauseMenu;
     private final Gson gson = new GsonBuilder()
         .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
             @Override
@@ -120,6 +120,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     private boolean crowFlag = false;
 
+    public GameMain getGameMain(){
+        return gameMain;
+    }
+
     public FarmMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.playerPosition = new Vector2(TILE_PIX_SIZE * FARM_X_SPAN / 2, TILE_PIX_SIZE * FARM_Y_SPAN / 2);
@@ -142,8 +146,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         initializeShader();
         initializeParticles();
         initializeStage();
-//        this.pauseMenu = new PauseMenu(AssetManager.getSkin(), stage, gameMain);
-
+        pauseMenu = new PauseMenu(AssetManager.getSkin() , this);
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -415,7 +418,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 selected = false;
             }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-//            pauseMenu.toggle();
+            System.out.println("hello");
+            pauseMenu.togglePauseMenu();
         } else {
             if (!isToolSwinging) {
                 playerController.setState(PlayerState.IDLE);
@@ -650,11 +654,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         clearAndResetScreen();
         updateSeasonGrassTexture();
 
-//        if (!pauseMenu.isVisible()) {
         updateTime(delta);
         playerController.updatePlayerPos(delta);
         playerController.update(delta);
-//        }
+
         handleEvents();
 
         renderMap(dayNightShader, nightFactor, delta);
@@ -668,6 +671,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void handleUI(float delta) {
+        pauseMenu.render();
         stage.act(delta);
         stage.draw();
     }

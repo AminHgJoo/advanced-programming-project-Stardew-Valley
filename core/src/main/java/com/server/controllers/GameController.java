@@ -1,5 +1,6 @@
 package com.server.controllers;
 
+import com.common.models.App;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.User;
@@ -79,7 +80,7 @@ public class GameController {
     }
 
     public void loadGame(Context ctx) {
-        try{
+        try {
             String id = ctx.attribute("id");
             String gameId = ctx.pathParam("gameId");
             User user = UserRepository.findUserById(id);
@@ -87,14 +88,45 @@ public class GameController {
                 ctx.json(Response.NOT_FOUND.setMessage("User not found"));
                 return;
             }
-            GameData game = GameRepository.findGameById(gameId , false);
+            GameData game = GameRepository.findGameById(gameId, false);
             if (game == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("Game not found"));
                 return;
             }
             AppWebSocket.loadGame(game, user);
             ctx.json(Response.OK.setMessage("Game loaded , waiting for players to come"));
-        }catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void leaveGame(Context ctx) {
+        try {
+            System.out.println("hello");
+
+            String id = ctx.attribute("id");
+            String gameId = ctx.pathParam("gameId");
+            User user = UserRepository.findUserById(id);
+            if (user == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("User not found"));
+                return;
+            }
+            System.out.println(gameId);
+
+            GameData game = GameRepository.findGameById(gameId, false);
+            if (game == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("Game not found"));
+                return;
+            }
+            GameServer gs = AppWebSocket.findGameServerByGAmeId(gameId);
+            if (gs == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("Game Server not found"));
+                return;
+            }
+            ctx.json(Response.OK.setMessage("bye bye"));
+            gs.userLeave(user);
+        } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }

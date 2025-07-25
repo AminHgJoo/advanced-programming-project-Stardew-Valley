@@ -17,10 +17,8 @@ public class GameRepository {
     public static GameData findGameById(String id, boolean populateFlag) {
         try {
             GameData gameData = db.find(GameData.class)
-                .filter(Filters.eq("_id", new ObjectId(id)))
+                .filter(Filters.eq("_id", (id)))
                 .first();
-            if (gameData != null && gameData.getCurrentPlayer() != null)
-                gameData.setCurrentPlayer(gameData.findPlayerByUsername(gameData.getCurrentPlayer().getUser().getUsername()));
             if (gameData != null) {
                 for (Player player : gameData.getPlayers()) {
                     player.setFarm(gameData.getFarmByNumber(player.getFarm().getFarmNumber()));

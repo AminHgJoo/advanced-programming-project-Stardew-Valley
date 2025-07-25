@@ -1,29 +1,58 @@
 package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.client.GameMain;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.client.ClientApp;
+import com.client.utils.HTTPUtil;
+import com.client.views.preGameMenus.MainMenu;
+import com.server.utilities.Response;
 
 public class PauseMenu {
-    private Window window;
-    private TextButton resumeButton;
-    private TextButton leaveButton;
+    private Stage stage;
+    private Table table;
+    private Skin skin;
     private boolean isVisible = false;
-    private GameMain gameMain;
-    // TODO idk why this shit is not working
-    public PauseMenu(Skin skin, Stage stage, GameMain gameMain) {
-        this.gameMain = gameMain;
-        window = new Window("Paused", skin);
-        window.setModal(true);
+    private FarmMenu farmMenu;
 
-        resumeButton = new TextButton("Resume", skin);
-        leaveButton = new TextButton("Leave", skin);
+    public PauseMenu(Skin skin, FarmMenu farmMenu) {
+        this.farmMenu = farmMenu;
+        this.skin = skin;
+        stage = new Stage();
+        // Create the table that will hold our buttons
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(new Color(0.6f, 0.4f, 0.2f, 1)); // Brown wood-like color
+        pixmap.fill();
 
+        Texture woodTexture = new Texture(pixmap);
+        pixmap.dispose();
+
+        TextureRegionDrawable woodBackground = new TextureRegionDrawable(new TextureRegion(woodTexture));
+        table = new Table();
+        table.setBackground(woodBackground);
+
+        table.setSize(600, 400);
+        table.setPosition(Gdx.graphics.getWidth() / 2 - 150 * 2, Gdx.graphics.getHeight() / 2 - 100 * 2);
+
+        Label title = new Label("Pause Menus", skin, "title");
+        title.setFontScale(0.5f);
+        table.add(title).padTop(20).padBottom(30).colspan(2).row();
+
+        // Create buttons
+        TextButton resumeButton = new TextButton("Resume", skin);
+        TextButton leaveButton = new TextButton("Leave", skin);
+
+        // Add listeners
         resumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -34,44 +63,66 @@ public class PauseMenu {
         leaveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Leave button clicked");
+                try {
+                    var getResponse = HTTPUtil.get("http://localhost:8080/api/game/leave/" +
+                        ClientApp.currentGameData.get_id());
+                    Response res = HTTPUtil.deserializeHttpResponse(getResponse);
+                    System.out.println(res.getMessage());
+                    if (res.getStatus() == 200) {
+                        System.out.println("hiiiiii");
+                        ClientApp.currentPlayer = null;
+                        ClientApp.currentGameData = null;
+                        ClientApp.loggedInUser.setCurrentGameId(null);
+                        farmMenu.getGameMain().setScreen(new MainMenu(farmMenu.getGameMain()));
+                        farmMenu.dispose();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
-        window.add(resumeButton).pad(10).row();
-        window.add(leaveButton).pad(10);
+        // Add buttons to table
+        table.add(resumeButton).padBottom(20).row();
+        table.add(leaveButton);
 
-        window.pack();
-        window.setSize(400, 300);
-        window.setColor(Color.RED);
-        window.setPosition(
-            stage.getWidth() / 2 - window.getWidth() / 2,
-            stage.getHeight() / 2 - window.getHeight() / 2
-        );
-
-        window.setVisible(false);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            this.toggle();
-        }
-        stage.addActor(window);
+        stage.addActor(table);
     }
 
     public void show() {
-        window.setVisible(true);
         isVisible = true;
+        Gdx.input.setInputProcessor(stage); // Take over input processing
     }
 
     public void hide() {
-        window.setVisible(false);
         isVisible = false;
+        // Return input processing to your main screen
+    }
+
+    public void render() {
+        if (isVisible) {
+            stage.act(Gdx.graphics.getDeltaTime());
+            stage.draw();
+        }
+    }
+
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+        table.setPosition(width / 2 - 150, height / 2 - 100);
+    }
+
+    public void togglePauseMenu() {
+        if (isVisible) {
+            hide();
+        } else
+            show();
+    }
+
+    public void dispose() {
+        stage.dispose();
     }
 
     public boolean isVisible() {
         return isVisible;
-    }
-
-    public void toggle() {
-        if (isVisible) hide();
-        else show();
     }
 }

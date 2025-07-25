@@ -2,6 +2,8 @@ package com.server.GameServers;
 
 import com.common.GameGSON;
 import com.common.models.GameData;
+import com.common.models.Player;
+import com.common.models.User;
 import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
 import com.server.controllers.InGameControllers.GameServerController;
@@ -40,6 +42,29 @@ public class GameServer extends Thread {
         AppWebSocket.narrowcast(username, message);
     }
 
+    public void userLeave(User user) {
+
+        // TODO do things about player leave in game
+        ArrayList<String> arr = new ArrayList<>();
+        Player p = null;
+        for (Player player : game.getPlayers()) {
+            if (player.getUser_id().equals(user.get_id())) {
+                p = player;
+            }
+            arr.add(player.getUser().getUsername());
+        }
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("type", "USER_LEAVE");
+        msg.put("player_user_id", p.getUser_id());
+        multicast(msg, arr);
+    }
+
+    public void multicast(HashMap<String, String> msg, ArrayList<String> usernames) {
+        for (String u : usernames) {
+            narrowCast(u, msg);
+        }
+    }
+
     @Override
     public void run() {
         while (isRunning) {
@@ -52,14 +77,14 @@ public class GameServer extends Thread {
                 e.printStackTrace();
             }
             count++;
-            if(count == 7){
+            if (count == 7) {
                 count = 0;
                 game.advanceTime();
             }
             String gameJson = this.gson.toJson(game);
             HashMap<String, String> message = new HashMap<>();
             message.put("type", "GAME_UPDATED");
-            message.put("game" , gameJson);
+            message.put("game", gameJson);
             broadcast(message);
         }
     }
