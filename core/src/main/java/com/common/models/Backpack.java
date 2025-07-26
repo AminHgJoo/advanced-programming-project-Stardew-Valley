@@ -29,6 +29,11 @@ public class Backpack {
         this.texture = AssetManager.getImage("backpack");
     }
 
+    public Backpack(ArrayList<Slot> slots, BackpackType type) {
+        this.slots = slots;
+        this.type = type;
+    }
+
     public ArrayList<Slot> getSlots() {
         return slots;
     }

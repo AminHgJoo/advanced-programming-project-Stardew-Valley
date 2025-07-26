@@ -186,6 +186,7 @@ public class SocialMenu implements MyScreen, InputProcessor {
 
     @Override
     public void dispose() {
+        titleFont.getData().setScale(1);
         batch.dispose();
         stage.dispose();
     }

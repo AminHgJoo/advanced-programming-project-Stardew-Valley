@@ -17,11 +17,12 @@ import com.client.utils.MyScreen;
 import com.common.models.Backpack;
 import com.common.models.Player;
 import com.common.models.Slot;
+import com.common.models.enums.types.inventoryEnums.BackpackType;
 import com.common.models.enums.types.inventoryEnums.TrashcanType;
 
 import java.util.List;
 
-public class InventoryMenu implements MyScreen, InputProcessor {
+public class FridgeMenu implements MyScreen, InputProcessor {
     private final GameMain gameMain;
     private final int ITEMS_PER_PAGE = 27;
     private final Skin skin;
@@ -44,13 +45,13 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private GlyphLayout layout;
 
 
-    public InventoryMenu(GameMain gameMain, MyScreen farmScreen) {
+    public FridgeMenu(GameMain gameMain, MyScreen farmScreen) {
         this.gameMain = gameMain;
         this.batch = new SpriteBatch();
         backgroundTexture = AssetManager.getImage("profileBackground");
         inventoryTexture = AssetManager.getImage("inventory");
         this.farmScreen = farmScreen;
-        backpack = ClientApp.currentPlayer.getInventory();
+        backpack = new Backpack(ClientApp.currentPlayer.getRefrigeratorSlots(), BackpackType.DEFAULT);
         //TODO trashcan logic and load
         trashcanType = TrashcanType.DEFAULT;
         this.skin = AssetManager.getSkin();

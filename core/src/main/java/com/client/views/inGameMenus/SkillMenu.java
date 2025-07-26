@@ -231,6 +231,7 @@ public class SkillMenu implements MyScreen, InputProcessor {
 
     @Override
     public void dispose() {
+        titleFont.getData().setScale(1);
         stage.dispose();
         batch.dispose();
     }

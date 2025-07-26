@@ -23,7 +23,8 @@ public enum Keybinds {
     OPEN_CRAFTING(Input.Keys.B),
     OPEN_COOKING(Input.Keys.K),
     OPEN_RADIO(Input.Keys.R),
-    SPAWN_CROW(Input.Keys.Z);
+    SPAWN_CROW(Input.Keys.Z),
+    OPEN_FRIDGE(Input.Keys.Q);
 
     public final ArrayList<Integer> keycodes;
 

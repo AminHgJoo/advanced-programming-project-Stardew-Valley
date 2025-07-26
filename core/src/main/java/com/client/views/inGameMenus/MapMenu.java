@@ -135,6 +135,7 @@ public class MapMenu implements MyScreen, InputProcessor {
 
     @Override
     public void dispose() {
+        titleFont.getData().setScale(1);
         batch.dispose();
     }
 }

@@ -35,10 +35,8 @@ import com.common.models.IO.Response;
 import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.enums.Quality;
-import com.common.models.enums.types.itemTypes.FoodTypes;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.items.buffs.ActiveBuff;
-import com.common.models.items.buffs.FoodBuff;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
@@ -50,7 +48,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.server.controllers_old.gameMenuControllers.ArtisanController;
-import org.codehaus.groovy.ast.stmt.AssertStatement;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -120,7 +117,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     private boolean crowFlag = false;
 
-    public GameMain getGameMain(){
+    public GameMain getGameMain() {
         return gameMain;
     }
 
@@ -146,7 +143,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         initializeShader();
         initializeParticles();
         initializeStage();
-        pauseMenu = new PauseMenu(AssetManager.getSkin() , this);
+        pauseMenu = new PauseMenu(AssetManager.getSkin(), this);
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -352,8 +349,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new RadioStardrop(gameMain, this));
         } else if (Keybinds.SPAWN_CROW.keycodes.contains(keycode)) {
             crowFlag = true;
-        } else if (keycode == Input.Keys.M) {
+        } else if (Keybinds.OPEN_MINIMAP.keycodes.contains(keycode)) {
             gameMain.setScreen(new MapMenu(gameMain, this));
+        } else if (Keybinds.OPEN_FRIDGE.keycodes.contains(keycode)) {
+            gameMain.setScreen(new CookingMenu(gameMain, this));
         }
         return false;
     }
