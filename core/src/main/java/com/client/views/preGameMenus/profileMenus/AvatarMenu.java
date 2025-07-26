@@ -89,6 +89,8 @@ public class AvatarMenu implements MyScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                stage.dispose();
+                //TODO bug
                 gameMain.setScreen(new ProfileMenu(gameMain));
             }
         });
@@ -141,16 +143,6 @@ public class AvatarMenu implements MyScreen {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        skin.dispose();
-        backgroundTexture.dispose();
-        currentAvatarTexture.dispose();
-        for (Texture texture : avatarTextures) {
-            texture.dispose();
-        }
-        if (currentAvatarTexture != null) {
-            currentAvatarTexture.dispose();
-        }
     }
 
     @Override

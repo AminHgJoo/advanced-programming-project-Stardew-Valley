@@ -53,6 +53,7 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -105,7 +106,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private ShapeRenderer shapeRenderer;
     private ParticleEffect rainEffect;
     private ParticleEffect snowEffect;
-
+    private ArrayList<Texture> emojiTextures;
     private Stage stage;
     private Image clockArrow;
     private Image clockBase;
@@ -114,7 +115,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Label timeLabel;
     private Label moneyLabel;
     private Stage popupStage;
-
+    private Texture currentEmoji;
+    private float emojiCounter;
     private boolean crowFlag = false;
 
     public GameMain getGameMain() {
@@ -145,6 +147,16 @@ public class FarmMenu implements MyScreen, InputProcessor {
         initializeStage();
         pauseMenu = new PauseMenu(AssetManager.getSkin(), this);
         shapeRenderer = new ShapeRenderer();
+        initializeEmoji();
+        emojiCounter = 0.0f;
+    }
+
+    private void initializeEmoji() {
+        emojiTextures = new ArrayList<>();
+        emojiTextures.add(AssetManager.getImage("happy"));
+        emojiTextures.add(AssetManager.getImage("sad"));
+        emojiTextures.add(AssetManager.getImage("anger"));
+        emojiTextures.add(AssetManager.getImage("laugh"));
     }
 
     public PlayerController getPlayerController() {
@@ -550,7 +562,35 @@ public class FarmMenu implements MyScreen, InputProcessor {
             }
         }
 
+        emojiSelection(screenX, screenY);
+
         return true;
+    }
+
+    private void emojiSelection(int screenX, int screenY) {
+        float emojiSize = 64f;
+        float spacing = 20f;
+        int count = emojiTextures.size();
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+
+        float totalWidth = count * emojiSize + (count - 1) * spacing;
+        float starX = (screenWidth - totalWidth) / 2f;
+        float y = screenHeight - emojiSize - 20f;
+
+        float touchY = screenHeight - screenY;
+
+        for (int i = 0; i < count; i++) {
+            float x = starX + i * (emojiSize + spacing);
+
+            if (screenX >= x && screenX <= x + emojiSize &&
+                touchY >= y && touchY <= y + emojiSize) {
+                //TODO Texture
+                currentEmoji = emojiTextures.get(i);
+                emojiCounter = 0f;
+                break;
+            }
+        }
     }
 
     @Override
@@ -787,6 +827,28 @@ public class FarmMenu implements MyScreen, InputProcessor {
         popupStage.draw();
 
         artisanTimeBar();
+
+        float emojiSize = 64f;
+        float spacing = 20f;
+        int count = emojiTextures.size();
+
+        float totalWidth = count * emojiSize + (count - 1) * spacing;
+        float startX = (Gdx.graphics.getWidth() - totalWidth) / 2f;
+        float y = Gdx.graphics.getHeight() - emojiSize - 20f;
+
+        for (int i = 0; i < count; i++) {
+            Texture texture5 = emojiTextures.get(i);
+            float x = startX + i * (emojiSize + spacing);
+            batch.draw(texture5, x, y, emojiSize, emojiSize);
+        }
+
+        if(emojiCounter >=0){
+            batch.draw(currentEmoji, playerPosition.x, playerPosition.y, emojiSize, emojiSize + 30);
+            emojiCounter += delta;
+            if(emojiCounter >= 3){
+                emojiCounter = -1;
+            }
+        }
 
         stage.dispose();
         initializeStage();

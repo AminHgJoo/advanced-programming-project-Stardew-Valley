@@ -141,11 +141,10 @@ public class ProfileMenu implements MyScreen {
         menuTable.add(changeAvatarButton).width(500).height(60).pad(10).row();
         menuTable.add(backButton).width(500).height(60).pad(10).row();
 
-
         Table root = new Table();
         root.setFillParent(true);
         root.add(detailsTable).expand().left().top().padLeft(30);
-        root.add(menuTable).expand().top(); // Center/Right side
+        root.add(menuTable).expand().top();
         stage.addActor(root);
 
         Gdx.input.setInputProcessor(stage);
