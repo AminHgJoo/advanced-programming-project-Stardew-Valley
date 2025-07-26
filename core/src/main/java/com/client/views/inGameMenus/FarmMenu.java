@@ -148,7 +148,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         pauseMenu = new PauseMenu(AssetManager.getSkin(), this);
         shapeRenderer = new ShapeRenderer();
         initializeEmoji();
-        emojiCounter = 0.0f;
+        emojiCounter = -1;
     }
 
     private void initializeEmoji() {
