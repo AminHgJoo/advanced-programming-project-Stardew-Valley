@@ -146,6 +146,17 @@ public class LobbyController {
         }
     }
 
+    public void getOnlinePlayers(Context ctx) {
+        try {
+            ArrayList<String> arr = AppWebSocket.getOnlinePlayers();
+
+            ctx.json(Response.OK.setBody(arr));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
 
     public void getLobbyById(Context ctx) {
         try {

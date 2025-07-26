@@ -165,6 +165,14 @@ public class AppWebSocket {
         return null;
     }
 
+    public static ArrayList<String> getOnlinePlayers() {
+        ArrayList<String> players = new ArrayList<>();
+        for (PlayerConnection pc : connectedPlayers.values()) {
+            players.add(pc.getUsername());
+        }
+        return players;
+    }
+
     public void clearGameThreads(){
         for (GameServer gs : activeGames) {
             gs.endGame();
