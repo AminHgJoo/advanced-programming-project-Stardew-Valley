@@ -2,6 +2,7 @@ package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -34,7 +35,6 @@ import com.common.models.IO.Request;
 import com.common.models.IO.Response;
 import com.common.models.Player;
 import com.common.models.Slot;
-import com.common.models.enums.Quality;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.items.buffs.ActiveBuff;
 import com.common.models.mapModels.Cell;
@@ -42,6 +42,7 @@ import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.*;
 import com.common.models.mapObjects.Tree;
+import com.common.utils.ChatMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -49,7 +50,6 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.server.controllers_old.gameMenuControllers.ArtisanController;
 
-import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -121,6 +121,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private float emojiCounter;
     private boolean crowFlag = false;
 
+    private final Stage chatNotifStage;
+    private InputProcessor temp;
+
     public GameMain getGameMain() {
         return gameMain;
     }
@@ -152,6 +155,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         pauseMenu = new PauseMenu(AssetManager.getSkin(), this);
         shapeRenderer = new ShapeRenderer();
 
+        this.chatNotifStage = new Stage(new ScreenViewport());
     }
 
     private void initializeEmoji() {
@@ -402,8 +406,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Keybinds.OPEN_FRIDGE.keycodes.contains(keycode)) {
             gameMain.setScreen(new CookingMenu(gameMain, this));
         } else if (Keybinds.INSPECT_GREENHOUSE.keycodes.contains(keycode)) {
-            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, AssetManager.getSkin());
-            uiPopupHelper.showDialog("This greenhouse can be repaired with 500 wood & 1000 gold.", "Message");
+
+            showPopUp("This greenhouse can be repaired with 500 wood & 1000 gold.", "Message");
+
         } else if (Keybinds.OPEN_LEADERBOARDS.keycodes.contains(keycode)) {
             gameMain.setScreen(new Leaderboards(gameMain, this));
         } else if (Keybinds.OPEN_CHAT.keycodes.contains(keycode)) {
@@ -672,6 +677,16 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (type.equals("GAME_UPDATED")) {
             String game = res.get("game");
             playerController.updateGame(game);
+        } else if (type.equals("MESSAGE_ADDED")) {
+            String messageJson = res.get("message");
+            System.out.println(messageJson);
+            ChatMessage chatMsg = gson.fromJson(messageJson, ChatMessage.class);
+
+            String prefix = "@" + ClientApp.loggedInUser.getUsername() + " ";
+
+            if (chatMsg.message.startsWith(prefix)) {
+                showPopUp(chatMsg.sender + ": " + chatMsg.message.substring(prefix.length()), "Chat Message");
+            }
         }
     }
 
@@ -749,8 +764,12 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     private void handleUI(float delta) {
         pauseMenu.render();
+
         stage.act(delta);
         stage.draw();
+
+        chatNotifStage.act(delta);
+        chatNotifStage.draw();
     }
 
     private void handleWeatherFX(float delta) {
@@ -862,7 +881,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         modifiedDraw(batch, house, 61, 8);
         modifiedDraw(batch, greenhouse, 22, 6);
         //Dummy texture to solve buffering.
-        modifiedDraw(batch, AssetManager.getImage("speedgro"), playerPosition.x,  playerPosition.y);
+        modifiedDraw(batch, AssetManager.getImage("speedgro"), playerPosition.x, playerPosition.y);
         popupStage.act(delta);
         popupStage.draw();
 
@@ -974,6 +993,13 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     private boolean isGreenhouseCell(int x, int y) {
         // Greenhouse runs from x : [22, 25] & y : [3, 6] (4 by 4)
-        return x >= 22 && x <= 25 && y >= 3 && y <= 6;
+        return x >= 20 && x <= 27 && y >= 1 && y <= 8;
+    }
+
+    private synchronized void showPopUp(String message, String promptType) {
+        temp = Gdx.input.getInputProcessor();
+        Gdx.input.setInputProcessor(chatNotifStage);
+        UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, AssetManager.getSkin());
+        uiPopupHelper.showDialog(message, promptType, temp);
     }
 }
