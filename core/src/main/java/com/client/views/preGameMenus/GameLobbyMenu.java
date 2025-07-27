@@ -57,7 +57,7 @@ public class GameLobbyMenu implements MyScreen {
     }
 
     public void loadLobbies() {
-        var getResponse = HTTPUtil.get("http://localhost:8080/api/lobby/all");
+        var getResponse = HTTPUtil.get("/api/lobby/all");
         Response res = HTTPUtil.deserializeHttpResponse(getResponse);
         if (res.getStatus() == 200) {
             this.visibleLobbies = new ArrayList<>();
@@ -76,14 +76,14 @@ public class GameLobbyMenu implements MyScreen {
 
     public void loadCurrentLobby() {
         if (ClientApp.loggedInUser.getCurrentLobbyId() != null) {
-            var getResponse = HTTPUtil.get("http://localhost:8080/api/lobby/getCurrentLobby");
+            var getResponse = HTTPUtil.get("/api/lobby/getCurrentLobby");
             Response res = HTTPUtil.deserializeHttpResponse(getResponse);
             System.out.println(res.getBody());
             if (res.getStatus() == 200) {
                 LinkedTreeMap body = (LinkedTreeMap) res.getBody();
                 Gson gson = new Gson();
                 String json = gson.toJson(body);
-                currLobby = ModelDecoder.decodeLobby(json);
+                currLobby = GameGSON.gson.fromJson(json ,Lobby.class);
             }
             if (currLobby != null) {
                 doesUINeedRefresh = true;
@@ -124,7 +124,7 @@ public class GameLobbyMenu implements MyScreen {
             startGameButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    var postResponse = HTTPUtil.get("http://localhost:8080/api/game/startGame/"
+                    var postResponse = HTTPUtil.get("/api/game/startGame/"
                         + currLobby.get_id().toString());
                     Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                     if (res.getStatus() == 200) {
@@ -164,7 +164,7 @@ public class GameLobbyMenu implements MyScreen {
                     var req = new JsonObject();
                     req.addProperty("farm", farmSelectBox.getSelected());
 
-                    var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/chooseFarm", req);
+                    var postResponse = HTTPUtil.post("/api/lobby/chooseFarm", req);
                     Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                     if (res.getStatus() == 200) {
                         LinkedTreeMap map = (LinkedTreeMap) res.getBody();
@@ -209,7 +209,7 @@ public class GameLobbyMenu implements MyScreen {
                     JsonObject req = new JsonObject();
                     req.addProperty("password", passwordInvisibleLobby.getText());
 
-                    var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/join/" + searchInvisibleLobby, req);
+                    var postResponse = HTTPUtil.post("/api/lobby/join/" + searchInvisibleLobby, req);
 
                     Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                     if (res.getStatus() == 200) {
@@ -272,7 +272,7 @@ public class GameLobbyMenu implements MyScreen {
                         JsonObject req = new JsonObject();
                         req.addProperty("password", passwordField.getText());
 
-                        var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/join/" + lobby.get_id(), req);
+                        var postResponse = HTTPUtil.post("/api/lobby/join/" + lobby.get_id(), req);
 
                         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                         if (res.getStatus() == 200) {
@@ -345,7 +345,7 @@ public class GameLobbyMenu implements MyScreen {
             leaveLobby.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    var getResponse = HTTPUtil.get("http://localhost:8080/api/lobby/leaveLobby");
+                    var getResponse = HTTPUtil.get("/api/lobby/leaveLobby");
                     Response res = HTTPUtil.deserializeHttpResponse(getResponse);
                     if (res.getStatus() == 200) {
                         ClientApp.loggedInUser.setCurrentLobbyId(null);

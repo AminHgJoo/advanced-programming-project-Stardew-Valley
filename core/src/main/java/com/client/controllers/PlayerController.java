@@ -164,7 +164,7 @@ public class PlayerController {
                     String dir = facingDirection.getDirection();
                     req.addProperty("direction", dir);
                     req.addProperty("toolName", tool.getName());
-                    var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/worldToolUse", req);
+                    var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/worldToolUse", req);
 
                     Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                     Gdx.app.postRunnable(() -> {
@@ -225,7 +225,7 @@ public class PlayerController {
             networkThreadPool.execute(() -> {
                 JsonObject req = new JsonObject();
                 req.addProperty("itemName", ((Tool) item).getName());
-                var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/inventoryPlaceItem", req);
+                var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryPlaceItem", req);
 
                 Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                 System.out.println(res.getMessage());
@@ -308,7 +308,7 @@ public class PlayerController {
                 JsonObject req = new JsonObject();
                 req.addProperty("x", playerPosition.x);
                 req.addProperty("y", playerPosition.y);
-                var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/movementWalk", req);
+                var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/movementWalk", req);
 
                 Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                 Gdx.app.postRunnable(() -> {
@@ -372,7 +372,7 @@ public class PlayerController {
         networkThreadPool.execute(() -> {
             JsonObject req = new JsonObject();
             req.addProperty("index", index);
-            var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/friendshipSendEmoji", req);
+            var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/friendshipSendEmoji", req);
             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
             Gdx.app.postRunnable(() -> {
                 if (res.getStatus() == 200) {
@@ -382,5 +382,21 @@ public class PlayerController {
                 }
             });
         });
+    }
+
+    public void equipItem(Item item) {
+        player.setEquippedItem(item);
+        JsonObject req = new JsonObject();
+        if (item != null) {
+            req.addProperty("toolName", item.getName());
+        }
+        var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryToolEquip", req);
+        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+        if (res.getStatus() == 200) {
+            String player = res.getBody().toString();
+            updatePlayerObject(player);
+        } else {
+
+        }
     }
 }

@@ -15,6 +15,7 @@ public class HTTPUtil {
      * @author AminHg
      */
     public static HttpResponse<JsonNode> post(String url, JsonObject req) {
+        url = "http://" + System.getenv("host") + url;
         try {
             return Unirest.post(url)
                 .header("Content-Type", "application/json")
@@ -27,6 +28,7 @@ public class HTTPUtil {
     }
 
     public static HttpResponse<JsonNode> get(String url) {
+        url = "http://" + System.getenv("host") + url;
         try {
             return Unirest.get(url)
                 .header("Content-Type", "application/json")

@@ -46,7 +46,7 @@ public class GameMain extends Game {
         String token = System.getProperty("TOKEN");
         ClientApp.token = token;
         try {
-            var getResponse = HTTPUtil.get("http://localhost:8080/api/user/whoAmI");
+            var getResponse = HTTPUtil.get("/api/user/whoAmI");
             if (getResponse != null) {
                 var res = HTTPUtil.deserializeHttpResponse(getResponse);
                 if (res.getStatus() == 200) {

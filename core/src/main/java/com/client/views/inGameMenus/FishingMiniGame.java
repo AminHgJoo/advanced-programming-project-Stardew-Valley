@@ -314,7 +314,7 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
         req.addProperty("fishType", caughtFishType.name());
         req.addProperty("count", caughtFishQuantity);
         req.addProperty("quality", caughtFishQuality.toString());
-        var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + ClientApp.currentGameData.get_id()
+        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id()
             + "/worldToolUse", req);
 
         Response res = HTTPUtil.deserializeHttpResponse(postResponse);

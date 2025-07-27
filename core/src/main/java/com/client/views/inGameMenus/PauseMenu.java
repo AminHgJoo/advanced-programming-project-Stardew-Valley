@@ -64,7 +64,7 @@ public class PauseMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    var getResponse = HTTPUtil.get("http://localhost:8080/api/game/leave/" +
+                    var getResponse = HTTPUtil.get("/api/game/leave/" +
                         ClientApp.currentGameData.get_id());
                     Response res = HTTPUtil.deserializeHttpResponse(getResponse);
                     System.out.println(res.getMessage());
