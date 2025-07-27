@@ -69,7 +69,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public static final float FARM_Y_SPAN = 50; //32 * 50 == 1600
     private final GameMain gameMain;
     private final PauseMenu pauseMenu;
-    private final Gson gson = new GsonBuilder()
+    public final Gson gson = new GsonBuilder()
         .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
             @Override
             public void write(JsonWriter out, LocalDateTime value) throws IOException {

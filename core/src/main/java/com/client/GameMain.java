@@ -7,6 +7,7 @@ import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.ModelDecoder;
 import com.client.utils.MyScreen;
+import com.client.views.inGameMenus.ChatScreen;
 import com.client.views.preGameMenus.LauncherMenu;
 import com.client.views.preGameMenus.MainMenu;
 import com.google.gson.Gson;
@@ -20,15 +21,14 @@ public class GameMain extends Game {
 
     @Override
     public void create() {
-
-        loadEnv();
+        //loadEnv();
         AssetManager.loadAssets();
-
-        if (ClientApp.loggedInUser != null) {
-            ClientApp.init();
-            this.setScreen(new MainMenu(this));
-        } else
-            this.setScreen(new LauncherMenu(this));
+        setScreen(new ChatScreen(null, this));
+//        if (ClientApp.loggedInUser != null) {
+//            ClientApp.init();
+//            this.setScreen(new MainMenu(this));
+//        } else
+//            this.setScreen(new LauncherMenu(this));
     }
 
     public void loadEnv() {

@@ -18,6 +18,7 @@ import com.common.models.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class Leaderboards implements MyScreen {
     private Texture background;
@@ -280,6 +281,19 @@ public class Leaderboards implements MyScreen {
 
     @Override
     public void socketMessage(String message) {
-
+        HashMap<String, String> res = (HashMap<String, String>) farmMenu.gson.fromJson(message, HashMap.class);
+        String type = res.get("type");
+        if (type.equals("PLAYER_UPDATED")) {
+            String id = res.get("player_user_id");
+            if (id != farmMenu.getPlayerController().getPlayer().getUser_id()) {
+                String player = res.get("player");
+                farmMenu.getPlayerController().updateAnotherPlayerObject(player);
+            }
+            refreshFlag = true;
+        } else if (type.equals("GAME_UPDATED")) {
+            String game = res.get("game");
+            farmMenu.getPlayerController().updateGame(game);
+            refreshFlag = true;
+        }
     }
 }

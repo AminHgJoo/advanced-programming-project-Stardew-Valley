@@ -645,13 +645,13 @@ public class WorldController extends Controller {
 
     public static float[] getXAndYIncrement(String direction) {
         if (direction.compareToIgnoreCase("down") == 0) {
-            return new float[]{0, -16 * 16/60};
+            return new float[]{0, -16 * 16 / 60};
         } else if (direction.compareToIgnoreCase("up") == 0) {
-            return new float[]{0, 16 * 16/60};
+            return new float[]{0, 16 * 16 / 60};
         } else if (direction.compareToIgnoreCase("right") == 0) {
-            return new float[]{16 * 16/60, 0};
+            return new float[]{16 * 16 / 60, 0};
         } else if (direction.compareToIgnoreCase("left") == 0) {
-            return new float[]{-16 * 16/60, 0};
+            return new float[]{-16 * 16 / 60, 0};
         } else if (direction.compareToIgnoreCase("down_right") == 0) {
             return new float[]{1, -1};
         } else if (direction.compareToIgnoreCase("down_left") == 0) {
@@ -786,11 +786,10 @@ public class WorldController extends Controller {
                     , equippedTool);
             } else if (toolType == ToolTypes.SCYTHE) {
                 handleScytheUse(ctx, game, player, direction);
-            }else if(toolType == ToolTypes.FISHING_ROD){
-                fishingRod(ctx , game , player , direction);
+            } else if (toolType == ToolTypes.FISHING_ROD) {
+                fishingRod(ctx, game, player, direction);
                 return;
-            }
-            else if (toolType == ToolTypes.MILK_PAIL) {
+            } else if (toolType == ToolTypes.MILK_PAIL) {
                 // TODO fix the function
                 handleMilkPailUse(ctx, game, player, direction);
             } else if (toolType == ToolTypes.SHEAR) {
@@ -813,7 +812,7 @@ public class WorldController extends Controller {
         }
     }
 
-    public void fishingRod(Context ctx , GameData game , Player player , String direction){
+    public void fishingRod(Context ctx, GameData game, Player player, String direction) {
         float[] dxAndDy = getXAndYIncrement(direction);
         float dx = dxAndDy[0];
         float dy = dxAndDy[1];
@@ -824,11 +823,11 @@ public class WorldController extends Controller {
         float playerY = 50 - (player.getCoordinate().getY() + dy) / 32;
         Cell targetCell = farm.findCellByCoordinate(playerX, playerY);
 
-        if(targetCell == null){
+        if (targetCell == null) {
             ctx.json(Response.BAD_REQUEST.setMessage("Target cell not found."));
             return;
         }
-        if(!(targetCell.getObjectOnCell() instanceof Water)){
+        if (!(targetCell.getObjectOnCell() instanceof Water)) {
             ctx.json(Response.BAD_REQUEST.setMessage("Target cell is not a water."));
             return;
         }

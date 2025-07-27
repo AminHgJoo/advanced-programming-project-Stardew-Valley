@@ -20,7 +20,7 @@ public class GameServerController {
     private final DealingController dealingController = new DealingController();
     private final CookingController cookingController = new CookingController();
     private final ArtisanController artisanController = new ArtisanController();
-    private final LeaderboardController leaderboardController = new LeaderboardController();
+    private final ChatController chatController = new ChatController();
 
     public void routingTheRequests(Context ctx, GameServer gs) {
         String controllerName = ctx.pathParam("controllerName");
@@ -66,9 +66,9 @@ public class GameServerController {
             } else if (controllerName.contains("artisan")) {
                 Method m = ArtisanController.class.getDeclaredMethod(methodName, Context.class, GameServer.class);
                 m.invoke(artisanController, ctx, gs);
-            } else if (controllerName.contains("leaderboard")) {
-                Method m = LeaderboardController.class.getDeclaredMethod(methodName, Context.class, GameServer.class);
-                m.invoke(leaderboardController, ctx, gs);
+            } else if (controllerName.contains("chat")) {
+                Method m = ChatController.class.getDeclaredMethod(methodName, Context.class, GameServer.class);
+                m.invoke(chatController, ctx, gs);
             } else {
                 ctx.json(Response.NOT_FOUND.setMessage("No Controller found"));
             }

@@ -20,6 +20,7 @@ import com.client.controllers.FishingGameController;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.FishType;
 import com.google.gson.JsonObject;
@@ -305,7 +306,6 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
         Gdx.input.setInputProcessor(stage);
     }
 
-    //TODO:
     private void notifyServerOfVictory(int xpGained, FishType caughtFishType
         , Quality caughtFishQuality, int caughtFishQuantity) {
         JsonObject req = new JsonObject();
@@ -321,7 +321,8 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
             String playerJson = res.getBody().toString();
             farmMenu.getPlayerController().updatePlayerObject(playerJson);
         } else {
-            // TODO shoe error
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, AssetManager.getSkin());
+            uiPopupHelper.showDialog("Error connecting to server", "Error");
         }
     }
 
@@ -347,7 +348,6 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             bobberAcceleration = -ALPHA - BETA * bobberVelocity;
         } else if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-            //TODO: Exit mini-game.
             dispose();
             gameMain.setScreen(farmMenu);
         } else {
