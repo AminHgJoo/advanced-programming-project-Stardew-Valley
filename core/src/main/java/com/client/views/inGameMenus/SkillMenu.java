@@ -71,7 +71,6 @@ public class SkillMenu implements MyScreen, InputProcessor {
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
         this.levelTexture = AssetManager.getImage("green");
-        //TODO load skills
         this.skills = player.getSkills();
         this.farmingLevel = skills.get(0).getLevel().levelNumber + 1;
         this.miningLevel = skills.get(1).getLevel().levelNumber + 1;

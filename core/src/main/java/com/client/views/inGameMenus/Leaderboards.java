@@ -173,8 +173,7 @@ public class Leaderboards implements MyScreen {
             score.setColor(color);
             contentTable.add(score).pad(10);
 
-            //TODO: Farming Skill Level :(
-            Label kills = new Label("0", labelStyle);
+            Label kills = new Label(String.valueOf(player.getSkills().get(0).getLevel().levelNumber), labelStyle);
             kills.setFontScale(1.3f);
             kills.setColor(color);
             contentTable.add(kills).pad(10);
