@@ -14,7 +14,6 @@ public enum Keybinds {
     OPEN_INVENTORY(Input.Keys.E, Input.Keys.ESCAPE),
     OPEN_JOURNAL(Input.Keys.F),
     OPEN_MINIMAP(Input.Keys.M),
-    //    CHANGE_EQUIPPED_ITEM(/), //TODO: Scrolling is different.
     CHANGE_TOOLBAR(Input.Keys.TAB),
     OPEN_CHAT(Input.Keys.T),
     HOTBAR_SLOTS(Input.Keys.NUM_1, Input.Keys.NUM_2, Input.Keys.NUM_3, Input.Keys.NUM_4, Input.Keys.NUM_5, Input.Keys.NUM_6
@@ -24,7 +23,8 @@ public enum Keybinds {
     OPEN_COOKING(Input.Keys.K),
     OPEN_RADIO(Input.Keys.R),
     SPAWN_CROW(Input.Keys.Z),
-    OPEN_FRIDGE(Input.Keys.Q);
+    OPEN_FRIDGE(Input.Keys.Q),
+    INSPECT_GREENHOUSE(Input.Keys.I);
 
     public final ArrayList<Integer> keycodes;
 

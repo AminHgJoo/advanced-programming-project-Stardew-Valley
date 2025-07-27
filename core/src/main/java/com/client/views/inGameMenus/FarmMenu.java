@@ -49,6 +49,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.server.controllers_old.gameMenuControllers.ArtisanController;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -289,11 +291,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         if (emojiCounter >= 0) {
             Image image = new Image(currentEmoji);
-            image.setPosition(stage.getWidth() /2, 20 +stage.getHeight() / 2);
+            image.setPosition(stage.getWidth() / 2, 20 + stage.getHeight() / 2);
             image.setSize(emojiSize, emojiSize);
             stage.addActor(image);
             emojiCounter += delta;
-            if(emojiCounter >= 2) {
+            if (emojiCounter >= 2) {
                 emojiCounter = -1;
             }
         }
@@ -398,12 +400,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new MapMenu(gameMain, this));
         } else if (Keybinds.OPEN_FRIDGE.keycodes.contains(keycode)) {
             gameMain.setScreen(new CookingMenu(gameMain, this));
+        } else if (Keybinds.INSPECT_GREENHOUSE.keycodes.contains(keycode)) {
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, AssetManager.getSkin());
+            uiPopupHelper.showDialog("This greenhouse can be repaired with 500 wood & 1000 gold.", "Message");
         }
         return false;
-    }
-
-    private void crowCheat() {
-
     }
 
     @Override
@@ -700,7 +701,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         lightningHelper.render(camera, delta);
     }
 
-    //TODO: Advance time on server-side.
     private void updateTime(float delta) {
 
         if (ClientApp.currentGameData == null) {
@@ -710,9 +710,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         float timeOfDay = (time.getHour() * 3600 + time.getMinute() * 60 + time.getSecond()) / 3600f;
 
         if (timeOfDay >= 18f) {
-            nightFactor = (timeOfDay - 18f) / 12f;
+            nightFactor = (timeOfDay - 18f) / 6f;
         } else if (timeOfDay <= 6f) {
-            nightFactor = (timeOfDay + 6f) / 12f;
+            nightFactor = (timeOfDay + 6f) / 6f;
         } else {
             nightFactor = 0f;
         }
@@ -852,21 +852,33 @@ public class FarmMenu implements MyScreen, InputProcessor {
         }
         //Draw buildings
         Texture house = AssetManager.getImage("playerhouse");
-        Texture greenhouseDestroyed = AssetManager.getImage("greenhousedestroyed");
+        Texture greenhouse = isGreenhouseBuilt() ? AssetManager.getImage("greenhouse") : AssetManager.getImage("greenhousedestroyed");
 
         modifiedDraw(batch, house, 61, 8);
-        modifiedDraw(batch, greenhouseDestroyed, 22, 6);
+        modifiedDraw(batch, greenhouse, 22, 6);
+        //Dummy texture to solve buffering.
+        modifiedDraw(batch, AssetManager.getImage("speedgro"), playerPosition.x,  playerPosition.y);
         popupStage.act(delta);
         popupStage.draw();
 
         artisanTimeBar();
-
 
         stage.dispose();
         initializeStage(delta);
         batch.end();
     }
 
+    private boolean isGreenhouseBuilt() {
+        try (FileInputStream fis = new FileInputStream(System.getenv("address") + "/greenhouse.txt")) {
+            byte[] data = fis.readAllBytes();
+            String greenhouse = new String(data);
+            greenhouse = greenhouse.trim();
+            return Boolean.parseBoolean(greenhouse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     //TODO server
     private void artisanTimeBar() {
@@ -914,11 +926,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         batch.draw(texture, x * TILE_PIX_SIZE, (convertYCoordinate(y) - 1) * TILE_PIX_SIZE, width, height);
     }
 
-    public void goToFishingMenu(boolean flag) {
-        // TODO what is the quality ?
-        this.gameMain.setScreen(new FishingMiniGame(gameMain, this, flag, Quality.DEFAULT));
-    }
-
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
@@ -958,5 +965,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     private boolean isMineCell(int x, int y) {
         return x <= 9 && y <= 11;
+    }
+
+    private boolean isGreenhouseCell(int x, int y) {
+        // Greenhouse runs from x : [22, 25] & y : [3, 6] (4 by 4)
+        return x >= 22 && x <= 25 && y >= 3 && y <= 6;
     }
 }
