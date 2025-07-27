@@ -367,4 +367,20 @@ public class PlayerController {
         this.player = gameData.findPlayerByUserId(player.getUser_id());
         ClientApp.currentPlayer = this.player;
     }
+
+    public void sendEmoji(int index) {
+        networkThreadPool.execute(() -> {
+            JsonObject req = new JsonObject();
+            req.addProperty("index", index);
+            var postResponse = HTTPUtil.post("http://localhost:8080/api/game/" + game.get_id() + "/friendshipSendEmoji", req);
+            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+            Gdx.app.postRunnable(() -> {
+                if (res.getStatus() == 200) {
+
+                } else {
+
+                }
+            });
+        });
+    }
 }
