@@ -310,7 +310,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
         if (selectedIndex >= 0 && selected == false) {
             selected = true;
             selectedSave = selectedIndex;
-            ClientApp.currentPlayer.setEquippedItem(backpack.getSlots().get(selectedSave).getItem());
+            playerController.equipItem(backpack.getSlots().get(selectedSave).getItem());
+
             selectedIndex = -1;
         }
 
@@ -503,10 +504,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
                 if (selectedIndex >= 0 && selectedIndex == actualIndex) {
                     selectedIndex = -1;
-                    ClientApp.currentPlayer.setEquippedItem(null);
+                    playerController.equipItem(null);
                 } else {
                     selectedIndex = actualIndex;
-                    ClientApp.currentPlayer.setEquippedItem(null);
+                    playerController.equipItem(null);
                 }
                 break;
             }

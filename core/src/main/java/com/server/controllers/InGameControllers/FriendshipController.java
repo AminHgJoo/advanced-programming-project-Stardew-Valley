@@ -313,12 +313,12 @@ public class FriendshipController extends Controller {
     }
 
     public void rejectMarriage(Context ctx, GameServer gs) {
-        try{
-            HashMap<String , Object> body = ctx.bodyAsClass(HashMap.class);
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String id = ctx.attribute("id");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
-            String username = (String)body.get("username");
+            String username = (String) body.get("username");
 
             Player friend = game.findPlayerByUsername(username);
             if (friend == null) {
@@ -336,13 +336,32 @@ public class FriendshipController extends Controller {
             ctx.json(Response.OK.setBody(gameJson));
             HashMap<String, String> msg = new HashMap<>();
             msg.put("type", "GAME_UPDATED");
-            msg.put("game" , gameJson);
+            msg.put("game", gameJson);
             gs.broadcast(msg);
             HashMap<String, String> msgToPlayer = new HashMap<>();
             msgToPlayer.put("type", "REJECT_MARRIAGE");
             msgToPlayer.put("player_user_id", id);
             msgToPlayer.put("player_username", player.getUser().getUsername());
             gs.narrowCast(friend.getUser().getUsername(), msgToPlayer);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void sendEmoji(Context ctx, GameServer gs) {
+        try {
+            HashMap<String , Object> body = ctx.bodyAsClass(HashMap.class);
+            String id = ctx.attribute("id");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+            int index = (Integer) body.get("index");
+
+            ctx.json(Response.OK.setMessage("Emoji has been sent"));
+            HashMap<String , String> msg = new HashMap<>();
+            msg.put("type", "EMOJI_SENT");
+            msg.put("index" , index + "");
+            gs.broadcast(msg);
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));

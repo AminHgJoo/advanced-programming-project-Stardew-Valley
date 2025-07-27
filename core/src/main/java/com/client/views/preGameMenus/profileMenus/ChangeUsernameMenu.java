@@ -53,7 +53,7 @@ public class ChangeUsernameMenu implements MyScreen {
             public void changed(ChangeEvent event, Actor actor) {
                 var req = new JsonObject();
                 req.addProperty("newUsername", usernameField.getText());
-                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/changeUsername", req);
+                var postResponse = HTTPUtil.post("/api/user/changeUsername", req);
                 if (postResponse == null) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog("Connection to server failed.", "Error");

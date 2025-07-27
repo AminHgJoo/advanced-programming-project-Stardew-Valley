@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.*;
+import com.common.GameGSON;
+import com.common.models.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
@@ -59,7 +61,7 @@ public class LoginMenu implements MyScreen {
                 req.addProperty("username", usernameField.getText());
                 req.addProperty("password", passwordField.getText());
 
-                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/login", req);
+                var postResponse = HTTPUtil.post("/api/user/login", req);
 
                 if (postResponse == null) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
@@ -90,7 +92,7 @@ public class LoginMenu implements MyScreen {
                         Gson gson = new Gson();
                         String json = gson.toJson(map);
                         System.out.println(json);
-                        ClientApp.loggedInUser = ModelDecoder.decodeUser(json);
+                        ClientApp.loggedInUser = GameGSON.gson.fromJson(json, User.class);
                         gameMain.setScreen(new MainMenu(gameMain));
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -124,7 +126,7 @@ public class LoginMenu implements MyScreen {
                 req.addProperty("newPassword", newPasswordField.getText());
                 req.addProperty("securityAnswer", securityAnswerField.getText());
 
-                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/forgetPassword", req);
+                var postResponse = HTTPUtil.post("/api/user/forgetPassword", req);
 
                 if (postResponse == null) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);

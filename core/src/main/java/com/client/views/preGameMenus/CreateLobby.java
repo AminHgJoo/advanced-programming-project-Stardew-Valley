@@ -83,7 +83,7 @@ public class CreateLobby implements MyScreen {
                 req.addProperty("isPublic", !isPrivateLobby.isChecked());
                 req.addProperty("password", passwordField.getText());
 
-                var postResponse = HTTPUtil.post("http://localhost:8080/api/lobby/", req);
+                var postResponse = HTTPUtil.post("/api/lobby/", req);
                 if (postResponse == null) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog("Connection to server failed.", "Error");

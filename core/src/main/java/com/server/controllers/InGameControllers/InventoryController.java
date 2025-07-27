@@ -50,8 +50,19 @@ public class InventoryController extends Controller {
             GameData game = gs.getGame();
 
             Player player = game.findPlayerByUserId(id);
+            if(toolName == null){
+                player.setEquippedItem(null);
+                String playerJson = GameGSON.gson.toJson(player);
+                ctx.json(Response.OK.setMessage("Set Null").setBody(playerJson));
+                HashMap<String , String> msg = new HashMap<>();
+                msg.put("type" , "PLAYER_UPDATED");
+                msg.put("player" , playerJson);
+                gs.broadcast(msg);
+                return;
+            }
             Backpack backpack = player.getInventory();
             Slot slot = backpack.getSlotByItemName(toolName);
+
             if (slot == null) {
                 ctx.json(Response.BAD_REQUEST.setMessage("item(s) does not exist!"));
                 return;
@@ -62,15 +73,14 @@ public class InventoryController extends Controller {
                 return;
             }
             Tool tool = (Tool) slot.getItem();
-            String toolJson = GameGSON.gson.toJson(tool);
+            String playerJson = GameGSON.gson.toJson(player);
             player.setEquippedItem(slot.getItem());
             ctx.json(Response.OK.setMessage("Equipped " + toolName + " successfully!")
-                .setBody(toolJson));
+                .setBody(playerJson));
 
             HashMap<String, String> msg = new HashMap<>();
-            msg.put("type", "TOOL_EQUIP");
-            msg.put("player_user_id", id);
-            msg.put("tool", toolJson);
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player", playerJson);
 
             gs.broadcast(msg);
         } catch (Exception e) {

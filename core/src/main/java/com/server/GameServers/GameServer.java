@@ -35,15 +35,22 @@ public class GameServer extends Thread {
     }
 
     public void broadcast(HashMap<String, String> message) {
-        AppWebSocket.broadcast(game, message);
+//        AppWebSocket.broadcast(game , message);
+        for (PlayerConnection pc : playerConnections) {
+            pc.send(gson.toJson(message));
+        }
     }
 
     public void narrowCast(String username, HashMap<String, String> message) {
-        AppWebSocket.narrowcast(username, message);
+//        AppWebSocket.narrowcast(username, message);
+        for (PlayerConnection pc : playerConnections) {
+            if (pc.getUsername().equals(username)) {
+                pc.send(gson.toJson(message));
+            }
+        }
     }
 
     public void userLeave(User user) {
-
         // TODO do things about player leave in game
         ArrayList<String> arr = new ArrayList<>();
         Player p = null;
@@ -53,10 +60,8 @@ public class GameServer extends Thread {
             }
             arr.add(player.getUser().getUsername());
         }
-        HashMap<String, String> msg = new HashMap<>();
-        msg.put("type", "USER_LEAVE");
-        msg.put("player_user_id", p.getUser_id());
-        multicast(msg, arr);
+        p.setOnline(false);
+        removePlayerConnection(user.getUsername());
     }
 
     public void multicast(HashMap<String, String> msg, ArrayList<String> usernames) {
@@ -103,5 +108,47 @@ public class GameServer extends Thread {
 
     public GameData getGame() {
         return game;
+    }
+
+    public void removePlayerConnection(PlayerConnection pc) {
+        playerConnections.remove(pc);
+        Player p = game.findPlayerByUsername(pc.getUsername());
+        p.setOnline(false);
+        sentOfflineMessage(p);
+    }
+
+    public void sentOfflineMessage(Player p) {
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("type", "PLAYER_OFFLINE");
+        msg.put("player_user_id", p.getUser_id());
+        msg.put("player_username", p.getUser().getUsername());
+        broadcast(msg);
+    }
+
+    public ArrayList<PlayerConnection> getPlayerConnections() {
+        return playerConnections;
+    }
+
+    public boolean containsUsername(String username) {
+        for (PlayerConnection pc : playerConnections) {
+            if (pc.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removePlayerConnection(String user) {
+        PlayerConnection pc = null;
+        for (PlayerConnection playerConnection : playerConnections) {
+            if (playerConnection.getUsername().equals(user)) {
+                pc = playerConnection;
+            }
+        }
+        if (pc != null) {
+            playerConnections.remove(pc);
+        }
+        Player p = game.findPlayerByUsername(user);
+        sentOfflineMessage(p);
     }
 }

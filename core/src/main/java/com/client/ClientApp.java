@@ -20,7 +20,7 @@ public class ClientApp {
 
     public static void init() {
         try {
-            SimpleWebSocketClient wsClient = new SimpleWebSocketClient("ws://localhost:8080/game");
+            SimpleWebSocketClient wsClient = new SimpleWebSocketClient("ws://" + System.getenv("host") + "/game");
             wsClient.connect();
             client = wsClient;
         } catch (Exception e) {

@@ -96,7 +96,7 @@ public class SignUpMenu implements MyScreen {
                 req.addProperty("securityQuestion", securityQuestionField.getSelected());
                 req.addProperty("securityAnswer", securityAnswerField.getText());
 
-                var postResponse = HTTPUtil.post("http://localhost:8080/api/user/register", req);
+                var postResponse = HTTPUtil.post("/api/user/register", req);
 
                 if (postResponse == null) {
                     UIPopupHelper popupHelper = new UIPopupHelper(stage, skin);

@@ -148,9 +148,12 @@ public class AppWebSocket {
             ws.onClose(ctx -> {
                 System.out.println("Disconnected");
                 String username = ctx.queryParam("playerUsername");
-                connectedPlayers.remove(username);
-                // TODO for developing
-                clearGameThreads();
+                PlayerConnection pc =  connectedPlayers.remove(username);
+                GameServer gs = findGameServerByPlayerConnection(username);
+                gs.removePlayerConnection(pc);
+                if(gs.getPlayerConnections().isEmpty()){
+                    gs.endGame();
+                }
             });
 
         });
@@ -173,10 +176,19 @@ public class AppWebSocket {
         return players;
     }
 
-    public void clearGameThreads(){
+    public void clearGameThreads() {
         for (GameServer gs : activeGames) {
             gs.endGame();
         }
         activeGames.clear();
+    }
+
+    public GameServer findGameServerByPlayerConnection(String username) {
+        for (GameServer gs : activeGames) {
+            if (gs.containsUsername(username)) {
+                return gs;
+            }
+        }
+        return null;
     }
 }
