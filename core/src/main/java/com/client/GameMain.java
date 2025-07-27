@@ -21,14 +21,14 @@ public class GameMain extends Game {
 
     @Override
     public void create() {
-        //loadEnv();
+        loadEnv();
         AssetManager.loadAssets();
-        setScreen(new ChatScreen(null, this));
-//        if (ClientApp.loggedInUser != null) {
-//            ClientApp.init();
-//            this.setScreen(new MainMenu(this));
-//        } else
-//            this.setScreen(new LauncherMenu(this));
+        //setScreen(new ChatScreen(null, this));
+        if (ClientApp.loggedInUser != null) {
+            ClientApp.init();
+            this.setScreen(new MainMenu(this));
+        } else
+            this.setScreen(new LauncherMenu(this));
     }
 
     public void loadEnv() {

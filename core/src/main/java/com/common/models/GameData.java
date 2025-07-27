@@ -17,6 +17,7 @@ import com.common.models.mapModels.Farm;
 import com.common.models.mapModels.Map;
 import com.common.models.mapObjects.*;
 import com.common.models.skills.Skill;
+import com.common.utils.ChatMessage;
 import com.server.repositories.GameRepository;
 import com.server.utilities.DateUtility;
 import com.server.utilities.RNG;
@@ -46,6 +47,8 @@ public class GameData {
     private Season season;
     private ArrayList<Message> messages = new ArrayList<>();
     private ArrayList<Gift> gifts = new ArrayList<>();
+
+    public ArrayList<ChatMessage> chatMessages = new ArrayList<>();
 
     public GameData(ArrayList<Player> players, Player currentPlayer) {
         this.players = players;

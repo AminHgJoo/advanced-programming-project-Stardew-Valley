@@ -406,6 +406,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
             uiPopupHelper.showDialog("This greenhouse can be repaired with 500 wood & 1000 gold.", "Message");
         } else if (Keybinds.OPEN_LEADERBOARDS.keycodes.contains(keycode)) {
             gameMain.setScreen(new Leaderboards(gameMain, this));
+        } else if (Keybinds.OPEN_CHAT.keycodes.contains(keycode)) {
+            gameMain.setScreen(new ChatScreen(this, gameMain));
         }
         return false;
     }
