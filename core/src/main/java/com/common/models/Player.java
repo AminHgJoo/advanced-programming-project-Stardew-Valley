@@ -31,6 +31,7 @@ public class Player {
     private static final Logger log = LoggerFactory.getLogger(Player.class);
     /// DO NOT USE THIS FIELD DIRECTLY
     public int money;
+    private boolean isOnline = true;
     private Coordinate coordinate;
     private Backpack inventory;
     private Farm farm;
@@ -674,5 +675,13 @@ public class Player {
 
     public void setInVillage(boolean inVillage) {
         isInVillage = inVillage;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 }

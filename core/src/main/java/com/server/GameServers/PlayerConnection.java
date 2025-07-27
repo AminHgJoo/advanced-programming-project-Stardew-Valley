@@ -22,4 +22,12 @@ public class PlayerConnection {
     public String getUsername() {
         return username;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayerConnection that = (PlayerConnection) o;
+        return username.equals(that.username);
+    }
 }
