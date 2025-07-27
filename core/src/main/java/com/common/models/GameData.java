@@ -45,10 +45,13 @@ public class GameData {
     private Weather weatherToday;
     private Weather weatherTomorrow;
     private Season season;
+    public ArrayList<ChatMessage> chatMessages = new ArrayList<>();
     private ArrayList<Message> messages = new ArrayList<>();
+    {
+        chatMessages.add(new ChatMessage("Kosssher","Kos", null, false));
+    }
     private ArrayList<Gift> gifts = new ArrayList<>();
 
-    public ArrayList<ChatMessage> chatMessages = new ArrayList<>();
 
     public GameData(ArrayList<Player> players, Player currentPlayer) {
         this.players = players;

@@ -14,12 +14,14 @@ import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
 import com.common.utils.ChatMessage;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.server.utilities.Response;
 import org.intellij.lang.annotations.Language;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +39,7 @@ public class ChatScreen implements MyScreen {
     private TextField inputField;
 
     private ArrayList<ChatMessage> chatMessages = new ArrayList<>();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private enum CommandPrefixes {
         EXIT("^/exit$"),
@@ -95,9 +98,9 @@ public class ChatScreen implements MyScreen {
 
         messagesTable = new Table();
         messagesTable.top().left();
+
         for (var chatMessage : chatMessages) {
-            addMessage((chatMessage.sender.equals(ClientApp.loggedInUser.getUsername()) ? "You" : chatMessage.sender)
-                + ": " + chatMessage.message, false);
+            addMessage(chatMessage.message, false, chatMessage.sender, chatMessage.recipient, chatMessage.isPrivate);
         }
 
         scrollPane = new ScrollPane(messagesTable, skin);
@@ -112,8 +115,9 @@ public class ChatScreen implements MyScreen {
 
                 if (CommandPrefixes.isCommand(msg)) {
                     executeCommand(msg);
+                    textField.setText("");
                 } else if (!msg.isEmpty()) {
-                    addMessage("You: " + msg, true);
+                    addMessage(msg, true, ClientApp.loggedInUser.getUsername(), null, false);
                     textField.setText("");
                 }
             }
@@ -128,22 +132,67 @@ public class ChatScreen implements MyScreen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void addMessage(String text, boolean updateMessagesList) {
-        Label msgLabel = new Label(text, skin);
-        msgLabel.setWrap(true);
-        messagesTable.add(msgLabel)
-            .expandX().fillX().pad(2)
-            .row();
+    private String configureHostName(String name) {
+        if (ClientApp.loggedInUser.getUsername().equals(name)) {
+            return "You";
+        }
+        return name;
+    }
 
-        Gdx.app.postRunnable(() -> {
-            scrollPane.layout();
-            scrollPane.setScrollPercentY(1f);
-        });
+    private void addMessage(String msgText, boolean updateMessagesData, String sender, String recipient, boolean isPrivate) {
+        String username = ClientApp.loggedInUser.getUsername();
 
-        if (updateMessagesList) {
-            ChatMessage message = new ChatMessage(text, ClientApp.loggedInUser.getUsername(), null, false);
+        if (!isPrivate) {
+            Label msgLabel = new Label(configureHostName(sender) + ": " + msgText, skin);
+            msgLabel.setWrap(true);
+            messagesTable.add(msgLabel)
+                .expandX().fillX().pad(2)
+                .row();
+
+            Gdx.app.postRunnable(() -> {
+                scrollPane.layout();
+                scrollPane.setScrollPercentY(1f);
+            });
+        } else if (username.equals(sender) || username.equals(recipient)) {
+            Label msgLabel = new Label("whisper from " + configureHostName(sender) + " to "
+                + configureHostName(recipient) + ": " + msgText, skin);
+
+            msgLabel.setWrap(true);
+            messagesTable.add(msgLabel)
+                .expandX().fillX().pad(2)
+                .row();
+
+            Gdx.app.postRunnable(() -> {
+                scrollPane.layout();
+                scrollPane.setScrollPercentY(1f);
+            });
+        }
+
+        if (updateMessagesData) {
+            ChatMessage message = new ChatMessage(msgText, sender, recipient, isPrivate);
             chatMessages.add(message);
-            //TODO: Send message to the server.
+            ClientApp.currentGameData.chatMessages.add(message);
+            sendMessageToServer(message);
+        }
+    }
+
+    private void sendMessageToServer(ChatMessage message) {
+        var req = new JsonObject();
+        req.addProperty("message", message.message);
+        req.addProperty("sender", message.sender);
+        req.addProperty("recipient", message.recipient);
+        req.addProperty("isPrivate", message.isPrivate);
+
+        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id()
+            + "/chatAddMessage", req);
+
+        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+
+        if (res.getStatus() == 200) {
+            System.out.println("Khoda ro shokr");
+        } else {
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, AssetManager.getSkin());
+            uiPopupHelper.showDialog("Error connecting to server", "Error");
         }
     }
 
@@ -152,19 +201,22 @@ public class ChatScreen implements MyScreen {
             dispose();
             gameMain.setScreen(farmMenu);
         } else if (CommandPrefixes.WHISPER.matches(command)) {
+            String sender = ClientApp.loggedInUser.getUsername();
+            String recipient = CommandPrefixes.WHISPER.getGroup(command, "recipient");
+            String message = CommandPrefixes.WHISPER.getGroup(command, "message");
 
+            addMessage(message, true, sender, recipient, true);
         }
     }
 
     private void fetchMessages() {
         var req = new JsonObject();
-        var postRes = HTTPUtil.post("http://localhost:8080/api/game/" + ClientApp.currentGameData.get_id()
+        var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id()
             + "/chatFetchMessages", req);
 
         Response res = HTTPUtil.deserializeHttpResponse(postRes);
 
         if (res.getStatus() == 200) {
-            Gson gson = new Gson();
             String msgArray = res.getBody().toString();
             ArrayList mediator = gson.fromJson(msgArray, ArrayList.class);
 
@@ -173,6 +225,8 @@ public class ChatScreen implements MyScreen {
                 String jsonData = map.toString();
                 chatMessages.add(gson.fromJson(jsonData, ChatMessage.class));
             }
+
+            ClientApp.currentGameData.chatMessages = chatMessages;
         } else {
             System.out.println("Error fetching chat messages");
         }
@@ -180,7 +234,15 @@ public class ChatScreen implements MyScreen {
 
     @Override
     public void socketMessage(String message) {
+        HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
+        String type = res.get("type");
 
+        if (type.equals("MESSAGE_ADDED")) {
+            String messageJson = res.get("message");
+            System.out.println(messageJson);
+            ChatMessage chatMsg = gson.fromJson(messageJson, ChatMessage.class);
+            addMessage(chatMsg.message, true, chatMsg.sender, chatMsg.recipient, chatMsg.isPrivate);
+        }
     }
 
     @Override

@@ -4,10 +4,8 @@ import com.common.GameGSON;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.User;
-import com.common.models.networking.Lobby;
 import com.google.gson.Gson;
 import com.server.controllers.InGameControllers.GameServerController;
-import com.server.repositories.LobbyRepository;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 
@@ -65,6 +63,12 @@ public class GameServer extends Thread {
     }
 
     public void multicast(HashMap<String, String> msg, ArrayList<String> usernames) {
+        for (String u : usernames) {
+            narrowCast(u, msg);
+        }
+    }
+
+    public void multicast(HashMap<String, String> msg, String... usernames) {
         for (String u : usernames) {
             narrowCast(u, msg);
         }
