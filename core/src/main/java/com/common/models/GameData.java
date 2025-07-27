@@ -47,9 +47,6 @@ public class GameData {
     private Season season;
     public ArrayList<ChatMessage> chatMessages = new ArrayList<>();
     private ArrayList<Message> messages = new ArrayList<>();
-    {
-        chatMessages.add(new ChatMessage("Kosssher","Kos", null, false));
-    }
     private ArrayList<Gift> gifts = new ArrayList<>();
 
 
