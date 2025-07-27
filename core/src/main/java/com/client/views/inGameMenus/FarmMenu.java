@@ -32,7 +32,6 @@ import com.client.utils.*;
 import com.common.models.Backpack;
 import com.common.models.GameData;
 import com.common.models.IO.Request;
-import com.common.models.IO.Response;
 import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.enums.worldEnums.Weather;
@@ -45,10 +44,12 @@ import com.common.models.mapObjects.Tree;
 import com.common.utils.ChatMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.server.controllers_old.gameMenuControllers.ArtisanController;
+import com.server.utilities.Response;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -555,19 +556,31 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     cheatBtn.addListener(new ChangeListener() {
                         @Override
                         public void changed(ChangeEvent event, Actor actor) {
-                            if (!artisanBlock.canBeCollected)
-                                artisanBlock.canBeCollected = true;
+                            if (!artisanBlock.canBeCollected) {
+                                JsonObject req = new JsonObject();
+                                req.addProperty("artisanName", artisanBlock.getArtisanType().name);
+                                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/artisanCheat", req);
+                                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                                if (res.getStatus() == 200) {
+                                    String player = res.getBody().toString();
+                                    ((FarmMenu) farmScreen).getPlayerController().updatePlayerObject(player);
+                                    Gdx.input.setInputProcessor(FarmMenu.this);
+                                    popup.remove();
+                                }
+                            }
                         }
                     });
                     collectBtn.addListener(new ChangeListener() {
                         @Override
                         public void changed(ChangeEvent event, Actor actor) {
                             if (artisanBlock.canBeCollected) {
-                                //TODO server
-                                Request request = new Request("Collect");
-                                request.body.put("artisanName", artisanBlock.getArtisanType().name);
-                                Response response = ArtisanController.handleArtisanGet(request);
-                                if (response.isSuccess()) {
+                                JsonObject req = new JsonObject();
+                                req.addProperty("artisanName", artisanBlock.getArtisanType().name);
+                                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/artisanHandleArtisanGet", req);
+                                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                                if (res.getStatus() == 200) {
+                                    String player = res.getBody().toString();
+                                    ((FarmMenu) farmScreen).getPlayerController().updatePlayerObject(player);
                                     Gdx.input.setInputProcessor(FarmMenu.this);
                                     popup.remove();
                                 }
@@ -577,12 +590,16 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     cancelBtn.addListener(new ChangeListener() {
                         @Override
                         public void changed(ChangeEvent event, Actor actor) {
-                            //TODO server
-                            artisanBlock.beingUsed = false;
-                            artisanBlock.canBeCollected = false;
-                            artisanBlock.productSlot = null;
-                            Gdx.input.setInputProcessor(FarmMenu.this);
-                            popup.remove();
+                            JsonObject req = new JsonObject();
+                            req.addProperty("artisanName", artisanBlock.getArtisanType().name);
+                            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/artisanCancel", req);
+                            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                            if (res.getStatus() == 200) {
+                                String player = res.getBody().toString();
+                                ((FarmMenu) farmScreen).getPlayerController().updatePlayerObject(player);
+                                Gdx.input.setInputProcessor(FarmMenu.this);
+                                popup.remove();
+                            }
                         }
                     });
                     exitBtn.addListener(new ChangeListener() {

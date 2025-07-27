@@ -66,7 +66,7 @@ public class ArtisanController extends Controller {
 
     }
 
-    private static @Nullable Response furnace(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
+    public static @Nullable Response furnace(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
         if (item1Name.equals(ForagingMineralsType.COPPER_ORE.name)) {
             return artisanMiscHandleCoal(player, gameData, backpack, item1Name, block, 0, 4, MiscType.COPPER_BAR, 5, 1, 10 * ForagingMineralsType.getPriceByName(item1Name));
         } else if (item1Name.equals(ForagingMineralsType.GOLD_ORE.name)) {
@@ -92,7 +92,7 @@ public class ArtisanController extends Controller {
         return false;
     }
 
-    private static @Nullable Response fishSmoker(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
+    public static @Nullable Response fishSmoker(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
         if (FishType.isFish(item1Name)) {
             // fish energy ?
             return artisanFoodHandleCoal(player, gameData, backpack, item1Name, block, 20, 1, FoodTypes.SMOKED_FISH, 1, 1, 2 * Objects.requireNonNull(FishType.getFishType(item1Name)).price);
@@ -108,7 +108,7 @@ public class ArtisanController extends Controller {
         return false;
     }
 
-    private static @NotNull Response preservesJar(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
+    public static @NotNull Response preservesJar(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
         if (isVegetable(item1Name)) {
             return artisanFoodHandle(player, gameData, backpack, item1Name, block, 7 * FoodTypes.getEnergy(item1Name) / 4, 6, FoodTypes.PICKLES, 1, 1, 2 * FoodTypes.getPrice(item1Name) + 50);
         } else if (isFruit(item1Name)) {
@@ -126,12 +126,12 @@ public class ArtisanController extends Controller {
         return false;
     }
 
-    private static @NotNull Response wrongItem(GameData gameData) {
+    public static @NotNull Response wrongItem(GameData gameData) {
         GameRepository.saveGame(gameData);
         return new Response(false, "wrong item selected");
     }
 
-    private static @NotNull Response oilMaker(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
+    public static @NotNull Response oilMaker(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
         if (item1Name.equals("Truffle")) {
             return artisanFoodHandle(player, gameData, backpack, item1Name, block, 38, 6, FoodTypes.TRUFFLE_OIL, 1, 1, 1065);
         } else if (item1Name.equals("Corn")) {
@@ -158,7 +158,7 @@ public class ArtisanController extends Controller {
         return false;
     }
 
-    private static @NotNull Response mayonnaiseMachine(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
+    public static @NotNull Response mayonnaiseMachine(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
         if (item1Name.equals("Egg")) {
             return artisanFoodHandle(player, gameData, backpack, item1Name, block, 50, 3, FoodTypes.MAYONNAISE, 1, 1, 190);
         } else if (item1Name.equals("Big Egg")) {
@@ -188,7 +188,7 @@ public class ArtisanController extends Controller {
         return false;
     }
 
-    private static Response loom(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
+    public static Response loom(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
         if (item1Name.equals("Wool")) {
             return artisanMiscHandle(player, gameData, backpack, item1Name, block, 0, 4, MiscType.CLOTH, 1, 1, 470);
         } else {
@@ -204,7 +204,7 @@ public class ArtisanController extends Controller {
         return false;
     }
 
-    private static @NotNull Response artisanMiscHandle(Player player, GameData gameData, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, MiscType miscType, int itemCount, int productCount, int price) {
+    public static @NotNull Response artisanMiscHandle(Player player, GameData gameData, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, MiscType miscType, int itemCount, int productCount, int price) {
 
         Slot slot = backpack.getSlotByItemName(item1Name);
         if (slot == null || slot.getCount() < itemCount) {
@@ -230,7 +230,7 @@ public class ArtisanController extends Controller {
         return new Response(true, miscType.name + " will be ready to collect in " + hours + " hours");
     }
 
-    private static @NotNull Response charCoalKiln(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
+    public static @NotNull Response charCoalKiln(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
         if (item1Name.equals("Wood")) {
             return artisanForagingMineralHandle(player, gameData, backpack, item1Name, block, 0, 1, ForagingMineralsType.COAL, 10, 1, 50);
         } else {
@@ -246,7 +246,7 @@ public class ArtisanController extends Controller {
         return false;
     }
 
-    private static @NotNull Response Dehydrator(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
+    public static @NotNull Response Dehydrator(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
         if (isMushroom(item1Name)) {
             return artisanFoodHandle(player, gameData, backpack, item1Name, block, 50, Duration.between(gameData.getDate(), gameData.getDate().plusDays(1).with(LocalTime.of(0, 0))).toHoursPart(), FoodTypes.DRIED_MUSHROOMS, 5, 1, FoodTypes.getPrice(item1Name) * 75 / 100 + 25);
         } else if (isFruit(item1Name) && !item1Name.equals("Grapes")) {
@@ -272,14 +272,14 @@ public class ArtisanController extends Controller {
         return false;
     }
 
-    private static boolean isMushroom(String itemName) {
+    public static boolean isMushroom(String itemName) {
         return itemName.equals(FoodTypes.CHANTERELLE.name) || itemName.equals(FoodTypes.COMMON_MUSHROOM.name) ||
             itemName.equals(FoodTypes.MOREL.name) || itemName.equals(FoodTypes.PURPLE_MUSHROOM.name) ||
             itemName.equals(FoodTypes.RED_MUSHROOM.name);
     }
 
 
-    private static @NotNull Response keg(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
+    public static @NotNull Response keg(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
         if (item1Name.equals("Wheat"))
             return artisanFoodHandle(player, gameData, backpack, item1Name, block, 50, 24, FoodTypes.BEER, 1, 1, FoodTypes.BEER.value);
         else if (item1Name.equals("Rice"))
@@ -318,7 +318,7 @@ public class ArtisanController extends Controller {
         return false;
     }
 
-    private static boolean isFruit(String itemName) {
+    public static boolean isFruit(String itemName) {
         return itemName.equals(FoodTypes.ANCIENT_FRUIT.name) || itemName.equals(FoodTypes.APPLE.name) ||
             itemName.equals(FoodTypes.APRICOT.name) || itemName.equals(FoodTypes.BANANA.name) ||
             itemName.equals(FoodTypes.BLACKBERRY.name) || itemName.equals(FoodTypes.CHERRY.name) ||
@@ -334,7 +334,7 @@ public class ArtisanController extends Controller {
             ;
     }
 
-    private static boolean isVegetable(String itemName) {
+    public static boolean isVegetable(String itemName) {
         return itemName.equals(FoodTypes.AMARANTH.name) || itemName.equals(FoodTypes.ARTICHOKE.name) ||
             itemName.equals(FoodTypes.BEET.name) || itemName.equals(FoodTypes.BOK_CHOY.name) ||
             itemName.equals(FoodTypes.BROCCOLI.name) || itemName.equals(FoodTypes.CARROT.name) ||
@@ -348,7 +348,7 @@ public class ArtisanController extends Controller {
             itemName.equals(FoodTypes.WHEAT.name) || itemName.equals(FoodTypes.YAM.name);
     }
 
-    private static @NotNull Response artisanForagingMineralHandle(Player player, GameData gameData, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, ForagingMineralsType foragingMineralsType, int itemCount, int productCount, int price) {
+    public static @NotNull Response artisanForagingMineralHandle(Player player, GameData gameData, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, ForagingMineralsType foragingMineralsType, int itemCount, int productCount, int price) {
 
         Slot slot = backpack.getSlotByItemName(item1Name);
         if (slot == null || slot.getCount() < itemCount) {
@@ -373,7 +373,7 @@ public class ArtisanController extends Controller {
         return new Response(true, foragingMineralsType.name + " will be ready to collect in " + hours + " hours");
     }
 
-    private static @NotNull Response artisanFoodHandle(Player player, GameData gameData, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, FoodTypes foodTypes, int itemCount, int productCount, int price) {
+    public static @NotNull Response artisanFoodHandle(Player player, GameData gameData, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, FoodTypes foodTypes, int itemCount, int productCount, int price) {
 
         Slot slot = backpack.getSlotByItemName(item1Name);
         if (slot == null || slot.getCount() < itemCount) {
@@ -398,7 +398,7 @@ public class ArtisanController extends Controller {
         return new Response(true, foodTypes.name + " will be ready to collect in " + hours + " hours");
     }
 
-    private static @NotNull Response artisanFoodHandleCoal(Player player, GameData gameData, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, FoodTypes foodTypes, int itemCount, int productCount, int price) {
+    public static @NotNull Response artisanFoodHandleCoal(Player player, GameData gameData, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, FoodTypes foodTypes, int itemCount, int productCount, int price) {
 
         Slot slot = backpack.getSlotByItemName(item1Name);
         if (slot == null || slot.getCount() < itemCount) {
@@ -433,7 +433,7 @@ public class ArtisanController extends Controller {
         return new Response(true, foodTypes.name + " will be ready to collect in " + hours + " hours");
     }
 
-    private static @NotNull Response artisanMiscHandleCoal(Player player, GameData gameData, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, MiscType miscType, int itemCount, int productCount, int price) {
+    public static @NotNull Response artisanMiscHandleCoal(Player player, GameData gameData, Backpack backpack, String item1Name, ArtisanBlock block, int energy, int hours, MiscType miscType, int itemCount, int productCount, int price) {
 
         Slot slot = backpack.getSlotByItemName(item1Name);
         if (slot == null || slot.getCount() < itemCount) {
@@ -468,7 +468,7 @@ public class ArtisanController extends Controller {
         return new Response(true, miscType.name + " will be ready to collect in " + hours + " hours");
     }
 
-    private static @NotNull Response cheesePress(String item1Name, Player player, GameData gameData, ArtisanBlock block, Backpack backpack) {
+    public static @NotNull Response cheesePress(String item1Name, Player player, GameData gameData, ArtisanBlock block, Backpack backpack) {
         if (item1Name.equals("Milk") || item1Name.equals("Big Milk"))
             return cheeseHandle(player, gameData, item1Name, block, backpack);
         else if (item1Name.equals("Goat Milk") || item1Name.equals("Big Goat Milk"))
@@ -487,7 +487,7 @@ public class ArtisanController extends Controller {
         return false;
     }
 
-    private static @NotNull Response goatCheeseHandle(Player player, GameData gameData, String item1Name, Backpack backpack, ArtisanBlock block) {
+    public static @NotNull Response goatCheeseHandle(Player player, GameData gameData, String item1Name, Backpack backpack, ArtisanBlock block) {
         if (item1Name.equals("Goat Milk")) {
             Slot slot = backpack.getSlotByItemName(item1Name);
             if (slot == null) {
@@ -538,7 +538,7 @@ public class ArtisanController extends Controller {
         }
     }
 
-    private static @NotNull Response honeyHandle(Player player, GameData gameData, ArtisanBlock block) {
+    public static @NotNull Response honeyHandle(Player player, GameData gameData, ArtisanBlock block) {
         block.beingUsed = true;
         block.prepTime = gameData.getDate().plusDays(4);
 
@@ -554,7 +554,7 @@ public class ArtisanController extends Controller {
         return new Response(true, "honey will be ready to collect in 4 days");
     }
 
-    private static @NotNull Response cheeseHandle(Player player, GameData gameData, String item1Name, ArtisanBlock block, Backpack backpack) {
+    public static @NotNull Response cheeseHandle(Player player, GameData gameData, String item1Name, ArtisanBlock block, Backpack backpack) {
         if (item1Name.equals("Milk")) {
             Slot slot = backpack.getSlotByItemName(item1Name);
             if (slot == null) {

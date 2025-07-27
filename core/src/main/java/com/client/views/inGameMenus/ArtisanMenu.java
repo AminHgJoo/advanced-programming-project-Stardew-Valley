@@ -17,11 +17,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.client.ClientApp;
 import com.client.GameMain;
+import com.client.controllers.PlayerController;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
 import com.common.models.Backpack;
+import com.common.models.Player;
 import com.common.models.Slot;
+import com.google.gson.JsonObject;
 import com.server.controllers_old.gameMenuControllers.ArtisanController;
+import com.server.utilities.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +132,13 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
         } else if (artisanName.equals("Fish Smoker")) {
             for (Slot slot : backpack.getSlots()) {
                 if (ArtisanController.isFish(slot.getItem().getName())) {
+                    targetSlots.add(slot);
+                }
+            }
+        }
+        else if(artisanName.equals("Furnace")) {
+            for (Slot slot : backpack.getSlots()) {
+                if (ArtisanController.isFurnace(slot.getItem().getName())) {
                     targetSlots.add(slot);
                 }
             }
@@ -245,6 +257,15 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
 //            Request request = new Request("asghar");
 //            request.body.put("itemName", targetSlots.get(selectedSave).getItem().getName());
 //            request.body.put("artisanName", artisanName);
+           JsonObject req = new JsonObject();
+           req.addProperty("artisanName", artisanName);
+           req.addProperty("item1Name", targetSlots.get(selectedSave).getItem().getName());
+           var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/artisanHandleArtisanUse", req);
+                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                if (res.getStatus() == 200) {
+                    String player = res.getBody().toString();
+                    ((FarmMenu) farmScreen).getPlayerController().updatePlayerObject(player);
+                }
             }
         });
 
@@ -253,6 +274,8 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
         multiplexer.addProcessor(this);
         Gdx.input.setInputProcessor(multiplexer);
     }
+
+
 
 
     @Override
