@@ -117,7 +117,11 @@ public class ChatScreen implements MyScreen {
                     executeCommand(msg);
                     textField.setText("");
                 } else if (!msg.isEmpty()) {
-                    addMessage(msg, true, ClientApp.loggedInUser.getUsername(), null, false);
+                    if (msg.startsWith("/")) {
+                        parseCheatCode(msg);
+                    } else {
+                        addMessage(msg, true, ClientApp.loggedInUser.getUsername(), null, false);
+                    }
                     textField.setText("");
                 }
             }
@@ -206,6 +210,25 @@ public class ChatScreen implements MyScreen {
             String message = CommandPrefixes.WHISPER.getGroup(command, "message");
 
             addMessage(message, true, sender, recipient, true);
+        }
+    }
+
+    private void parseCheatCode(String cheatCode) {
+        var req = new JsonObject();
+        req.addProperty("command", cheatCode);
+
+        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id()
+            + "/chatParseCheat", req);
+
+        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+
+        //TODO: Update gameData after cheat execution via broadcast.
+
+        if (res.getStatus() == 200) {
+            System.out.println("Khoda ro shokr. Cheat Kardim Raft!");
+        } else {
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, AssetManager.getSkin());
+            uiPopupHelper.showDialog("Error connecting to server", "Error");
         }
     }
 
