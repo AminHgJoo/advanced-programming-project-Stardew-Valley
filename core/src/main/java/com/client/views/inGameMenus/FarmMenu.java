@@ -403,6 +403,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Keybinds.INSPECT_GREENHOUSE.keycodes.contains(keycode)) {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, AssetManager.getSkin());
             uiPopupHelper.showDialog("This greenhouse can be repaired with 500 wood & 1000 gold.", "Message");
+        } else if (Keybinds.OPEN_LEADERBOARDS.keycodes.contains(keycode)) {
+            gameMain.setScreen(new Leaderboards(gameMain, this));
         }
         return false;
     }

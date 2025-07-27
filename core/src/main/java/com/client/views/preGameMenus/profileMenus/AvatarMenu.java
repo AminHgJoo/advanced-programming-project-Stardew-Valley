@@ -42,7 +42,6 @@ public class AvatarMenu implements MyScreen {
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
 
         skin = AssetManager.getSkin();
         backgroundTexture = AssetManager.getImage("profileBackground");
@@ -85,7 +84,6 @@ public class AvatarMenu implements MyScreen {
 
         backButton = new TextButton("back", skin);
 
-
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -110,6 +108,8 @@ public class AvatarMenu implements MyScreen {
         mainTable.add(buttonTable);
 
         stage.addActor(mainTable);
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     private void updateSelection() {
@@ -143,6 +143,7 @@ public class AvatarMenu implements MyScreen {
 
     @Override
     public void dispose() {
+        stage.dispose();
     }
 
     @Override
@@ -162,7 +163,7 @@ public class AvatarMenu implements MyScreen {
 
     @Override
     public void hide() {
-        Gdx.input.setInputProcessor(null);
+
     }
 
     @Override

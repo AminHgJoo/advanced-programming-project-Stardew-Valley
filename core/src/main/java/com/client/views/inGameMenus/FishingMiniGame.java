@@ -54,7 +54,6 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
     private boolean isCatchPerfect = true;
     private ProgressBar catchingProgressBar;
     private float BOBBER_BASE_X;
-    //TODO: TEST ONLY.
     private FishType caughtFishType = FishType.GLACIER_FISH;
     private int caughtFishQuantity = 2;
     private Quality caughtFishQuality = Quality.COPPER;

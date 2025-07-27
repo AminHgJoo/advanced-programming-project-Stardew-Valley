@@ -24,7 +24,8 @@ public enum Keybinds {
     OPEN_RADIO(Input.Keys.R),
     SPAWN_CROW(Input.Keys.Z),
     OPEN_FRIDGE(Input.Keys.Q),
-    INSPECT_GREENHOUSE(Input.Keys.I);
+    INSPECT_GREENHOUSE(Input.Keys.I),
+    OPEN_LEADERBOARDS(Input.Keys.L);
 
     public final ArrayList<Integer> keycodes;
 

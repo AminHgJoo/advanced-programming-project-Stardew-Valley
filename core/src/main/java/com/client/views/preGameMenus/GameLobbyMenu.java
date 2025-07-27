@@ -33,7 +33,6 @@ public class GameLobbyMenu implements MyScreen {
     private final GameMain gameMain;
     private final Skin skin;
     private final Texture background;
-    //TODO: Add server notifs here!!!
     private final ArrayList<String> messagesFromServer = new ArrayList<>();
     private Stage stage;
     private Skin skin2;
@@ -42,7 +41,6 @@ public class GameLobbyMenu implements MyScreen {
     private Lobby currLobby = null;
     private SimpleWebSocketClient client = ClientApp.client;
     private boolean GAME_START = false;
-    //TODO: get this from the server.
     private ArrayList<Lobby> visibleLobbies = new ArrayList<>();
 
     public GameLobbyMenu(GameMain gameMain, Lobby currLobby) {
