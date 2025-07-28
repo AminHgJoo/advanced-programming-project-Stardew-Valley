@@ -508,11 +508,10 @@ public class GameLobbyMenu implements MyScreen {
             }
         } else if (type.equals("LOBBY_JOINED")) {
             System.out.println("Joinedddd");
-            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-            uiPopupHelper.showDialog(res.get("message"), "Success");
+            messagesFromServer.add(res.get("message"));
         } else if (type.equals("FARM_CHOSEN")) {
-            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-            uiPopupHelper.showDialog(res.get("message"), "Success");
+            System.out.println("Farm chosen");
+            messagesFromServer.add(res.get("message"));
         } else if (type.equals("GAME_START")) {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog(res.get("message"), "Success");
