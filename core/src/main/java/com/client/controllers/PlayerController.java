@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.client.ClientApp;
 import com.client.services.PlayerService;
 import com.client.utils.*;
@@ -44,8 +45,10 @@ public class PlayerController {
     private PlayerService playerService = new PlayerService(player, game);
     private float width;
     private float height;
+    private FarmMenu farmMenu;
 
-    public PlayerController(Vector2 x, Vector2 y) {
+    public PlayerController(Vector2 x, Vector2 y, FarmMenu farmMenu) {
+        this.farmMenu = farmMenu;
         facingDirection = FacingDirection.DOWN;
         currState = PlayerState.IDLE;
         playerAnimationController = new PlayerAnimationController(currState, facingDirection);
@@ -325,6 +328,25 @@ public class PlayerController {
             playerPosition.x = player.getCoordinate().getX();
             playerPosition.y = player.getCoordinate().getY();
         }
+        if (playerPosition.x == 2366.5f && playerPosition.y == 67f) {
+            System.out.println("hello");
+            farmMenu.showGoToVillagePopUp();
+        }
+    }
+
+    public void goToVillage(){
+            player.setInVillage(true);
+            networkThreadPool.execute(() -> {
+                var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/movementGoToVillage", null);
+                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                Gdx.app.postRunnable(()->{
+                    if (res.getStatus() == 200) {
+
+                    }else {
+
+                    }
+                });
+            });
     }
 
     public Player getPlayer() {
@@ -407,7 +429,7 @@ public class PlayerController {
         req.addProperty("backpack", json);
         var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryChangeInventory", req);
         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-        if(res.getStatus() == 200) {
+        if (res.getStatus() == 200) {
             String player = res.getBody().toString();
             updatePlayerObject(player);
         }

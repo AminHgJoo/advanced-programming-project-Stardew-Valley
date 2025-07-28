@@ -141,7 +141,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
         popupStage = new Stage(new ScreenViewport());
         this.grassTexture = AssetManager.getImage("grassfall");
-        playerController = new PlayerController(playerPosition, playerVelocity);
+        playerController = new PlayerController(playerPosition, playerVelocity, this);
         this.farm = playerController.getPlayer().getFarm();
         this.inventory = AssetManager.getImage("aks");
         //TODO tuf zadam
@@ -169,6 +169,25 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     public PlayerController getPlayerController() {
         return playerController;
+    }
+
+    public void showGoToVillagePopUp() {
+        System.out.println("FARM MENU");
+        ConfirmAlert alert = new ConfirmAlert("question", "Do You Wanna go to village ?", AssetManager.getSkin()) {
+            @Override
+            protected void result(Object object) {
+                boolean result = (boolean) object;
+                if (result) {
+                    playerController.goToVillage();
+                } else {
+                }
+                Gdx.input.setInputProcessor(stage);
+
+                remove();
+            }
+        };
+        alert.show(popupStage);
+        Gdx.input.setInputProcessor(popupStage);
     }
 
     private void initializeStage(float delta) {
@@ -706,7 +725,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
             if (chatMsg.message.startsWith(prefix)) {
                 showPopUp(chatMsg.sender + ": " + chatMsg.message.substring(prefix.length()), "Chat Message");
             }
-        } else if(type.equals("EMOJI_SENT")){
+        } else if (type.equals("EMOJI_SENT")) {
             // TODO pouya do something
         }
     }
@@ -762,25 +781,29 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        this.farm = playerController.getPlayer().getFarm();
-        batch.setShader(dayNightShader);
-        clearAndResetScreen();
-        updateSeasonGrassTexture();
+        if (playerController.getPlayer().isInVillage()) {
+            gameMain.setScreen(new VillageMenu(this , playerController , gameMain));
+        } else {
+            this.farm = playerController.getPlayer().getFarm();
+            batch.setShader(dayNightShader);
+            clearAndResetScreen();
+            updateSeasonGrassTexture();
 
-        updateTime(delta);
-        playerController.updatePlayerPos(delta);
-        playerController.update(delta);
+            updateTime(delta);
+            playerController.updatePlayerPos(delta);
+            playerController.update(delta);
 
-        handleEvents();
+            handleEvents();
 
-        renderMap(dayNightShader, nightFactor, delta);
+            renderMap(dayNightShader, nightFactor, delta);
 
-        handleLightning(camera, delta);
-        batch.setShader(null);
+            handleLightning(camera, delta);
+            batch.setShader(null);
 
-        handleWeatherFX(delta);
+            handleWeatherFX(delta);
 
-        handleUI(delta);
+            handleUI(delta);
+        }
     }
 
     private void handleUI(float delta) {
