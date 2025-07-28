@@ -17,13 +17,13 @@ import com.client.utils.MyScreen;
 public class MapMenu implements MyScreen, InputProcessor {
     private final Skin skin;
     private GameMain gameMain;
-    private MyScreen farmScreen;
+    private FarmMenu farmScreen;
     private SpriteBatch batch;
     private Texture backgroundTexture;
     private BitmapFont titleFont;
     private GlyphLayout layout;
 
-    public MapMenu(GameMain gameMain, MyScreen farmScreen) {
+    public MapMenu(GameMain gameMain, FarmMenu farmScreen) {
         this.gameMain = gameMain;
         this.farmScreen = farmScreen;
         this.batch = new SpriteBatch();

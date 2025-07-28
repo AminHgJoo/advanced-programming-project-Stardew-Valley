@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class SkillMenu implements MyScreen, InputProcessor {
     private final Skin skin;
     private GameMain gameMain;
-    private MyScreen farmScreen;
+    private FarmMenu farmScreen;
     private SpriteBatch batch;
     private Texture backgroundTexture;
     private Stage stage;
@@ -42,7 +42,7 @@ public class SkillMenu implements MyScreen, InputProcessor {
     private int fishingLevel;
     private Label tooltipLabel;
 
-    public SkillMenu(GameMain gameMain, MyScreen farmScreen) {
+    public SkillMenu(GameMain gameMain, FarmMenu farmScreen) {
         this.gameMain = gameMain;
         this.farmScreen = farmScreen;
         this.batch = new SpriteBatch();

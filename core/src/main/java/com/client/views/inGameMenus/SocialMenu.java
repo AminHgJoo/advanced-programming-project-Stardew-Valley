@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class SocialMenu implements MyScreen, InputProcessor {
     private final Skin skin;
     private GameMain gameMain;
-    private MyScreen farmScreen;
+    private FarmMenu farmScreen;
     private SpriteBatch batch;
     private Texture backgroundTexture;
     private Stage stage;
@@ -37,7 +37,7 @@ public class SocialMenu implements MyScreen, InputProcessor {
     private ArrayList<Friendship> friendships;
     private ArrayList<NPCFriendship> npcs;
 
-    public SocialMenu(GameMain gameMain, MyScreen farmScreen) {
+    public SocialMenu(GameMain gameMain, FarmMenu farmScreen) {
         this.gameMain = gameMain;
         this.farmScreen = farmScreen;
         this.batch = new SpriteBatch();

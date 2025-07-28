@@ -50,13 +50,13 @@ public class InventoryController extends Controller {
             GameData game = gs.getGame();
 
             Player player = game.findPlayerByUserId(id);
-            if(toolName == null){
+            if (toolName == null) {
                 player.setEquippedItem(null);
                 String playerJson = GameGSON.gson.toJson(player);
                 ctx.json(Response.OK.setMessage("Set Null").setBody(playerJson));
-                HashMap<String , String> msg = new HashMap<>();
-                msg.put("type" , "PLAYER_UPDATED");
-                msg.put("player" , playerJson);
+                HashMap<String, String> msg = new HashMap<>();
+                msg.put("type", "PLAYER_UPDATED");
+                msg.put("player", playerJson);
                 gs.broadcast(msg);
                 return;
             }
@@ -82,6 +82,28 @@ public class InventoryController extends Controller {
             msg.put("type", "PLAYER_UPDATED");
             msg.put("player", playerJson);
 
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void changeInventory(Context ctx, GameServer gs) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String id = ctx.attribute("id");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+            String backpackJson = (String) body.get("backpack");
+
+            Backpack backpack = GameGSON.gson.fromJson(backpackJson, Backpack.class);
+            player.setInventory(backpack);
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setMessage("Changed Inventory").setBody(playerJson));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player", playerJson);
             gs.broadcast(msg);
         } catch (Exception e) {
             e.printStackTrace();

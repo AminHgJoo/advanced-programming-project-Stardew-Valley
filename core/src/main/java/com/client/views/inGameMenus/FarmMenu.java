@@ -329,6 +329,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 selectedIndex = -1;
                 selected = false;
                 selectedSave = -1;
+                playerController.updateInventory(backpack);
+
             }
         }
         List<Slot> slots = backpack.getSlots();

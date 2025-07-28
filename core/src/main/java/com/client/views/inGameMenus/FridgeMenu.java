@@ -34,7 +34,7 @@ public class FridgeMenu implements MyScreen, InputProcessor {
     private Texture backgroundTexture;
     private Texture inventoryTexture;
     private int scrollIndex = 0;
-    private MyScreen farmScreen;
+    private FarmMenu farmScreen;
     private int GRID_SIZE = 9;
     private int GRID_PADDING = 8;
     private int selectedIndex = -1;
@@ -45,7 +45,7 @@ public class FridgeMenu implements MyScreen, InputProcessor {
     private GlyphLayout layout;
 
 
-    public FridgeMenu(GameMain gameMain, MyScreen farmScreen) {
+    public FridgeMenu(GameMain gameMain, FarmMenu farmScreen) {
         this.gameMain = gameMain;
         this.batch = new SpriteBatch();
         backgroundTexture = AssetManager.getImage("profileBackground");

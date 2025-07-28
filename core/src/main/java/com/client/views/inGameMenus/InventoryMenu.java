@@ -33,7 +33,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private Texture backgroundTexture;
     private Texture inventoryTexture;
     private int scrollIndex = 0;
-    private MyScreen farmScreen;
+    private FarmMenu farmScreen;
     private int GRID_SIZE = 9;
     private int GRID_PADDING = 8;
     private int selectedIndex = -1;
@@ -44,7 +44,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private GlyphLayout layout;
 
 
-    public InventoryMenu(GameMain gameMain, MyScreen farmScreen) {
+    public InventoryMenu(GameMain gameMain, FarmMenu farmScreen) {
         this.gameMain = gameMain;
         this.batch = new SpriteBatch();
         backgroundTexture = AssetManager.getImage("profileBackground");
@@ -123,6 +123,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
                     selectedIndex = -1;
                     selectedSave = -1;
                     selected = false;
+                    farmScreen.getPlayerController().updateInventory(backpack);
                 }
                 return true;
             }
@@ -215,6 +216,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
                 selectedIndex = -1;
                 selected = false;
                 selectedSave = -1;
+                farmScreen.getPlayerController().updateInventory(backpack);
             }
         }
         List<Slot> slots = backpack.getSlots();

@@ -17,12 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.client.ClientApp;
 import com.client.GameMain;
-import com.client.controllers.PlayerController;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
 import com.common.models.Backpack;
-import com.common.models.Player;
 import com.common.models.Slot;
 import com.google.gson.JsonObject;
 import com.server.controllers_old.gameMenuControllers.ArtisanController;
@@ -40,7 +38,7 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
     private Texture backgroundTexture;
     private Texture inventoryTexture;
     private int scrollIndex = 0;
-    private MyScreen farmScreen;
+    private FarmMenu farmScreen;
     private int GRID_SIZE = 9;
     private int GRID_PADDING = 8;
     private int selectedIndex = -1;
@@ -59,7 +57,7 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
     private TextButton startButton;
 
 
-    public ArtisanMenu(GameMain gameMain, MyScreen farmScreen, String artisanName) {
+    public ArtisanMenu(GameMain gameMain, FarmMenu farmScreen, String artisanName) {
         this.gameMain = gameMain;
         this.batch = new SpriteBatch();
         backgroundTexture = AssetManager.getImage("profileBackground");

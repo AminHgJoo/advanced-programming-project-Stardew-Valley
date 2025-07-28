@@ -11,6 +11,7 @@ import com.client.services.PlayerService;
 import com.client.utils.*;
 import com.client.views.inGameMenus.FarmMenu;
 import com.common.GameGSON;
+import com.common.models.Backpack;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.Slot;
@@ -397,6 +398,18 @@ public class PlayerController {
             updatePlayerObject(player);
         } else {
 
+        }
+    }
+
+    public void updateInventory(Backpack backpack) {
+        String json = GameGSON.gson.toJson(backpack);
+        JsonObject req = new JsonObject();
+        req.addProperty("backpack", json);
+        var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryChangeInventory", req);
+        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+        if(res.getStatus() == 200) {
+            String player = res.getBody().toString();
+            updatePlayerObject(player);
         }
     }
 }
