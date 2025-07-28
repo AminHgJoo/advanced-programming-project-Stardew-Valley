@@ -63,14 +63,17 @@ public class GameController {
 
                 game.getMap().getFarms().add(p.getFarm());
             }
-            GameRepository.saveGame(game);
             boolean check = AppWebSocket.startGame(game, lobby);
             if (check) {
+                GameRepository.saveGame(game);
                 for (User u : users) {
                     u.setCurrentGameId(game.get_id().toString());
+                    u.setCurrentLobbyId(null);
                 }
+                LobbyRepository.delete(lobby);
+            }else {
+                ctx.json(Response.BAD_REQUEST.setMessage("Couldn't start game"));
             }
-            LobbyRepository.delete(lobby);
 
         } catch (Exception e) {
             e.printStackTrace();

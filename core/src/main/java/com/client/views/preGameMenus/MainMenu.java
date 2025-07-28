@@ -26,6 +26,7 @@ public class MainMenu implements MyScreen {
     private Stage stage;
 
     public MainMenu(GameMain gameMain) {
+        ClientApp.init();
         this.gameMain = gameMain;
         this.skin = AssetManager.getSkin();
         this.background = AssetManager.getImage("mainMenuBackground");
