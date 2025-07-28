@@ -57,4 +57,18 @@ public class ChatController extends Controller {
             e.printStackTrace();
         }
     }
+
+    //TODO: Update gameData after cheat execution via broadcast
+    public void parseCheat(Context ctx, GameServer gs) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String command = (String) body.get("command");
+            //TODO: Implement.
+
+            ctx.json(Response.OK.setMessage("Placeholder").setBody(command));
+        } catch (Exception e) {
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+            e.printStackTrace();
+        }
+    }
 }

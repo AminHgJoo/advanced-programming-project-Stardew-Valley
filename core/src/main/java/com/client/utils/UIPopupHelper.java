@@ -1,5 +1,7 @@
 package com.client.utils;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -31,5 +33,20 @@ public class UIPopupHelper {
         dialog.button("Confirm");
 
         dialog.show(stage);
+    }
+    public void showDialog(String message, String promptType, InputProcessor inputProcessor) {
+
+        Dialog dialog = new Dialog(promptType, skin) {
+            @Override
+            protected void result(Object object) {
+                Gdx.input.setInputProcessor(inputProcessor);
+            }
+        };
+
+        dialog.text(message);
+        dialog.button("Confirm");
+
+        dialog.show(stage);
+
     }
 }
