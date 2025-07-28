@@ -68,6 +68,7 @@ public class GameController {
                 GameRepository.saveGame(game);
                 for (User u : users) {
                     u.setCurrentGameId(game.get_id().toString());
+                    u.getGames().add(game.get_id().toString());
                     u.setCurrentLobbyId(null);
                 }
                 LobbyRepository.delete(lobby);
