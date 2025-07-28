@@ -704,6 +704,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
             if (chatMsg.message.startsWith(prefix)) {
                 showPopUp(chatMsg.sender + ": " + chatMsg.message.substring(prefix.length()), "Chat Message");
             }
+        } else if(type.equals("EMOJI_SENT")){
+            // TODO pouya do something
         }
     }
 
