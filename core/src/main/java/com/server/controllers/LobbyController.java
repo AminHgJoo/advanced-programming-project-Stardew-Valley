@@ -82,6 +82,10 @@ public class LobbyController {
             }
 
             Lobby lobby = LobbyRepository.findById(user.getCurrentLobbyId());
+            if(lobby == null){
+                ctx.json(Response.NOT_FOUND.setMessage("Lobby not found"));
+                return;
+            }
             lobby.getUsersFarm().put(user.getUsername(), farm);
 
             ctx.json(Response.OK.setMessage("Farm successfully chosen").setBody(lobby));

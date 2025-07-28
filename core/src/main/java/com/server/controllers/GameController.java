@@ -58,7 +58,6 @@ public class GameController {
             }
             GameData game = new GameData(players);
             for (Player p : players) {
-                // TODO hard coded
                 Farm f = Farm.makeFarm(1, game);
                 p.setFarm(f);
 
