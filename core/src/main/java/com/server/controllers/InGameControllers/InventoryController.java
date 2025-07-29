@@ -68,16 +68,10 @@ public class InventoryController extends Controller {
                 return;
 
             }
-            if (!(slot.getItem() instanceof Tool)) {
-                ctx.json(Response.BAD_REQUEST.setMessage("item(s) is not a tool!"));
-                return;
-            }
-            Tool tool = (Tool) slot.getItem();
-            String playerJson = GameGSON.gson.toJson(player);
             player.setEquippedItem(slot.getItem());
+            String playerJson = GameGSON.gson.toJson(player);
             ctx.json(Response.OK.setMessage("Equipped " + toolName + " successfully!")
                 .setBody(playerJson));
-
             HashMap<String, String> msg = new HashMap<>();
             msg.put("type", "PLAYER_UPDATED");
             msg.put("player", playerJson);
