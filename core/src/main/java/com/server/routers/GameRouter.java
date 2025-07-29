@@ -29,10 +29,11 @@ public class GameRouter {
         app.get("/api/game/loadGame/{gameId}", controller::loadGame);
         app.get("/api/game/leave/{gameId}", controller::leaveGame);
         app.get("/api/game/{gameId}/music/download/{filename}", musicController::downloadMusicHandler);
-//        app.get("/api/game/{gameId}", controller::handleGetRequests);
 
         // POST requests
         app.post("/api/game/{gameId}/{controllerName}", controller::handlePostRequests);
         app.post("/api/game/{gameId}/music/upload", musicController::uploadMusicHandler);
+        app.post("/api/game/{gameId}/music/sync_req", musicController::handleMusicSyncing);
+        app.post("/api/game/{gameId}/music/sync_res", musicController::receiveMusicData);
     }
 }

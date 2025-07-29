@@ -2,7 +2,6 @@ package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -31,7 +30,6 @@ import com.client.controllers.PlayerController;
 import com.client.utils.*;
 import com.common.models.Backpack;
 import com.common.models.GameData;
-import com.common.models.IO.Request;
 import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.enums.worldEnums.Weather;
@@ -48,7 +46,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.server.controllers_old.gameMenuControllers.ArtisanController;
 import com.server.utilities.Response;
 
 import java.io.FileInputStream;
@@ -727,6 +724,21 @@ public class FarmMenu implements MyScreen, InputProcessor {
             }
         } else if (type.equals("EMOJI_SENT")) {
             // TODO pouya do something
+        } else if (type.equals("MUSIC_QUERY")) {
+            var req = new JsonObject();
+
+            if (gameMain.music != null) {
+                req.addProperty("isPlaying", gameMain.music.isPlaying());
+                req.addProperty("musicName", gameMain.playingMusicName);
+                req.addProperty("musicPos", (double) gameMain.music.getPosition());
+            } else {
+                req.addProperty("isPlaying", false);
+                req.addProperty("musicName", "");
+                req.addProperty("musicPos", 0.0);
+            }
+
+            var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/music/sync_res", req);
+
         }
     }
 
@@ -782,7 +794,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     @Override
     public void render(float delta) {
         if (playerController.getPlayer().isInVillage()) {
-            gameMain.setScreen(new VillageMenu(this , playerController , gameMain));
+            gameMain.setScreen(new VillageMenu(this, playerController, gameMain));
         } else {
             this.farm = playerController.getPlayer().getFarm();
             batch.setShader(dayNightShader);

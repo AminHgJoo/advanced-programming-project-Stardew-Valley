@@ -1,6 +1,7 @@
 package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,7 +15,12 @@ import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
 import com.common.models.Player;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -23,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RadioStardrop implements MyScreen {
     private final GameMain gameMain;
@@ -34,6 +41,8 @@ public class RadioStardrop implements MyScreen {
     private Label currentlyPlaying;
 
     private final ArrayList<String> loadedFilePaths = new ArrayList<>();
+
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public RadioStardrop(GameMain gameMain, FarmMenu farmScreen) {
         this.gameMain = gameMain;
@@ -112,7 +121,6 @@ public class RadioStardrop implements MyScreen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                HTTPUtil.downloadFile("05 - Celebrate (from the Original Motion Picture 'Penguins of Madagascar').mp3", ClientApp.currentGameData.get_id());
                 dispose();
                 gameMain.setScreen(farmScreen);
             }
@@ -150,6 +158,7 @@ public class RadioStardrop implements MyScreen {
                         }
 
                         gameMain.music = Gdx.audio.newMusic(Gdx.files.absolute(selectedFile.getAbsolutePath()));
+                        gameMain.playingMusicName = selectedFile.getName();
                         gameMain.music.setLooping(true);
                         gameMain.music.setVolume(volumeSlider.getValue());
                         gameMain.music.play();
@@ -187,6 +196,7 @@ public class RadioStardrop implements MyScreen {
                     }
 
                     gameMain.music = Gdx.audio.newMusic(Gdx.files.absolute(musicPath));
+                    gameMain.playingMusicName = getFileName(musicPath);
                     gameMain.music.setLooping(true);
                     gameMain.music.setVolume(volumeSlider.getValue());
                     gameMain.music.play();
@@ -245,11 +255,6 @@ public class RadioStardrop implements MyScreen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    //TODO:
-    private void querySelectedPlayer(Player player) {
-
-    }
-
     private void configureCurrentlyPlaying(String absPath) {
         String musicName = getMusicName(absPath);
         currentlyPlaying.setText("Currently Playing: " + musicName);
@@ -267,6 +272,10 @@ public class RadioStardrop implements MyScreen {
         }
 
         return fileName;
+    }
+
+    private String getFileName(String absPath) {
+        return absPath.split("\\\\")[absPath.split("\\\\").length - 1];
     }
 
     private void writeToFile(String text) {
@@ -291,14 +300,87 @@ public class RadioStardrop implements MyScreen {
         }
     }
 
-    //TODO: Called whenever music is played on client side and is new. Should start a new thread.
     private void uploadMusicToServer(String absPath) {
         HTTPUtil.uploadFile(absPath, ClientApp.currentGameData.get_id());
     }
 
+    private void downloadMusicFromServer(String musicName) {
+        HTTPUtil.downloadFile(musicName, ClientApp.currentGameData.get_id());
+    }
+
     @Override
     public void socketMessage(String message) {
+        HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
+        String type = res.get("type");
 
+        if (type.equals("MUSIC_QUERY")) {
+            var req = new JsonObject();
+            if (gameMain.music != null) {
+                req.addProperty("isPlaying", gameMain.music.isPlaying());
+                req.addProperty("musicName", gameMain.playingMusicName);
+                req.addProperty("musicPos", (double) gameMain.music.getPosition());
+            } else {
+                req.addProperty("isPlaying", false);
+                req.addProperty("musicName", "");
+                req.addProperty("musicPos", 0.0);
+            }
+
+            var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/music/sync_res", req);
+
+        } else if (type.equals("SYNC_DATA")) {
+            String syncData = res.get("syncData");
+
+            JsonObject syncDataJson = JsonParser.parseString(syncData).getAsJsonObject();
+
+            String musicName = syncDataJson.get("musicName").getAsString();
+            double pos = syncDataJson.get("musicPos").getAsDouble();
+            boolean playingMusic = syncDataJson.get("isPlaying").getAsBoolean();
+
+            if (!playingMusic) {
+                UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                uiPopupHelper.showDialog("Selected User Isn't Listening to Music Right Now.", "Error");
+            } else {
+                new Thread(() -> {
+                    downloadMusicFromServer(musicName);
+
+                    FileHandle fh = Gdx.files.internal("downloads/" + musicName);
+                    File selectedFile = fh.file();
+
+                    writeToFile(selectedFile.getAbsolutePath());
+
+                    if (gameMain.music != null) {
+                        gameMain.music.stop();
+                        gameMain.music.dispose();
+                    }
+
+                    gameMain.music = Gdx.audio.newMusic(fh);
+                    gameMain.playingMusicName = selectedFile.getName();
+                    gameMain.music.setLooping(true);
+                    gameMain.music.play();
+                    gameMain.music.setPosition((float) pos);
+
+                    configureCurrentlyPlaying(selectedFile.getAbsolutePath());
+
+                    Gdx.app.postRunnable(() -> {
+                        dispose();
+                        initializeStage();
+                    });
+                }).start();
+            }
+        }
+    }
+
+    private void querySelectedPlayer(Player player) {
+        var req = new JsonObject();
+        req.addProperty("senderUsername", ClientApp.loggedInUser.getUsername());
+        req.addProperty("syncTargetUsername", player.getUser().getUsername());
+
+        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/music/sync_req", req);
+
+        var res = HTTPUtil.deserializeHttpResponse(postResponse);
+
+        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+        uiPopupHelper.showDialog(res.getMessage(), "Message");
     }
 
     @Override

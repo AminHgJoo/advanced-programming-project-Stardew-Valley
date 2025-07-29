@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 
 public class GameMain extends Game {
     public Music music = null;
+    public String playingMusicName = "";
 
     @Override
     public void create() {
