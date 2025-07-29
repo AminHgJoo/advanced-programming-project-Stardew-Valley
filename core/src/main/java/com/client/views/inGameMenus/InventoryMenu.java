@@ -123,7 +123,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
                     selectedIndex = -1;
                     selectedSave = -1;
                     selected = false;
-                    farmScreen.getPlayerController().updateInventory(backpack);
+                    farmScreen.updateBackPack();
                 }
                 return true;
             }
@@ -216,7 +216,8 @@ public class InventoryMenu implements MyScreen, InputProcessor {
                 selectedIndex = -1;
                 selected = false;
                 selectedSave = -1;
-                farmScreen.getPlayerController().updateInventory(backpack);
+                farmScreen.updateBackPack();
+
             }
         }
         List<Slot> slots = backpack.getSlots();

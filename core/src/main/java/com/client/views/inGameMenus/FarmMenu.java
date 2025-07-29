@@ -138,8 +138,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
         popupStage = new Stage(new ScreenViewport());
         this.grassTexture = AssetManager.getImage("grassfall");
-        playerController = new PlayerController(playerPosition, playerVelocity, this);
+        playerController = new PlayerController(playerPosition, playerVelocity, this , ClientApp.currentPlayer);
         this.farm = playerController.getPlayer().getFarm();
+        playerController.getPlayer().setInVillage(true);
         this.inventory = AssetManager.getImage("aks");
         //TODO tuf zadam
         for (Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {
@@ -290,6 +291,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         showTools();
         emojiShow(delta);
 
+    }
+
+    public void updateBackPack() {
+        playerController.updateInventory(ClientApp.currentPlayer.getInventory());
     }
 
     private void emojiShow(float delta) {
@@ -798,7 +803,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     @Override
     public void render(float delta) {
         if (playerController.getPlayer().isInVillage()) {
-            gameMain.setScreen(new VillageMenu(this, playerController, gameMain));
+            gameMain.setScreen(new VillageMenu(this, gameMain));
         } else {
             this.farm = playerController.getPlayer().getFarm();
             batch.setShader(dayNightShader);

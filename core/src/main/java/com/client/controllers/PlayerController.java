@@ -40,18 +40,20 @@ public class PlayerController {
     private FacingDirection facingDirection;
     private PlayerState currState;
     private boolean isMoving = false;
-    private Player player = ClientApp.currentPlayer;
+    private Player player;
     private GameData game = ClientApp.currentGameData;
-    private PlayerService playerService = new PlayerService(player, game);
+    private PlayerService playerService;
     private float width;
     private float height;
     private FarmMenu farmMenu;
 
-    public PlayerController(Vector2 x, Vector2 y, FarmMenu farmMenu) {
+    public PlayerController(Vector2 x, Vector2 y, FarmMenu farmMenu , Player player) {
         this.farmMenu = farmMenu;
+        this.player = player;
         facingDirection = FacingDirection.DOWN;
         currState = PlayerState.IDLE;
         playerAnimationController = new PlayerAnimationController(currState, facingDirection);
+        playerService = new PlayerService(player, game);
         this.playerPosition = x;
         this.playerVelocity = y;
         this.width = playerAnimationController.getCurrentFrame().getTexture().getWidth();
@@ -270,6 +272,7 @@ public class PlayerController {
     }
 
     public void handleKeyUp(float x, float y) {
+        System.out.println("hrllo");
         playerVelocity.x = x;
         playerVelocity.y = y;
         if (x != 0) {
@@ -285,6 +288,7 @@ public class PlayerController {
                 facingDirection = FacingDirection.DOWN;
             }
         }
+        System.out.println(facingDirection);
     }
 
     public void handleKeyDown() {
@@ -301,11 +305,12 @@ public class PlayerController {
         playerPosition.y += playerVelocity.y * delta * FarmMenu.BASE_SPEED_FACTOR;
         playerPosition.y = MathUtils.clamp(playerPosition.y, height / 2, FarmMenu.FARM_Y_SPAN * FarmMenu.TILE_PIX_SIZE - height / 2);
 
-        if (prev_x != playerPosition.x || prev_y != playerPosition.y)
+        if ((prev_x != playerPosition.x || prev_y != playerPosition.y) && !player.isInVillage())
             updatePlayerCoordinate();
     }
 
     public void updatePlayerCoordinate() {
+        System.out.println("hi");
         boolean checkWalk = playerService.walk(playerPosition.x, playerPosition.y);
         if (checkWalk) {
             networkThreadPool.execute(() -> {
@@ -424,6 +429,7 @@ public class PlayerController {
     }
 
     public void updateInventory(Backpack backpack) {
+        System.out.println("HI");
         String json = GameGSON.gson.toJson(backpack);
         JsonObject req = new JsonObject();
         req.addProperty("backpack", json);
