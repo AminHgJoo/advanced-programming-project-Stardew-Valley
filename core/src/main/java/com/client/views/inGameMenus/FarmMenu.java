@@ -433,6 +433,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Keybinds.OPEN_CHAT.keycodes.contains(keycode)) {
             gameMain.setScreen(new ChatScreen(this, gameMain));
         }
+        else if(keycode == Input.Keys.J) {
+            //shipping menu jjjjjjjjjjjj
+            gameMain.setScreen(new ShippingMenu(gameMain, this));
+        }
         return false;
     }
 
@@ -929,6 +933,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 Coordinate coordinate = cell.getCoordinate();
                 drawFuckingTreeProperly(batch, cell.getObjectOnCell().getTexture(), coordinate.getX(), coordinate.getY());
             }
+            if(cell.getObjectOnCell() instanceof BuildingBlock) {
+                if(((BuildingBlock) cell.getObjectOnCell()).buildingType.equals("shippingBin")) {
+                    modifiedDraw(batch,AssetManager.getImage("shippingbin") , cell.getCoordinate().getX(), cell.getCoordinate().getY(), 32, 32);
+                }
+            }
         }
         //Draw buildings
         Texture house = AssetManager.getImage("playerhouse");
@@ -936,6 +945,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         modifiedDraw(batch, house, 61, 8);
         modifiedDraw(batch, greenhouse, 22, 6);
+
         //Dummy texture to solve buffering.
         modifiedDraw(batch, AssetManager.getImage("speedgro"), playerPosition.x, playerPosition.y);
         popupStage.act(delta);

@@ -58,18 +58,20 @@ public class Farm {
         for (Cell cell : farmCells) {
             int randomNumber = (int) (Math.random() * 50);
             //TODO artisan test
-//            if (cell.getCoordinate().getX() == 2 && cell.getCoordinate().getY() == 20) {
-//                cell.setObjectOnCell(new ArtisanBlock(ArtisanBlockType.KEG));
-//            }
-            if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE, LocalDateTime.parse("2025-01-01 09:00:00", dateTimeFormatter), gameData));
-            } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
-                cell.setObjectOnCell(new ForagingMineral(ForagingMineralsType.STONE, "gray", "Stone"));
-            } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
-                cell.setObjectOnCell(randomForagingCrop(gameData));
-            } else if (cell.getObjectOnCell().type.equals("buildingBlock") && randomNumber <= 10 && isMineCell(cell)) {
-                cell.setObjectOnCell(randomForagingMineral());
+            if (cell.getCoordinate().getX() == 68 && cell.getCoordinate().getY() == 8) {
+                cell.setObjectOnCell(new BuildingBlock(false, "shippingBin"));
+            }
+            if((cell.getCoordinate().getX() <67 ||cell.getCoordinate().getX()> 69 ) && (cell.getCoordinate().getY() < 8 ||cell.getCoordinate().getY()> 9)) {
+                if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
+                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE, LocalDateTime.parse("2025-01-01 09:00:00", dateTimeFormatter), gameData));
+                } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 2) {
+                    cell.setObjectOnCell(new ForagingMineral(ForagingMineralsType.STONE, "gray", "Stone"));
+                } else if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 1) {
+                    cell.setObjectOnCell(randomForagingCrop(gameData));
+                } else if (cell.getObjectOnCell().type.equals("buildingBlock") && randomNumber <= 10 && isMineCell(cell)) {
+                    cell.setObjectOnCell(randomForagingMineral());
+                }
             }
         }
 

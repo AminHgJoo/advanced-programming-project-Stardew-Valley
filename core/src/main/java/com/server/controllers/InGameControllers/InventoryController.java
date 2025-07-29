@@ -89,6 +89,7 @@ public class InventoryController extends Controller {
             String id = ctx.attribute("id");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
+            //TODO kharab
             String backpackJson = (String) body.get("backpack");
 
             Backpack backpack = GameGSON.gson.fromJson(backpackJson, Backpack.class);
