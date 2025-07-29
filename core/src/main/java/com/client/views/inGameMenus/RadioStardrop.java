@@ -9,9 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
+import com.common.models.Player;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -72,7 +75,7 @@ public class RadioStardrop implements MyScreen {
         stage.addActor(root);
 
         Table rightTable = new Table(); //The local stuff (back, load song, pause/play, change volume, upload to server.)
-        Table leftTable = new Table(); //TODO: The online stuff (tune in to other player's stuff.)
+        Table leftTable = new Table(); //The online stuff (tune in to other player's stuff.)
 
         if (currentlyPlaying == null) {
             currentlyPlaying = new Label("Currently Playing: Nothing", labelStyle);
@@ -109,6 +112,7 @@ public class RadioStardrop implements MyScreen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                HTTPUtil.downloadFile("05 - Celebrate (from the Original Motion Picture 'Penguins of Madagascar').mp3", ClientApp.currentGameData.get_id());
                 dispose();
                 gameMain.setScreen(farmScreen);
             }
@@ -205,10 +209,45 @@ public class RadioStardrop implements MyScreen {
         rightTable.add(backButton).colspan(2).pad(10).row();
         rightTable.add(scrollPane).colspan(2).pad(10).row();
 
+        //----------Other Table Config----------//
+
+        Label label = new Label("Tune to other players", labelStyle);
+        label.setColor(Color.GOLD);
+
+        Table tuneTable = new Table();
+
+        for (Player player : ClientApp.currentGameData.getPlayers()) {
+            if (player == ClientApp.currentPlayer) {
+                continue;
+            }
+
+            tuneTable.add(new Label(player.getUser().getUsername(), labelStyle)).pad(10);
+
+            TextButton tuneButton = new TextButton("Tune", customStyle);
+            tuneButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    querySelectedPlayer(player);
+                }
+            });
+            tuneTable.add(tuneButton).pad(10).row();
+        }
+
+        ScrollPane playersList = new ScrollPane(tuneTable, skin);
+
+        leftTable.center();
+        leftTable.add(label).row();
+        leftTable.add(playersList).row();
+
         root.add(leftTable).expandX().fillX();
         root.add(rightTable).expandX().fillX();
 
         Gdx.input.setInputProcessor(stage);
+    }
+
+    //TODO:
+    private void querySelectedPlayer(Player player) {
+
     }
 
     private void configureCurrentlyPlaying(String absPath) {
@@ -254,7 +293,7 @@ public class RadioStardrop implements MyScreen {
 
     //TODO: Called whenever music is played on client side and is new. Should start a new thread.
     private void uploadMusicToServer(String absPath) {
-
+        HTTPUtil.uploadFile(absPath, ClientApp.currentGameData.get_id());
     }
 
     @Override

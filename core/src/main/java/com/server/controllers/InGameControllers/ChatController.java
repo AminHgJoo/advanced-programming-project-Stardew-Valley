@@ -67,7 +67,6 @@ public class ChatController extends Controller {
         }
     }
 
-    //TODO: Update gameData after cheat execution via broadcast
     public void parseCheat(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);

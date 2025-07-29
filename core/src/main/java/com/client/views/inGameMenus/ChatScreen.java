@@ -215,14 +215,12 @@ public class ChatScreen implements MyScreen {
 
     private void parseCheatCode(String cheatCode) {
         var req = new JsonObject();
-        req.addProperty("command", cheatCode);
+        req.addProperty("command", cheatCode.substring(1));
 
         var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id()
             + "/chatParseCheat", req);
 
         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-
-        //TODO: Update gameData after cheat execution via broadcast.
 
         if (res.getStatus() == 200) {
             System.out.println("Khoda ro shokr. Cheat Kardim Raft!");

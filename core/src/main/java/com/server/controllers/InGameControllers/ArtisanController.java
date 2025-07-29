@@ -1,10 +1,11 @@
 package com.server.controllers.InGameControllers;
 
-import com.client.ClientApp;
 import com.common.GameGSON;
-import com.common.models.*;
-import com.common.models.IO.Request;
+import com.common.models.Backpack;
+import com.common.models.GameData;
 import com.common.models.IO.Response;
+import com.common.models.Player;
+import com.common.models.Slot;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.FishType;
 import com.common.models.enums.types.itemTypes.FoodTypes;
@@ -32,59 +33,62 @@ public class ArtisanController extends Controller {
     public static GameServer gs;
 
     public static void handleArtisanUse(Context ctx, GameServer gs) {
-        HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
-        ArtisanController.gs = gs;
-        ArtisanController.ctx = ctx;
-        String artisanName = (String) body.get("artisanName");
-        String item1Name = (String) body.getOrDefault("item1Name", " ");
-        String id = ctx.attribute("id");
-        GameData gameData = gs.getGame();
-        Farm farm = gameData.getCurrentPlayer().getCurrentFarm(gameData);
-        Player player = gameData.findPlayerByUserId(id);
-        Backpack backpack = player.getInventory();
-        ArtisanBlock block = farm.getArtisanBlock(artisanName);
-        if (block == null) {
-            ctx.json(com.server.utilities.Response.BAD_REQUEST.setMessage("Wrong block"));
-           return;
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            ArtisanController.gs = gs;
+            ArtisanController.ctx = ctx;
+            String artisanName = (String) body.get("artisanName");
+            String item1Name = (String) body.getOrDefault("item1Name", " ");
+            String id = ctx.attribute("id");
+            GameData gameData = gs.getGame();
+            Farm farm = gameData.getCurrentPlayer().getCurrentFarm(gameData);
+            Player player = gameData.findPlayerByUserId(id);
+            Backpack backpack = player.getInventory();
+            ArtisanBlock block = farm.getArtisanBlock(artisanName);
+            if (block == null) {
+                ctx.json(com.server.utilities.Response.BAD_REQUEST.setMessage("Wrong block"));
+                return;
+            }
+            if (block.beingUsed) {
+                ctx.json(com.server.utilities.Response.BAD_REQUEST.setMessage("Wrong block"));
+                return;
+            }
+            if (artisanName.equals("Bee House")) {
+                honeyHandle(player, gameData, block);
+                return;
+            } else if (artisanName.equals("Cheese Press")) {
+                cheesePress(item1Name, player, gameData, block, backpack);
+                return;
+            } else if (artisanName.equals("Keg")) {
+                keg(item1Name, player, gameData, backpack, block);
+                return;
+            } else if (artisanName.equals("Dehydrator")) {
+                Dehydrator(item1Name, player, gameData, backpack, block);
+                return;
+            } else if (artisanName.equals("Charcoal Klin")) {
+                charCoalKiln(item1Name, player, gameData, backpack, block);
+                return;
+            } else if (artisanName.equals("Loom")) {
+                loom(item1Name, player, gameData, backpack, block);
+                return;
+            } else if (artisanName.equals("Mayonnaise Machine")) {
+                mayonnaiseMachine(item1Name, player, gameData, backpack, block);
+                return;
+            } else if (artisanName.equals("Oil Maker")) {
+                oilMaker(item1Name, player, gameData, backpack, block);
+                return;
+            } else if (artisanName.equals("Preserves Jar")) {
+                preservesJar(item1Name, player, gameData, backpack, block);
+                return;
+            } else if (artisanName.equals("Fish Smoker")) {
+                fishSmoker(item1Name, player, gameData, backpack, block);
+                return;
+            }
+            furnace(item1Name, player, gameData, backpack, block);
+        } catch (Exception e) {
+            ctx.json(com.server.utilities.Response.BAD_REQUEST.setMessage(e.getMessage()));
+            e.printStackTrace();
         }
-        if (block.beingUsed) {
-            ctx.json(com.server.utilities.Response.BAD_REQUEST.setMessage("Wrong block"));
-           return;
-        }
-        if (artisanName.equals("Bee House")) {
-             honeyHandle(player, gameData, block);
-             return;
-        } else if (artisanName.equals("Cheese Press")) {
-             cheesePress(item1Name, player, gameData, block, backpack);
-             return;
-        } else if (artisanName.equals("Keg")) {
-             keg(item1Name, player, gameData, backpack, block);
-             return;
-        } else if (artisanName.equals("Dehydrator")) {
-             Dehydrator(item1Name, player, gameData, backpack, block);
-             return;
-        } else if (artisanName.equals("Charcoal Klin")) {
-             charCoalKiln(item1Name, player, gameData, backpack, block);
-             return;
-        } else if (artisanName.equals("Loom")) {
-             loom(item1Name, player, gameData, backpack, block);
-             return;
-        } else if (artisanName.equals("Mayonnaise Machine")) {
-             mayonnaiseMachine(item1Name, player, gameData, backpack, block);
-             return;
-        } else if (artisanName.equals("Oil Maker")) {
-             oilMaker(item1Name, player, gameData, backpack, block);
-             return;
-        } else if (artisanName.equals("Preserves Jar")) {
-             preservesJar(item1Name, player, gameData, backpack, block);
-             return;
-        } else if (artisanName.equals("Fish Smoker")) {
-             fishSmoker(item1Name, player, gameData, backpack, block);
-             return;
-        }
-         furnace(item1Name, player, gameData, backpack, block);
-        return;
-
     }
 
     public static @Nullable Response furnace(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
@@ -248,9 +252,9 @@ public class ArtisanController extends Controller {
         block.productSlot = new Slot(new Misc(Quality.DEFAULT, miscType, price), productCount);
         String playerJson = GameGSON.gson.toJson(player);
         ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-        HashMap<String , String> msg = new HashMap<>();
-        msg.put("type" , "PLAYER_UPDATED");
-        msg.put("player" , playerJson);
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("type", "PLAYER_UPDATED");
+        msg.put("player", playerJson);
         gs.broadcast(msg);
         return new Response(true, miscType.name + " will be ready to collect in " + hours + " hours");
     }
@@ -302,7 +306,6 @@ public class ArtisanController extends Controller {
             itemName.equals(FoodTypes.MOREL.name) || itemName.equals(FoodTypes.PURPLE_MUSHROOM.name) ||
             itemName.equals(FoodTypes.RED_MUSHROOM.name);
     }
-
 
     public static @NotNull Response keg(String item1Name, Player player, GameData gameData, Backpack backpack, ArtisanBlock block) {
         if (item1Name.equals("Wheat"))
@@ -396,9 +399,9 @@ public class ArtisanController extends Controller {
         block.productSlot = new Slot(new ForagingMineralItem(Quality.DEFAULT, foragingMineralsType, price), productCount);
         String playerJson = GameGSON.gson.toJson(player);
         ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-        HashMap<String , String> msg = new HashMap<>();
-        msg.put("type" , "PLAYER_UPDATED");
-        msg.put("player" , playerJson);
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("type", "PLAYER_UPDATED");
+        msg.put("player", playerJson);
         gs.broadcast(msg);
         return new Response(true, foragingMineralsType.name + " will be ready to collect in " + hours + " hours");
     }
@@ -426,9 +429,9 @@ public class ArtisanController extends Controller {
         block.productSlot = new Slot(new Food(Quality.DEFAULT, foodTypes, price, energy), productCount);
         String playerJson = GameGSON.gson.toJson(player);
         ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-        HashMap<String , String> msg = new HashMap<>();
-        msg.put("type" , "PLAYER_UPDATED");
-        msg.put("player" , playerJson);
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("type", "PLAYER_UPDATED");
+        msg.put("player", playerJson);
         gs.broadcast(msg);
         return new Response(true, foodTypes.name + " will be ready to collect in " + hours + " hours");
     }
@@ -466,9 +469,9 @@ public class ArtisanController extends Controller {
         block.productSlot = new Slot(new Food(Quality.DEFAULT, foodTypes, price, energy), productCount);
         String playerJson = GameGSON.gson.toJson(player);
         ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-        HashMap<String , String> msg = new HashMap<>();
-        msg.put("type" , "PLAYER_UPDATED");
-        msg.put("player" , playerJson);
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("type", "PLAYER_UPDATED");
+        msg.put("player", playerJson);
         gs.broadcast(msg);
         return new Response(true, foodTypes.name + " will be ready to collect in " + hours + " hours");
     }
@@ -506,9 +509,9 @@ public class ArtisanController extends Controller {
         block.productSlot = new Slot(new Misc(Quality.DEFAULT, miscType, price), productCount);
         String playerJson = GameGSON.gson.toJson(player);
         ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-        HashMap<String , String> msg = new HashMap<>();
-        msg.put("type" , "PLAYER_UPDATED");
-        msg.put("player" , playerJson);
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("type", "PLAYER_UPDATED");
+        msg.put("player", playerJson);
         gs.broadcast(msg);
         return new Response(true, miscType.name + " will be ready to collect in " + hours + " hours");
     }
@@ -555,9 +558,9 @@ public class ArtisanController extends Controller {
             block.productSlot = new Slot(new Food(Quality.DEFAULT, FoodTypes.GOAT_CHEESE, 400), 1);
             String playerJson = GameGSON.gson.toJson(player);
             ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-            HashMap<String , String> msg = new HashMap<>();
-            msg.put("type" , "PLAYER_UPDATED");
-            msg.put("player" , playerJson);
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player", playerJson);
             gs.broadcast(msg);
             return new Response(false, "goat cheese will be ready to collect in 3 hours");
         } else if (item1Name.equals("Big Goat Milk")) {
@@ -582,9 +585,9 @@ public class ArtisanController extends Controller {
             block.productSlot = new Slot(new Food(Quality.DEFAULT, FoodTypes.GOAT_CHEESE, 600), 1);
             String playerJson = GameGSON.gson.toJson(player);
             ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-            HashMap<String , String> msg = new HashMap<>();
-            msg.put("type" , "PLAYER_UPDATED");
-            msg.put("player" , playerJson);
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player", playerJson);
             gs.broadcast(msg);
             return new Response(true, "goat cheese will be ready to collect in 3 hours");
         } else {
@@ -607,9 +610,9 @@ public class ArtisanController extends Controller {
         block.productSlot = new Slot(new Food(Quality.DEFAULT, FoodTypes.HONEY), 1);
         String playerJson = GameGSON.gson.toJson(player);
         ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-        HashMap<String , String> msg = new HashMap<>();
-        msg.put("type" , "PLAYER_UPDATED");
-        msg.put("player" , playerJson);
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("type", "PLAYER_UPDATED");
+        msg.put("player", playerJson);
         gs.broadcast(msg);
         return new Response(true, "honey will be ready to collect in 4 days");
     }
@@ -637,9 +640,9 @@ public class ArtisanController extends Controller {
             block.productSlot = new Slot(new Food(Quality.DEFAULT, FoodTypes.CHEESE, 230), 1);
             String playerJson = GameGSON.gson.toJson(player);
             ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-            HashMap<String , String> msg = new HashMap<>();
-            msg.put("type" , "PLAYER_UPDATED");
-            msg.put("player" , playerJson);
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player", playerJson);
             gs.broadcast(msg);
             return new Response(true, "cheese will be ready to collect in 3 hours");
         } else if (item1Name.equals("Big Milk")) {
@@ -664,9 +667,9 @@ public class ArtisanController extends Controller {
             block.productSlot = new Slot(new Food(Quality.DEFAULT, FoodTypes.CHEESE, 345), 1);
             String playerJson = GameGSON.gson.toJson(player);
             ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-            HashMap<String , String> msg = new HashMap<>();
-            msg.put("type" , "PLAYER_UPDATED");
-            msg.put("player" , playerJson);
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player", playerJson);
             gs.broadcast(msg);
             return new Response(true, "cheese will be ready to collect in 3 hours");
         } else {
@@ -675,7 +678,7 @@ public class ArtisanController extends Controller {
         }
     }
 
-    public static Response handleArtisanGet(Context ctx, GameServer gs) {
+    public static void handleArtisanGet(Context ctx, GameServer gs) {
         HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
         ArtisanController.gs = gs;
         ArtisanController.ctx = ctx;
@@ -688,22 +691,22 @@ public class ArtisanController extends Controller {
         ArtisanBlock block = farm.getArtisanBlock(artisanName);
         if (block == null) {
             ctx.json(com.server.utilities.Response.BAD_REQUEST.setMessage("not enough items"));
-            return new Response(false, "artisan not found");
+            return;
         }
         if (!block.beingUsed) {
             ctx.json(com.server.utilities.Response.BAD_REQUEST.setMessage("not enough items"));
-            return new Response(false, "no product found");
+            return;
         }
         if (!block.canBeCollected) {
             ctx.json(com.server.utilities.Response.BAD_REQUEST.setMessage("not enough items"));
-            return new Response(false, "The product is not ready for collection");
+            return;
         }
         Slot slot = block.productSlot;
         Slot backPackSlot = backpack.getSlotByItemName(artisanName);
         if (backPackSlot == null) {
             if (backpack.getSlots().size() == backpack.getType().getMaxCapacity()) {
                 ctx.json(com.server.utilities.Response.BAD_REQUEST.setMessage("not enough items"));
-                return new Response(false, "your backpack is full");
+                return;
             }
             Slot slotToAdd = new Slot(slot.getItem(), slot.getCount());
             backpack.addSlot(slotToAdd);
@@ -713,11 +716,11 @@ public class ArtisanController extends Controller {
             block.startTime = null;
             String playerJson = GameGSON.gson.toJson(player);
             ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-            HashMap<String , String> msg = new HashMap<>();
-            msg.put("type" , "PLAYER_UPDATED");
-            msg.put("player" , playerJson);
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player", playerJson);
             gs.broadcast(msg);
-            return new Response(true, "you have collected " + slotToAdd.getCount() + " of " + slotToAdd.getItem().getName());
+            return;
         }
         backPackSlot.setCount(backPackSlot.getCount() + slot.getCount());
         int count = slot.getCount();
@@ -728,50 +731,60 @@ public class ArtisanController extends Controller {
         block.startTime = null;
         String playerJson = GameGSON.gson.toJson(player);
         ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-        HashMap<String , String> msg = new HashMap<>();
-        msg.put("type" , "PLAYER_UPDATED");
-        msg.put("player" , playerJson);
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("type", "PLAYER_UPDATED");
+        msg.put("player", playerJson);
         gs.broadcast(msg);
-        return new Response(true, "you have collected " + count + " of " + itemName);
+        return;
     }
 
-    public static void cancel(Context ctx, GameServer gs){
-        HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
-        ArtisanController.gs = gs;
-        ArtisanController.ctx = ctx;
-        String artisanName = (String) body.get("artisanName");
-        String id = ctx.attribute("id");
-        GameData gameData = gs.getGame();
-        Farm farm = gameData.getCurrentPlayer().getCurrentFarm(gameData);
-        Player player = gameData.findPlayerByUserId(id);
-        ArtisanBlock artisanBlock = farm.getArtisanBlock(artisanName);
-        artisanBlock.beingUsed = false;
-        artisanBlock.canBeCollected = false;
-        artisanBlock.productSlot = null;
-        String playerJson = GameGSON.gson.toJson(player);
-        ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
-        HashMap<String , String> msg = new HashMap<>();
-        msg.put("type" , "PLAYER_UPDATED");
-        msg.put("player" , playerJson);
-        gs.broadcast(msg);
+    public static void cancel(Context ctx, GameServer gs) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            ArtisanController.gs = gs;
+            ArtisanController.ctx = ctx;
+            String artisanName = (String) body.get("artisanName");
+            String id = ctx.attribute("id");
+            GameData gameData = gs.getGame();
+            Farm farm = gameData.getCurrentPlayer().getCurrentFarm(gameData);
+            Player player = gameData.findPlayerByUserId(id);
+            ArtisanBlock artisanBlock = farm.getArtisanBlock(artisanName);
+            artisanBlock.beingUsed = false;
+            artisanBlock.canBeCollected = false;
+            artisanBlock.productSlot = null;
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(com.server.utilities.Response.OK.setMessage("artisan start").setBody(playerJson));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player", playerJson);
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            ctx.json(com.server.utilities.Response.BAD_REQUEST.setMessage(e.getMessage()));
+            e.printStackTrace();
+        }
     }
 
-    public static void cheat(Context ctx, GameServer gs){
-        HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
-        ArtisanController.gs = gs;
-        ArtisanController.ctx = ctx;
-        String artisanName = (String) body.get("artisanName");
-        String id = ctx.attribute("id");
-        GameData gameData = gs.getGame();
-        Farm farm = gameData.getCurrentPlayer().getCurrentFarm(gameData);
-        Player player = gameData.findPlayerByUserId(id);
-        ArtisanBlock artisanBlock = farm.getArtisanBlock(artisanName);
-        artisanBlock.canBeCollected = true;
-        String playerJson = GameGSON.gson.toJson(player);
-        ctx.json(com.server.utilities.Response.OK.setMessage("artisan cheat").setBody(playerJson));
-        HashMap<String , String> msg = new HashMap<>();
-        msg.put("type" , "PLAYER_UPDATED");
-        msg.put("player" , playerJson);
-        gs.broadcast(msg);
+    public static void cheat(Context ctx, GameServer gs) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            ArtisanController.gs = gs;
+            ArtisanController.ctx = ctx;
+            String artisanName = (String) body.get("artisanName");
+            String id = ctx.attribute("id");
+            GameData gameData = gs.getGame();
+            Farm farm = gameData.getCurrentPlayer().getCurrentFarm(gameData);
+            Player player = gameData.findPlayerByUserId(id);
+            ArtisanBlock artisanBlock = farm.getArtisanBlock(artisanName);
+            artisanBlock.canBeCollected = true;
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(com.server.utilities.Response.OK.setMessage("artisan cheat").setBody(playerJson));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player", playerJson);
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            ctx.json(com.server.utilities.Response.BAD_REQUEST.setMessage(e.getMessage()));
+            e.printStackTrace();
+        }
     }
 }

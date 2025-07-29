@@ -7,6 +7,9 @@ import com.server.routers.UserRouter;
 import com.server.utilities.Connection;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
+import io.javalin.config.JavalinConfig;
+import io.javalin.config.MultipartConfig;
+import io.javalin.config.SizeUnit;
 
 public class ServerMain {
     public static void main(String[] args) {
@@ -17,7 +20,15 @@ public class ServerMain {
             .load();
         Connection.getDatabase();
 
-        Javalin app = Javalin.create().start(8080);
+        Javalin app = Javalin.create((JavalinConfig config) -> {
+            var multipartConfig = new MultipartConfig();
+            multipartConfig.cacheDirectory("/tmp");
+            multipartConfig.maxFileSize(20, SizeUnit.MB);
+            multipartConfig.maxInMemoryFileSize(20, SizeUnit.MB);
+            multipartConfig.maxTotalRequestSize(20, SizeUnit.MB);
+            config.jetty.multipartConfig = multipartConfig;
+        }).start(8080);
+
         app.get("/", ctx -> {
             ctx.result("Hello World!");
         });

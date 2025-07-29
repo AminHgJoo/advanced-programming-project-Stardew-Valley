@@ -8,6 +8,8 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 
+import java.io.File;
+
 public class HTTPUtil {
     /**
      * Returns null if the connection failed.
@@ -43,5 +45,38 @@ public class HTTPUtil {
         Gson gson = new Gson();
         String jsonStr = response.getBody().toString();
         return gson.fromJson(jsonStr, Response.class);
+    }
+
+    public static HttpResponse<JsonNode> uploadFile(String absPath, String gameId) {
+        try {
+            String url = "http://" + System.getenv("host") + "/api/game/" + gameId + "/music/upload";
+
+            HttpResponse<JsonNode> response = Unirest.post(url)
+                .header("Authorization", ClientApp.token)
+                .field("file", new File(absPath))
+                .asJson();
+
+            System.out.println("Successfully uploaded music file");
+            System.out.println(response.getBody().toString());
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String downloadFile(String fileName, String gameId) {
+        try {
+            String url = "http://" + System.getenv("host") + "/api/game/" + gameId + "/music/download/" + fileName;
+
+            var response = Unirest.get(url)
+                .header("Authorization", ClientApp.token)
+                .asFile(System.getProperty("user.dir") + (System.getProperty("user.dir").contains("assets") ? "" : "\\assets") + "\\downloads\\" + fileName);
+
+            return "OK";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
