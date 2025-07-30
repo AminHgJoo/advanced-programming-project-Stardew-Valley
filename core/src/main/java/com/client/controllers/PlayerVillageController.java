@@ -3,6 +3,7 @@ package com.client.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -88,6 +89,20 @@ public class PlayerVillageController {
         TextureRegion playerTexture = playerAnimationController.getCurrentFrame();
         float scale = 3f;
         // TODO pouya inja esme playero bezar
+        String playerName = player.getUser().getUsername();
+        float nameOffset = 20f;
+        float nameX = playerPosition.x - (playerTexture.getRegionWidth() / (2 * scale));
+        float nameY = playerPosition.y + (playerTexture.getRegionHeight() / scale) + nameOffset;
+        BitmapFont font  = AssetManager.getStardewFont();
+        font.draw(batch, playerName, nameX, nameY);
+        if (player.emojiCounter >= 0) {
+            batch.draw(player.currentEmoji, nameX + 4, nameY, 64, 64);
+             player.emojiCounter += 0.01f;
+            if ( player.emojiCounter >= 5) {
+                 player.emojiCounter = -1;
+            }
+        }
+
         batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale),
             playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale), playerTexture.getRegionWidth() / scale
             , playerTexture.getRegionHeight() / scale);

@@ -3,10 +3,10 @@ package com.client.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.client.ClientApp;
 import com.client.services.PlayerService;
 import com.client.utils.*;
@@ -68,9 +68,27 @@ public class PlayerController {
         TextureRegion playerTexture = playerAnimationController.getCurrentFrame();
         float scale = 3f;
         // TODO pouya inja esme playero bezar
+        String playerName = player.getUser().getUsername();
+        float nameOffset = 15f;
+        float nameX = playerPosition.x - playerName.length() - 4;
+        float nameY = playerPosition.y + (playerTexture.getRegionHeight() / (2*scale)) + nameOffset;
+        BitmapFont font = AssetManager.getStardewFont();
+        font.getData().setScale(0.5f);
+        font.draw(batch, playerName, nameX, nameY);
+        font.getData().setScale(1f);
+        if (player.emojiCounter >= 0) {
+            batch.draw(player.currentEmoji, nameX , nameY, 32, 32);
+            player.emojiCounter += 0.01f;
+            if (player.emojiCounter >= 5) {
+                player.emojiCounter = -1;
+            }
+        }
+
+
         batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale),
             playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale), playerTexture.getRegionWidth() / scale
             , playerTexture.getRegionHeight() / scale);
+
         if (currState != PlayerState.TOOL_SWINGING && player.getEquippedItem() != null) {
             if (facingDirection == FacingDirection.DOWN) {
                 Texture t;

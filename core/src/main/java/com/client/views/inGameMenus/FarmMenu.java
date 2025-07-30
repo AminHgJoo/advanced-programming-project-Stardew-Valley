@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -115,8 +116,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Label timeLabel;
     private Label moneyLabel;
     private Stage popupStage;
-    private Texture currentEmoji;
-    private float emojiCounter;
     private boolean crowFlag = false;
 
     private final Stage chatNotifStage;
@@ -149,7 +148,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         initializeShader();
         initializeParticles();
         initializeEmoji();
-        emojiCounter = -1;
+        playerController.getPlayer().emojiCounter = -1;
         initializeStage(0.1f);
         pauseMenu = new PauseMenu(AssetManager.getSkin(), this);
         shapeRenderer = new ShapeRenderer();
@@ -315,16 +314,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
             stage.addActor(image);
         }
 
-        if (emojiCounter >= 0) {
-            Image image = new Image(currentEmoji);
-            image.setPosition(stage.getWidth() / 2, 20 + stage.getHeight() / 2);
-            image.setSize(emojiSize, emojiSize);
-            stage.addActor(image);
-            emojiCounter += delta;
-            if (emojiCounter >= 2) {
-                emojiCounter = -1;
-            }
-        }
+  //      if (emojiCounter >= 0) {
+//            Image image = new Image(currentEmoji);
+//            image.setPosition(stage.getWidth() / 2, 20 + stage.getHeight() / 2);
+//            image.setSize(emojiSize, emojiSize);
+//            image.setSize(emojiSize, emojiSize);
+//            stage.addActor(image);
+//            emojiCounter += delta;
+//            if (emojiCounter >= 2) {
+//                emojiCounter = -1;
+//            }
+//      }
     }
 
     private void showTools() {
@@ -674,8 +674,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
             if (screenX >= x && screenX <= x + emojiSize &&
                 touchY >= y && touchY <= y + emojiSize) {
                 //TODO Texture
-                currentEmoji = emojiTextures.get(i);
-                emojiCounter = 0f;
+                playerController.getPlayer().currentEmoji = emojiTextures.get(i);
+                playerController.getPlayer().emojiCounter = 0f;
                 break;
             }
         }
@@ -733,6 +733,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
             }
         } else if (type.equals("EMOJI_SENT")) {
             // TODO pouya do something
+
         } else if (type.equals("MUSIC_QUERY")) {
             var req = new JsonObject();
 

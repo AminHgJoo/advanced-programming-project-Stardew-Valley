@@ -1,5 +1,6 @@
 package com.common.models;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.common.models.NPCModels.NPC;
 import com.common.models.NPCModels.NPCFriendship;
 import com.common.models.NPCModels.NPCReward;
@@ -45,6 +46,7 @@ public class Player {
     private String partnerName;
     private int currentFarmNumber;
     private boolean isInVillage;
+    public float emojiCounter;
     @Transient
     private User user;
     private ArrayList<Friendship> friendships = new ArrayList<>();
@@ -59,6 +61,8 @@ public class Player {
     @Transient
     private ArrayList<Message> notifications = new ArrayList<>();
     private int moneyInNextDay = 0;
+    @Transient
+    public Texture currentEmoji;
 
     public Player() {
     }
@@ -76,6 +80,7 @@ public class Player {
         this.equippedItem = null;
         this.isPlayerFainted = false;
         this.partnerName = null;
+        this.emojiCounter = -1;
         initializeInventory();
         initializeSkills();
         initializeRecipes();

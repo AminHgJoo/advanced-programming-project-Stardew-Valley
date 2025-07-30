@@ -38,7 +38,6 @@ public class VillageMenu implements MyScreen {
     private final OrthographicCamera camera;
     private final StretchViewport viewport;
     private boolean showingQuestion = false;
-
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
     private HashMap<String, PlayerVillageController> playerControllers = new HashMap<>();
