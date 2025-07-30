@@ -28,6 +28,7 @@ import com.server.utilities.Response;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -45,6 +46,7 @@ public class PlayerVillageController {
     private float width;
     private float height;
     private FarmMenu farmMenu;
+    private HashMap<String, Coordinate> stores = new HashMap<>();
 
     public PlayerVillageController(Vector2 x, Vector2 y, FarmMenu farmMenu, Player player) {
         this.farmMenu = farmMenu;
@@ -57,6 +59,24 @@ public class PlayerVillageController {
         this.playerVelocity = y;
         this.width = playerAnimationController.getCurrentFrame().getTexture().getWidth();
         this.height = playerAnimationController.getCurrentFrame().getTexture().getHeight();
+        initStores();
+    }
+
+    public void initStores() {
+        // 1232.6101 , 527.6693 ->  star drop
+        // 1480.6656 , 535.89667 -> jojamart
+        // 597.03845 , 522.557 -> pierre
+        // 1572.1227 , 772.8281 -> fish
+        // 555.7794 , 766.0151 -> carpenter
+        // 1176.92 , 761.74866 -> blacksmith
+        // 1262.0074 , 254.55693 -> ranch
+        stores.put("The Stardrop Saloon", new Coordinate(1232.6101f, 527.6693f));
+        stores.put("JojaMart", new Coordinate(1480.6656f, 535.89667f));
+        stores.put("Pierre's General Store", new Coordinate(597.03845f, 522.557f));
+        stores.put("Fish Shop", new Coordinate(1572.1227f, 772.8281f));
+        stores.put("Carpenter's Shop", new Coordinate(555.7794f, 766.0151f));
+        stores.put("Blacksmith", new Coordinate(1176.92f, 761.74866f));
+        stores.put("Marnie's Ranch", new Coordinate(1262.0074f, 254.55693f));
     }
 
     public void update(float delta) {
@@ -66,6 +86,7 @@ public class PlayerVillageController {
     public void render(Batch batch) {
         TextureRegion playerTexture = playerAnimationController.getCurrentFrame();
         float scale = 3f;
+        // TODO pouya inja esme playero bezar
         batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale),
             playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale), playerTexture.getRegionWidth() / scale
             , playerTexture.getRegionHeight() / scale);
@@ -303,6 +324,26 @@ public class PlayerVillageController {
         playerPosition.y = MathUtils.clamp(playerPosition.y, height / 2, 927.7919f);
         if ((prev_x != playerPosition.x || prev_y != playerPosition.y))
             updatePlayerCoordinate();
+        checkStoreEntry();
+    }
+
+    public void checkStoreEntry() {
+        String storeName = null;
+        for (Map.Entry<String, Coordinate> entry : stores.entrySet()) {
+            Coordinate coordinate = entry.getValue();
+            if (checkInRange(playerPosition.x , coordinate.getX()) && checkInRange(playerPosition.y , coordinate.getY())) {
+                storeName = entry.getKey();
+                break;
+            }
+        }
+        if(storeName != null){
+            System.out.println(storeName);
+
+        }
+    }
+
+    public boolean checkInRange(float x, float y) {
+        return (x >= y - 10) &&(x <= y + 10);
     }
 
     public void updatePlayerCoordinate() {

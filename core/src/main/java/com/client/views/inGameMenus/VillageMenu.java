@@ -1,6 +1,7 @@
 package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -98,7 +99,10 @@ public class VillageMenu implements MyScreen {
         } else if (Gdx.input.isKeyPressed(Keybinds.RIGHT.keycodes.get(0))) {
             playerController.setState(PlayerState.WALKING);
             playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
-        } else {
+        }else if(Gdx.input.isKeyPressed(Input.Keys.P)){
+            System.out.println(playerPosition.x + " , " + playerPosition.y);
+
+        }else {
             playerController.setState(PlayerState.IDLE);
             playerVelocity.x = 0;
             playerVelocity.y = 0;

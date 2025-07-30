@@ -67,6 +67,7 @@ public class PlayerController {
     public void render(Batch batch) {
         TextureRegion playerTexture = playerAnimationController.getCurrentFrame();
         float scale = 3f;
+        // TODO pouya inja esme playero bezar
         batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale),
             playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale), playerTexture.getRegionWidth() / scale
             , playerTexture.getRegionHeight() / scale);
