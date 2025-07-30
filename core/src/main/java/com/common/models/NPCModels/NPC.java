@@ -193,8 +193,9 @@ public class NPC {
         return null;
     }
 
-    public String context(GameData game){
-        // TODO
-        return "";
+    public String context(GameData game , String username){
+        return "You are a NPC in stardew valley game  , you are in the village , your name is " +
+            name + " and " + username + " is talking to you. The date of now is " + game.getDate().toString() +
+            "and the weather is " + game.getWeatherToday();
     }
 }

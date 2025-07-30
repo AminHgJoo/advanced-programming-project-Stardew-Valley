@@ -37,7 +37,7 @@ public class NpcController extends Controller {
                 npc.getHasTalked().put(player.getUser().getUsername(), true);
                 player.addXpToNpcFriendship(20, npc);
             }
-            String response = AIChat.getNpcDialogue(message);
+            String response = AIChat.getNpcDialogue(message , npc.context(game , player.getUser().getUsername()));
             String gameJson = GameGSON.gson.toJson(game);
 
             ctx.json(Response.OK.setMessage(response).setBody(gameJson));
