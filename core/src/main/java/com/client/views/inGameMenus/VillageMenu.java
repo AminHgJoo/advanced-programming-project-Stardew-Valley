@@ -142,7 +142,8 @@ public class VillageMenu implements MyScreen {
         playerController.updatePlayerPos(delta);
         playerController.update(delta);
         clearAndResetScreen();
-        handleEvents();
+        if (!showingQuestion)
+            handleEvents();
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         renderPlayers();

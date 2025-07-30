@@ -314,6 +314,30 @@ public class PlayerVillageController {
         playerVelocity.x = 0;
         playerVelocity.y = 0;
     }
+    // x : 33.5 - 822.5166 | y : 426.72534 - 524.69574
+    // x : 822.5166 - 984.9261 | y : 0 - 927.7919
+    // x : 984.1325 - 1889.6036 | y : 426.72534 , 524.69574
+    // x : 984.1325 , 1889.6036 | y : 740.0952 , 770.0764
+
+    // x : 822.5166 , 385.32944 | y : 740.0952 , 770.0764
+    // x : 984.1325 , 1889.6036 | Y : 185.20575  , 254.1898
+
+
+    public boolean checkToBeInSideWalk() {
+        float x = playerPosition.x;
+        float y = playerPosition.y;
+        if (isInRange(x, 33.5f, 822.5166f) && isInRange(y, 426.72534f, 524.69574f)) return true;
+        if (isInRange(x, 822.5166f, 984.9261f) && isInRange(y, 0, 927.7919f)) return true;
+        if (isInRange(x, 984.1325f, 1889.6036f) && isInRange(y, 426.72534f, 524.69574f)) return true;
+        if (isInRange(x, 984.1325f, 1889.6036f) && isInRange(y, 740.0952f, 770.0764f)) return true;
+        if (isInRange(x, 385.32944f, 822.5166f) && isInRange(y, 740.0952f, 770.0764f)) return true;
+        if (isInRange(x, 984.1325f, 1889.6036f) && isInRange(y, 185.20575f, 254.1898f)) return true;
+        return false;
+    }
+
+    public boolean isInRange(float x, float min, float max) {
+        return x >= min && x <= max;
+    }
 
     public void updatePlayerPos(float delta) {
         float prev_x = playerPosition.x;
@@ -323,6 +347,11 @@ public class PlayerVillageController {
 
         playerPosition.y += playerVelocity.y * delta * FarmMenu.BASE_SPEED_FACTOR;
         playerPosition.y = MathUtils.clamp(playerPosition.y, height / 2, 927.7919f);
+
+        if (!checkToBeInSideWalk()) {
+            playerPosition.y = prev_y;
+            playerPosition.x = prev_x;
+        }
         if ((prev_x != playerPosition.x || prev_y != playerPosition.y))
             updatePlayerCoordinate();
     }
@@ -331,19 +360,22 @@ public class PlayerVillageController {
         String storeName = null;
         for (Map.Entry<String, Coordinate> entry : stores.entrySet()) {
             Coordinate coordinate = entry.getValue();
-            if (checkInRange(playerPosition.x, coordinate.getX()) && checkInRange(playerPosition.y, coordinate.getY())) {
+            if (checkInRange(playerPosition.x, coordinate.getX(), 20) && checkInRange(playerPosition.y, coordinate.getY(), 20)) {
                 storeName = entry.getKey();
                 break;
             }
         }
         if (storeName != null && facingDirection == FacingDirection.UP) {
             System.out.println(storeName);
+            playerVelocity.x = 0;
+            playerVelocity.y = 0;
+            currState = PlayerState.IDLE;
             this.villageMenu.showGoToStorePopUp(storeName);
         }
     }
 
-    public boolean checkInRange(float x, float y) {
-        return (x >= y - 20) && (x <= y + 20);
+    public boolean checkInRange(float x, float y, float range) {
+        return (x >= y - range) && (x <= y + range);
     }
 
     public void updatePlayerCoordinate() {
