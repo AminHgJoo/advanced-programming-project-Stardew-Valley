@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.controllers.PlayerController;
+import com.client.controllers.PlayerVillageController;
 import com.client.utils.AssetManager;
 import com.client.utils.Keybinds;
 import com.client.utils.MyScreen;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 
 public class VillageMenu implements MyScreen {
     private FarmMenu farmMenu;
-    private PlayerController playerController;
+    private PlayerVillageController playerController;
     private Stage stage;
     private GameMain gameMain;
     private SpriteBatch batch;
@@ -34,13 +35,13 @@ public class VillageMenu implements MyScreen {
     public static final float BASE_SPEED_FACTOR = 16;
     public static final float TILE_PIX_SIZE = 32;
     public static final float FARM_X_SPAN = 60; //32 * 75 == 2400
-    public static final float FARM_Y_SPAN = 30; //32 * 50 == 1600
+    public static final float FARM_Y_SPAN = 29.5f; //32 * 50 == 1600
     private final OrthographicCamera camera;
     private final StretchViewport viewport;
 
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
-    private HashMap<String, PlayerController> playerControllers = new HashMap<>();
+    private HashMap<String, PlayerVillageController> playerControllers = new HashMap<>();
     private GameData game = ClientApp.currentGameData;
     private Player player = ClientApp.currentPlayer;
 
@@ -59,7 +60,7 @@ public class VillageMenu implements MyScreen {
                 x = playerPosition;
                 y = playerVelocity;
             }
-            playerControllers.put(p.getUser_id(), new PlayerController(x, y, farmMenu, p));
+            playerControllers.put(p.getUser_id(), new PlayerVillageController(x, y, farmMenu, p));
         }
         this.playerController = playerControllers.get(player.getUser_id());
         backgroundTexture = AssetManager.getImage("stardewvillageday");
