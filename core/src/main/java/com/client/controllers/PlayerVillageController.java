@@ -10,6 +10,7 @@ import com.client.ClientApp;
 import com.client.services.PlayerService;
 import com.client.utils.*;
 import com.client.views.inGameMenus.FarmMenu;
+import com.client.views.inGameMenus.VillageMenu;
 import com.common.GameGSON;
 import com.common.models.Backpack;
 import com.common.models.GameData;
@@ -45,11 +46,11 @@ public class PlayerVillageController {
     private PlayerService playerService;
     private float width;
     private float height;
-    private FarmMenu farmMenu;
+    private VillageMenu villageMenu;
     private HashMap<String, Coordinate> stores = new HashMap<>();
 
-    public PlayerVillageController(Vector2 x, Vector2 y, FarmMenu farmMenu, Player player) {
-        this.farmMenu = farmMenu;
+    public PlayerVillageController(Vector2 x, Vector2 y, VillageMenu villageMenu, Player player) {
+        this.villageMenu = villageMenu;
         this.player = player;
         facingDirection = FacingDirection.DOWN;
         currState = PlayerState.IDLE;
@@ -324,26 +325,25 @@ public class PlayerVillageController {
         playerPosition.y = MathUtils.clamp(playerPosition.y, height / 2, 927.7919f);
         if ((prev_x != playerPosition.x || prev_y != playerPosition.y))
             updatePlayerCoordinate();
-        checkStoreEntry();
     }
 
     public void checkStoreEntry() {
         String storeName = null;
         for (Map.Entry<String, Coordinate> entry : stores.entrySet()) {
             Coordinate coordinate = entry.getValue();
-            if (checkInRange(playerPosition.x , coordinate.getX()) && checkInRange(playerPosition.y , coordinate.getY())) {
+            if (checkInRange(playerPosition.x, coordinate.getX()) && checkInRange(playerPosition.y, coordinate.getY())) {
                 storeName = entry.getKey();
                 break;
             }
         }
-        if(storeName != null){
+        if (storeName != null && facingDirection == FacingDirection.UP) {
             System.out.println(storeName);
-
+            this.villageMenu.showGoToStorePopUp(storeName);
         }
     }
 
     public boolean checkInRange(float x, float y) {
-        return (x >= y - 10) &&(x <= y + 10);
+        return (x >= y - 20) && (x <= y + 20);
     }
 
     public void updatePlayerCoordinate() {
@@ -354,7 +354,6 @@ public class PlayerVillageController {
             var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/movementWalkInVillage", req);
 
             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-            System.out.println(res.getMessage());
             Gdx.app.postRunnable(() -> {
                 if (res.getStatus() == 200) {
                     player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
@@ -364,6 +363,7 @@ public class PlayerVillageController {
                 }
             });
         });
+        checkStoreEntry();
     }
 
     public void goToVillage() {
@@ -379,6 +379,10 @@ public class PlayerVillageController {
                 }
             });
         });
+    }
+
+    public void goToFarm() {
+
     }
 
     public Player getPlayer() {

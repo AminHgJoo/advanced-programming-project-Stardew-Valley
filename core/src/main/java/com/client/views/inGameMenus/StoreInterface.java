@@ -23,7 +23,7 @@ public class StoreInterface implements MyScreen {
     private final ArrayList<StoreProduct> storeProducts = new ArrayList<>();
     private final String storeName;
     private final GameMain gameMain;
-    private final FarmMenu farmMenu;
+    private final VillageMenu villageMenu;
     private final Skin skin;
     private final Texture background;
     private StoreProduct selectedItem = null;
@@ -31,10 +31,10 @@ public class StoreInterface implements MyScreen {
     private Stage stage;
     private TextButton buyButton;
 
-    public StoreInterface(GameMain gameMain, String storeName, FarmMenu farmMenu) {
+    public StoreInterface(GameMain gameMain, String storeName, VillageMenu villageMenu) {
         this.gameMain = gameMain;
         this.storeName = storeName;
-        this.farmMenu = farmMenu;
+        this.villageMenu = villageMenu;
 
         this.skin = AssetManager.getSkin();
         this.background = AssetManager.getImage("profilebackground");
@@ -160,7 +160,7 @@ public class StoreInterface implements MyScreen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 dispose();
-                gameMain.setScreen(farmMenu);
+                gameMain.setScreen(villageMenu);
             }
         });
 

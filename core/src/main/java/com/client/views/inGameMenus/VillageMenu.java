@@ -14,10 +14,7 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.controllers.PlayerController;
 import com.client.controllers.PlayerVillageController;
-import com.client.utils.AssetManager;
-import com.client.utils.Keybinds;
-import com.client.utils.MyScreen;
-import com.client.utils.PlayerState;
+import com.client.utils.*;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.mapModels.Coordinate;
@@ -28,6 +25,7 @@ public class VillageMenu implements MyScreen {
     private FarmMenu farmMenu;
     private PlayerVillageController playerController;
     private Stage stage;
+    private Stage popUpStage;
     private GameMain gameMain;
     private SpriteBatch batch;
     private Texture backgroundTexture;
@@ -39,6 +37,7 @@ public class VillageMenu implements MyScreen {
     public static final float FARM_Y_SPAN = 29.5f; //32 * 50 == 1600
     private final OrthographicCamera camera;
     private final StretchViewport viewport;
+    private boolean showingQuestion = false;
 
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
@@ -52,6 +51,8 @@ public class VillageMenu implements MyScreen {
         this.gameMain = gameMain;
         batch = new SpriteBatch();
         stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
+        popUpStage = new Stage();
         this.playerPosition = new Vector2(player.getCoordinate().getX(), player.getCoordinate().getY());
         this.playerVelocity = new Vector2();
         for (Player p : game.getPlayers()) {
@@ -61,7 +62,7 @@ public class VillageMenu implements MyScreen {
                 x = playerPosition;
                 y = playerVelocity;
             }
-            playerControllers.put(p.getUser_id(), new PlayerVillageController(x, y, farmMenu, p));
+            playerControllers.put(p.getUser_id(), new PlayerVillageController(x, y, this, p));
         }
         this.playerController = playerControllers.get(player.getUser_id());
         backgroundTexture = AssetManager.getImage("stardewvillageday");
@@ -79,6 +80,31 @@ public class VillageMenu implements MyScreen {
     @Override
     public void socketMessage(String message) {
 
+    }
+
+    public void showGoToStorePopUp(String name) {
+        if (!showingQuestion) {
+            showingQuestion = true;
+            VillageMenu menu = this;
+            ConfirmAlert alert = new ConfirmAlert("question", "Do you wanna go to " + name + " ?",
+                AssetManager.getSkin()) {
+                @Override
+                protected void result(Object object) {
+                    boolean result = (boolean) object;
+                    Gdx.input.setInputProcessor(stage);
+                    showingQuestion = false;
+                    if (result) {
+                        gameMain.setScreen(new StoreInterface(gameMain, name, menu));
+                    } else {
+                        playerPosition.y -= 20;
+                    }
+
+                    remove();
+                }
+            };
+            alert.show(popUpStage);
+            Gdx.input.setInputProcessor(popUpStage);
+        }
     }
 
     @Override
@@ -99,10 +125,10 @@ public class VillageMenu implements MyScreen {
         } else if (Gdx.input.isKeyPressed(Keybinds.RIGHT.keycodes.get(0))) {
             playerController.setState(PlayerState.WALKING);
             playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
-        }else if(Gdx.input.isKeyPressed(Input.Keys.P)){
+        } else if (Gdx.input.isKeyPressed(Input.Keys.P)) {
             System.out.println(playerPosition.x + " , " + playerPosition.y);
 
-        }else {
+        } else {
             playerController.setState(PlayerState.IDLE);
             playerVelocity.x = 0;
             playerVelocity.y = 0;
@@ -121,6 +147,14 @@ public class VillageMenu implements MyScreen {
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         renderPlayers();
         batch.end();
+        handleUI(delta);
+    }
+
+    public void handleUI(float delta) {
+        stage.act(delta);
+        stage.draw();
+        popUpStage.act(delta);
+        popUpStage.draw();
     }
 
     @Override
