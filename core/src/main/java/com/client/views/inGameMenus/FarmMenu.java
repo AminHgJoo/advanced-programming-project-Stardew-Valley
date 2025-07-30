@@ -140,7 +140,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.grassTexture = AssetManager.getImage("grassfall");
         playerController = new PlayerController(playerPosition, playerVelocity, this , ClientApp.currentPlayer);
         this.farm = playerController.getPlayer().getFarm();
-        playerController.getPlayer().setInVillage(true);
+//        playerController.getPlayer().setInVillage(true);
         this.inventory = AssetManager.getImage("aks");
         //TODO tuf zadam
         for (Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {

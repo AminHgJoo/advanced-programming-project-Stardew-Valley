@@ -1,6 +1,7 @@
 package com.server.controllers.InGameControllers;
 
 
+import com.common.GameGSON;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.mapModels.Cell;
@@ -66,8 +67,37 @@ public class MovementController extends Controller {
         }
     }
 
+    public void walkInVillage(Context ctx, GameServer gs) {
+        try {
+            String id = ctx.attribute("id");
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            double x = (Double) body.get("x");
+            double y = (Double) body.get("y");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+
+            if(!player.isInVillage()) {
+                ctx.json(Response.BAD_REQUEST.setMessage("Player not in village"));
+                return;
+            }
+            player.setCoordinate(new Coordinate((float) x, (float) y));
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setMessage("Ok").setBody(playerJson));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player_user_id", id);
+            msg.put("x", String.format("%f", x));
+            msg.put("y", String.format("%f", y));
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
     public void goToVillage(Context ctx, GameServer gs) {
         try {
+            System.out.println("he");
             String id = ctx.attribute("id");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);

@@ -46,7 +46,7 @@ public class PlayerVillageController {
     private float height;
     private FarmMenu farmMenu;
 
-    public PlayerVillageController(Vector2 x, Vector2 y, FarmMenu farmMenu , Player player) {
+    public PlayerVillageController(Vector2 x, Vector2 y, FarmMenu farmMenu, Player player) {
         this.farmMenu = farmMenu;
         this.player = player;
         facingDirection = FacingDirection.DOWN;
@@ -271,7 +271,6 @@ public class PlayerVillageController {
     }
 
     public void handleKeyUp(float x, float y) {
-        System.out.println("hrllo");
         playerVelocity.x = x;
         playerVelocity.y = y;
         if (x != 0) {
@@ -287,7 +286,6 @@ public class PlayerVillageController {
                 facingDirection = FacingDirection.DOWN;
             }
         }
-        System.out.println(facingDirection);
     }
 
     public void handleKeyDown() {
@@ -303,49 +301,39 @@ public class PlayerVillageController {
 
         playerPosition.y += playerVelocity.y * delta * FarmMenu.BASE_SPEED_FACTOR;
         playerPosition.y = MathUtils.clamp(playerPosition.y, height / 2, 927.7919f);
-        if ((prev_x != playerPosition.x || prev_y != playerPosition.y) && !player.isInVillage())
+        if ((prev_x != playerPosition.x || prev_y != playerPosition.y))
             updatePlayerCoordinate();
     }
 
     public void updatePlayerCoordinate() {
-        System.out.println("hi");
-        boolean checkWalk = playerService.walk(playerPosition.x, playerPosition.y);
-        if (checkWalk) {
-            networkThreadPool.execute(() -> {
-                JsonObject req = new JsonObject();
-                req.addProperty("x", playerPosition.x);
-                req.addProperty("y", playerPosition.y);
-                var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/movementWalk", req);
+        networkThreadPool.execute(() -> {
+            JsonObject req = new JsonObject();
+            req.addProperty("x", playerPosition.x);
+            req.addProperty("y", playerPosition.y);
+            var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/movementWalkInVillage", req);
 
-                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-                Gdx.app.postRunnable(() -> {
-                    if (res.getStatus() == 200) {
-                        player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
-                    } else {
-                        playerPosition.x = player.getCoordinate().getX();
-                        playerPosition.y = player.getCoordinate().getY();
-                    }
-                });
+            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+            System.out.println(res.getMessage());
+            Gdx.app.postRunnable(() -> {
+                if (res.getStatus() == 200) {
+                    player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
+                } else {
+                    playerPosition.x = player.getCoordinate().getX();
+                    playerPosition.y = player.getCoordinate().getY();
+                }
             });
-        } else {
-            playerPosition.x = player.getCoordinate().getX();
-            playerPosition.y = player.getCoordinate().getY();
-        }
-        if (playerPosition.x == 2366.5f && playerPosition.y == 67f) {
-            System.out.println("hello");
-            farmMenu.showGoToVillagePopUp();
-        }
+        });
     }
 
-    public void goToVillage(){
+    public void goToVillage() {
         player.setInVillage(true);
         networkThreadPool.execute(() -> {
             var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/movementGoToVillage", null);
             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-            Gdx.app.postRunnable(()->{
+            Gdx.app.postRunnable(() -> {
                 if (res.getStatus() == 200) {
 
-                }else {
+                } else {
 
                 }
             });

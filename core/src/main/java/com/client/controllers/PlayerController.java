@@ -47,7 +47,7 @@ public class PlayerController {
     private float height;
     private FarmMenu farmMenu;
 
-    public PlayerController(Vector2 x, Vector2 y, FarmMenu farmMenu , Player player) {
+    public PlayerController(Vector2 x, Vector2 y, FarmMenu farmMenu, Player player) {
         this.farmMenu = farmMenu;
         this.player = player;
         facingDirection = FacingDirection.DOWN;
@@ -272,7 +272,6 @@ public class PlayerController {
     }
 
     public void handleKeyUp(float x, float y) {
-        System.out.println("hrllo");
         playerVelocity.x = x;
         playerVelocity.y = y;
         if (x != 0) {
@@ -288,7 +287,6 @@ public class PlayerController {
                 facingDirection = FacingDirection.DOWN;
             }
         }
-        System.out.println(facingDirection);
     }
 
     public void handleKeyDown() {
@@ -339,19 +337,16 @@ public class PlayerController {
         }
     }
 
-    public void goToVillage(){
-            player.setInVillage(true);
-            networkThreadPool.execute(() -> {
-                var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/movementGoToVillage", null);
-                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-                Gdx.app.postRunnable(()->{
-                    if (res.getStatus() == 200) {
+    public void goToVillage() {
+        player.setInVillage(true);
+        var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/movementGoToVillage", new JsonObject());
+        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+        System.out.println(res.getMessage());
+        if (res.getStatus() == 200) {
 
-                    }else {
+        } else {
 
-                    }
-                });
-            });
+        }
     }
 
     public Player getPlayer() {
