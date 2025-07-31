@@ -117,7 +117,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Label moneyLabel;
     private Stage popupStage;
     private boolean crowFlag = false;
-
+    public boolean voteFlag = false;
+    public Player votedPlayer;
     private final Stage chatNotifStage;
     private InputProcessor temp;
 
@@ -150,7 +151,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         initializeEmoji();
         playerController.getPlayer().emojiCounter = -1;
         initializeStage(0.1f);
-        pauseMenu = new PauseMenu(AssetManager.getSkin(), this);
+        pauseMenu = new PauseMenu(AssetManager.getSkin(), this, gameMain);
         shapeRenderer = new ShapeRenderer();
 
         this.chatNotifStage = new Stage(new ScreenViewport());
@@ -438,9 +439,12 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Keybinds.OPEN_CHAT.keycodes.contains(keycode)) {
             gameMain.setScreen(new ChatScreen(this, gameMain));
         }
-        else if(keycode == Input.Keys.J) {
+        else if(keycode == Input.Keys.H) {
             //shipping menu jjjjjjjjjjjj
             gameMain.setScreen(new ShippingMenu(gameMain, this));
+        }
+        else if(keycode == Input.Keys.N) {
+            gameMain.setScreen(new JournalMenu(gameMain, this));
         }
         return false;
     }
@@ -803,6 +807,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public void render(float delta) {
+        if(voteFlag){
+            gameMain.setScreen(new VoteMenu(gameMain, this, votedPlayer));
+        }
         if (playerController.getPlayer().isInVillage()) {
             gameMain.setScreen(new VillageMenu(this, gameMain));
         } else {
@@ -825,6 +832,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
             handleWeatherFX(delta);
 
             handleUI(delta);
+
         }
     }
 

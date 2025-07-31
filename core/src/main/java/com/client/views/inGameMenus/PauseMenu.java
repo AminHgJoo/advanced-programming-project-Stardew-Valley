@@ -14,9 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.client.ClientApp;
+import com.client.GameMain;
 import com.client.utils.HTTPUtil;
 import com.client.views.preGameMenus.MainMenu;
 import com.server.utilities.Response;
+import com.server.views.gameViews.GameMenu;
 
 public class PauseMenu {
     private Stage stage;
@@ -24,10 +26,12 @@ public class PauseMenu {
     private Skin skin;
     private boolean isVisible = false;
     private FarmMenu farmMenu;
+    private GameMain gameMain;
 
-    public PauseMenu(Skin skin, FarmMenu farmMenu) {
+    public PauseMenu(Skin skin, FarmMenu farmMenu, GameMain gameMain) {
         this.farmMenu = farmMenu;
         this.skin = skin;
+        this.gameMain = gameMain;
         stage = new Stage();
         // Create the table that will hold our buttons
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -50,6 +54,7 @@ public class PauseMenu {
 
         // Create buttons
         TextButton resumeButton = new TextButton("Resume", skin);
+        TextButton voteButton = new TextButton("Vote", skin);
         TextButton leaveButton = new TextButton("Leave", skin);
 
         // Add listeners
@@ -57,6 +62,13 @@ public class PauseMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 hide();
+            }
+        });
+        voteButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                hide();
+                gameMain.setScreen(new ChoosePlayerMenu(gameMain, farmMenu));
             }
         });
 
@@ -84,6 +96,7 @@ public class PauseMenu {
 
         // Add buttons to table
         table.add(resumeButton).padBottom(20).row();
+        table.add(voteButton).padBottom(20).row();
         table.add(leaveButton);
 
         stage.addActor(table);

@@ -9,47 +9,98 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
-import com.common.models.Friendship;
-import com.common.models.NPCModels.NPCFriendship;
 import com.common.models.Player;
-import com.common.models.Quest;
 
-import java.util.ArrayList;
-
-public class JournalMenu implements MyScreen, InputProcessor {
+public class VoteMenu implements MyScreen, InputProcessor {
     private final Skin skin;
     private GameMain gameMain;
     private MyScreen farmScreen;
     private SpriteBatch batch;
     private Texture backgroundTexture;
+    private Stage stage;
     private BitmapFont titleFont;
     private GlyphLayout layout;
     private Player player;
-    private ArrayList<Quest> quests;
 
-    public JournalMenu(GameMain gameMain, MyScreen farmScreen) {
+    public VoteMenu(GameMain gameMain, MyScreen farmScreen, Player player) {
         this.gameMain = gameMain;
         this.farmScreen = farmScreen;
         this.batch = new SpriteBatch();
         backgroundTexture = AssetManager.getImage("profileBackground");
         this.skin = AssetManager.getSkin();
+        stage = new Stage(new ScreenViewport());
+        Image backgroundImage = new Image(backgroundTexture);
+        backgroundImage.setFillParent(true);
+        stage.addActor(backgroundImage);
+
         titleFont = AssetManager.getStardewFont();
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
-        this.player = ClientApp.currentPlayer;
-        this.quests = player.getQuests();
+        this.player = player;
+        float buttonWidth = 200f;
+        float buttonHeight = 80f;
+        float spacing = 40f;
+        float totalWidth = buttonWidth * 2 + spacing;
+        float startX = (Gdx.graphics.getWidth() - totalWidth) / 2f;
+        float yButtons = Gdx.graphics.getHeight() - 200f;
+        TextButton yesButton = new TextButton("Yes", skin);
+        yesButton.setSize(buttonWidth, buttonHeight);
+        yesButton.setPosition(startX, yButtons);
+        TextButton noButton = new TextButton("No", skin);
+        noButton.setSize(buttonWidth, buttonHeight);
+        noButton.setPosition(startX + buttonWidth + spacing, yButtons);
 
+        yesButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //TODO server
+                ((FarmMenu) farmScreen).voteFlag = false;
+                ((FarmMenu) farmScreen).votedPlayer = null;
+                gameMain.setScreen(farmScreen);
+                dispose();
+            }
+        });
+
+        noButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //TODO server
+                ((FarmMenu) farmScreen).voteFlag = false;
+                ((FarmMenu) farmScreen).votedPlayer = null;
+                gameMain.setScreen(farmScreen);
+                dispose();
+            }
+        });
+        String voteText = "Do you want to kick " + player.getUser().getUsername() + " ?";
+        Label voteLabel = new Label(voteText, skin);
+        voteLabel.setColor(Color.YELLOW);
+        voteLabel.setFontScale(2.5f);
+        voteLabel.setAlignment(1);
+
+        float labelX = Gdx.graphics.getWidth() / 2f - voteLabel.getPrefWidth() / 2f + 150;
+        float labelY = Gdx.graphics.getHeight() - 100f;
+
+        voteLabel.setPosition(labelX, labelY);
+        stage.addActor(voteLabel);
+
+        stage.addActor(yesButton);
+        stage.addActor(noButton);
+
+        Gdx.input.setInputProcessor(stage);
     }
+
 
     @Override
     public boolean keyDown(int i) {
@@ -107,34 +158,15 @@ public class JournalMenu implements MyScreen, InputProcessor {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(this);
     }
 
     @Override
     public void render(float v) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        batch.draw(backgroundTexture, 0, 0);
-        float xInfo = 100f;
-        float yInfo = Gdx.graphics.getHeight() - 150f;
-        BitmapFont font = AssetManager.getStardewFont();
-        font.getData().setScale(1);
-        font.setColor(Color.WHITE);
 
-        font.draw(batch, "Active Quests:", xInfo, yInfo);
-        yInfo -= 40;
-
-//        for (Friendship f : friendships) {
-//            font.draw(batch, "Name: " + f.getPlayer() + " | Level: " + f.getLevel() + " | XP: " + f.getXp(), xInfo, yInfo);
-//            yInfo -= 30;
-//        }
-
-        for(Quest quest : quests) {
-            font.draw(batch, quest.toString(), xInfo, yInfo);
-        }
-        batch.end();
-
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
     }
 
 
@@ -161,5 +193,6 @@ public class JournalMenu implements MyScreen, InputProcessor {
     @Override
     public void dispose() {
         batch.dispose();
+        stage.dispose();
     }
 }
