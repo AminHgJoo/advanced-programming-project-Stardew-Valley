@@ -16,12 +16,14 @@ import com.client.controllers.NpcController;
 import com.client.controllers.PlayerController;
 import com.client.controllers.PlayerVillageController;
 import com.client.utils.*;
+import com.common.GameGSON;
 import com.common.models.GameData;
 import com.common.models.NPCModels.NPC;
 import com.common.models.Player;
 import com.common.models.mapModels.Coordinate;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class VillageMenu implements MyScreen {
     private FarmMenu farmMenu;
@@ -90,7 +92,27 @@ public class VillageMenu implements MyScreen {
 
     @Override
     public void socketMessage(String message) {
-
+        HashMap<String, String> res = (HashMap<String, String>) GameGSON.gson.fromJson(message, HashMap.class);
+        String type = res.get("type");
+        if(type.equals("GAME_UPDATED")){
+            System.out.println("hello");
+            String gameJson = res.get("game");
+            GameData game = GameGSON.gson.fromJson(gameJson, GameData.class);
+            ClientApp.currentGameData = game;
+            this.game = game;
+            for(Map.Entry<String , PlayerVillageController> entry : playerControllers.entrySet()){
+                entry.getValue().updateGame();
+            }
+            for(Map.Entry<String , NpcController> entry : npcControllers.entrySet()){
+                entry.getValue().updateGame();
+            }
+        }else if(type.equals("PLAYER_UPDATED")){
+            String id = res.get("player_user_id");
+            PlayerVillageController controller = playerControllers.get(id);
+            String playerJson = res.get("player");
+            Player player1 = GameGSON.gson.fromJson(playerJson , Player.class);
+            controller.updateGamePlayer(player1);
+        }
     }
 
     public void showGoToStorePopUp(String name) {

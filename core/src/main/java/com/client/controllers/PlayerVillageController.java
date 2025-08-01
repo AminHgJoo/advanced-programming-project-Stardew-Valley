@@ -517,4 +517,18 @@ public class PlayerVillageController {
             updatePlayerObject(player);
         }
     }
+
+    public void updatePlayer(Player player){
+        this.player = player;
+    }
+
+    public void updateGamePlayer(Player player){
+        game.setPlayerById(player.getUser_id(), player);
+        updatePlayer(player);
+    }
+
+    public void updateGame(){
+        this.game = ClientApp.currentGameData;
+        updatePlayer(game.findPlayerByUserId(player.getUser_id()));
+    }
 }

@@ -59,4 +59,14 @@ public class NpcController {
         return x >= min && x <= max;
     }
 
+    public void updateNpc(){
+        this.npc = game.findNpcByName(npc.getName());
+
+    }
+
+    public void updateGame(){
+        this.game = ClientApp.currentGameData;
+        updateNpc();
+    }
+
 }

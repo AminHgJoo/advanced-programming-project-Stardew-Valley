@@ -1,14 +1,18 @@
 package com.common.models.NPCModels;
 
+import com.badlogic.gdx.math.Vector2;
+import com.client.utils.NpcState;
 import com.common.models.GameData;
 import com.common.models.Quest;
 import com.common.models.enums.types.itemTypes.*;
 import com.common.models.items.*;
 import com.common.models.mapModels.Coordinate;
 import dev.morphia.annotations.Embedded;
+import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 @Embedded
 public class NPC {
@@ -22,6 +26,15 @@ public class NPC {
     private HashMap<String, Boolean> hasTalked = new HashMap<>();
     private HashMap<String, Boolean> gift = new HashMap<>();
 
+    @Transient
+    private Vector2 targetPosition = new Vector2();
+    @Transient
+    private NpcState state = NpcState.IDLE;
+    @Transient
+    private float waitTimer;
+    @Transient
+    private Vector2 position;
+
     public NPC() {
     }
 
@@ -31,6 +44,73 @@ public class NPC {
         initializeNpcQuest(name);
         initializeNpcFavorites(name);
         initializeNpcRewards(name);
+        position = new Vector2(coordinate.getX(), coordinate.getY());
+    }
+
+    public void update(float delta) {
+        switch (state) {
+            case IDLE:
+                chooseNewTarget();
+                break;
+            case WALKING_TO_TARGET:
+                moveTowardsTarget(delta);
+                break;
+            case WAITING_AT_TARGET:
+                waitTimer -= delta;
+                if (waitTimer <= 0) {
+                    state = NpcState.IDLE;
+                }
+                break;
+
+        }
+    }
+
+    private void moveTowardsTarget(float deltaTime) {
+        Vector2 direction = new Vector2(targetPosition.x - position.x, targetPosition.y - position.y);
+        float distance = direction.len();
+        Random random = new Random();
+        if (distance < 5f) {
+            position.set(targetPosition);
+            waitTimer = 2;
+            state = NpcState.WAITING_AT_TARGET;
+            return;
+        }
+
+        direction.nor();
+        position.x += direction.x * deltaTime;
+        position.y += direction.y * deltaTime;
+
+        this.coordinate = new Coordinate(position.x, position.y);
+
+//        if (!isInSidewalk(position.x, position.y)) {
+//            chooseNewTarget();
+//        }
+    }
+
+    private void chooseNewTarget() {
+        float x, y;
+        Random random = new Random();
+        do {
+            x = 33.5f + random.nextFloat() * (1889.6036f - 33.5f);
+            y = 0 + random.nextFloat() * (927.7919f - 0);
+        } while (!isInSidewalk(x, y));
+
+        targetPosition = new Vector2(x, y);
+        state = NpcState.WALKING_TO_TARGET;
+    }
+
+    private boolean isInSidewalk(float x, float y) {
+        if (isInRange(x, 33.5f, 822.5166f) && isInRange(y, 426.72534f, 524.69574f)) return true;
+        if (isInRange(x, 822.5166f, 984.9261f) && isInRange(y, 0, 927.7919f)) return true;
+        if (isInRange(x, 984.1325f, 1889.6036f) && isInRange(y, 426.72534f, 524.69574f)) return true;
+        if (isInRange(x, 984.1325f, 1889.6036f) && isInRange(y, 740.0952f, 770.0764f)) return true;
+        if (isInRange(x, 385.32944f, 822.5166f) && isInRange(y, 740.0952f, 770.0764f)) return true;
+        if (isInRange(x, 984.1325f, 1889.6036f) && isInRange(y, 185.20575f, 254.1898f)) return true;
+        return false;
+    }
+
+    private boolean isInRange(float value, float min, float max) {
+        return value >= min && value <= max;
     }
 
     public String getName() {
@@ -193,7 +273,7 @@ public class NPC {
         return null;
     }
 
-    public String context(GameData game , String username){
+    public String context(GameData game, String username) {
         return "You are a NPC in stardew valley game  , you are in the village , your name is " +
             name + " and " + username + " is talking to you. The date of now is " + game.getDate().toString() +
             "and the weather is " + game.getWeatherToday();
