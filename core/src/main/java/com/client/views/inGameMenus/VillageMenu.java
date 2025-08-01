@@ -12,10 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
+import com.client.controllers.NpcController;
 import com.client.controllers.PlayerController;
 import com.client.controllers.PlayerVillageController;
 import com.client.utils.*;
 import com.common.models.GameData;
+import com.common.models.NPCModels.NPC;
 import com.common.models.Player;
 import com.common.models.mapModels.Coordinate;
 
@@ -41,6 +43,7 @@ public class VillageMenu implements MyScreen {
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
     private HashMap<String, PlayerVillageController> playerControllers = new HashMap<>();
+    private HashMap<String, NpcController> npcControllers = new HashMap<>();
     private GameData game = ClientApp.currentGameData;
     private Player player = ClientApp.currentPlayer;
 
@@ -63,6 +66,9 @@ public class VillageMenu implements MyScreen {
             }
             playerControllers.put(p.getUser_id(), new PlayerVillageController(x, y, this, p));
         }
+        for (NPC npc : game.getMap().getVillage().getNpcs()) {
+            npcControllers.put(npc.getName(), new NpcController(this, npc));
+        }
         this.playerController = playerControllers.get(player.getUser_id());
         backgroundTexture = AssetManager.getImage("stardewvillageday");
         this.camera = new OrthographicCamera();
@@ -73,6 +79,12 @@ public class VillageMenu implements MyScreen {
     public void renderPlayers() {
         for (Player p : ClientApp.currentGameData.getPlayers()) {
             playerControllers.get(p.getUser_id()).render(batch);
+        }
+    }
+
+    public void renderNpcs() {
+        for (NPC npc : game.getMap().getVillage().getNpcs()) {
+            npcControllers.get(npc.getName()).render(batch);
         }
     }
 
@@ -95,7 +107,7 @@ public class VillageMenu implements MyScreen {
                     if (result) {
                         gameMain.setScreen(new StoreInterface(gameMain, name, menu));
                     } else {
-                        playerPosition.y -= 20;
+                        playerPosition.y -= 10;
                     }
 
                     remove();
@@ -146,6 +158,7 @@ public class VillageMenu implements MyScreen {
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         renderPlayers();
+        renderNpcs();
         batch.end();
         handleUI(delta);
     }

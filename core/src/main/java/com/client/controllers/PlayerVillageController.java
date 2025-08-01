@@ -88,7 +88,6 @@ public class PlayerVillageController {
     public void render(Batch batch) {
         TextureRegion playerTexture = playerAnimationController.getCurrentFrame();
         float scale = 3f;
-        // TODO pouya inja esme playero bezar
         String playerName = player.getUser().getUsername();
         float nameOffset = 20f;
         float nameX = playerPosition.x - (playerTexture.getRegionWidth() / (2 * scale));
