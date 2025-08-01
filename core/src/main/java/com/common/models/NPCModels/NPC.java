@@ -1,7 +1,9 @@
 package com.common.models.NPCModels;
 
 import com.badlogic.gdx.math.Vector2;
+import com.client.utils.FacingDirection;
 import com.client.utils.NpcState;
+import com.client.utils.PlayerState;
 import com.common.models.GameData;
 import com.common.models.Quest;
 import com.common.models.enums.types.itemTypes.*;
@@ -27,7 +29,7 @@ public class NPC {
     private HashMap<String, Boolean> gift = new HashMap<>();
 
     @Transient
-    private Vector2 targetPosition = new Vector2();
+    private Vector2 targetPosition;
     @Transient
     private NpcState state = NpcState.IDLE;
     @Transient
@@ -36,6 +38,7 @@ public class NPC {
     private Vector2 position;
 
     public NPC() {
+        targetPosition = null;
     }
 
     public NPC(String name, Coordinate coordinate) {
@@ -45,6 +48,7 @@ public class NPC {
         initializeNpcFavorites(name);
         initializeNpcRewards(name);
         position = new Vector2(coordinate.getX(), coordinate.getY());
+        targetPosition = null;
     }
 
     public void update(float delta) {
@@ -53,9 +57,12 @@ public class NPC {
                 chooseNewTarget();
                 break;
             case WALKING_TO_TARGET:
-                moveTowardsTarget(delta);
+                if(coordinate.getY() == targetPosition.y && coordinate.getX() == targetPosition.x) {
+                    state = NpcState.WAITING_AT_TARGET;
+                }
                 break;
             case WAITING_AT_TARGET:
+                targetPosition = null;
                 waitTimer -= delta;
                 if (waitTimer <= 0) {
                     state = NpcState.IDLE;
@@ -65,26 +72,33 @@ public class NPC {
         }
     }
 
+    public Vector2 getTargetPosition() {
+        return targetPosition;
+    }
+
     private void moveTowardsTarget(float deltaTime) {
         Vector2 direction = new Vector2(targetPosition.x - position.x, targetPosition.y - position.y);
         float distance = direction.len();
         Random random = new Random();
         if (distance < 5f) {
             position.set(targetPosition);
-            waitTimer = 2;
+            waitTimer = 10;
+            targetPosition = null;
             state = NpcState.WAITING_AT_TARGET;
             return;
         }
 
-        direction.nor();
-        position.x += direction.x * deltaTime;
-        position.y += direction.y * deltaTime;
+        if (!(direction.x > -5 && direction.x < 5)) {
+            position.x += direction.x * deltaTime;
+        } else if (!(direction.y > -5 && direction.y < 5)) {
+            position.y += direction.y * deltaTime;
+        }
 
         this.coordinate = new Coordinate(position.x, position.y);
 
-//        if (!isInSidewalk(position.x, position.y)) {
-//            chooseNewTarget();
-//        }
+        if (!isInSidewalk(position.x, position.y)) {
+            chooseNewTarget();
+        }
     }
 
     private void chooseNewTarget() {

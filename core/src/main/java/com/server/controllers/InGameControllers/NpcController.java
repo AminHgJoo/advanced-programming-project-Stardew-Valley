@@ -7,6 +7,7 @@ import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.items.Item;
 import com.common.models.items.Tool;
+import com.common.models.mapModels.Coordinate;
 import com.server.GameServers.GameServer;
 import com.server.repositories.GameRepository;
 import com.server.utilities.AIChat;
@@ -16,6 +17,27 @@ import io.javalin.http.Context;
 import java.util.HashMap;
 
 public class NpcController extends Controller {
+    public void changePosition(Context ctx, GameServer gs) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String name = (String) body.get("name");
+            double x = (double) body.get("x");
+            double y = (double) body.get("y");
+            GameData game = gs.getGame();
+
+            NPC npc = game.findNpcByName(name);
+            if (npc != null) {
+                npc.setCoordinate(new Coordinate((float) x, (float) y));
+                ctx.json(Response.OK.setMessage("NPC changed"));
+            }else {
+                ctx.json(Response.NOT_FOUND.setMessage("NPC not found"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
     public void talk(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
@@ -37,7 +59,7 @@ public class NpcController extends Controller {
                 npc.getHasTalked().put(player.getUser().getUsername(), true);
                 player.addXpToNpcFriendship(20, npc);
             }
-            String response = AIChat.getNpcDialogue(message , npc.context(game , player.getUser().getUsername()));
+            String response = AIChat.getNpcDialogue(message, npc.context(game, player.getUser().getUsername()));
             String gameJson = GameGSON.gson.toJson(game);
 
             ctx.json(Response.OK.setMessage(response).setBody(gameJson));

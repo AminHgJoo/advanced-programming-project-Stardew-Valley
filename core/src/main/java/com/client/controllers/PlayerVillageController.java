@@ -523,7 +523,7 @@ public class PlayerVillageController {
     }
 
     public void updateGamePlayer(Player player){
-        game.setPlayerById(player.getUser_id(), player);
+        game.setPlayerById(this.player.getUser_id(), player);
         updatePlayer(player);
     }
 

@@ -84,9 +84,9 @@ public class VillageMenu implements MyScreen {
         }
     }
 
-    public void renderNpcs() {
+    public void renderNpcs(float delta) {
         for (NPC npc : game.getMap().getVillage().getNpcs()) {
-            npcControllers.get(npc.getName()).render(batch);
+            npcControllers.get(npc.getName()).render(batch , delta);
         }
     }
 
@@ -94,24 +94,25 @@ public class VillageMenu implements MyScreen {
     public void socketMessage(String message) {
         HashMap<String, String> res = (HashMap<String, String>) GameGSON.gson.fromJson(message, HashMap.class);
         String type = res.get("type");
-        if(type.equals("GAME_UPDATED")){
-            System.out.println("hello");
+        if (type.equals("GAME_UPDATED")) {
             String gameJson = res.get("game");
             GameData game = GameGSON.gson.fromJson(gameJson, GameData.class);
             ClientApp.currentGameData = game;
             this.game = game;
-            for(Map.Entry<String , PlayerVillageController> entry : playerControllers.entrySet()){
+            for (Map.Entry<String, PlayerVillageController> entry : playerControllers.entrySet()) {
                 entry.getValue().updateGame();
             }
-            for(Map.Entry<String , NpcController> entry : npcControllers.entrySet()){
+            for (Map.Entry<String, NpcController> entry : npcControllers.entrySet()) {
                 entry.getValue().updateGame();
             }
-        }else if(type.equals("PLAYER_UPDATED")){
+        } else if (type.equals("PLAYER_UPDATED")) {
             String id = res.get("player_user_id");
-            PlayerVillageController controller = playerControllers.get(id);
-            String playerJson = res.get("player");
-            Player player1 = GameGSON.gson.fromJson(playerJson , Player.class);
-            controller.updateGamePlayer(player1);
+            if (!id.equals(player.getUser_id())) {
+                PlayerVillageController controller = playerControllers.get(id);
+                String playerJson = res.get("player");
+                Player player1 = GameGSON.gson.fromJson(playerJson, Player.class);
+                controller.updateGamePlayer(player1);
+            }
         }
     }
 
@@ -180,7 +181,7 @@ public class VillageMenu implements MyScreen {
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         renderPlayers();
-        renderNpcs();
+        renderNpcs(delta);
         batch.end();
         handleUI(delta);
     }
