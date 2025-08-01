@@ -17,9 +17,9 @@ public class Village {
     public Village() {
         initializeStores();
         npcs.add(new NPC("Sebastian", null));
-        npcs.add(new NPC("Abigale", null));
+        npcs.add(new NPC("Abigail", null));
         npcs.add(new NPC("Harvey", null));
-        npcs.add(new NPC("Lia", null));
+        npcs.add(new NPC("Leah", null));
         npcs.add(new NPC("Robin", null));
     }
 

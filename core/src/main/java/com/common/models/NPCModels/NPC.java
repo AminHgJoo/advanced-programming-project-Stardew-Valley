@@ -70,7 +70,7 @@ public class NPC {
             quests.add(new Quest(ForagingMineralsType.IRON_ORE, 50));
             quests.add(new Quest(FoodTypes.PUMPKIN_PIE, 1));
             quests.add(new Quest(ForagingMineralsType.STONE, 150));
-        } else if (name.equals("Abigale")) {
+        } else if (name.equals("Abigail")) {
             quests.add(new Quest(MiscType.GOLD_BAR, 1));
             quests.add(new Quest(FoodTypes.PUMPKIN, 1));
             quests.add(new Quest(FoodTypes.WHEAT, 50));
@@ -78,7 +78,7 @@ public class NPC {
             quests.add(new Quest(CropSeedsType.BLUE_JAZZ, 12));
             quests.add(new Quest(FishType.SALMON, 1));
             quests.add(new Quest(FoodTypes.WINE, 1));
-        } else if (name.equals("Lia")) {
+        } else if (name.equals("Leah")) {
             quests.add(new Quest(MiscType.WOOD, 10));
             quests.add(new Quest(FishType.SALMON, 1));
             quests.add(new Quest(MiscType.WOOD, 200));
@@ -94,7 +94,7 @@ public class NPC {
             favoriteItems.add(new FavoriteItem(MiscType.WOOL));
             favoriteItems.add(new FavoriteItem(FoodTypes.PUMPKIN_PIE));
             favoriteItems.add(new FavoriteItem(FoodTypes.PIZZA));
-        } else if (name.equals("Abigale")) {
+        } else if (name.equals("Abigail")) {
             favoriteItems.add(new FavoriteItem(ForagingMineralsType.STONE));
             favoriteItems.add(new FavoriteItem(ForagingMineralsType.IRON_ORE));
             favoriteItems.add(new FavoriteItem(FoodTypes.COFFEE));
@@ -102,7 +102,7 @@ public class NPC {
             favoriteItems.add(new FavoriteItem(FoodTypes.COFFEE));
             favoriteItems.add(new FavoriteItem(FoodTypes.PICKLES));
             favoriteItems.add(new FavoriteItem(FoodTypes.WINE));
-        } else if (name.equals("Lia")) {
+        } else if (name.equals("Leah")) {
             favoriteItems.add(new FavoriteItem(FoodTypes.SALAD));
             favoriteItems.add(new FavoriteItem(FoodTypes.GRAPE));
             favoriteItems.add(new FavoriteItem(FoodTypes.WINE));
@@ -118,7 +118,7 @@ public class NPC {
             rewards.add(new NPCReward(0, ForagingMineralsType.DIAMOND, 0, 3));
             rewards.add(new NPCReward(5000, null, 0, 0));
             rewards.add(new NPCReward(0, ForagingMineralsType.QUARTZ, 0, 50));
-        } else if (name.equals("Abigale")) {
+        } else if (name.equals("Abigail")) {
             rewards.add(new NPCReward(0, null, 1, 0));
             rewards.add(new NPCReward(500, null, 0, 0));
             rewards.add(new NPCReward(0, MiscType.IRIDIUM_SPRINKLER, 0, 1));
@@ -126,7 +126,7 @@ public class NPC {
             rewards.add(new NPCReward(750, null, 0, 0));
             rewards.add(new NPCReward(0, null, 1, 0));
             rewards.add(new NPCReward(0, FoodTypes.SALAD, 0, 5));
-        } else if (name.equals("Lia")) {
+        } else if (name.equals("Leah")) {
             rewards.add(new NPCReward(500, null, 0, 0));
             rewards.add(new NPCReward(0, FoodTypes.SALMON_DINNER, 0, 1));
             rewards.add(new NPCReward(0, MiscType.DELUXE_SCARE_CROW, 0, 3));

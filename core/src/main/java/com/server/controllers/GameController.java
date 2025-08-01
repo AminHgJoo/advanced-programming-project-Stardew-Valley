@@ -4,6 +4,7 @@ import com.common.models.App;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.User;
+import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
 import com.common.models.networking.Lobby;
 import com.server.GameServers.AppWebSocket;
@@ -60,6 +61,7 @@ public class GameController {
             for (Player p : players) {
                 Farm f = Farm.makeFarm(1, game);
                 p.setFarm(f);
+                p.setCoordinate(new Coordinate(1200, 800));
 
                 game.getMap().getFarms().add(p.getFarm());
             }
@@ -72,7 +74,7 @@ public class GameController {
                     u.setCurrentLobbyId(null);
                 }
                 LobbyRepository.delete(lobby);
-            }else {
+            } else {
                 ctx.json(Response.BAD_REQUEST.setMessage("Couldn't start game"));
             }
 
