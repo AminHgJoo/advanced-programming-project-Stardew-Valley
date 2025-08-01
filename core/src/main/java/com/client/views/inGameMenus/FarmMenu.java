@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -122,6 +121,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private final Stage chatNotifStage;
     private InputProcessor temp;
 
+
     public GameMain getGameMain() {
         return gameMain;
     }
@@ -138,7 +138,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
         popupStage = new Stage(new ScreenViewport());
         this.grassTexture = AssetManager.getImage("grassfall");
-        playerController = new PlayerController(playerPosition, playerVelocity, this , ClientApp.currentPlayer);
+        playerController = new PlayerController(playerPosition, playerVelocity, this, ClientApp.currentPlayer);
         this.farm = playerController.getPlayer().getFarm();
 //        playerController.getPlayer().setInVillage(true);
         this.inventory = AssetManager.getImage("aks");
@@ -286,7 +286,16 @@ public class FarmMenu implements MyScreen, InputProcessor {
             + ". " + currentDateTime.getDayOfMonth());
 
         timeLabel.setText((currentHour > 12 ? (currentHour - 12) : currentHour) + ":" + (currentDateTime.getMinute() < 10 ? "0" + currentDateTime.getMinute() : currentDateTime.getMinute()) + " " + (currentHour > 12 ? "PM" : "AM"));
-
+        float emojiSize = 64f;
+        float spacing = 20f;
+        int count = 4;
+        float totalWidth = count * emojiSize + (count - 1) * spacing;
+        float startX = (stage.getWidth() - totalWidth) / 2f + 400;
+        float y = stage.getHeight() - emojiSize - 20f;
+        Skin skin = AssetManager.getSkin();
+        TextButton friendsButton = new TextButton("Friends", skin);
+        friendsButton.setPosition(startX, y);
+        stage.addActor(friendsButton);
         moneyLabel.setText(gameData.getCurrentPlayer().getMoney(gameData));
         showTools();
         emojiShow(delta);
@@ -315,7 +324,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
             stage.addActor(image);
         }
 
-  //      if (emojiCounter >= 0) {
+        //      if (emojiCounter >= 0) {
 //            Image image = new Image(currentEmoji);
 //            image.setPosition(stage.getWidth() / 2, 20 + stage.getHeight() / 2);
 //            image.setSize(emojiSize, emojiSize);
@@ -438,12 +447,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new Leaderboards(gameMain, this));
         } else if (Keybinds.OPEN_CHAT.keycodes.contains(keycode)) {
             gameMain.setScreen(new ChatScreen(this, gameMain));
-        }
-        else if(keycode == Input.Keys.H) {
+        } else if (keycode == Input.Keys.H) {
             //shipping menu jjjjjjjjjjjj
             gameMain.setScreen(new ShippingMenu(gameMain, this));
-        }
-        else if(keycode == Input.Keys.N) {
+        } else if (keycode == Input.Keys.N) {
             gameMain.setScreen(new JournalMenu(gameMain, this));
         }
         return false;
@@ -650,12 +657,23 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     popup.add(exitBtn);
 
                     popupStage.addActor(popup);
+
                 }
             }
         }
 
         emojiSelection(screenX, prev_screen_y);
-
+        Vector2 worldsCoords = stage.screenToStageCoordinates(new Vector2(screenX, prev_screen_y));
+        float spacing = 20f;
+        int count = 4;
+        float totalWidth = count * 64 + (count - 1) * spacing;
+        float startXasghar = (stage.getWidth() - totalWidth) / 2f + 400;
+        float y = stage.getHeight() - 64 - 20f;
+        if (worldsCoords.x >= startXasghar && worldsCoords.x <= startXasghar + totalWidth &&
+            worldsCoords.y >= y && worldsCoords.y <= y + 64) {
+            gameMain.setScreen(new InteractionsMenu(gameMain, FarmMenu.this));
+            return true;
+        }
         return true;
     }
 
@@ -807,7 +825,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        if(voteFlag){
+        if (voteFlag) {
             gameMain.setScreen(new VoteMenu(gameMain, this, votedPlayer));
         }
         if (playerController.getPlayer().isInVillage()) {
@@ -947,9 +965,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 Coordinate coordinate = cell.getCoordinate();
                 drawFuckingTreeProperly(batch, cell.getObjectOnCell().getTexture(), coordinate.getX(), coordinate.getY());
             }
-            if(cell.getObjectOnCell() instanceof BuildingBlock) {
-                if(((BuildingBlock) cell.getObjectOnCell()).buildingType.equals("shippingBin")) {
-                    modifiedDraw(batch,AssetManager.getImage("shippingbin") , cell.getCoordinate().getX(), cell.getCoordinate().getY(), 32, 32);
+            if (cell.getObjectOnCell() instanceof BuildingBlock) {
+                if (((BuildingBlock) cell.getObjectOnCell()).buildingType.equals("shippingBin")) {
+                    modifiedDraw(batch, AssetManager.getImage("shippingbin"), cell.getCoordinate().getX(), cell.getCoordinate().getY(), 32, 32);
                 }
             }
         }
