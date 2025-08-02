@@ -132,6 +132,7 @@ public class GiftMenu implements MyScreen, InputProcessor {
                 selected = false;
                 selectedSave = -1;
                 selectedIndex = -1;
+                //TODO update game
             }
 
         }

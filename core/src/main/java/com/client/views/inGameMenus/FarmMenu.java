@@ -439,9 +439,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Keybinds.OPEN_FRIDGE.keycodes.contains(keycode)) {
             gameMain.setScreen(new CookingMenu(gameMain, this));
         } else if (Keybinds.INSPECT_GREENHOUSE.keycodes.contains(keycode)) {
-
             showPopUp("This greenhouse can be repaired with 500 wood & 1000 gold.", "Message");
-
         } else if (Keybinds.OPEN_LEADERBOARDS.keycodes.contains(keycode)) {
             gameMain.setScreen(new Leaderboards(gameMain, this));
         } else if (Keybinds.OPEN_CHAT.keycodes.contains(keycode)) {
@@ -451,8 +449,102 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new ShippingMenu(gameMain, this));
         } else if (keycode == Input.Keys.N) {
             gameMain.setScreen(new JournalMenu(gameMain, this));
+        } else if (keycode == Input.Keys.U) {
+            for (Player player : ClientApp.currentGameData.getPlayers()) {
+                if ((player != ClientApp.currentPlayer) && (Coordinate.calculateEuclideanDistance(ClientApp.currentPlayer.getCoordinate(), player.getCoordinate()) <= Math.sqrt(2))){
+                    Gdx.input.setInputProcessor(popupStage);
+                    Vector2 stageCoords = popupStage.screenToStageCoordinates(new Vector2(player.getCoordinate().getX(),player.getCoordinate().getX()));
+                    Skin skin = AssetManager.getSkin();
+
+
+                    Window popup = new Window(player.getUser().getUsername(), skin);
+                    popup.setSize(300, 500);
+                    popup.setPosition(stageCoords.x, stageCoords.y, Align.topLeft);
+                    Label label = new Label("Interactions with " + player.getUser().getUsername(), skin);
+                    label.setWrap(true);
+                    label.setAlignment(Align.center);
+
+                    TextButton hugBtn = new TextButton("Hug", skin);
+                    TextButton marryBtn = new TextButton("Marry", skin);
+                    TextButton flowerBtn = new TextButton("Flower", skin);
+                    TextButton exitBtn = new TextButton("Exit", skin);
+
+                    //TODO animation
+                    //TODO update game
+                    hugBtn.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            JsonObject req = new JsonObject();
+                            req.addProperty("username", player.getUser().getUsername());
+                            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipHug", req);
+                            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                            if (res.getStatus() == 200) {
+                                Gdx.input.setInputProcessor(FarmMenu.this);
+                                popup.remove();
+                            }
+                        }
+                    });
+                    marryBtn.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            JsonObject req = new JsonObject();
+                            req.addProperty("username", player.getUser().getUsername());
+                            req.addProperty("ring", "ring");
+                            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipAskMarriage", req);
+                            //TODO dastan dare hanooz kiram toosh bayad accept kne yaroo
+                            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                            if (res.getStatus() == 200) {
+                                Gdx.input.setInputProcessor(FarmMenu.this);
+                                popup.remove();
+                            }
+                        }
+                    });
+                    flowerBtn.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            Slot flowerSlot = null;
+                            for(Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {
+                                if(isFlower(slot.getItem().getName()))
+                                    flowerSlot = slot;
+                            }
+                            if(flowerSlot != null) {
+                                JsonObject req = new JsonObject();
+                                req.addProperty("username", player.getUser().getUsername());
+                                req.addProperty("flowerName", flowerSlot.getItem().getName());
+                                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipFlower", req);
+                                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                                if (res.getStatus() == 200) {
+                                    Gdx.input.setInputProcessor(FarmMenu.this);
+                                    popup.remove();
+                                }
+                            }
+                        }
+                    });
+                    exitBtn.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            Gdx.input.setInputProcessor(FarmMenu.this);
+                            popup.remove();
+                        }
+                    });
+
+                    popup.pad(10);
+                    label.setWrap(false);
+                    popup.add(label).row();
+                    popup.add(hugBtn).row();
+                    popup.add(marryBtn).row();
+                    popup.add(flowerBtn);
+                    popup.add(exitBtn);
+
+                    popupStage.addActor(popup);
+                }
+            }
         }
         return false;
+    }
+
+    public boolean isFlower(String flowerName) {
+        return flowerName.equals("Sweat Pea") || flowerName.equals("Crocus") || flowerName.equals("Tulip") || flowerName.equals("Blue Jazz") || flowerName.equals("Summer Spangle") || flowerName.equals("Poppy") || flowerName.equals("Sunflower") || flowerName.equals("Fairy Rose");
     }
 
     @Override
