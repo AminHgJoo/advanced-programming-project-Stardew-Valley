@@ -24,6 +24,7 @@ public class AIChat {
         userMsg.put("role", "user");
         userMsg.put("content", userMessage);
         arr.put(0, userMsg);
+        arr.put(1, systemMsg);
         payload.put("messages", arr);
 
         HttpClient client = HttpClient.newHttpClient();
@@ -37,6 +38,7 @@ public class AIChat {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         JSONObject jsonResponse = new JSONObject(response.body());
+        System.out.println(jsonResponse.toString());
         return jsonResponse.getJSONArray("choices")
             .getJSONObject(0).getJSONObject("message").getString("content");
     }

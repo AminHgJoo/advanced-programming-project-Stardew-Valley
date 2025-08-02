@@ -102,7 +102,6 @@ public class GameServer extends Thread {
                 for (NPC npc : game.getMap().getVillage().getNpcs()) {
                     npc.update(1);
                 }
-                System.out.println("hello");
             }
             String gameJson = this.gson.toJson(game);
             HashMap<String, String> message = new HashMap<>();

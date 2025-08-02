@@ -145,7 +145,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(this);
     }
 
     public void handleEvents() {
