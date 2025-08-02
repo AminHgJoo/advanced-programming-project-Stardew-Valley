@@ -22,10 +22,7 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
-import com.common.models.Friendship;
-import com.common.models.NPCModels.NPCFriendship;
 import com.common.models.Player;
-import com.common.models.Quest;
 
 import java.util.ArrayList;
 
@@ -38,7 +35,7 @@ public class ChoosePlayerMenu implements MyScreen, InputProcessor {
     private Stage stage;
     private BitmapFont titleFont;
     private GlyphLayout layout;
-    private ArrayList<Player> players ;
+    private ArrayList<Player> players;
 
     public ChoosePlayerMenu(GameMain gameMain, MyScreen farmScreen) {
         this.gameMain = gameMain;
@@ -65,7 +62,7 @@ public class ChoosePlayerMenu implements MyScreen, InputProcessor {
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
-        this.players =ClientApp.currentGameData.getPlayers();
+        this.players = ClientApp.currentGameData.getPlayers();
 
         float startY = Gdx.graphics.getHeight() - 200f;
         float spacing = 80f;
@@ -92,7 +89,7 @@ public class ChoosePlayerMenu implements MyScreen, InputProcessor {
 
             stage.addActor(button);
             Gdx.input.setInputProcessor(stage);
-    }
+        }
     }
 
     private void siktir(Player player) {

@@ -65,8 +65,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public static final float TILE_PIX_SIZE = 32;
     public static final float FARM_X_SPAN = 75; //32 * 75 == 2400
     public static final float FARM_Y_SPAN = 50; //32 * 50 == 1600
-    private final GameMain gameMain;
-    private final PauseMenu pauseMenu;
     public final Gson gson = new GsonBuilder()
         .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
             @Override
@@ -81,12 +79,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
         })
         .serializeSpecialFloatingPointValues()
         .create();
+    private final GameMain gameMain;
+    private final PauseMenu pauseMenu;
     private final OrthographicCamera camera;
     private final StretchViewport viewport;
     //These are graphical coordinates, not the x and y coordinates in the game logic.
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
     private final PlayerController playerController;
+    private final Stage chatNotifStage;
+    public boolean voteFlag = false;
+    public Player votedPlayer;
     private SpriteBatch batch;
     private Farm farm;
     private Texture grassTexture;
@@ -116,15 +119,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Label moneyLabel;
     private Stage popupStage;
     private boolean crowFlag = false;
-    public boolean voteFlag = false;
-    public Player votedPlayer;
-    private final Stage chatNotifStage;
     private InputProcessor temp;
 
-
-    public GameMain getGameMain() {
-        return gameMain;
-    }
 
     public FarmMenu(GameMain gameMain) {
         this.gameMain = gameMain;
@@ -155,6 +151,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         shapeRenderer = new ShapeRenderer();
 
         this.chatNotifStage = new Stage(new ScreenViewport());
+    }
+
+    public GameMain getGameMain() {
+        return gameMain;
     }
 
     private void initializeEmoji() {

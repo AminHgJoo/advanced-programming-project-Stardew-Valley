@@ -1,6 +1,5 @@
 package com.server.utilities;
 
-import com.common.models.NPCModels.NPC;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,7 +12,7 @@ public class AIChat {
     private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions";
     private static final String API_KEY = System.getProperty("AI_API_KEY"); // Replace with your token
 
-    public static String getAIResponse(String userMessage , String context) throws Exception {
+    public static String getAIResponse(String userMessage, String context) throws Exception {
         JSONObject payload = new JSONObject();
         payload.put("model", "deepseek/deepseek-chat-v3-0324:free");
         JSONArray arr = new JSONArray();
@@ -43,9 +42,9 @@ public class AIChat {
             .getJSONObject(0).getJSONObject("message").getString("content");
     }
 
-    public static String getNpcDialogue(String message ,String ctx) {
+    public static String getNpcDialogue(String message, String ctx) {
         try {
-            String response = getAIResponse(message , ctx);
+            String response = getAIResponse(message, ctx);
             return response;
         } catch (Exception e) {
             System.out.println(e.getMessage());

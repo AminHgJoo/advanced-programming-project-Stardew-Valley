@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class NpcController {
+    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(2);
     private Vector2 npcPosition;
     private FacingDirection facingDirection;
     private PlayerState currState;
@@ -26,7 +27,6 @@ public class NpcController {
     private GameData game = ClientApp.currentGameData;
     private VillageMenu villageMenu;
     private NpcAnimationController npcAnimationController;
-    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(2);
 
     public NpcController(VillageMenu villageMenu, NPC npc) {
         this.npc = npc;
@@ -108,7 +108,7 @@ public class NpcController {
     }
 
     public boolean isInPosition(int x, int y) {
-        if (x >= npcPosition.x -100 && x <= npcPosition.x + 100 && y >= npcPosition.y -100 && y <= npcPosition.y + 100) {
+        if (x >= npcPosition.x - 100 && x <= npcPosition.x + 100 && y >= npcPosition.y - 100 && y <= npcPosition.y + 100) {
             return true;
         }
         return false;

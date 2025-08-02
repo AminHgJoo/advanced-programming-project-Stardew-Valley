@@ -76,7 +76,7 @@ public class MovementController extends Controller {
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
 
-            if(!player.isInVillage()) {
+            if (!player.isInVillage()) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Player not in village"));
                 return;
             }

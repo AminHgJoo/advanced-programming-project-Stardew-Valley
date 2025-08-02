@@ -36,13 +36,10 @@ public class RadioStardrop implements MyScreen {
     private final FarmMenu farmScreen;
     private final Skin skin;
     private final Texture background;
-    private Stage stage;
-
-    private Label currentlyPlaying;
-
     private final ArrayList<String> loadedFilePaths = new ArrayList<>();
-
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private Stage stage;
+    private Label currentlyPlaying;
 
     public RadioStardrop(GameMain gameMain, FarmMenu farmScreen) {
         this.gameMain = gameMain;

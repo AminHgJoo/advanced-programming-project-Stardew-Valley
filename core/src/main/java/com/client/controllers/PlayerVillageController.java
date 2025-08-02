@@ -92,13 +92,13 @@ public class PlayerVillageController {
         float nameOffset = 20f;
         float nameX = playerPosition.x - (playerTexture.getRegionWidth() / (2 * scale));
         float nameY = playerPosition.y + (playerTexture.getRegionHeight() / scale) + nameOffset;
-        BitmapFont font  = AssetManager.getStardewFont();
+        BitmapFont font = AssetManager.getStardewFont();
         font.draw(batch, playerName, nameX, nameY);
         if (player.emojiCounter >= 0) {
             batch.draw(player.currentEmoji, nameX + 4, nameY, 64, 64);
-             player.emojiCounter += 0.01f;
-            if ( player.emojiCounter >= 5) {
-                 player.emojiCounter = -1;
+            player.emojiCounter += 0.01f;
+            if (player.emojiCounter >= 5) {
+                player.emojiCounter = -1;
             }
         }
 
@@ -518,16 +518,16 @@ public class PlayerVillageController {
         }
     }
 
-    public void updatePlayer(Player player){
+    public void updatePlayer(Player player) {
         this.player = player;
     }
 
-    public void updateGamePlayer(Player player){
+    public void updateGamePlayer(Player player) {
         game.setPlayerById(this.player.getUser_id(), player);
         updatePlayer(player);
     }
 
-    public void updateGame(){
+    public void updateGame() {
         this.game = ClientApp.currentGameData;
         updatePlayer(game.findPlayerByUserId(player.getUser_id()));
     }

@@ -189,7 +189,7 @@ public class ChatController extends Controller {
         }
 
         GameData currentGameData = gs.getGame();
-//        currentGameData.getCurrentPlayer().getCurrentFarm(currentGameData).strikeLightning(targetX, targetY, currentGameData.getDate());
+        currentGameData.setWeatherToday(Weather.STORM);
         String gameJson = GameGSON.gson.toJson(currentGameData);
         ctx.json(Response.OK.setMessage("Date added successfully").setBody(gameJson));
         HashMap<String, String> msg = new HashMap<>();

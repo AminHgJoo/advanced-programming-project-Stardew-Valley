@@ -35,7 +35,7 @@ public class NPCController extends Controller {
             player.addXpToNpcFriendship(20, npc);
             GameRepository.saveGame(gameData);
         }
-        String response = AIChat.getNpcDialogue(message , "npc");
+        String response = AIChat.getNpcDialogue(message, "npc");
         return new Response(true, response);
     }
 

@@ -18,7 +18,6 @@ import com.client.GameMain;
 import com.client.utils.HTTPUtil;
 import com.client.views.preGameMenus.MainMenu;
 import com.server.utilities.Response;
-import com.server.views.gameViews.GameMenu;
 
 public class PauseMenu {
     private Stage stage;

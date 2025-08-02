@@ -10,10 +10,10 @@ import java.util.HashMap;
 public class LoadGameServer extends Thread {
     private final GameData game;
     private final HashMap<String, Boolean> activePlayers = new HashMap<>();
-    private ArrayList<PlayerConnection> playerConnections ;
+    private ArrayList<PlayerConnection> playerConnections;
     private ArrayList<String> usernames = new ArrayList<>();
 
-    public LoadGameServer(GameData game, String id , ArrayList<PlayerConnection> playerConnection) {
+    public LoadGameServer(GameData game, String id, ArrayList<PlayerConnection> playerConnection) {
         this.game = game;
         for (Player p : game.getPlayers()) {
             if (p.getUser_id().equals(id)) {
@@ -39,18 +39,18 @@ public class LoadGameServer extends Thread {
         playerConnections.add(AppWebSocket.getConnectedPlayers().get(user.getUsername()));
         game.findPlayerByUserId(user.get_id()).setOnline(true);
         // TODO broadcast who has been connected
-        HashMap<String , String> msg = new HashMap<>();
+        HashMap<String, String> msg = new HashMap<>();
         msg.put("player_user_id", user.get_id());
-        msg.put("player_username" , user.getUsername());
-        msg.put("type" , "PLAYER_ONLINE");
-        AppWebSocket.broadcast(game , msg);
+        msg.put("player_username", user.getUsername());
+        msg.put("type", "PLAYER_ONLINE");
+        AppWebSocket.broadcast(game, msg);
     }
 
     @Override
     public void run() {
-            while(!checkActivePlayer()) {
+        while (!checkActivePlayer()) {
 
-            }
-            AppWebSocket.startOldGame(game, usernames);
+        }
+        AppWebSocket.startOldGame(game, usernames);
     }
 }

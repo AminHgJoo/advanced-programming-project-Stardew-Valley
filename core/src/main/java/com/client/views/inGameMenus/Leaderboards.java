@@ -21,36 +21,17 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class Leaderboards implements MyScreen {
-    private Texture background;
-    private Stage stage;
-    private Skin skin;
     private final Label.LabelStyle labelStyle;
     private final TextButton.TextButtonStyle textButtonStyle;
     private final GameMain gameMain;
     private final FarmMenu farmMenu;
-
+    private final ArrayList<SortOption> sortOptions;
+    private Texture background;
+    private Stage stage;
+    private Skin skin;
     private boolean refreshFlag;
     private ArrayList<Player> players;
-    private final ArrayList<SortOption> sortOptions;
     private SortOption sortedByCurrently;
-
-    private enum SortOption {
-        SORT_BY_NAME("Sorted by Name"),
-        SORT_BY_MONEY("Sorted by Money"),
-        SORT_BY_LEVEL("Sorted by Level"),
-        SORT_BY_QUESTS("Sorted by Quests");
-
-        private final String name;
-
-        SortOption(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
 
     public Leaderboards(GameMain gameMain, FarmMenu farmMenu) {
         this.gameMain = gameMain;
@@ -294,6 +275,24 @@ public class Leaderboards implements MyScreen {
             String game = res.get("game");
             farmMenu.getPlayerController().updateGame(game);
             refreshFlag = true;
+        }
+    }
+
+    private enum SortOption {
+        SORT_BY_NAME("Sorted by Name"),
+        SORT_BY_MONEY("Sorted by Money"),
+        SORT_BY_LEVEL("Sorted by Level"),
+        SORT_BY_QUESTS("Sorted by Quests");
+
+        private final String name;
+
+        SortOption(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
         }
     }
 }

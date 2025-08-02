@@ -81,7 +81,7 @@ public class GameLobbyMenu implements MyScreen {
                 LinkedTreeMap body = (LinkedTreeMap) res.getBody();
                 Gson gson = new Gson();
                 String json = gson.toJson(body);
-                currLobby = GameGSON.gson.fromJson(json ,Lobby.class);
+                currLobby = GameGSON.gson.fromJson(json, Lobby.class);
             }
             if (currLobby != null) {
                 doesUINeedRefresh = true;

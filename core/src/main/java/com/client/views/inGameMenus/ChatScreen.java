@@ -26,51 +26,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChatScreen implements MyScreen {
+    private final GameMain gameMain;
+    private final FarmMenu farmMenu;
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private Stage stage;
     private Skin skin;
     private Texture backgroundTexture;
-
-    private final GameMain gameMain;
-    private final FarmMenu farmMenu;
-
     private Table rootTable;
     private Table messagesTable;
     private ScrollPane scrollPane;
     private TextField inputField;
-
     private ArrayList<ChatMessage> chatMessages = new ArrayList<>();
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-    private enum CommandPrefixes {
-        EXIT("^/exit$"),
-        WHISPER("^/whisper\\s+-m\\s+(?<message>.*?)\\s+-r\\s+(?<recipient>.*?)$"),
-        ;
-
-        private final String regex;
-
-        public boolean matches(String command) {
-            return command.matches(regex);
-        }
-
-        public String getGroup(String command, String groupName) {
-            Matcher matcher = Pattern.compile(regex).matcher(command);
-            matcher.find();
-            return matcher.group(groupName);
-        }
-
-        public static boolean isCommand(String command) {
-            for (var commandPrefix : CommandPrefixes.values()) {
-                if (commandPrefix.matches(command)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        CommandPrefixes(@Language("Regexp") String regex) {
-            this.regex = regex;
-        }
-    }
 
     public ChatScreen(FarmMenu farmMenu, GameMain gameMain) {
         this.farmMenu = farmMenu;
@@ -302,5 +268,36 @@ public class ChatScreen implements MyScreen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    private enum CommandPrefixes {
+        EXIT("^/exit$"),
+        WHISPER("^/whisper\\s+-m\\s+(?<message>.*?)\\s+-r\\s+(?<recipient>.*?)$"),
+        ;
+
+        private final String regex;
+
+        CommandPrefixes(@Language("Regexp") String regex) {
+            this.regex = regex;
+        }
+
+        public static boolean isCommand(String command) {
+            for (var commandPrefix : CommandPrefixes.values()) {
+                if (commandPrefix.matches(command)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean matches(String command) {
+            return command.matches(regex);
+        }
+
+        public String getGroup(String command, String groupName) {
+            Matcher matcher = Pattern.compile(regex).matcher(command);
+            matcher.find();
+            return matcher.group(groupName);
+        }
     }
 }

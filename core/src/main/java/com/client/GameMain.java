@@ -7,7 +7,6 @@ import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.ModelDecoder;
 import com.client.utils.MyScreen;
-import com.client.views.inGameMenus.ChatScreen;
 import com.client.views.preGameMenus.LauncherMenu;
 import com.client.views.preGameMenus.MainMenu;
 import com.google.gson.Gson;

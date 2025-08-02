@@ -5,10 +5,8 @@ import com.common.models.*;
 import com.common.models.items.Misc;
 import com.common.models.mapModels.Coordinate;
 import com.server.GameServers.GameServer;
-import com.server.repositories.GameRepository;
 import com.server.utilities.Response;
 import io.javalin.http.Context;
-import scala.Int;
 
 import java.util.HashMap;
 
@@ -351,16 +349,16 @@ public class FriendshipController extends Controller {
 
     public void sendEmoji(Context ctx, GameServer gs) {
         try {
-            HashMap<String , Object> body = ctx.bodyAsClass(HashMap.class);
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String id = ctx.attribute("id");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             int index = (Integer) body.get("index");
 
             ctx.json(Response.OK.setMessage("Emoji has been sent"));
-            HashMap<String , String> msg = new HashMap<>();
+            HashMap<String, String> msg = new HashMap<>();
             msg.put("type", "EMOJI_SENT");
-            msg.put("index" , index + "");
+            msg.put("index", index + "");
             gs.broadcast(msg);
         } catch (Exception e) {
             e.printStackTrace();

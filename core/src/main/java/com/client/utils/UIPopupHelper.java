@@ -34,6 +34,7 @@ public class UIPopupHelper {
 
         dialog.show(stage);
     }
+
     public void showDialog(String message, String promptType, InputProcessor inputProcessor) {
 
         Dialog dialog = new Dialog(promptType, skin) {

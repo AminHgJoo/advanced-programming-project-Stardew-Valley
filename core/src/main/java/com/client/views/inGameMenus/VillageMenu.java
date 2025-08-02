@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.controllers.NpcController;
-import com.client.controllers.PlayerController;
 import com.client.controllers.PlayerVillageController;
 import com.client.utils.*;
 import com.common.GameGSON;
@@ -23,18 +22,12 @@ import com.common.models.GameData;
 import com.common.models.NPCModels.NPC;
 import com.common.models.Player;
 import com.common.models.mapModels.Coordinate;
+import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class VillageMenu implements MyScreen, InputProcessor {
-    private FarmMenu farmMenu;
-    private PlayerVillageController playerController;
-    private Stage stage;
-    private Stage popUpStage;
-    private GameMain gameMain;
-    private SpriteBatch batch;
-    private Texture backgroundTexture;
     public static final float SCREEN_WIDTH = 450 * 1.2f;
     public static final float SCREEN_HEIGHT = 300 * 1f;
     public static final float BASE_SPEED_FACTOR = 16;
@@ -43,9 +36,16 @@ public class VillageMenu implements MyScreen, InputProcessor {
     public static final float FARM_Y_SPAN = 29.5f; //32 * 50 == 1600
     private final OrthographicCamera camera;
     private final StretchViewport viewport;
-    private boolean showingQuestion = false;
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
+    private FarmMenu farmMenu;
+    private PlayerVillageController playerController;
+    private Stage stage;
+    private Stage popUpStage;
+    private GameMain gameMain;
+    private SpriteBatch batch;
+    private Texture backgroundTexture;
+    private boolean showingQuestion = false;
     private HashMap<String, PlayerVillageController> playerControllers = new HashMap<>();
     private HashMap<String, NpcController> npcControllers = new HashMap<>();
     private GameData game = ClientApp.currentGameData;
@@ -96,6 +96,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
     public void socketMessage(String message) {
         HashMap<String, String> res = (HashMap<String, String>) GameGSON.gson.fromJson(message, HashMap.class);
         String type = res.get("type");
+
         if (type.equals("GAME_UPDATED")) {
             String gameJson = res.get("game");
             GameData game = GameGSON.gson.fromJson(gameJson, GameData.class);
@@ -115,6 +116,24 @@ public class VillageMenu implements MyScreen, InputProcessor {
                 Player player1 = GameGSON.gson.fromJson(playerJson, Player.class);
                 controller.updateGamePlayer(player1);
             }
+        } else if (type.equals("EMOJI_SENT")) {
+            // TODO pouya do something
+
+        } else if (type.equals("MUSIC_QUERY")) {
+            var req = new JsonObject();
+
+            if (gameMain.music != null) {
+                req.addProperty("isPlaying", gameMain.music.isPlaying());
+                req.addProperty("musicName", gameMain.playingMusicName);
+                req.addProperty("musicPos", (double) gameMain.music.getPosition());
+            } else {
+                req.addProperty("isPlaying", false);
+                req.addProperty("musicName", "");
+                req.addProperty("musicPos", 0.0);
+            }
+
+            var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/music/sync_res", req);
+
         }
     }
 
@@ -266,7 +285,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
             }
         }
         if (nc != null) {
-            gameMain.setScreen(new NPCChatScreen(nc.getNpc(), this , gameMain));
+            gameMain.setScreen(new NPCChatScreen(nc.getNpc(), this, gameMain));
         }
         return false;
     }

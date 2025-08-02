@@ -74,14 +74,14 @@ public class InteractionsMenu implements MyScreen, InputProcessor {
             giftButton.setPosition(xButton, yButtonStart);
 
 
-             String playerString = f.getPlayer();
-             Player targetPlayer = ClientApp.currentPlayer;
+            String playerString = f.getPlayer();
+            Player targetPlayer = ClientApp.currentPlayer;
 
-             for(Player player1 : ClientApp.currentGameData.getPlayers()) {
-                 if(player1.getUser().getUsername().equals(playerString)) {
-                     targetPlayer = player1;
-                 }
-             }
+            for (Player player1 : ClientApp.currentGameData.getPlayers()) {
+                if (player1.getUser().getUsername().equals(playerString)) {
+                    targetPlayer = player1;
+                }
+            }
             Player finalTargetPlayer = targetPlayer;
             giftButton.addListener(new ClickListener() {
                 @Override
@@ -100,6 +100,7 @@ public class InteractionsMenu implements MyScreen, InputProcessor {
         gameMain.setScreen(new GiftMenu(gameMain, farmScreen, targetPlayer));
         this.dispose();
     }
+
     @Override
     public boolean keyDown(int i) {
         if (i == Input.Keys.ESCAPE) {

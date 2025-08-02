@@ -25,7 +25,6 @@ import com.client.utils.MyScreen;
 import com.common.models.Backpack;
 import com.common.models.Player;
 import com.common.models.Slot;
-import com.common.models.enums.types.inventoryEnums.BackpackType;
 import com.google.gson.JsonObject;
 import com.server.utilities.Response;
 
@@ -100,7 +99,7 @@ public class GiftMenu implements MyScreen, InputProcessor {
         sendButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(countField.getText() != null) {
+                if (countField.getText() != null) {
                     try {
                         int count = Integer.parseInt(countField.getText());
                         send(count);
@@ -121,7 +120,7 @@ public class GiftMenu implements MyScreen, InputProcessor {
     //TODO receive gift
 
     public void send(int count) {
-        if(selectedSave >=0 ){
+        if (selectedSave >= 0) {
             Slot slot = backpack.getSlots().get(selectedSave);
             JsonObject req = new JsonObject();
             req.addProperty("username", targetPlayer.getUser().getUsername());
@@ -131,7 +130,7 @@ public class GiftMenu implements MyScreen, InputProcessor {
             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
             if (res.getStatus() == 200) {
                 selected = false;
-               selectedSave = -1;
+                selectedSave = -1;
                 selectedIndex = -1;
             }
 

@@ -14,8 +14,8 @@ public class ArtisanBlock extends MapObject {
     public Slot productSlot;
     public boolean beingUsed;
     public boolean canBeCollected;
-    private ArtisanBlockType artisanType;
     public LocalDateTime startTime;
+    private ArtisanBlockType artisanType;
 
     public ArtisanBlock() {
         super();

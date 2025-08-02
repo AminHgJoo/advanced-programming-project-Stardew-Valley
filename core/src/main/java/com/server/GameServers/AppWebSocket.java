@@ -125,6 +125,23 @@ public class AppWebSocket {
         return null;
     }
 
+    public static GameServer findGameServerByGAmeId(String gameId) {
+        for (GameServer gs : activeGames) {
+            if (gs.getGame().get_id().toString().equals(gameId)) {
+                return gs;
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<String> getOnlinePlayers() {
+        ArrayList<String> players = new ArrayList<>();
+        for (PlayerConnection pc : connectedPlayers.values()) {
+            players.add(pc.getUsername());
+        }
+        return players;
+    }
+
     public void start() {
         app.ws("/game", ws -> {
             ws.onConnect(ctx -> {
@@ -148,32 +165,15 @@ public class AppWebSocket {
             ws.onClose(ctx -> {
                 System.out.println("Disconnected");
                 String username = ctx.queryParam("playerUsername");
-                PlayerConnection pc =  connectedPlayers.remove(username);
+                PlayerConnection pc = connectedPlayers.remove(username);
                 GameServer gs = findGameServerByPlayerConnection(username);
                 gs.removePlayerConnection(pc);
-                if(gs.getPlayerConnections().isEmpty()){
+                if (gs.getPlayerConnections().isEmpty()) {
                     gs.endGame();
                 }
             });
 
         });
-    }
-
-    public static GameServer findGameServerByGAmeId(String gameId) {
-        for (GameServer gs : activeGames) {
-            if (gs.getGame().get_id().toString().equals(gameId)) {
-                return gs;
-            }
-        }
-        return null;
-    }
-
-    public static ArrayList<String> getOnlinePlayers() {
-        ArrayList<String> players = new ArrayList<>();
-        for (PlayerConnection pc : connectedPlayers.values()) {
-            players.add(pc.getUsername());
-        }
-        return players;
     }
 
     public void clearGameThreads() {

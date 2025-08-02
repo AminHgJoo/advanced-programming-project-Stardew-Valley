@@ -82,7 +82,7 @@ public class LobbyController {
             }
 
             Lobby lobby = LobbyRepository.findById(user.getCurrentLobbyId());
-            if(lobby == null){
+            if (lobby == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("Lobby not found"));
                 return;
             }
@@ -155,8 +155,7 @@ public class LobbyController {
             ArrayList<String> arr = AppWebSocket.getOnlinePlayers();
 
             ctx.json(Response.OK.setBody(arr));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }

@@ -115,7 +115,7 @@ public class ShippingMenu implements MyScreen, InputProcessor {
                     req.addProperty("productName", backpack.getSlots().get(selectedSave).getItem().getName());
                     req.addProperty("count", backpack.getSlots().get(selectedSave).getCount());
                     var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/dealingSellProduct", req);
-                    if(postResponse.getStatus() == 200) {
+                    if (postResponse.getStatus() == 200) {
                         selectedIndex = -1;
                         selectedSave = -1;
                         selected = false;
