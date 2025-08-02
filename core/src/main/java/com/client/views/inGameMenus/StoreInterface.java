@@ -31,6 +31,8 @@ public class StoreInterface implements MyScreen {
     private Stage stage;
     private TextButton buyButton;
 
+    private boolean ignoreOutOfStockItems = false;
+
     public StoreInterface(GameMain gameMain, String storeName, VillageMenu villageMenu) {
         this.gameMain = gameMain;
         this.storeName = storeName;
@@ -64,7 +66,7 @@ public class StoreInterface implements MyScreen {
 //        storeProducts.add(new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store"));
 //        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
 //
-//        storeProducts.add(new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store"));
+        //        storeProducts.add(new StoreProduct(AllProducts.ANCIENT_SEED, "Pierre's General Store"));
 //        storeProducts.add(new StoreProduct(AllProducts.BOUQUET, "Pierre's General Store"));
         storeProducts.addAll(store.getAvailableProducts());
     }
@@ -110,6 +112,10 @@ public class StoreInterface implements MyScreen {
             Label label = new Label(storeProduct.getType().getName() + "  " + storeProduct.getPrice(), labelStyle);
 
             if (storeProduct.getAvailableCount() <= 0) {
+                if (ignoreOutOfStockItems) {
+                    continue;
+                }
+
                 label.setColor(Color.DARK_GRAY);
             }
 
@@ -196,6 +202,18 @@ public class StoreInterface implements MyScreen {
             }
         });
 
+        TextButton filterButton = new TextButton("Filter Out Of Stock", textButtonStyle);
+        filterButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ignoreOutOfStockItems = !ignoreOutOfStockItems;
+                Gdx.app.postRunnable(() -> {
+                    dispose();
+                    initializeStage();
+                });
+            }
+        });
+
         mainTable.center();
         mainTable.add(inventoryLabel).align(Align.left).pad(10);
         mainTable.add(backButton).expandX();
@@ -210,6 +228,7 @@ public class StoreInterface implements MyScreen {
         mainTable.add(minusButton).align(Align.right).pad(10);
         mainTable.row();
         mainTable.add(buyButton).align(Align.right).colspan(3).pad(10);
+        mainTable.add(filterButton).align(Align.right).pad(10);
 
         stage.addActor(mainTable);
 
@@ -230,13 +249,13 @@ public class StoreInterface implements MyScreen {
      * @author AminHg
      */
     private Image getNPCPortrait(String storeName) {
-        if (storeName.equals("Blacksmith's Shop")) {
+        if (storeName.equals("Blacksmith")) {
             return new Image(AssetManager.getImage("clint"));
         } else if (storeName.equals("Carpenter's Shop")) {
             return new Image(AssetManager.getImage("robin"));
         } else if (storeName.equals("Fish Shop")) {
             return new Image(AssetManager.getImage("willy"));
-        } else if (storeName.equals("Joja Mart")) {
+        } else if (storeName.equals("JojaMart")) {
             return new Image(AssetManager.getImage("morris"));
         } else if (storeName.equals("Marnie's Ranch")) {
             return new Image(AssetManager.getImage("marnie"));

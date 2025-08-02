@@ -171,7 +171,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     public void showGoToVillagePopUp() {
         System.out.println("FARM MENU");
-        ConfirmAlert alert = new ConfirmAlert("question", "Do You Wanna go to village ?", AssetManager.getSkin()) {
+        ConfirmAlert alert = new ConfirmAlert("question", "Do you want to go to the village ?", AssetManager.getSkin()) {
             @Override
             protected void result(Object object) {
                 boolean result = (boolean) object;

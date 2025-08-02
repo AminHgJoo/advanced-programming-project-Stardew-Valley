@@ -327,7 +327,7 @@ public class PlayerController {
     }
 
     public void updatePlayerCoordinate() {
-        System.out.println("hi");
+
         boolean checkWalk = playerService.walk(playerPosition.x, playerPosition.y);
         if (checkWalk) {
             networkThreadPool.execute(() -> {
@@ -350,7 +350,7 @@ public class PlayerController {
             playerPosition.x = player.getCoordinate().getX();
             playerPosition.y = player.getCoordinate().getY();
         }
-        if (playerPosition.x == 2366.5f && playerPosition.y == 67f) {
+        if (playerPosition.x == 2366.5f && playerPosition.y >= 67f) {
             System.out.println("hello");
             farmMenu.showGoToVillagePopUp();
         }

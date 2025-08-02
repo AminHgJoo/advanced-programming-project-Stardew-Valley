@@ -141,7 +141,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
         if (!showingQuestion) {
             showingQuestion = true;
             VillageMenu menu = this;
-            ConfirmAlert alert = new ConfirmAlert("question", "Do you wanna go to " + name + " ?",
+            ConfirmAlert alert = new ConfirmAlert("question", "Do you want to go to " + name + " ?",
                 AssetManager.getSkin()) {
                 @Override
                 protected void result(Object object) {
