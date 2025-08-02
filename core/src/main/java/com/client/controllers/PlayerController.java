@@ -71,13 +71,13 @@ public class PlayerController {
         String playerName = player.getUser().getUsername();
         float nameOffset = 15f;
         float nameX = playerPosition.x - playerName.length() - 4;
-        float nameY = playerPosition.y + (playerTexture.getRegionHeight() / (2*scale)) + nameOffset;
+        float nameY = playerPosition.y + (playerTexture.getRegionHeight() / (2 * scale)) + nameOffset;
         BitmapFont font = AssetManager.getStardewFont();
         font.getData().setScale(0.5f);
         font.draw(batch, playerName, nameX, nameY);
         font.getData().setScale(1f);
         if (player.emojiCounter >= 0) {
-            batch.draw(player.currentEmoji, nameX , nameY, 32, 32);
+            batch.draw(player.currentEmoji, nameX, nameY, 32, 32);
             player.emojiCounter += 0.01f;
             if (player.emojiCounter >= 5) {
                 player.emojiCounter = -1;
@@ -327,7 +327,7 @@ public class PlayerController {
     }
 
     public void updatePlayerCoordinate() {
-        System.out.println("hi");
+
         boolean checkWalk = playerService.walk(playerPosition.x, playerPosition.y);
         if (checkWalk) {
             networkThreadPool.execute(() -> {
@@ -350,7 +350,7 @@ public class PlayerController {
             playerPosition.x = player.getCoordinate().getX();
             playerPosition.y = player.getCoordinate().getY();
         }
-        if (playerPosition.x == 2366.5f && playerPosition.y == 67f) {
+        if (playerPosition.x == 2366.5f && playerPosition.y >= 67f) {
             System.out.println("hello");
             farmMenu.showGoToVillagePopUp();
         }

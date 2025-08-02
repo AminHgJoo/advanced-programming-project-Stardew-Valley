@@ -16,11 +16,11 @@ public class Village {
 
     public Village() {
         initializeStores();
-        npcs.add(new NPC("Sebastian", new Coordinate(1233f , 526f)));
-        npcs.add(new NPC("Abigail", new Coordinate(1481f , 534f)));
-        npcs.add(new NPC("Harvey", new Coordinate(598f , 521f)));
-        npcs.add(new NPC("Leah", new Coordinate(1573f , 771f)));
-        npcs.add(new NPC("Robin", new Coordinate(556f , 765f)));
+        npcs.add(new NPC("Sebastian", new Coordinate(1233f, 526f)));
+        npcs.add(new NPC("Abigail", new Coordinate(1481f, 534f)));
+        npcs.add(new NPC("Harvey", new Coordinate(598f, 521f)));
+        npcs.add(new NPC("Leah", new Coordinate(1573f, 771f)));
+        npcs.add(new NPC("Robin", new Coordinate(556f, 765f)));
     }
 
     public void initializeStores() {

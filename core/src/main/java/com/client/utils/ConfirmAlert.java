@@ -1,14 +1,13 @@
 package com.client.utils;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class ConfirmAlert extends Dialog {
     public boolean result = false;
-    public ConfirmAlert(String title,String message ,  Skin skin) {
+
+    public ConfirmAlert(String title, String message, Skin skin) {
         super(title, skin);
 
         setSize(400, 200);

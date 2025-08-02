@@ -24,12 +24,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class NPCChatScreen implements MyScreen {
+    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(2);
     private Stage stage;
     private Skin skin;
     private VillageMenu villageMenu;
     private GameMain gameMain;
-    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(2);
-
     private String npcName;
     private NPC npc;
     private Texture npcPortrait;

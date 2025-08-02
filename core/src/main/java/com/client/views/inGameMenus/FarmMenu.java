@@ -56,6 +56,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class FarmMenu implements MyScreen, InputProcessor {
 
@@ -65,8 +66,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public static final float TILE_PIX_SIZE = 32;
     public static final float FARM_X_SPAN = 75; //32 * 75 == 2400
     public static final float FARM_Y_SPAN = 50; //32 * 50 == 1600
-    private final GameMain gameMain;
-    private final PauseMenu pauseMenu;
     public final Gson gson = new GsonBuilder()
         .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
             @Override
@@ -81,12 +80,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
         })
         .serializeSpecialFloatingPointValues()
         .create();
+    private final GameMain gameMain;
+    private final PauseMenu pauseMenu;
     private final OrthographicCamera camera;
     private final StretchViewport viewport;
     //These are graphical coordinates, not the x and y coordinates in the game logic.
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
     private final PlayerController playerController;
+    private final Stage chatNotifStage;
+    public boolean voteFlag = false;
+    public Player votedPlayer;
     private SpriteBatch batch;
     private Farm farm;
     private Texture grassTexture;
@@ -116,15 +120,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Label moneyLabel;
     private Stage popupStage;
     private boolean crowFlag = false;
-    public boolean voteFlag = false;
-    public Player votedPlayer;
-    private final Stage chatNotifStage;
     private InputProcessor temp;
-
-
-    public GameMain getGameMain() {
-        return gameMain;
-    }
 
     public FarmMenu(GameMain gameMain) {
         this.gameMain = gameMain;
@@ -140,7 +136,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.grassTexture = AssetManager.getImage("grassfall");
         playerController = new PlayerController(playerPosition, playerVelocity, this, ClientApp.currentPlayer);
         this.farm = playerController.getPlayer().getFarm();
-//        playerController.getPlayer().setInVillage(true);
         this.inventory = AssetManager.getImage("aks");
         //TODO tuf zadam
         for (Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {
@@ -157,6 +152,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.chatNotifStage = new Stage(new ScreenViewport());
     }
 
+    public GameMain getGameMain() {
+        return gameMain;
+    }
+
     private void initializeEmoji() {
         emojiTextures = new ArrayList<>();
         emojiTextures.add(AssetManager.getImage("happy"));
@@ -171,7 +170,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     public void showGoToVillagePopUp() {
         System.out.println("FARM MENU");
-        ConfirmAlert alert = new ConfirmAlert("question", "Do You Wanna go to village ?", AssetManager.getSkin()) {
+        ConfirmAlert alert = new ConfirmAlert("question", "Do you want to go to the village ?", AssetManager.getSkin()) {
             @Override
             protected void result(Object object) {
                 boolean result = (boolean) object;
@@ -732,11 +731,12 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public void socketMessage(String message) {
         HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
         String type = res.get("type");
+
         if (type.equals("PLAYER_MOVED")) {
             playerController.handleServerPlayerMove(res);
         } else if (type.equals("PLAYER_UPDATED")) {
             String id = res.get("player_user_id");
-            if (id != playerController.getPlayer().getUser_id()) {
+            if (!Objects.equals(id, playerController.getPlayer().getUser_id())) {
                 String player = res.get("player");
                 playerController.updateAnotherPlayerObject(player);
             }
@@ -781,16 +781,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     private void updateSeasonGrassTexture() {
 
-        if (ClientApp.currentGameData == null) return;
-
         grassTexture = SeasonTextures.giveSeasonTexture(ClientApp.currentGameData.getSeason());
     }
 
     private void handleLightning(OrthographicCamera camera, float delta) {
-
-        if (ClientApp.currentGameData == null) {
-            return;
-        }
 
         if (ClientApp.currentGameData.getWeatherToday() == Weather.STORM) {
             float rand = MathUtils.random(0f, 1f);
@@ -806,10 +800,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void updateTime(float delta) {
-
-        if (ClientApp.currentGameData == null) {
-            return;
-        }
         LocalDateTime time = ClientApp.currentGameData.getDate();
         float timeOfDay = (time.getHour() * 3600 + time.getMinute() * 60 + time.getSecond()) / 3600f;
 

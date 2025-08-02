@@ -32,6 +32,9 @@ public class Player {
     private static final Logger log = LoggerFactory.getLogger(Player.class);
     /// DO NOT USE THIS FIELD DIRECTLY
     public int money;
+    public float emojiCounter;
+    @Transient
+    public Texture currentEmoji;
     private boolean isOnline = true;
     private Coordinate coordinate;
     private Backpack inventory;
@@ -46,7 +49,6 @@ public class Player {
     private String partnerName;
     private int currentFarmNumber;
     private boolean isInVillage;
-    public float emojiCounter;
     @Transient
     private User user;
     private ArrayList<Friendship> friendships = new ArrayList<>();
@@ -61,8 +63,6 @@ public class Player {
     @Transient
     private ArrayList<Message> notifications = new ArrayList<>();
     private int moneyInNextDay = 0;
-    @Transient
-    public Texture currentEmoji;
 
     public Player() {
     }

@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.controllers.NpcController;
-import com.client.controllers.PlayerController;
 import com.client.controllers.PlayerVillageController;
 import com.client.utils.*;
 import com.common.GameGSON;
@@ -23,18 +22,15 @@ import com.common.models.GameData;
 import com.common.models.NPCModels.NPC;
 import com.common.models.Player;
 import com.common.models.mapModels.Coordinate;
+import com.common.utils.ChatMessage;
+import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.common.GameGSON.gson;
+
 public class VillageMenu implements MyScreen, InputProcessor {
-    private FarmMenu farmMenu;
-    private PlayerVillageController playerController;
-    private Stage stage;
-    private Stage popUpStage;
-    private GameMain gameMain;
-    private SpriteBatch batch;
-    private Texture backgroundTexture;
     public static final float SCREEN_WIDTH = 450 * 1.2f;
     public static final float SCREEN_HEIGHT = 300 * 1f;
     public static final float BASE_SPEED_FACTOR = 16;
@@ -43,13 +39,23 @@ public class VillageMenu implements MyScreen, InputProcessor {
     public static final float FARM_Y_SPAN = 29.5f; //32 * 50 == 1600
     private final OrthographicCamera camera;
     private final StretchViewport viewport;
-    private boolean showingQuestion = false;
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
+    private FarmMenu farmMenu;
+    private PlayerVillageController playerController;
+    private Stage stage;
+    private Stage popUpStage;
+    private Stage chatNotifStage;
+    private GameMain gameMain;
+    private SpriteBatch batch;
+    private Texture backgroundTexture;
+    private boolean showingQuestion = false;
     private HashMap<String, PlayerVillageController> playerControllers = new HashMap<>();
     private HashMap<String, NpcController> npcControllers = new HashMap<>();
     private GameData game = ClientApp.currentGameData;
     private Player player = ClientApp.currentPlayer;
+
+    private InputProcessor temp;
 
     public VillageMenu(FarmMenu farmMenu, GameMain gameMain) {
         player.setCoordinate(new Coordinate(TILE_PIX_SIZE * FARM_X_SPAN / 2, TILE_PIX_SIZE * FARM_Y_SPAN / 2));
@@ -57,6 +63,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
         this.gameMain = gameMain;
         batch = new SpriteBatch();
         stage = new Stage();
+        chatNotifStage = new Stage();
         Gdx.input.setInputProcessor(this);
         popUpStage = new Stage();
         this.playerPosition = new Vector2(player.getCoordinate().getX(), player.getCoordinate().getY());
@@ -94,11 +101,12 @@ public class VillageMenu implements MyScreen, InputProcessor {
 
     @Override
     public void socketMessage(String message) {
-        HashMap<String, String> res = (HashMap<String, String>) GameGSON.gson.fromJson(message, HashMap.class);
+        HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
         String type = res.get("type");
+
         if (type.equals("GAME_UPDATED")) {
             String gameJson = res.get("game");
-            GameData game = GameGSON.gson.fromJson(gameJson, GameData.class);
+            GameData game = gson.fromJson(gameJson, GameData.class);
             ClientApp.currentGameData = game;
             this.game = game;
             for (Map.Entry<String, PlayerVillageController> entry : playerControllers.entrySet()) {
@@ -112,17 +120,52 @@ public class VillageMenu implements MyScreen, InputProcessor {
             if (!id.equals(player.getUser_id())) {
                 PlayerVillageController controller = playerControllers.get(id);
                 String playerJson = res.get("player");
-                Player player1 = GameGSON.gson.fromJson(playerJson, Player.class);
+                Player player1 = gson.fromJson(playerJson, Player.class);
                 controller.updateGamePlayer(player1);
             }
+        } else if (type.equals("MESSAGE_ADDED")) {
+            String messageJson = res.get("message");
+            System.out.println(messageJson);
+            ChatMessage chatMsg = gson.fromJson(messageJson, ChatMessage.class);
+
+            String prefix = "@" + ClientApp.loggedInUser.getUsername() + " ";
+
+            if (chatMsg.message.startsWith(prefix)) {
+                showPopUp(chatMsg.sender + ": " + chatMsg.message.substring(prefix.length()), "Chat Message");
+            }
+        } else if (type.equals("EMOJI_SENT")) {
+            // TODO pouya do something
+
+        } else if (type.equals("MUSIC_QUERY")) {
+            var req = new JsonObject();
+
+            if (gameMain.music != null) {
+                req.addProperty("isPlaying", gameMain.music.isPlaying());
+                req.addProperty("musicName", gameMain.playingMusicName);
+                req.addProperty("musicPos", (double) gameMain.music.getPosition());
+            } else {
+                req.addProperty("isPlaying", false);
+                req.addProperty("musicName", "");
+                req.addProperty("musicPos", 0.0);
+            }
+
+            var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/music/sync_res", req);
+
         }
+    }
+
+    private synchronized void showPopUp(String message, String promptType) {
+        temp = Gdx.input.getInputProcessor();
+        Gdx.input.setInputProcessor(chatNotifStage);
+        UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, AssetManager.getSkin());
+        uiPopupHelper.showDialog(message, promptType, temp);
     }
 
     public void showGoToStorePopUp(String name) {
         if (!showingQuestion) {
             showingQuestion = true;
             VillageMenu menu = this;
-            ConfirmAlert alert = new ConfirmAlert("question", "Do you wanna go to " + name + " ?",
+            ConfirmAlert alert = new ConfirmAlert("question", "Do you want to go to " + name + " ?",
                 AssetManager.getSkin()) {
                 @Override
                 protected void result(Object object) {
@@ -266,7 +309,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
             }
         }
         if (nc != null) {
-            gameMain.setScreen(new NPCChatScreen(nc.getNpc(), this , gameMain));
+            gameMain.setScreen(new NPCChatScreen(nc.getNpc(), this, gameMain));
         }
         return false;
     }

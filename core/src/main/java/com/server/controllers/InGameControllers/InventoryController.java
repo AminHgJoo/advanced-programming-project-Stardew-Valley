@@ -7,7 +7,6 @@ import com.common.models.enums.types.itemTypes.ItemType;
 import com.common.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.common.models.items.Food;
 import com.common.models.items.Misc;
-import com.common.models.items.Tool;
 import com.common.models.items.buffs.ActiveBuff;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapObjects.ArtisanBlock;

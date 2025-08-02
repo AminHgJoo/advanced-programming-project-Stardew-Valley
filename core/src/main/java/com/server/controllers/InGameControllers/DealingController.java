@@ -12,13 +12,57 @@ import com.common.models.enums.types.storeProductTypes.BlackSmithProducts;
 import com.common.models.enums.types.storeProductTypes.FishProducts;
 import com.common.models.items.*;
 import com.server.GameServers.GameServer;
-import com.server.repositories.GameRepository;
 import com.server.utilities.Response;
 import io.javalin.http.Context;
 
 import java.util.HashMap;
 
 public class DealingController extends Controller {
+    public static boolean handleBuyRecipe(String name, StoreProduct p, Player player) {
+        CraftingRecipes craft = CraftingRecipes.findByName(name.split(" ")[0]);
+        CookingRecipes cook = CookingRecipes.findByName(name.split(" ")[0]);
+        if (craft != null) {
+            player.getUnlockedCraftingRecipes().add(craft);
+            return true;
+        }
+        if (cook != null) {
+            player.getUnlockedCookingRecipes().add(cook);
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean handleUpgradeTool(String name, StoreProduct p, Player player) {
+        BlackSmithProducts trashCan = BlackSmithProducts.findTrashCanUpgrade(name);
+        BlackSmithProducts tool = BlackSmithProducts.findSteelToolUpgrade(name);
+        if (trashCan != null) {
+            TrashcanType type = trashCan.getTrashcan();
+            player.setTrashcanType(type);
+            return true;
+        } else if (tool != null) {
+            Quality q = tool.getTool();
+            if (player.getEquippedItem() instanceof Tool t) {
+                p.setAvailableCount(p.getAvailableCount() - 1);
+                Slot slot = player.getInventory().getSlotByItemName(p.getType().getIngredient().getName());
+                if (slot == null || slot.getCount() < 5) {
+                    return false;
+                }
+                slot.setCount(slot.getCount() - 5);
+                if (slot.getCount() == 0) {
+                    player.getInventory().removeSlot(slot);
+                }
+                Slot s = player.getInventory().getSlotByItemName(t.getName());
+                t.setQuality(q);
+                ((Tool) s.getItem()).setQuality(q);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
     public void purchase(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
@@ -218,51 +262,6 @@ public class DealingController extends Controller {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }
-    }
-
-    public static boolean handleBuyRecipe(String name, StoreProduct p, Player player) {
-        CraftingRecipes craft = CraftingRecipes.findByName(name.split(" ")[0]);
-        CookingRecipes cook = CookingRecipes.findByName(name.split(" ")[0]);
-        if (craft != null) {
-            player.getUnlockedCraftingRecipes().add(craft);
-            return true;
-        }
-        if (cook != null) {
-            player.getUnlockedCookingRecipes().add(cook);
-            return true;
-        }
-
-        return false;
-    }
-
-    public static boolean handleUpgradeTool(String name, StoreProduct p, Player player) {
-        BlackSmithProducts trashCan = BlackSmithProducts.findTrashCanUpgrade(name);
-        BlackSmithProducts tool = BlackSmithProducts.findSteelToolUpgrade(name);
-        if (trashCan != null) {
-            TrashcanType type = trashCan.getTrashcan();
-            player.setTrashcanType(type);
-            return true;
-        } else if (tool != null) {
-            Quality q = tool.getTool();
-            if (player.getEquippedItem() instanceof Tool t) {
-                p.setAvailableCount(p.getAvailableCount() - 1);
-                Slot slot = player.getInventory().getSlotByItemName(p.getType().getIngredient().getName());
-                if (slot == null || slot.getCount() < 5) {
-                    return false;
-                }
-                slot.setCount(slot.getCount() - 5);
-                if (slot.getCount() == 0) {
-                    player.getInventory().removeSlot(slot);
-                }
-                Slot s = player.getInventory().getSlotByItemName(t.getName());
-                t.setQuality(q);
-                ((Tool) s.getItem()).setQuality(q);
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return false;
     }
 }
 

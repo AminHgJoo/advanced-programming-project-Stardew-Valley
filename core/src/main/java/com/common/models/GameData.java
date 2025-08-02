@@ -32,7 +32,7 @@ import java.util.ArrayList;
 @Entity("games")
 public class GameData {
     public ArrayList<Trade> tradingHistory = new ArrayList<>();
-
+    public ArrayList<ChatMessage> chatMessages = new ArrayList<>();
     private int capacity = 0;
     @Id
     private String _id;
@@ -45,7 +45,6 @@ public class GameData {
     private Weather weatherToday;
     private Weather weatherTomorrow;
     private Season season;
-    public ArrayList<ChatMessage> chatMessages = new ArrayList<>();
     private ArrayList<Message> messages = new ArrayList<>();
     private ArrayList<Gift> gifts = new ArrayList<>();
 

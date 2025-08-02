@@ -1,7 +1,6 @@
 package com.client.views.preGameMenus.profileMenus;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,10 +18,10 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
-import com.server.views.gameViews.GameMenu;
 
 
 public class AvatarMenu implements MyScreen {
+    private static final float CHECK_INTERVAL = 0.5f;
     private Stage stage;
     private Skin skin;
     private Image[] avatarImages;
@@ -32,7 +31,6 @@ public class AvatarMenu implements MyScreen {
     private Texture backgroundTexture, currentAvatarTexture;
     private Image backgroundImage, currentAvatarImage;
     private float checkTimer = 0;
-    private static final float CHECK_INTERVAL = 0.5f;
     private GameMain gameMain;
 
     public AvatarMenu(GameMain gameMain) {

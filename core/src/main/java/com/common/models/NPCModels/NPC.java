@@ -1,9 +1,7 @@
 package com.common.models.NPCModels;
 
 import com.badlogic.gdx.math.Vector2;
-import com.client.utils.FacingDirection;
 import com.client.utils.NpcState;
-import com.client.utils.PlayerState;
 import com.common.models.GameData;
 import com.common.models.Quest;
 import com.common.models.enums.types.itemTypes.*;
@@ -57,7 +55,7 @@ public class NPC {
                 chooseNewTarget();
                 break;
             case WALKING_TO_TARGET:
-                if(coordinate.getY() == targetPosition.y && coordinate.getX() == targetPosition.x) {
+                if (coordinate.getY() == targetPosition.y && coordinate.getX() == targetPosition.x) {
                     state = NpcState.WAITING_AT_TARGET;
                 }
                 break;

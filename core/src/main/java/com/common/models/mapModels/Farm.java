@@ -61,7 +61,7 @@ public class Farm {
             if (cell.getCoordinate().getX() == 68 && cell.getCoordinate().getY() == 8) {
                 cell.setObjectOnCell(new BuildingBlock(false, "shippingBin"));
             }
-            if((cell.getCoordinate().getX() <67 ||cell.getCoordinate().getX()> 69 ) && (cell.getCoordinate().getY() < 8 ||cell.getCoordinate().getY()> 9)) {
+            if ((cell.getCoordinate().getX() < 67 || cell.getCoordinate().getX() > 69) && (cell.getCoordinate().getY() < 8 || cell.getCoordinate().getY() > 9)) {
                 if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
                     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     cell.setObjectOnCell(new Tree(TreeType.NORMAL_TREE, LocalDateTime.parse("2025-01-01 09:00:00", dateTimeFormatter), gameData));

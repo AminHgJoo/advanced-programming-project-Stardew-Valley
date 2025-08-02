@@ -82,7 +82,7 @@ public class LobbyController {
             }
 
             Lobby lobby = LobbyRepository.findById(user.getCurrentLobbyId());
-            if(lobby == null){
+            if (lobby == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("Lobby not found"));
                 return;
             }
@@ -150,13 +150,31 @@ public class LobbyController {
         }
     }
 
+    public String findUserInLobby(String username, ArrayList<Lobby> lobbies) {
+        String lobbyName = "None";
+        for (Lobby lobby : lobbies) {
+            if (lobby.getUsers().contains(username)) {
+                lobbyName = lobby.getName();
+                break;
+            }
+        }
+        return lobbyName;
+    }
+
     public void getOnlinePlayers(Context ctx) {
         try {
             ArrayList<String> arr = AppWebSocket.getOnlinePlayers();
 
-            ctx.json(Response.OK.setBody(arr));
-        }
-        catch (Exception e) {
+            ArrayList<Lobby> lobbies = LobbyRepository.findAll(false);
+
+            ArrayList<String> result = new ArrayList<>();
+
+            for (String username : arr) {
+                result.add(username + ", lobby: " + findUserInLobby(username, lobbies));
+            }
+
+            ctx.json(Response.OK.setBody(result));
+        } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
         }

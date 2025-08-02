@@ -9,7 +9,6 @@ import com.common.models.items.Item;
 import com.common.models.items.Tool;
 import com.common.models.mapModels.Coordinate;
 import com.server.GameServers.GameServer;
-import com.server.repositories.GameRepository;
 import com.server.utilities.AIChat;
 import com.server.utilities.Response;
 import io.javalin.http.Context;
@@ -29,7 +28,7 @@ public class NpcController extends Controller {
             if (npc != null) {
                 npc.setCoordinate(new Coordinate((float) x, (float) y));
                 ctx.json(Response.OK.setMessage("NPC changed"));
-            }else {
+            } else {
                 ctx.json(Response.NOT_FOUND.setMessage("NPC not found"));
             }
         } catch (Exception e) {

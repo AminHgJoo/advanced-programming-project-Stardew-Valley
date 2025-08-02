@@ -1,6 +1,5 @@
 package com.server.controllers;
 
-import com.common.models.App;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.User;
