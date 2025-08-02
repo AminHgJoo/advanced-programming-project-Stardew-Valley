@@ -22,10 +22,13 @@ import com.common.models.GameData;
 import com.common.models.NPCModels.NPC;
 import com.common.models.Player;
 import com.common.models.mapModels.Coordinate;
+import com.common.utils.ChatMessage;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.common.GameGSON.gson;
 
 public class VillageMenu implements MyScreen, InputProcessor {
     public static final float SCREEN_WIDTH = 450 * 1.2f;
@@ -42,6 +45,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
     private PlayerVillageController playerController;
     private Stage stage;
     private Stage popUpStage;
+    private Stage chatNotifStage;
     private GameMain gameMain;
     private SpriteBatch batch;
     private Texture backgroundTexture;
@@ -51,12 +55,15 @@ public class VillageMenu implements MyScreen, InputProcessor {
     private GameData game = ClientApp.currentGameData;
     private Player player = ClientApp.currentPlayer;
 
+    private InputProcessor temp;
+
     public VillageMenu(FarmMenu farmMenu, GameMain gameMain) {
         player.setCoordinate(new Coordinate(TILE_PIX_SIZE * FARM_X_SPAN / 2, TILE_PIX_SIZE * FARM_Y_SPAN / 2));
         this.farmMenu = farmMenu;
         this.gameMain = gameMain;
         batch = new SpriteBatch();
         stage = new Stage();
+        chatNotifStage = new Stage();
         Gdx.input.setInputProcessor(this);
         popUpStage = new Stage();
         this.playerPosition = new Vector2(player.getCoordinate().getX(), player.getCoordinate().getY());
@@ -94,12 +101,12 @@ public class VillageMenu implements MyScreen, InputProcessor {
 
     @Override
     public void socketMessage(String message) {
-        HashMap<String, String> res = (HashMap<String, String>) GameGSON.gson.fromJson(message, HashMap.class);
+        HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
         String type = res.get("type");
 
         if (type.equals("GAME_UPDATED")) {
             String gameJson = res.get("game");
-            GameData game = GameGSON.gson.fromJson(gameJson, GameData.class);
+            GameData game = gson.fromJson(gameJson, GameData.class);
             ClientApp.currentGameData = game;
             this.game = game;
             for (Map.Entry<String, PlayerVillageController> entry : playerControllers.entrySet()) {
@@ -113,8 +120,18 @@ public class VillageMenu implements MyScreen, InputProcessor {
             if (!id.equals(player.getUser_id())) {
                 PlayerVillageController controller = playerControllers.get(id);
                 String playerJson = res.get("player");
-                Player player1 = GameGSON.gson.fromJson(playerJson, Player.class);
+                Player player1 = gson.fromJson(playerJson, Player.class);
                 controller.updateGamePlayer(player1);
+            }
+        } else if (type.equals("MESSAGE_ADDED")) {
+            String messageJson = res.get("message");
+            System.out.println(messageJson);
+            ChatMessage chatMsg = gson.fromJson(messageJson, ChatMessage.class);
+
+            String prefix = "@" + ClientApp.loggedInUser.getUsername() + " ";
+
+            if (chatMsg.message.startsWith(prefix)) {
+                showPopUp(chatMsg.sender + ": " + chatMsg.message.substring(prefix.length()), "Chat Message");
             }
         } else if (type.equals("EMOJI_SENT")) {
             // TODO pouya do something
@@ -135,6 +152,13 @@ public class VillageMenu implements MyScreen, InputProcessor {
             var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/music/sync_res", req);
 
         }
+    }
+
+    private synchronized void showPopUp(String message, String promptType) {
+        temp = Gdx.input.getInputProcessor();
+        Gdx.input.setInputProcessor(chatNotifStage);
+        UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, AssetManager.getSkin());
+        uiPopupHelper.showDialog(message, promptType, temp);
     }
 
     public void showGoToStorePopUp(String name) {

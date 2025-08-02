@@ -56,6 +56,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class FarmMenu implements MyScreen, InputProcessor {
 
@@ -121,7 +122,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private boolean crowFlag = false;
     private InputProcessor temp;
 
-
     public FarmMenu(GameMain gameMain) {
         this.gameMain = gameMain;
         this.playerPosition = new Vector2(TILE_PIX_SIZE * FARM_X_SPAN / 2, TILE_PIX_SIZE * FARM_Y_SPAN / 2);
@@ -136,7 +136,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.grassTexture = AssetManager.getImage("grassfall");
         playerController = new PlayerController(playerPosition, playerVelocity, this, ClientApp.currentPlayer);
         this.farm = playerController.getPlayer().getFarm();
-//        playerController.getPlayer().setInVillage(true);
         this.inventory = AssetManager.getImage("aks");
         //TODO tuf zadam
         for (Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {
@@ -732,11 +731,12 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public void socketMessage(String message) {
         HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
         String type = res.get("type");
+
         if (type.equals("PLAYER_MOVED")) {
             playerController.handleServerPlayerMove(res);
         } else if (type.equals("PLAYER_UPDATED")) {
             String id = res.get("player_user_id");
-            if (id != playerController.getPlayer().getUser_id()) {
+            if (!Objects.equals(id, playerController.getPlayer().getUser_id())) {
                 String player = res.get("player");
                 playerController.updateAnotherPlayerObject(player);
             }
@@ -781,16 +781,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     private void updateSeasonGrassTexture() {
 
-        if (ClientApp.currentGameData == null) return;
-
         grassTexture = SeasonTextures.giveSeasonTexture(ClientApp.currentGameData.getSeason());
     }
 
     private void handleLightning(OrthographicCamera camera, float delta) {
-
-        if (ClientApp.currentGameData == null) {
-            return;
-        }
 
         if (ClientApp.currentGameData.getWeatherToday() == Weather.STORM) {
             float rand = MathUtils.random(0f, 1f);
@@ -806,10 +800,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void updateTime(float delta) {
-
-        if (ClientApp.currentGameData == null) {
-            return;
-        }
         LocalDateTime time = ClientApp.currentGameData.getDate();
         float timeOfDay = (time.getHour() * 3600 + time.getMinute() * 60 + time.getSecond()) / 3600f;
 

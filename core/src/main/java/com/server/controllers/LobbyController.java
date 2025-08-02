@@ -150,11 +150,30 @@ public class LobbyController {
         }
     }
 
+    public String findUserInLobby(String username, ArrayList<Lobby> lobbies) {
+        String lobbyName = "None";
+        for (Lobby lobby : lobbies) {
+            if (lobby.getUsers().contains(username)) {
+                lobbyName = lobby.getName();
+                break;
+            }
+        }
+        return lobbyName;
+    }
+
     public void getOnlinePlayers(Context ctx) {
         try {
             ArrayList<String> arr = AppWebSocket.getOnlinePlayers();
 
-            ctx.json(Response.OK.setBody(arr));
+            ArrayList<Lobby> lobbies = LobbyRepository.findAll(false);
+
+            ArrayList<String> result = new ArrayList<>();
+
+            for (String username : arr) {
+                result.add(username + ", lobby: " + findUserInLobby(username, lobbies));
+            }
+
+            ctx.json(Response.OK.setBody(result));
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));

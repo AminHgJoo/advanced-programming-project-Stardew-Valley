@@ -42,6 +42,12 @@ public class GameLobbyMenu implements MyScreen {
     private SimpleWebSocketClient client = ClientApp.client;
     private boolean GAME_START = false;
     private ArrayList<Lobby> visibleLobbies = new ArrayList<>();
+    private final Gson gson = new Gson();
+    private ScrollPane playersListPane;
+    private Table onlinePlayersTable;
+    private Table slidingMenu;
+
+    private float refreshTimer = 0.0f;
 
     public GameLobbyMenu(GameMain gameMain, Lobby currLobby) {
         this.gameMain = gameMain;
@@ -127,9 +133,6 @@ public class GameLobbyMenu implements MyScreen {
                     Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                     if (res.getStatus() == 200) {
                         // TODO set a loading
-                    } else {
-//                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-//                        uiPopupHelper.showDialog(res.getMessage(), "Error");
                     }
                 }
             });
@@ -302,7 +305,8 @@ public class GameLobbyMenu implements MyScreen {
     }
 
     private void initializeSlidingMenu() {
-        Table slidingMenu = new Table(skin);
+        slidingMenu = new Table(skin);
+
         if (currLobby != null) {
             Label asghar = new Label("Players in lobby:", skin);
             asghar.setColor(Color.DARK_GRAY);
@@ -314,6 +318,12 @@ public class GameLobbyMenu implements MyScreen {
             }
         }
         slidingMenu.pad(10);
+
+        Label onlinePlayersLabel = new Label("Online Players:", skin);
+        onlinePlayersLabel.setColor(Color.DARK_GRAY);
+        slidingMenu.add(onlinePlayersLabel).pad(10).row();
+
+        initOnlinePlayers(slidingMenu);
 
         Label label = new Label("Lobby Options", skin);
         label.setColor(Color.DARK_GRAY);
@@ -418,6 +428,23 @@ public class GameLobbyMenu implements MyScreen {
         });
     }
 
+    private void initOnlinePlayers(Table slidingMenu) {
+        var getRes = HTTPUtil.get("/api/lobby/getOnlinePlayers");
+
+        var res = HTTPUtil.deserializeHttpResponse(getRes);
+
+        ArrayList<String> list = (ArrayList<String>) res.getBody();
+
+        onlinePlayersTable = new Table(skin);
+        for (String s : list) {
+            Label label = new Label(s, skin);
+            label.setColor(Color.DARK_GRAY);
+            onlinePlayersTable.add(label).pad(10).row();
+        }
+        playersListPane = new ScrollPane(onlinePlayersTable, skin);
+        slidingMenu.add(playersListPane).pad(10).row();
+    }
+
     public void updateLobby(Lobby lobby) {
         for (int i = 0; i < visibleLobbies.size(); i++) {
             if (visibleLobbies.get(i).get_id().toString().equals(lobby.get_id().toString())) {
@@ -437,6 +464,13 @@ public class GameLobbyMenu implements MyScreen {
             this.gameMain.setScreen(new FarmMenu(gameMain));
             this.dispose();
         }
+        refreshTimer += delta;
+
+        if (refreshTimer >= 10) {
+            doesUINeedRefresh = true;
+            refreshTimer = 0;
+        }
+
         if (doesUINeedRefresh) {
             stage.dispose();
             initializeStage();
@@ -526,9 +560,6 @@ public class GameLobbyMenu implements MyScreen {
                 }
             }
             GAME_START = true;
-            // TODO redirect to the main page of the game
-//            this.gameMain.setScreen(new FarmMenu(gameMain));
-//            this.dispose();
         }
         String lobby = res.get("lobby");
         if (lobby != null) {
