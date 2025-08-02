@@ -266,7 +266,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
             }
         }
         if (nc != null) {
-            System.out.println(nc.getNpc().getName());
+            gameMain.setScreen(new NPCChatScreen(nc.getNpc(), this , gameMain));
         }
         return false;
     }
