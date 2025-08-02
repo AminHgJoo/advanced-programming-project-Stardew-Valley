@@ -40,6 +40,7 @@ public class NPCChatScreen implements MyScreen {
     private ScrollPane chatScrollPane;
     private Table messageContainer;
     private TextField messageInput;
+    private TextField giftItemName;
     private TextButton sendButton;
     private TextButton giftButton;
 
@@ -87,6 +88,7 @@ public class NPCChatScreen implements MyScreen {
 
         Label nameLabel = new Label(npcName, skin, "title");
         sidebar.add(nameLabel).row();
+        giftItemName = new TextField("Item name", skin);
 
         giftButton = new TextButton("Send Gift", skin);
         sidebar.add(giftButton).width(150).height(60).row();
@@ -158,7 +160,7 @@ public class NPCChatScreen implements MyScreen {
         giftButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Gift button clicked");
+                System.out.println(giftItemName.getText());
             }
         });
     }
