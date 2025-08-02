@@ -2,12 +2,14 @@ package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.client.ClientApp;
@@ -25,7 +27,7 @@ import com.common.models.mapModels.Coordinate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VillageMenu implements MyScreen {
+public class VillageMenu implements MyScreen, InputProcessor {
     private FarmMenu farmMenu;
     private PlayerVillageController playerController;
     private Stage stage;
@@ -55,7 +57,7 @@ public class VillageMenu implements MyScreen {
         this.gameMain = gameMain;
         batch = new SpriteBatch();
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(this);
         popUpStage = new Stage();
         this.playerPosition = new Vector2(player.getCoordinate().getX(), player.getCoordinate().getY());
         this.playerVelocity = new Vector2();
@@ -86,7 +88,7 @@ public class VillageMenu implements MyScreen {
 
     public void renderNpcs(float delta) {
         for (NPC npc : game.getMap().getVillage().getNpcs()) {
-            npcControllers.get(npc.getName()).render(batch , delta);
+            npcControllers.get(npc.getName()).render(batch, delta);
         }
     }
 
@@ -237,4 +239,60 @@ public class VillageMenu implements MyScreen {
         batch.setProjectionMatrix(camera.combined);
     }
 
+    @Override
+    public boolean keyDown(int i) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int i) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char c) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        Vector3 touchPos = new Vector3(screenX, screenY, 0);
+        camera.unproject(touchPos);
+
+        NpcController nc = null;
+        for (Map.Entry<String, NpcController> entry : npcControllers.entrySet()) {
+            if (entry.getValue().isInPosition((int) touchPos.x, (int) touchPos.y)) {
+                nc = entry.getValue();
+            }
+        }
+        if (nc != null) {
+            System.out.println(nc.getNpc().getName());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int i, int i1, int i2, int i3) {
+        return false;
+    }
+
+    @Override
+    public boolean touchCancelled(int i, int i1, int i2, int i3) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int i, int i1, int i2) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int i, int i1) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float v, float v1) {
+        return false;
+    }
 }

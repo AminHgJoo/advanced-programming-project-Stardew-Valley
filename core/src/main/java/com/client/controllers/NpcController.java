@@ -107,6 +107,17 @@ public class NpcController {
         return false;
     }
 
+    public boolean isInPosition(int x, int y) {
+        if (x >= npcPosition.x -100 && x <= npcPosition.x + 100 && y >= npcPosition.y -100 && y <= npcPosition.y + 100) {
+            return true;
+        }
+        return false;
+    }
+
+    public NPC getNpc() {
+        return npc;
+    }
+
     public boolean isInRange(float x, float min, float max) {
         return x >= min && x <= max;
     }
