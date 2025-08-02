@@ -16,6 +16,9 @@ import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
+import com.common.GameGSON;
+import com.common.models.GameData;
 import com.common.models.NPCModels.NPC;
 import com.google.gson.JsonObject;
 import com.server.utilities.Response;
@@ -88,6 +91,7 @@ public class NPCChatScreen implements MyScreen {
         Label nameLabel = new Label(npcName, skin, "title");
         sidebar.add(nameLabel).row();
         giftItemName = new TextField("Item name", skin);
+        sidebar.add(giftItemName).width(150).height(40).row();
 
         giftButton = new TextButton("Send Gift", skin);
         sidebar.add(giftButton).width(150).height(60).row();
@@ -159,7 +163,28 @@ public class NPCChatScreen implements MyScreen {
         giftButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println(giftItemName.getText());
+                networkThreadPool.execute(()->{
+                    JsonObject req = new JsonObject();
+                    req.addProperty("item", giftItemName.getText());
+                    req.addProperty("npcName", npcName);
+
+                    var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/npcGift" , req);
+
+                    Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                    Gdx.app.postRunnable(()->{
+                        if(res.getStatus() == 200){
+                            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage , skin);
+                            uiPopupHelper.showDialog("Gift was sent successfully" , "Success");
+                            String gameJson = res.getBody().toString();
+                            System.out.println(gameJson);
+                            GameData gameData = GameGSON.gson.fromJson(gameJson, GameData.class);
+                            ClientApp.currentGameData = gameData;
+                        }else {
+                            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage , skin);
+                            uiPopupHelper.showDialog(res.getMessage() , "Error");
+                        }
+                    });
+                });
             }
         });
     }

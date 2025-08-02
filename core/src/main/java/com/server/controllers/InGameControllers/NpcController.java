@@ -108,7 +108,7 @@ public class NpcController extends Controller {
                 npc.getGift().put(player.getUser().getUsername(), true);
             }
             String gameJson = GameGSON.gson.toJson(game);
-            ctx.json(Response.OK.setMessage(gameJson));
+            ctx.json(Response.OK.setBody(gameJson));
             HashMap<String, String> msg = new HashMap<>();
             msg.put("type", "GAME_UPDATED");
             msg.put("game", gameJson);
