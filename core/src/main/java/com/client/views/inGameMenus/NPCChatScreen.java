@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Timer;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
@@ -21,11 +20,15 @@ import com.common.models.NPCModels.NPC;
 import com.google.gson.JsonObject;
 import com.server.utilities.Response;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class NPCChatScreen implements MyScreen {
     private Stage stage;
     private Skin skin;
     private VillageMenu villageMenu;
     private GameMain gameMain;
+    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(2);
 
     private String npcName;
     private NPC npc;
@@ -165,18 +168,22 @@ public class NPCChatScreen implements MyScreen {
         if (!message.isEmpty()) {
             addMessage(message, true);
             messageInput.setText("");
-            JsonObject req = new JsonObject();
-            req.addProperty("npcName", npcName);
-            req.addProperty("message", message);
+            networkThreadPool.execute(() -> {
+                JsonObject req = new JsonObject();
+                req.addProperty("npcName", npcName);
+                req.addProperty("message", message);
 
-            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/npcTalk", req);
-            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-            if (res.getStatus() == 200) {
-                String msg = res.getMessage().toString();
-                addMessage(msg, false);
-            }else {
-                System.out.println(res.getMessage());
-            }
+                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/npcTalk", req);
+                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                Gdx.app.postRunnable(() -> {
+                    if (res.getStatus() == 200) {
+                        String msg = res.getMessage().toString();
+                        addMessage(msg, false);
+                    } else {
+                        System.out.println(res.getMessage());
+                    }
+                });
+            });
         }
     }
 
