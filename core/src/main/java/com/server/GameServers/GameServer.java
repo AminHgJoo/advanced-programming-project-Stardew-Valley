@@ -127,11 +127,12 @@ public class GameServer extends Thread {
         return game;
     }
 
-    public void removePlayerConnection(PlayerConnection pc) {
+    public Player removePlayerConnection(PlayerConnection pc) {
         playerConnections.remove(pc);
         Player p = game.findPlayerByUsername(pc.getUsername());
         p.setOnline(false);
         sentOfflineMessage(p);
+        return p;
     }
 
     public void sentOfflineMessage(Player p) {

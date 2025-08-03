@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.server.repositories.LobbyRepository;
 import com.server.repositories.UserRepository;
 import io.javalin.Javalin;
 import org.json.JSONObject;
@@ -17,6 +18,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -167,10 +170,22 @@ public class AppWebSocket {
                 String username = ctx.queryParam("playerUsername");
                 PlayerConnection pc = connectedPlayers.remove(username);
                 GameServer gs = findGameServerByPlayerConnection(username);
-                gs.removePlayerConnection(pc);
+                Player p = gs.removePlayerConnection(pc);
                 if (gs.getPlayerConnections().isEmpty()) {
                     gs.endGame();
                 }
+                (new Timer()).schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (connectedPlayers.get(username) == null) {
+                            User user = p.getUser();
+                            user.setCurrentLobbyId(null);
+                            user.setCurrentGameId(null);
+                            UserRepository.saveUser(user);
+                        }
+                        this.cancel();
+                    }
+                }, 2 * 60 * 1000);
             });
 
         });
