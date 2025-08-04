@@ -17,10 +17,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
+import com.common.GameGSON;
+import com.common.models.GameData;
 import com.common.models.Player;
+import com.google.gson.JsonObject;
+import com.server.utilities.Response;
+
+import java.util.HashMap;
 
 public class VoteMenu implements MyScreen, InputProcessor {
     private final Skin skin;
@@ -65,22 +74,44 @@ public class VoteMenu implements MyScreen, InputProcessor {
         yesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO server
-                ((FarmMenu) farmScreen).voteFlag = false;
-                ((FarmMenu) farmScreen).votedPlayer = null;
-                gameMain.setScreen(farmScreen);
-                dispose();
+                JsonObject req = new JsonObject();
+                req.addProperty("playerId", player.getUser_id());
+                req.addProperty("vote", true);
+                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/worldGoToVoteMenu", req);
+                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                if (res.getStatus() == 200) {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog("Waiting for others to vote ... ", "Success");
+                } else {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog(res.getMessage(), "Error");
+                }
+//                ((FarmMenu) farmScreen).voteFlag = false;
+//                ((FarmMenu) farmScreen).votedPlayer = null;
+//                gameMain.setScreen(farmScreen);
+//                dispose();
             }
         });
 
         noButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO server
+                JsonObject req = new JsonObject();
+                req.addProperty("playerId", player.getUser_id());
+                req.addProperty("vote", false);
+                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/worldGoToVoteMenu", req);
+                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                if (res.getStatus() == 200) {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog("Waiting for others to vote ... ", "Success");
+                } else {
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog(res.getMessage(), "Error");
+                }
                 ((FarmMenu) farmScreen).voteFlag = false;
-                ((FarmMenu) farmScreen).votedPlayer = null;
-                gameMain.setScreen(farmScreen);
-                dispose();
+//                ((FarmMenu) farmScreen).votedPlayer = null;
+//                gameMain.setScreen(farmScreen);
+//                dispose();
             }
         });
         String voteText = "Do you want to kick " + player.getUser().getUsername() + " ?";
@@ -153,7 +184,23 @@ public class VoteMenu implements MyScreen, InputProcessor {
 
     @Override
     public void socketMessage(String message) {
-
+        HashMap<String, String> res = (HashMap<String, String>) GameGSON.gson.fromJson(message, HashMap.class);
+        String type = res.get("type");
+        if (type.equals("PLAYER_VOTED")) {
+            String playerUsername = res.get("player_username");
+            String votedPlayerUsername = res.get("player_username_vote");
+            String vote = res.get("vote");
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+            uiPopupHelper.showDialog(votedPlayerUsername + " voted " + vote + " for kick " + playerUsername, "Success");
+        } else if (type.equals("PLAYER_KICK_OUT")) {
+            String gameJson = res.get("game");
+            ClientApp.currentGameData = GameGSON.gson.fromJson(gameJson, GameData.class);
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+            uiPopupHelper.showDialog("Player has been kicked out", "Success");
+        } else if (type.equals("PLAYER_NOT_KICK_OUT")) {
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+            uiPopupHelper.showDialog("Player hasn't been kicked out", "Success");
+        }
     }
 
     @Override

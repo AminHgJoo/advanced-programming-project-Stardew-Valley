@@ -32,6 +32,25 @@ public class WorldController extends Controller {
         backpack.addSlot(newSlot);
     }
 
+    public void goToVoteMenu(Context ctx, GameServer gs) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String id = (String) ctx.attribute("id");
+            String playerId = (String) body.get("playerId");
+            GameData game = gs.getGame();
+
+            Player player = game.findPlayerByUserId(playerId);
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_VOTING");
+            msg.put("player_user_id", playerId);
+            msg.put("player_username", player.getUser().getUsername());
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
     public void votePlayer(Context ctx, GameServer gs) {
         try {
             String id = ctx.attribute("id");
@@ -62,7 +81,7 @@ public class WorldController extends Controller {
                     HashMap<String, String> msg = new HashMap<>();
                     msg.put("type", "PLAYER_KICK_OUT");
                     msg.put("player_user_id", playerId);
-                    msg.put("player_username", player.getUser().getUsername());
+                    msg.put("player_username", player2.getUser().getUsername());
                     msg.put("game", gameJson);
                     gs.broadcast(msg);
                 } else {
@@ -70,17 +89,19 @@ public class WorldController extends Controller {
                     HashMap<String, String> msg = new HashMap<>();
                     msg.put("type", "PLAYER_NOT_KICK_OUT");
                     msg.put("player_user_id", playerId);
-                    msg.put("player_username", player.getUser().getUsername());
+                    msg.put("player_username", player2.getUser().getUsername());
                     gs.broadcast(msg);
                 }
-            }else {
-                HashMap<String, String> msg = new HashMap<>();
-                msg.put("type", "PLAYER_VOTING");
-                msg.put("player_user_id", playerId);
-                msg.put("player_username", player.getUser().getUsername());
-                gs.broadcast(msg);
             }
             ctx.json(Response.OK.setMessage("You voted successfully"));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_VOTED");
+            msg.put("player_user_id", playerId);
+            msg.put("player_username", player2.getUser().getUsername());
+            msg.put("player_user_id_vote" , id);
+            msg.put("player_username_vote" , player.getUser().getUsername());
+            msg.put("vote" , vote.toString());
+            gs.broadcast(msg);
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));

@@ -451,9 +451,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new JournalMenu(gameMain, this));
         } else if (keycode == Input.Keys.U) {
             for (Player player : ClientApp.currentGameData.getPlayers()) {
-                if ((player != ClientApp.currentPlayer) && (Coordinate.calculateEuclideanDistance(ClientApp.currentPlayer.getCoordinate(), player.getCoordinate()) <= Math.sqrt(2))){
+                if ((player != ClientApp.currentPlayer) && (Coordinate.calculateEuclideanDistance(ClientApp.currentPlayer.getCoordinate(), player.getCoordinate()) <= Math.sqrt(2))) {
                     Gdx.input.setInputProcessor(popupStage);
-                    Vector2 stageCoords = popupStage.screenToStageCoordinates(new Vector2(player.getCoordinate().getX(),player.getCoordinate().getX()));
+                    Vector2 stageCoords = popupStage.screenToStageCoordinates(new Vector2(player.getCoordinate().getX(), player.getCoordinate().getX()));
                     Skin skin = AssetManager.getSkin();
 
 
@@ -503,11 +503,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
                         @Override
                         public void changed(ChangeEvent event, Actor actor) {
                             Slot flowerSlot = null;
-                            for(Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {
-                                if(isFlower(slot.getItem().getName()))
+                            for (Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {
+                                if (isFlower(slot.getItem().getName()))
                                     flowerSlot = slot;
                             }
-                            if(flowerSlot != null) {
+                            if (flowerSlot != null) {
                                 JsonObject req = new JsonObject();
                                 req.addProperty("username", player.getUser().getUsername());
                                 req.addProperty("flowerName", flowerSlot.getItem().getName());
@@ -863,6 +863,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
             var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/music/sync_res", req);
 
+        } else if (type.equals("PLAYER_VOTING")) {
+            String playerId = res.get("player_user_id");
+            Player player = ClientApp.currentGameData.findPlayerByUserId(playerId);
+            voteFlag = true;
+            votedPlayer = player;
         }
     }
 

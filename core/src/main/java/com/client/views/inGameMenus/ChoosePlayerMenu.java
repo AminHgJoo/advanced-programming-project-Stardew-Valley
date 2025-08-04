@@ -21,9 +21,14 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
 import com.common.models.Player;
+import com.google.gson.JsonObject;
+import com.server.utilities.Response;
 
+import java.rmi.server.UID;
 import java.util.ArrayList;
 
 public class ChoosePlayerMenu implements MyScreen, InputProcessor {
@@ -94,10 +99,20 @@ public class ChoosePlayerMenu implements MyScreen, InputProcessor {
 
     private void siktir(Player player) {
         //TODO server : All players should be informed to immediately enter the vote menu
-        ((FarmMenu) farmScreen).voteFlag = true;
-        ((FarmMenu) farmScreen).votedPlayer = player;
-        gameMain.setScreen(farmScreen);
-        dispose();
+        JsonObject req = new JsonObject();
+        req.addProperty("playerId", player.getUser_id());
+        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/worldGoToVoteMenu", req);
+        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+        if (res.getStatus() == 200) {
+            ((FarmMenu) farmScreen).voteFlag = true;
+            ((FarmMenu) farmScreen).votedPlayer = player;
+            gameMain.setScreen(farmScreen);
+            dispose();
+        } else {
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+            uiPopupHelper.showDialog(res.getMessage(), "Error");
+        }
+
     }
 
     @Override
