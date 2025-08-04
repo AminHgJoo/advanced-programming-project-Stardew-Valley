@@ -132,7 +132,8 @@ public class GiftMenu implements MyScreen, InputProcessor {
                 selected = false;
                 selectedSave = -1;
                 selectedIndex = -1;
-                //TODO update game
+                String game = res.getBody().toString();
+                ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
             }
 
         }

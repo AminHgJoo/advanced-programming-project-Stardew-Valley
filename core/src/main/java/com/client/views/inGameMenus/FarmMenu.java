@@ -150,6 +150,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         shapeRenderer = new ShapeRenderer();
 
         this.chatNotifStage = new Stage(new ScreenViewport());
+        farmScreen = this;
     }
 
     public GameMain getGameMain() {
@@ -470,7 +471,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     TextButton exitBtn = new TextButton("Exit", skin);
 
                     //TODO animation
-                    //TODO update game
                     hugBtn.addListener(new ChangeListener() {
                         @Override
                         public void changed(ChangeEvent event, Actor actor) {
@@ -479,6 +479,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
                             var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipHug", req);
                             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                             if (res.getStatus() == 200) {
+                                String game = res.getBody().toString();
+                                ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
                                 Gdx.input.setInputProcessor(FarmMenu.this);
                                 popup.remove();
                             }
@@ -494,6 +496,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
                             //TODO dastan dare hanooz kiram toosh bayad accept kne yaroo
                             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                             if (res.getStatus() == 200) {
+                                String game = res.getBody().toString();
+                                ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
                                 Gdx.input.setInputProcessor(FarmMenu.this);
                                 popup.remove();
                             }
@@ -514,6 +518,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                 var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipFlower", req);
                                 Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                                 if (res.getStatus() == 200) {
+                                    String game = res.getBody().toString();
+                                    ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
                                     Gdx.input.setInputProcessor(FarmMenu.this);
                                     popup.remove();
                                 }
