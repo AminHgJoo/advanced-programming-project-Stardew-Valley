@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Embedded
 public class Player {
@@ -63,6 +64,7 @@ public class Player {
     @Transient
     private ArrayList<Message> notifications = new ArrayList<>();
     private int moneyInNextDay = 0;
+    private HashMap<String, Boolean> votes = new HashMap();
 
     public Player() {
     }
@@ -688,5 +690,9 @@ public class Player {
 
     public void setOnline(boolean online) {
         isOnline = online;
+    }
+
+    public HashMap<String, Boolean> getVotes() {
+        return votes;
     }
 }

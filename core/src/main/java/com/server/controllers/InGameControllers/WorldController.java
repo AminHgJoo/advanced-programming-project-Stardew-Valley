@@ -18,6 +18,7 @@ import com.server.utilities.Response;
 import io.javalin.http.Context;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class WorldController extends Controller {
     private static void addFishes(Fish fish, Backpack backpack, int numberOfFishes) {
@@ -29,6 +30,61 @@ public class WorldController extends Controller {
         }
         Slot newSlot = new Slot(fish, numberOfFishes);
         backpack.addSlot(newSlot);
+    }
+
+    public void votePlayer(Context ctx, GameServer gs) {
+        try {
+            String id = ctx.attribute("id");
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            Boolean vote = (Boolean) body.get("vote");
+            String playerId = (String) body.get("playerId");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+            Player player2 = game.findPlayerByUserId(playerId);
+
+            if (player2 == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("player not found"));
+                return;
+            }
+            player2.getVotes().put(id, vote);
+            int numOfPlayers = game.getPlayers().size();
+            if (player2.getVotes().size() == numOfPlayers) {
+                int rejectCount = 0;
+                for (Map.Entry<String, Boolean> entry : player2.getVotes().entrySet()) {
+                    if (entry.getValue()) {
+                        rejectCount++;
+                    }
+                }
+                if (rejectCount > numOfPlayers / 2) {
+                    gs.removePlayerConnection(player2.getUser().getUsername());
+                    game.getPlayers().remove(player2);
+                    String gameJson = GameGSON.gson.toJson(game);
+                    HashMap<String, String> msg = new HashMap<>();
+                    msg.put("type", "PLAYER_KICK_OUT");
+                    msg.put("player_user_id", playerId);
+                    msg.put("player_username", player.getUser().getUsername());
+                    msg.put("game", gameJson);
+                    gs.broadcast(msg);
+                } else {
+                    player2.getVotes().clear();
+                    HashMap<String, String> msg = new HashMap<>();
+                    msg.put("type", "PLAYER_NOT_KICK_OUT");
+                    msg.put("player_user_id", playerId);
+                    msg.put("player_username", player.getUser().getUsername());
+                    gs.broadcast(msg);
+                }
+            }else {
+                HashMap<String, String> msg = new HashMap<>();
+                msg.put("type", "PLAYER_VOTING");
+                msg.put("player_user_id", playerId);
+                msg.put("player_username", player.getUser().getUsername());
+                gs.broadcast(msg);
+            }
+            ctx.json(Response.OK.setMessage("You voted successfully"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
     }
 
     private static void handleHoeUse(Context ctx, GameData game, Player player, String direction, Quality quality, int skillEnergyDiscount) {
