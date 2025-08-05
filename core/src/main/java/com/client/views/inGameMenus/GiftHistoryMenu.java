@@ -12,23 +12,23 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
 import com.common.models.Friendship;
-import com.common.models.NPCModels.NPCFriendship;
+import com.common.models.Gift;
 import com.common.models.Player;
+import com.google.gson.JsonObject;
+import com.server.utilities.Response;
 
 import java.util.ArrayList;
 
-public class InteractionsMenu implements MyScreen, InputProcessor {
+public class GiftHistoryMenu implements MyScreen, InputProcessor {
     private final Skin skin;
     private GameMain gameMain;
     private FarmMenu farmScreen;
@@ -38,11 +38,13 @@ public class InteractionsMenu implements MyScreen, InputProcessor {
     private BitmapFont titleFont;
     private GlyphLayout layout;
     private Player player;
-    private ArrayList<Friendship> friendships;
-    private ArrayList<NPCFriendship> npcs;
+    private ArrayList<Gift> gifts;
+    private ArrayList<Gift> receivedGifts;
+    private ArrayList<Gift> sentGifts;
     private float buttonWidth;
+    private TextField rateField;
 
-    public InteractionsMenu(GameMain gameMain, FarmMenu farmScreen) {
+    public GiftHistoryMenu(GameMain gameMain, FarmMenu farmScreen) {
         this.gameMain = gameMain;
         this.farmScreen = farmScreen;
         this.batch = new SpriteBatch();
@@ -52,7 +54,7 @@ public class InteractionsMenu implements MyScreen, InputProcessor {
         Image backgroundImage = new Image(backgroundTexture);
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
-        Label label = new Label("Social", skin);
+        Label label = new Label("Gift History", skin);
         label.setColor(Color.RED);
         label.setFontScale(4f);
         stage.addActor(label);
@@ -61,66 +63,76 @@ public class InteractionsMenu implements MyScreen, InputProcessor {
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
         this.player = ClientApp.currentPlayer;
-        npcs = player.getNpcs();
-        friendships = player.getFriendships();
-        buttonWidth = 300;
-        float xButton = 100f;
-        float yButtonStart = Gdx.graphics.getHeight() - 180f;
-        float buttonHeight = 40f;
-        float buttonSpacing = 30f;
-
-        for (Friendship f : friendships) {
-            TextButton giftButton = new TextButton("Gift", skin);
-            giftButton.setSize(buttonWidth, buttonHeight);
-            giftButton.setPosition(xButton, yButtonStart);
-
-
-            String playerString = f.getPlayer();
-            Player targetPlayer = ClientApp.currentPlayer;
-
-            for (Player player1 : ClientApp.currentGameData.getPlayers()) {
-                if (player1.getUser().getUsername().equals(playerString)) {
-                    targetPlayer = player1;
-                }
+        gifts = ClientApp.currentGameData.getGifts();
+        for (Gift g : gifts) {
+            if(g.getFrom().equals(player.getUser().getUsername())) {
+                sentGifts.add(g);
             }
-            Player finalTargetPlayer = targetPlayer;
-            giftButton.addListener(new ClickListener() {
+            else if(g.getTo().equals(player.getUser().getUsername())) {
+                receivedGifts.add(g);
+            }
+        }
+
+
+        float fieldWidth = 200f;
+        float fieldHeight = 50f;
+        float xField = 100f;
+        float yField = Gdx.graphics.getHeight() - 180f;
+
+        buttonWidth = 300;
+        float xButton = xField + fieldWidth + 40;
+        float yButtonStart = Gdx.graphics.getHeight() - 180f;
+        float buttonHeight = 50f;
+        float buttonSpacing = 30f;
+        int index = 0;
+        for (Gift g : receivedGifts) {
+            TextButton rateButton = new TextButton("Rate", skin);
+            rateButton.setSize(buttonWidth, buttonHeight);
+            rateButton.setPosition(xButton, yButtonStart);
+            rateField = new TextField("", skin);
+            rateField.setMessageText("Enter count...");
+            rateField.setTextFieldFilter(new TextField.TextFieldFilter() {
+                @Override
+                public boolean acceptChar(TextField textField, char c) {
+                    return Character.isDigit(c);
+                }
+            });
+            rateField.setSize(fieldWidth, fieldHeight);
+            rateField.setPosition(xField, yField);
+            stage.addActor(rateField);
+
+            int finalIndex = index;
+            rateButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    gift(finalTargetPlayer);
+                    int rate = Integer.parseInt(rateField.getText());
+                    JsonObject req = new JsonObject();
+                    req.addProperty("giftNumber", finalIndex);
+                    req.addProperty("rate", rate);
+                    var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipGiftRate", req);
+                    Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                    if (res.getStatus() == 200) {
+                        String game = res.getBody().toString();
+                        ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
+                    }
                 }
             });
 
-            stage.addActor(giftButton);
+            stage.addActor(rateButton);
             yButtonStart -= buttonSpacing;
+            yField -= buttonSpacing;
+            index++;
         }
-
-        TextButton historyButton = new TextButton("Gift History", skin);
-        historyButton.setSize(200, 50);
-        historyButton.setPosition(20f, Gdx.graphics.getHeight() - 70f);
-        historyButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gameMain.setScreen(new GiftHistoryMenu(gameMain, farmScreen));
-                InteractionsMenu.this.dispose();
-            }
-        });
-        stage.addActor(historyButton);
-
         InputMultiplexer inputMultiplexer = new InputMultiplexer(stage , this);
         Gdx.input.setInputProcessor(inputMultiplexer);
 
     }
 
-    private void gift(Player targetPlayer) {
-        gameMain.setScreen(new GiftMenu(gameMain, farmScreen, targetPlayer));
-        this.dispose();
-    }
 
     @Override
     public boolean keyDown(int i) {
         if (i == Input.Keys.ESCAPE) {
-            gameMain.setScreen(farmScreen);
+            gameMain.setScreen(new InteractionsMenu(gameMain, farmScreen));
             this.dispose();
         }
         return false;
@@ -183,24 +195,30 @@ public class InteractionsMenu implements MyScreen, InputProcessor {
         batch.begin();
         batch.draw(backgroundTexture, 0, 0);
 
-        String title = "Social";
+        String title = "Gifts History";
         layout.setText(titleFont, title);
         float xTitle = Gdx.graphics.getWidth() / 2f - layout.width / 2f;
         float yTitle = Gdx.graphics.getHeight() - 50f;
         titleFont.draw(batch, layout, xTitle, yTitle);
 
-        float xInfo = 500f;
+        float xInfo = 590f;
         float yInfo = Gdx.graphics.getHeight() - 160f;
         BitmapFont font = AssetManager.getStardewFont();
         font.getData().setScale(1);
         font.setColor(Color.WHITE);
 
-        font.draw(batch, "Player Friendships:", xInfo, yInfo);
+        font.draw(batch, "Received Gifts:", xInfo, yInfo);
         yInfo -= 40;
 
-        for (Friendship f : friendships) {
-            font.draw(batch, "Name: " + f.getPlayer() + " | Level: " + f.getLevel() + " | XP: " + f.getXp(), xInfo, yInfo);
+        for (Gift gift : receivedGifts) {
+            font.draw(batch, "From: " + gift.getFrom() + " | Item: " + gift.getItem().getName() + " | Rate: " + gift.getRate(), xInfo, yInfo);
             yInfo -= 30;
+        }
+
+        font.draw(batch, "Sent Gifts:", xInfo, yInfo);
+        yInfo -= 40;
+        for (Gift gift : sentGifts) {
+            font.draw(batch, "From: " + gift.getFrom() + " | Item: " + gift.getItem().getName() + " | Rate: " + gift.getRate(), xInfo, yInfo);
         }
 
         batch.end();

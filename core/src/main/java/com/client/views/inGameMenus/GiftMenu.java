@@ -70,7 +70,6 @@ public class GiftMenu implements MyScreen, InputProcessor {
         this.layout = new GlyphLayout();
         currentPlayer = ClientApp.currentPlayer;
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
 
         countField = new TextField("", skin);
         countField.setMessageText("Enter count...");
