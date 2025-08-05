@@ -2,6 +2,7 @@ package com.client.views.inGameMenus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -93,7 +94,9 @@ public class InteractionsMenu implements MyScreen, InputProcessor {
             stage.addActor(giftButton);
             yButtonStart -= buttonSpacing;
         }
-        Gdx.input.setInputProcessor(stage);
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(stage , this);
+        Gdx.input.setInputProcessor(inputMultiplexer);
+
     }
 
     private void gift(Player targetPlayer) {
