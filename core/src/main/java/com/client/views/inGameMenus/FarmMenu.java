@@ -549,7 +549,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     public boolean isFlower(String flowerName) {
-        return flowerName.equals("Sweat Pea") || flowerName.equals("Crocus") || flowerName.equals("Tulip") || flowerName.equals("Blue Jazz") || flowerName.equals("Summer Spangle") || flowerName.equals("Poppy") || flowerName.equals("Sunflower") || flowerName.equals("Fairy Rose");
+        return flowerName.equals("Bouquet");
     }
 
     @Override
