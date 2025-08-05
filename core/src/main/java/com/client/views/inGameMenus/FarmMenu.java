@@ -483,6 +483,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                 Gdx.input.setInputProcessor(FarmMenu.this);
                                 popup.remove();
                             }
+                            else{
+                                String error = res.getBody().toString();
+                                showPopUp(error, "Error");
+                            }
                         }
                     });
                     marryBtn.addListener(new ChangeListener() {
@@ -499,6 +503,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                 ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
                                 Gdx.input.setInputProcessor(FarmMenu.this);
                                 popup.remove();
+                            }
+                            else{
+                                String error = res.getBody().toString();
+                                showPopUp(error, "Error");
                             }
                         }
                     });
@@ -522,7 +530,12 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                     Gdx.input.setInputProcessor(FarmMenu.this);
                                     popup.remove();
                                 }
+                                else{
+                                    String error = res.getBody().toString();
+                                    showPopUp(error, "Error");
+                                }
                             }
+
                         }
                     });
                     exitBtn.addListener(new ChangeListener() {
