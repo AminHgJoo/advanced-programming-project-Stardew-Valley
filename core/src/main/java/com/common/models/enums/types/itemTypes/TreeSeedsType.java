@@ -7,7 +7,7 @@ import com.common.models.enums.worldEnums.Season;
 import com.common.models.items.TreeSeed;
 
 public enum TreeSeedsType implements ItemType {
-    //TODO maple seeds,
+
     ACORNS(Season.values(), "Acorns", 0),
     MAPLE_SEEDS(Season.values(), "Maple Seeds", 0),
     PINE_CONES(Season.values(), "Pine Cones", 0),

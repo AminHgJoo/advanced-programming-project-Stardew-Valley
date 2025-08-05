@@ -16,7 +16,6 @@ import java.util.ArrayList;
 public class Backpack {
     private ArrayList<Slot> slots = new ArrayList<>();
     private BackpackType type;
-    //TODO load
     @Transient
     private Texture texture;
 

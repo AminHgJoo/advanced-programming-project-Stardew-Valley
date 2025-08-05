@@ -78,9 +78,6 @@ public class GameServer extends Thread {
     @Override
     public void run() {
         while (isRunning) {
-           /* TODO sending game updates
-           broadcast(state...);
-           * */
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

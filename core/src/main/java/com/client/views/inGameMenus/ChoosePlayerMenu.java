@@ -98,7 +98,6 @@ public class ChoosePlayerMenu implements MyScreen, InputProcessor {
     }
 
     private void siktir(Player player) {
-        //TODO server : All players should be informed to immediately enter the vote menu
         JsonObject req = new JsonObject();
         req.addProperty("playerId", player.getUser_id());
         var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/worldGoToVoteMenu", req);

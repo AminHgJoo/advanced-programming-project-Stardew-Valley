@@ -132,7 +132,6 @@ public class GameLobbyMenu implements MyScreen {
                         + currLobby.get_id().toString());
                     Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                     if (res.getStatus() == 200) {
-                        // TODO set a loading
                     }
                 }
             });

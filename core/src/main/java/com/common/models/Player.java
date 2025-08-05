@@ -140,7 +140,6 @@ public class Player {
     }
 
     private void initializeSkills() {
-        //TODO amin comment karde bood error midad
         this.skills.add(new Farming());
         this.skills.add(new Fishing());
         this.skills.add(new Foraging());

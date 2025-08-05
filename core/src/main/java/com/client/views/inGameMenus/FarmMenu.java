@@ -137,7 +137,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         playerController = new PlayerController(playerPosition, playerVelocity, this, ClientApp.currentPlayer);
         this.farm = playerController.getPlayer().getFarm();
         this.inventory = AssetManager.getImage("aks");
-        //TODO tuf zadam
         for (Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {
             slot.getItem().setTexture(slot.getItem().getTexture());
         }
@@ -678,8 +677,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     popup.setSize(300, 500);
                     popup.setPosition(stageCoords.x, stageCoords.y, Align.topLeft);
 
-                    //TODO information
-                    Label label = new Label("information", skin);
+                    Label label = new Label("information: \nthis is a " + artisanBlock.getArtisanType().name, skin);
                     label.setWrap(true);
                     label.setAlignment(Align.center);
 
@@ -792,7 +790,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
             if (screenX >= x && screenX <= x + emojiSize &&
                 touchY >= y && touchY <= y + emojiSize) {
-                //TODO Texture
+
                 playerController.getPlayer().currentEmoji = emojiTextures.get(i);
                 playerController.getPlayer().emojiCounter = 0f;
                 break;
@@ -851,9 +849,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
             if (chatMsg.message.startsWith(prefix)) {
                 showPopUp(chatMsg.sender + ": " + chatMsg.message.substring(prefix.length()), "Chat Message");
             }
-        } else if (type.equals("EMOJI_SENT")) {
-            // TODO pouya do something
-
         } else if (type.equals("MUSIC_QUERY")) {
             var req = new JsonObject();
 
@@ -1095,7 +1090,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
         }
     }
 
-    //TODO server
     private void artisanTimeBar() {
         for (Cell cell : farm.getCells()) {
             if (cell.getObjectOnCell() instanceof ArtisanBlock) {
@@ -1103,14 +1097,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 if (artisanBlock.beingUsed) {
                     float artisanHeight = 30.0f;
                     float artisanWidth = 30.0f;
-                    //TODO gameData
-                    GameData gameData = ClientApp.currentPlayer.getUser().getCurrentGame();
+
+                    GameData gameData = ClientApp.currentGameData;
                     LocalDateTime start = artisanBlock.startTime;
                     LocalDateTime end = artisanBlock.prepTime;
-                    LocalDateTime now = ClientApp.currentPlayer
-                        .getUser()
-                        .getCurrentGame()
-                        .getDate();
+                    LocalDateTime now = gameData.getDate();
                     float totalSec = Duration.between(start, end).toMillis();
                     float elapsed = Duration.between(start, now).toMillis();
                     float progress = MathUtils.clamp(elapsed / totalSec, 0f, 1f);

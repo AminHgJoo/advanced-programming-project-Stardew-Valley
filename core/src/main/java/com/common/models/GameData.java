@@ -289,7 +289,6 @@ public class GameData {
         }
     }
 
-    //TODO: Change this.
     public void advanceTime() {
         date = date.plusMinutes(10);
 

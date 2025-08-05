@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 @Embedded
 public class Farm {
-    //TODO: When greenhouse gets built no map tiles should get overridden!
+
     private static int lastFarmNumber;
 
     static {
@@ -57,7 +57,7 @@ public class Farm {
     private static void addRandomItems(ArrayList<Cell> farmCells, GameData gameData) {
         for (Cell cell : farmCells) {
             int randomNumber = (int) (Math.random() * 50);
-            //TODO artisan test
+
             if (cell.getCoordinate().getX() == 68 && cell.getCoordinate().getY() == 8) {
                 cell.setObjectOnCell(new BuildingBlock(false, "shippingBin"));
             }

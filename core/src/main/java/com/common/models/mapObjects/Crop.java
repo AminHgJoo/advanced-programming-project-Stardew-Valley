@@ -25,7 +25,6 @@ public class Crop extends MapObject {
     }
 
     public Crop(CropSeedsType plantType, LocalDateTime source) {
-        //TODO texture
         super(true, "plant", "green", null);
         this.cropSeedsType = plantType;
         this.lastWateringDate = source;
@@ -38,7 +37,6 @@ public class Crop extends MapObject {
         this.hasBeenWateredToday = false;
         harvestDeadLine = null;
         this.texture = AssetManager.getImage(cropSeedsType.getTextureName());
-
     }
 
     @Override

@@ -8,8 +8,6 @@ import dev.morphia.annotations.Embedded;
 @Embedded
 public class ForagingMineral extends MapObject {
     private ForagingMineralsType fMType;
-    //TODO loading texture
-
 
     public ForagingMineral() {
     }

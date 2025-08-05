@@ -11,7 +11,6 @@ public class BuildingBlock extends MapObject {
     }
 
     public BuildingBlock(boolean isWalkable, String buildingType) {
-        //TODO display
         super(isWalkable, "buildingBlock", "red", null);
         this.buildingType = buildingType;
     }

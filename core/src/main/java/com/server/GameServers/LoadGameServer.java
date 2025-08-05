@@ -38,7 +38,7 @@ public class LoadGameServer extends Thread {
         usernames.add(user.get_id());
         playerConnections.add(AppWebSocket.getConnectedPlayers().get(user.getUsername()));
         game.findPlayerByUserId(user.get_id()).setOnline(true);
-        // TODO broadcast who has been connected
+
         HashMap<String, String> msg = new HashMap<>();
         msg.put("player_user_id", user.get_id());
         msg.put("player_username", user.getUsername());

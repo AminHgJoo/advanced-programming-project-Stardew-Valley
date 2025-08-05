@@ -11,7 +11,6 @@ public class MapObject {
     public String color;
     @Transient
     public Texture texture;
-    //TODO: texture
 
     public MapObject() {
 

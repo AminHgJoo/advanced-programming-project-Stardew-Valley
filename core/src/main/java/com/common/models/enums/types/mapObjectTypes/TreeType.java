@@ -9,7 +9,7 @@ import com.common.models.enums.worldEnums.Season;
 import java.util.Arrays;
 
 public enum TreeType {
-    //TODO textures not found
+
     TREE_BARK("Tree Bark", "alaki", -1, MiscType.WOOD, -1, -1, false, -1, (Season[]) null, new String[]{"barkTreeAlaki"}),
     BURNT_TREE("Burnt Tree", "alaki", -1, ForagingMineralsType.COAL, -1, -1, false, -1, (Season[]) null, new String[]{"barkTreeAlaki"}),
     NORMAL_TREE("Normal Tree", "alaki", -1, MiscType.WOOD, -1, -1, false, -1, (Season[]) null, new String[]{"barkTreeAlaki"}),

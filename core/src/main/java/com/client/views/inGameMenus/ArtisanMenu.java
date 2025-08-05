@@ -250,10 +250,6 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO sooroosh komak
-//            Request request = new Request("asghar");
-//            request.body.put("itemName", targetSlots.get(selectedSave).getItem().getName());
-//            request.body.put("artisanName", artisanName);
                 JsonObject req = new JsonObject();
                 req.addProperty("artisanName", artisanName);
                 req.addProperty("item1Name", targetSlots.get(selectedSave).getItem().getName());

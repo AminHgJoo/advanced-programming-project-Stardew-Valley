@@ -9,7 +9,6 @@ import dev.morphia.annotations.Embedded;
 public class ForagingCrop extends MapObject {
     private ForagingCropsType foragingCropsType;
     private boolean canBeHarvested;
-    //TODO texture loading
 
     public ForagingCrop() {
         super();

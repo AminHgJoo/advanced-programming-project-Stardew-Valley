@@ -199,7 +199,6 @@ public class World extends Controller {
 
         player.setMoney(player.getMoney(gameData) - 1000, gameData);
 
-        //TODO: MODIFY THIS!
         //Greenhouse runs from x : [22, 28] & y : [3, 10]
         for (int i = 23; i < 28; i++) {
             for (int j = 4; j < 10; j++) {

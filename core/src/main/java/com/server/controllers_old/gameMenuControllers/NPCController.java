@@ -13,8 +13,6 @@ import com.server.controllers_old.Controller;
 import com.server.repositories.GameRepository;
 import com.server.utilities.AIChat;
 
-// TODO handle npc friendship level
-
 public class NPCController extends Controller {
     public static Response handleTalkNPC(Request request) {
         User user = App.getLoggedInUser();

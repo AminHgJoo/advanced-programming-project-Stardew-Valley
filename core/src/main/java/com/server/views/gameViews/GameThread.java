@@ -24,7 +24,7 @@ public class GameThread extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            //TODO: manage time.
+
             boolean check = gameData.checkSeasonChange();
 
             if (check) {

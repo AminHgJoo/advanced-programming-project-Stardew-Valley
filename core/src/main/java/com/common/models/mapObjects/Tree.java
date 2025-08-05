@@ -16,7 +16,6 @@ public class Tree extends MapObject {
     private int stageNumber = 0;
     private LocalDateTime[] growthDeadLines = new LocalDateTime[5];
     private LocalDateTime harvestDeadLine = null;
-    //TODO loading texture ( note that trees have stages )
 
     public Tree() {
     }

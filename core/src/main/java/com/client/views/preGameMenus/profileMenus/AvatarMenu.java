@@ -86,7 +86,6 @@ public class AvatarMenu implements MyScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stage.dispose();
-                //TODO bug
                 gameMain.setScreen(new ProfileMenu(gameMain));
             }
         });

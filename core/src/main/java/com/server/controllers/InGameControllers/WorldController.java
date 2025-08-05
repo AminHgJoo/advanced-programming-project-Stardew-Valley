@@ -12,6 +12,7 @@ import com.common.models.items.*;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.*;
+import com.common.models.skills.Skill;
 import com.server.GameServers.GameServer;
 import com.server.utilities.DateUtility;
 import com.server.utilities.Response;
@@ -867,10 +868,10 @@ public class WorldController extends Controller {
                 fishingRod(ctx, game, player, direction);
                 return;
             } else if (toolType == ToolTypes.MILK_PAIL) {
-                // TODO fix the function
+
                 handleMilkPailUse(ctx, game, player, direction);
             } else if (toolType == ToolTypes.SHEAR) {
-                // TODO fix the function
+
                 handleShearUse(ctx, game, player, direction);
             } else {
                 ctx.json(Response.BAD_REQUEST.setMessage("Unknown tool type: " + toolType));
@@ -931,7 +932,8 @@ public class WorldController extends Controller {
                 return;
             }
             addFishes(fish, backpack, count);
-            // TODO handle xp
+            Skill fishing = player.getSkills().get(1);
+            fishing.setXp(fishing.getXp() + xpGained);
             String playerJson = GameGSON.gson.toJson(player);
             ctx.json(Response.OK.setBody(playerJson));
             HashMap<String, String> msg = new HashMap<>();

@@ -6,7 +6,7 @@ import dev.morphia.annotations.Embedded;
 
 @Embedded
 public class Water extends MapObject {
-    //TODO loading texture
+
     public Water() {
         super(false, "water", "blue", AssetManager.getImage("water"));
     }

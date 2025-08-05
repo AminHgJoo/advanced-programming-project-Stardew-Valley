@@ -133,9 +133,6 @@ public class VillageMenu implements MyScreen, InputProcessor {
             if (chatMsg.message.startsWith(prefix)) {
                 showPopUp(chatMsg.sender + ": " + chatMsg.message.substring(prefix.length()), "Chat Message");
             }
-        } else if (type.equals("EMOJI_SENT")) {
-            // TODO pouya do something
-
         } else if (type.equals("MUSIC_QUERY")) {
             var req = new JsonObject();
 
