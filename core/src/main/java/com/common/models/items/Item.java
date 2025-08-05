@@ -15,7 +15,7 @@ public class Item {
     protected double energyCost;
     protected String name;
     @Transient
-    protected Texture texture;
+    protected transient Texture texture;
 
     public Item() {
     }

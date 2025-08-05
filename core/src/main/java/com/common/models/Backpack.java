@@ -17,7 +17,7 @@ public class Backpack {
     private ArrayList<Slot> slots = new ArrayList<>();
     private BackpackType type;
     @Transient
-    private Texture texture;
+    private transient Texture texture;
 
     public Backpack() {
 

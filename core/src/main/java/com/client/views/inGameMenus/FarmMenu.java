@@ -60,6 +60,7 @@ import java.util.Objects;
 
 public class FarmMenu implements MyScreen, InputProcessor {
     private boolean showingQuestion = false;
+    private boolean updateBackPack = false;
     public static final float SCREEN_WIDTH = 450 * 1.5f;
     public static final float SCREEN_HEIGHT = 300 * 1.5f;
     public static final float BASE_SPEED_FACTOR = 16;
@@ -304,7 +305,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     public void updateBackPack() {
-        playerController.updateInventory(ClientApp.currentPlayer.getInventory());
+        if (!updateBackPack) {
+            updateBackPack = true;
+        }
     }
 
     private void emojiShow(float delta) {
@@ -886,6 +889,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public void show() {
+        if (updateBackPack) {
+            updateBackPack = false;
+            playerController.updateInventory(ClientApp.currentPlayer.getInventory());
+        }
         showingQuestion = false;
         playerPosition.x = playerController.getPlayer().getCoordinate().getX();
         playerPosition.y = playerController.getPlayer().getCoordinate().getY();
