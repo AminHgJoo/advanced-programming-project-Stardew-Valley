@@ -52,10 +52,6 @@ public class InteractionsMenu implements MyScreen, InputProcessor {
         Image backgroundImage = new Image(backgroundTexture);
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
-        Label label = new Label("Social", skin);
-        label.setColor(Color.RED);
-        label.setFontScale(4f);
-        stage.addActor(label);
         titleFont = AssetManager.getStardewFont();
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
@@ -180,8 +176,10 @@ public class InteractionsMenu implements MyScreen, InputProcessor {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        stage.act(v);
+        stage.draw();
+
         batch.begin();
-        batch.draw(backgroundTexture, 0, 0);
 
         String title = "Social";
         layout.setText(titleFont, title);

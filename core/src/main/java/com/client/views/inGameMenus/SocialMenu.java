@@ -30,7 +30,6 @@ public class SocialMenu implements MyScreen, InputProcessor {
     private FarmMenu farmScreen;
     private SpriteBatch batch;
     private Texture backgroundTexture;
-    private Stage stage;
     private BitmapFont titleFont;
     private GlyphLayout layout;
     private Player player;
@@ -43,14 +42,6 @@ public class SocialMenu implements MyScreen, InputProcessor {
         this.batch = new SpriteBatch();
         backgroundTexture = AssetManager.getImage("profileBackground");
         this.skin = AssetManager.getSkin();
-        stage = new Stage(new ScreenViewport());
-        Image backgroundImage = new Image(backgroundTexture);
-        backgroundImage.setFillParent(true);
-        stage.addActor(backgroundImage);
-        Label label = new Label("Social", skin);
-        label.setColor(Color.RED);
-        label.setFontScale(4f);
-        stage.addActor(label);
         titleFont = AssetManager.getStardewFont();
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
@@ -188,6 +179,5 @@ public class SocialMenu implements MyScreen, InputProcessor {
     public void dispose() {
         titleFont.getData().setScale(1);
         batch.dispose();
-        stage.dispose();
     }
 }
