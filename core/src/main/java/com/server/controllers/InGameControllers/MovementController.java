@@ -97,16 +97,43 @@ public class MovementController extends Controller {
 
     public void goToVillage(Context ctx, GameServer gs) {
         try {
-            System.out.println("he");
             String id = ctx.attribute("id");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             if (!player.isInVillage()) {
                 player.setInVillage(true);
-                ctx.json(Response.OK.setMessage("Player is in Village"));
+                player.setCoordinate(new Coordinate(1200, 800));
+                String playerJson = GameGSON.gson.toJson(player);
+                ctx.json(Response.OK.setMessage("Player is in Village").setBody(playerJson));
                 HashMap<String, String> msg = new HashMap<>();
-                msg.put("type", "PLAYER_GO_TO_VILLAGE");
+                msg.put("type", "PLAYER_UPDATED");
                 msg.put("player_user_id", id);
+                msg.put("player" , playerJson);
+                gs.broadcast(msg);
+                return;
+            }
+            ctx.json(Response.OK.setMessage("Player is in Village"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void goToFarm(Context ctx, GameServer gs) {
+        try {
+            String id = ctx.attribute("id");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+            if (player.isInVillage()) {
+                player.setInVillage(false);
+                player.setCoordinate(new Coordinate(1200, 800));
+                String playerJson = GameGSON.gson.toJson(player);
+                ctx.json(Response.OK.setMessage("Player is in Farm").setBody(playerJson));
+                HashMap<String, String> msg = new HashMap<>();
+                msg.put("type", "PLAYER_UPDATED");
+                msg.put("player_user_id", id);
+                msg.put("player" , playerJson);
                 gs.broadcast(msg);
                 return;
             }

@@ -368,6 +368,12 @@ public class PlayerVillageController {
         }
         if ((prev_x != playerPosition.x || prev_y != playerPosition.y))
             updatePlayerCoordinate();
+        if (playerPosition.y >= 850) {
+            playerVelocity.x = 0;
+            playerVelocity.y = 0;
+            currState = PlayerState.IDLE;
+            villageMenu.showGoToFarmPopUp();
+        }
     }
 
     public void checkStoreEntry() {

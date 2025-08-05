@@ -351,6 +351,9 @@ public class PlayerController {
         }
         if (playerPosition.x == 2366.5f && playerPosition.y >= 67f) {
             System.out.println("hello");
+            playerVelocity.y = 0;
+            playerVelocity.x = 0;
+            currState = PlayerState.IDLE;
             farmMenu.showGoToVillagePopUp();
         }
     }

@@ -24,6 +24,7 @@ import com.common.models.Player;
 import com.common.models.mapModels.Coordinate;
 import com.common.utils.ChatMessage;
 import com.google.gson.JsonObject;
+import com.server.utilities.Response;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -208,6 +209,40 @@ public class VillageMenu implements MyScreen, InputProcessor {
             playerController.setState(PlayerState.IDLE);
             playerVelocity.x = 0;
             playerVelocity.y = 0;
+        }
+    }
+
+    public void showGoToFarmPopUp() {
+        if (!showingQuestion) {
+            showingQuestion = true;
+            ConfirmAlert alert = new ConfirmAlert("question", "Do you want to go to your farm ?",
+                AssetManager.getSkin()) {
+                @Override
+                protected void result(Object object) {
+                    boolean result = (boolean) object;
+                    Gdx.input.setInputProcessor(stage);
+                    showingQuestion = false;
+                    if (result) {
+                        var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/movementGoToFarm", new JsonObject());
+                        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                        System.out.println(res.getMessage());
+                        if (res.getStatus() == 200) {
+                            player.setInVillage(false);
+                            player.setCoordinate(new Coordinate(1200, 800));
+                            gameMain.setScreen(farmMenu);
+                            dispose();
+                        } else {
+                            System.out.println("Error");
+                        }
+                    } else {
+                        playerPosition.y -= 10;
+                    }
+
+                    remove();
+                }
+            };
+            alert.show(popUpStage);
+            Gdx.input.setInputProcessor(popUpStage);
         }
     }
 

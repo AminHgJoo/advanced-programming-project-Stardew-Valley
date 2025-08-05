@@ -59,7 +59,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class FarmMenu implements MyScreen, InputProcessor {
-
+    private boolean showingQuestion = false;
     public static final float SCREEN_WIDTH = 450 * 1.5f;
     public static final float SCREEN_HEIGHT = 300 * 1.5f;
     public static final float BASE_SPEED_FACTOR = 16;
@@ -169,22 +169,24 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     public void showGoToVillagePopUp() {
-        System.out.println("FARM MENU");
-        ConfirmAlert alert = new ConfirmAlert("question", "Do you want to go to the village ?", AssetManager.getSkin()) {
-            @Override
-            protected void result(Object object) {
-                boolean result = (boolean) object;
-                if (result) {
-                    playerController.goToVillage();
-                } else {
-                }
-                Gdx.input.setInputProcessor(stage);
+        if (!showingQuestion) {
+            showingQuestion = true;
+            ConfirmAlert alert = new ConfirmAlert("question", "Do you want to go to the village ?", AssetManager.getSkin()) {
+                @Override
+                protected void result(Object object) {
+                    boolean result = (boolean) object;
+                    if (result) {
+                        playerController.goToVillage();
+                    } else {
+                    }
+                    Gdx.input.setInputProcessor(stage);
 
-                remove();
-            }
-        };
-        alert.show(popupStage);
-        Gdx.input.setInputProcessor(popupStage);
+                    remove();
+                }
+            };
+            alert.show(popupStage);
+            Gdx.input.setInputProcessor(popupStage);
+        }
     }
 
     private void initializeStage(float delta) {
@@ -482,8 +484,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                 ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
                                 Gdx.input.setInputProcessor(FarmMenu.this);
                                 popup.remove();
-                            }
-                            else{
+                            } else {
                                 String error = res.getBody().toString();
                                 showPopUp(error, "Error");
                             }
@@ -503,8 +504,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                 ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
                                 Gdx.input.setInputProcessor(FarmMenu.this);
                                 popup.remove();
-                            }
-                            else{
+                            } else {
                                 String error = res.getBody().toString();
                                 showPopUp(error, "Error");
                             }
@@ -529,8 +529,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                     ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
                                     Gdx.input.setInputProcessor(FarmMenu.this);
                                     popup.remove();
-                                }
-                                else{
+                                } else {
                                     String error = res.getBody().toString();
                                     showPopUp(error, "Error");
                                 }
@@ -887,6 +886,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
     @Override
     public void show() {
+        showingQuestion = false;
+        playerPosition.x = playerController.getPlayer().getCoordinate().getX();
+        playerPosition.y = playerController.getPlayer().getCoordinate().getY();
         Gdx.input.setInputProcessor(this);
     }
 
@@ -940,8 +942,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
             updateTime(delta);
             playerController.updatePlayerPos(delta);
             playerController.update(delta);
-
-            handleEvents();
+            if (!showingQuestion)
+                handleEvents();
 
             renderMap(dayNightShader, nightFactor, delta);
 
