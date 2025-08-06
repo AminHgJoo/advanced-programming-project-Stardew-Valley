@@ -885,6 +885,49 @@ public class FarmMenu implements MyScreen, InputProcessor {
             voteFlag = true;
             votedPlayer = player;
         }
+        else if(type.equals("ASKED_FOR_MARRIAGE")){
+            final boolean[] answer = {false};
+            String username = res.get("player_username");
+            ConfirmAlert alert = new ConfirmAlert("question", "Do you want to marry "+ username + " ?", AssetManager.getSkin()) {
+                @Override
+                protected void result(Object object) {
+                    boolean result = (boolean) object;
+                    if (result) {
+                        answer[0] = true;
+                    }
+
+                    remove();
+                }
+            };
+            alert.show(popupStage);
+            Gdx.input.setInputProcessor(popupStage);
+            if(answer[0]){
+                JsonObject req = new JsonObject();
+                req.addProperty("username", ClientApp.currentPlayer.getUser().getUsername());
+                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipAcceptMarriage", req);
+                Response resul = HTTPUtil.deserializeHttpResponse(postResponse);
+                if(resul.getStatus() == 200){
+                    String gameData = resul.getBody().toString();
+                    ((FarmMenu) farmScreen).getPlayerController().updateGame(gameData);
+                }
+            }
+            else{
+                JsonObject req = new JsonObject();
+                req.addProperty("username", ClientApp.currentPlayer.getUser().getUsername());
+                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipRejectMarriage", req);
+                Response resul = HTTPUtil.deserializeHttpResponse(postResponse);
+                if(resul.getStatus() == 200){
+                    String gameData = resul.getBody().toString();
+                    ((FarmMenu) farmScreen).getPlayerController().updateGame(gameData);
+                }
+            }
+        }
+        else if(type.equals("REJECT_MARRIAGE")){
+            showPopUp("You were rejected", "Message");
+        }
+        else if(type.equals("ACCEPT_MARRIAGE")){
+            showPopUp("Now you have a wife", "Message");
+        }
     }
 
     @Override
