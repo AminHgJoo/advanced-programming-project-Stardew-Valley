@@ -370,4 +370,8 @@ public class VillageMenu implements MyScreen, InputProcessor {
     public boolean scrolled(float v, float v1) {
         return false;
     }
+
+    public void setGame(GameData game) {
+        this.game = game;
+    }
 }

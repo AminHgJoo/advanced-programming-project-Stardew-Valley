@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
 import com.common.models.Backpack;
@@ -18,6 +19,7 @@ import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.enums.recipes.CookingRecipes;
+import com.google.gson.JsonObject;
 
 public class CookingMenu implements MyScreen {
     private final GameMain gameMain;
@@ -119,7 +121,7 @@ public class CookingMenu implements MyScreen {
 
                 String result = localController(selectedRecipe);
                 if ("OK".equals(result)) {
-                    notifyServerOfSuccessfulCrafting(selectedRecipe);
+                    notifyServerOfSuccessfulCooking(selectedRecipe);
 
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog("Crafting Successful!", "Success");
@@ -141,9 +143,22 @@ public class CookingMenu implements MyScreen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    //TODO: Send request to server.
-    private void notifyServerOfSuccessfulCrafting(CookingRecipes recipe) {
+    private void notifyServerOfSuccessfulCooking(CookingRecipes recipe) {
+        var req = new JsonObject();
+        req.addProperty("recipe", recipe.name);
 
+        var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id()
+        + "/cookingHandleCooking", req);
+
+        var res = HTTPUtil.deserializeHttpResponse(postRes);
+
+        if (res.getStatus() == 200) {
+            String playerJson = res.getBody().toString();
+            farmMenu.getPlayerController().updatePlayerObject(playerJson);
+        } else {
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+            uiPopupHelper.showDialog("Connection to server failed.", "Error");
+        }
     }
 
     private String localController(CookingRecipes targetRecipe) {

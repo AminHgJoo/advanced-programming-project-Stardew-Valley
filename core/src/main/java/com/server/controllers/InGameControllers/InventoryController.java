@@ -3,10 +3,14 @@ package com.server.controllers.InGameControllers;
 import com.common.GameGSON;
 import com.common.models.*;
 import com.common.models.enums.Quality;
+import com.common.models.enums.recipes.CraftingRecipes;
 import com.common.models.enums.types.itemTypes.ItemType;
+import com.common.models.enums.types.itemTypes.MiscType;
+import com.common.models.enums.types.itemTypes.TreeSeedsType;
 import com.common.models.enums.types.mapObjectTypes.ArtisanBlockType;
 import com.common.models.items.Food;
 import com.common.models.items.Misc;
+import com.common.models.items.TreeSeed;
 import com.common.models.items.buffs.ActiveBuff;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapObjects.ArtisanBlock;
@@ -284,6 +288,70 @@ public class InventoryController extends Controller {
             msg.put("player", playerJson);
             gs.broadcast(msg);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void handleCrafting(Context ctx, GameServer gs) {
+        try {
+            String id = ctx.attribute("id");
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String itemName = (String) body.get("recipe");
+            CraftingRecipes targetRecipe = null;
+
+            GameData gameData = gs.getGame();
+            Player player = gameData.getCurrentPlayer();
+
+            for (CraftingRecipes craftingRecipes : player.getUnlockedCraftingRecipes()) {
+                if (craftingRecipes.name.compareToIgnoreCase(itemName) == 0) {
+                    targetRecipe = craftingRecipes;
+                    break;
+                }
+            }
+
+            if (targetRecipe == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("recipe not found!"));
+                return;
+            }
+
+            Backpack backpack = player.getInventory();
+
+            //deduct the materials.
+            for (Slot ingredient : targetRecipe.ingredients) {
+                Slot playerSlot = backpack.getSlotByItemName(ingredient.getItem().getName());
+
+                playerSlot.setCount(playerSlot.getCount() - ingredient.getCount());
+
+                if (playerSlot.getCount() == 0) {
+                    backpack.getSlots().remove(playerSlot);
+                }
+            }
+
+            Slot craftedItemSlot = null;
+
+            if (targetRecipe.resultItemType == TreeSeedsType.MYSTIC_TREE_SEED) {
+                craftedItemSlot = new Slot(new TreeSeed(TreeSeedsType.MYSTIC_TREE_SEED), 1);
+            } else {
+                craftedItemSlot = new Slot(new Misc((MiscType) targetRecipe.resultItemType), 1);
+            }
+
+            Slot destinationSlot = backpack.getSlotByItemName(craftedItemSlot.getItem().getName());
+
+            if (destinationSlot == null) {
+                backpack.getSlots().add(craftedItemSlot);
+            } else {
+                destinationSlot.setCount(destinationSlot.getCount() + craftedItemSlot.getCount());
+            }
+
+            String json = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setBody(json));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player_user_id", id);
+            msg.put("player", json);
+            gs.broadcast(msg);
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));

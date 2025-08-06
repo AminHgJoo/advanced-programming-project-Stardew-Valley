@@ -35,6 +35,21 @@ public class UIPopupHelper {
         dialog.show(stage);
     }
 
+    public void showDialog(String message, String promptType, Runnable onConfirm) {
+
+        Dialog dialog = new Dialog(promptType, skin) {
+            @Override
+            protected void result(Object object) {
+                onConfirm.run();
+            }
+        };
+
+        dialog.text(message);
+        dialog.button("Confirm");
+
+        dialog.show(stage);
+    }
+
     public void showDialog(String message, String promptType, InputProcessor inputProcessor) {
 
         Dialog dialog = new Dialog(promptType, skin) {
@@ -48,6 +63,5 @@ public class UIPopupHelper {
         dialog.button("Confirm");
 
         dialog.show(stage);
-
     }
 }

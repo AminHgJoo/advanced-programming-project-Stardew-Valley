@@ -13,8 +13,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
+import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
 import com.common.models.*;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
@@ -235,9 +238,29 @@ public class StoreInterface implements MyScreen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    //TODO
     private void buyItem() {
+        var req = new JsonObject();
+        req.addProperty("productName", selectedItem.getItem().getName());
+        req.addProperty("storeName", storeName);
+        req.addProperty("count", selectedAmount);
 
+        var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() +
+            "/dealingPurchase", req);
+
+        var res = HTTPUtil.deserializeHttpResponse(postRes);
+
+        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+
+        if (res.getStatus() == 200) {
+            uiPopupHelper.showDialog("Success", "Success", () -> {
+                dispose();
+                selectedItem = null;
+                selectedAmount = 0;
+                initializeStage();
+            });
+        } else {
+            uiPopupHelper.showDialog("Error connecting to server", "Error");
+        }
     }
 
     private String productDescription() {
