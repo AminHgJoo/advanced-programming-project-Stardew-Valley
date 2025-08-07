@@ -178,10 +178,16 @@ public class AppWebSocket {
                     @Override
                     public void run() {
                         if (connectedPlayers.get(username) == null) {
-                            User user = p.getUser();
-                            user.setCurrentLobbyId(null);
-                            user.setCurrentGameId(null);
-                            UserRepository.saveUser(user);
+                          HashMap<String , String> msg = new HashMap<>();
+                          msg.put("type" , "PLAYER_DC");
+                          msg.put("player_user_id" , p.getUser_id());
+                          gs.broadcast(msg);
+                          for(Player player : gs.getGame().getPlayers()) {
+                              User u = player.getUser();
+                              u.setCurrentGameId(null);
+                              u.setCurrentLobbyId(null);
+                              UserRepository.saveUser(u);
+                          }
                         }
                         this.cancel();
                     }
