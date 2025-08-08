@@ -123,6 +123,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Stage popupStage;
     private boolean crowFlag = false;
     private InputProcessor temp;
+    private Texture loadingTexture;
 
     public FarmMenu(GameMain gameMain) {
         this.gameMain = gameMain;
@@ -152,6 +153,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         this.chatNotifStage = new Stage(new ScreenViewport());
         farmScreen = this;
+        this.loadingTexture = AssetManager.getImage("loading");
     }
 
     public GameMain getGameMain() {
@@ -989,7 +991,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
         }
         if (playerController.getPlayer().isInVillage()) {
             gameMain.setScreen(new VillageMenu(this, gameMain));
-        } else {
+        }
+        if(playerController.loadingTimer>= 0){
+            batch.begin();
+            batch.draw(loadingTexture, 0, 0);
+            batch.end();
+            playerController.loadingTimer += delta;
+            if(playerController.loadingTimer >= 3){
+                playerController.loadingTimer = -1;
+            }
+        }
+        else {
             this.farm = playerController.getPlayer().getFarm();
             batch.setShader(dayNightShader);
             clearAndResetScreen();

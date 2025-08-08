@@ -64,6 +64,15 @@ public class MainMenu implements MyScreen {
             }
         });
 
+        TextButton loadGameButton = new TextButton("Load Game", skin);
+        loadGameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //TODO soooroosh
+            }
+        });
+
+
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.RED);
         pixmap.fill();
@@ -93,6 +102,7 @@ public class MainMenu implements MyScreen {
         table.center();
         table.padTop(50);
         table.add(label).pad(10).row();
+        table.add(loadGameButton).width(500).height(60).pad(10).row();
         table.add(profileMenuButtonButton).width(500).height(60).pad(10).row();
         table.add(createGameButton).width(500).height(60).pad(10).row();
         table.add(logoutButton).width(500).height(60).pad(10).row();
