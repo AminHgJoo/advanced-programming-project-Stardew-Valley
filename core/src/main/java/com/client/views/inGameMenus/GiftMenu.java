@@ -22,6 +22,7 @@ import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
 import com.common.models.Backpack;
 import com.common.models.Player;
 import com.common.models.Slot;
@@ -148,6 +149,11 @@ public class GiftMenu implements MyScreen, InputProcessor {
                 selectedIndex = -1;
                 String game = res.getBody().toString();
                 ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
+            }
+            else{
+                String error = res.getMessage();
+                UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                uiPopupHelper.showDialog(error, "Error");
             }
 
         }

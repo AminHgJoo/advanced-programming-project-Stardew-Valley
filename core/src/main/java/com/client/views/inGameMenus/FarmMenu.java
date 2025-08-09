@@ -491,7 +491,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                 Gdx.input.setInputProcessor(FarmMenu.this);
                                 popup.remove();
                             } else {
-                                String error = res.getBody().toString();
+                                String error = res.getMessage();
                                 showPopUp(error, "Error");
                             }
                         }
@@ -511,7 +511,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                 Gdx.input.setInputProcessor(FarmMenu.this);
                                 popup.remove();
                             } else {
-                                String error = res.getBody().toString();
+                                String error = res.getMessage();
                                 showPopUp(error, "Error");
                             }
                         }
@@ -536,7 +536,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                     Gdx.input.setInputProcessor(FarmMenu.this);
                                     popup.remove();
                                 } else {
-                                    String error = res.getBody().toString();
+                                    String error = res.getMessage();
                                     showPopUp(error, "Error");
                                 }
                             }
