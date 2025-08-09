@@ -87,6 +87,11 @@ public class GameServer extends Thread {
             if (count == 7) {
                 count = 0;
                 game.advanceTime();
+                String gameJson = this.gson.toJson(game);
+                HashMap<String, String> message = new HashMap<>();
+                message.put("type", "GAME_UPDATED");
+                message.put("game", gameJson);
+                broadcast(message);
             }
             boolean check = false;
             for (Player p : game.getPlayers()) {

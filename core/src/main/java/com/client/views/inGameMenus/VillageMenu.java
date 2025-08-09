@@ -132,6 +132,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
             if (!id.equals(player.getUser_id())) {
                 PlayerVillageController controller = playerControllers.get(id);
                 String playerJson = res.get("player");
+                System.out.println(playerJson);
                 Player player1 = gson.fromJson(playerJson, Player.class);
                 controller.updateGamePlayer(player1);
             }

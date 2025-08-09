@@ -471,7 +471,7 @@ public class GameLobbyMenu implements MyScreen {
         }
 
         if (doesUINeedRefresh) {
-            stage.dispose();
+//            stage.dispose();
             initializeStage();
             doesUINeedRefresh = false;
         }

@@ -71,6 +71,7 @@ public class GameController {
                     u.setCurrentGameId(game.get_id().toString());
                     u.getGames().add(game.get_id().toString());
                     u.setCurrentLobbyId(null);
+                    u.setCurrentLobbyId(null);
                 }
                 LobbyRepository.delete(lobby);
             } else {

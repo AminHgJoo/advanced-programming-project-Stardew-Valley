@@ -33,7 +33,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class PlayerController {
-    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(2);
+    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(4);
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
     private PlayerAnimationController playerAnimationController;
