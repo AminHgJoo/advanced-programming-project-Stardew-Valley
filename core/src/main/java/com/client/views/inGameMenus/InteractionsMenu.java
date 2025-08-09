@@ -198,7 +198,7 @@ public class InteractionsMenu implements MyScreen, InputProcessor {
 
         for (Friendship f : friendships) {
             font.draw(batch, "Name: " + f.getPlayer() + " | Level: " + f.getLevel() + " | XP: " + f.getXp(), xInfo, yInfo);
-            yInfo -= 70;
+            yInfo -= 30;
         }
 
         batch.end();
