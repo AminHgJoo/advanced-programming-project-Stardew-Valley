@@ -184,7 +184,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     } else {
                     }
                     Gdx.input.setInputProcessor(stage);
-
+                    showingQuestion = false;
                     remove();
                 }
             };
