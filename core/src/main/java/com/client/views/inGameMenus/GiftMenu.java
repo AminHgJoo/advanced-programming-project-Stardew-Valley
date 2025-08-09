@@ -149,6 +149,8 @@ public class GiftMenu implements MyScreen, InputProcessor {
                 selectedIndex = -1;
                 String game = res.getBody().toString();
                 ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
+                gameMain.setScreen(farmScreen);
+                this.dispose();
             }
             else{
                 String error = res.getMessage();
