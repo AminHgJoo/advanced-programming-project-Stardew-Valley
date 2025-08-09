@@ -22,6 +22,7 @@ import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
 import com.common.models.Backpack;
 import com.common.models.Player;
 import com.common.models.Slot;
@@ -53,6 +54,7 @@ public class GiftMenu implements MyScreen, InputProcessor {
     private Stage stage;
     private TextField countField;
     private TextButton sendButton;
+    private TextButton exitButton;
 
 
     public GiftMenu(GameMain gameMain, FarmMenu farmScreen, Player targetPlayer) {
@@ -109,7 +111,21 @@ public class GiftMenu implements MyScreen, InputProcessor {
             }
         });
 
+        exitButton = new TextButton("Exit", skin);
+        exitButton.setSize(fieldWidth, fieldHeight);
+        exitButton.setPosition(xField, yField - 2* fieldHeight - 20f);
+
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameMain.setScreen(farmScreen);
+                GiftMenu.this.dispose();
+            }
+        });
+
+
         stage.addActor(sendButton);
+        stage.addActor(exitButton);
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this);
@@ -125,7 +141,7 @@ public class GiftMenu implements MyScreen, InputProcessor {
             req.addProperty("username", targetPlayer.getUser().getUsername());
             req.addProperty("item", slot.getItem().getName());
             req.addProperty("amount", count);
-            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipGift", req);
+            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipGift", req);
             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
             if (res.getStatus() == 200) {
                 selected = false;
@@ -133,6 +149,13 @@ public class GiftMenu implements MyScreen, InputProcessor {
                 selectedIndex = -1;
                 String game = res.getBody().toString();
                 ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
+                gameMain.setScreen(farmScreen);
+                this.dispose();
+            }
+            else{
+                String error = res.getMessage();
+                UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                uiPopupHelper.showDialog(error, "Error");
             }
 
         }

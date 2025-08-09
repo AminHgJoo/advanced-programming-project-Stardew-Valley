@@ -28,6 +28,7 @@ import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.controllers.PlayerController;
 import com.client.utils.*;
+import com.client.views.preGameMenus.MainMenu;
 import com.common.models.Backpack;
 import com.common.models.GameData;
 import com.common.models.Player;
@@ -122,6 +123,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Stage popupStage;
     private boolean crowFlag = false;
     private InputProcessor temp;
+    private Texture loadingTexture;
 
     public FarmMenu(GameMain gameMain) {
         this.gameMain = gameMain;
@@ -151,6 +153,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         this.chatNotifStage = new Stage(new ScreenViewport());
         farmScreen = this;
+        this.loadingTexture = AssetManager.getImage("loading");
     }
 
     public GameMain getGameMain() {
@@ -181,7 +184,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     } else {
                     }
                     Gdx.input.setInputProcessor(stage);
-
+                    showingQuestion = false;
                     remove();
                 }
             };
@@ -488,7 +491,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                 Gdx.input.setInputProcessor(FarmMenu.this);
                                 popup.remove();
                             } else {
-                                String error = res.getBody().toString();
+                                String error = res.getMessage();
                                 showPopUp(error, "Error");
                             }
                         }
@@ -508,7 +511,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                 Gdx.input.setInputProcessor(FarmMenu.this);
                                 popup.remove();
                             } else {
-                                String error = res.getBody().toString();
+                                String error = res.getMessage();
                                 showPopUp(error, "Error");
                             }
                         }
@@ -533,7 +536,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                                     Gdx.input.setInputProcessor(FarmMenu.this);
                                     popup.remove();
                                 } else {
-                                    String error = res.getBody().toString();
+                                    String error = res.getMessage();
                                     showPopUp(error, "Error");
                                 }
                             }
@@ -884,6 +887,54 @@ public class FarmMenu implements MyScreen, InputProcessor {
             Player player = ClientApp.currentGameData.findPlayerByUserId(playerId);
             voteFlag = true;
             votedPlayer = player;
+        } else if (type.equals("ASKED_FOR_MARRIAGE")) {
+            final boolean[] answer = {false};
+            String username = res.get("player_username");
+            ConfirmAlert alert = new ConfirmAlert("question", "Do you want to marry " + username + " ?", AssetManager.getSkin()) {
+                @Override
+                protected void result(Object object) {
+                    boolean result = (boolean) object;
+                    if (result) {
+                        answer[0] = true;
+                    }
+
+                    remove();
+                }
+            };
+            alert.show(popupStage);
+            Gdx.input.setInputProcessor(popupStage);
+            if (answer[0]) {
+                JsonObject req = new JsonObject();
+                req.addProperty("username", ClientApp.currentPlayer.getUser().getUsername());
+                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipAcceptMarriage", req);
+                Response resul = HTTPUtil.deserializeHttpResponse(postResponse);
+                if (resul.getStatus() == 200) {
+                    String gameData = resul.getBody().toString();
+                    ((FarmMenu) farmScreen).getPlayerController().updateGame(gameData);
+                }
+            } else {
+                JsonObject req = new JsonObject();
+                req.addProperty("username", ClientApp.currentPlayer.getUser().getUsername());
+                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipRejectMarriage", req);
+                Response resul = HTTPUtil.deserializeHttpResponse(postResponse);
+                if (resul.getStatus() == 200) {
+                    String gameData = resul.getBody().toString();
+                    ((FarmMenu) farmScreen).getPlayerController().updateGame(gameData);
+                }
+            }
+        } else if (type.equals("REJECT_MARRIAGE")) {
+            showPopUp("You were rejected", "Message");
+        } else if (type.equals("ACCEPT_MARRIAGE")) {
+            showPopUp("Now you have a wife", "Message");
+        } else if (type.equals("PLAYER_OFFLINE")) {
+            showPopUp("player " + res.get("player_username") + " has been offline.", "Message");
+        } else if (type.equals("PLAYER_DC")) {
+            ClientApp.currentGameData = null;
+            ClientApp.currentPlayer = null;
+            ClientApp.loggedInUser.setCurrentLobbyId(null);
+            ClientApp.loggedInUser.setCurrentGameId(null);
+            gameMain.setScreen(new MainMenu(gameMain));
+            dispose();
         }
     }
 
@@ -940,7 +991,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
         }
         if (playerController.getPlayer().isInVillage()) {
             gameMain.setScreen(new VillageMenu(this, gameMain));
-        } else {
+        }
+        if(playerController.loadingTimer>= 0){
+            batch.begin();
+            batch.draw(loadingTexture, 0, 0);
+            batch.end();
+            playerController.loadingTimer += delta;
+            if(playerController.loadingTimer >= 3){
+                playerController.loadingTimer = -1;
+            }
+        }
+        else {
             this.farm = playerController.getPlayer().getFarm();
             batch.setShader(dayNightShader);
             clearAndResetScreen();

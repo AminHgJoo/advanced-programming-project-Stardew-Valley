@@ -1,5 +1,6 @@
 package com.common.models;
 
+import com.common.models.enums.Quality;
 import com.common.models.enums.types.storeProductTypes.AllProducts;
 import com.common.models.items.Item;
 import dev.morphia.annotations.Embedded;

@@ -188,7 +188,7 @@ public class InteractionsMenu implements MyScreen, InputProcessor {
         titleFont.draw(batch, layout, xTitle, yTitle);
 
         float xInfo = 500f;
-        float yInfo = Gdx.graphics.getHeight() - 160f;
+        float yInfo = Gdx.graphics.getHeight() - 140f;
         BitmapFont font = AssetManager.getStardewFont();
         font.getData().setScale(1);
         font.setColor(Color.WHITE);

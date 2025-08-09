@@ -33,7 +33,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class PlayerController {
-    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(2);
+    private final ExecutorService networkThreadPool = Executors.newFixedThreadPool(4);
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
     private PlayerAnimationController playerAnimationController;
@@ -46,6 +46,8 @@ public class PlayerController {
     private float width;
     private float height;
     private FarmMenu farmMenu;
+    public float loadingTimer;
+
 
     public PlayerController(Vector2 x, Vector2 y, FarmMenu farmMenu, Player player) {
         this.farmMenu = farmMenu;
@@ -58,6 +60,11 @@ public class PlayerController {
         this.playerVelocity = y;
         this.width = playerAnimationController.getCurrentFrame().getTexture().getWidth();
         this.height = playerAnimationController.getCurrentFrame().getTexture().getHeight();
+        loadingTimer = -1;
+    }
+
+    public void showLoading(){
+        loadingTimer = 0.0f;
     }
 
     public void update(float delta) {

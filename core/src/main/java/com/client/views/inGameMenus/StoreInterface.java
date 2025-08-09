@@ -239,27 +239,29 @@ public class StoreInterface implements MyScreen {
     }
 
     private void buyItem() {
-        var req = new JsonObject();
-        req.addProperty("productName", selectedItem.getItem().getName());
-        req.addProperty("storeName", storeName);
-        req.addProperty("count", selectedAmount);
+        if(selectedItem.getType() != null) {
+            var req = new JsonObject();
+            req.addProperty("productName", selectedItem.getType().getName());
+            req.addProperty("storeName", storeName);
+            req.addProperty("count", selectedAmount);
 
-        var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() +
-            "/dealingPurchase", req);
+            var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() +
+                "/dealingPurchase", req);
 
-        var res = HTTPUtil.deserializeHttpResponse(postRes);
+            var res = HTTPUtil.deserializeHttpResponse(postRes);
 
-        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
 
-        if (res.getStatus() == 200) {
-            uiPopupHelper.showDialog("Success", "Success", () -> {
-                dispose();
-                selectedItem = null;
-                selectedAmount = 0;
-                initializeStage();
-            });
-        } else {
-            uiPopupHelper.showDialog("Error connecting to server", "Error");
+            if (res.getStatus() == 200) {
+                uiPopupHelper.showDialog("Success", "Success", () -> {
+                    dispose();
+                    selectedItem = null;
+                    selectedAmount = 0;
+                    initializeStage();
+                });
+            } else {
+                uiPopupHelper.showDialog("Error connecting to server", "Error");
+            }
         }
     }
 

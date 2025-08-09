@@ -86,6 +86,7 @@ public class MovementController extends Controller {
             HashMap<String, String> msg = new HashMap<>();
             msg.put("type", "PLAYER_UPDATED");
             msg.put("player_user_id", id);
+            msg.put("player", playerJson);
             msg.put("x", String.format("%f", x));
             msg.put("y", String.format("%f", y));
             gs.broadcast(msg);

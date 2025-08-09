@@ -10,7 +10,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
@@ -21,6 +29,7 @@ import com.common.GameGSON;
 import com.common.models.GameData;
 import com.common.models.NPCModels.NPC;
 import com.common.models.Player;
+import com.common.models.Slot;
 import com.common.models.mapModels.Coordinate;
 import com.common.utils.ChatMessage;
 import com.google.gson.JsonObject;
@@ -55,6 +64,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
     private HashMap<String, NpcController> npcControllers = new HashMap<>();
     private GameData game = ClientApp.currentGameData;
     private Player player = ClientApp.currentPlayer;
+    private Stage popupStage;
 
     private InputProcessor temp;
 
@@ -86,6 +96,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
         this.camera = new OrthographicCamera();
         this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
         camera.setToOrtho(false, camera.viewportWidth, camera.viewportHeight);
+        popupStage = new Stage(new ScreenViewport());
     }
 
     public void renderPlayers() {
@@ -121,6 +132,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
             if (!id.equals(player.getUser_id())) {
                 PlayerVillageController controller = playerControllers.get(id);
                 String playerJson = res.get("player");
+                System.out.println(playerJson);
                 Player player1 = gson.fromJson(playerJson, Player.class);
                 controller.updateGamePlayer(player1);
             }
@@ -343,7 +355,114 @@ public class VillageMenu implements MyScreen, InputProcessor {
         if (nc != null) {
             gameMain.setScreen(new NPCChatScreen(nc.getNpc(), this, gameMain));
         }
+        for (Player player : ClientApp.currentGameData.getPlayers()) {
+            if ((player != ClientApp.currentPlayer) && (player.getCoordinate().getX()<= touchPos.x + 15 && player.getCoordinate().getX() >= touchPos.x -15) && (player.getCoordinate().getY()<= touchPos.y + 30 && player.getCoordinate().getY() >= touchPos.y -30)) {
+                Gdx.input.setInputProcessor(popupStage);
+                Vector2 stageCoords = popupStage.screenToStageCoordinates(new Vector2(player.getCoordinate().getX(), player.getCoordinate().getX()));
+                Skin skin = AssetManager.getSkin();
+
+
+                Window popup = new Window(player.getUser().getUsername(), skin);
+                popup.setSize(300, 500);
+                popup.setPosition(stageCoords.x, stageCoords.y, Align.topLeft);
+                Label label = new Label("Interactions with " + player.getUser().getUsername(), skin);
+                label.setWrap(true);
+                label.setAlignment(Align.center);
+
+                TextButton hugBtn = new TextButton("Hug", skin);
+                TextButton marryBtn = new TextButton("Marry", skin);
+                TextButton flowerBtn = new TextButton("Flower", skin);
+                TextButton exitBtn = new TextButton("Exit", skin);
+
+                //TODO animation
+                hugBtn.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        JsonObject req = new JsonObject();
+                        req.addProperty("username", player.getUser().getUsername());
+                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipHug", req);
+                        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                        if (res.getStatus() == 200) {
+                            String game = res.getBody().toString();
+                            VillageMenu.this.playerController.updateGame(game);
+                            Gdx.input.setInputProcessor(VillageMenu.this);
+                            popup.remove();
+                        } else {
+                            String error = res.getBody().toString();
+                            showPopUp(error, "Error");
+                        }
+                    }
+                });
+                marryBtn.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        JsonObject req = new JsonObject();
+                        req.addProperty("username", player.getUser().getUsername());
+                        req.addProperty("ring", "ring");
+                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipAskMarriage", req);
+                        //TODO dastan dare hanooz kiram toosh bayad accept kne yaroo
+                        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                        if (res.getStatus() == 200) {
+                            String game = res.getBody().toString();
+                            VillageMenu.this.playerController.updateGame(game);
+                            Gdx.input.setInputProcessor(VillageMenu.this);
+                            popup.remove();
+                        } else {
+                            String error = res.getBody().toString();
+                            showPopUp(error, "Error");
+                        }
+                    }
+                });
+                flowerBtn.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        Slot flowerSlot = null;
+                        for (Slot slot : ClientApp.currentPlayer.getInventory().getSlots()) {
+                            if (isFlower(slot.getItem().getName()))
+                                flowerSlot = slot;
+                        }
+                        if (flowerSlot != null) {
+                            JsonObject req = new JsonObject();
+                            req.addProperty("username", player.getUser().getUsername());
+                            req.addProperty("flowerName", flowerSlot.getItem().getName());
+                            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipFlower", req);
+                            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                            if (res.getStatus() == 200) {
+                                String game = res.getBody().toString();
+                                VillageMenu.this.playerController.updateGame(game);
+                                Gdx.input.setInputProcessor(VillageMenu.this);
+                                popup.remove();
+                            } else {
+                                String error = res.getBody().toString();
+                                showPopUp(error, "Error");
+                            }
+                        }
+
+                    }
+                });
+                exitBtn.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        Gdx.input.setInputProcessor(VillageMenu.this);
+                        popup.remove();
+                    }
+                });
+
+                popup.pad(10);
+                label.setWrap(false);
+                popup.add(label).row();
+                popup.add(hugBtn).row();
+                popup.add(marryBtn).row();
+                popup.add(flowerBtn);
+                popup.add(exitBtn);
+
+                popupStage.addActor(popup);
+            }
+        }
         return false;
+    }
+    public boolean isFlower(String flowerName) {
+        return flowerName.equals("Bouquet");
     }
 
     @Override
