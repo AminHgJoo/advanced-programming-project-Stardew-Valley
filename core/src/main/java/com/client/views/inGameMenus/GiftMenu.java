@@ -53,6 +53,7 @@ public class GiftMenu implements MyScreen, InputProcessor {
     private Stage stage;
     private TextField countField;
     private TextButton sendButton;
+    private TextButton exitButton;
 
 
     public GiftMenu(GameMain gameMain, FarmMenu farmScreen, Player targetPlayer) {
@@ -109,7 +110,21 @@ public class GiftMenu implements MyScreen, InputProcessor {
             }
         });
 
+        exitButton = new TextButton("Exit", skin);
+        exitButton.setSize(fieldWidth, fieldHeight);
+        exitButton.setPosition(xField, yField - 2* fieldHeight - 20f);
+
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameMain.setScreen(farmScreen);
+                GiftMenu.this.dispose();
+            }
+        });
+
+
         stage.addActor(sendButton);
+        stage.addActor(exitButton);
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this);
