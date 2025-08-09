@@ -66,7 +66,7 @@ public class ChatScreen implements MyScreen {
         messagesTable.top().left();
 
         for (var chatMessage : chatMessages) {
-            addMessage(chatMessage.message, false, chatMessage.sender, chatMessage.recipient, chatMessage.isPrivate);
+            addMessage(chatMessage.message, false, chatMessage.sender, chatMessage.recipient, chatMessage.isPrivate, false);
         }
 
         scrollPane = new ScrollPane(messagesTable, skin);
@@ -86,7 +86,7 @@ public class ChatScreen implements MyScreen {
                     if (msg.startsWith("/")) {
                         parseCheatCode(msg);
                     } else {
-                        addMessage(msg, true, ClientApp.loggedInUser.getUsername(), null, false);
+                        addMessage(msg, true, ClientApp.loggedInUser.getUsername(), null, false, true);
                     }
                     textField.setText("");
                 }
@@ -109,7 +109,7 @@ public class ChatScreen implements MyScreen {
         return name;
     }
 
-    private void addMessage(String msgText, boolean updateMessagesData, String sender, String recipient, boolean isPrivate) {
+    private void addMessage(String msgText, boolean updateMessagesData, String sender, String recipient, boolean isPrivate, boolean sendToServer) {
         String username = ClientApp.loggedInUser.getUsername();
 
         if (!isPrivate) {
@@ -142,7 +142,10 @@ public class ChatScreen implements MyScreen {
             ChatMessage message = new ChatMessage(msgText, sender, recipient, isPrivate);
             chatMessages.add(message);
             ClientApp.currentGameData.chatMessages.add(message);
-            sendMessageToServer(message);
+
+            if (sendToServer) {
+                sendMessageToServer(message);
+            }
         }
     }
 
@@ -175,7 +178,7 @@ public class ChatScreen implements MyScreen {
             String recipient = CommandPrefixes.WHISPER.getGroup(command, "recipient");
             String message = CommandPrefixes.WHISPER.getGroup(command, "message");
 
-            addMessage(message, true, sender, recipient, true);
+            addMessage(message, true, sender, recipient, true, true);
         }
     }
 
@@ -228,7 +231,7 @@ public class ChatScreen implements MyScreen {
             String messageJson = res.get("message");
             System.out.println(messageJson);
             ChatMessage chatMsg = gson.fromJson(messageJson, ChatMessage.class);
-            addMessage(chatMsg.message, true, chatMsg.sender, chatMsg.recipient, chatMsg.isPrivate);
+            addMessage(chatMsg.message, true, chatMsg.sender, chatMsg.recipient, chatMsg.isPrivate, false);
         }
     }
 
