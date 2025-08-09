@@ -140,7 +140,7 @@ public class GiftMenu implements MyScreen, InputProcessor {
             req.addProperty("username", targetPlayer.getUser().getUsername());
             req.addProperty("item", slot.getItem().getName());
             req.addProperty("amount", count);
-            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipGift", req);
+            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipGift", req);
             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
             if (res.getStatus() == 200) {
                 selected = false;

@@ -72,6 +72,7 @@ public class GameController {
                     u.getGames().add(game.get_id().toString());
                     u.setCurrentLobbyId(null);
                     u.setCurrentLobbyId(null);
+                    UserRepository.saveUser(u);
                 }
                 LobbyRepository.delete(lobby);
             } else {
