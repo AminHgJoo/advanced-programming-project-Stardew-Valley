@@ -42,11 +42,13 @@ public class WorldController extends Controller {
             GameData game = gs.getGame();
 
             Player player = game.findPlayerByUserId(playerId);
+            ctx.json(Response.OK.setMessage("OKKKK"));
             HashMap<String, String> msg = new HashMap<>();
             msg.put("type", "PLAYER_VOTING");
             msg.put("player_user_id", playerId);
             msg.put("player_username", player.getUser().getUsername());
             gs.broadcast(msg);
+
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
