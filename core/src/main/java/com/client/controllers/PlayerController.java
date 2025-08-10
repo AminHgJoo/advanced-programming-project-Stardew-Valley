@@ -63,7 +63,7 @@ public class PlayerController {
         loadingTimer = -1;
     }
 
-    public void showLoading(){
+    public void showLoading() {
         loadingTimer = 0.0f;
     }
 
@@ -195,6 +195,8 @@ public class PlayerController {
                     String dir = facingDirection.getDirection();
                     req.addProperty("direction", dir);
                     req.addProperty("toolName", tool.getName());
+                    req.addProperty("x", playerPosition.x);
+                    req.addProperty("y", playerPosition.y);
                     var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/worldToolUse", req);
 
                     Response res = HTTPUtil.deserializeHttpResponse(postResponse);
@@ -437,18 +439,23 @@ public class PlayerController {
 
     public void equipItem(Item item) {
         player.setEquippedItem(item);
-        JsonObject req = new JsonObject();
-        if (item != null) {
-            req.addProperty("toolName", item.getName());
-        }
-        var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryToolEquip", req);
-        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-        if (res.getStatus() == 200) {
-            String player = res.getBody().toString();
-            updatePlayerObject(player);
-        } else {
+        networkThreadPool.execute(() -> {
+            JsonObject req = new JsonObject();
+            if (item != null) {
+                req.addProperty("toolName", item.getName());
+            }
+            var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryToolEquip", req);
+            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+            Gdx.app.postRunnable(() -> {
 
-        }
+                if (res.getStatus() == 200) {
+//                    String player = res.getBody().toString();
+//                    updatePlayerObject(player);
+                } else {
+
+                }
+            });
+        });
     }
 
     public void updateInventory(Backpack backpack) {
@@ -459,8 +466,8 @@ public class PlayerController {
         var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryChangeInventory", req);
         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
         if (res.getStatus() == 200) {
-            String player = res.getBody().toString();
-            updatePlayerObject(player);
+//            String player = res.getBody().toString();
+//            updatePlayerObject(player);
         }
     }
 }

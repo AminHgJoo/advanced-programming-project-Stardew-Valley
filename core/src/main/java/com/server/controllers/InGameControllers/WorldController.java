@@ -10,6 +10,7 @@ import com.common.models.enums.types.mapObjectTypes.TreeType;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.items.*;
 import com.common.models.mapModels.Cell;
+import com.common.models.mapModels.Coordinate;
 import com.common.models.mapModels.Farm;
 import com.common.models.mapObjects.*;
 import com.common.models.skills.Skill;
@@ -99,9 +100,9 @@ public class WorldController extends Controller {
             msg.put("type", "PLAYER_VOTED");
             msg.put("player_user_id", playerId);
             msg.put("player_username", player2.getUser().getUsername());
-            msg.put("player_user_id_vote" , id);
-            msg.put("player_username_vote" , player.getUser().getUsername());
-            msg.put("vote" , vote.toString());
+            msg.put("player_user_id_vote", id);
+            msg.put("player_username_vote", player.getUser().getUsername());
+            msg.put("vote", vote.toString());
             gs.broadcast(msg);
         } catch (Exception e) {
             e.printStackTrace();
@@ -812,6 +813,9 @@ public class WorldController extends Controller {
             String direction = (String) body.get("direction");
             String toolName = (String) body.get("toolName");
             String id = ctx.attribute("id");
+            double x = (Double) body.get("x");
+            double y = (Double) body.get("y");
+
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             Item item = player.getInventory().getSlotByItemName(toolName).getItem();
@@ -829,6 +833,7 @@ public class WorldController extends Controller {
                 ctx.json(Response.BAD_REQUEST.setMessage("Invalid direction."));
                 return;
             }
+            player.setCoordinate(new Coordinate((float) x, (float) y));
             Tool equippedTool = (Tool) player.getEquippedItem();
             ToolTypes toolType = equippedTool.getType();
             if (toolType == ToolTypes.HOE) {
