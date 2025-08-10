@@ -8,19 +8,34 @@ import io.javalin.http.Context;
 import java.lang.reflect.Method;
 
 public class GameServerController {
-    private final WorldController worldController = new WorldController();
-    private final TradingController tradingController = new TradingController();
-    private final NpcController npcController = new NpcController();
-    private final MovementController movementController = new MovementController();
-    private final LoadSaveController loadSaveController = new LoadSaveController();
-    private final LiveStockController liveStockController = new LiveStockController();
-    private final InventoryController inventoryController = new InventoryController();
-    private final FriendshipController friendshipController = new FriendshipController();
-    private final FarmingController farmingController = new FarmingController();
-    private final DealingController dealingController = new DealingController();
-    private final CookingController cookingController = new CookingController();
+    private final WorldController worldController;
+    private final TradingController tradingController;
+    private final NpcController npcController;
+    private final MovementController movementController;
+    private final LoadSaveController loadSaveController;
+    private final LiveStockController liveStockController;
+    private final InventoryController inventoryController;
+    private final FriendshipController friendshipController;
+    private final FarmingController farmingController;
+    private final DealingController dealingController;
+    private final CookingController cookingController;
     private final ArtisanController artisanController = new ArtisanController();
-    private final ChatController chatController = new ChatController();
+    private final ChatController chatController;
+
+    public GameServerController(GameServer gs) {
+        worldController = new WorldController(gs);
+        tradingController = new TradingController(gs);
+        npcController = new NpcController(gs);
+        movementController = new MovementController(gs);
+        loadSaveController = new LoadSaveController(gs);
+        liveStockController = new LiveStockController(gs);
+        inventoryController = new InventoryController(gs);
+        friendshipController = new FriendshipController(gs);
+        farmingController = new FarmingController(gs);
+        dealingController = new DealingController(gs);
+        cookingController = new CookingController(gs);
+        chatController = new ChatController(gs);
+    }
 
     public void routingTheRequests(Context ctx, GameServer gs) {
         String controllerName = ctx.pathParam("controllerName");

@@ -18,6 +18,9 @@ import io.javalin.http.Context;
 import java.util.HashMap;
 
 public class DealingController extends Controller {
+    public DealingController(GameServer gs) {
+        super(gs);
+    }
     public static boolean handleBuyRecipe(String name, StoreProduct p, Player player) {
         CraftingRecipes craft = CraftingRecipes.findByName(name.split(" ")[0]);
         CookingRecipes cook = CookingRecipes.findByName(name.split(" ")[0]);

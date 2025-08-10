@@ -23,6 +23,9 @@ import io.javalin.http.Context;
 import java.util.HashMap;
 
 public class InventoryController extends Controller {
+    public InventoryController(GameServer gs) {
+        super(gs);
+    }
     private static int[] getXAndYIncrement(String direction) {
         if (direction.compareToIgnoreCase("down") == 0) {
             return new int[]{0, -1};

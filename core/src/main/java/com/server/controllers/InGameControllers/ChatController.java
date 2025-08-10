@@ -21,6 +21,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChatController extends Controller {
+    public ChatController(GameServer gs) {
+        super(gs);
+    }
     public void fetchMessages(Context ctx, GameServer gs) {
         try {
             GameData gameData = gs.getGame();

@@ -5,6 +5,10 @@ import com.server.GameServers.GameServer;
 public abstract class Controller {
     private GameServer gs;
 
+    public Controller(GameServer gs) {
+        this.gs = gs;
+    }
+
     public GameServer getGs() {
         return gs;
     }

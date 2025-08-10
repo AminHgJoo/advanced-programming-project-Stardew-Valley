@@ -23,6 +23,9 @@ import io.javalin.http.Context;
 import java.util.HashMap;
 
 public class FarmingController extends Controller {
+    public FarmingController(GameServer gs) {
+        super(gs);
+    }
     public void seedPlanting(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);

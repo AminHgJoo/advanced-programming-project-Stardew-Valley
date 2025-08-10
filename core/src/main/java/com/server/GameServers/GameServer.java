@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameServer extends Thread {
-    private final GameServerController controller = new GameServerController();
+    private final GameServerController controller ;
     private final Gson gson = GameGSON.gson;
     private ArrayList<PlayerConnection> playerConnections;
     private GameData game;
@@ -31,6 +31,7 @@ public class GameServer extends Thread {
         for (PlayerConnection playerConnection : players) {
             playerConnection.send(new Gson().toJson(res));
         }
+        controller = new GameServerController(this);
     }
 
     public void broadcast(HashMap<String, String> message) {

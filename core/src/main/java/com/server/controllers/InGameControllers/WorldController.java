@@ -23,6 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WorldController extends Controller {
+
+    public WorldController(GameServer gs) {
+        super(gs);
+    }
     private static void addFishes(Fish fish, Backpack backpack, int numberOfFishes) {
         for (Slot slot : backpack.getSlots()) {
             if (slot.getItem().getName().compareToIgnoreCase(fish.getName()) == 0) {

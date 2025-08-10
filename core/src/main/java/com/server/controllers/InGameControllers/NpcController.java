@@ -16,6 +16,9 @@ import io.javalin.http.Context;
 import java.util.HashMap;
 
 public class NpcController extends Controller {
+    public NpcController(GameServer gs) {
+        super(gs);
+    }
     public void changePosition(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);

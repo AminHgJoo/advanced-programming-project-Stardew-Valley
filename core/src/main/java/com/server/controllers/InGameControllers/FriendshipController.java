@@ -11,6 +11,9 @@ import io.javalin.http.Context;
 import java.util.HashMap;
 
 public class FriendshipController extends Controller {
+    public FriendshipController(GameServer gs) {
+        super(gs);
+    }
     public void gift(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);

@@ -15,6 +15,9 @@ import io.javalin.http.Context;
 import java.util.HashMap;
 
 public class CookingController extends Controller {
+    public CookingController(GameServer gs) {
+        super(gs);
+    }
     public void handleCooking(Context ctx, GameServer gs) {
         try {
             String id = ctx.attribute("id");

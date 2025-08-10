@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class MovementController extends Controller {
+    public MovementController(GameServer gs) {
+        super(gs);
+    }
     private static Coordinate getEmptyCoordinate(Player player, Player partner, ArrayList<Cell> cells) {
         for (int i = 60; i >= 0; i--) {
             for (int j = 8; j <= 40; j++) {
