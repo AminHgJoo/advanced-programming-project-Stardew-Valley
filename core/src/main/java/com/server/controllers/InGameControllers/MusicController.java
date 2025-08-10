@@ -1,6 +1,7 @@
 package com.server.controllers.InGameControllers;
 
 import com.google.gson.JsonObject;
+import com.server.GameServers.GameServer;
 import com.server.utilities.Response;
 import io.javalin.http.Context;
 import io.javalin.http.UploadedFile;
@@ -16,6 +17,12 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MusicController extends Controller {
     public AtomicReference<String> userWaitingForMusic = new AtomicReference<>("");
 
+    public MusicController(GameServer gs) {
+        super(gs);
+    }
+    public MusicController() {
+        super(null);
+    }
     public void uploadMusicHandler(Context ctx) {
         try {
             UploadedFile file = ctx.uploadedFile("file");
@@ -85,7 +92,7 @@ public class MusicController extends Controller {
             var req = new HashMap<String, String>();
             req.put("type", "MUSIC_QUERY");
 
-            getGs().narrowCast(syncTargetUsername, req);
+            getGs(ctx.pathParam("gameId")).narrowCast(syncTargetUsername, req);
             ctx.json(Response.OK.setMessage("Please wait..."));
         } catch (Exception e) {
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
@@ -109,7 +116,7 @@ public class MusicController extends Controller {
             data.addProperty("isPlaying", isPlaying);
 
             req.put("syncData", data.toString());
-            getGs().narrowCast(userWaitingForMusic.get(), req);
+            getGs(ctx.pathParam("gameId")).narrowCast(userWaitingForMusic.get(), req);
 
             ctx.json(Response.OK.setMessage("Successfully received music data"));
         } catch (Exception e) {
