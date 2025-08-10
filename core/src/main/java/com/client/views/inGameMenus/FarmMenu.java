@@ -94,6 +94,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public boolean voteFlag = false;
     public Player votedPlayer;
     private SpriteBatch batch;
+    private SpriteBatch batch2;
     private Farm farm;
     private Texture grassTexture;
     private boolean isToolSwinging = false;
@@ -121,6 +122,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Label timeLabel;
     private Label moneyLabel;
     private Stage popupStage;
+    private Stage playerStage;
     private boolean crowFlag = false;
     private InputProcessor temp;
     private Texture loadingTexture;
@@ -136,6 +138,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
         popupStage = new Stage(new ScreenViewport());
+        playerStage = new Stage(new ScreenViewport());
         this.grassTexture = AssetManager.getImage("grassfall");
         playerController = new PlayerController(playerPosition, playerVelocity, this, ClientApp.currentPlayer);
         this.farm = playerController.getPlayer().getFarm();
@@ -992,16 +995,15 @@ public class FarmMenu implements MyScreen, InputProcessor {
         if (playerController.getPlayer().isInVillage()) {
             gameMain.setScreen(new VillageMenu(this, gameMain));
         }
-        if(playerController.loadingTimer>= 0){
+        if (playerController.loadingTimer >= 0) {
             batch.begin();
             batch.draw(loadingTexture, 0, 0);
             batch.end();
             playerController.loadingTimer += delta;
-            if(playerController.loadingTimer >= 3){
+            if (playerController.loadingTimer >= 3) {
                 playerController.loadingTimer = -1;
             }
-        }
-        else {
+        } else {
             this.farm = playerController.getPlayer().getFarm();
             batch.setShader(dayNightShader);
             clearAndResetScreen();
@@ -1017,6 +1019,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
             handleLightning(camera, delta);
             batch.setShader(null);
+
+            batch2.begin();
+            playerController.render(batch2);
+            batch2.end();
 
             handleWeatherFX(delta);
 
@@ -1130,7 +1136,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
             batch.draw(AssetManager.getImage("crow"), playerPosition.x - 64, playerPosition.y, 32, 32);
         }
 
-        playerController.render(batch);
         for (Cell cell : farm.getCells()) {
             if (cell.getObjectOnCell() instanceof Tree) {
                 Coordinate coordinate = cell.getCoordinate();
