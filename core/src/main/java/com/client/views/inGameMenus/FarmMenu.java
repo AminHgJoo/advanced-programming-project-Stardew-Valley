@@ -94,7 +94,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public boolean voteFlag = false;
     public Player votedPlayer;
     private SpriteBatch batch;
-    private SpriteBatch batch2;
     private Farm farm;
     private Texture grassTexture;
     private boolean isToolSwinging = false;
@@ -1020,10 +1019,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
             handleLightning(camera, delta);
             batch.setShader(null);
 
-            batch2.begin();
-            playerController.render(batch2);
-            batch2.end();
-
             handleWeatherFX(delta);
 
             handleUI(delta);
@@ -1151,6 +1146,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         Texture house = AssetManager.getImage("playerhouse");
         Texture greenhouse = isGreenhouseBuilt() ? AssetManager.getImage("greenhouse") : AssetManager.getImage("greenhousedestroyed");
 
+        playerController.render(batch);
         modifiedDraw(batch, house, 61, 8);
         modifiedDraw(batch, greenhouse, 22, 6);
 

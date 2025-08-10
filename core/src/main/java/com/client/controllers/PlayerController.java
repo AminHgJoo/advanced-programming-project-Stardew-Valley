@@ -331,11 +331,10 @@ public class PlayerController {
         playerPosition.y = MathUtils.clamp(playerPosition.y, height / 2, FarmMenu.FARM_Y_SPAN * FarmMenu.TILE_PIX_SIZE - height / 2);
 
         if ((prev_x != playerPosition.x || prev_y != playerPosition.y) && !player.isInVillage())
-            updatePlayerCoordinate();
+            updatePlayerCoordinate(prev_x, prev_y);
     }
 
-    public void updatePlayerCoordinate() {
-
+    public void updatePlayerCoordinate(float prev_x, float prev_y) {
         boolean checkWalk = playerService.walk(playerPosition.x, playerPosition.y);
         if (checkWalk) {
             networkThreadPool.execute(() -> {
@@ -349,14 +348,14 @@ public class PlayerController {
                     if (res.getStatus() == 200) {
                         player.setCoordinate(new Coordinate(playerPosition.x, playerPosition.y));
                     } else {
-                        playerPosition.x = player.getCoordinate().getX();
-                        playerPosition.y = player.getCoordinate().getY();
+                        playerPosition.x = prev_x;
+                        playerPosition.y = prev_y;
                     }
                 });
             });
         } else {
-            playerPosition.x = player.getCoordinate().getX();
-            playerPosition.y = player.getCoordinate().getY();
+            playerPosition.x = prev_x;
+            playerPosition.y = prev_y;
         }
         if (playerPosition.x == 2366.5f && playerPosition.y >= 67f) {
             System.out.println("hello");
@@ -460,14 +459,18 @@ public class PlayerController {
 
     public void updateInventory(Backpack backpack) {
         System.out.println("HI");
-        String json = GameGSON.gson.toJson(backpack);
-        JsonObject req = new JsonObject();
-        req.addProperty("backpack", json);
-        var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryChangeInventory", req);
-        Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-        if (res.getStatus() == 200) {
+        networkThreadPool.execute(() -> {
+            String json = GameGSON.gson.toJson(backpack);
+            JsonObject req = new JsonObject();
+            req.addProperty("backpack", json);
+            var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryChangeInventory", req);
+            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+            Gdx.app.postRunnable(() -> {
+                if (res.getStatus() == 200) {
 //            String player = res.getBody().toString();
 //            updatePlayerObject(player);
-        }
+                }
+            });
+        });
     }
 }

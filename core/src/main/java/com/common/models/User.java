@@ -25,7 +25,7 @@ public class User {
     private String currentGameId;
     private String currentLobbyId;
     @Transient
-    private GameData currentGameData;
+    private transient GameData currentGameData;
 
     public User() {
 
