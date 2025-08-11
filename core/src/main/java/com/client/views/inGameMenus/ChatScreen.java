@@ -195,7 +195,7 @@ public class ChatScreen implements MyScreen {
             System.out.println("Khoda ro shokr. Cheat Kardim Raft!");
         } else {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, AssetManager.getSkin());
-            uiPopupHelper.showDialog("Error connecting to server", "Error");
+            uiPopupHelper.showDialog(res.getMessage(), "Error");
         }
     }
 

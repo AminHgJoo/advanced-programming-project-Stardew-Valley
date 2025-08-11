@@ -112,7 +112,7 @@ public class StoreInterface implements MyScreen {
         root.center();
 
         for (StoreProduct storeProduct : storeProducts) {
-            Label label = new Label(storeProduct.getType().getName() + "  " + storeProduct.getPrice(), labelStyle);
+            Label label = new Label(storeProduct.getType().getName() + "  " + storeProduct.getType().getPrice(), labelStyle);
 
             if (storeProduct.getAvailableCount() <= 0) {
                 if (ignoreOutOfStockItems) {
@@ -260,6 +260,7 @@ public class StoreInterface implements MyScreen {
                     initializeStage();
                 });
             } else {
+                System.out.println(res.getMessage());
                 uiPopupHelper.showDialog("Error connecting to server", "Error");
             }
         }
