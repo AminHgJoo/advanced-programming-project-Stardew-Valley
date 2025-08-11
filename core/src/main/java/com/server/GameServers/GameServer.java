@@ -87,7 +87,12 @@ public class GameServer extends Thread {
             }
             count++;
             if (count % 7 == 0) {
-                game.advanceTime();
+                boolean check = game.advanceTime();
+                if (check) {
+                    HashMap<String, String> msg = new HashMap<>();
+                    msg.put("type", "DAY_END");
+                    broadcast(msg);
+                }
             }
             if (count % 15 == 0) {
                 GameRepository.saveGame(game);
@@ -104,6 +109,11 @@ public class GameServer extends Thread {
                     npc.update(1);
                 }
             }
+
+            game.checkForRecipeUnlocking();
+            game.handleBuffExpiration();
+            game.checkForSkillUpgrades();
+
             String gameJson = this.gson.toJson(game);
             HashMap<String, String> message = new HashMap<>();
             message.put("type", "GAME_UPDATED");

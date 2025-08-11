@@ -937,6 +937,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
             ClientApp.loggedInUser.setCurrentGameId(null);
             gameMain.setScreen(new MainMenu(gameMain));
             dispose();
+        }else if(type.equals("DAY_END")){
+            System.out.println("HELLO");
+            playerController.showLoading();
         }
     }
 

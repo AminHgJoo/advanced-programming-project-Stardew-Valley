@@ -289,7 +289,7 @@ public class GameData {
         }
     }
 
-    public void advanceTime() {
+    public boolean advanceTime() {
         date = date.plusMinutes(10);
 
         if (date.getHour() == 23) {
@@ -303,6 +303,7 @@ public class GameData {
             }
 
             newDayBackgroundChecks();
+            return true;
 
         }
         if (date.getDayOfMonth() == 29) {
@@ -310,6 +311,7 @@ public class GameData {
             date = date.plusMonths(1);
         }
         handleArtisanUse();
+        return false;
     }
 
     /// Only called in advance time cheats.
