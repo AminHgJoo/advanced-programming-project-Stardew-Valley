@@ -1061,8 +1061,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         }
 
         TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
-
+        batch.begin();
         batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation);
+        batch.end();
     }
 
     private void handleUI(float delta) {
