@@ -131,9 +131,6 @@ public class User {
     }
 
     public GameData getCurrentGame() {
-        if (currentGameData == null && currentGameId != null) {
-            currentGameData = GameRepository.findGameById(currentGameId, true);
-        }
         return currentGameData;
     }
 

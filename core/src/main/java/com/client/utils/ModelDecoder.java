@@ -41,6 +41,9 @@ public class ModelDecoder {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            for (Object s : obj.getJSONArray("games")) {
+                user.getGames().add(s.toString());
+            }
             return user;
         } catch (Exception e) {
             e.printStackTrace();

@@ -68,7 +68,8 @@ public class MainMenu implements MyScreen {
         loadGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO soooroosh
+                dispose();
+                gameMain.setScreen(new LoadGameMenu(gameMain));
             }
         });
 
