@@ -164,7 +164,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.loadingTexture = AssetManager.getImage("loading");
         TextureRegion[] frames = new TextureRegion[6];
         for (int i = 0; i < 6; i++) {
-            Texture texture = new Texture(Gdx.files.internal("asghar" + (i + 1) + ".png"));
+            Texture texture = AssetManager.getImage("asghar" + i+1);
             frames[i] = new TextureRegion(texture);
         }
         walkAnimationَAsgharAnimation = new Animation<>(0.1f, frames);
