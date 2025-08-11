@@ -945,6 +945,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
             dispose();
         } else if (type.equals("THOR")) {
             thorFlag = true;
+        }else if(type.equals("DAY_END")){
+            System.out.println("HELLO");
+            playerController.showLoading();
         }
     }
 

@@ -7,6 +7,7 @@ import com.common.models.Player;
 import com.common.models.User;
 import com.google.gson.Gson;
 import com.server.controllers.InGameControllers.GameServerController;
+import com.server.repositories.GameRepository;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 
@@ -14,12 +15,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameServer extends Thread {
-    private final GameServerController controller ;
+    private final GameServerController controller;
     private final Gson gson = GameGSON.gson;
     private ArrayList<PlayerConnection> playerConnections;
     private GameData game;
     private boolean isRunning = true;
-    private int count = 0;
+    private int count = 1;
 
     public GameServer(ArrayList<PlayerConnection> players, GameData game) {
         this.playerConnections = players;
@@ -85,9 +86,16 @@ public class GameServer extends Thread {
                 e.printStackTrace();
             }
             count++;
-            if (count == 7) {
-                count = 0;
-                game.advanceTime();
+            if (count % 7 == 0) {
+                boolean check = game.advanceTime();
+                if (check) {
+                    HashMap<String, String> msg = new HashMap<>();
+                    msg.put("type", "DAY_END");
+                    broadcast(msg);
+                }
+            }
+            if (count % 15 == 0) {
+                GameRepository.saveGame(game);
             }
             boolean check = false;
             for (Player p : game.getPlayers()) {
@@ -101,6 +109,11 @@ public class GameServer extends Thread {
                     npc.update(1);
                 }
             }
+
+            game.checkForRecipeUnlocking();
+            game.handleBuffExpiration();
+            game.checkForSkillUpgrades();
+
             String gameJson = this.gson.toJson(game);
             HashMap<String, String> message = new HashMap<>();
             message.put("type", "GAME_UPDATED");

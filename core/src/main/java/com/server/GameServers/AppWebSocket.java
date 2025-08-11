@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.server.repositories.GameRepository;
 import com.server.repositories.LobbyRepository;
 import com.server.repositories.UserRepository;
 import io.javalin.Javalin;
@@ -98,6 +99,8 @@ public class AppWebSocket {
     }
 
     public static void startOldGame(GameData game, ArrayList<String> usernames) {
+        LoadGameServer ls = findLoadGameServer(game);
+        loadGameServers.remove(ls);
         ArrayList<PlayerConnection> arr = new ArrayList<>();
         for (String p : usernames) {
             PlayerConnection connection = connectedPlayers.get(p);
@@ -111,12 +114,26 @@ public class AppWebSocket {
         gs.start();
     }
 
+    public static LoadGameServer findLoadGameServer(GameData game) {
+        for (LoadGameServer ls : loadGameServers) {
+            if (ls.getGame().get_id().equals(game.get_id())) {
+                return ls;
+            }
+        }
+        return null;
+    }
+
     public static void loadGame(GameData game, User user) {
-        ArrayList<PlayerConnection> arr = new ArrayList<>();
-        arr.add(connectedPlayers.get(user.getUsername()));
-        LoadGameServer loadGameServer = new LoadGameServer(game, user.get_id(), arr);
-        loadGameServers.add(loadGameServer);
-        loadGameServer.start();
+        LoadGameServer ls = findLoadGameServer(game);
+        if (ls == null) {
+            ArrayList<PlayerConnection> arr = new ArrayList<>();
+            arr.add(connectedPlayers.get(user.getUsername()));
+            LoadGameServer loadGameServer = new LoadGameServer(game, user.get_id(), arr);
+            loadGameServers.add(loadGameServer);
+            loadGameServer.start();
+        } else {
+            ls.addUser(user);
+        }
     }
 
     public static GameServer getActiveGameById(String gameId) {
@@ -178,16 +195,17 @@ public class AppWebSocket {
                     @Override
                     public void run() {
                         if (connectedPlayers.get(username) == null) {
-                          HashMap<String , String> msg = new HashMap<>();
-                          msg.put("type" , "PLAYER_DC");
-                          msg.put("player_user_id" , p.getUser_id());
-                          gs.broadcast(msg);
-                          for(Player player : gs.getGame().getPlayers()) {
-                              User u = player.getUser();
-                              u.setCurrentGameId(null);
-                              u.setCurrentLobbyId(null);
-                              UserRepository.saveUser(u);
-                          }
+                            HashMap<String, String> msg = new HashMap<>();
+                            msg.put("type", "PLAYER_DC");
+                            msg.put("player_user_id", p.getUser_id());
+                            gs.broadcast(msg);
+                            for (Player player : gs.getGame().getPlayers()) {
+                                User u = player.getUser();
+                                u.setCurrentGameId(null);
+                                u.setCurrentLobbyId(null);
+                                UserRepository.saveUser(u);
+                            }
+                            GameRepository.saveGame(gs.getGame());
                         }
                         this.cancel();
                     }

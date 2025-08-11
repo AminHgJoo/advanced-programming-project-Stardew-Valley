@@ -1,5 +1,6 @@
 package com.client.views.preGameMenus;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -460,6 +461,7 @@ public class GameLobbyMenu implements MyScreen {
     @Override
     public void render(float delta) {
         if (GAME_START) {
+            ClientApp.loggedInUser.getGames().add(ClientApp.currentGameData.get_id());
             this.gameMain.setScreen(new FarmMenu(gameMain));
             this.dispose();
         }

@@ -289,7 +289,7 @@ public class GameData {
         }
     }
 
-    public void advanceTime() {
+    public boolean advanceTime() {
         date = date.plusMinutes(10);
 
         if (date.getHour() == 23) {
@@ -303,6 +303,7 @@ public class GameData {
             }
 
             newDayBackgroundChecks();
+            return true;
 
         }
         if (date.getDayOfMonth() == 29) {
@@ -310,11 +311,11 @@ public class GameData {
             date = date.plusMonths(1);
         }
         handleArtisanUse();
+        return false;
     }
 
     /// Only called in advance time cheats.
     public void newDayBackgroundChecks() {
-
         for (Player player : players) {
             if (player.isPlayerFainted()) {
                 player.setPlayerFainted(false);
@@ -342,8 +343,7 @@ public class GameData {
 
         handleCrowAttack();
 
-        //TODO: Commented by AminHG
-        //resetAllAnimalDailyVariables();
+//        resetAllAnimalDailyVariables();
 
         reInitializeStoreProductsCount();
         reInitializeNpc();

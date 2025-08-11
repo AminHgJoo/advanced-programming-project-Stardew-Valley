@@ -89,6 +89,7 @@ public class GameController {
         try {
             String id = ctx.attribute("id");
             String gameId = ctx.pathParam("gameId");
+            System.out.println(gameId);
             User user = UserRepository.findUserById(id);
             if (user == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("User not found"));

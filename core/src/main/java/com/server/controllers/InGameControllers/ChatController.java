@@ -24,6 +24,7 @@ public class ChatController extends Controller {
     public ChatController(GameServer gs) {
         super(gs);
     }
+
     public void fetchMessages(Context ctx, GameServer gs) {
         try {
             GameData gameData = gs.getGame();
@@ -79,6 +80,8 @@ public class ChatController extends Controller {
                 advanceTime(ctx, command, gs);
             } else if (GameMenuCommands.CHEAT_ADVANCE_DATE.matches(command)) {
                 advanceDate(ctx, command, gs);
+            } else if (GameMenuCommands.ENERGY_SET_VALUE.matches(command)) {
+                setEnergy(ctx, gs, command);
             } else if (GameMenuCommands.CHEAT_THOR.matches(command)) {
                 thor(ctx, command, gs);
             } else if (GameMenuCommands.CHEAT_WEATHER_SET.matches(command)) {
@@ -89,11 +92,28 @@ public class ChatController extends Controller {
                 setFriendship(ctx, command, gs);
             } else if (GameMenuCommands.CHEAT_ADD_SKILL_XP.matches(command)) {
                 skillXp(ctx, command, gs);
+            } else {
+                ctx.json(Response.NOT_FOUND.setMessage("NO CHEAT"));
             }
         } catch (Exception e) {
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
             e.printStackTrace();
         }
+    }
+
+    public void setEnergy(Context ctx, GameServer gs, String command) {
+        int energy = Integer.parseInt(GameMenuCommands.ENERGY_SET_VALUE.getGroup(command, "value"));
+        String id = ctx.attribute("id");
+        GameData gameData = gs.getGame();
+        Player player = gameData.findPlayerByUserId(id);
+        player.setEnergy(player.getEnergy() + energy);
+        String json = GameGSON.gson.toJson(player);
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("type", "PLAYER_UPDATED");
+        msg.put("player_user_id", id);
+        gs.broadcast(msg);
+        ctx.json(Response.OK.setMessage("player").setBody(json));
+
     }
 
     // Cheat Controllers
@@ -104,7 +124,7 @@ public class ChatController extends Controller {
         Player player = gameData.findPlayerByUserId(id);
         player.setMoney(player.getMoney(gameData) + count, gameData);
         String playerJson = GameGSON.gson.toJson(player);
-        ctx.json(Response.OK.setMessage("Money added successfully").setBody(playerJson));
+        ctx.json(Response.OK.setMessage("player").setBody(playerJson));
 
         HashMap<String, String> msg = new HashMap<>();
         msg.put("type", "PLAYER_UPDATED");
@@ -144,7 +164,7 @@ public class ChatController extends Controller {
         }
         currentGameData.handleArtisanUse();
         String gameJson = GameGSON.gson.toJson(currentGameData);
-        ctx.json(Response.OK.setMessage("Date added successfully").setBody(gameJson));
+        ctx.json(Response.OK.setMessage("game").setBody(gameJson));
         HashMap<String, String> msg = new HashMap<>();
         msg.put("type", "GAME_UPDATED");
         msg.put("game", gameJson);
@@ -175,7 +195,7 @@ public class ChatController extends Controller {
         }
         currentGameData.checkSeasonChange();
         String gameJson = GameGSON.gson.toJson(currentGameData);
-        ctx.json(Response.OK.setMessage("Date added successfully").setBody(gameJson));
+        ctx.json(Response.OK.setMessage("game").setBody(gameJson));
         HashMap<String, String> msg = new HashMap<>();
         msg.put("type", "GAME_UPDATED");
         msg.put("game", gameJson);
@@ -200,7 +220,7 @@ public class ChatController extends Controller {
             gameData.setWeatherToday(weather);
         }
         String gameJson = GameGSON.gson.toJson(gameData);
-        ctx.json(Response.OK.setMessage("Date added successfully").setBody(gameJson));
+        ctx.json(Response.OK.setMessage("game").setBody(gameJson));
         HashMap<String, String> msg = new HashMap<>();
         msg.put("type", "GAME_UPDATED");
         msg.put("game", gameJson);
@@ -252,7 +272,7 @@ public class ChatController extends Controller {
         }
 
         String playerJson = GameGSON.gson.toJson(player);
-        ctx.json(Response.OK.setMessage("Date added successfully").setBody(playerJson));
+        ctx.json(Response.OK.setMessage("player").setBody(playerJson));
         HashMap<String, String> msg = new HashMap<>();
         msg.put("type", "PLAYER_UPDATED");
         msg.put("player_user_id", id);
@@ -283,7 +303,7 @@ public class ChatController extends Controller {
             return;
         }
         String playerJson = GameGSON.gson.toJson(player);
-        ctx.json(Response.OK.setMessage("Date added successfully").setBody(playerJson));
+        ctx.json(Response.OK.setMessage("player").setBody(playerJson));
         HashMap<String, String> msg = new HashMap<>();
         msg.put("type", "PLAYER_UPDATED");
         msg.put("player_user_id", id);

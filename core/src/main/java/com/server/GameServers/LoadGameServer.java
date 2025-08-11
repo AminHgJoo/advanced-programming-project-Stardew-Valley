@@ -13,11 +13,16 @@ public class LoadGameServer extends Thread {
     private ArrayList<PlayerConnection> playerConnections;
     private ArrayList<String> usernames = new ArrayList<>();
 
+    public GameData getGame() {
+        return game;
+    }
+
     public LoadGameServer(GameData game, String id, ArrayList<PlayerConnection> playerConnection) {
         this.game = game;
         for (Player p : game.getPlayers()) {
             if (p.getUser_id().equals(id)) {
                 activePlayers.put(p.getUser_id(), true);
+                usernames.add(p.getUser().getUsername());
             } else
                 activePlayers.put(p.getUser_id(), false);
         }
