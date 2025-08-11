@@ -1290,6 +1290,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         stage.dispose();
         shapeRenderer.dispose();
         popupStage.dispose();
+        for (TextureRegion frame : walkAnimationَAsgharAnimation.getKeyFrames()) {
+            frame.getTexture().dispose();
+        }
     }
 
     public float convertYCoordinate(float yCoordinate) {
