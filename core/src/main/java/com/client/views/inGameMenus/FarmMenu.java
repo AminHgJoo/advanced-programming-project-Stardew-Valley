@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -122,7 +120,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Label moneyLabel;
     private Stage popupStage;
     private Stage playerStage;
-
+    private Animation<TextureRegion> walkAnimationَAsgharAnimation;
+    private float stateTimeَAsgharAnimation;
+    private float xَAsgharAnimation;
+    private float yَAsgharAnimation;
+    private static final float SPEED = 20f;
     private boolean crowFlag = false;
     public boolean thorFlag = false;
     private boolean greenhouseCheatFlag = false;
@@ -160,6 +162,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.chatNotifStage = new Stage(new ScreenViewport());
         farmScreen = this;
         this.loadingTexture = AssetManager.getImage("loading");
+        TextureRegion[] frames = new TextureRegion[6];
+        for (int i = 0; i < 6; i++) {
+            Texture texture = new Texture(Gdx.files.internal("asghar" + (i + 1) + ".png"));
+            frames[i] = new TextureRegion(texture);
+        }
+        walkAnimationَAsgharAnimation = new Animation<>(0.1f, frames);
+        walkAnimationَAsgharAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        stateTimeَAsgharAnimation = 0f;
+        yَAsgharAnimation = 0f;
+        yَAsgharAnimation = Gdx.graphics.getHeight() / 2f;
     }
 
     public GameMain getGameMain() {
@@ -1029,7 +1042,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 handleEvents();
 
             renderMap(dayNightShader, nightFactor, delta);
-
+            asgharChup();
             handleLightning(camera, delta);
             batch.setShader(null);
 
@@ -1038,6 +1051,18 @@ public class FarmMenu implements MyScreen, InputProcessor {
             handleUI(delta);
 
         }
+    }
+
+    private void asgharChup() {
+        stateTimeَAsgharAnimation += Gdx.graphics.getDeltaTime();
+
+        if (xَAsgharAnimation < 60 * 32) {
+            xَAsgharAnimation += SPEED * Gdx.graphics.getDeltaTime();
+        }
+
+        TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
+
+        batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation);
     }
 
     private void handleUI(float delta) {
