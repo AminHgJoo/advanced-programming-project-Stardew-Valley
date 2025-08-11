@@ -1010,7 +1010,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         }
         if (playerController.loadingTimer >= 0) {
             batch.begin();
-            batch.draw(loadingTexture, 0, 0);
+            batch.draw(loadingTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             batch.end();
             playerController.loadingTimer += delta;
             if (playerController.loadingTimer >= 3) {
