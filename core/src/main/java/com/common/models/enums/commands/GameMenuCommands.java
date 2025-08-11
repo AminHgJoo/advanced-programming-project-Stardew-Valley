@@ -40,7 +40,7 @@ public enum GameMenuCommands implements Command {
     PRINT_MAP("^print\\s+map\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s+-s\\s+(?<size>.+)$"),
     HELP_READING_MAP("^help\\s+reading\\s+map$"),
     ENERGY_SHOW("^energy\\s+show$"),
-    ENERGY_SET_VALUE("^energy\\s+set\\s+-v\\s+(?<value>\\d+)$"),
+    ENERGY_SET_VALUE("^cheat\\s+energy\\s+set\\s+-v\\s+(?<value>\\d+)$"),
     ENERGY_UNLIMITED("^energy\\s+unlimited$"),
     INVENTORY_SHOW("^inventory\\s+show$"),
     INVENTORY_TRASH("^inventory\\s+trash\\s+-i\\s+(?<itemName>.+?)(\\s+-n\\s+(?<number>\\d+))?$"),

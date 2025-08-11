@@ -192,6 +192,14 @@ public class ChatScreen implements MyScreen {
         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
 
         if (res.getStatus() == 200) {
+            String type = res.getMessage();
+            if (type.equals("player")) {
+                String json = res.getBody().toString();
+                farmMenu.getPlayerController().updatePlayerObject(json);
+            } else {
+                String json = res.getBody().toString();
+                farmMenu.getPlayerController().updateGame(json);
+            }
             System.out.println("Khoda ro shokr. Cheat Kardim Raft!");
         } else {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, AssetManager.getSkin());
