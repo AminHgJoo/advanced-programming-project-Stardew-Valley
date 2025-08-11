@@ -23,8 +23,17 @@ import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
 import com.common.models.enums.Quality;
 import com.common.models.enums.types.itemTypes.FishType;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.server.utilities.Response;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 
 public class FishingMiniGame implements MyScreen, InputProcessor {
     private final float BASE_SPEED_FACTOR = 3;
@@ -59,6 +68,21 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
     private int caughtFishQuantity = 2;
     private Quality caughtFishQuality = Quality.COPPER;
     private int xpGained = 5;
+
+    public final Gson gson = new GsonBuilder()
+        .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+            @Override
+            public void write(JsonWriter out, LocalDateTime value) throws IOException {
+                out.value(value.toString());
+            }
+
+            @Override
+            public LocalDateTime read(JsonReader in) throws IOException {
+                return LocalDateTime.parse(in.nextString());
+            }
+        })
+        .serializeSpecialFloatingPointValues()
+        .create();
 
     public FishingMiniGame(GameMain gameMain, FarmMenu farmMenu, boolean doesUserHaveSonar, Quality poleQuality) {
         this.gameMain = gameMain;
@@ -197,7 +221,13 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
 
     @Override
     public void socketMessage(String message) {
+        HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
+        String type = res.get("type");
 
+        if (type.equals("GAME_UPDATED")) {
+            String game = res.get("game");
+            farmMenu.getPlayerController().updateGame(game);
+        }
     }
 
     @Override

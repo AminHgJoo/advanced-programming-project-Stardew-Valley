@@ -122,7 +122,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Label moneyLabel;
     private Stage popupStage;
     private Stage playerStage;
+
     private boolean crowFlag = false;
+    public boolean thorFlag = false;
+    private boolean greenhouseCheatFlag = false;
+
     private InputProcessor temp;
     private Texture loadingTexture;
 
@@ -454,6 +458,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new Leaderboards(gameMain, this));
         } else if (Keybinds.OPEN_CHAT.keycodes.contains(keycode)) {
             gameMain.setScreen(new ChatScreen(this, gameMain));
+        } else if (Keybinds.REPAIR_GREENHOUSE_CHEAT.keycodes.contains(keycode)) {
+            greenhouseCheatFlag = true;
         } else if (keycode == Input.Keys.H) {
             //shipping menu jjjjjjjjjjjj
             gameMain.setScreen(new ShippingMenu(gameMain, this));
@@ -937,6 +943,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
             ClientApp.loggedInUser.setCurrentGameId(null);
             gameMain.setScreen(new MainMenu(gameMain));
             dispose();
+        } else if (type.equals("THOR")) {
+            thorFlag = true;
         }
     }
 
@@ -958,18 +966,21 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void handleLightning(OrthographicCamera camera, float delta) {
-
-        if (ClientApp.currentGameData.getWeatherToday() == Weather.STORM) {
-            float rand = MathUtils.random(0f, 1f);
-
-            if (rand < 0.0001f && !lightningHelper.flashing) {
-                lightningHelper.trigger();
-            }
-        } else {
-            return;
+        if (lightningHelper.flashing) {
+            lightningHelper.render(camera, delta);
         }
 
-        lightningHelper.render(camera, delta);
+        if (thorFlag && !lightningHelper.flashing) {
+            lightningHelper.trigger();
+            thorFlag = false;
+        } else if (ClientApp.currentGameData.getWeatherToday() == Weather.STORM
+            && !lightningHelper.flashing) {
+            float rand = MathUtils.random(0f, 1f);
+
+            if (rand < 0.0005f) {
+                lightningHelper.trigger();
+            }
+        }
     }
 
     private void updateTime(float delta) {
@@ -1145,6 +1156,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         //Draw buildings
         Texture house = AssetManager.getImage("playerhouse");
         Texture greenhouse = isGreenhouseBuilt() ? AssetManager.getImage("greenhouse") : AssetManager.getImage("greenhousedestroyed");
+
+        if (greenhouseCheatFlag) {
+            greenhouse = AssetManager.getImage("greenhouse");
+        }
 
         playerController.render(batch);
         modifiedDraw(batch, house, 61, 8);

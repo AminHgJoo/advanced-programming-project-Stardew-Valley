@@ -22,10 +22,11 @@ public enum Keybinds {
     OPEN_CRAFTING(Input.Keys.B),
     OPEN_COOKING(Input.Keys.K),
     OPEN_RADIO(Input.Keys.R),
-    SPAWN_CROW(Input.Keys.Z),
     OPEN_FRIDGE(Input.Keys.Q),
+    OPEN_LEADERBOARDS(Input.Keys.L),
     INSPECT_GREENHOUSE(Input.Keys.I),
-    OPEN_LEADERBOARDS(Input.Keys.L);
+    SPAWN_CROW(Input.Keys.Z),
+    REPAIR_GREENHOUSE_CHEAT(Input.Keys.G);
 
     public final ArrayList<Integer> keycodes;
 

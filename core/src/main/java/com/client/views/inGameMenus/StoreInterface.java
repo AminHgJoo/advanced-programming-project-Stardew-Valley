@@ -17,9 +17,17 @@ import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
 import com.common.models.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class StoreInterface implements MyScreen {
 
@@ -33,6 +41,21 @@ public class StoreInterface implements MyScreen {
     private int selectedAmount = 1;
     private Stage stage;
     private TextButton buyButton;
+
+    public final Gson gson = new GsonBuilder()
+        .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+            @Override
+            public void write(JsonWriter out, LocalDateTime value) throws IOException {
+                out.value(value.toString());
+            }
+
+            @Override
+            public LocalDateTime read(JsonReader in) throws IOException {
+                return LocalDateTime.parse(in.nextString());
+            }
+        })
+        .serializeSpecialFloatingPointValues()
+        .create();
 
     private boolean ignoreOutOfStockItems = false;
 
@@ -296,7 +319,13 @@ public class StoreInterface implements MyScreen {
 
     @Override
     public void socketMessage(String message) {
+        HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
+        String type = res.get("type");
 
+        if (type.equals("GAME_UPDATED")) {
+            String game = res.get("game");
+            villageMenu.getPlayerController().updateGame(game);
+        }
     }
 
     @Override

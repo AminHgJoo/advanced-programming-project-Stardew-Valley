@@ -342,7 +342,8 @@ public class GameData {
 
         handleCrowAttack();
 
-        resetAllAnimalDailyVariables();
+        //TODO: Commented by AminHG
+        //resetAllAnimalDailyVariables();
 
         reInitializeStoreProductsCount();
         reInitializeNpc();

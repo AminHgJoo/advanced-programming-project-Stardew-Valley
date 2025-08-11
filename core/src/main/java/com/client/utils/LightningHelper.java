@@ -16,7 +16,6 @@ public class LightningHelper {
     }
 
     public void render(Camera camera, float delta) {
-        if (!flashing) return;
 
         alpha -= delta; // fade out quickly
         if (alpha <= 0f) {

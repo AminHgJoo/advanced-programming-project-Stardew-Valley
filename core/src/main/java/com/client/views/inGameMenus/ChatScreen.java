@@ -232,6 +232,8 @@ public class ChatScreen implements MyScreen {
             System.out.println(messageJson);
             ChatMessage chatMsg = gson.fromJson(messageJson, ChatMessage.class);
             addMessage(chatMsg.message, true, chatMsg.sender, chatMsg.recipient, chatMsg.isPrivate, false);
+        } else if (type.equals("THOR")) {
+            farmMenu.thorFlag = true;
         }
     }
 

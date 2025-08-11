@@ -31,7 +31,7 @@ public enum GameMenuCommands implements Command {
     CHEAT_ADVANCE_TIME("^cheat\\s+advance\\s+time\\s+(?<X>\\d+)\\s*h$"),
     CHEAT_ADVANCE_DATE("^cheat\\s+advance\\s+date\\s+(?<X>\\d+)\\s*d$"),
     SEASON("^season$"),
-    CHEAT_THOR("^cheat\\s+Thor\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
+    CHEAT_THOR("^cheat\\s+thor$"),
     WEATHER("^weather$"),
     WEATHER_FORECAST("^weather\\s+forecast$"),
     CHEAT_WEATHER_SET("^cheat\\s+weather\\s+set\\s+(?<Type>sunny|rain|storm|snow)$"),

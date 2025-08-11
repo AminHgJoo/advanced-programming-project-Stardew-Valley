@@ -113,7 +113,7 @@ public class ChatController extends Controller {
     }
 
     public void advanceTime(Context ctx, String command, GameServer gs) {
-        int amountOfHours = Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.getGroup(command, "X"));
+        int amountOfHours = Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_TIME.getGroup(command, "X"));
         GameData currentGameData = gs.getGame();
         String id = ctx.attribute("id");
         Player player = currentGameData.findPlayerByUserId(id);
@@ -183,21 +183,9 @@ public class ChatController extends Controller {
     }
 
     public void thor(Context ctx, String command, GameServer gs) {
-        int targetX = Integer.parseInt(GameMenuCommands.CHEAT_THOR.getGroup(command, "x"));
-        int targetY = Integer.parseInt(GameMenuCommands.CHEAT_THOR.getGroup(command, "y"));
-
-        if (targetX >= 75 || targetY >= 50 || targetX < 0 || targetY < 0) {
-            ctx.json(Response.BAD_REQUEST.setMessage("Invalid coordinates").setBody("Invalid coordinates"));
-            return;
-        }
-
-        GameData currentGameData = gs.getGame();
-        currentGameData.setWeatherToday(Weather.STORM);
-        String gameJson = GameGSON.gson.toJson(currentGameData);
-        ctx.json(Response.OK.setMessage("Date added successfully").setBody(gameJson));
+        ctx.json(Response.OK.setMessage("Cheat done successfully"));
         HashMap<String, String> msg = new HashMap<>();
-        msg.put("type", "GAME_UPDATED");
-        msg.put("game", gameJson);
+        msg.put("type", "THOR");
         gs.broadcast(msg);
     }
 
@@ -209,7 +197,7 @@ public class ChatController extends Controller {
             ctx.json(Response.BAD_REQUEST.setMessage("null weather"));
             return;
         } else {
-            gameData.setWeatherTomorrow(weather);
+            gameData.setWeatherToday(weather);
         }
         String gameJson = GameGSON.gson.toJson(gameData);
         ctx.json(Response.OK.setMessage("Date added successfully").setBody(gameJson));

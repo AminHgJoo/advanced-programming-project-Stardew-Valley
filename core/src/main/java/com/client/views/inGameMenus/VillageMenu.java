@@ -52,6 +52,11 @@ public class VillageMenu implements MyScreen, InputProcessor {
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
     private FarmMenu farmMenu;
+
+    public PlayerVillageController getPlayerController() {
+        return playerController;
+    }
+
     private PlayerVillageController playerController;
     private Stage stage;
     private Stage popUpStage;
