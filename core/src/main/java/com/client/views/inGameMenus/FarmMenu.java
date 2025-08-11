@@ -163,7 +163,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         farmScreen = this;
         this.loadingTexture = AssetManager.getImage("loading");
         TextureRegion[] frames = new TextureRegion[6];
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 5; i++) {
             Texture texture = AssetManager.getImage("asghar" + (i+1));
             frames[i] = new TextureRegion(texture);
         }
