@@ -314,7 +314,6 @@ public class GameData {
 
     /// Only called in advance time cheats.
     public void newDayBackgroundChecks() {
-
         for (Player player : players) {
             if (player.isPlayerFainted()) {
                 player.setPlayerFainted(false);
@@ -342,7 +341,7 @@ public class GameData {
 
         handleCrowAttack();
 
-        resetAllAnimalDailyVariables();
+//        resetAllAnimalDailyVariables();
 
         reInitializeStoreProductsCount();
         reInitializeNpc();

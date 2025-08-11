@@ -113,7 +113,7 @@ public class ChatController extends Controller {
     }
 
     public void advanceTime(Context ctx, String command, GameServer gs) {
-        int amountOfHours = Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.getGroup(command, "X"));
+        int amountOfHours = Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_TIME.getGroup(command, "X"));
         GameData currentGameData = gs.getGame();
         String id = ctx.attribute("id");
         Player player = currentGameData.findPlayerByUserId(id);
