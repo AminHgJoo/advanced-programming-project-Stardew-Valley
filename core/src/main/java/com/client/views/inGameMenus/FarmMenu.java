@@ -642,8 +642,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     }
                 } else
                     playerController.toolUse();
-            }else if(item instanceof Seed){
-
+            } else if (item instanceof Seed) {
+                playerController.plantSeeds();
             }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
@@ -967,8 +967,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (type.equals("DAY_END")) {
             System.out.println("HELLO");
             playerController.showLoading();
-        }
-        else if (type.equals("GIFT_RATED")) {
+        } else if (type.equals("GIFT_RATED")) {
             //TODO popup
         }
     }
@@ -1039,7 +1038,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 playerController.loadingTimer = -1;
             }
         } else {
-            this.farm = playerController.getPlayer().getFarm();
+            this.farm = ClientApp.currentPlayer.getCurrentFarm(ClientApp.currentGameData);
             batch.setShader(dayNightShader);
             clearAndResetScreen();
             updateSeasonGrassTexture();
@@ -1147,7 +1146,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
             float xOfCell = coordinate.getX();
             float yOfCell = coordinate.getY();
             Texture texture1 = grassTexture;
-
+            if (texture1 == grassTexture && cell.isTilled()) {
+                texture1 = AssetManager.getImage("tilled");
+            }
             if (cell.getObjectOnCell() instanceof Tree) {
                 continue;
             }
@@ -1163,9 +1164,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 continue;
             }
 
-            if (texture1 == grassTexture && cell.isTilled()) {
-                texture1 = AssetManager.getImage("tilled");
-            }
+
             // TODO check for giant crop correct rendering
             if (cell.getObjectOnCell() instanceof DroppedItem || cell.getObjectOnCell() instanceof ArtisanBlock) {
                 modifiedDraw(batch, texture1, xOfCell, yOfCell, 30, 30);
