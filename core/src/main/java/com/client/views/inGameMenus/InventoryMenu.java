@@ -9,15 +9,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
 import com.common.models.Backpack;
 import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.enums.types.inventoryEnums.TrashcanType;
+import com.common.models.items.Food;
 
 import java.util.List;
 
@@ -42,10 +46,13 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private int selectedSave = -1;
     private BitmapFont titleFont;
     private GlyphLayout layout;
+    private final Stage chatNotifStage;
+    private InputProcessor temp;
 
 
     public InventoryMenu(GameMain gameMain, FarmMenu farmScreen) {
         this.gameMain = gameMain;
+        this.player = ClientApp.currentPlayer;
         this.batch = new SpriteBatch();
         backgroundTexture = AssetManager.getImage("profileBackground");
         inventoryTexture = AssetManager.getImage("inventory");
@@ -58,6 +65,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
+        this.chatNotifStage = new Stage(new ScreenViewport());
     }
 
     @Override
@@ -115,6 +123,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             int trashHeight = trashcanType.getTexture().getHeight() * trashScale;
             int trashX = Gdx.graphics.getWidth() - trashWidth;
             int trashY = Gdx.graphics.getHeight() / 2 - trashHeight / 2;
+            int fridgeX =   10;
 
             if (screenX >= trashX && screenX <= trashX + trashWidth &&
                 screenY >= trashY && screenY <= trashY + trashHeight) {
@@ -127,11 +136,29 @@ public class InventoryMenu implements MyScreen, InputProcessor {
                 }
                 return true;
             }
+            if(screenX >=fridgeX  && screenX <= fridgeX + trashWidth &&
+                screenY >= trashY && screenY <= trashY + trashHeight){
+                if(selectedSave>=0){
+                    if(backpack.getSlots().get(selectedSave).getItem() instanceof Food) {
+                        player.getRefrigeratorSlots().add(backpack.getSlots().get(selectedSave));
+                        backpack.removeSlot(backpack.getSlots().get(selectedSave));
+                        selectedIndex = -1;
+                        selectedSave = -1;
+                        selected = false;
+                        farmScreen.updateBackPack();
+                    }
+                    else{
+                        String error = "qaza ni";
+                        UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, skin);
+                        Gdx.input.setInputProcessor(chatNotifStage);
+                        uiPopupHelper.showDialog(error, "Error", this);
+                    }
+                }
+            }
         }
 
         return true;
     }
-
     @Override
     public boolean touchUp(int i, int i1, int i2, int i3) {
         return false;
@@ -193,6 +220,8 @@ public class InventoryMenu implements MyScreen, InputProcessor {
 
         Texture trashcanTexture = trashcanType.getTexture();
         batch.draw(trashcanTexture, Gdx.graphics.getWidth() - trashcanTexture.getWidth() * trashScale, Gdx.graphics.getHeight() / 2 - trashcanTexture.getHeight() * trashScale / 2, trashcanTexture.getWidth() * trashScale, trashcanTexture.getHeight() * trashScale);
+        Texture fridge = AssetManager.getImage("fridge");
+        batch.draw(fridge, 10 , Gdx.graphics.getHeight() / 2 - trashcanTexture.getHeight() * trashScale / 2, trashcanTexture.getWidth() * trashScale, trashcanTexture.getHeight() * trashScale);
         int GRID_ITEM_SIZE = 95;
         int GRID_PADDING = 8;
 
@@ -243,6 +272,8 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             batch.draw(itemTexture, x, y, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
         }
         batch.end();
+        chatNotifStage.act(delta);
+        chatNotifStage.draw();
     }
 
     @Override

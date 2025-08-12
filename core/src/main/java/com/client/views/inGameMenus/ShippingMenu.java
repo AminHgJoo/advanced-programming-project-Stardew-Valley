@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
@@ -131,7 +132,9 @@ public class ShippingMenu implements MyScreen, InputProcessor {
                     }
                     else{
                         String error = res.getMessage();
-                        showPopUp(error, "Error");
+                        UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, AssetManager.getSkin());
+                        Gdx.input.setInputProcessor(chatNotifStage);
+                        uiPopupHelper.showDialog(error, "Error", this);
                     }
                 }
                 return true;
@@ -140,12 +143,7 @@ public class ShippingMenu implements MyScreen, InputProcessor {
 
         return true;
     }
-    private synchronized void showPopUp(String message, String promptType) {
-        temp = Gdx.input.getInputProcessor();
-        Gdx.input.setInputProcessor(chatNotifStage);
-        UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, AssetManager.getSkin());
-        uiPopupHelper.showDialog(message, promptType, temp);
-    }
+
 
     @Override
     public boolean touchUp(int i, int i1, int i2, int i3) {
@@ -257,6 +255,8 @@ public class ShippingMenu implements MyScreen, InputProcessor {
             batch.draw(itemTexture, x, y, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
         }
         batch.end();
+        chatNotifStage.act(delta);
+        chatNotifStage.draw();
     }
 
     @Override
