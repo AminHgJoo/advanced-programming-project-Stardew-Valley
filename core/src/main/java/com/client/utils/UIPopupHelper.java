@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.client.views.inGameMenus.InventoryMenu;
 
 /**
  * A helper for onscreen pop-ups.
@@ -56,6 +57,22 @@ public class UIPopupHelper {
             @Override
             protected void result(Object object) {
                 Gdx.input.setInputProcessor(inputProcessor);
+            }
+        };
+
+        dialog.text(message);
+        dialog.button("Confirm");
+
+        dialog.show(stage);
+    }
+
+    public void showDialog(String message, String promptType, InventoryMenu tofScreen, boolean tof) {
+
+        Dialog dialog = new Dialog(promptType, skin) {
+            @Override
+            protected void result(Object object) {
+                tofScreen.popUpTimer = 5f;
+                tofScreen.timerFlag = true;
             }
         };
 

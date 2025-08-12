@@ -79,6 +79,11 @@ public class GameServer extends Thread {
 
     @Override
     public void run() {
+        String gameJson1 = this.gson.toJson(game);
+        HashMap<String, String> msg1 = new HashMap<>();
+        msg1.put("type", "GAME_UPDATED");
+        msg1.put("game", gameJson1);
+        broadcast(msg1);
         while (isRunning) {
             try {
                 Thread.sleep(1000);
@@ -93,9 +98,20 @@ public class GameServer extends Thread {
                     msg.put("type", "DAY_END");
                     broadcast(msg);
                 }
+                String gameJson = this.gson.toJson(game);
+
+                HashMap<String, String> message = new HashMap<>();
+                message.put("type", "GAME_UPDATED");
+                message.put("game", gameJson);
+                broadcast(message);
             }
             if (count % 15 == 0) {
                 GameRepository.saveGame(game);
+                String gameJson = this.gson.toJson(game);
+                HashMap<String, String> message = new HashMap<>();
+                message.put("type", "GAME_UPDATED");
+                message.put("game", gameJson);
+                broadcast(message);
             }
             boolean check = false;
             for (Player p : game.getPlayers()) {
@@ -106,19 +122,20 @@ public class GameServer extends Thread {
             }
             if (check) {
                 for (NPC npc : game.getMap().getVillage().getNpcs()) {
-                    npc.update(1);
+                    boolean check2 = npc.update(1);
+                    if (check2) {
+                        String gameJson = this.gson.toJson(game);
+                        HashMap<String, String> message = new HashMap<>();
+                        message.put("type", "GAME_UPDATED");
+                        message.put("game", gameJson);
+                        broadcast(message);
+                    }
                 }
             }
 
             game.checkForRecipeUnlocking();
             game.handleBuffExpiration();
             game.checkForSkillUpgrades();
-
-            String gameJson = this.gson.toJson(game);
-            HashMap<String, String> message = new HashMap<>();
-            message.put("type", "GAME_UPDATED");
-            message.put("game", gameJson);
-            broadcast(message);
         }
     }
 

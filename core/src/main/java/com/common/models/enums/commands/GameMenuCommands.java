@@ -12,6 +12,7 @@ public enum GameMenuCommands implements Command {
     SHOW_MONEY("^show\\s+money$"),
     CHEAT_EMPTY_RECTANGLE("^cheat\\s+empty\\s+rectangle\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
     CHEAT_ADD_SKILL_XP("^cheat\\s+add\\s+-s\\s+(?<skill>.+?)\\s+xp\\s+-a\\s+(?<amount>\\d+)$"),
+    CHEAT_UNLOCK_RECIPE("^cheat\\s+unlock\\s+recipe\\s+-n\\s+(?<name>.+?)$"),
     /// Debug only command.
     SHOW_FARM("^show\\s+entire\\s+farm$"),
     GO_TO_PARTNER_FARM("^go\\s+to\\s+partner\\s+farm$"),

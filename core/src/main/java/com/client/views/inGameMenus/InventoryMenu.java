@@ -47,8 +47,8 @@ public class InventoryMenu implements MyScreen, InputProcessor {
     private BitmapFont titleFont;
     private GlyphLayout layout;
     private final Stage chatNotifStage;
-    private InputProcessor temp;
-
+    public float popUpTimer = 0.0f;
+    public boolean timerFlag = false;
 
     public InventoryMenu(GameMain gameMain, FarmMenu farmScreen) {
         this.gameMain = gameMain;
@@ -123,7 +123,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             int trashHeight = trashcanType.getTexture().getHeight() * trashScale;
             int trashX = Gdx.graphics.getWidth() - trashWidth;
             int trashY = Gdx.graphics.getHeight() / 2 - trashHeight / 2;
-            int fridgeX =   10;
+            int fridgeX = 10;
 
             if (screenX >= trashX && screenX <= trashX + trashWidth &&
                 screenY >= trashY && screenY <= trashY + trashHeight) {
@@ -152,7 +152,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
                         String error = "qaza ni";
                         UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, skin);
                         Gdx.input.setInputProcessor(chatNotifStage);
-                        uiPopupHelper.showDialog(error, "Error", this);
+                        uiPopupHelper.showDialog(error, "Error", this, false);
                     }
                 }
             }
@@ -203,6 +203,14 @@ public class InventoryMenu implements MyScreen, InputProcessor {
 
     @Override
     public void render(float delta) {
+        if (popUpTimer >= 0 && timerFlag) {
+            popUpTimer -= delta;
+        }
+
+        if (popUpTimer <= 0 && timerFlag) {
+            timerFlag = false;
+            Gdx.input.setInputProcessor(this);
+        }
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
@@ -222,7 +230,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         Texture trashcanTexture = trashcanType.getTexture();
         batch.draw(trashcanTexture, Gdx.graphics.getWidth() - trashcanTexture.getWidth() * trashScale, Gdx.graphics.getHeight() / 2 - trashcanTexture.getHeight() * trashScale / 2, trashcanTexture.getWidth() * trashScale, trashcanTexture.getHeight() * trashScale);
         Texture fridge = AssetManager.getImage("fridge");
-        batch.draw(fridge, 10 , Gdx.graphics.getHeight() / 2 - trashcanTexture.getHeight() * trashScale / 2, trashcanTexture.getWidth() * trashScale, trashcanTexture.getHeight() * trashScale);
+        batch.draw(fridge, 10, Gdx.graphics.getHeight() / 2 - trashcanTexture.getHeight() * trashScale / 2, trashcanTexture.getWidth() * trashScale, trashcanTexture.getHeight() * trashScale);
         int GRID_ITEM_SIZE = 95;
         int GRID_PADDING = 8;
 
@@ -231,7 +239,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
         int startY = Gdx.graphics.getHeight() / 2 + inventoryTexture.getHeight() / 2
             + GRID_PADDING - 160;
 
-        if (selectedIndex >= 0 && selected == false) {
+        if (selectedIndex >= 0 && !selected) {
             selected = true;
             selectedSave = selectedIndex;
             selectedIndex = -1;

@@ -126,7 +126,7 @@ public class PlayerController {
                     (float) t.getWidth() / scale, (float) t.getHeight() / scale);
             }
         }
-        if (currState == PlayerState.TOOL_SWINGING &&player.getEquippedItem() instanceof Tool ) {
+        if (currState == PlayerState.TOOL_SWINGING && player.getEquippedItem() instanceof Tool) {
             if (player.getEquippedItem().getName().contains("Rod")) {
                 return;
             }
@@ -182,6 +182,14 @@ public class PlayerController {
                     playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
                     (float) t.getWidth() / scale, (float) t.getHeight() / scale);
             }
+        }
+        if (currState != PlayerState.TOOL_SWINGING && player.getEquippedItem() != null && !(player.getEquippedItem() instanceof Tool)) {
+            System.out.println("HELLO");
+            Item item = player.getEquippedItem();
+            Texture t = item.getTexture();
+            batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                (float) (t.getWidth() / scale)*2, (float) (t.getHeight() / scale)*2);
         }
     }
 
@@ -437,6 +445,10 @@ public class PlayerController {
     }
 
     public void equipItem(Item item) {
+        if (!(item instanceof Tool) && item != null) {
+            System.out.println("Hello");
+            currState = PlayerState.CARRYING_ITEM;
+        }
         player.setEquippedItem(item);
         networkThreadPool.execute(() -> {
             JsonObject req = new JsonObject();
@@ -471,6 +483,25 @@ public class PlayerController {
 //            updatePlayerObject(player);
                 }
             });
+        });
+    }
+
+    public void updateFridge(ArrayList<Slot> slots) {
+        networkThreadPool.execute(() -> {
+            String json = GameGSON.gson.toJson(slots);
+            JsonObject req = new JsonObject();
+            req.addProperty("slots", json);
+            var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryUpdateFridge", req);
+
+            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+
+            if (res.getStatus() == 200) {
+                System.out.println("Fridge updated");
+            } else {
+                System.out.println("Fridge update failed");
+            }
+
+            System.out.println(res.getBody().toString());
         });
     }
 }

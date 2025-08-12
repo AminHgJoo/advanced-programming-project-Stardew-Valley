@@ -105,8 +105,9 @@ public class VillageMenu implements MyScreen, InputProcessor {
     }
 
     public void renderPlayers() {
-        for (Player p : ClientApp.currentGameData.getPlayers()) {
-            playerControllers.get(p.getUser_id()).render(batch);
+        for (Player p : game.getPlayers()) {
+            if (p.isInVillage())
+                playerControllers.get(p.getUser_id()).render(batch);
         }
     }
 
@@ -135,9 +136,9 @@ public class VillageMenu implements MyScreen, InputProcessor {
         } else if (type.equals("PLAYER_UPDATED")) {
             String id = res.get("player_user_id");
             if (!id.equals(player.getUser_id())) {
+                System.out.println(player.getUser().getUsername());
                 PlayerVillageController controller = playerControllers.get(id);
                 String playerJson = res.get("player");
-                System.out.println(playerJson);
                 Player player1 = gson.fromJson(playerJson, Player.class);
                 controller.updateGamePlayer(player1);
             }
@@ -361,7 +362,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new NPCChatScreen(nc.getNpc(), this, gameMain));
         }
         for (Player player : ClientApp.currentGameData.getPlayers()) {
-            if ((player != ClientApp.currentPlayer) && (player.getCoordinate().getX()<= touchPos.x + 15 && player.getCoordinate().getX() >= touchPos.x -15) && (player.getCoordinate().getY()<= touchPos.y + 30 && player.getCoordinate().getY() >= touchPos.y -30)) {
+            if ((player != ClientApp.currentPlayer) && (player.getCoordinate().getX() <= touchPos.x + 15 && player.getCoordinate().getX() >= touchPos.x - 15) && (player.getCoordinate().getY() <= touchPos.y + 30 && player.getCoordinate().getY() >= touchPos.y - 30)) {
                 Gdx.input.setInputProcessor(popupStage);
                 Vector2 stageCoords = popupStage.screenToStageCoordinates(new Vector2(player.getCoordinate().getX(), player.getCoordinate().getX()));
                 Skin skin = AssetManager.getSkin();
@@ -466,6 +467,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
         }
         return false;
     }
+
     public boolean isFlower(String flowerName) {
         return flowerName.equals("Bouquet");
     }

@@ -26,7 +26,7 @@ public abstract class ServerController {
         this.gs = gs;
     }
 
-    public static Player getCurrentPlayer(GameData gameData, String playerId) {
+    public static Player getPlayer(GameData gameData, String playerId) {
         Player player = null;
         ArrayList<Player> players = gameData.getPlayers();
 

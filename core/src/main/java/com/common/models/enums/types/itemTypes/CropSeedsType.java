@@ -99,6 +99,10 @@ public enum CropSeedsType implements ItemType {
         return null;
     }
 
+    public String getSource() {
+        return source;
+    }
+
     public CropSeedsType getRandomCropSeedsType(Season season) {
         if (name.compareToIgnoreCase("Random Crop") == 0) {
             if (season == Season.SPRING) {

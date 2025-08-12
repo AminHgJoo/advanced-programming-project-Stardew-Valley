@@ -27,7 +27,7 @@ public class ServerMain {
             multipartConfig.maxInMemoryFileSize(20, SizeUnit.MB);
             multipartConfig.maxTotalRequestSize(20, SizeUnit.MB);
             config.jetty.multipartConfig = multipartConfig;
-        }).start("0.0.0.0",8080);
+        }).start(8080);
 
         app.get("/", ctx -> {
             ctx.result("Hello World!");

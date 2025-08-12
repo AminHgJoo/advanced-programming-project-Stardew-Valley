@@ -5,5 +5,6 @@ public enum PlayerState {
     WALKING,
     TOOL_SWINGING,
     FAINTING,
-    FISHING
+    FISHING,
+    CARRYING_ITEM
 }

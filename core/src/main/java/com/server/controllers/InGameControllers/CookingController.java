@@ -26,7 +26,7 @@ public class CookingController extends ServerController {
             CookingRecipes targetRecipe = null;
 
             GameData gameData = gs.getGame();
-            Player player = getCurrentPlayer(gameData, id);
+            Player player = getPlayer(gameData, id);
 
             if (player == null) {
                 ctx.json(Response.NOT_FOUND.setMessage("Player not found"));

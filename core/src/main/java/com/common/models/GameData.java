@@ -408,10 +408,15 @@ public class GameData {
     }
 
     public void setPlayerById(String id, Player p) {
-        for (Player player : players) {
+        int index = -1;
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
             if (player.getUser_id().equals(id)) {
-                player = p;
+                index = i;
             }
+        }
+        if (index != -1) {
+            players.set(index, p);
         }
     }
 
