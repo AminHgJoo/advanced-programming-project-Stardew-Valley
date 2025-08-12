@@ -122,7 +122,7 @@ public class ShippingMenu implements MyScreen, InputProcessor {
                     JsonObject req = new JsonObject();
                     req.addProperty("productName", backpack.getSlots().get(selectedSave).getItem().getName());
                     req.addProperty("count", backpack.getSlots().get(selectedSave).getCount());
-                    var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/dealingSellProduct", req);
+                    var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/dealingSellProduct", req);
                     Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                     if (res.getStatus() == 200) {
                         selectedIndex = -1;

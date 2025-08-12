@@ -107,7 +107,7 @@ public class GiftHistoryMenu implements MyScreen, InputProcessor {
                     JsonObject req = new JsonObject();
                     req.addProperty("giftNumber", finalIndex);
                     req.addProperty("rate", rate);
-                    var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipGiftRate", req);
+                    var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipGiftRate", req);
                     Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                     if (res.getStatus() == 200) {
                         String game = res.getBody().toString();

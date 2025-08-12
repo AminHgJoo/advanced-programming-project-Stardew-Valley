@@ -253,7 +253,7 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
                 JsonObject req = new JsonObject();
                 req.addProperty("artisanName", artisanName);
                 req.addProperty("item1Name", targetSlots.get(selectedSave).getItem().getName());
-                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/artisanHandleArtisanUse", req);
+                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/artisanHandleArtisanUse", req);
                 Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                 if (res.getStatus() == 200) {
                     String player = res.getBody().toString();

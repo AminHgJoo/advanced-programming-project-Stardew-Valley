@@ -27,10 +27,8 @@ import com.client.GameMain;
 import com.client.controllers.PlayerController;
 import com.client.utils.*;
 import com.client.views.preGameMenus.MainMenu;
-import com.common.models.Backpack;
-import com.common.models.GameData;
-import com.common.models.Player;
-import com.common.models.Slot;
+import com.common.GameGSON;
+import com.common.models.*;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.items.Item;
 import com.common.models.items.Seed;
@@ -969,6 +967,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (type.equals("DAY_END")) {
             System.out.println("HELLO");
             playerController.showLoading();
+        }
+        else if (type.equals("GIFT_RATED")) {
+            //TODO popup
         }
     }
 
