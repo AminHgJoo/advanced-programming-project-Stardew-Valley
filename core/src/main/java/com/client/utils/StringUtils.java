@@ -67,6 +67,9 @@ public class StringUtils {
         if (name.equals("Shear")) {
             return "shear";
         }
+        if (name.equals("Milk Pail")) {
+            return "milkpail";
+        }
         return null;
     }
 }
