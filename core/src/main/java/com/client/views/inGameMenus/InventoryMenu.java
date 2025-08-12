@@ -151,9 +151,10 @@ public class InventoryMenu implements MyScreen, InputProcessor {
                         selectedSave = -1;
                         selected = false;
                         farmScreen.updateBackPack();
+                        farmScreen.getPlayerController().updateFridge(player.getRefrigeratorSlots());
                     }
                     else{
-                        String error = "qaza ni";
+                        String error = "Not a Food Item";
                         UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, skin);
                         Gdx.input.setInputProcessor(chatNotifStage);
                         uiPopupHelper.showDialog(error, "Error", this, false);

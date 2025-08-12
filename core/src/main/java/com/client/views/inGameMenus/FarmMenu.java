@@ -1300,7 +1300,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         shapeRenderer.dispose();
         popupStage.dispose();
         for (TextureRegion frame : walkAnimationَAsgharAnimation.getKeyFrames()) {
-            frame.getTexture().dispose();
+            if (frame != null) {
+                frame.getTexture().dispose();
+            }
         }
     }
 

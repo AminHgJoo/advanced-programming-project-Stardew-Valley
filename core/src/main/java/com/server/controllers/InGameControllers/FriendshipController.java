@@ -79,7 +79,7 @@ public class FriendshipController extends ServerController {
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
 
-            Gift g = game.findGiftByName(index - 1, player.getUser().getUsername());
+            Gift g = game.findGiftByName(index, player.getUser().getUsername());
             if (g == null) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Gift not found"));
                 return;

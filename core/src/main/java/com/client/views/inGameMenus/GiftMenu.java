@@ -109,7 +109,7 @@ public class GiftMenu implements MyScreen, InputProcessor {
                         int count = Integer.parseInt(countField.getText());
                         send(count);
                     } catch (NumberFormatException e) {
-                        Gdx.app.log("GiftMenu", "Invalid integer input.");
+                        System.out.println("GiftMenu Invalid integer input.");
                     }
                 }
             }

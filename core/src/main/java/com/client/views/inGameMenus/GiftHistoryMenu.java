@@ -116,6 +116,11 @@ public class GiftHistoryMenu implements MyScreen, InputProcessor {
                     if (res.getStatus() == 200) {
                         String game = res.getBody().toString();
                         ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
+                        System.out.println("Gift rate sabt shod");
+                    } else {
+                        System.out.println("Gift rate sabt nashod");
+                        System.out.println(res.getMessage());
+                        System.out.println(res.getBody().toString());
                     }
                 }
             });

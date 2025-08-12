@@ -124,7 +124,7 @@ public class CookingMenu implements MyScreen {
                     notifyServerOfSuccessfulCooking(selectedRecipe);
 
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-                    uiPopupHelper.showDialog("Crafting Successful!", "Success");
+                    uiPopupHelper.showDialog("Cooking Successful!", "Success");
                 } else {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                     uiPopupHelper.showDialog(result, "Failed");

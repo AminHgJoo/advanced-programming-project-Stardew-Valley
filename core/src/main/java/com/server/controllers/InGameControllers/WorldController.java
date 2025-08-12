@@ -901,7 +901,7 @@ public class WorldController extends ServerController {
         }
     }
 
-    public void fishingRod(Context ctx, GameData game, Player player, String direction) {
+    public static void fishingRod(Context ctx, GameData game, Player player, String direction) {
         float[] dxAndDy = getXAndYIncrement(direction);
         float dx = dxAndDy[0];
         float dy = dxAndDy[1];

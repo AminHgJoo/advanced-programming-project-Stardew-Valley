@@ -57,10 +57,6 @@ public class Leaderboards implements MyScreen {
         textButtonStyle.pressedOffsetX = baseStyle.pressedOffsetX;
         textButtonStyle.pressedOffsetY = baseStyle.pressedOffsetY;
 
-        this.players = new ArrayList<>();
-        this.players.addAll(ClientApp.currentGameData.getPlayers());
-        this.players.sort(Comparator.comparingInt((Player player) -> player.getMoney(ClientApp.currentGameData)).reversed());
-
         this.sortedByCurrently = SortOption.SORT_BY_NAME;
 
         this.sortOptions = new ArrayList<>();
@@ -90,12 +86,12 @@ public class Leaderboards implements MyScreen {
         Collections.rotate(sortOptions, 1);
     }
 
-    private void updateLeaderboards() {
-
-    }
-
     private void initializeStage() {
         stage = new Stage(new ScreenViewport());
+
+        this.players = new ArrayList<>();
+        this.players.addAll(ClientApp.currentGameData.getPlayers());
+        this.players.sort(Comparator.comparingInt((Player player) -> player.getMoney(ClientApp.currentGameData)).reversed());
 
         Image backgroundImage = new Image(background);
         backgroundImage.setFillParent(true);
@@ -192,7 +188,7 @@ public class Leaderboards implements MyScreen {
                 } else if (sortOptions.get(0).equals(SortOption.SORT_BY_MONEY)) {
                     players.sort(Comparator.comparingInt((Player player) -> player.getMoney(ClientApp.currentGameData)).reversed());
                 } else if (sortOptions.get(0).equals(SortOption.SORT_BY_LEVEL)) {
-                    players.sort(Comparator.comparingInt((Player user) -> user.getFarmingSkill().getLevel().levelNumber).reversed());
+                    players.sort(Comparator.comparingInt((Player user) -> user.getSkills().get(0).getLevel().levelNumber).reversed());
                 } else if (sortOptions.get(0).equals(SortOption.SORT_BY_QUESTS)) {
                 }
 

@@ -226,7 +226,8 @@ public class ChatScreen implements MyScreen {
 
             ClientApp.currentGameData.chatMessages = chatMessages;
         } else {
-            System.out.println("Error fetching chat messages");
+            System.out.println(res.getBody().toString());
+            System.out.println(res.getMessage());
         }
     }
 

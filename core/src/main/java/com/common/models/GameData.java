@@ -746,8 +746,8 @@ public class GameData {
         int counter = 0;
         for (Gift g : gifts) {
             if (counter == index)
-                    return g;
-                counter++;
+                return g;
+            counter++;
         }
         return null;
     }
