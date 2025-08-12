@@ -190,10 +190,12 @@ public class ShippingMenu implements MyScreen, InputProcessor {
             if (!Objects.equals(id, ((FarmMenu)farmScreen).getPlayerController().getPlayer().getUser_id())) {
                 String player = res.get("player");
                 ((FarmMenu)farmScreen).getPlayerController().updateAnotherPlayerObject(player);
+                backpack = ClientApp.currentPlayer.getInventory();
             }
         } else if (type.equals("GAME_UPDATED")) {
             String game = res.get("game");
              ((FarmMenu)farmScreen).getPlayerController().updateGame(game);
+             backpack = ClientApp.currentPlayer.getInventory();
         }
     }
 
