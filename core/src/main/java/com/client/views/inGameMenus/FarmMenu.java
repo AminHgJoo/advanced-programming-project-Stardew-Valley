@@ -644,7 +644,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
             }else if(item instanceof Seed){
 
             }
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
             if (success) {
                 selectedIndex = -1;
