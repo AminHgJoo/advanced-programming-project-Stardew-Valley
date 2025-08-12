@@ -43,6 +43,7 @@ public class GiftHistoryMenu implements MyScreen, InputProcessor {
     private ArrayList<Gift> sentGifts = new ArrayList<>();
     private float buttonWidth;
     private TextField rateField;
+    private TextButton exitButton;
 
     public GiftHistoryMenu(GameMain gameMain, FarmMenu farmScreen) {
         this.gameMain = gameMain;
@@ -115,7 +116,20 @@ public class GiftHistoryMenu implements MyScreen, InputProcessor {
                 }
             });
 
+            exitButton = new TextButton("Exit", skin);
+            exitButton.setSize(fieldWidth, fieldHeight);
+            exitButton.setPosition(xField, yField - 2* fieldHeight - 20f);
+
+            exitButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    gameMain.setScreen(farmScreen);
+                    GiftHistoryMenu.this.dispose();
+                }
+            });
+
             stage.addActor(rateButton);
+            stage.addActor(exitButton);
             yButtonStart -= buttonSpacing;
             yField -= buttonSpacing;
             index++;
