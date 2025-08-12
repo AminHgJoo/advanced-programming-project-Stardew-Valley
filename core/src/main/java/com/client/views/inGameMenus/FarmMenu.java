@@ -32,6 +32,9 @@ import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.enums.worldEnums.Weather;
+import com.common.models.items.Item;
+import com.common.models.items.Seed;
+import com.common.models.items.Tool;
 import com.common.models.items.buffs.ActiveBuff;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
@@ -164,7 +167,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.loadingTexture = AssetManager.getImage("loading");
         TextureRegion[] frames = new TextureRegion[6];
         for (int i = 0; i < 5; i++) {
-            Texture texture = AssetManager.getImage("asghar" + (i+1));
+            Texture texture = AssetManager.getImage("asghar" + (i + 1));
             frames[i] = new TextureRegion(texture);
         }
         walkAnimationَAsgharAnimation = new Animation<>(0.1f, frames);
@@ -617,28 +620,33 @@ public class FarmMenu implements MyScreen, InputProcessor {
             if (playerController.getPlayer().getEquippedItem() == null) {
                 return;
             }
-            playerController.setState(PlayerState.TOOL_SWINGING);
-            isToolSwinging = true;
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    isToolSwinging = false;
-                    this.cancel();
-                }
-            }, .6f, 2);
-            if (playerController.getPlayer().getEquippedItem().getName().contains("Rod")) {
-                boolean check = playerController.useFishingRod();
-                if (check) {
-                    boolean flag = false;
-                    Slot slot = playerController.getPlayer().getInventory().getSlotByItemName("Sonar Bobber");
-                    if (slot != null) {
-                        flag = true;
+            Item item = playerController.getPlayer().getEquippedItem();
+            if (item instanceof Tool) {
+                playerController.setState(PlayerState.TOOL_SWINGING);
+                isToolSwinging = true;
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        isToolSwinging = false;
+                        this.cancel();
                     }
-                    gameMain.setScreen(new FishingMiniGame(gameMain, this, flag, playerController.getPlayer().
-                        getEquippedItem().getQuality()));
-                }
-            } else
-                playerController.toolUse();
+                }, .6f, 2);
+                if (playerController.getPlayer().getEquippedItem().getName().contains("Rod")) {
+                    boolean check = playerController.useFishingRod();
+                    if (check) {
+                        boolean flag = false;
+                        Slot slot = playerController.getPlayer().getInventory().getSlotByItemName("Sonar Bobber");
+                        if (slot != null) {
+                            flag = true;
+                        }
+                        gameMain.setScreen(new FishingMiniGame(gameMain, this, flag, playerController.getPlayer().
+                            getEquippedItem().getQuality()));
+                    }
+                } else
+                    playerController.toolUse();
+            }else if(item instanceof Seed){
+
+            }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
             if (success) {
@@ -958,7 +966,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
             dispose();
         } else if (type.equals("THOR")) {
             thorFlag = true;
-        }else if(type.equals("DAY_END")){
+        } else if (type.equals("DAY_END")) {
             System.out.println("HELLO");
             playerController.showLoading();
         }

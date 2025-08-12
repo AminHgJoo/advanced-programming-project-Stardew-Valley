@@ -79,6 +79,11 @@ public class GameServer extends Thread {
 
     @Override
     public void run() {
+        String gameJson1 = this.gson.toJson(game);
+        HashMap<String, String> msg1 = new HashMap<>();
+        msg1.put("type", "GAME_UPDATED");
+        msg1.put("game", gameJson1);
+        broadcast(msg1);
         while (isRunning) {
             try {
                 Thread.sleep(1000);
