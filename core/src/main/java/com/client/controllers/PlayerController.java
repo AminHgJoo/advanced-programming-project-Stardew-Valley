@@ -213,6 +213,7 @@ public class PlayerController {
                             System.out.println(res.getMessage());
                             String playerJson = res.getBody().toString();
                             updatePlayerObject(playerJson);
+                            System.out.println("Tool used");
                         } else {
                             System.out.println(res.getMessage());
                         }

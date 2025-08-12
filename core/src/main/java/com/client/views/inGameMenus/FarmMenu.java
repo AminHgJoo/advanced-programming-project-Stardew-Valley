@@ -27,8 +27,10 @@ import com.client.GameMain;
 import com.client.controllers.PlayerController;
 import com.client.utils.*;
 import com.client.views.preGameMenus.MainMenu;
-import com.common.GameGSON;
-import com.common.models.*;
+import com.common.models.Backpack;
+import com.common.models.GameData;
+import com.common.models.Player;
+import com.common.models.Slot;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.items.Item;
 import com.common.models.items.Seed;
@@ -641,7 +643,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     }
                 } else
                     playerController.toolUse();
-            }else if(item instanceof Seed){
+            } else if (item instanceof Seed) {
 
             }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
@@ -883,6 +885,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (type.equals("GAME_UPDATED")) {
             String game = res.get("game");
             playerController.updateGame(game);
+            farm = playerController.getPlayer().getFarm();
         } else if (type.equals("MESSAGE_ADDED")) {
             String messageJson = res.get("message");
             System.out.println(messageJson);
@@ -966,8 +969,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (type.equals("DAY_END")) {
             System.out.println("HELLO");
             playerController.showLoading();
-        }
-        else if (type.equals("GIFT_RATED")) {
+        } else if (type.equals("GIFT_RATED")) {
             //TODO popup
         }
     }
@@ -1155,6 +1157,12 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 texture1 = cell.getObjectOnCell().getTexture();
             }
 
+            if (texture1 == grassTexture && cell.isTilled()) {
+                texture1 = AssetManager.getImage("tilled");
+                modifiedDraw(batch, texture1, xOfCell, yOfCell, TILE_PIX_SIZE, TILE_PIX_SIZE);
+                continue;
+            }
+
             if (texture1 == SeasonTextures.SPRING.texture ||
                 texture1 == SeasonTextures.SUMMER.texture ||
                 texture1 == SeasonTextures.FALL.texture ||
@@ -1162,9 +1170,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 continue;
             }
 
-            if (texture1 == grassTexture && cell.isTilled()) {
-                texture1 = AssetManager.getImage("tilled");
-            }
             // TODO check for giant crop correct rendering
             if (cell.getObjectOnCell() instanceof DroppedItem || cell.getObjectOnCell() instanceof ArtisanBlock) {
                 modifiedDraw(batch, texture1, xOfCell, yOfCell, 30, 30);
