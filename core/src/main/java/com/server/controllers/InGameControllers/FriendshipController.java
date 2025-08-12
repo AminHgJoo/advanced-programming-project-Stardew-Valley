@@ -79,7 +79,7 @@ public class FriendshipController extends ServerController {
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
 
-            Gift g = game.findGiftByName(index - 1, player.getUser().getUsername());
+            Gift g = game.findGiftByName(index, player.getUser().getUsername());
             if (g == null) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Gift not found"));
                 return;
@@ -97,12 +97,12 @@ public class FriendshipController extends ServerController {
             msg.put("type", "GAME_UPDATED");
             msg.put("game", gameJson);
             gs.broadcast(msg);
-
-            HashMap<String, String> msgToPlayer = new HashMap<>();
-            msgToPlayer.put("type", "GIFT_RATED");
-            msgToPlayer.put("gift", g.toString());
-            msgToPlayer.put("rate", rate + "");
-            gs.narrowCast(friend.getUser().getUsername(), msgToPlayer);
+//
+//            HashMap<String, String> msgToPlayer = new HashMap<>();
+//            msgToPlayer.put("type", "GIFT_RATED");
+//            msgToPlayer.put("gift", g.toString());
+//            msgToPlayer.put("rate", rate + "");
+//            gs.narrowCast(friend.getUser().getUsername(), msgToPlayer);
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));

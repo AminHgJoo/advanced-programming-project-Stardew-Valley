@@ -23,7 +23,11 @@ import com.common.models.Slot;
 import com.common.models.enums.types.inventoryEnums.TrashcanType;
 import com.common.models.items.Food;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+
+import static com.common.GameGSON.gson;
 
 public class InventoryMenu implements MyScreen, InputProcessor {
     private final GameMain gameMain;
@@ -147,9 +151,10 @@ public class InventoryMenu implements MyScreen, InputProcessor {
                         selectedSave = -1;
                         selected = false;
                         farmScreen.updateBackPack();
+                        farmScreen.getPlayerController().updateFridge(player.getRefrigeratorSlots());
                     }
                     else{
-                        String error = "qaza ni";
+                        String error = "Not a Food Item";
                         UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, skin);
                         Gdx.input.setInputProcessor(chatNotifStage);
                         uiPopupHelper.showDialog(error, "Error", this, false);
@@ -192,7 +197,19 @@ public class InventoryMenu implements MyScreen, InputProcessor {
 
     @Override
     public void socketMessage(String message) {
+        HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
+        String type = res.get("type");
 
+        if (type.equals("PLAYER_UPDATED")) {
+            String id = res.get("player_user_id");
+            if (!Objects.equals(id, ((FarmMenu)farmScreen).getPlayerController().getPlayer().getUser_id())) {
+                String player = res.get("player");
+                ((FarmMenu)farmScreen).getPlayerController().updateAnotherPlayerObject(player);
+            }
+        } else if (type.equals("GAME_UPDATED")) {
+            String game = res.get("game");
+            ((FarmMenu)farmScreen).getPlayerController().updateGame(game);
+        }
     }
 
     @Override

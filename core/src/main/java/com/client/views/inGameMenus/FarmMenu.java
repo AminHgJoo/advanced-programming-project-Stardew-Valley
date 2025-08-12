@@ -27,8 +27,10 @@ import com.client.GameMain;
 import com.client.controllers.PlayerController;
 import com.client.utils.*;
 import com.client.views.preGameMenus.MainMenu;
-import com.common.GameGSON;
-import com.common.models.*;
+import com.common.models.Backpack;
+import com.common.models.GameData;
+import com.common.models.Player;
+import com.common.models.Slot;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.models.items.Item;
 import com.common.models.items.Seed;
@@ -163,7 +165,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.chatNotifStage = new Stage(new ScreenViewport());
         farmScreen = this;
         this.loadingTexture = AssetManager.getImage("loading");
-        TextureRegion[] frames = new TextureRegion[6];
+        TextureRegion[] frames = new TextureRegion[5];
         for (int i = 0; i < 5; i++) {
             Texture texture = AssetManager.getImage("asghar" + (i + 1));
             frames[i] = new TextureRegion(texture);
@@ -650,7 +652,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
             } else if (item instanceof Seed) {
                 playerController.plantSeeds();
             }
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
             if (success) {
                 selectedIndex = -1;
@@ -889,6 +891,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (type.equals("GAME_UPDATED")) {
             String game = res.get("game");
             playerController.updateGame(game);
+            farm = playerController.getPlayer().getFarm();
         } else if (type.equals("MESSAGE_ADDED")) {
             String messageJson = res.get("message");
             System.out.println(messageJson);
@@ -1069,16 +1072,16 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void asgharChup() {
-//        stateTimeَAsgharAnimation += Gdx.graphics.getDeltaTime();
-//
-//        if (xَAsgharAnimation < 60 * 32) {
-//            xَAsgharAnimation += SPEED * Gdx.graphics.getDeltaTime();
-//        }
-//
-//        TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
-//        batch.begin();
-//        batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation);
-//        batch.end();
+        stateTimeَAsgharAnimation += Gdx.graphics.getDeltaTime();
+
+        if (xَAsgharAnimation < 60 * 32) {
+            xَAsgharAnimation += SPEED * Gdx.graphics.getDeltaTime();
+        }
+
+        TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
+        batch.begin();
+        batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation, 96, 96);
+        batch.end();
     }
 
     private void handleUI(float delta) {
@@ -1153,15 +1156,19 @@ public class FarmMenu implements MyScreen, InputProcessor {
             float xOfCell = coordinate.getX();
             float yOfCell = coordinate.getY();
             Texture texture1 = grassTexture;
-            if (texture1 == grassTexture && cell.isTilled()) {
-                texture1 = AssetManager.getImage("tilled");
-            }
+
             if (cell.getObjectOnCell() instanceof Tree) {
                 continue;
             }
 
             if (!(cell.getObjectOnCell() instanceof BuildingBlock)) {
                 texture1 = cell.getObjectOnCell().getTexture();
+            }
+
+            if (texture1 == grassTexture && cell.isTilled()) {
+                texture1 = AssetManager.getImage("tilled");
+                modifiedDraw(batch, texture1, xOfCell, yOfCell, TILE_PIX_SIZE, TILE_PIX_SIZE);
+                continue;
             }
 
             if (texture1 == SeasonTextures.SPRING.texture ||
@@ -1307,7 +1314,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         shapeRenderer.dispose();
         popupStage.dispose();
         for (TextureRegion frame : walkAnimationَAsgharAnimation.getKeyFrames()) {
-            frame.getTexture().dispose();
+            if (frame != null) {
+                frame.getTexture().dispose();
+            }
         }
     }
 

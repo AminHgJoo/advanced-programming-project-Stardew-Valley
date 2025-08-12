@@ -36,7 +36,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class FishingMiniGame implements MyScreen, InputProcessor {
-    private final float BASE_SPEED_FACTOR = 3;
+    private final float BASE_SPEED_FACTOR = 6;
     private final float MAX_PROGRESS = 10;
     private final float MIN_PROGRESS = 0;
     private final float MAX_BOBBER_POS = 325;
@@ -340,11 +340,11 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
         , Quality caughtFishQuality, int caughtFishQuantity) {
         JsonObject req = new JsonObject();
         req.addProperty("xpGained", xpGained);
-        req.addProperty("fishType", caughtFishType.name());
+        req.addProperty("fishType", caughtFishType.name);
         req.addProperty("count", caughtFishQuantity);
         req.addProperty("quality", caughtFishQuality.toString());
         var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id()
-            + "/worldToolUse", req);
+            + "/worldFishing", req);
 
         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
         if (res.getStatus() == 200) {

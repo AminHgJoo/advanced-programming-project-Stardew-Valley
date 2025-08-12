@@ -125,6 +125,7 @@ public class FridgeMenu implements MyScreen, InputProcessor {
                     selectedSave = -1;
                     selected = false;
                     //TODO update fridge
+                    farmScreen.getPlayerController().updateFridge(player.getRefrigeratorSlots());
                 }
                 return true;
             }

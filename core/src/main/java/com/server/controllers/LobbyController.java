@@ -20,7 +20,7 @@ public class LobbyController {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
             String id = ctx.attribute("id");
             String lobbyId = ctx.pathParam("id");
-            String password = (String) body.get("passwrod");
+            String password = (String) body.get("password");
 
             User user = UserRepository.findUserById(id);
             if (user == null) {

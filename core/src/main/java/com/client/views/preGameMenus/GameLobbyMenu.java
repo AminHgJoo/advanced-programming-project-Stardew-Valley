@@ -49,6 +49,7 @@ public class GameLobbyMenu implements MyScreen {
     private Table slidingMenu;
 
     private float refreshTimer = 0.0f;
+    private boolean refreshFlag = false;
 
     public GameLobbyMenu(GameMain gameMain, Lobby currLobby) {
         this.gameMain = gameMain;
@@ -210,7 +211,7 @@ public class GameLobbyMenu implements MyScreen {
                     JsonObject req = new JsonObject();
                     req.addProperty("password", passwordInvisibleLobby.getText());
 
-                    var postResponse = HTTPUtil.post("/api/lobby/join/" + searchInvisibleLobby, req);
+                    var postResponse = HTTPUtil.post("/api/lobby/join/" + searchInvisibleLobby.getText(), req);
 
                     Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                     if (res.getStatus() == 200) {
@@ -218,7 +219,7 @@ public class GameLobbyMenu implements MyScreen {
                         Gson gson = new Gson();
                         String json = gson.toJson(map);
                         Lobby lobby = ModelDecoder.decodeLobby(json);
-                        ClientApp.loggedInUser.setCurrentLobbyId(currLobby.get_id());
+                        ClientApp.loggedInUser.setCurrentLobbyId(lobby.get_id());
                         currLobby = lobby;
                         doesUINeedRefresh = true;
                         UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
@@ -239,7 +240,6 @@ public class GameLobbyMenu implements MyScreen {
                 }
             });
             table.add(refreshButton).colspan(2).pad(10).row();
-
 
             Table root = new Table();
             root.setFillParent(true);
@@ -301,6 +301,15 @@ public class GameLobbyMenu implements MyScreen {
                 .pad(16);
 
         }
+        TextButton autoRefreshButton = new TextButton("Toggle Auto Refresh", skin);
+        autoRefreshButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                refreshFlag = !refreshFlag;
+            }
+        });
+        table.add(autoRefreshButton).colspan(2).pad(10).row();
+
         stage.addActor(table);
     }
 
@@ -465,11 +474,13 @@ public class GameLobbyMenu implements MyScreen {
             this.gameMain.setScreen(new FarmMenu(gameMain));
             this.dispose();
         }
-        refreshTimer += delta;
+        if (refreshFlag) {
+            refreshTimer += delta;
 
-        if (refreshTimer >= 10) {
-            doesUINeedRefresh = true;
-            refreshTimer = 0;
+            if (refreshTimer >= 10) {
+                doesUINeedRefresh = true;
+                refreshTimer = 0;
+            }
         }
 
         if (doesUINeedRefresh) {

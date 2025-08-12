@@ -27,6 +27,10 @@ import com.google.gson.JsonObject;
 import com.server.utilities.Response;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+
+import static com.common.GameGSON.gson;
 
 public class GiftHistoryMenu implements MyScreen, InputProcessor {
     private final Skin skin;
@@ -112,6 +116,11 @@ public class GiftHistoryMenu implements MyScreen, InputProcessor {
                     if (res.getStatus() == 200) {
                         String game = res.getBody().toString();
                         ((FarmMenu) farmScreen).getPlayerController().updateGame(game);
+                        System.out.println("Gift rate sabt shod");
+                    } else {
+                        System.out.println("Gift rate sabt nashod");
+                        System.out.println(res.getMessage());
+                        System.out.println(res.getBody().toString());
                     }
                 }
             });
@@ -191,7 +200,19 @@ public class GiftHistoryMenu implements MyScreen, InputProcessor {
 
     @Override
     public void socketMessage(String message) {
+        HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
+        String type = res.get("type");
 
+        if (type.equals("PLAYER_UPDATED")) {
+            String id = res.get("player_user_id");
+            if (!Objects.equals(id, ((FarmMenu)farmScreen).getPlayerController().getPlayer().getUser_id())) {
+                String player = res.get("player");
+                ((FarmMenu)farmScreen).getPlayerController().updateAnotherPlayerObject(player);
+            }
+        } else if (type.equals("GAME_UPDATED")) {
+            String game = res.get("game");
+            ((FarmMenu)farmScreen).getPlayerController().updateGame(game);
+        }
     }
 
     @Override

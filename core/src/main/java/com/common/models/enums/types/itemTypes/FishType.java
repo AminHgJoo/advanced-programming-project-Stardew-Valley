@@ -50,7 +50,7 @@ public enum FishType implements ItemType {
 
     public static FishType getFishType(String itemName) {
         for (FishType f : FishType.values()) {
-            if (f.name.equals(itemName))
+            if (f.name.compareToIgnoreCase(itemName) == 0)
                 return f;
         }
         return null;
