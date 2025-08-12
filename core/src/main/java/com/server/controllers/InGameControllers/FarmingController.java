@@ -22,7 +22,7 @@ import io.javalin.http.Context;
 
 import java.util.HashMap;
 
-public class FarmingController extends Controller {
+public class FarmingController extends ServerController {
     public FarmingController(GameServer gs) {
         super(gs);
     }

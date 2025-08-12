@@ -10,7 +10,7 @@ import io.javalin.http.Context;
 
 import java.util.HashMap;
 
-public class FriendshipController extends Controller {
+public class FriendshipController extends ServerController {
     public FriendshipController(GameServer gs) {
         super(gs);
     }

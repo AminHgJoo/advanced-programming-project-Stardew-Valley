@@ -22,7 +22,7 @@ import io.javalin.http.Context;
 
 import java.util.HashMap;
 
-public class InventoryController extends Controller {
+public class InventoryController extends ServerController {
     public InventoryController(GameServer gs) {
         super(gs);
     }
@@ -305,7 +305,12 @@ public class InventoryController extends Controller {
             CraftingRecipes targetRecipe = null;
 
             GameData gameData = gs.getGame();
-            Player player = gameData.getCurrentPlayer();
+            Player player = getCurrentPlayer(gameData, id);
+
+            if (player == null) {
+                ctx.json(Response.BAD_REQUEST.setMessage("player not found!"));
+                return;
+            }
 
             for (CraftingRecipes craftingRecipes : player.getUnlockedCraftingRecipes()) {
                 if (craftingRecipes.name.compareToIgnoreCase(itemName) == 0) {
