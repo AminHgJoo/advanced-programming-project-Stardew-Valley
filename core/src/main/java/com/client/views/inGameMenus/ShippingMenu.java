@@ -9,14 +9,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
 import com.common.models.Backpack;
 import com.common.models.Slot;
 import com.google.gson.JsonObject;
+import com.server.utilities.Response;
 
 import java.util.List;
 
@@ -38,6 +42,8 @@ public class ShippingMenu implements MyScreen, InputProcessor {
     private int selectedSave = -1;
     private BitmapFont titleFont;
     private GlyphLayout layout;
+    private InputProcessor temp;
+    private final Stage chatNotifStage;
 
 
     public ShippingMenu(GameMain gameMain, FarmMenu farmScreen) {
@@ -51,6 +57,7 @@ public class ShippingMenu implements MyScreen, InputProcessor {
         titleFont.getData().setScale(3f);
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
+        this.chatNotifStage = new Stage(new ScreenViewport());
     }
 
     @Override
@@ -115,11 +122,16 @@ public class ShippingMenu implements MyScreen, InputProcessor {
                     req.addProperty("productName", backpack.getSlots().get(selectedSave).getItem().getName());
                     req.addProperty("count", backpack.getSlots().get(selectedSave).getCount());
                     var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/dealingSellProduct", req);
-                    if (postResponse.getStatus() == 200) {
+                    Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                    if (res.getStatus() == 200) {
                         selectedIndex = -1;
                         selectedSave = -1;
                         selected = false;
                         farmScreen.getPlayerController().updateInventory(backpack);
+                    }
+                    else{
+                        String error = res.getMessage();
+                        showPopUp(error, "Error");
                     }
                 }
                 return true;
@@ -127,6 +139,12 @@ public class ShippingMenu implements MyScreen, InputProcessor {
         }
 
         return true;
+    }
+    private synchronized void showPopUp(String message, String promptType) {
+        temp = Gdx.input.getInputProcessor();
+        Gdx.input.setInputProcessor(chatNotifStage);
+        UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, AssetManager.getSkin());
+        uiPopupHelper.showDialog(message, promptType, temp);
     }
 
     @Override
@@ -181,7 +199,7 @@ public class ShippingMenu implements MyScreen, InputProcessor {
             Gdx.graphics.getHeight() / 2 - inventoryTexture.getHeight() / 2,
             inventoryTexture.getWidth(), inventoryTexture.getHeight());
 
-        String title = "Inventory";
+        String title = "Shipping Bin";
         layout.setText(titleFont, title);
 
         float xAsghar = Gdx.graphics.getWidth() / 2f - layout.width / 2f;

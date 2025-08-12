@@ -121,10 +121,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Stage popupStage;
     private Stage playerStage;
     private Animation<TextureRegion> walkAnimationَAsgharAnimation;
-    private float stateTimeAsgharAnimation;
+    private float stateTimeَAsgharAnimation;
     private float xَAsgharAnimation;
     private float yَAsgharAnimation;
-    private static final float SPEED = 20f;
+    private static final float SPEED = 60f;
     private boolean crowFlag = false;
     public boolean thorFlag = false;
     private boolean greenhouseCheatFlag = false;
@@ -162,7 +162,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.chatNotifStage = new Stage(new ScreenViewport());
         farmScreen = this;
         this.loadingTexture = AssetManager.getImage("loading");
-        TextureRegion[] frames = new TextureRegion[6];
+        TextureRegion[] frames = new TextureRegion[5];
         for (int i = 0; i < 5; i++) {
             Texture texture = AssetManager.getImage("asghar" + (i+1));
             frames[i] = new TextureRegion(texture);
@@ -170,7 +170,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         walkAnimationَAsgharAnimation = new Animation<>(0.1f, frames);
         walkAnimationَAsgharAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
-        stateTimeAsgharAnimation = 0f;
+        stateTimeَAsgharAnimation = 0f;
         yَAsgharAnimation = 0f;
         yَAsgharAnimation = Gdx.graphics.getHeight() / 2f;
     }
@@ -464,7 +464,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Keybinds.OPEN_MINIMAP.keycodes.contains(keycode)) {
             gameMain.setScreen(new MapMenu(gameMain, this));
         } else if (Keybinds.OPEN_FRIDGE.keycodes.contains(keycode)) {
-            gameMain.setScreen(new CookingMenu(gameMain, this));
+            gameMain.setScreen(new FridgeMenu(gameMain, this));
         } else if (Keybinds.INSPECT_GREENHOUSE.keycodes.contains(keycode)) {
             showPopUp("This greenhouse can be repaired with 500 wood & 1000 gold.", "Message");
         } else if (Keybinds.OPEN_LEADERBOARDS.keycodes.contains(keycode)) {
@@ -1042,7 +1042,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 handleEvents();
 
             renderMap(dayNightShader, nightFactor, delta);
-            //asgharChup();
+            asgharChup();
             handleLightning(camera, delta);
             batch.setShader(null);
 
@@ -1054,16 +1054,16 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void asgharChup() {
-        stateTimeAsgharAnimation += Gdx.graphics.getDeltaTime();
-
-        if (xَAsgharAnimation < 60 * 32) {
+        if (xَAsgharAnimation < 75 * 32) {
+            stateTimeَAsgharAnimation += Gdx.graphics.getDeltaTime();
             xَAsgharAnimation += SPEED * Gdx.graphics.getDeltaTime();
+            TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
+            batch.begin();
+            batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation, 96, 96);
+            batch.end();
         }
 
-        TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeAsgharAnimation);
-        batch.begin();
-        batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation);
-        batch.end();
+
     }
 
     private void handleUI(float delta) {

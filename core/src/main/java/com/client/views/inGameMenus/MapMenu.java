@@ -102,7 +102,7 @@ public class MapMenu implements MyScreen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        batch.draw(backgroundTexture, 0, 0);
+        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         String title = "Map";
         layout.setText(titleFont, title);
