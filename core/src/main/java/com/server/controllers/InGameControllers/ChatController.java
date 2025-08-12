@@ -4,6 +4,8 @@ import com.common.GameGSON;
 import com.common.models.*;
 import com.common.models.enums.Quality;
 import com.common.models.enums.commands.GameMenuCommands;
+import com.common.models.enums.recipes.CookingRecipes;
+import com.common.models.enums.recipes.CraftingRecipes;
 import com.common.models.enums.types.itemTypes.ItemType;
 import com.common.models.enums.worldEnums.Weather;
 import com.common.utils.ChatMessage;
@@ -92,13 +94,72 @@ public class ChatController extends ServerController {
                 setFriendship(ctx, command, gs);
             } else if (GameMenuCommands.CHEAT_ADD_SKILL_XP.matches(command)) {
                 skillXp(ctx, command, gs);
+            } else if (GameMenuCommands.CHEAT_UNLOCK_RECIPE.matches(command)) {
+                unlockRecipe(ctx, command, gs);
             } else {
-                ctx.json(Response.NOT_FOUND.setMessage("NO CHEAT"));
+                ctx.json(Response.NOT_FOUND.setMessage("Cheat Not Found"));
             }
         } catch (Exception e) {
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
             e.printStackTrace();
         }
+    }
+
+    public void unlockRecipe(Context ctx, String command, GameServer gs) {
+        String recipeName = GameMenuCommands.CHEAT_UNLOCK_RECIPE.getGroup(command, "name");
+        String id = ctx.attribute("id");
+
+        GameData gameData = gs.getGame();
+        Player player = getPlayer(gameData, id);
+
+        if (player == null) {
+            ctx.json(Response.BAD_REQUEST.setMessage("Player Not Found"));
+            return;
+        }
+
+        CookingRecipes targetRecipe = null;
+
+        for (CookingRecipes recipe : CookingRecipes.values()) {
+            if (recipe.name.compareToIgnoreCase(recipeName) == 0) {
+                targetRecipe = recipe;
+            }
+        }
+
+        if (targetRecipe != null) {
+            if (!player.getUnlockedCookingRecipes().contains(targetRecipe)) {
+                player.getUnlockedCookingRecipes().add(targetRecipe);
+            }
+            String json = GameGSON.gson.toJson(player);
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player_user_id", id);
+            gs.broadcast(msg);
+            ctx.json(Response.OK.setMessage("player").setBody(json));
+            return;
+        }
+
+        CraftingRecipes targetRecipeCrafting = null;
+
+        for (CraftingRecipes recipe : CraftingRecipes.values()) {
+            if (recipe.name.compareToIgnoreCase(recipeName) == 0) {
+                targetRecipeCrafting = recipe;
+            }
+        }
+
+        if (targetRecipeCrafting != null) {
+            if (!player.getUnlockedCraftingRecipes().contains(targetRecipeCrafting)) {
+                player.getUnlockedCraftingRecipes().add(targetRecipeCrafting);
+            }
+            String json = GameGSON.gson.toJson(player);
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player_user_id", id);
+            gs.broadcast(msg);
+            ctx.json(Response.OK.setMessage("player").setBody(json));
+            return;
+        }
+
+        ctx.json(Response.BAD_REQUEST.setMessage("Recipe Not Found"));
     }
 
     public void setEnergy(Context ctx, GameServer gs, String command) {
@@ -113,7 +174,6 @@ public class ChatController extends ServerController {
         msg.put("player_user_id", id);
         gs.broadcast(msg);
         ctx.json(Response.OK.setMessage("player").setBody(json));
-
     }
 
     // Cheat Controllers

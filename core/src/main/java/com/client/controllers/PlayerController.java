@@ -473,4 +473,23 @@ public class PlayerController {
             });
         });
     }
+
+    public void updateFridge(ArrayList<Slot> slots) {
+        networkThreadPool.execute(() -> {
+            String json = GameGSON.gson.toJson(slots);
+            JsonObject req = new JsonObject();
+            req.addProperty("slots", json);
+            var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryUpdateFridge", req);
+
+            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+
+            if (res.getStatus() == 200) {
+                System.out.println("Fridge updated");
+            } else {
+                System.out.println("Fridge update failed");
+            }
+
+            System.out.println(res.getBody().toString());
+        });
+    }
 }

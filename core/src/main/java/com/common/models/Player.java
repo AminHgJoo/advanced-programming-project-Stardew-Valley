@@ -694,4 +694,8 @@ public class Player {
     public HashMap<String, Boolean> getVotes() {
         return votes;
     }
+
+    public void setRefrigeratorSlots(ArrayList<Slot> refrigeratorSlots) {
+        this.refrigeratorSlots = refrigeratorSlots;
+    }
 }

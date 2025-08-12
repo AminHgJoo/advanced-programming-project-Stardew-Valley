@@ -44,7 +44,7 @@ public class ArtisanController extends ServerController {
             String item1Name = (String) body.getOrDefault("item1Name", " ");
             String id = ctx.attribute("id");
             GameData gameData = gs.getGame();
-            Farm farm = getCurrentPlayer(gameData, id).getCurrentFarm(gameData);
+            Farm farm = getPlayer(gameData, id).getCurrentFarm(gameData);
             Player player = gameData.findPlayerByUserId(id);
             Backpack backpack = player.getInventory();
             ArtisanBlock block = farm.getArtisanBlock(artisanName);
@@ -688,7 +688,7 @@ public class ArtisanController extends ServerController {
         String artisanName = (String) body.get("artisanName");
         String id = ctx.attribute("id");
         GameData gameData = gs.getGame();
-        Farm farm = getCurrentPlayer(gameData, id).getCurrentFarm(gameData);
+        Farm farm = getPlayer(gameData, id).getCurrentFarm(gameData);
         Player player = gameData.findPlayerByUserId(id);
         Backpack backpack = player.getInventory();
         ArtisanBlock block = farm.getArtisanBlock(artisanName);
@@ -749,7 +749,7 @@ public class ArtisanController extends ServerController {
             String artisanName = (String) body.get("artisanName");
             String id = ctx.attribute("id");
             GameData gameData = gs.getGame();
-            Farm farm = getCurrentPlayer(gameData, id).getCurrentFarm(gameData);
+            Farm farm = getPlayer(gameData, id).getCurrentFarm(gameData);
             Player player = gameData.findPlayerByUserId(id);
             ArtisanBlock artisanBlock = farm.getArtisanBlock(artisanName);
             artisanBlock.beingUsed = false;
@@ -775,7 +775,7 @@ public class ArtisanController extends ServerController {
             String artisanName = (String) body.get("artisanName");
             String id = ctx.attribute("id");
             GameData gameData = gs.getGame();
-            Farm farm = getCurrentPlayer(gameData, id).getCurrentFarm(gameData);
+            Farm farm = getPlayer(gameData, id).getCurrentFarm(gameData);
             Player player = gameData.findPlayerByUserId(id);
             ArtisanBlock artisanBlock = farm.getArtisanBlock(artisanName);
             artisanBlock.canBeCollected = true;

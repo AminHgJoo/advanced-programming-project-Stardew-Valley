@@ -20,6 +20,7 @@ import com.server.GameServers.GameServer;
 import com.server.utilities.Response;
 import io.javalin.http.Context;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InventoryController extends ServerController {
@@ -305,7 +306,7 @@ public class InventoryController extends ServerController {
             CraftingRecipes targetRecipe = null;
 
             GameData gameData = gs.getGame();
-            Player player = getCurrentPlayer(gameData, id);
+            Player player = getPlayer(gameData, id);
 
             if (player == null) {
                 ctx.json(Response.BAD_REQUEST.setMessage("player not found!"));
@@ -363,6 +364,29 @@ public class InventoryController extends ServerController {
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+        }
+    }
+
+    public void updateFridge(Context ctx, GameServer gs) {
+        try {
+            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
+            String id = ctx.attribute("id");
+            GameData game = gs.getGame();
+            Player player = game.findPlayerByUserId(id);
+
+            String backpackJson = (String) body.get("slots");
+
+            ArrayList<Slot> slots = GameGSON.gson.fromJson(backpackJson, ArrayList.class);
+            player.setRefrigeratorSlots(slots);
+            String playerJson = GameGSON.gson.toJson(player);
+            ctx.json(Response.OK.setMessage("Changed Fridge").setBody(playerJson));
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "PLAYER_UPDATED");
+            msg.put("player", playerJson);
+            gs.broadcast(msg);
+        } catch (Exception e) {
+            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
+            e.printStackTrace();
         }
     }
 }

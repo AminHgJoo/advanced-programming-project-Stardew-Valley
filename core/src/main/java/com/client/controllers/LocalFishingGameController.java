@@ -95,7 +95,7 @@ public class LocalFishingGameController {
         int randomNumber = (int) (Math.random() * 2);
         double weatherModifier = setWeatherModifierFishing(gameData);
         Player player = gameData.getCurrentPlayer();
-        int playerLevel = player.getFishingSkill().getLevel().levelNumber;
+        int playerLevel = player.getSkills().get(1).getLevel().levelNumber;
         int numberOfFishes = (int) (((double) randomNumber)
             * weatherModifier * (double) (playerLevel + 2)) + 1;
 
