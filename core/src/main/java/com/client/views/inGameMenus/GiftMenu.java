@@ -29,7 +29,11 @@ import com.common.models.Slot;
 import com.google.gson.JsonObject;
 import com.server.utilities.Response;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+
+import static com.common.GameGSON.gson;
 
 public class GiftMenu implements MyScreen, InputProcessor {
     private final GameMain gameMain;
@@ -247,7 +251,19 @@ public class GiftMenu implements MyScreen, InputProcessor {
 
     @Override
     public void socketMessage(String message) {
+        HashMap<String, String> res = (HashMap<String, String>) gson.fromJson(message, HashMap.class);
+        String type = res.get("type");
 
+        if (type.equals("PLAYER_UPDATED")) {
+            String id = res.get("player_user_id");
+            if (!Objects.equals(id, ((FarmMenu)farmScreen).getPlayerController().getPlayer().getUser_id())) {
+                String player = res.get("player");
+                ((FarmMenu)farmScreen).getPlayerController().updateAnotherPlayerObject(player);
+            }
+        } else if (type.equals("GAME_UPDATED")) {
+            String game = res.get("game");
+            ((FarmMenu)farmScreen).getPlayerController().updateGame(game);
+        }
     }
 
     @Override

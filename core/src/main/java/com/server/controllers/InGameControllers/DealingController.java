@@ -225,10 +225,10 @@ public class DealingController extends ServerController {
             Player player = game.findPlayerByUserId(id);
             String productName = (String) body.get("productName");
 
-            if (!player.isNearShippingBin()) {
-                ctx.json(Response.BAD_REQUEST.setMessage("You are not near shipping bin"));
-                return;
-            }
+//            if (!player.isNearShippingBin()) {
+//                ctx.json(Response.BAD_REQUEST.setMessage("You are not near shipping bin"));
+//                return;
+//            }
             Slot productSlot = player.getInventory().getSlotByItemName(productName);
             if (productSlot == null) {
                 ctx.json(Response.BAD_REQUEST.setMessage("No product"));
