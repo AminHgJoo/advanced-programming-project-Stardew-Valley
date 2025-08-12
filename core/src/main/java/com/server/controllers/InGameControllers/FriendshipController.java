@@ -97,12 +97,12 @@ public class FriendshipController extends ServerController {
             msg.put("type", "GAME_UPDATED");
             msg.put("game", gameJson);
             gs.broadcast(msg);
-
-            HashMap<String, String> msgToPlayer = new HashMap<>();
-            msgToPlayer.put("type", "GIFT_RATED");
-            msgToPlayer.put("gift", g.toString());
-            msgToPlayer.put("rate", rate + "");
-            gs.narrowCast(friend.getUser().getUsername(), msgToPlayer);
+//
+//            HashMap<String, String> msgToPlayer = new HashMap<>();
+//            msgToPlayer.put("type", "GIFT_RATED");
+//            msgToPlayer.put("gift", g.toString());
+//            msgToPlayer.put("rate", rate + "");
+//            gs.narrowCast(friend.getUser().getUsername(), msgToPlayer);
         } catch (Exception e) {
             e.printStackTrace();
             ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));

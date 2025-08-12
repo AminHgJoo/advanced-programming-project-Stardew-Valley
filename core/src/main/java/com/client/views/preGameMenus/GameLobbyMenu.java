@@ -241,15 +241,6 @@ public class GameLobbyMenu implements MyScreen {
             });
             table.add(refreshButton).colspan(2).pad(10).row();
 
-            TextButton autoRefreshButton = new TextButton("Toggle Auto Refresh", skin);
-            autoRefreshButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    refreshFlag = !refreshFlag;
-                }
-            });
-            table.add(autoRefreshButton).colspan(2).pad(10).row();
-
             Table root = new Table();
             root.setFillParent(true);
             root.setColor(Color.CYAN);
@@ -310,6 +301,15 @@ public class GameLobbyMenu implements MyScreen {
                 .pad(16);
 
         }
+        TextButton autoRefreshButton = new TextButton("Toggle Auto Refresh", skin);
+        autoRefreshButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                refreshFlag = !refreshFlag;
+            }
+        });
+        table.add(autoRefreshButton).colspan(2).pad(10).row();
+
         stage.addActor(table);
     }
 

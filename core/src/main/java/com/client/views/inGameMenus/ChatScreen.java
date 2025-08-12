@@ -12,6 +12,9 @@ import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
+import com.common.models.enums.types.itemTypes.CropSeedsType;
+import com.common.models.enums.types.mapObjectTypes.ForagingCropsType;
+import com.common.models.enums.types.mapObjectTypes.TreeType;
 import com.common.utils.ChatMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -84,7 +87,16 @@ public class ChatScreen implements MyScreen {
                     textField.setText("");
                 } else if (!msg.isEmpty()) {
                     if (msg.startsWith("/")) {
-                        parseCheatCode(msg);
+                        @Language("Regexp")
+                        String craftInfoRegex = "^/craftinfo\\s+-n\\s+(?<craftName>.+)$";
+                        Matcher matcher = Pattern.compile(craftInfoRegex).matcher(msg);
+
+                        if (msg.matches(craftInfoRegex)) {
+                            matcher.find();
+                            handleCraftInfo(matcher.group("craftName"));
+                        } else {
+                            parseCheatCode(msg);
+                        }
                     } else {
                         addMessage(msg, true, ClientApp.loggedInUser.getUsername(), null, false, true);
                     }
@@ -100,6 +112,32 @@ public class ChatScreen implements MyScreen {
             .expandX().fillX().pad(10).height(30);
 
         Gdx.input.setInputProcessor(stage);
+    }
+
+    private void handleCraftInfo(String queriedName) {
+
+        for (CropSeedsType type : CropSeedsType.values()) {
+            if (queriedName.compareToIgnoreCase(type.name) == 0) {
+                addMessage("Query Result: " + type.toString(), true
+                    , "Khodaye Asemoonha", ClientApp.loggedInUser.getUsername(), true, false);
+                return;
+            }
+        }
+
+        for (TreeType type : TreeType.values()) {
+            if (queriedName.compareToIgnoreCase(type.name) == 0) {
+                addMessage("Query Result: " + type.toString(), true
+                    , "Khodaye Asemoonha", ClientApp.loggedInUser.getUsername(), true, false);
+                return;
+            }
+        }
+
+        for (ForagingCropsType type : ForagingCropsType.values()) {
+            if (queriedName.compareToIgnoreCase(type.name) == 0) {
+                addMessage("Query Result: " + type.toString(), true
+                    , "Khodaye Asemoonha", ClientApp.loggedInUser.getUsername(), true, false);
+            }
+        }
     }
 
     private String configureHostName(String name) {
