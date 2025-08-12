@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
-import com.client.controllers.FishingGameController;
+import com.client.controllers.LocalFishingGameController;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
@@ -97,7 +97,7 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
             showFishType();
         }
 
-        FishingGameController.determineFishMotionType(caughtFishType.isLegendary);
+        LocalFishingGameController.determineFishMotionType(caughtFishType.isLegendary);
     }
 
     private void getFishingResults() {
@@ -105,7 +105,7 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
             return;
         }
 
-        var query = FishingGameController.queryFishingResult(ClientApp.currentGameData, poleQuality);
+        var query = LocalFishingGameController.queryFishingResult(ClientApp.currentGameData, poleQuality);
         caughtFishQuality = (Quality) query.get("quality");
         caughtFishType = (FishType) query.get("type");
         caughtFishQuantity = (Integer) query.get("quantity");
@@ -241,7 +241,7 @@ public class FishingMiniGame implements MyScreen, InputProcessor {
         if (isGameOngoing) {
             handlePlayerInput();
             handleBobberKinematics(delta);
-            FishingGameController.handleFishAI(this, delta);
+            LocalFishingGameController.handleFishAI(this, delta);
             incrementProgress(delta);
             checkForWinOrLoss();
         }

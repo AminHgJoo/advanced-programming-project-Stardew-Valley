@@ -26,7 +26,12 @@ public class CookingController extends Controller {
             CookingRecipes targetRecipe = null;
 
             GameData gameData = gs.getGame();
-            Player player = gameData.getCurrentPlayer();
+            Player player = getCurrentPlayer(gameData, id);
+
+            if (player == null) {
+                ctx.json(Response.NOT_FOUND.setMessage("Player not found"));
+                return;
+            }
 
             for (CookingRecipes recipes : player.getUnlockedCookingRecipes()) {
                 if (recipes.name.compareToIgnoreCase(recipe) == 0) {

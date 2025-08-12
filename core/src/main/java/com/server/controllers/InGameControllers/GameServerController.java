@@ -19,7 +19,7 @@ public class GameServerController {
     private final FarmingController farmingController;
     private final DealingController dealingController;
     private final CookingController cookingController;
-    private final ArtisanController artisanController = new ArtisanController();
+    private final ArtisanController artisanController;
     private final ChatController chatController;
 
     public GameServerController(GameServer gs) {
@@ -35,6 +35,7 @@ public class GameServerController {
         dealingController = new DealingController(gs);
         cookingController = new CookingController(gs);
         chatController = new ChatController(gs);
+        artisanController = new ArtisanController(gs);
     }
 
     public void routingTheRequests(Context ctx, GameServer gs) {

@@ -121,7 +121,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private Stage popupStage;
     private Stage playerStage;
     private Animation<TextureRegion> walkAnimationَAsgharAnimation;
-    private float stateTimeَAsgharAnimation;
+    private float stateTimeAsgharAnimation;
     private float xَAsgharAnimation;
     private float yَAsgharAnimation;
     private static final float SPEED = 20f;
@@ -170,7 +170,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         walkAnimationَAsgharAnimation = new Animation<>(0.1f, frames);
         walkAnimationَAsgharAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
-        stateTimeَAsgharAnimation = 0f;
+        stateTimeAsgharAnimation = 0f;
         yَAsgharAnimation = 0f;
         yَAsgharAnimation = Gdx.graphics.getHeight() / 2f;
     }
@@ -1042,7 +1042,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 handleEvents();
 
             renderMap(dayNightShader, nightFactor, delta);
-            asgharChup();
+            //asgharChup();
             handleLightning(camera, delta);
             batch.setShader(null);
 
@@ -1054,13 +1054,13 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void asgharChup() {
-        stateTimeَAsgharAnimation += Gdx.graphics.getDeltaTime();
+        stateTimeAsgharAnimation += Gdx.graphics.getDeltaTime();
 
         if (xَAsgharAnimation < 60 * 32) {
             xَAsgharAnimation += SPEED * Gdx.graphics.getDeltaTime();
         }
 
-        TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
+        TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeAsgharAnimation);
         batch.begin();
         batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation);
         batch.end();

@@ -12,7 +12,7 @@ import com.common.models.enums.worldEnums.Weather;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FishingGameController {
+public class LocalFishingGameController {
     private static final float SPEED_FACTOR = 15;
     private static final float WATER_LANE_HEIGHT = 427;
     private static final float BEHAVIOUR_RESET_TIME = 0.5f;
