@@ -137,7 +137,7 @@ public class RadioStardrop implements MyScreen {
                     }
 
                     JFileChooser fileChooser = new JFileChooser();
-                    FileNameExtensionFilter filter = new FileNameExtensionFilter("Music Files", "mp3");
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter("Music Files", "mp3", "ogg");
                     fileChooser.setFileFilter(filter);
                     int returnVal = fileChooser.showOpenDialog(null);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -354,6 +354,7 @@ public class RadioStardrop implements MyScreen {
                     gameMain.playingMusicName = selectedFile.getName();
                     gameMain.music.setLooping(true);
                     gameMain.music.play();
+                    System.out.println(pos);
                     gameMain.music.setPosition((float) pos);
 
                     configureCurrentlyPlaying(selectedFile.getAbsolutePath());
