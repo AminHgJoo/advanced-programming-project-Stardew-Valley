@@ -95,7 +95,7 @@ public class PlayerController {
             playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale), playerTexture.getRegionWidth() / scale
             , playerTexture.getRegionHeight() / scale);
 
-        if (currState != PlayerState.TOOL_SWINGING && player.getEquippedItem() != null) {
+        if (currState != PlayerState.TOOL_SWINGING && player.getEquippedItem() != null && player.getEquippedItem() instanceof Tool) {
             if (facingDirection == FacingDirection.DOWN) {
                 Texture t;
                 String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
@@ -126,7 +126,7 @@ public class PlayerController {
                     (float) t.getWidth() / scale, (float) t.getHeight() / scale);
             }
         }
-        if (currState == PlayerState.TOOL_SWINGING) {
+        if (currState == PlayerState.TOOL_SWINGING &&player.getEquippedItem() instanceof Tool ) {
             if (player.getEquippedItem().getName().contains("Rod")) {
                 return;
             }

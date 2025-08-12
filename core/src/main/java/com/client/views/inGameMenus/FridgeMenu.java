@@ -124,6 +124,7 @@ public class FridgeMenu implements MyScreen, InputProcessor {
                     selectedIndex = -1;
                     selectedSave = -1;
                     selected = false;
+                    //TODO update fridge
                 }
                 return true;
             }

@@ -379,7 +379,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         for (int j = 0; j < 9; j++) {
             int actualIndex = scrollIndex * GRID_SIZE + j;
-            if (selectedIndex >= 0 && selected) {
+            if (selectedIndex >= 0 && selected && selectedIndex < backpack.getSlots().size()) {
                 Slot temp = backpack.getSlots().get(selectedIndex);
                 backpack.getSlots().set(selectedIndex, backpack.getSlots().get(selectedSave));
                 backpack.getSlots().set(selectedSave, temp);
@@ -639,7 +639,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 }
             } else
                 playerController.toolUse();
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
             if (success) {
                 selectedIndex = -1;
