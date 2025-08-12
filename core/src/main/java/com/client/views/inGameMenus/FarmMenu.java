@@ -967,8 +967,10 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (type.equals("DAY_END")) {
             System.out.println("HELLO");
             playerController.showLoading();
+        } else if (type.equals("RECEIVED_GIFT")) {
+            showPopUp("Received Gift \n " + res.get("gift"), "Gift");
         } else if (type.equals("GIFT_RATED")) {
-            //TODO popup
+            showPopUp("Rate Gift \n " + res.get("gift") + " rate : " + res.get("rate"), "Gift");
         }
     }
 
