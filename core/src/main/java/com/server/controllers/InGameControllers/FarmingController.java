@@ -126,22 +126,18 @@ public class FarmingController extends ServerController {
             String seed = (String) body.get("seed");
             String dir = (String) body.get("direction");
             String id = ctx.attribute("id");
+            double x1 = (Double) body.get("x");
+            double y1 = (Double) body.get("y");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
             TreeSeedsType treeSeedsType = TreeSeedsType.findTreeTypeByName(seed);
-            Directions direction;
-            try {
-                direction = Directions.getDir(dir);
-            } catch (Exception e) {
-                ctx.json(Response.BAD_REQUEST.setMessage("Invalid direction"));
-                return;
-            }
-            if (direction == null) {
-                ctx.json(Response.BAD_REQUEST.setMessage("Invalid direction"));
-                return;
-            }
-            Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
-            Cell cell = player.getCurrentFarm(game).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+            float[] dxAndDy = WorldController.getXAndYIncrement(dir);
+            float dx = dxAndDy[0];
+            float dy = dxAndDy[1];
+            player.setCoordinate(new Coordinate((float) x1, (float) y1));
+            float playerX = (player.getCoordinate().getX() + dx) / 32;
+            float playerY = 50 - (player.getCoordinate().getY() + dy) / 32;
+            Cell cell = player.getCurrentFarm(game).findCellByCoordinate(playerX, playerY);
             if (cell == null) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Cell not found"));
                 return;
@@ -194,21 +190,17 @@ public class FarmingController extends ServerController {
             String dir = (String) body.get("direction");
             String fertilizer = (String) body.get("fertilizer");
             String id = ctx.attribute("id");
+            double x1 = (Double) body.get("x");
+            double y1 = (Double) body.get("y");
             GameData game = gs.getGame();
             Player player = game.findPlayerByUserId(id);
-            Directions direction;
-            try {
-                direction = Directions.getDir(dir);
-            } catch (Exception e) {
-                ctx.json(Response.BAD_REQUEST.setMessage("Invalid direction"));
-                return;
-            }
-            if (direction == null) {
-                ctx.json(Response.BAD_REQUEST.setMessage("Invalid direction"));
-                return;
-            }
-            Coordinate cellCoordinate = direction.getCoordinate(player.getCoordinate());
-            Cell cell = player.getCurrentFarm(game).findCellByCoordinate(cellCoordinate.getX(), cellCoordinate.getY());
+            float[] dxAndDy = WorldController.getXAndYIncrement(dir);
+            float dx = dxAndDy[0];
+            float dy = dxAndDy[1];
+            player.setCoordinate(new Coordinate((float) x1, (float) y1));
+            float playerX = (player.getCoordinate().getX() + dx) / 32;
+            float playerY = 50 - (player.getCoordinate().getY() + dy) / 32;
+            Cell cell = player.getCurrentFarm(game).findCellByCoordinate(playerX, playerY);
             if (cell == null) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Cell not found"));
                 return;

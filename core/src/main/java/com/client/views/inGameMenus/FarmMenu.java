@@ -651,6 +651,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     playerController.toolUse();
             } else if (item instanceof Seed) {
                 playerController.plantSeeds();
+            }else if(item.getName().contains("Fertilizer")){
+                playerController.fertilization();
             }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);

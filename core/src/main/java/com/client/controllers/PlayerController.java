@@ -216,7 +216,7 @@ public class PlayerController {
                             updatePlayerObject(playerJson);
                             if (tool.getName().contains("Water")) {
                                 Tool t = (Tool) player.getEquippedItem();
-                                farmMenu.showPopUp("Watering Can  : " + t.getWaterReserve() , "Status");
+                                farmMenu.showPopUp("Watering Can  : " + t.getWaterReserve(), "Status");
                             }
                         } else {
                             System.out.println(res.getMessage());
@@ -423,6 +423,29 @@ public class PlayerController {
     public void updateAnotherPlayerObject(String json) {
         Player p = GameGSON.gson.fromJson(json, Player.class);
         game.setPlayerById(p.getUser_id(), p);
+    }
+
+    public void fertilization() {
+        Item i = player.getEquippedItem();
+        networkThreadPool.execute(() -> {
+            JsonObject req = new JsonObject();
+            req.addProperty("x", playerPosition.x);
+            req.addProperty("y", playerPosition.y);
+            req.addProperty("direction", facingDirection.getDirection());
+            req.addProperty("fertilizer", i.getName());
+
+            var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/farmingFertilization", req);
+            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+            Gdx.app.postRunnable(() -> {
+                if (res.getStatus() == 200) {
+                    String playerJson = res.getBody().toString();
+                    updatePlayerObject(playerJson);
+                    farmMenu.unEquip();
+                    player.setEquippedItem(null);
+                    farmMenu.showPopUp("Successfully fertilized the crop !!" , "Success");
+                }
+            });
+        });
     }
 
     public void updateGame(String json) {
