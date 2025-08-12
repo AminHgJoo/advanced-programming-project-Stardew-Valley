@@ -93,6 +93,12 @@ public class GameServer extends Thread {
                     msg.put("type", "DAY_END");
                     broadcast(msg);
                 }
+                String gameJson = this.gson.toJson(game);
+
+                HashMap<String, String> message = new HashMap<>();
+                message.put("type", "GAME_UPDATED");
+                message.put("game", gameJson);
+                broadcast(message);
             }
             if (count % 15 == 0) {
                 GameRepository.saveGame(game);

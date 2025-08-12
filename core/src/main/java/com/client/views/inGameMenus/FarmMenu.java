@@ -1054,16 +1054,16 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void asgharChup() {
-        stateTimeَAsgharAnimation += Gdx.graphics.getDeltaTime();
-
-        if (xَAsgharAnimation < 60 * 32) {
-            xَAsgharAnimation += SPEED * Gdx.graphics.getDeltaTime();
-        }
-
-        TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
-        batch.begin();
-        batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation);
-        batch.end();
+//        stateTimeَAsgharAnimation += Gdx.graphics.getDeltaTime();
+//
+//        if (xَAsgharAnimation < 60 * 32) {
+//            xَAsgharAnimation += SPEED * Gdx.graphics.getDeltaTime();
+//        }
+//
+//        TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
+//        batch.begin();
+//        batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation);
+//        batch.end();
     }
 
     private void handleUI(float delta) {

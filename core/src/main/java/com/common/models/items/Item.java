@@ -33,7 +33,7 @@ public class Item {
 
     public ItemType getItemType(String name) {
         for (CropSeedsType type : CropSeedsType.values()) {
-            if (type.getName().equals(name)) {
+            if (type.getName().equals(name) || type.getSource().equals(name)) {
                 return type;
             }
         }
