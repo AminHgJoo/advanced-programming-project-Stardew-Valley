@@ -7,10 +7,10 @@ import com.server.GameServers.GameServer;
 
 import java.util.ArrayList;
 
-public abstract class Controller {
+public abstract class ServerController {
     private GameServer gs;
 
-    public Controller(GameServer gs) {
+    public ServerController(GameServer gs) {
         this.gs = gs;
     }
 

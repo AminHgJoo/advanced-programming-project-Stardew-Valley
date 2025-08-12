@@ -20,10 +20,9 @@ import com.server.GameServers.GameServer;
 import com.server.utilities.Response;
 import io.javalin.http.Context;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public class InventoryController extends Controller {
+public class InventoryController extends ServerController {
     public InventoryController(GameServer gs) {
         super(gs);
     }

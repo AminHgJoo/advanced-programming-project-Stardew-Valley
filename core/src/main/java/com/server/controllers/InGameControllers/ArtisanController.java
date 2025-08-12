@@ -27,7 +27,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class ArtisanController extends Controller {
+public class ArtisanController extends ServerController {
     public static Context ctx;
     public static GameServer gs;
 

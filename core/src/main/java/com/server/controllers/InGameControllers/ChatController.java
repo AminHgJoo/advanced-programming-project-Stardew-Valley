@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ChatController extends Controller {
+public class ChatController extends ServerController {
     public ChatController(GameServer gs) {
         super(gs);
     }

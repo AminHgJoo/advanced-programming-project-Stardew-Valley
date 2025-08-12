@@ -15,7 +15,7 @@ import io.javalin.http.Context;
 
 import java.util.HashMap;
 
-public class NpcController extends Controller {
+public class NpcController extends ServerController {
     public NpcController(GameServer gs) {
         super(gs);
     }

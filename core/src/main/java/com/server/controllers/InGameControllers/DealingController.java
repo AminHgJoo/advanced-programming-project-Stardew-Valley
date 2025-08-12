@@ -17,7 +17,7 @@ import io.javalin.http.Context;
 
 import java.util.HashMap;
 
-public class DealingController extends Controller {
+public class DealingController extends ServerController {
     public DealingController(GameServer gs) {
         super(gs);
     }

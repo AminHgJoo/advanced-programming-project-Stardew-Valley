@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class MovementController extends Controller {
+public class MovementController extends ServerController {
     public MovementController(GameServer gs) {
         super(gs);
     }

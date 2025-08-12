@@ -14,7 +14,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MusicController extends Controller {
+public class MusicController extends ServerController {
     public AtomicReference<String> userWaitingForMusic = new AtomicReference<>("");
 
     public MusicController(GameServer gs) {
