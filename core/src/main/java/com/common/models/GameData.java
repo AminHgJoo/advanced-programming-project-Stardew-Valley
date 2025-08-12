@@ -745,11 +745,9 @@ public class GameData {
     public Gift findGiftByName(int index, String username) {
         int counter = 0;
         for (Gift g : gifts) {
-            if (g.getTo().equals(username)) {
-                if (counter == index)
+            if (counter == index)
                     return g;
                 counter++;
-            }
         }
         return null;
     }
