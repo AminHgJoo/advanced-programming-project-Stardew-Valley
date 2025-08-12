@@ -335,7 +335,7 @@ public class GameData {
 
         resetAllCropsWater();
 
-        handleCropDeath();
+//        handleCropDeath();
 
         if (weatherToday == Weather.RAIN || weatherToday == Weather.STORM) {
             waterAllCrops();
@@ -387,13 +387,11 @@ public class GameData {
     }
 
     private void strikeLightningOnStormyDay() {
-        User user = App.getLoggedInUser();
-        GameData gameData = user.getCurrentGame();
         for (Player player : players) {
             for (int i = 0; i < 3; i++) {
                 int targetX = (int) (Math.random() * 75);
                 int targetY = (int) (Math.random() * 50);
-                player.getFarm().strikeLightning(targetX, targetY, gameData.getDate(), this);
+                player.getFarm().strikeLightning(targetX, targetY, this.getDate(), this);
             }
         }
     }
@@ -614,14 +612,19 @@ public class GameData {
                     for (int i = crop.getStageNumber(); i < 5; i++) {
                         LocalDateTime d = arr[i];
                         if (d != null && !d.isAfter(date)) {
-                            if (crop.isHasBeenWateredToday()) {
-                                crop.setStageNumber(i + 1);
-                                if (crop.getStageNumber() == 5
-                                    || crop.getGrowthDeadLines()[crop.getStageNumber()] == null) {
-                                    crop.setHarvestDeadLine(date);
-                                }
-                            } else {
-                                crop.pushBackDeadlines(1);
+//                            if (crop.isHasBeenWateredToday()) {
+//                                crop.setStageNumber(i + 1);
+//                                if (crop.getStageNumber() == 5
+//                                    || crop.getGrowthDeadLines()[crop.getStageNumber()] == null) {
+//                                    crop.setHarvestDeadLine(date);
+//                                }
+//                            } else {
+//                                crop.pushBackDeadlines(1);
+//                            }
+                            crop.setStageNumber(i + 1);
+                            if (crop.getStageNumber() == 5
+                                || crop.getGrowthDeadLines()[crop.getStageNumber()] == null) {
+                                crop.setHarvestDeadLine(date);
                             }
                         }
                     }
