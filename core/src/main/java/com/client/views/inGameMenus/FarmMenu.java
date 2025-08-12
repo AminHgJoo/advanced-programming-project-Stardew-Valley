@@ -129,7 +129,6 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private boolean crowFlag = false;
     public boolean thorFlag = false;
     private boolean greenhouseCheatFlag = false;
-
     private InputProcessor temp;
     private Texture loadingTexture;
 
@@ -163,7 +162,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.chatNotifStage = new Stage(new ScreenViewport());
         farmScreen = this;
         this.loadingTexture = AssetManager.getImage("loading");
-        TextureRegion[] frames = new TextureRegion[6];
+        TextureRegion[] frames = new TextureRegion[5];
         for (int i = 0; i < 5; i++) {
             Texture texture = AssetManager.getImage("asghar" + (i + 1));
             frames[i] = new TextureRegion(texture);
@@ -1063,16 +1062,16 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void asgharChup() {
-//        stateTimeَAsgharAnimation += Gdx.graphics.getDeltaTime();
-//
-//        if (xَAsgharAnimation < 60 * 32) {
-//            xَAsgharAnimation += SPEED * Gdx.graphics.getDeltaTime();
-//        }
-//
-//        TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
-//        batch.begin();
-//        batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation);
-//        batch.end();
+        stateTimeَAsgharAnimation += Gdx.graphics.getDeltaTime();
+
+        if (xَAsgharAnimation < 60 * 32) {
+            xَAsgharAnimation += SPEED * Gdx.graphics.getDeltaTime();
+        }
+
+        TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
+        batch.begin();
+        batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation, 96, 96);
+        batch.end();
     }
 
     private void handleUI(float delta) {
