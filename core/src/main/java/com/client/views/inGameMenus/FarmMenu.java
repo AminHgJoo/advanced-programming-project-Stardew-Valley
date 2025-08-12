@@ -364,6 +364,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
 //      }
     }
 
+    public void unEquip() {
+        selected = false;
+        selectedIndex = -1;
+    }
+
     private void showTools() {
         int GRID_ITEM_SIZE = 95;
         int GRID_PADDING = 8;
@@ -1319,7 +1324,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         return x >= 20 && x <= 27 && y >= 1 && y <= 8;
     }
 
-    private synchronized void showPopUp(String message, String promptType) {
+    public synchronized void showPopUp(String message, String promptType) {
         temp = Gdx.input.getInputProcessor();
         Gdx.input.setInputProcessor(chatNotifStage);
         UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, AssetManager.getSkin());

@@ -417,12 +417,14 @@ public class WorldController extends ServerController {
                 ctx.json(Response.BAD_REQUEST.setMessage("Can is empty"));
                 return;
             }
+            equippedTool.setWaterReserve(equippedTool.getWaterReserve() - 20);
             tree.setHasBeenWateredToday(true);
         } else if (targetCell.getObjectOnCell() instanceof Crop crop) {
             if (equippedTool.getWaterReserve() == 0) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Can is empty"));
                 return;
             }
+            equippedTool.setWaterReserve(equippedTool.getWaterReserve() - 10);
             crop.setHasBeenWateredToday(true);
             crop.setLastWateringDate(game.getDate());
         } else {

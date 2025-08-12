@@ -214,6 +214,10 @@ public class PlayerController {
                             System.out.println(res.getMessage());
                             String playerJson = res.getBody().toString();
                             updatePlayerObject(playerJson);
+                            if (tool.getName().contains("Water")) {
+                                Tool t = (Tool) player.getEquippedItem();
+                                farmMenu.showPopUp("Watering Can  : " + t.getWaterReserve() , "Status");
+                            }
                         } else {
                             System.out.println(res.getMessage());
                         }
@@ -460,6 +464,8 @@ public class PlayerController {
                 if (res.getStatus() == 200) {
                     String playerJson = res.getBody().toString();
                     updatePlayerObject(playerJson);
+                    farmMenu.unEquip();
+                    player.setEquippedItem(null);
                 }
             });
         });

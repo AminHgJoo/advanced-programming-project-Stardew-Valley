@@ -105,6 +105,7 @@ public class FarmingController extends ServerController {
                     plant.setStageNumber(s);
                 }
             }
+            player.setEquippedItem(null);
             String playerJson = GameGSON.gson.toJson(player);
             ctx.json(Response.OK.setMessage("Planted crop").setBody(playerJson));
 
