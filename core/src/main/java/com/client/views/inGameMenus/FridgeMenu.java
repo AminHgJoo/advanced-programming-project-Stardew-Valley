@@ -184,7 +184,7 @@ public class FridgeMenu implements MyScreen, InputProcessor {
             Gdx.graphics.getHeight() / 2 - inventoryTexture.getHeight() / 2,
             inventoryTexture.getWidth(), inventoryTexture.getHeight());
 
-        String title = "Inventory";
+        String title = "Fridge";
         layout.setText(titleFont, title);
 
         float xAsghar = Gdx.graphics.getWidth() / 2f - layout.width / 2f;
