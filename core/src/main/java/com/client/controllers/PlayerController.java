@@ -410,6 +410,10 @@ public class PlayerController {
     public void updateAnotherPlayerObject(String json) {
         Player p = GameGSON.gson.fromJson(json, Player.class);
         game.setPlayerById(p.getUser_id(), p);
+        int x = 5;
+        if(x == 5){
+
+        }
     }
 
     public void updateGame(String json) {

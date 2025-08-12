@@ -96,6 +96,11 @@ public class GameServer extends Thread {
             }
             if (count % 15 == 0) {
                 GameRepository.saveGame(game);
+                String gameJson = this.gson.toJson(game);
+                HashMap<String, String> message = new HashMap<>();
+                message.put("type", "GAME_UPDATED");
+                message.put("game", gameJson);
+                broadcast(message);
             }
             boolean check = false;
             for (Player p : game.getPlayers()) {
@@ -106,19 +111,20 @@ public class GameServer extends Thread {
             }
             if (check) {
                 for (NPC npc : game.getMap().getVillage().getNpcs()) {
-                    npc.update(1);
+                    boolean check2 = npc.update(1);
+                    if (check2) {
+                        String gameJson = this.gson.toJson(game);
+                        HashMap<String, String> message = new HashMap<>();
+                        message.put("type", "GAME_UPDATED");
+                        message.put("game", gameJson);
+                        broadcast(message);
+                    }
                 }
             }
 
             game.checkForRecipeUnlocking();
             game.handleBuffExpiration();
             game.checkForSkillUpgrades();
-
-            String gameJson = this.gson.toJson(game);
-            HashMap<String, String> message = new HashMap<>();
-            message.put("type", "GAME_UPDATED");
-            message.put("game", gameJson);
-            broadcast(message);
         }
     }
 

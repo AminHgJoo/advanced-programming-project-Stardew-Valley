@@ -162,7 +162,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         this.chatNotifStage = new Stage(new ScreenViewport());
         farmScreen = this;
         this.loadingTexture = AssetManager.getImage("loading");
-        TextureRegion[] frames = new TextureRegion[5];
+        TextureRegion[] frames = new TextureRegion[6];
         for (int i = 0; i < 5; i++) {
             Texture texture = AssetManager.getImage("asghar" + (i+1));
             frames[i] = new TextureRegion(texture);
@@ -379,7 +379,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
         for (int j = 0; j < 9; j++) {
             int actualIndex = scrollIndex * GRID_SIZE + j;
-            if (selectedIndex >= 0 && selected && selectedIndex < backpack.getSlots().size()) {
+            if (selectedIndex >= 0 && selected) {
                 Slot temp = backpack.getSlots().get(selectedIndex);
                 backpack.getSlots().set(selectedIndex, backpack.getSlots().get(selectedSave));
                 backpack.getSlots().set(selectedSave, temp);
@@ -464,7 +464,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Keybinds.OPEN_MINIMAP.keycodes.contains(keycode)) {
             gameMain.setScreen(new MapMenu(gameMain, this));
         } else if (Keybinds.OPEN_FRIDGE.keycodes.contains(keycode)) {
-            gameMain.setScreen(new FridgeMenu(gameMain, this));
+            gameMain.setScreen(new CookingMenu(gameMain, this));
         } else if (Keybinds.INSPECT_GREENHOUSE.keycodes.contains(keycode)) {
             showPopUp("This greenhouse can be repaired with 500 wood & 1000 gold.", "Message");
         } else if (Keybinds.OPEN_LEADERBOARDS.keycodes.contains(keycode)) {
@@ -639,7 +639,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 }
             } else
                 playerController.toolUse();
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
             if (success) {
                 selectedIndex = -1;
@@ -1054,16 +1054,16 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void asgharChup() {
-        if (xَAsgharAnimation < 75 * 32) {
-            stateTimeَAsgharAnimation += Gdx.graphics.getDeltaTime();
+        stateTimeَAsgharAnimation += Gdx.graphics.getDeltaTime();
+
+        if (xَAsgharAnimation < 60 * 32) {
             xَAsgharAnimation += SPEED * Gdx.graphics.getDeltaTime();
-            TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
-            batch.begin();
-            batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation, 96, 96);
-            batch.end();
         }
 
-
+        TextureRegion currentFrame = walkAnimationَAsgharAnimation.getKeyFrame(stateTimeَAsgharAnimation);
+        batch.begin();
+        batch.draw(currentFrame, xَAsgharAnimation, yَAsgharAnimation);
+        batch.end();
     }
 
     private void handleUI(float delta) {

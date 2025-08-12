@@ -49,7 +49,8 @@ public class NPC {
         targetPosition = null;
     }
 
-    public void update(float delta) {
+    public boolean update(float delta) {
+        NpcState previousState = state;
         switch (state) {
             case IDLE:
                 chooseNewTarget();
@@ -68,6 +69,8 @@ public class NPC {
                 break;
 
         }
+        if (previousState != state) return true;
+        return false;
     }
 
     public Vector2 getTargetPosition() {
