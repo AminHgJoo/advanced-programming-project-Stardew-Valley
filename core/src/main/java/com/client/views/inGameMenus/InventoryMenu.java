@@ -136,18 +136,20 @@ public class InventoryMenu implements MyScreen, InputProcessor {
                 }
                 return true;
             }
-            if (screenX >= fridgeX && screenX <= fridgeX + trashWidth &&
-                screenY >= trashY && screenY <= trashY + trashHeight) {
-                if (selectedSave >= 0) {
-                    if (backpack.getSlots().get(selectedSave).getItem() instanceof Food) {
+            if(screenX >=fridgeX  && screenX <= fridgeX + trashWidth &&
+                screenY >= trashY && screenY <= trashY + trashHeight){
+                if(selectedSave>=0){
+                    //TODO update fridge
+                    if(backpack.getSlots().get(selectedSave).getItem() instanceof Food) {
                         player.getRefrigeratorSlots().add(backpack.getSlots().get(selectedSave));
                         backpack.removeSlot(backpack.getSlots().get(selectedSave));
                         selectedIndex = -1;
                         selectedSave = -1;
                         selected = false;
                         farmScreen.updateBackPack();
-                    } else {
-                        String error = "Not Food Item";
+                    }
+                    else{
+                        String error = "qaza ni";
                         UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, skin);
                         Gdx.input.setInputProcessor(chatNotifStage);
                         uiPopupHelper.showDialog(error, "Error", this, false);
@@ -158,7 +160,6 @@ public class InventoryMenu implements MyScreen, InputProcessor {
 
         return true;
     }
-
     @Override
     public boolean touchUp(int i, int i1, int i2, int i3) {
         return false;
