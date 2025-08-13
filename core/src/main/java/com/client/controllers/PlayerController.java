@@ -270,16 +270,16 @@ public class PlayerController {
         if (check) {
             networkThreadPool.execute(() -> {
                 JsonObject req = new JsonObject();
-                req.addProperty("itemName", ((Tool) item).getName());
+                req.addProperty("itemName", item.getActualName());
                 var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryPlaceItem", req);
 
                 Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                 System.out.println(res.getMessage());
                 Gdx.app.postRunnable(() -> {
-                    if (res.getStatus() != 200) {
-                        player.setEquippedItem(item);
-                        player.getInventory().addSlot(new Slot(item, 1));
-                        cell.setObjectOnCell(new EmptyCell());
+                    if (res.getStatus() == 200) {
+                        String playerJson = res.getBody().toString();
+                        updatePlayerObject(playerJson);
+                        farmMenu.unEquip();
                     }
                 });
             });
