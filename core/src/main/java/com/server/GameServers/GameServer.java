@@ -13,17 +13,18 @@ import io.javalin.http.HandlerType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GameServer extends Thread {
     private final GameServerController controller;
     private final Gson gson = GameGSON.gson;
-    private ArrayList<PlayerConnection> playerConnections;
+    private AtomicReference<ArrayList<PlayerConnection>> playerConnections = new AtomicReference<>();
     private GameData game;
     private boolean isRunning = true;
     private int count = 1;
 
     public GameServer(ArrayList<PlayerConnection> players, GameData game) {
-        this.playerConnections = players;
+        this.playerConnections.set(players);
         this.game = game;
         HashMap<String, String> res = new HashMap<>();
         res.put("type", "GAME_START");
@@ -36,18 +37,27 @@ public class GameServer extends Thread {
     }
 
     public void broadcast(HashMap<String, String> message) {
-//        AppWebSocket.broadcast(game , message);
-        for (PlayerConnection pc : playerConnections) {
-            pc.send(gson.toJson(message));
+        try {
+            for (PlayerConnection pc : playerConnections.get()) {
+                pc.send(gson.toJson(message));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+//        AppWebSocket.broadcast(game , message);
     }
 
     public void narrowCast(String username, HashMap<String, String> message) {
 //        AppWebSocket.narrowcast(username, message);
-        for (PlayerConnection pc : playerConnections) {
-            if (pc.getUsername().equals(username)) {
-                pc.send(gson.toJson(message));
+        try {
+
+            for (PlayerConnection pc : playerConnections.get()) {
+                if (pc.getUsername().equals(username)) {
+                    pc.send(gson.toJson(message));
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -156,11 +166,14 @@ public class GameServer extends Thread {
     }
 
     public Player removePlayerConnection(PlayerConnection pc) {
-        playerConnections.remove(pc);
-        Player p = game.findPlayerByUsername(pc.getUsername());
-        p.setOnline(false);
-        sentOfflineMessage(p);
-        return p;
+        if (pc != null) {
+            playerConnections.get().remove(pc);
+            Player p = game.findPlayerByUsername(pc.getUsername());
+            p.setOnline(false);
+            sentOfflineMessage(p);
+            return p;
+        }
+        return null;
     }
 
     public void sentOfflineMessage(Player p) {
@@ -172,11 +185,11 @@ public class GameServer extends Thread {
     }
 
     public ArrayList<PlayerConnection> getPlayerConnections() {
-        return playerConnections;
+        return playerConnections.get();
     }
 
     public boolean containsUsername(String username) {
-        for (PlayerConnection pc : playerConnections) {
+        for (PlayerConnection pc : playerConnections.get()) {
             if (pc.getUsername().equals(username)) {
                 return true;
             }
@@ -186,13 +199,17 @@ public class GameServer extends Thread {
 
     public void removePlayerConnection(String user) {
         PlayerConnection pc = null;
-        for (PlayerConnection playerConnection : playerConnections) {
+        for (PlayerConnection playerConnection : playerConnections.get()) {
             if (playerConnection.getUsername().equals(user)) {
                 pc = playerConnection;
             }
         }
+
         if (pc != null) {
-            playerConnections.remove(pc);
+            HashMap<String, String> msg = new HashMap<>();
+            msg.put("type", "KICK_OUT");
+            pc.send(gson.toJson(msg));
+            playerConnections.get().remove(pc);
         }
         Player p = game.findPlayerByUsername(user);
         sentOfflineMessage(p);
