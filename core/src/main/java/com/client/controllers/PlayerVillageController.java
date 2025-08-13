@@ -362,10 +362,10 @@ public class PlayerVillageController {
         if (target != null) {
             float diff = target.getX() - playerPosition.x;
             float diff2 = target.getY() - playerPosition.y;
-            if (diff >= -15 && diff < 15) {
+            if (diff >= -5 && diff < 5) {
                 diff = 0;
             }
-            if (diff2 >= -15 && diff2 < 15) {
+            if (diff2 >= -5 && diff2 < 5) {
                 diff2 = 0;
             }
             if (diff2 == 0 && diff == 0) {
