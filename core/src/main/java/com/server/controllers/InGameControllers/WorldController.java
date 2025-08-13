@@ -83,7 +83,7 @@ public class WorldController extends ServerController {
                         rejectCount++;
                     }
                 }
-                if (rejectCount > numOfPlayers / 2) {
+                if (rejectCount >= numOfPlayers / 2) {
                     gs.removePlayerConnection(player2.getUser().getUsername());
                     game.getPlayers().remove(player2);
                     String gameJson = GameGSON.gson.toJson(game);

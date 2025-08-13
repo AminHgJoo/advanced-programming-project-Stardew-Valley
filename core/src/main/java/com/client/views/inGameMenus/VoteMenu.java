@@ -197,9 +197,13 @@ public class VoteMenu implements MyScreen, InputProcessor {
             ClientApp.currentGameData = GameGSON.gson.fromJson(gameJson, GameData.class);
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog("Player has been kicked out", "Success");
+            dispose();
+            gameMain.setScreen(farmScreen);
         } else if (type.equals("PLAYER_NOT_KICK_OUT")) {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog("Player hasn't been kicked out", "Success");
+            dispose();
+            gameMain.setScreen(farmScreen);
         }
     }
 
