@@ -77,7 +77,7 @@ public class VoteMenu implements MyScreen, InputProcessor {
                 JsonObject req = new JsonObject();
                 req.addProperty("playerId", player.getUser_id());
                 req.addProperty("vote", true);
-                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/worldGoToVoteMenu", req);
+                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/worldVotePlayer", req);
                 Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                 if (res.getStatus() == 200) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
@@ -99,7 +99,7 @@ public class VoteMenu implements MyScreen, InputProcessor {
                 JsonObject req = new JsonObject();
                 req.addProperty("playerId", player.getUser_id());
                 req.addProperty("vote", false);
-                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/worldGoToVoteMenu", req);
+                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/worldVotePlayer", req);
                 Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                 if (res.getStatus() == 200) {
                     UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
@@ -197,9 +197,13 @@ public class VoteMenu implements MyScreen, InputProcessor {
             ClientApp.currentGameData = GameGSON.gson.fromJson(gameJson, GameData.class);
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog("Player has been kicked out", "Success");
+            dispose();
+            gameMain.setScreen(farmScreen);
         } else if (type.equals("PLAYER_NOT_KICK_OUT")) {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog("Player hasn't been kicked out", "Success");
+            dispose();
+            gameMain.setScreen(farmScreen);
         }
     }
 
