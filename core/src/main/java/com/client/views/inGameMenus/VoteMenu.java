@@ -31,6 +31,7 @@ import com.google.gson.JsonObject;
 import com.server.utilities.Response;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VoteMenu implements MyScreen, InputProcessor {
     private final Skin skin;
@@ -42,8 +43,8 @@ public class VoteMenu implements MyScreen, InputProcessor {
     private BitmapFont titleFont;
     private GlyphLayout layout;
     private Player player;
-    private boolean goToFarmMenu = false;
-    private boolean goToMainMenu = false;
+    private AtomicBoolean goToFarmMenu = new AtomicBoolean(false);
+    private AtomicBoolean goToMainMenu = new AtomicBoolean(false);
 
     public VoteMenu(GameMain gameMain, MyScreen farmScreen, Player player) {
         this.gameMain = gameMain;
@@ -203,18 +204,18 @@ public class VoteMenu implements MyScreen, InputProcessor {
                 ClientApp.currentPlayer = null;
                 ClientApp.loggedInUser.getGames().remove(ClientApp.currentGameData.get_id());
                 ClientApp.currentGameData = null;
-                goToMainMenu = true;
+                goToMainMenu.set(true);
                 System.out.println("SIKTIR");
             }else{
                 UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                 uiPopupHelper.showDialog("Player has been kicked out", "Success");
-                goToFarmMenu = true;
+                goToFarmMenu.set(true);
                 System.out.println("KIKCEDDDD");
             }
         } else if (type.equals("PLAYER_NOT_KICK_OUT")) {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog("Player hasn't been kicked out", "Success");
-            goToFarmMenu = true;
+            goToFarmMenu.set(true);
             System.out.println("NOT KICKEDDD");
         } else if (type.equals("KICK_OUT")) {
 
@@ -227,12 +228,12 @@ public class VoteMenu implements MyScreen, InputProcessor {
 
     @Override
     public void render(float v) {
-        if (goToFarmMenu) {
+        if (goToFarmMenu.get()) {
             dispose();
             gameMain.setScreen(farmScreen);
             return;
         }
-        if (goToMainMenu) {
+        if (goToMainMenu.get()) {
             dispose();
             farmScreen.dispose();
             gameMain.setScreen(new MainMenu(gameMain));
