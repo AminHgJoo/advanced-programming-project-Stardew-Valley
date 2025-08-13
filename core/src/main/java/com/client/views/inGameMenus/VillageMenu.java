@@ -462,7 +462,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
                     public void changed(ChangeEvent event, Actor actor) {
                         JsonObject req = new JsonObject();
                         req.addProperty("username", player.getUser().getUsername());
-                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipHug", req);
+                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipHug", req);
                         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                         if (res.getStatus() == 200) {
                             String game = res.getBody().toString();
@@ -481,7 +481,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
                         JsonObject req = new JsonObject();
                         req.addProperty("username", player.getUser().getUsername());
                         req.addProperty("ring", "ring");
-                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipAskMarriage", req);
+                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipAskMarriage", req);
                         //TODO dastan dare hanooz kiram toosh bayad accept kne yaroo
                         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                         if (res.getStatus() == 200) {
@@ -507,7 +507,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
                             JsonObject req = new JsonObject();
                             req.addProperty("username", player.getUser().getUsername());
                             req.addProperty("flowerName", flowerSlot.getItem().getName());
-                            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipFlower", req);
+                            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipFlower", req);
                             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                             if (res.getStatus() == 200) {
                                 String game = res.getBody().toString();
