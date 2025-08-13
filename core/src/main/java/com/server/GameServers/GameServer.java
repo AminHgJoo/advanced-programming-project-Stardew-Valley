@@ -206,9 +206,6 @@ public class GameServer extends Thread {
         }
 
         if (pc != null) {
-            HashMap<String, String> msg = new HashMap<>();
-            msg.put("type", "KICK_OUT");
-            pc.send(gson.toJson(msg));
             playerConnections.get().remove(pc);
         }
         Player p = game.findPlayerByUsername(user);
