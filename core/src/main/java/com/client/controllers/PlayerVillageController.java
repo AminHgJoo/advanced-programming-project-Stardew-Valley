@@ -373,10 +373,10 @@ public class PlayerVillageController {
                 currState = PlayerState.IDLE;
                 return;
             }
-            playerPosition.x += diff / 256 * delta;
-            playerPosition.y += diff2 / 256 * delta;
-            target.setX(target.getX() - diff / 256 * delta);
-            target.setY(target.getY() - diff2 / 256 * delta);
+            playerPosition.x += diff  * delta;
+            playerPosition.y += diff2  * delta;
+            target.setX(target.getX() - diff  * delta);
+            target.setY(target.getY() - diff2  * delta);
             if (diff != 0) {
                 if (diff > 0) {
                     facingDirection = FacingDirection.RIGHT;
