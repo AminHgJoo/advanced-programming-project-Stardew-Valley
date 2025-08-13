@@ -518,6 +518,7 @@ public class WorldController extends ServerController {
                     targetCell.setObjectOnCell(new EmptyCell());
                 } else {
                     crop.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), crop.cropSeedsType.regrowthTime));
+                    crop.setStageNumber(crop.getStageNumber() - 1);
                 }
 
                 player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);
