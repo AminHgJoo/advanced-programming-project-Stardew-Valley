@@ -27,6 +27,7 @@ public class WorldController extends ServerController {
     public WorldController(GameServer gs) {
         super(gs);
     }
+
     private static void addFishes(Fish fish, Backpack backpack, int numberOfFishes) {
         for (Slot slot : backpack.getSlots()) {
             if (slot.getItem().getName().compareToIgnoreCase(fish.getName()) == 0) {
@@ -514,12 +515,14 @@ public class WorldController extends ServerController {
                 }
 
                 Slot newSlot = new Slot(FoodTypes.getFoodTypeByName(crop.cropSeedsType.name), amountToHarvest);
+                slot = newSlot;
                 backpack.getSlots().add(newSlot);
 
                 if (crop.cropSeedsType.oneTime) {
                     targetCell.setObjectOnCell(new EmptyCell());
                 } else {
                     crop.setHarvestDeadLine(DateUtility.getLocalDateTime(game.getDate(), crop.cropSeedsType.regrowthTime));
+                    crop.setStageNumber(crop.getStageNumber() - 1);
                 }
 
                 player.getUnbuffedFarmingSkill().setXp(player.getUnbuffedFarmingSkill().getXp() + 5);

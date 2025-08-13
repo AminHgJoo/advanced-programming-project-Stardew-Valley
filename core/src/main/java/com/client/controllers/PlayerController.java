@@ -185,7 +185,6 @@ public class PlayerController {
             }
         }
         if (currState != PlayerState.TOOL_SWINGING && player.getEquippedItem() != null && !(player.getEquippedItem() instanceof Tool)) {
-            System.out.println("HELLO");
             Item item = player.getEquippedItem();
             Texture t = item.getTexture();
             batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
@@ -483,6 +482,7 @@ public class PlayerController {
 
             var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/farmingSeedPlanting", req);
             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+            System.out.println(res.getMessage());
             Gdx.app.postRunnable(() -> {
                 if (res.getStatus() == 200) {
                     String playerJson = res.getBody().toString();
@@ -496,7 +496,6 @@ public class PlayerController {
 
     public void equipItem(Item item) {
         if (!(item instanceof Tool) && item != null) {
-            System.out.println("Hello");
             currState = PlayerState.CARRYING_ITEM;
         }
         player.setEquippedItem(item);
