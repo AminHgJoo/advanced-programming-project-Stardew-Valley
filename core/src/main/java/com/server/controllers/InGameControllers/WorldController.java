@@ -60,26 +60,6 @@ public class WorldController extends ServerController {
         }
     }
 
-    public void sendEmoji(Context ctx, GameServer gs) {
-        try {
-            HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
-            int emojiIndex = (Integer) body.get("emoji");
-            String id = ctx.attribute("id");
-            GameData game = gs.getGame();
-            Player player = game.findPlayerByUserId(id);
-            ctx.json(Response.OK.setMessage("emoji successfully sent"));
-            HashMap<String, String> msg = new HashMap<>();
-            msg.put("type", "EMOJI_SENT");
-            msg.put("emoji", emojiIndex + "");
-            msg.put("player_username", player.getUser().getUsername());
-            msg.put("player_user_id", id);
-            gs.broadcast(msg);
-        } catch (Exception e) {
-            e.printStackTrace();
-            ctx.json(Response.BAD_REQUEST.setMessage(e.getMessage()));
-        }
-    }
-
     public void votePlayer(Context ctx, GameServer gs) {
         try {
             String id = ctx.attribute("id");

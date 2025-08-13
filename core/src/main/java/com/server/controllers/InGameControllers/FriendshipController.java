@@ -14,6 +14,7 @@ public class FriendshipController extends ServerController {
     public FriendshipController(GameServer gs) {
         super(gs);
     }
+
     public void gift(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
@@ -369,6 +370,8 @@ public class FriendshipController extends ServerController {
             HashMap<String, String> msg = new HashMap<>();
             msg.put("type", "EMOJI_SENT");
             msg.put("index", index + "");
+            msg.put("player_user_id", id);
+            msg.put("player_username", player.getUser().getUsername());
             gs.broadcast(msg);
         } catch (Exception e) {
             e.printStackTrace();
