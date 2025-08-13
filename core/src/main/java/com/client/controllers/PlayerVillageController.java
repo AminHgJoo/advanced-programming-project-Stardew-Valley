@@ -59,8 +59,6 @@ public class PlayerVillageController {
         playerAnimationController = new PlayerAnimationController(currState, facingDirection);
         playerService = new PlayerService(player, game);
         this.playerPosition = x;
-        // TODO tooof
-        this.playerPosition.x = 600;
         this.playerVelocity = y;
         this.width = playerAnimationController.getCurrentFrame().getTexture().getWidth();
         this.height = playerAnimationController.getCurrentFrame().getTexture().getHeight();
