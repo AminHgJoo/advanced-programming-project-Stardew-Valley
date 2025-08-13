@@ -137,6 +137,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
 
                 playerController.getPlayer().currentEmoji = emojiTextures.get(i);
                 playerController.getPlayer().emojiCounter = 0f;
+                playerController.sendEmoji(i);
                 break;
             }
         }
