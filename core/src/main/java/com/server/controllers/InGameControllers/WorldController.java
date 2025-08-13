@@ -27,6 +27,7 @@ public class WorldController extends ServerController {
     public WorldController(GameServer gs) {
         super(gs);
     }
+
     private static void addFishes(Fish fish, Backpack backpack, int numberOfFishes) {
         for (Slot slot : backpack.getSlots()) {
             if (slot.getItem().getName().compareToIgnoreCase(fish.getName()) == 0) {
@@ -417,12 +418,14 @@ public class WorldController extends ServerController {
                 ctx.json(Response.BAD_REQUEST.setMessage("Can is empty"));
                 return;
             }
+            equippedTool.setWaterReserve(equippedTool.getWaterReserve() - 20);
             tree.setHasBeenWateredToday(true);
         } else if (targetCell.getObjectOnCell() instanceof Crop crop) {
             if (equippedTool.getWaterReserve() == 0) {
                 ctx.json(Response.BAD_REQUEST.setMessage("Can is empty"));
                 return;
             }
+            equippedTool.setWaterReserve(equippedTool.getWaterReserve() - 10);
             crop.setHasBeenWateredToday(true);
             crop.setLastWateringDate(game.getDate());
         } else {
@@ -512,6 +515,7 @@ public class WorldController extends ServerController {
                 }
 
                 Slot newSlot = new Slot(FoodTypes.getFoodTypeByName(crop.cropSeedsType.name), amountToHarvest);
+                slot = newSlot;
                 backpack.getSlots().add(newSlot);
 
                 if (crop.cropSeedsType.oneTime) {

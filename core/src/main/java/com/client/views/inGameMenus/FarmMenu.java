@@ -131,6 +131,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     private boolean crowFlag = false;
     public boolean thorFlag = false;
     private boolean greenhouseCheatFlag = false;
+
     private InputProcessor temp;
     private Texture loadingTexture;
 
@@ -363,6 +364,11 @@ public class FarmMenu implements MyScreen, InputProcessor {
 //                emojiCounter = -1;
 //            }
 //      }
+    }
+
+    public void unEquip() {
+        selected = false;
+        selectedIndex = -1;
     }
 
     private void showTools() {
@@ -644,7 +650,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 } else
                     playerController.toolUse();
             } else if (item instanceof Seed) {
-
+                playerController.plantSeeds();
+            }else if(item.getName().contains("Fertilizer")){
+                playerController.fertilization();
             }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
@@ -652,6 +660,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 selectedIndex = -1;
                 selectedSave = -1;
                 selected = false;
+
             }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             System.out.println("hello");
@@ -721,7 +730,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
 
                     Window popup = new Window(artisanBlock.getArtisanType().name, skin);
                     popup.setSize(300, 500);
-                    popup.setPosition(stageCoords.x, stageCoords.y, Align.topLeft);
+                    popup.setPosition(stageCoords.x, stageCoords.y + 40, Align.topLeft);
 
                     Label label = new Label("information: \nthis is a " + artisanBlock.getArtisanType().name, skin);
                     label.setWrap(true);
@@ -738,13 +747,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
                             if (!artisanBlock.canBeCollected) {
                                 JsonObject req = new JsonObject();
                                 req.addProperty("artisanName", artisanBlock.getArtisanType().name);
-                                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/artisanCheat", req);
+                                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/artisanCheat", req);
                                 Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                                 if (res.getStatus() == 200) {
                                     String player = res.getBody().toString();
                                     ((FarmMenu) farmScreen).getPlayerController().updatePlayerObject(player);
                                     Gdx.input.setInputProcessor(FarmMenu.this);
                                     popup.remove();
+                                }
+                                else{
+                                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                                    uiPopupHelper.showDialog(res.getMessage(), "Failed");
                                 }
                             }
                         }
@@ -755,13 +768,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
                             if (artisanBlock.canBeCollected) {
                                 JsonObject req = new JsonObject();
                                 req.addProperty("artisanName", artisanBlock.getArtisanType().name);
-                                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/artisanHandleArtisanGet", req);
+                                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/artisanHandleArtisanGet", req);
                                 Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                                 if (res.getStatus() == 200) {
                                     String player = res.getBody().toString();
                                     ((FarmMenu) farmScreen).getPlayerController().updatePlayerObject(player);
                                     Gdx.input.setInputProcessor(FarmMenu.this);
                                     popup.remove();
+                                }
+                                else{
+                                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                                    uiPopupHelper.showDialog(res.getMessage(), "Failed");
                                 }
                             }
                         }
@@ -771,13 +788,17 @@ public class FarmMenu implements MyScreen, InputProcessor {
                         public void changed(ChangeEvent event, Actor actor) {
                             JsonObject req = new JsonObject();
                             req.addProperty("artisanName", artisanBlock.getArtisanType().name);
-                            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/artisanCancel", req);
+                            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/artisanCancel", req);
                             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                             if (res.getStatus() == 200) {
                                 String player = res.getBody().toString();
                                 ((FarmMenu) farmScreen).getPlayerController().updatePlayerObject(player);
                                 Gdx.input.setInputProcessor(FarmMenu.this);
                                 popup.remove();
+                            }
+                            else{
+                                UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                                uiPopupHelper.showDialog(res.getMessage(), "Failed");
                             }
                         }
                     });
@@ -793,8 +814,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
                     label.setWrap(false);
                     popup.add(label).row();
                     popup.add(cheatBtn).row();
-                    popup.add(collectBtn).row();
-                    popup.add(cancelBtn);
+                    if(artisanBlock.canBeCollected)
+                        popup.add(collectBtn).row();
+                    popup.add(cancelBtn).row();
                     popup.add(exitBtn);
 
                     popupStage.addActor(popup);
@@ -881,6 +903,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
             if (!Objects.equals(id, playerController.getPlayer().getUser_id())) {
                 String player = res.get("player");
                 playerController.updateAnotherPlayerObject(player);
+                FarmMenu.this.farm = ClientApp.currentPlayer.getFarm();
             }
         } else if (type.equals("GAME_UPDATED")) {
             String game = res.get("game");
@@ -970,8 +993,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
             System.out.println("HELLO");
             playerController.showLoading();
         } else if (type.equals("RECEIVED_GIFT")) {
-            String gift = res.get("gift");
-            showPopUp(gift, "Gift");
+            showPopUp("Received Gift \n " + res.get("gift"), "Gift");
+        } else if (type.equals("GIFT_RATED")) {
+            showPopUp("Rate Gift \n " + res.get("gift") + " rate : " + res.get("rate"), "Gift");
         }
     }
 
@@ -1041,7 +1065,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 playerController.loadingTimer = -1;
             }
         } else {
-            this.farm = playerController.getPlayer().getFarm();
+            this.farm = ClientApp.currentPlayer.getCurrentFarm(ClientApp.currentGameData);
             batch.setShader(dayNightShader);
             clearAndResetScreen();
             updateSeasonGrassTexture();
@@ -1155,10 +1179,13 @@ public class FarmMenu implements MyScreen, InputProcessor {
             }
 
             if (!(cell.getObjectOnCell() instanceof BuildingBlock)) {
+                if(cell.getObjectOnCell() instanceof Crop crop){
+                    texture1 = crop.getTexture();
+                }
                 texture1 = cell.getObjectOnCell().getTexture();
             }
 
-            if (texture1 == grassTexture && cell.isTilled()) {
+            if ( cell.isTilled()) {
                 texture1 = AssetManager.getImage("tilled");
                 modifiedDraw(batch, texture1, xOfCell, yOfCell, TILE_PIX_SIZE, TILE_PIX_SIZE);
                 continue;
@@ -1171,10 +1198,36 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 continue;
             }
 
+
             // TODO check for giant crop correct rendering
             if (cell.getObjectOnCell() instanceof DroppedItem || cell.getObjectOnCell() instanceof ArtisanBlock) {
                 modifiedDraw(batch, texture1, xOfCell, yOfCell, 30, 30);
-            } else if (cell.getObjectOnCell() instanceof ForagingMineral) {
+            }
+            if(cell.getObjectOnCell() instanceof ArtisanBlock) {
+                        ArtisanBlock artisanBlock = (ArtisanBlock) cell.getObjectOnCell();
+                        if (artisanBlock.beingUsed) {
+                            float artisanHeight = 30.0f;
+                            float artisanWidth = 30.0f;
+
+                            GameData gameData = ClientApp.currentGameData;
+                            LocalDateTime start = artisanBlock.startTime;
+                            LocalDateTime end = artisanBlock.prepTime;
+                            LocalDateTime now = gameData.getDate();
+                            float totalSec = Duration.between(start, end).toMillis();
+                            float elapsed = Duration.between(start, now).toMillis();
+                            if(artisanBlock.canBeCollected)
+                                elapsed = totalSec;
+                            float progress = MathUtils.clamp(elapsed / totalSec, 0f, 1f);
+                            float barWidth = artisanWidth * (elapsed / totalSec);
+                            float barHeight = 5f;
+                            //shapeRenderer.begin(ShapeRenderer.ShapeType.Filled); shapeRenderer.setColor(Color.DARK_GRAY); shapeRenderer.rect(barX, barY, barWidth, barHeight); shapeRenderer.setColor(Color.LIME); shapeRenderer.rect(barX, barY, barWidth * progress, barHeight); shapeRenderer.end();
+                            if(artisanBlock.canBeCollected)
+                                modifiedDraw(batch, AssetManager.getImage("green"),xOfCell, yOfCell - 1, barWidth, barHeight);
+                            else
+                                modifiedDraw(batch, AssetManager.getImage("red"),xOfCell, yOfCell - 1, barWidth, barHeight);
+                        }
+            }
+            else if (cell.getObjectOnCell() instanceof ForagingMineral) {
                 modifiedDraw(batch, texture1, xOfCell, yOfCell, 30, 30);
             } else {
                 modifiedDraw(batch, texture1, xOfCell, yOfCell);
@@ -1233,33 +1286,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
     }
 
     private void artisanTimeBar() {
-        for (Cell cell : farm.getCells()) {
-            if (cell.getObjectOnCell() instanceof ArtisanBlock) {
-                ArtisanBlock artisanBlock = (ArtisanBlock) cell.getObjectOnCell();
-                if (artisanBlock.beingUsed) {
-                    float artisanHeight = 30.0f;
-                    float artisanWidth = 30.0f;
 
-                    GameData gameData = ClientApp.currentGameData;
-                    LocalDateTime start = artisanBlock.startTime;
-                    LocalDateTime end = artisanBlock.prepTime;
-                    LocalDateTime now = gameData.getDate();
-                    float totalSec = Duration.between(start, end).toMillis();
-                    float elapsed = Duration.between(start, now).toMillis();
-                    float progress = MathUtils.clamp(elapsed / totalSec, 0f, 1f);
-                    float barWidth = artisanWidth;
-                    float barHeight = 5f;
-                    float barX = cell.getCoordinate().getX();
-                    float barY = cell.getCoordinate().getY() + artisanHeight + 2;
-                    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                    shapeRenderer.setColor(Color.DARK_GRAY);
-                    shapeRenderer.rect(barX, barY, barWidth, barHeight);
-                    shapeRenderer.setColor(Color.LIME);
-                    shapeRenderer.rect(barX, barY, barWidth * progress, barHeight);
-                    shapeRenderer.end();
-                }
-            }
-        }
     }
 
     public void drawFuckingTreeProperly(SpriteBatch batch, Texture texture, float xOfCell, float yOfCell) {
@@ -1325,7 +1352,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
         return x >= 20 && x <= 27 && y >= 1 && y <= 8;
     }
 
-    private synchronized void showPopUp(String message, String promptType) {
+    public synchronized void showPopUp(String message, String promptType) {
         temp = Gdx.input.getInputProcessor();
         Gdx.input.setInputProcessor(chatNotifStage);
         UIPopupHelper uiPopupHelper = new UIPopupHelper(chatNotifStage, AssetManager.getSkin());

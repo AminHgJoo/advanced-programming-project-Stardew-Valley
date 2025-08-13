@@ -27,19 +27,19 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class ArtisanController extends ServerController {
+public class ArtisanControllerNew extends ServerController {
     public static Context ctx;
     public static GameServer gs;
 
-    public ArtisanController(GameServer gs) {
+    public ArtisanControllerNew(GameServer gs) {
         super(gs);
     }
 
     public static void handleArtisanUse(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
-            ArtisanController.gs = gs;
-            ArtisanController.ctx = ctx;
+            ArtisanControllerNew.gs = gs;
+            ArtisanControllerNew.ctx = ctx;
             String artisanName = (String) body.get("artisanName");
             String item1Name = (String) body.getOrDefault("item1Name", " ");
             String id = ctx.attribute("id");
@@ -683,8 +683,8 @@ public class ArtisanController extends ServerController {
 
     public static void handleArtisanGet(Context ctx, GameServer gs) {
         HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
-        ArtisanController.gs = gs;
-        ArtisanController.ctx = ctx;
+        ArtisanControllerNew.gs = gs;
+        ArtisanControllerNew.ctx = ctx;
         String artisanName = (String) body.get("artisanName");
         String id = ctx.attribute("id");
         GameData gameData = gs.getGame();
@@ -744,8 +744,8 @@ public class ArtisanController extends ServerController {
     public static void cancel(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
-            ArtisanController.gs = gs;
-            ArtisanController.ctx = ctx;
+            ArtisanControllerNew.gs = gs;
+            ArtisanControllerNew.ctx = ctx;
             String artisanName = (String) body.get("artisanName");
             String id = ctx.attribute("id");
             GameData gameData = gs.getGame();
@@ -770,8 +770,8 @@ public class ArtisanController extends ServerController {
     public static void cheat(Context ctx, GameServer gs) {
         try {
             HashMap<String, Object> body = ctx.bodyAsClass(HashMap.class);
-            ArtisanController.gs = gs;
-            ArtisanController.ctx = ctx;
+            ArtisanControllerNew.gs = gs;
+            ArtisanControllerNew.ctx = ctx;
             String artisanName = (String) body.get("artisanName");
             String id = ctx.attribute("id");
             GameData gameData = gs.getGame();

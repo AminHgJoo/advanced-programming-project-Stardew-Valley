@@ -42,7 +42,7 @@ public class Crop extends MapObject {
     @Override
     public Texture getTexture() {
         if (texture == null) {
-            this.texture = AssetManager.getImage(cropSeedsType.getTextureName());
+            this.texture = AssetManager.getImage(cropSeedsType.getStagedTexture(stageNumber));
         }
         if (isGiant) {
             this.texture = AssetManager.getImage("giant" + cropSeedsType.getTextureName());

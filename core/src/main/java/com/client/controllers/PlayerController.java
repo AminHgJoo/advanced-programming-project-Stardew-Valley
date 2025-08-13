@@ -17,6 +17,7 @@ import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.Slot;
 import com.common.models.items.Item;
+import com.common.models.items.Seed;
 import com.common.models.items.Tool;
 import com.common.models.mapModels.Cell;
 import com.common.models.mapModels.Coordinate;
@@ -189,7 +190,7 @@ public class PlayerController {
             Texture t = item.getTexture();
             batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
                 playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
-                (float) (t.getWidth() / scale)*2, (float) (t.getHeight() / scale)*2);
+                (float) (t.getWidth() / scale) * 2, (float) (t.getHeight() / scale) * 2);
         }
     }
 
@@ -213,7 +214,10 @@ public class PlayerController {
                             System.out.println(res.getMessage());
                             String playerJson = res.getBody().toString();
                             updatePlayerObject(playerJson);
-                            System.out.println("Tool used");
+                            if (tool.getName().contains("Water")) {
+                                Tool t = (Tool) player.getEquippedItem();
+                                farmMenu.showPopUp("Watering Can  : " + t.getWaterReserve(), "Status");
+                            }
                         } else {
                             System.out.println(res.getMessage());
                         }
@@ -421,6 +425,29 @@ public class PlayerController {
         game.setPlayerById(p.getUser_id(), p);
     }
 
+    public void fertilization() {
+        Item i = player.getEquippedItem();
+        networkThreadPool.execute(() -> {
+            JsonObject req = new JsonObject();
+            req.addProperty("x", playerPosition.x);
+            req.addProperty("y", playerPosition.y);
+            req.addProperty("direction", facingDirection.getDirection());
+            req.addProperty("fertilizer", i.getName());
+
+            var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/farmingFertilization", req);
+            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+            Gdx.app.postRunnable(() -> {
+                if (res.getStatus() == 200) {
+                    String playerJson = res.getBody().toString();
+                    updatePlayerObject(playerJson);
+                    farmMenu.unEquip();
+                    player.setEquippedItem(null);
+                    farmMenu.showPopUp("Successfully fertilized the crop !!" , "Success");
+                }
+            });
+        });
+    }
+
     public void updateGame(String json) {
         GameData gameData = GameGSON.gson.fromJson(json, GameData.class);
         this.game = gameData;
@@ -440,6 +467,28 @@ public class PlayerController {
 
                 } else {
 
+                }
+            });
+        });
+    }
+
+    public void plantSeeds() {
+        networkThreadPool.execute(() -> {
+            Seed seed = (Seed) player.getEquippedItem();
+            JsonObject req = new JsonObject();
+            req.addProperty("x", playerPosition.x);
+            req.addProperty("y", playerPosition.y);
+            req.addProperty("direction", facingDirection.getDirection());
+            req.addProperty("seed", seed.getName());
+
+            var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/farmingSeedPlanting", req);
+            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+            Gdx.app.postRunnable(() -> {
+                if (res.getStatus() == 200) {
+                    String playerJson = res.getBody().toString();
+                    updatePlayerObject(playerJson);
+                    farmMenu.unEquip();
+                    player.setEquippedItem(null);
                 }
             });
         });
