@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.controllers.NpcController;
+import com.client.controllers.PlayerController;
 import com.client.controllers.PlayerVillageController;
 import com.client.utils.*;
 import com.common.models.GameData;
@@ -263,6 +264,16 @@ public class VillageMenu implements MyScreen, InputProcessor {
             System.out.println("HUGGGGGGGGG");
         } else if (type.equals("RECEIVED_FLOWER")) {
             showPopUp("Yeki Romantic Shod", "Eshghe Abadi");
+        }
+        else if(type.equals("EMOJI_SENT")){
+            String username = res.get("player_username");
+            String index = res.get("index");
+            for(Player player1 :game.getPlayers() ){
+               if(player1.getUser().getUsername().equals(username)){
+                   player1.currentEmoji = emojiTextures.get(Integer.parseInt(index));
+                   player1.emojiCounter = 0;
+               }
+            }
         }
     }
 
