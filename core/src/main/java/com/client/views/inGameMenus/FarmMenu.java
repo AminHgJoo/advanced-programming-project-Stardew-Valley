@@ -491,7 +491,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new ShippingMenu(gameMain, this));
         } else if (keycode == Input.Keys.N) {
             gameMain.setScreen(new JournalMenu(gameMain, this));
-        } else if (keycode == Input.Keys.U) {
+        }
+        else if (keycode == Input.Keys.U) {
             for (Player player : ClientApp.currentGameData.getPlayers()) {
                 if ((player != ClientApp.currentPlayer) && (Coordinate.calculateEuclideanDistance(ClientApp.currentPlayer.getCoordinate(), player.getCoordinate()) <= Math.sqrt(2))) {
                     Gdx.input.setInputProcessor(popupStage);
@@ -597,6 +598,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
                 }
             }
         }
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.J)){
+            gameMain.setScreen(new AnimalMenu(gameMain, this));
+        }
         return false;
     }
 
@@ -674,7 +678,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             System.out.println("hello");
             pauseMenu.togglePauseMenu();
-        } else {
+        }
+
+        else {
             if (!isToolSwinging) {
                 playerController.setState(PlayerState.IDLE);
                 playerVelocity.x = 0;
