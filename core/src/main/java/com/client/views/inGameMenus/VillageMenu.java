@@ -73,6 +73,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
     private InputProcessor temp;
 
     public VillageMenu(FarmMenu farmMenu, GameMain gameMain) {
+        player.setCoordinate(new Coordinate(TILE_PIX_SIZE * FARM_X_SPAN / 2, TILE_PIX_SIZE * FARM_Y_SPAN / 2));
         this.farmMenu = farmMenu;
         this.gameMain = gameMain;
         batch = new SpriteBatch();

@@ -1,6 +1,7 @@
 package com.server.controllers.InGameControllers;
 
 
+import com.client.views.inGameMenus.FarmMenu;
 import com.common.GameGSON;
 import com.common.models.GameData;
 import com.common.models.Player;
@@ -14,6 +15,9 @@ import io.javalin.http.Context;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+
+import static com.client.views.inGameMenus.FarmMenu.FARM_Y_SPAN;
+import static com.client.views.inGameMenus.FarmMenu.TILE_PIX_SIZE;
 
 public class MovementController extends ServerController {
     public MovementController(GameServer gs) {
