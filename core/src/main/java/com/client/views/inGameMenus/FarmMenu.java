@@ -625,7 +625,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
         } else if (Gdx.input.isKeyPressed(Keybinds.RIGHT.keycodes.get(0))) {
             playerController.setState(PlayerState.WALKING);
             playerController.handleKeyUp(BASE_SPEED_FACTOR, 0);
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+        }
+        else if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
             System.out.println(playerController.getPlayer().getEquippedItem());
             if (playerController.getPlayer().getEquippedItem() == null) {
                 return;
@@ -661,7 +662,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
             } else if (item instanceof Food) {
                 playerController.eatFood();
             }
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+        }
+        else if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
             if (success) {
                 selectedIndex = -1;

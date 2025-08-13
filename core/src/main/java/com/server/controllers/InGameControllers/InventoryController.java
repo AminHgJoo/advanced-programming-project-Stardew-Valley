@@ -124,7 +124,7 @@ public class InventoryController extends ServerController {
 
             Backpack backpack = player.getInventory();
             float playerX = player.getCoordinate().getX() / 32;
-            float playerY = 49 - player.getCoordinate().getY() / 32;
+            float playerY = 50 - player.getCoordinate().getY() / 32;
 
             Slot slotToPlace = backpack.getSlotByItemName(itemName);
             if (slotToPlace == null) {
