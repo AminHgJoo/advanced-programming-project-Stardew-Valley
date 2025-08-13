@@ -65,11 +65,8 @@ public class LoadGameMenu implements MyScreen {
                 var getResponse = HTTPUtil.get("/api/game/loadGame/" + selectBox.getSelected());
                 Response res = HTTPUtil.deserializeHttpResponse(getResponse);
                 if (res.getStatus() == 200) {
-                    UIPopupHelper popupHelper = new UIPopupHelper(stage, skin);
-                    popupHelper.showDialog(res.getMessage(), "Success");
+                    System.out.println("Khoda Ro Shokr II");
                 } else {
-                    UIPopupHelper popupHelper = new UIPopupHelper(stage, skin);
-                    popupHelper.showDialog(res.getMessage(), "Error");
                 }
             }
         });

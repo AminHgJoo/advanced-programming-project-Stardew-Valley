@@ -42,7 +42,6 @@ public class JournalMenu implements MyScreen, InputProcessor {
         this.layout = new GlyphLayout();
         this.player = ClientApp.currentPlayer;
         this.quests = player.getQuests();
-
     }
 
     @Override

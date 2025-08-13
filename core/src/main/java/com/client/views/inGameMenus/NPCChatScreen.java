@@ -45,6 +45,7 @@ public class NPCChatScreen implements MyScreen {
     private TextField giftItemName;
     private TextButton sendButton;
     private TextButton giftButton;
+    private Label friendshipLabel;
 
     public NPCChatScreen(NPC npc, VillageMenu villageMenu, GameMain gameMain) {
         this.npc = npc;
@@ -104,6 +105,9 @@ public class NPCChatScreen implements MyScreen {
                 gameMain.setScreen(villageMenu);
             }
         });
+        friendshipLabel = new Label("Friend Level: " + fetchFriendshipLevel(npcName) + "/10", skin);
+        sidebar.add(friendshipLabel).width(150).height(60).row();
+
         sidebar.add().expandY();
 
     }
@@ -271,5 +275,10 @@ public class NPCChatScreen implements MyScreen {
     @Override
     public void socketMessage(String message) {
 
+    }
+
+    private String fetchFriendshipLevel(String npcName) {
+
+        return "0";
     }
 }

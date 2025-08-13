@@ -107,6 +107,10 @@ public class PlayerVillageController {
         batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale),
             playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale), playerTexture.getRegionWidth() / scale
             , playerTexture.getRegionHeight() / scale);
+        batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale),
+            playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale), playerTexture.getRegionWidth() / scale
+            , playerTexture.getRegionHeight() / scale);
+
         if (currState != PlayerState.TOOL_SWINGING && player.getEquippedItem() != null) {
             if (facingDirection == FacingDirection.DOWN) {
                 Texture t;
