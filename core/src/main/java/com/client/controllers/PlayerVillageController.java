@@ -58,6 +58,8 @@ public class PlayerVillageController {
         playerAnimationController = new PlayerAnimationController(currState, facingDirection);
         playerService = new PlayerService(player, game);
         this.playerPosition = x;
+        // TODO tooof
+        this.playerPosition.x = 600;
         this.playerVelocity = y;
         this.width = playerAnimationController.getCurrentFrame().getTexture().getWidth();
         this.height = playerAnimationController.getCurrentFrame().getTexture().getHeight();
@@ -531,6 +533,8 @@ public class PlayerVillageController {
     public void updateGamePlayer(Player player) {
         game.setPlayerById(this.player.getUser_id(), player);
         updatePlayer(player);
+        playerPosition.x = player.getCoordinate().getX();
+        playerPosition.y = player.getCoordinate().getY();
     }
 
     public void updateGame() {
