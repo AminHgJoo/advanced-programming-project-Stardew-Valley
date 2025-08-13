@@ -19,6 +19,7 @@ public class MovementController extends ServerController {
     public MovementController(GameServer gs) {
         super(gs);
     }
+
     private static Coordinate getEmptyCoordinate(Player player, Player partner, ArrayList<Cell> cells) {
         for (int i = 60; i >= 0; i--) {
             for (int j = 8; j <= 40; j++) {
@@ -106,13 +107,13 @@ public class MovementController extends ServerController {
             Player player = game.findPlayerByUserId(id);
             if (!player.isInVillage()) {
                 player.setInVillage(true);
-                player.setCoordinate(new Coordinate(1200, 800));
+                player.setCoordinate(new Coordinate(960, 472));
                 String playerJson = GameGSON.gson.toJson(player);
                 ctx.json(Response.OK.setMessage("Player is in Village").setBody(playerJson));
                 HashMap<String, String> msg = new HashMap<>();
                 msg.put("type", "PLAYER_UPDATED");
                 msg.put("player_user_id", id);
-                msg.put("player" , playerJson);
+                msg.put("player", playerJson);
                 gs.broadcast(msg);
                 return;
             }
@@ -137,7 +138,7 @@ public class MovementController extends ServerController {
                 HashMap<String, String> msg = new HashMap<>();
                 msg.put("type", "PLAYER_UPDATED");
                 msg.put("player_user_id", id);
-                msg.put("player" , playerJson);
+                msg.put("player", playerJson);
                 gs.broadcast(msg);
                 return;
             }
