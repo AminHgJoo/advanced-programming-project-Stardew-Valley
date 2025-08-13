@@ -29,7 +29,6 @@ public enum QuestTypes {
         this.rewardDollars = rewardDollars;
     }
 
-    //TODO
     public boolean attemptQuestFinish() {
         Player player = ClientApp.currentPlayer;
         Backpack backpack = player.getInventory();

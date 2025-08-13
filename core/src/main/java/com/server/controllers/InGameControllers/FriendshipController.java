@@ -224,14 +224,20 @@ public class FriendshipController extends ServerController {
 
             Player friend = game.findPlayerByUsername(username);
             if (friend == null) {
-                ctx.json(Response.BAD_REQUEST.setMessage("Player not found"));
+                ctx.json(Response.BAD_REQUEST.setMessage("Target Player not found"));
                 return;
             }
             Slot slot = player.getInventory().getSlotByItemName(ring);
             if (slot == null) {
-                ctx.json(Response.BAD_REQUEST.setMessage("Slot not found"));
+                ctx.json(Response.BAD_REQUEST.setMessage("You Don't Have A Ring."));
                 return;
             }
+            Friendship friendship = player.findFriendshipByFriendName(username);
+            if (friendship.getLevel() <= 2) {
+                ctx.json(Response.BAD_REQUEST.setMessage("You Must At Least Be At Friendship Level 3!"));
+                return;
+            }
+
             Misc ringItem = (Misc) slot.getItem();
             MarriageRequest marriageRequest = new MarriageRequest();
             marriageRequest.setFrom(player.getUser().getUsername());
@@ -291,6 +297,7 @@ public class FriendshipController extends ServerController {
             }
             friend.setFriendShipLevel(4, player);
             player.setFriendShipLevel(4, friend);
+
 
             friend.setPartnerName(player.getUser().getUsername());
             player.setPartnerName(username);

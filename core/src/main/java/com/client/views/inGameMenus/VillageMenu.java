@@ -22,7 +22,6 @@ import com.client.GameMain;
 import com.client.controllers.NpcController;
 import com.client.controllers.PlayerVillageController;
 import com.client.utils.*;
-import com.common.GameGSON;
 import com.common.models.GameData;
 import com.common.models.NPCModels.NPC;
 import com.common.models.Player;
@@ -35,6 +34,8 @@ import com.server.utilities.Response;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.common.GameGSON.gson;
 
@@ -50,6 +51,8 @@ public class VillageMenu implements MyScreen, InputProcessor {
     private final Vector2 playerPosition;
     private final Vector2 playerVelocity;
     private FarmMenu farmMenu;
+
+    private AtomicBoolean tofFlag = new AtomicBoolean(false);
 
     public PlayerVillageController getPlayerController() {
         return playerController;
@@ -210,6 +213,55 @@ public class VillageMenu implements MyScreen, InputProcessor {
 
             var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/music/sync_res", req);
 
+        } else if (type.equals("ASKED_FOR_MARRIAGE")) {
+            final boolean[] answer = {false};
+            String username = res.get("player_username");
+            ConfirmAlert alert = new ConfirmAlert("question", "Do you want to marry " + username + " ?", AssetManager.getSkin()) {
+                @Override
+                protected void result(Object object) {
+                    boolean result = (boolean) object;
+                    if (result) {
+                        answer[0] = true;
+                    }
+
+                    if (answer[0]) {
+                        JsonObject req = new JsonObject();
+                        req.addProperty("username", username);
+                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipAcceptMarriage", req);
+                        Response resul = HTTPUtil.deserializeHttpResponse(postResponse);
+                        System.out.println(resul.getMessage());
+                        if (resul.getStatus() == 200) {
+                            String gameData = resul.getBody().toString();
+                            playerController.updateGame(gameData);
+                            System.out.println("Acceptance");
+                        }
+                    } else {
+                        JsonObject req = new JsonObject();
+                        req.addProperty("username", username);
+                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipRejectMarriage", req);
+                        Response resul = HTTPUtil.deserializeHttpResponse(postResponse);
+                        System.out.println(resul.getMessage());
+                        if (resul.getStatus() == 200) {
+                            String gameData = resul.getBody().toString();
+                            playerController.updateGame(gameData);
+                            System.out.println("Rejection");
+                        }
+                    }
+                    remove();
+                }
+            };
+            Gdx.input.setInputProcessor(popupStage);
+            alert.show(popupStage);
+
+        } else if (type.equals("REJECT_MARRIAGE")) {
+            showPopUp("You were rejected", "Message");
+        } else if (type.equals("ACCEPT_MARRIAGE")) {
+            showPopUp("Now you have a wife", "Message");
+        } else if (type.equals("HUGGED")) {
+            showPopUp("A Fat Man Hugged You", "Message");
+            System.out.println("HUGGGGGGGGG");
+        } else if (type.equals("RECEIVED_FLOWER")) {
+            showPopUp("Yeki Romantic Shod", "Eshghe Abadi");
         }
     }
 
@@ -367,6 +419,8 @@ public class VillageMenu implements MyScreen, InputProcessor {
         popUpStage.draw();
         popupStage.act(delta);
         popupStage.draw();
+        chatNotifStage.act(delta);
+        chatNotifStage.draw();
     }
 
     @Override
@@ -445,7 +499,12 @@ public class VillageMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new NPCChatScreen(nc.getNpc(), this, gameMain));
         }
         for (Player player : ClientApp.currentGameData.getPlayers()) {
-            if ((player != ClientApp.currentPlayer) && (player.getCoordinate().getX() <= touchPos.x + 80 && player.getCoordinate().getX() >= touchPos.x - 80) && (player.getCoordinate().getY() <= touchPos.y + 80 && player.getCoordinate().getY() >= touchPos.y - 80)) {
+            if ((!Objects.equals(player.getUser().get_id(), ClientApp.currentPlayer.getUser_id()) && (player.getCoordinate().getX() <= touchPos.x + 80
+                && player.getCoordinate().getX() >= touchPos.x - 80)
+                && (player.getCoordinate().getY() <= touchPos.y + 80
+                && player.getCoordinate().getY() >= touchPos.y - 80)
+            && !tofFlag.get())) {
+                tofFlag.set(true);
                 Gdx.input.setInputProcessor(popupStage);
                 Vector2 stageCoords = popupStage.screenToStageCoordinates(new Vector2(player.getCoordinate().getX(), player.getCoordinate().getX()));
                 Skin skin = AssetManager.getSkin();
@@ -463,7 +522,6 @@ public class VillageMenu implements MyScreen, InputProcessor {
                 TextButton flowerBtn = new TextButton("Flower", skin);
                 TextButton exitBtn = new TextButton("Exit", skin);
 
-                //TODO animation
                 hugBtn.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
@@ -476,8 +534,9 @@ public class VillageMenu implements MyScreen, InputProcessor {
                             VillageMenu.this.playerController.updateGame(game);
                             Gdx.input.setInputProcessor(VillageMenu.this);
                             popup.remove();
+                            tofFlag.set(false);
                         } else {
-                            String error = res.getBody().toString();
+                            String error = res.getMessage();
                             showPopUp(error, "Error");
                         }
                     }
@@ -487,17 +546,18 @@ public class VillageMenu implements MyScreen, InputProcessor {
                     public void changed(ChangeEvent event, Actor actor) {
                         JsonObject req = new JsonObject();
                         req.addProperty("username", player.getUser().getUsername());
-                        req.addProperty("ring", "ring");
+                        req.addProperty("ring", "Wedding Ring");
                         var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipAskMarriage", req);
-                        //TODO dastan dare hanooz kiram toosh bayad accept kne yaroo
+
                         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                         if (res.getStatus() == 200) {
                             String game = res.getBody().toString();
                             VillageMenu.this.playerController.updateGame(game);
                             Gdx.input.setInputProcessor(VillageMenu.this);
                             popup.remove();
+                            tofFlag.set(false);
                         } else {
-                            String error = res.getBody().toString();
+                            String error = res.getMessage();
                             showPopUp(error, "Error");
                         }
                     }
@@ -521,8 +581,9 @@ public class VillageMenu implements MyScreen, InputProcessor {
                                 VillageMenu.this.playerController.updateGame(game);
                                 Gdx.input.setInputProcessor(VillageMenu.this);
                                 popup.remove();
+                                tofFlag.set(false);
                             } else {
-                                String error = res.getBody().toString();
+                                String error = res.getMessage();
                                 showPopUp(error, "Error");
                             }
                         }
@@ -534,6 +595,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
                     public void changed(ChangeEvent event, Actor actor) {
                         Gdx.input.setInputProcessor(VillageMenu.this);
                         popup.remove();
+                        tofFlag.set(false);
                     }
                 });
 
@@ -542,7 +604,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
                 popup.add(label).row();
                 popup.add(hugBtn).row();
                 popup.add(marryBtn).row();
-                popup.add(flowerBtn);
+                popup.add(flowerBtn).row();
                 popup.add(exitBtn);
 
                 popupStage.addActor(popup);

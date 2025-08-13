@@ -609,6 +609,7 @@ public class Player {
         }
         if (friendship != null) {
             friendship.setLevel(level);
+            System.out.println("Set Shod");
         }
     }
 

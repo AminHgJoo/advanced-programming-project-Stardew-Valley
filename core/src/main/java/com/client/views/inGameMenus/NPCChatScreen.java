@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.client.ClientApp;
 import com.client.GameMain;
 import com.client.utils.AssetManager;
@@ -57,8 +58,7 @@ public class NPCChatScreen implements MyScreen {
 
     @Override
     public void show() {
-        stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
+        stage = new Stage(new ScreenViewport());
 
         skin = AssetManager.getSkin();
 
@@ -76,6 +76,8 @@ public class NPCChatScreen implements MyScreen {
 
         mainTable.add(chatArea).expand().fill();
         mainTable.add(sidebar).width(200).fillY();
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     private void createSidebar() {
@@ -246,6 +248,9 @@ public class NPCChatScreen implements MyScreen {
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        if (Gdx.input.getInputProcessor() != stage) {
+            Gdx.input.setInputProcessor(stage);
+        }
         stage.act(delta);
         stage.draw();
     }

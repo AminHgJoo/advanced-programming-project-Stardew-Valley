@@ -109,7 +109,8 @@ public class NpcController {
     }
 
     public boolean isInPosition(int x, int y) {
-        if (x >= npcPosition.x - 100 && x <= npcPosition.x + 100 && y >= npcPosition.y - 100 && y <= npcPosition.y + 100) {
+        int asghar = 50;
+        if (x >= npcPosition.x - asghar && x <= npcPosition.x + asghar && y >= npcPosition.y - asghar && y <= npcPosition.y + asghar) {
             return true;
         }
         return false;
