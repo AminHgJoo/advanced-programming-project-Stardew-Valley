@@ -371,6 +371,7 @@ public class PlayerVillageController {
             if (diff2 == 0 && diff == 0) {
                 target = null;
                 currState = PlayerState.IDLE;
+                return;
             }
             playerPosition.x += diff / 256 * delta;
             playerPosition.y += diff2 / 256 * delta;
