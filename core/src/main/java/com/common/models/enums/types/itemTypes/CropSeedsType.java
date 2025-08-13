@@ -181,4 +181,11 @@ public enum CropSeedsType implements ItemType {
             return "bluejazz";
         return AssetManager.generateKeyFromFileName(name);
     }
+
+    public String getStagedTexture(int stage){
+        String name = getName() + "stage" + (stage + 1);
+        if (name.equals("Random Crop"))
+            return "bluejazz";
+        return AssetManager.generateKeyFromFileName(name);
+    }
 }

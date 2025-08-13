@@ -1164,6 +1164,9 @@ public class FarmMenu implements MyScreen, InputProcessor {
             }
 
             if (!(cell.getObjectOnCell() instanceof BuildingBlock)) {
+                if(cell.getObjectOnCell() instanceof Crop crop){
+                    texture1 = crop.getTexture();
+                }
                 texture1 = cell.getObjectOnCell().getTexture();
             }
 
