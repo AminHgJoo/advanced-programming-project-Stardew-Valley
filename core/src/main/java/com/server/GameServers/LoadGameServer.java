@@ -40,7 +40,7 @@ public class LoadGameServer extends Thread {
 
     public void addUser(User user) {
         activePlayers.put(user.get_id(), true);
-        usernames.add(user.get_id());
+        usernames.add(user.getUsername());
         playerConnections.add(AppWebSocket.getConnectedPlayers().get(user.getUsername()));
         game.findPlayerByUserId(user.get_id()).setOnline(true);
 
