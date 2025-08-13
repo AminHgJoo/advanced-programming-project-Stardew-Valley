@@ -99,7 +99,8 @@ public class LoadGameMenu implements MyScreen {
         HashMap<String, String> res = (HashMap<String, String>) GameGSON.gson.fromJson(message, HashMap.class);
         String type = res.get("type");
         if (type.equals("PLAYER_ONLINE")) {
-            showMessage(res.get("player_username") + " joined the game", "Success");
+            if (!res.get("player_username").equals(ClientApp.currentPlayer.getUser().getUsername()))
+                showMessage(res.get("player_username") + " joined the game", "Success");
         } else if (type.equals("GAME_START")) {
             String gameJson = res.get("game");
             GameData game = GameGSON.gson.fromJson(gameJson, GameData.class);
@@ -110,7 +111,6 @@ public class LoadGameMenu implements MyScreen {
                 }
             }
             GAME_START = true;
-
         }
     }
 

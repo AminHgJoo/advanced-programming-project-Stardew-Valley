@@ -348,6 +348,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
         renderNpcs(delta);
         batch.end();
         handleUI(delta);
+
     }
 
     public void handleUI(float delta) {
@@ -355,6 +356,8 @@ public class VillageMenu implements MyScreen, InputProcessor {
         stage.draw();
         popUpStage.act(delta);
         popUpStage.draw();
+        popupStage.act(delta);
+        popupStage.draw();
     }
 
     @Override
@@ -382,6 +385,8 @@ public class VillageMenu implements MyScreen, InputProcessor {
     public void dispose() {
         batch.dispose();
         stage.dispose();
+        popupStage.dispose();
+        popUpStage.dispose();
     }
 
     private void handleCamera() {
@@ -431,7 +436,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new NPCChatScreen(nc.getNpc(), this, gameMain));
         }
         for (Player player : ClientApp.currentGameData.getPlayers()) {
-            if ((player != ClientApp.currentPlayer) && (player.getCoordinate().getX() <= touchPos.x + 15 && player.getCoordinate().getX() >= touchPos.x - 15) && (player.getCoordinate().getY() <= touchPos.y + 30 && player.getCoordinate().getY() >= touchPos.y - 30)) {
+            if ((player != ClientApp.currentPlayer) && (player.getCoordinate().getX() <= touchPos.x + 80 && player.getCoordinate().getX() >= touchPos.x - 80) && (player.getCoordinate().getY() <= touchPos.y + 80 && player.getCoordinate().getY() >= touchPos.y - 80)) {
                 Gdx.input.setInputProcessor(popupStage);
                 Vector2 stageCoords = popupStage.screenToStageCoordinates(new Vector2(player.getCoordinate().getX(), player.getCoordinate().getX()));
                 Skin skin = AssetManager.getSkin();
@@ -455,7 +460,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
                     public void changed(ChangeEvent event, Actor actor) {
                         JsonObject req = new JsonObject();
                         req.addProperty("username", player.getUser().getUsername());
-                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipHug", req);
+                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipHug", req);
                         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                         if (res.getStatus() == 200) {
                             String game = res.getBody().toString();
@@ -474,7 +479,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
                         JsonObject req = new JsonObject();
                         req.addProperty("username", player.getUser().getUsername());
                         req.addProperty("ring", "ring");
-                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipAskMarriage", req);
+                        var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipAskMarriage", req);
                         //TODO dastan dare hanooz kiram toosh bayad accept kne yaroo
                         Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                         if (res.getStatus() == 200) {
@@ -500,7 +505,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
                             JsonObject req = new JsonObject();
                             req.addProperty("username", player.getUser().getUsername());
                             req.addProperty("flowerName", flowerSlot.getItem().getName());
-                            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData + "/friendshipFlower", req);
+                            var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/friendshipFlower", req);
                             Response res = HTTPUtil.deserializeHttpResponse(postResponse);
                             if (res.getStatus() == 200) {
                                 String game = res.getBody().toString();
