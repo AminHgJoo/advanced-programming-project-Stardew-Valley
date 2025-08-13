@@ -199,7 +199,7 @@ public class VoteMenu implements MyScreen, InputProcessor {
             String gameJson = res.get("game");
             ClientApp.currentGameData = GameGSON.gson.fromJson(gameJson, GameData.class);
 
-            if (res.get("player_user_id").equals(player.getUser_id())){
+            if (res.get("player_user_id").equals(ClientApp.currentPlayer.getUser_id())){
                 ClientApp.currentPlayer = null;
                 ClientApp.loggedInUser.getGames().remove(ClientApp.currentGameData.get_id());
                 ClientApp.currentGameData = null;
