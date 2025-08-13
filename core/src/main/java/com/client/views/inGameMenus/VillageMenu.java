@@ -350,6 +350,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
         renderNpcs(delta);
         batch.end();
         handleUI(delta);
+
     }
 
     public void handleUI(float delta) {
@@ -357,6 +358,8 @@ public class VillageMenu implements MyScreen, InputProcessor {
         stage.draw();
         popUpStage.act(delta);
         popUpStage.draw();
+        popupStage.act(delta);
+        popupStage.draw();
     }
 
     @Override
@@ -384,6 +387,8 @@ public class VillageMenu implements MyScreen, InputProcessor {
     public void dispose() {
         batch.dispose();
         stage.dispose();
+        popupStage.dispose();
+        popUpStage.dispose();
     }
 
     private void handleCamera() {
