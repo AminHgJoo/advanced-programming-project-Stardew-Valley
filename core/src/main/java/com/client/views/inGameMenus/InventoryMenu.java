@@ -143,7 +143,7 @@ public class InventoryMenu implements MyScreen, InputProcessor {
             if(screenX >=fridgeX  && screenX <= fridgeX + trashWidth &&
                 screenY >= trashY && screenY <= trashY + trashHeight){
                 if(selectedSave>=0){
-                    //TODO update fridge
+
                     if(backpack.getSlots().get(selectedSave).getItem() instanceof Food) {
                         player.getRefrigeratorSlots().add(backpack.getSlots().get(selectedSave));
                         backpack.removeSlot(backpack.getSlots().get(selectedSave));

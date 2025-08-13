@@ -15,9 +15,7 @@ import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.MyScreen;
 import com.common.models.Player;
-import com.common.models.Quest;
-
-import java.util.ArrayList;
+import com.common.models.enums.types.QuestTypes;
 
 public class JournalMenu implements MyScreen, InputProcessor {
     private final Skin skin;
@@ -28,7 +26,6 @@ public class JournalMenu implements MyScreen, InputProcessor {
     private BitmapFont titleFont;
     private GlyphLayout layout;
     private Player player;
-    private ArrayList<Quest> quests;
 
     public JournalMenu(GameMain gameMain, MyScreen farmScreen) {
         this.gameMain = gameMain;
@@ -41,7 +38,6 @@ public class JournalMenu implements MyScreen, InputProcessor {
         titleFont.setColor(Color.WHITE);
         this.layout = new GlyphLayout();
         this.player = ClientApp.currentPlayer;
-        this.quests = player.getQuests();
     }
 
     @Override
@@ -123,8 +119,9 @@ public class JournalMenu implements MyScreen, InputProcessor {
 //            yInfo -= 30;
 //        }
 
-        for (Quest quest : quests) {
+        for (QuestTypes quest : ClientApp.currentQuests) {
             font.draw(batch, quest.toString(), xInfo, yInfo);
+            yInfo -= 120;
         }
         batch.end();
 

@@ -1,5 +1,6 @@
 package com.common.models;
 
+import com.common.models.enums.types.QuestTypes;
 import com.common.models.enums.types.itemTypes.*;
 import dev.morphia.annotations.Embedded;
 
@@ -9,13 +10,21 @@ public class Quest {
     private boolean completed = false;
     private String fieldName = "";
     private String enumName = "";
+    private String description = "";
+
+    /// Alternative way for quests.
+    private QuestTypes questType;
 
     public Quest() {
 
     }
 
+    public Quest(QuestTypes questType) {
+        this.questType = questType;
+    }
+
     public Quest(ItemType item, int count) {
-        this.fieldName = item.name();
+        this.fieldName = item.getName();
         if (item instanceof CropSeedsType) {
             enumName = "CropSeedsType";
         } else if (item instanceof MiscType) {
@@ -79,6 +88,6 @@ public class Quest {
 
     @Override
     public String toString() {
-        return fieldName + " " + count;
+        return questType.toString();
     }
 }

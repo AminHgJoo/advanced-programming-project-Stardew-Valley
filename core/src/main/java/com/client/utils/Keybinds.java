@@ -26,7 +26,8 @@ public enum Keybinds {
     OPEN_LEADERBOARDS(Input.Keys.L),
     INSPECT_GREENHOUSE(Input.Keys.I),
     SPAWN_CROW(Input.Keys.Z),
-    REPAIR_GREENHOUSE_CHEAT(Input.Keys.G);
+    REPAIR_GREENHOUSE_CHEAT(Input.Keys.G),
+    OPEN_QUEST_BOARD(Input.Keys.Y);
 
     public final ArrayList<Integer> keycodes;
 

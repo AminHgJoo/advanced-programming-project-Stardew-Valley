@@ -484,6 +484,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new ChatScreen(this, gameMain));
         } else if (Keybinds.REPAIR_GREENHOUSE_CHEAT.keycodes.contains(keycode)) {
             greenhouseCheatFlag = true;
+        } else if (Keybinds.OPEN_QUEST_BOARD.keycodes.contains(keycode)) {
+            gameMain.setScreen(new QuestBoardMenu(gameMain, this));
         } else if (keycode == Input.Keys.H) {
             //shipping menu jjjjjjjjjjjj
             gameMain.setScreen(new ShippingMenu(gameMain, this));

@@ -5,7 +5,11 @@ import com.client.utils.MyScreen;
 import com.client.utils.SimpleWebSocketClient;
 import com.common.models.GameData;
 import com.common.models.Player;
+import com.common.models.Quest;
 import com.common.models.User;
+import com.common.models.enums.types.QuestTypes;
+
+import java.util.ArrayList;
 
 public class ClientApp {
 
@@ -17,6 +21,7 @@ public class ClientApp {
     public static String avatarPath = "avatars/avatar1.jpg";
     public static Texture avatarTexture = new Texture(avatarPath);
     public static String token = "";
+    public static ArrayList<QuestTypes> currentQuests = new ArrayList<>();
 
     public static void init() {
         try {
