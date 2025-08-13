@@ -112,6 +112,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
         float y = stage.getHeight() - emojiSize - 20f;
 
     }
+
     private void emojiSelection(float screenX, float screenY) {
         float emojiSize = 64f;
         float spacing = 20f;
@@ -137,6 +138,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
             }
         }
     }
+
     private void initializeEmoji() {
         emojiTextures = new ArrayList<>();
         emojiTextures.add(AssetManager.getImage("happy"));
@@ -210,6 +212,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
 
         }
     }
+
     private void emojiShow(float delta) {
         float emojiSize = 64f;
         float spacing = 20f;
@@ -342,6 +345,12 @@ public class VillageMenu implements MyScreen, InputProcessor {
         playerController.update(delta);
         if (!showingQuestion)
             handleEvents();
+        for (Player p : game.getPlayers()) {
+            if (p.isInVillage() && !(p.getUser_id().equals(player.getUser_id()))) {
+                playerControllers.get(p.getUser_id()).updateOtherPlayersPos(delta);
+                playerControllers.get(p.getUser_id()).update(delta);
+            }
+        }
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         renderPlayers();

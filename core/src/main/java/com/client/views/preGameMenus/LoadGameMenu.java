@@ -65,7 +65,7 @@ public class LoadGameMenu implements MyScreen {
                 var getResponse = HTTPUtil.get("/api/game/loadGame/" + selectBox.getSelected());
                 Response res = HTTPUtil.deserializeHttpResponse(getResponse);
                 if (res.getStatus() == 200) {
-                    System.out.println("Khoda Ro Shokr II");
+                    showMessage("Game loaded , waiting for others to join ...", "Success");
                 } else {
                 }
             }

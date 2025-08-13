@@ -49,6 +49,7 @@ public class PlayerVillageController {
     private float height;
     private VillageMenu villageMenu;
     private HashMap<String, Coordinate> stores = new HashMap<>();
+    private Coordinate target = null;
 
     public PlayerVillageController(Vector2 x, Vector2 y, VillageMenu villageMenu, Player player) {
         this.villageMenu = villageMenu;
@@ -58,8 +59,6 @@ public class PlayerVillageController {
         playerAnimationController = new PlayerAnimationController(currState, facingDirection);
         playerService = new PlayerService(player, game);
         this.playerPosition = x;
-        // TODO tooof
-        this.playerPosition.x = 600;
         this.playerVelocity = y;
         this.width = playerAnimationController.getCurrentFrame().getTexture().getWidth();
         this.height = playerAnimationController.getCurrentFrame().getTexture().getHeight();
@@ -359,6 +358,41 @@ public class PlayerVillageController {
         return x >= min && x <= max;
     }
 
+    public void updateOtherPlayersPos(float delta) {
+        if (target != null) {
+            float diff = target.getX() - playerPosition.x;
+            float diff2 = target.getY() - playerPosition.y;
+            if (diff >= -5 && diff < 5) {
+                diff = 0;
+            }
+            if (diff2 >= -5 && diff2 < 5) {
+                diff2 = 0;
+            }
+            if (diff2 == 0 && diff == 0) {
+                target = null;
+                currState = PlayerState.IDLE;
+                return;
+            }
+            playerPosition.x += diff  * delta;
+            playerPosition.y += diff2  * delta;
+            target.setX(target.getX() - diff  * delta);
+            target.setY(target.getY() - diff2  * delta);
+            if (diff != 0) {
+                if (diff > 0) {
+                    facingDirection = FacingDirection.RIGHT;
+                } else {
+                    facingDirection = FacingDirection.LEFT;
+                }
+            } else {
+                if (diff2 > 0) {
+                    facingDirection = FacingDirection.UP;
+                } else {
+                    facingDirection = FacingDirection.DOWN;
+                }
+            }
+        }
+    }
+
     public void updatePlayerPos(float delta) {
         float prev_x = playerPosition.x;
         float prev_y = playerPosition.y;
@@ -537,8 +571,12 @@ public class PlayerVillageController {
     public void updateGamePlayer(Player player) {
         game.setPlayerById(this.player.getUser_id(), player);
         updatePlayer(player);
-        playerPosition.x = player.getCoordinate().getX();
-        playerPosition.y = player.getCoordinate().getY();
+        float prev_x = playerPosition.x;
+        float prev_y = playerPosition.y;
+        if (player.getCoordinate().getX() != prev_x || player.getCoordinate().getY() != prev_y) {
+            currState = PlayerState.WALKING;
+            target = new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY());
+        }
     }
 
     public void updateGame() {

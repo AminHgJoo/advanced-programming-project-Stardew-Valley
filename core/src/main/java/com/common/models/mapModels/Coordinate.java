@@ -16,6 +16,13 @@ public class Coordinate {
         this.y = y;
     }
 
+    public void setX(float x){
+        this.x = x;
+    }
+    public void setY(float y){
+        this.y = y;
+    }
+
     /// Eureka Indeed!
     public static double calculateEuclideanDistance(Cell cell1, Cell cell2) {
         Coordinate a = cell1.getCoordinate(), b = cell2.getCoordinate();

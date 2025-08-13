@@ -566,7 +566,7 @@ public class GameLobbyMenu implements MyScreen {
             System.out.println("Game start");
             System.out.println(game.toString());
             ClientApp.currentGameData = game;
-            ClientApp.loggedInUser.getGames().add(ClientApp.currentGameData.get_id());
+            ClientApp.loggedInUser.getGames().add(game.get_id());
             for (Player p : game.getPlayers()) {
                 if (p.getUser_id().equals(ClientApp.loggedInUser.get_id())) {
                     ClientApp.currentPlayer = p;
