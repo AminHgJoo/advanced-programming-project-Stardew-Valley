@@ -61,6 +61,9 @@ public class Farm {
             if (cell.getCoordinate().getX() == 68 && cell.getCoordinate().getY() == 8) {
                 cell.setObjectOnCell(new BuildingBlock(false, "shippingBin"));
             }
+             if(cell.getCoordinate().getX() == 68 && cell.getCoordinate().getY() == 5){
+                cell.setObjectOnCell(new ArtisanBlock(ArtisanBlockType.FISH_SMOKER));
+            }
             if ((cell.getCoordinate().getX() < 67 || cell.getCoordinate().getX() > 69) && (cell.getCoordinate().getY() < 8 || cell.getCoordinate().getY() > 9)) {
                 if (cell.getObjectOnCell().type.equals("empty") && randomNumber == 3) {
                     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

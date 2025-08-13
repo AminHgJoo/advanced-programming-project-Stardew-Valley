@@ -20,6 +20,7 @@ import com.client.GameMain;
 import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
+import com.client.utils.UIPopupHelper;
 import com.common.models.Backpack;
 import com.common.models.Slot;
 import com.google.gson.JsonObject;
@@ -266,14 +267,20 @@ public class ArtisanMenu implements MyScreen, InputProcessor {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                JsonObject req = new JsonObject();
-                req.addProperty("artisanName", artisanName);
-                req.addProperty("item1Name", targetSlots.get(selectedSave).getItem().getName());
-                var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/artisanHandleArtisanUse", req);
-                Response res = HTTPUtil.deserializeHttpResponse(postResponse);
-                if (res.getStatus() == 200) {
-                    String player = res.getBody().toString();
-                    ((FarmMenu) farmScreen).getPlayerController().updatePlayerObject(player);
+                if(selectedSave >=0) {
+                    JsonObject req = new JsonObject();
+                    req.addProperty("artisanName", artisanName);
+                    req.addProperty("item1Name", targetSlots.get(selectedSave).getItem().getName());
+                    var postResponse = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/artisanHandleArtisanUse", req);
+                    Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+                    if (res.getStatus() == 200) {
+                        String player = res.getBody().toString();
+                        ((FarmMenu) farmScreen).getPlayerController().updatePlayerObject(player);
+                    }
+                    else{
+                        UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                        uiPopupHelper.showDialog(res.getMessage(), "Error");
+                    }
                 }
             }
         });
