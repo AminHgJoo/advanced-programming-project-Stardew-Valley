@@ -12,10 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -35,6 +32,7 @@ import com.common.utils.ChatMessage;
 import com.google.gson.JsonObject;
 import com.server.utilities.Response;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,6 +68,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
     private GameData game = ClientApp.currentGameData;
     private Player player = ClientApp.currentPlayer;
     private Stage popupStage;
+    private ArrayList<Texture> emojiTextures;
 
     private InputProcessor temp;
 
@@ -102,6 +101,48 @@ public class VillageMenu implements MyScreen, InputProcessor {
         this.viewport = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
         camera.setToOrtho(false, camera.viewportWidth, camera.viewportHeight);
         popupStage = new Stage(new ScreenViewport());
+        initializeEmoji();
+        emojiShow(0.01f);
+        playerController.getPlayer().emojiCounter = -1;
+        float emojiSize = 64f;
+        float spacing = 20f;
+        int count = 4;
+        float totalWidth = count * emojiSize + (count - 1) * spacing;
+        float startX = (stage.getWidth() - totalWidth) / 2f + 400;
+        float y = stage.getHeight() - emojiSize - 20f;
+
+    }
+    private void emojiSelection(float screenX, float screenY) {
+        float emojiSize = 64f;
+        float spacing = 20f;
+        int count = emojiTextures.size();
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+
+        float totalWidth = count * emojiSize + (count - 1) * spacing;
+        float starX = (screenWidth - totalWidth) / 2f;
+        float y = screenHeight - emojiSize - 20f;
+
+        float touchY = screenHeight - screenY;
+
+        for (int i = 0; i < count; i++) {
+            float x = starX + i * (emojiSize + spacing);
+
+            if (screenX >= x && screenX <= x + emojiSize &&
+                touchY >= y && touchY <= y + emojiSize) {
+
+                playerController.getPlayer().currentEmoji = emojiTextures.get(i);
+                playerController.getPlayer().emojiCounter = 0f;
+                break;
+            }
+        }
+    }
+    private void initializeEmoji() {
+        emojiTextures = new ArrayList<>();
+        emojiTextures.add(AssetManager.getImage("happy"));
+        emojiTextures.add(AssetManager.getImage("sad"));
+        emojiTextures.add(AssetManager.getImage("anger"));
+        emojiTextures.add(AssetManager.getImage("laugh"));
     }
 
     public void renderPlayers() {
@@ -168,6 +209,36 @@ public class VillageMenu implements MyScreen, InputProcessor {
             var postRes = HTTPUtil.post("/api/game/" + ClientApp.currentGameData.get_id() + "/music/sync_res", req);
 
         }
+    }
+    private void emojiShow(float delta) {
+        float emojiSize = 64f;
+        float spacing = 20f;
+        int count = emojiTextures.size();
+
+        float totalWidth = count * emojiSize + (count - 1) * spacing;
+        float startX = (stage.getWidth() - totalWidth) / 2f;
+        float y = stage.getHeight() - emojiSize - 20f;
+
+        for (int i = 0; i < count; i++) {
+            Texture texture5 = emojiTextures.get(i);
+            float x = startX + i * (emojiSize + spacing);
+            Image image = new Image(texture5);
+            image.setPosition(x, y);
+            image.setSize(emojiSize, emojiSize);
+            stage.addActor(image);
+        }
+
+        //      if (emojiCounter >= 0) {
+//            Image image = new Image(currentEmoji);
+//            image.setPosition(stage.getWidth() / 2, 20 + stage.getHeight() / 2);
+//            image.setSize(emojiSize, emojiSize);
+//            image.setSize(emojiSize, emojiSize);
+//            stage.addActor(image);
+//            emojiCounter += delta;
+//            if (emojiCounter >= 2) {
+//                emojiCounter = -1;
+//            }
+//      }
     }
 
     private synchronized void showPopUp(String message, String promptType) {
@@ -465,6 +536,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
                 popupStage.addActor(popup);
             }
         }
+        emojiSelection(screenX, screenY);
         return false;
     }
 
