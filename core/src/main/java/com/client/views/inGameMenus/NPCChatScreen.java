@@ -53,16 +53,17 @@ public class NPCChatScreen implements MyScreen {
         this.npcPortrait = new Texture(Gdx.files.internal("images/npc/" + npcName + "/portrait-1.png"));
         this.villageMenu = villageMenu;
         this.gameMain = gameMain;
-    }
-
-    @Override
-    public void show() {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
         skin = AssetManager.getSkin();
 
         createUI();
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
     }
 
     private void createUI() {
