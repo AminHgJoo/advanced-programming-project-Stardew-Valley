@@ -438,7 +438,7 @@ public class VillageMenu implements MyScreen, InputProcessor {
             gameMain.setScreen(new NPCChatScreen(nc.getNpc(), this, gameMain));
         }
         for (Player player : ClientApp.currentGameData.getPlayers()) {
-            if ((player != ClientApp.currentPlayer) && (player.getCoordinate().getX() <= touchPos.x + 15 && player.getCoordinate().getX() >= touchPos.x - 15) && (player.getCoordinate().getY() <= touchPos.y + 30 && player.getCoordinate().getY() >= touchPos.y - 30)) {
+            if ((player != ClientApp.currentPlayer) && (player.getCoordinate().getX() <= touchPos.x + 80 && player.getCoordinate().getX() >= touchPos.x - 80) && (player.getCoordinate().getY() <= touchPos.y + 80 && player.getCoordinate().getY() >= touchPos.y - 80)) {
                 Gdx.input.setInputProcessor(popupStage);
                 Vector2 stageCoords = popupStage.screenToStageCoordinates(new Vector2(player.getCoordinate().getX(), player.getCoordinate().getX()));
                 Skin skin = AssetManager.getSkin();
