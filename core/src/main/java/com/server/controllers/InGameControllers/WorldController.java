@@ -84,7 +84,6 @@ public class WorldController extends ServerController {
                     }
                 }
                 if (rejectCount >= numOfPlayers / 2) {
-                    gs.removePlayerConnection(player2.getUser().getUsername());
                     game.getPlayers().remove(player2);
                     String gameJson = GameGSON.gson.toJson(game);
                     HashMap<String, String> msg = new HashMap<>();
@@ -93,6 +92,7 @@ public class WorldController extends ServerController {
                     msg.put("player_username", player2.getUser().getUsername());
                     msg.put("game", gameJson);
                     gs.broadcast(msg);
+                    gs.removePlayerConnection(player2);
                 } else {
                     player2.getVotes().clear();
                     HashMap<String, String> msg = new HashMap<>();

@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class VoteMenu implements MyScreen, InputProcessor {
     private final Skin skin;
     private GameMain gameMain;
-    private MyScreen farmScreen;
+    private FarmMenu farmScreen;
     private SpriteBatch batch;
     private Texture backgroundTexture;
     private Stage stage;
@@ -45,8 +45,9 @@ public class VoteMenu implements MyScreen, InputProcessor {
     private Player player;
     private AtomicBoolean goToFarmMenu = new AtomicBoolean(false);
     private AtomicBoolean goToMainMenu = new AtomicBoolean(false);
+    private boolean finished = false;
 
-    public VoteMenu(GameMain gameMain, MyScreen farmScreen, Player player) {
+    public VoteMenu(GameMain gameMain, FarmMenu farmScreen, Player player) {
         this.gameMain = gameMain;
         this.farmScreen = farmScreen;
         this.batch = new SpriteBatch();
@@ -210,6 +211,8 @@ public class VoteMenu implements MyScreen, InputProcessor {
                 UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
                 uiPopupHelper.showDialog("Player has been kicked out", "Success");
                 goToFarmMenu.set(true);
+                finished = true;
+                farmScreen.voteFlag = false;
                 System.out.println("KIKCEDDDD");
             }
         } else if (type.equals("PLAYER_NOT_KICK_OUT")) {
@@ -228,7 +231,7 @@ public class VoteMenu implements MyScreen, InputProcessor {
 
     @Override
     public void render(float v) {
-        if (goToFarmMenu.get()) {
+        if (goToFarmMenu.get() || finished) {
             dispose();
             gameMain.setScreen(farmScreen);
             return;

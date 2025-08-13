@@ -72,7 +72,7 @@ public class GameServer extends Thread {
             arr.add(player.getUser().getUsername());
         }
         p.setOnline(false);
-        removePlayerConnection(user.getUsername());
+        removePlayerConnection(p);
     }
 
     public void multicast(HashMap<String, String> msg, ArrayList<String> usernames) {
@@ -197,10 +197,10 @@ public class GameServer extends Thread {
         return false;
     }
 
-    public void removePlayerConnection(String user) {
+    public void removePlayerConnection(Player player) {
         PlayerConnection pc = null;
         for (PlayerConnection playerConnection : playerConnections.get()) {
-            if (playerConnection.getUsername().equals(user)) {
+            if (playerConnection.getUsername().equals(player.getUser().getUsername())) {
                 pc = playerConnection;
             }
         }
@@ -208,7 +208,7 @@ public class GameServer extends Thread {
         if (pc != null) {
             playerConnections.get().remove(pc);
         }
-        Player p = game.findPlayerByUsername(user);
+        Player p = player;
         sentOfflineMessage(p);
     }
 }
