@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StoreInterface implements MyScreen {
 
@@ -262,7 +264,7 @@ public class StoreInterface implements MyScreen {
     }
 
     private void buyItem() {
-        if(selectedItem.getType() != null) {
+        if (selectedItem.getType() != null) {
             var req = new JsonObject();
             req.addProperty("productName", selectedItem.getType().getName());
             req.addProperty("storeName", storeName);
@@ -273,18 +275,19 @@ public class StoreInterface implements MyScreen {
 
             var res = HTTPUtil.deserializeHttpResponse(postRes);
 
-            UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
-
             if (res.getStatus() == 200) {
-                uiPopupHelper.showDialog("Success", "Success", () -> {
+                Gdx.app.postRunnable(() -> {
                     dispose();
                     selectedItem = null;
                     selectedAmount = 0;
                     initializeStage();
+                    UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                    uiPopupHelper.showDialog("Success", "Success");
                 });
             } else {
                 System.out.println(res.getMessage());
-                uiPopupHelper.showDialog("Error connecting to server", "Error");
+                UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
+                uiPopupHelper.showDialog(res.getMessage(), "Error");
             }
         }
     }
@@ -325,6 +328,16 @@ public class StoreInterface implements MyScreen {
         if (type.equals("GAME_UPDATED")) {
             String game = res.get("game");
             villageMenu.getPlayerController().updateGame(game);
+
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Gdx.app.postRunnable(() -> {
+                        dispose();
+                        initializeStage();
+                    });
+                }
+            }, 2000);
         }
     }
 
