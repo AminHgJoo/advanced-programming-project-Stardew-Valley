@@ -227,7 +227,7 @@ public class VoteMenu implements MyScreen, InputProcessor {
 
     @Override
     public void render(float v) {
-        if (goToMainMenu) {
+        if (goToFarmMenu) {
             dispose();
             gameMain.setScreen(farmScreen);
             return;
