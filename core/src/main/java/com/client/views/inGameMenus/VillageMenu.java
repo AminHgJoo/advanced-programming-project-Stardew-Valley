@@ -73,7 +73,6 @@ public class VillageMenu implements MyScreen, InputProcessor {
     private InputProcessor temp;
 
     public VillageMenu(FarmMenu farmMenu, GameMain gameMain) {
-        player.setCoordinate(new Coordinate(TILE_PIX_SIZE * FARM_X_SPAN / 2, TILE_PIX_SIZE * FARM_Y_SPAN / 2));
         this.farmMenu = farmMenu;
         this.gameMain = gameMain;
         batch = new SpriteBatch();
@@ -346,8 +345,10 @@ public class VillageMenu implements MyScreen, InputProcessor {
         if (!showingQuestion)
             handleEvents();
         for (Player p : game.getPlayers()) {
-            if (p.isInVillage() && !(p.getUser_id().equals(player.getUser_id())))
+            if (p.isInVillage() && !(p.getUser_id().equals(player.getUser_id()))) {
                 playerControllers.get(p.getUser_id()).updateOtherPlayersPos(delta);
+                playerControllers.get(p.getUser_id()).update(delta);
+            }
         }
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
