@@ -201,15 +201,18 @@ public class VoteMenu implements MyScreen, InputProcessor {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog("Player has been kicked out", "Success");
             goToFarmMenu = true;
+            System.out.println("KIKCEDDDD");
         } else if (type.equals("PLAYER_NOT_KICK_OUT")) {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog("Player hasn't been kicked out", "Success");
             goToFarmMenu = true;
+            System.out.println("NOT KICKEDDD");
         } else if (type.equals("KICK_OUT")) {
             ClientApp.currentPlayer = null;
             ClientApp.loggedInUser.getGames().remove(ClientApp.currentGameData.get_id());
             ClientApp.currentGameData = null;
             goToMainMenu = true;
+            System.out.println("SIKTIR");
         }
     }
 
