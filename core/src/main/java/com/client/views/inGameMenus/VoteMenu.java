@@ -23,6 +23,7 @@ import com.client.utils.AssetManager;
 import com.client.utils.HTTPUtil;
 import com.client.utils.MyScreen;
 import com.client.utils.UIPopupHelper;
+import com.client.views.preGameMenus.MainMenu;
 import com.common.GameGSON;
 import com.common.models.GameData;
 import com.common.models.Player;
@@ -41,6 +42,8 @@ public class VoteMenu implements MyScreen, InputProcessor {
     private BitmapFont titleFont;
     private GlyphLayout layout;
     private Player player;
+    private boolean goToFarmMenu = false;
+    private boolean goToMainMenu = false;
 
     public VoteMenu(GameMain gameMain, MyScreen farmScreen, Player player) {
         this.gameMain = gameMain;
@@ -197,13 +200,19 @@ public class VoteMenu implements MyScreen, InputProcessor {
             ClientApp.currentGameData = GameGSON.gson.fromJson(gameJson, GameData.class);
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog("Player has been kicked out", "Success");
-            dispose();
-            gameMain.setScreen(farmScreen);
+            goToFarmMenu = true;
+            System.out.println("KIKCEDDDD");
         } else if (type.equals("PLAYER_NOT_KICK_OUT")) {
             UIPopupHelper uiPopupHelper = new UIPopupHelper(stage, skin);
             uiPopupHelper.showDialog("Player hasn't been kicked out", "Success");
-            dispose();
-            gameMain.setScreen(farmScreen);
+            goToFarmMenu = true;
+            System.out.println("NOT KICKEDDD");
+        } else if (type.equals("KICK_OUT")) {
+            ClientApp.currentPlayer = null;
+            ClientApp.loggedInUser.getGames().remove(ClientApp.currentGameData.get_id());
+            ClientApp.currentGameData = null;
+            goToMainMenu = true;
+            System.out.println("SIKTIR");
         }
     }
 
@@ -213,6 +222,17 @@ public class VoteMenu implements MyScreen, InputProcessor {
 
     @Override
     public void render(float v) {
+        if (goToMainMenu) {
+            dispose();
+            gameMain.setScreen(farmScreen);
+            return;
+        }
+        if (goToMainMenu) {
+            dispose();
+            farmScreen.dispose();
+            gameMain.setScreen(new MainMenu(gameMain));
+            return;
+        }
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
