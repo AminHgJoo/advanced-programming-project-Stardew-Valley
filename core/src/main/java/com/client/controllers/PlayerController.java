@@ -16,6 +16,7 @@ import com.common.models.Backpack;
 import com.common.models.GameData;
 import com.common.models.Player;
 import com.common.models.Slot;
+import com.common.models.items.Food;
 import com.common.models.items.Item;
 import com.common.models.items.Seed;
 import com.common.models.items.Tool;
@@ -441,7 +442,7 @@ public class PlayerController {
                     updatePlayerObject(playerJson);
                     farmMenu.unEquip();
                     player.setEquippedItem(null);
-                    farmMenu.showPopUp("Successfully fertilized the crop !!" , "Success");
+                    farmMenu.showPopUp("Successfully fertilized the crop !!", "Success");
                 }
             });
         });
@@ -466,6 +467,25 @@ public class PlayerController {
 
                 } else {
 
+                }
+            });
+        });
+    }
+
+    public void eatFood() {
+        Food f = (Food) player.getEquippedItem();
+        networkThreadPool.execute(() -> {
+            JsonObject req = new JsonObject();
+            req.addProperty("foodName", f.getName());
+            var postResponse = HTTPUtil.post("/api/game/" + game.get_id() + "/inventoryEat", req);
+            Response res = HTTPUtil.deserializeHttpResponse(postResponse);
+            Gdx.app.postRunnable(() -> {
+                if (res.getStatus() == 200) {
+                    String json = res.getBody().toString();
+                    updatePlayerObject(json);
+                    farmMenu.unEquip();
+                    player.setEquippedItem(null);
+                    farmMenu.showPopUp("Ate food \n " + (-f.getEnergyCost()) + " Energy received", "Success");
                 }
             });
         });

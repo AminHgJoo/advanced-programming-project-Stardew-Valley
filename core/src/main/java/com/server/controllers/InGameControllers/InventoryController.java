@@ -203,7 +203,7 @@ public class InventoryController extends ServerController {
             if (slot.getCount() == 0) {
                 backpack.getSlots().remove(slot);
             }
-            player.getActiveBuffs().add(new ActiveBuff(food.foodBuff));
+            player.getActiveBuffs().add(new ActiveBuff(food.foodBuff , game.getDate()));
             player.setEnergy(Math.min(player.getEnergy() - food.getEnergyCost(), player.getMaxEnergy()));
             String playerJson = GameGSON.gson.toJson(player);
             ctx.json(Response.OK.setBody(playerJson));

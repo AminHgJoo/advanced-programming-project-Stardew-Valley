@@ -370,6 +370,8 @@ public class FarmMenu implements MyScreen, InputProcessor {
     public void unEquip() {
         selected = false;
         selectedIndex = -1;
+        selectedSave = -1;
+        ClientApp.currentPlayer.setEquippedItem(null);
     }
 
     private void showTools() {
@@ -655,7 +657,7 @@ public class FarmMenu implements MyScreen, InputProcessor {
             } else if (item.getName().contains("Fertilizer")) {
                 playerController.fertilization();
             } else if (item instanceof Food) {
-
+                playerController.eatFood();
             }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             boolean success = playerController.dropItem(ClientApp.currentPlayer, farm);
