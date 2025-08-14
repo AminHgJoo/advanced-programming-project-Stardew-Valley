@@ -143,6 +143,14 @@ public class GameServer extends Thread {
                 }
             }
 
+            for (Player p : game.getPlayers()) {
+                if (p.getEnergy() == 0) {
+                    HashMap<String, String> msg = new HashMap<>();
+                    msg.put("type", "FAINT");
+                    narrowCast(p.getUser().getUsername(), msg);
+                }
+            }
+
             game.checkForRecipeUnlocking();
             game.handleBuffExpiration();
             game.checkForSkillUpgrades();

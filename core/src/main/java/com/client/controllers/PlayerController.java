@@ -50,7 +50,6 @@ public class PlayerController {
     private FarmMenu farmMenu;
     public float loadingTimer;
 
-
     public PlayerController(Vector2 x, Vector2 y, FarmMenu farmMenu, Player player) {
         this.farmMenu = farmMenu;
         this.player = player;
@@ -66,6 +65,9 @@ public class PlayerController {
     }
 
     public void showLoading() {
+        if (currState == PlayerState.FAINTING) {
+            currState = PlayerState.IDLE;
+        }
         loadingTimer = 0.0f;
     }
 
@@ -91,106 +93,114 @@ public class PlayerController {
                 player.emojiCounter = -1;
             }
         }
+        if (currState == PlayerState.FAINTING) {
+            batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale),
+                playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale),
+                playerTexture.getTexture().getWidth() / (2 * scale), playerTexture.getTexture().getHeight() / (2 * scale)
+                , playerTexture.getRegionWidth() / scale
+                , playerTexture.getRegionHeight() / scale, 1f, 1f, 90);
+        } else {
 
 
-        batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale),
-            playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale), playerTexture.getRegionWidth() / scale
-            , playerTexture.getRegionHeight() / scale);
+            batch.draw(playerTexture, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale),
+                playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale), playerTexture.getRegionWidth() / scale
+                , playerTexture.getRegionHeight() / scale);
 
-        if (currState != PlayerState.TOOL_SWINGING && player.getEquippedItem() != null && player.getEquippedItem() instanceof Tool) {
-            if (facingDirection == FacingDirection.DOWN) {
-                Texture t;
-                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
-                t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "1.png"));
-                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
-                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
-                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
-            } else if (facingDirection == FacingDirection.UP) {
-                Texture t;
-                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
-                t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "3.png"));
-                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
-                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
-                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
-            } else if (facingDirection == FacingDirection.RIGHT) {
-                Texture t;
-                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
-                t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "7.png"));
-                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
-                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
-                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
-            } else if (facingDirection == FacingDirection.LEFT) {
-                Texture t;
-                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
-                t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "5.png"));
-                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
-                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
-                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
-            }
-        }
-        if (currState == PlayerState.TOOL_SWINGING && player.getEquippedItem() instanceof Tool) {
-            if (player.getEquippedItem().getName().contains("Rod")) {
-                return;
-            }
-            if (facingDirection == FacingDirection.DOWN) {
-                int index = playerAnimationController.getCurrentFrameIndex();
-                Texture t;
-                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
-                if (index == 0) {
+            if (currState != PlayerState.TOOL_SWINGING && player.getEquippedItem() != null && player.getEquippedItem() instanceof Tool) {
+                if (facingDirection == FacingDirection.DOWN) {
+                    Texture t;
+                    String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
                     t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "1.png"));
-                } else {
-                    t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "2.png"));
-                }
-                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
-                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
-                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
-            } else if (facingDirection == FacingDirection.UP) {
-                int index = playerAnimationController.getCurrentFrameIndex();
-                Texture t;
-                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
-
-                if (index == 0) {
+                    batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                        playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                        (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+                } else if (facingDirection == FacingDirection.UP) {
+                    Texture t;
+                    String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
                     t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "3.png"));
-                } else {
-                    t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "4.png"));
-                }
-                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
-                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
-                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
-            } else if (facingDirection == FacingDirection.RIGHT) {
-                int index = playerAnimationController.getCurrentFrameIndex();
-                Texture t;
-                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
-
-                if (index == 0) {
+                    batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                        playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                        (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+                } else if (facingDirection == FacingDirection.RIGHT) {
+                    Texture t;
+                    String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
                     t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "7.png"));
-                } else {
-                    t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "8.png"));
+                    batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                        playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                        (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+                } else if (facingDirection == FacingDirection.LEFT) {
+                    Texture t;
+                    String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
+                    t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "5.png"));
+                    batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                        playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                        (float) t.getWidth() / scale, (float) t.getHeight() / scale);
                 }
+            }
+            if (currState == PlayerState.TOOL_SWINGING && player.getEquippedItem() instanceof Tool) {
+                if (player.getEquippedItem().getName().contains("Rod")) {
+                    return;
+                }
+                if (facingDirection == FacingDirection.DOWN) {
+                    int index = playerAnimationController.getCurrentFrameIndex();
+                    Texture t;
+                    String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
+                    if (index == 0) {
+                        t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "1.png"));
+                    } else {
+                        t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "2.png"));
+                    }
+                    batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                        playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                        (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+                } else if (facingDirection == FacingDirection.UP) {
+                    int index = playerAnimationController.getCurrentFrameIndex();
+                    Texture t;
+                    String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
+
+                    if (index == 0) {
+                        t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "3.png"));
+                    } else {
+                        t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "4.png"));
+                    }
+                    batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                        playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                        (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+                } else if (facingDirection == FacingDirection.RIGHT) {
+                    int index = playerAnimationController.getCurrentFrameIndex();
+                    Texture t;
+                    String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
+
+                    if (index == 0) {
+                        t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "7.png"));
+                    } else {
+                        t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "8.png"));
+                    }
+                    batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
+                        playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                        (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+                } else if (facingDirection == FacingDirection.LEFT) {
+                    int index = playerAnimationController.getCurrentFrameIndex();
+                    Texture t;
+                    String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
+
+                    if (index == 0) {
+                        t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "5.png"));
+                    } else {
+                        t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "6.png"));
+                    }
+                    batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale) - 10f,
+                        playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
+                        (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+                }
+            }
+            if (currState != PlayerState.TOOL_SWINGING && player.getEquippedItem() != null && !(player.getEquippedItem() instanceof Tool)) {
+                Item item = player.getEquippedItem();
+                Texture t = item.getTexture();
                 batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
                     playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
-                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
-            } else if (facingDirection == FacingDirection.LEFT) {
-                int index = playerAnimationController.getCurrentFrameIndex();
-                Texture t;
-                String picName = StringUtils.convertToolNameToAssetName(player.getEquippedItem().getActualName());
-
-                if (index == 0) {
-                    t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "5.png"));
-                } else {
-                    t = new Texture(Gdx.files.internal("images/player/tool/" + picName + "/" + picName + "6.png"));
-                }
-                batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale) - 10f,
-                    playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
-                    (float) t.getWidth() / scale, (float) t.getHeight() / scale);
+                    (float) (t.getWidth() / scale) * 2, (float) (t.getHeight() / scale) * 2);
             }
-        }
-        if (currState != PlayerState.TOOL_SWINGING && player.getEquippedItem() != null && !(player.getEquippedItem() instanceof Tool)) {
-            Item item = player.getEquippedItem();
-            Texture t = item.getTexture();
-            batch.draw(t, playerPosition.x - (float) playerTexture.getTexture().getWidth() / (2 * scale) + (float) t.getWidth() / (2 * scale),
-                playerPosition.y - (float) playerTexture.getTexture().getHeight() / (2 * scale) + (float) t.getHeight() / (2 * scale),
-                (float) (t.getWidth() / scale) * 2, (float) (t.getHeight() / scale) * 2);
         }
     }
 
@@ -262,6 +272,10 @@ public class PlayerController {
         }
     }
 
+    public void faint() {
+        currState = PlayerState.FAINTING;
+    }
+
     public boolean dropItem(Player player, Farm farm) {
         Item item = player.getEquippedItem();
         Cell cell = farm.findCellByCoordinate(player.getCoordinate().getX() / 32
@@ -312,19 +326,21 @@ public class PlayerController {
     }
 
     public void handleKeyUp(float x, float y) {
-        playerVelocity.x = x;
-        playerVelocity.y = y;
-        if (x != 0) {
-            if (x > 0) {
-                facingDirection = FacingDirection.RIGHT;
+        if (currState != PlayerState.FAINTING) {
+            playerVelocity.x = x;
+            playerVelocity.y = y;
+            if (x != 0) {
+                if (x > 0) {
+                    facingDirection = FacingDirection.RIGHT;
+                } else {
+                    facingDirection = FacingDirection.LEFT;
+                }
             } else {
-                facingDirection = FacingDirection.LEFT;
-            }
-        } else {
-            if (y > 0) {
-                facingDirection = FacingDirection.UP;
-            } else {
-                facingDirection = FacingDirection.DOWN;
+                if (y > 0) {
+                    facingDirection = FacingDirection.UP;
+                } else {
+                    facingDirection = FacingDirection.DOWN;
+                }
             }
         }
     }
@@ -332,6 +348,10 @@ public class PlayerController {
     public void handleKeyDown() {
         playerVelocity.x = 0;
         playerVelocity.y = 0;
+    }
+
+    public PlayerState getCurrState() {
+        return currState;
     }
 
     public void updatePlayerPos(float delta) {
@@ -418,6 +438,11 @@ public class PlayerController {
         this.player = p;
         ClientApp.currentPlayer = player;
         game.setPlayerById(p.getUser_id(), p);
+        if (currState == PlayerState.FAINTING) {
+            if (p.getEnergy() > 0) {
+                currState = PlayerState.IDLE;
+            }
+        }
     }
 
     public void updateAnotherPlayerObject(String json) {

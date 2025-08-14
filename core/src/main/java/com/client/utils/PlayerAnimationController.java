@@ -60,7 +60,7 @@ public class PlayerAnimationController {
     }
 
     public TextureRegion getCurrentFrame() {
-        if (currentState == PlayerState.IDLE) {
+        if (currentState == PlayerState.IDLE || currentState == PlayerState.FAINTING) {
             Texture t = new Texture("images/player/idle/" + facingDirection.getAnimationRow() + "-1.png");
             return new TextureRegion(t);
         }
